@@ -1,3 +1,4 @@
+import Header from "../components/header";
 import Link from "next/link";
 import { client } from "../libs/client";
 
@@ -7,6 +8,7 @@ import { PhoneIcon, AddIcon, WarningIcon } from "@chakra-ui/icons";
 export default function Home({ blog }) {
   return (
     <div>
+      <Header />
       <IconButton
         colorScheme="teal"
         aria-label="Call Segun"

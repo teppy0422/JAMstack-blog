@@ -1,10 +1,14 @@
+import Header from "../../components/header";
 import { client } from "../../libs/client";
 import styles from "../../styles/home.module.scss";
 
 export default function BlogId({ blog }) {
   return (
     <main className={styles.main}>
-      <h1 className={styles.title}>{blog.title}</h1>
+      <Header />
+      <h1 style={{ backgroundColor: `lightGray` }} className={styles.title}>
+        {blog.title}
+      </h1>
       <p className={styles.publishedAt}>{blog.publishedAt}</p>
       <p className="category">{blog.category && `${blog.category.name}`}</p>
       <div

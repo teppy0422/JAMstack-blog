@@ -1,9 +1,9 @@
 .main {
-  width: 960px;
-  margin: 0 auto;
 }
 
 .title {
+  font-size: 30px;
+  padding: 6px 10px;
   margin-bottom: 20px;
 }
 
@@ -37,4 +37,8 @@
     list-style-type: decimal;
     list-style-position: inside;
   }
+}
+.TopHeader {
+  width: 100%;
+  height: 56px;
 }
