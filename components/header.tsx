@@ -16,14 +16,14 @@ export default function Header() {
     <div>
       <header>
         <VStack>
-          <Flex color="white" className={styles.TopHeader}>
+          <Flex className={styles.TopHeader}>
             <Center w="100px">
               <Text>TeppyBlog</Text>
             </Center>
-            <Center flex="1" bg="gray.700">
+            <Center flex="1">
               <Text>horizontal_area</Text>
             </Center>
-            <Center w="100px" bg="gray.700">
+            <Center w="100px">
               <IconButton
                 _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 aria-label="DarkMode Switch"

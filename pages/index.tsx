@@ -1,20 +1,23 @@
 import Header from "../components/header";
 import Link from "next/link";
 import { client } from "../libs/client";
+import { Container } from "@chakra-ui/react";
 
 export default function Home({ blog }) {
   return (
     <div>
       <Header />
-      <ul>
-        {blog.map((blog) => (
-          <li key={blog.id}>
-            <Link href={`/blog/${blog.id}`}>
-              <a>{blog.title}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <Container style={{ marginTop: "56px" }}>
+        <ul>
+          {blog.map((blog) => (
+            <li key={blog.id}>
+              <Link href={`/blog/${blog.id}`}>
+                <a>{blog.title}</a>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Container>
     </div>
   );
 }

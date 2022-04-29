@@ -1,7 +1,6 @@
 .title {
   font-size: 30px;
   padding: 6px 10px;
-  margin: 50px 0px 20px 0px;
 }
 
 .publishedAt {
@@ -40,5 +39,7 @@
   height: 56px;
   position: fixed;
   z-index: 1;
-  background: rgba(255, 0, 0, 0.3);
+  background: #ffffff40;
+  backdrop-filter: blur(10px);
+  color: #000;
 }
