@@ -9,12 +9,6 @@ export default function Home({ blog }) {
   return (
     <div>
       <Header />
-      <IconButton
-        colorScheme="teal"
-        aria-label="Call Segun"
-        size="lg"
-        icon={<PhoneIcon />}
-      />
       <ul>
         {blog.map((blog) => (
           <li key={blog.id}>
