@@ -2,9 +2,6 @@ import Header from "../components/header";
 import Link from "next/link";
 import { client } from "../libs/client";
 
-import { IconButton } from "@chakra-ui/react";
-import { PhoneIcon, AddIcon, WarningIcon } from "@chakra-ui/icons";
-
 export default function Home({ blog }) {
   return (
     <div>

@@ -3,7 +3,6 @@ import {
   Center,
   Text,
   VStack,
-  Box,
   IconButton,
   Button,
   useColorMode,
