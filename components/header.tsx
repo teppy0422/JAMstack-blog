@@ -7,7 +7,13 @@ import {
   Button,
   useColorMode,
 } from "@chakra-ui/react";
-import { PhoneIcon, AddIcon, WarningIcon, MoonIcon } from "@chakra-ui/icons";
+import {
+  PhoneIcon,
+  AddIcon,
+  WarningIcon,
+  MoonIcon,
+  SunIcon,
+} from "@chakra-ui/icons";
 
 import styles from "../styles/home.module.scss";
 

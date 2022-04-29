@@ -1,7 +1,8 @@
-//ここでimportしたものは全てのファイルで読み込まれる
+//ここでimportしたものは全てのページで読み込まれる
 import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
 import "../styles/globals.css"; //リセット用
+// import theme from "./theme";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -9,6 +10,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>blog</title>
       </Head>
+      {/* <ChakraProvider theme={theme}> */}
       <ChakraProvider>
         <Component {...pageProps} />
       </ChakraProvider>
