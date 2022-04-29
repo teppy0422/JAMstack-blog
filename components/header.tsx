@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { PhoneIcon, AddIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import styles from "../styles/home.module.scss";
+import Image from "next/image";
 
 export default function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -20,9 +21,11 @@ export default function Header() {
     <>
       <header>
         <VStack>
-          <Flex className={myClass}>
+          <Flex className={`${myClass} ${styles.headerNav}`}>
             <Center w="100px">
-              <Text bg={bg}>TeppyBlog</Text>
+              <Text bg={bg} color={color} style={{ padding: "0 10px" }}>
+                left
+              </Text>
             </Center>
             <Center flex="1">
               <Text>horizontal_area</Text>

@@ -1,16 +1,15 @@
-import { Container } from "@chakra-ui/react";
+import { Container, useColorModeValue } from "@chakra-ui/react";
 import Header from "../../components/header";
 import { client } from "../../libs/client";
 import styles from "../../styles/home.module.scss";
 
 export default function BlogId({ blog }) {
+  const myClass = useColorModeValue(styles.myLight, styles.myDark);
   return (
     <main>
       <Header />
       <Container className={styles.contain}>
-        <h1 style={{ backgroundColor: `lightGray` }} className={styles.title}>
-          {blog.title}
-        </h1>
+        <h1 className={styles.title}>{blog.title}</h1>
         <p className={styles.publishedAt}>{blog.publishedAt}</p>
         <p className="category">{blog.category && `${blog.category.name}`}</p>
         <div
