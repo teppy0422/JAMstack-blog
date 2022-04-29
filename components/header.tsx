@@ -27,7 +27,14 @@ export default function Header() {
                 left
               </Text>
             </Center>
-            <Center flex="1">
+            <Center flex="1" style={{ gap: "4px" }}>
+              <Image
+                className={styles.logo}
+                src="/images/hippo_001_footstump.webp"
+                alt="logo"
+                width="40"
+                height="30"
+              />
               <Text>horizontal_area</Text>
             </Center>
             <Center w="100px">
