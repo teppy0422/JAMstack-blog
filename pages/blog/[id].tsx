@@ -7,7 +7,7 @@ export default function BlogId({ blog }) {
   return (
     <main>
       <Header />
-      <Container style={{ marginTop: "56px" }}>
+      <Container className={styles.contain}>
         <h1 style={{ backgroundColor: `lightGray` }} className={styles.title}>
           {blog.title}
         </h1>

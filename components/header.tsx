@@ -5,20 +5,24 @@ import {
   VStack,
   IconButton,
   useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { PhoneIcon, AddIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
-
 import styles from "../styles/home.module.scss";
 
 export default function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const bg = useColorModeValue("red.500", "red.200");
+  const color = useColorModeValue("white", "gray.800");
+  const myClass = useColorModeValue(styles.myLight, styles.myDark);
   return (
-    <div>
+    <>
       <header>
         <VStack>
-          <Flex className={styles.TopHeader}>
+          <Flex className={myClass}>
             <Center w="100px">
-              <Text>TeppyBlog</Text>
+              <Text bg={bg}>TeppyBlog</Text>
             </Center>
             <Center flex="1">
               <Text>horizontal_area</Text>
@@ -35,6 +39,6 @@ export default function Header() {
           </Flex>
         </VStack>
       </header>
-    </div>
+    </>
   );
 }
