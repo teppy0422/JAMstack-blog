@@ -10,7 +10,6 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>blog</title>
       </Head>
-      {/* <ChakraProvider theme={theme}> */}
       <ChakraProvider>
         <Component {...pageProps} />
       </ChakraProvider>
