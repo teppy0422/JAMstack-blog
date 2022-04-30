@@ -9,6 +9,8 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { PhoneIcon, AddIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
 import Image from "next/image";
 
@@ -16,17 +18,25 @@ export default function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const bg = useColorModeValue("red.500", "red.200");
-  const color = useColorModeValue("white", "gray.800");
+  const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   return (
     <>
       <header id="navTop">
         <VStack>
           <Flex className={`${myClass} ${styles.headerNav}`}>
-            <Center w="100px">
-              <Text bg={bg} color={color} style={{ padding: "0 10px" }}>
-                left
-              </Text>
+            <Center w="64px">
+              <Link
+                _focus={{ _focus: "none" }}
+                href="https://github.com/teppy0422/JAMstack-blog"
+                isExternal
+              >
+                <FontAwesomeIcon
+                  color={color}
+                  icon={faGithub}
+                  className={styles.githubIcon}
+                />
+              </Link>
             </Center>
             <Center flex="1" style={{ gap: "4px" }}>
               <Image
