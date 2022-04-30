@@ -76,9 +76,16 @@
     text-decoration: underline !important;
     text-underline-offset: 0.25em;
   }
-  a::after {
-    content: "kk";
-    color: red;
+  a:after {
+    content: " ";
+    display: inline-block;
+    background-image: url("../public/images/external_link.png");
+    background-size: contain;
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+    margin-left: 4px;
+    transform: translateY(-2px);
   }
 
   & > ol {

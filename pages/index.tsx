@@ -5,7 +5,7 @@ import { Container } from "@chakra-ui/react";
 
 export default function Home({ blog }) {
   return (
-    <div>
+    <>
       <Header />
       <div style={{ height: "56px" }}></div>
       <Container>
@@ -19,7 +19,7 @@ export default function Home({ blog }) {
           ))}
         </ul>
       </Container>
-    </div>
+    </>
   );
 }
 

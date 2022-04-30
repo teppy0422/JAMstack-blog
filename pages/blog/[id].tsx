@@ -1,27 +1,37 @@
 import { Container, Divider, useColorModeValue } from "@chakra-ui/react";
-import Header from "../../components/header";
 import { client } from "../../libs/client";
+import Header from "../../components/header";
 import styles from "../../styles/home.module.scss";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 export default function BlogId({ blog }) {
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   return (
-    <main>
-      <Header />
-      <div style={{ height: "56px" }}></div>
-      <Container className={styles.contain}>
-        <h1 className={styles.title}>{blog.title}</h1>
-        <Divider className={myClass} />
-        <p className={styles.publishedAt}>{blog.publishedAt}</p>
-        <p className="category">{blog.category && `${blog.category.name}`}</p>
-        <div
-          className={styles.post}
-          dangerouslySetInnerHTML={{
-            __html: `${blog.content}`,
-          }}
-        />
-      </Container>
-    </main>
+    <>
+      <main>
+        <Header />
+        <div style={{ height: "56px" }}></div>
+        <Container className={styles.contain}>
+          <h1 className={styles.title}>{blog.title}</h1>
+          <Divider className={myClass} />
+          <p className={styles.publishedAt}>{blog.publishedAt}</p>
+          <p className="category">{blog.category && `${blog.category.name}`}</p>
+          <div
+            className={styles.post}
+            dangerouslySetInnerHTML={{
+              __html: `${blog.content}`,
+            }}
+          />
+        </Container>
+      </main>
+      <style jsx>{`
+        p {
+          color: red;
+        }
+      `}</style>
+    </>
   );
 }
 
