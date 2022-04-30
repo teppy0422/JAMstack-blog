@@ -32,10 +32,10 @@ export default function Header() {
                 className={styles.logo}
                 src="/images/hippo_001_footstump.webp"
                 alt="logo"
-                width="40"
-                height="30"
+                width="36"
+                height="24"
               />
-              <Text>horizontal_area</Text>
+              <Text>TeppeiKataoka</Text>
             </Center>
             <Center w="100px">
               <IconButton

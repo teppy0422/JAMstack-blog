@@ -8,6 +8,7 @@ export default function BlogId({ blog }) {
   return (
     <main>
       <Header />
+      <div style={{ height: "56px" }}></div>
       <Container className={styles.contain}>
         <h1 className={styles.title}>{blog.title}</h1>
         <p className={styles.publishedAt}>{blog.publishedAt}</p>
