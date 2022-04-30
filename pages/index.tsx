@@ -7,7 +7,8 @@ export default function Home({ blog }) {
   return (
     <div>
       <Header />
-      <Container style={{ marginTop: "56px" }}>
+      <div style={{ height: "56px" }}></div>
+      <Container>
         <ul>
           {blog.map((blog) => (
             <li key={blog.id}>

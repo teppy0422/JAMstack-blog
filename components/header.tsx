@@ -6,6 +6,7 @@ import {
   IconButton,
   useColorMode,
   useColorModeValue,
+  Link,
 } from "@chakra-ui/react";
 import { PhoneIcon, AddIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import styles from "../styles/home.module.scss";
@@ -19,7 +20,7 @@ export default function Header() {
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   return (
     <>
-      <header>
+      <header id="navTop">
         <VStack>
           <Flex className={`${myClass} ${styles.headerNav}`}>
             <Center w="100px">
@@ -32,10 +33,12 @@ export default function Header() {
                 className={styles.logo}
                 src="/images/hippo_001_footstump.webp"
                 alt="logo"
-                width="36"
-                height="24"
+                width="30"
+                height="20"
               />
-              <Text>TeppeiKataoka</Text>
+              <Link href="/">
+                <Text className={styles.logoText}>TeppeiKataoka</Text>
+              </Link>
             </Center>
             <Center w="100px">
               <IconButton

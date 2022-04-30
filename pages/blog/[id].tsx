@@ -1,4 +1,4 @@
-import { Container, useColorModeValue } from "@chakra-ui/react";
+import { Container, Divider, useColorModeValue } from "@chakra-ui/react";
 import Header from "../../components/header";
 import { client } from "../../libs/client";
 import styles from "../../styles/home.module.scss";
@@ -11,6 +11,7 @@ export default function BlogId({ blog }) {
       <div style={{ height: "56px" }}></div>
       <Container className={styles.contain}>
         <h1 className={styles.title}>{blog.title}</h1>
+        <Divider className={myClass} />
         <p className={styles.publishedAt}>{blog.publishedAt}</p>
         <p className="category">{blog.category && `${blog.category.name}`}</p>
         <div

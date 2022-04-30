@@ -10,6 +10,10 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <title>blog</title>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Yusei+Magic&display=swap"
+        />
       </Head>
       <DefaultSeo
         defaultTitle="teppy-Blog"
