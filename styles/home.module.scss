@@ -79,10 +79,11 @@
   a:after {
     content: " ";
     display: inline-block;
-    background-image: url("../public/images/external_link.png");
+    background-image: url("../public/images/external_link.svg");
     background-size: contain;
     vertical-align: middle;
     width: 18px;
+    background-color: yellow;
     height: 18px;
     margin-left: 4px;
     transform: translateY(-2px);
