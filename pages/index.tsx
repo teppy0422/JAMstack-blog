@@ -3,7 +3,7 @@ import Link from "next/link";
 import { client } from "../libs/client";
 import { Container } from "@chakra-ui/react";
 
-export default function Home({ blog, category }) {
+export default function Home({ blog, category, tag }) {
   return (
     <>
       <Header />
@@ -11,6 +11,7 @@ export default function Home({ blog, category }) {
 
       <Container>
         <ul>
+          <div>category</div>
           {category.map((category) => (
             <li key={category.id}>
               <Link href={`/category/${category.id}`}>
@@ -19,6 +20,18 @@ export default function Home({ blog, category }) {
             </li>
           ))}
         </ul>
+
+        <div style={{ height: "200px" }}></div>
+        <ul>
+          {tag.map((tag) => (
+            <li key={tag.id}>
+              <Link href={`/tag/${tag.id}`}>
+                <a>{tag.name}</a>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
         <div style={{ height: "200px" }}></div>
         <ul>
           {blog.map((blog) => (
@@ -39,13 +52,14 @@ export const getStaticProps = async () => {
   const data = await client.get({ endpoint: "blog" });
   // カテゴリーコンテンツの取得
   const categoryData = await client.get({ endpoint: "categories" });
+  // タグコンテンツの取得
+  const tagData = await client.get({ endpoint: "tags" });
 
   return {
     props: {
       blog: data.contents,
       category: categoryData.contents,
+      tag: tagData.contents,
     },
   };
 };
-
-<script>console.log(category)</script>;
