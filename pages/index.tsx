@@ -11,7 +11,7 @@ export default function Home({ blog, category, tag }) {
 
       <Container>
         <ul>
-          <div>category</div>
+          <div>-category-</div>
           {category.map((category) => (
             <li key={category.id}>
               <Link href={`/category/${category.id}`}>
@@ -21,7 +21,8 @@ export default function Home({ blog, category, tag }) {
           ))}
         </ul>
 
-        <div style={{ height: "200px" }}></div>
+        <div style={{ height: "100px" }}></div>
+        <div>-tag-</div>
         <ul>
           {tag.map((tag) => (
             <li key={tag.id}>
@@ -32,7 +33,7 @@ export default function Home({ blog, category, tag }) {
           ))}
         </ul>
 
-        <div style={{ height: "200px" }}></div>
+        <div style={{ height: "100px" }}></div>
         <ul>
           {blog.map((blog) => (
             <li key={blog.id}>
