@@ -1,6 +1,7 @@
-// pages/category/[id].js
 import Link from "next/link";
 import { client } from "../../libs/client";
+import Header from "../../components/header";
+import { Container } from "@chakra-ui/react";
 
 export default function CategoryId({ blog }) {
   // タグに紐付いたコンテンツがない場合に表示
@@ -9,15 +10,19 @@ export default function CategoryId({ blog }) {
   }
   return (
     <div>
-      <ul>
-        {blog.map((blog) => (
-          <li key={blog.id}>
-            <Link href={`/blog/${blog.id}`}>
-              <a>{blog.title}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <Header />
+      <div style={{ height: "56px" }}></div>
+      <Container>
+        <ul>
+          {blog.map((blog) => (
+            <li key={blog.id}>
+              <Link href={`/blog/${blog.id}`}>
+                <a>{blog.title}</a>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Container>
     </div>
   );
 }

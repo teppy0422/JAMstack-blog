@@ -1,7 +1,8 @@
 import Header from "../components/header";
 import Link from "next/link";
 import { client } from "../libs/client";
-import { Container } from "@chakra-ui/react";
+import { Container, Tag } from "@chakra-ui/react";
+import styles from "../../styles/home.module.scss";
 
 export default function Home({ blog, category, tag }) {
   return (
@@ -10,7 +11,7 @@ export default function Home({ blog, category, tag }) {
       <div style={{ height: "56px" }}></div>
 
       <Container>
-        <ul>
+        {/* <ul>
           <div>-category-</div>
           {category.map((category) => (
             <li key={category.id}>
@@ -19,21 +20,20 @@ export default function Home({ blog, category, tag }) {
               </Link>
             </li>
           ))}
-        </ul>
+        </ul> */}
 
-        <div style={{ height: "100px" }}></div>
-        <div>-tag-</div>
+        <div style={{ height: "10px" }}></div>
         <ul>
           {tag.map((tag) => (
-            <li key={tag.id}>
+            <Tag style={{ marginRight: "10px" }}>
               <Link href={`/tag/${tag.id}`}>
                 <a>{tag.name}</a>
               </Link>
-            </li>
+            </Tag>
           ))}
         </ul>
 
-        <div style={{ height: "100px" }}></div>
+        <div style={{ height: "30px" }}></div>
         <ul>
           {blog.map((blog) => (
             <li key={blog.id}>
