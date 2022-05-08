@@ -68,7 +68,7 @@
 
   h4 {
     border-bottom: #888 1px solid;
-    margin: 5px 0 5px 0;
+    margin: 16px 0 8px 0;
   }
 
   & > p {
@@ -97,5 +97,9 @@
   & > ol {
     list-style-type: decimal;
     list-style-position: inside;
+  }
+  code {
+    background-color: #1c1b19;
+    color: #f0e6db;
   }
 }

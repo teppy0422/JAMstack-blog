@@ -41,10 +41,10 @@ export default function Header() {
             <Center flex="1" style={{ gap: "4px" }}>
               <Image
                 className={styles.logo}
-                src="/images/hippo_001_footstump.webp"
+                src="/images/hippo_001_footprint.svg"
                 alt="logo"
                 width="30"
-                height="20"
+                height="30"
               />
               <Link href="/">
                 <Text className={styles.logoText}>TeppeiKataoka</Text>
