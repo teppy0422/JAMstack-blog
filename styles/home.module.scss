@@ -21,6 +21,16 @@
 .logo {
   margin-right: 10px;
   padding: 10px;
+  transform: rotate(-30deg);
+  transition: 0.7s;
+}
+.logoAndText {
+  text-decoration: none !important;
+
+  &:hover .logo {
+    cursor: pointer;
+    transform: rotate(30deg);
+  }
 }
 .logoText {
   font-family: "M PLUS Rounded 1c", sans-serif;

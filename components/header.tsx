@@ -38,7 +38,11 @@ export default function Header() {
                 />
               </Link>
             </Center>
-            <Center flex="1" style={{ gap: "4px" }}>
+            <Center
+              flex="1"
+              style={{ gap: "4px" }}
+              className={styles.logoAndText}
+            >
               <Image
                 className={styles.logo}
                 src="/images/hippo_001_footprint.svg"
