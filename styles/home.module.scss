@@ -32,7 +32,6 @@
   text-decoration: none !important;
 
   &:hover .logo {
-    cursor: pointer;
     transform: rotate(30deg);
   }
 }
@@ -81,7 +80,7 @@
   }
 
   h4 {
-    border-bottom: #888 1px solid;
+    border-bottom: #888 2px solid;
     margin: 16px 0 8px 0;
   }
 
