@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }) {
         openGraph={{
           type: "website",
           title: "teppy-Blog",
-          description: "ブログになりきれなかった自分専用のメモ帳です",
+          description: "ブログになりきれなかったメモ帳です",
           site_name: "teppy-Blog",
           url: "https://jam-stack-blog-teppy0422.vercel.app/",
           images: [

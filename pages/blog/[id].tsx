@@ -3,10 +3,15 @@ import { client } from "../../libs/client";
 import Header from "../../components/header";
 import styles from "../../styles/home.module.scss";
 
+//シンタックスハイライト用
+import cheerio from "cheerio";
+import hljs from "highlight.js";
+import "highlight.js/styles/srcery.css";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
-export default function BlogId({ blog }) {
+export default function BlogId({ blog, highlightedBody }) {
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   return (
     <>
@@ -18,12 +23,16 @@ export default function BlogId({ blog }) {
           <Divider className={myClass} />
           <p className={styles.publishedAt}>{blog.publishedAt}</p>
           {/* <p className="category">{blog.category && `${blog.category.name}`}</p> */}
-          <div
+          {/* <div
             className={styles.post}
             dangerouslySetInnerHTML={{
               __html: `${blog.content}`,
             }}
-          />
+          /> */}
+          <div
+            className={styles.post}
+            dangerouslySetInnerHTML={{ __html: highlightedBody }}
+          ></div>
         </Container>
       </main>
       <style jsx>{`
@@ -48,9 +57,17 @@ export const getStaticProps = async (context) => {
   const id = context.params.id;
   const data = await client.get({ endpoint: "blog", contentId: id });
 
+  const $ = cheerio.load(data.content); // data.bodyはmicroCMSから返されるリッチエディタ部分
+  $("pre code").each((_, elm) => {
+    const result = hljs.highlightAuto($(elm).text());
+    $(elm).html(result.value);
+    $(elm).addClass("hljs");
+  });
+
   return {
     props: {
-      blog: data,
+      blog: data, //未使用
+      highlightedBody: $.html(), //ハイライト済みのHTML
     },
   };
 };

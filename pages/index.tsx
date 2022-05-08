@@ -4,12 +4,11 @@ import { client } from "../libs/client";
 import { Container, Tag } from "@chakra-ui/react";
 import styles from "../../styles/home.module.scss";
 
-export default function Home({ blog, category, tag }) {
+export default function Home({ blog, category, tag, eyecatch }) {
   return (
     <>
       <Header />
       <div style={{ height: "56px" }}></div>
-
       <Container>
         {/* <ul>
           <div>-category-</div>
@@ -40,9 +39,11 @@ export default function Home({ blog, category, tag }) {
               <Link href={`/blog/${blog.id}`}>
                 <a>{blog.title}</a>
               </Link>
+              {/* <img src={`${blog.eyecatch}`}></img> */}
             </li>
           ))}
         </ul>
+        <div style={{ height: "900px" }}></div>
       </Container>
     </>
   );

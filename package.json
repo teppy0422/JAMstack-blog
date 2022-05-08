@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start"
   },
@@ -18,8 +18,12 @@
     "@types/node": "^17.0.29",
     "@types/react": "^17.0.44",
     "@types/react-dom": "^18.0.0",
+    "cheerio": "^1.0.0-rc.10",
     "framer-motion": "^6.3.2",
+    "highlight.js": "^11.5.1",
+    "hljs": "^6.2.3",
     "microcms-js-sdk": "^2.0.0",
+    "microcms-richedit-processer": "^1.0.5",
     "next": "latest",
     "next-seo": "^5.4.0",
     "react": "17.0.2",
