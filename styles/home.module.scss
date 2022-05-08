@@ -17,12 +17,16 @@
   background: #00000020;
   backdrop-filter: blur(10px);
   border-color: #fff !important;
+  fill: pink;
 }
 .logo {
-  margin-right: 10px;
+  margin-right: -20px;
   padding: 10px;
+  width: 66px;
+  height: 66px;
   transform: rotate(-30deg);
-  transition: 0.7s;
+  transition: 0.5s;
+  background: none !important;
 }
 .logoAndText {
   text-decoration: none !important;

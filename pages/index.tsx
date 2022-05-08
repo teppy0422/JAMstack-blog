@@ -2,7 +2,7 @@ import Header from "../components/header";
 import Link from "next/link";
 import { client } from "../libs/client";
 import { Container, Tag } from "@chakra-ui/react";
-import styles from "../../styles/home.module.scss";
+import styles from "../styles/home.module.scss";
 
 export default function Home({ blog, category, tag, eyecatch }) {
   return (
@@ -20,7 +20,6 @@ export default function Home({ blog, category, tag, eyecatch }) {
             </li>
           ))}
         </ul> */}
-
         <div style={{ height: "10px" }}></div>
         <ul>
           {tag.map((tag) => (
