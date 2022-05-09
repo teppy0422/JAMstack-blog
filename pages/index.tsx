@@ -1,7 +1,17 @@
 import Header from "../components/header";
 import Link from "next/link";
 import { client } from "../libs/client";
-import { Container, Tag, Flex, Avatar, Box, Text } from "@chakra-ui/react";
+import {
+  Container,
+  Tag,
+  Flex,
+  Image,
+  Box,
+  Text,
+  Spacer,
+  Grid,
+  GridItem,
+} from "@chakra-ui/react";
 import styles from "../styles/home.module.scss";
 
 export default function Home({ blog, category, tag, eyecatch }) {
@@ -33,17 +43,35 @@ export default function Home({ blog, category, tag, eyecatch }) {
 
         <div style={{ height: "30px" }}></div>
         {blog.map((blog) => (
-          <Flex style={{ margin: "10px 0px" }}>
-            <Avatar src={blog.eyecatch.url} />
-            <Box ml="3">
-              <Text fontWeight="bold">
-                <Link href={`/blog/${blog.id}`}>
-                  <a>{blog.title}</a>
-                </Link>
-              </Text>
-              <Text fontSize="sm">aaa</Text>
-            </Box>
-          </Flex>
+          <Link href={`/blog/${blog.id}`}>
+            <a>
+              <Flex
+                className={styles.blogList}
+                style={{
+                  margin: "10px 0px",
+                  border: "1px #888 solid",
+                  borderRadius: "10px",
+                }}
+              >
+                <Box ml="3" style={{ margin: "10px 10px" }}>
+                  <Text className={styles.blogTitle} fontWeight="bold">
+                    {blog.title}
+                  </Text>
+                  <Text fontSize="sm">aaa</Text>
+                </Box>
+                <Spacer />
+                <Box>
+                  <Image
+                    boxSize="80px"
+                    className={styles.eyecatch}
+                    objectFit="cover"
+                    alt={blog.title}
+                    src={blog.eyecatch.url}
+                  />
+                </Box>
+              </Flex>
+            </a>
+          </Link>
         ))}
 
         <div style={{ height: "900px" }}></div>

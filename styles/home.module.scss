@@ -116,7 +116,18 @@
     background-color: #1c1b19;
     color: #f0e6db;
   }
-  img {
-    height: 100px;
+}
+.blogList {
+  height: 80px;
+  .blogTitle {
+    overflow: hidden;
+    white-space: nowrap;
+
+    text-overflow: ellipsis !important;
+  }
+  .eyecatch {
+    border-radius: 0 10px 10px 0;
+    height: 78px;
+    width: 80px !important;
   }
 }
