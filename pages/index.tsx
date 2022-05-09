@@ -9,10 +9,10 @@ import {
   Box,
   Text,
   Spacer,
-  Grid,
-  GridItem,
 } from "@chakra-ui/react";
+import { RepeatClockIcon } from "@chakra-ui/icons";
 import styles from "../styles/home.module.scss";
+import Moment from "react-moment";
 
 export default function Home({ blog, category, tag, eyecatch }) {
   return (
@@ -58,6 +58,10 @@ export default function Home({ blog, category, tag, eyecatch }) {
                     {blog.title}
                   </Text>
                   <Text fontSize="sm">{blog.subtitle}</Text>
+                  <Text fontSize="sm" style={{ opacity: "0.5" }}>
+                    <RepeatClockIcon style={{ marginRight: "5px" }} />
+                    <Moment format="YYYY/MM/DD">{blog.updatedAt}</Moment>
+                  </Text>
                 </Box>
                 <Spacer />
                 <Box>
