@@ -1,7 +1,7 @@
 import Header from "../components/header";
 import Link from "next/link";
 import { client } from "../libs/client";
-import { Container, Tag } from "@chakra-ui/react";
+import { Container, Tag, Flex, Avatar, Box, Text } from "@chakra-ui/react";
 import styles from "../styles/home.module.scss";
 
 export default function Home({ blog, category, tag, eyecatch }) {
@@ -32,16 +32,20 @@ export default function Home({ blog, category, tag, eyecatch }) {
         </ul>
 
         <div style={{ height: "30px" }}></div>
-        <ul>
-          {blog.map((blog) => (
-            <li key={blog.id}>
-              <Link href={`/blog/${blog.id}`}>
-                <a>{blog.title}</a>
-              </Link>
-              {/* <img src={`${blog.eyecatch}`}></img> */}
-            </li>
-          ))}
-        </ul>
+        {blog.map((blog) => (
+          <Flex style={{ margin: "10px 0px" }}>
+            <Avatar src={blog.eyecatch.url} />
+            <Box ml="3">
+              <Text fontWeight="bold">
+                <Link href={`/blog/${blog.id}`}>
+                  <a>{blog.title}</a>
+                </Link>
+              </Text>
+              <Text fontSize="sm">aaa</Text>
+            </Box>
+          </Flex>
+        ))}
+
         <div style={{ height: "900px" }}></div>
       </Container>
     </>

@@ -22,8 +22,8 @@
 .logo {
   margin-right: -20px;
   padding: 10px;
-  width: 66px;
-  height: 66px;
+  width: 62px;
+  height: 62px;
   transform: rotate(-30deg);
   transition: 0.5s;
   background: none !important;
@@ -93,6 +93,7 @@
   a {
     text-decoration: underline !important;
     text-underline-offset: 0.25em;
+    background-color: none !important;
   }
   a:after {
     content: " ";
@@ -114,5 +115,8 @@
   code {
     background-color: #1c1b19;
     color: #f0e6db;
+  }
+  img {
+    height: 100px;
   }
 }

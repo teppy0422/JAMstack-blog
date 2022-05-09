@@ -57,7 +57,7 @@ export const getStaticProps = async (context) => {
   const id = context.params.id;
   const data = await client.get({ endpoint: "blog", contentId: id });
 
-  const $ = cheerio.load(data.content); // data.bodyはmicroCMSから返されるリッチエディタ部分
+  const $ = cheerio.load(data.content); // data.contentはmicroCMSから返されるリッチエディタ部分
   $("pre code").each((_, elm) => {
     const result = hljs.highlightAuto($(elm).text());
     $(elm).html(result.value);
