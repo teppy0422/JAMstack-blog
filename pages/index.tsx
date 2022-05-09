@@ -57,7 +57,7 @@ export default function Home({ blog, category, tag, eyecatch }) {
                   <Text className={styles.blogTitle} fontWeight="bold">
                     {blog.title}
                   </Text>
-                  <Text fontSize="sm">aaa</Text>
+                  <Text fontSize="sm">{blog.subtitle}</Text>
                 </Box>
                 <Spacer />
                 <Box>
