@@ -119,6 +119,23 @@
 }
 .blogList {
   height: 80px;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    .eyecatch {
+      animation: eyecatch_icon 0.5s linear forwards;
+      @keyframes eyecatch_icon {
+        0% {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateX(0px);
+        }
+      }
+    }
+  }
+
   .blogTitle {
     overflow: hidden;
     white-space: nowrap;
@@ -126,8 +143,9 @@
     text-overflow: ellipsis !important;
   }
   .eyecatch {
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 8px 8px 0;
     height: 78px;
     width: 100px !important;
+    transition: 1s;
   }
 }
