@@ -33,7 +33,7 @@ export default function Home({ blog, category, tag, eyecatch }) {
         <div style={{ height: "10px" }}></div>
         <ul>
           {tag.map((tag) => (
-            <Tag style={{ marginRight: "10px" }}>
+            <Tag style={{ margin: "5px 5px" }}>
               <Link href={`/tag/${tag.id}`}>
                 <a>{tag.name}</a>
               </Link>
@@ -41,7 +41,7 @@ export default function Home({ blog, category, tag, eyecatch }) {
           ))}
         </ul>
 
-        <div style={{ height: "30px" }}></div>
+        <div style={{ height: "10px" }}></div>
         {blog.map((blog) => (
           <Link href={`/blog/${blog.id}`}>
             <a>

@@ -120,12 +120,15 @@
 .blogList {
   height: 80px;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.2);
     .eyecatch {
       animation: eyecatch_icon 0.5s linear forwards;
       @keyframes eyecatch_icon {
         0% {
           opacity: 0;
+          transform: translateX(0px);
+        }
+        10% {
           transform: translateX(-50px);
         }
         100% {
