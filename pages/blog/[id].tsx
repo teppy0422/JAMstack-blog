@@ -23,12 +23,7 @@ export default function BlogId({ blog, highlightedBody }) {
           <Divider className={myClass} />
           <p className={styles.publishedAt}>{blog.publishedAt}</p>
           {/* <p className="category">{blog.category && `${blog.category.name}`}</p> */}
-          {/* <div
-            className={styles.post}
-            dangerouslySetInnerHTML={{
-              __html: `${blog.content}`,
-            }}
-          /> */}
+
           <div
             className={styles.post}
             dangerouslySetInnerHTML={{ __html: highlightedBody }}

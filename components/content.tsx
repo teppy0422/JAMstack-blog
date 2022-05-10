@@ -1,10 +1,15 @@
 // レイアウトを決める
-export default function Content() {
+import { Container, Center } from "@chakra-ui/react";
+
+export default function Content({ children }) {
   return (
     <>
-      <div className={`container`}>
-        <div></div>
-      </div>
+      <Container className={`container`}>{children}</Container>
+      <hr />
+
+      <Center h="50px" color="gray">
+        ©︎ 2022 Teppei Kataoka. All rights Reserved.
+      </Center>
     </>
   );
 }

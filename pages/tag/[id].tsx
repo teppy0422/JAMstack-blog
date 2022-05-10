@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { client } from "../../libs/client";
 import Header from "../../components/header";
+import Content from "../../components/content";
 import { Container } from "@chakra-ui/react";
 
 export default function CategoryId({ blog }) {
@@ -12,7 +13,7 @@ export default function CategoryId({ blog }) {
     <div>
       <Header />
       <div style={{ height: "56px" }}></div>
-      <Container>
+      <Content>
         <ul>
           {blog.map((blog) => (
             <li key={blog.id}>
@@ -22,7 +23,7 @@ export default function CategoryId({ blog }) {
             </li>
           ))}
         </ul>
-      </Container>
+      </Content>
     </div>
   );
 }
