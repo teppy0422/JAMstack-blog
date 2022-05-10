@@ -28,7 +28,7 @@ export default function Home({ blog, category, tag, blog2 }) {
       <ul>
         {tag.map((tag) => (
           <Box>
-            <button onClick={() => testtttt(blog, tag.id, setShowBlogs)}>
+            <button onClick={() => testtttt(blog, tag, setShowBlogs)}>
               test_button
             </button>
             <Tag style={{ margin: "5px 5px" }}>
@@ -56,7 +56,7 @@ export default function Home({ blog, category, tag, blog2 }) {
 
       <div style={{ height: "10px" }}></div>
 
-      {blog.map((blog) => (
+      {showBlogs.map((blog) => (
         <Link href={`/blog/${blog.id}`}>
           <a>
             <Flex className={styles.blogList}>
@@ -108,16 +108,16 @@ export const getStaticProps = async () => {
   };
 };
 
-const testtttt = async (blog: any, tag: string, setShowBlogs: any) => {
+const testtttt = async (blog, tag, setShowBlogs) => {
   console.log(tag);
-  if (tag === "all") {
-    // setShowBlogs(blog);
+  if (tag.name === "all") {
+    setShowBlogs(blog);
   } else {
     const selectedBlogs = blog.filter((blog: any) => {
-      const haveTags = blog.tags.map((tag: any) => tag.tag);
-      return haveTags.includes(tag);
+      const haveTags = blog.tags.map((tag: any) => tag.name);
+      return haveTags.includes(tag.name);
     });
-    // setShowBlogs(selectedBlogs);
+    setShowBlogs(selectedBlogs);
   }
   //画面最上部へスクロールさせる
   window.scrollTo({
