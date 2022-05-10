@@ -28,7 +28,9 @@ export default function Home({ blog, category, tag, blog2 }) {
       <ul>
         {tag.map((tag) => (
           <Box>
-            <button onClick={() => testtttt(blog, tag.id)}>test_button</button>
+            <button onClick={() => testtttt(blog, tag.id, setShowBlogs)}>
+              test_button
+            </button>
             <Tag style={{ margin: "5px 5px" }}>
               <Text>
                 {tag.name}
