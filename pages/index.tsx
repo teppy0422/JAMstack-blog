@@ -27,30 +27,15 @@ export default function Home({ blog, category, tag, blog2 }) {
 
       <ul>
         {tag.map((tag) => (
-          <Box>
-            <button onClick={() => testtttt(blog, tag, setShowBlogs)}>
-              test_button
-            </button>
-            <Tag style={{ margin: "5px 5px" }}>
-              <Text>
-                {tag.name}
-                {tag.id}
-              </Text>
-            </Tag>
-          </Box>
-        ))}
-      </ul>
-
-      <ul>
-        {tag.map((tag) => (
-          <Link href={`/tag/${tag.id}`}>
-            <Tag className={styles.tags}>
-              <Image src={tag.img.url} boxSize="32px" />
-              <Box ml="1">
-                <Text fontWeight={500}>{tag.name}</Text>
-              </Box>
-            </Tag>
-          </Link>
+          <Tag
+            className={styles.tags}
+            onClick={() => testtttt(blog, tag, setShowBlogs)}
+          >
+            <Image src={tag.img.url} boxSize="32px" />
+            <Box ml="1">
+              <Text fontWeight={500}>{tag.name}</Text>
+            </Box>
+          </Tag>
         ))}
       </ul>
 
@@ -109,8 +94,7 @@ export const getStaticProps = async () => {
 };
 
 const testtttt = async (blog, tag, setShowBlogs) => {
-  console.log(tag);
-  if (tag.name === "all") {
+  if (tag.name === "All") {
     setShowBlogs(blog);
   } else {
     const selectedBlogs = blog.filter((blog: any) => {
