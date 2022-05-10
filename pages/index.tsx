@@ -9,6 +9,7 @@ import {
   Box,
   Text,
   Spacer,
+  Center,
 } from "@chakra-ui/react";
 import { RepeatClockIcon } from "@chakra-ui/icons";
 import styles from "../styles/home.module.scss";
@@ -39,6 +40,27 @@ export default function Home({ blog, category, tag, eyecatch }) {
               </Link>
             </Tag>
           ))}
+        </ul>
+
+        <ul>
+          <Flex>
+            {tag.map((tag) => (
+              <Link href={`/tag/${tag.id}`}>
+                <Tag
+                  style={{
+                    margin: "5px 5px",
+                    padding: "0px 8px 0px 0px",
+                    borderRadius: "16px 0 0 16px",
+                  }}
+                >
+                  <Image src={tag.img.url} boxSize="32px" />
+                  <Box ml="1">
+                    <Text fontWeight={500}>{tag.name}</Text>
+                  </Box>
+                </Tag>
+              </Link>
+            ))}
+          </Flex>
         </ul>
 
         <div style={{ height: "10px" }}></div>
@@ -79,6 +101,9 @@ export default function Home({ blog, category, tag, eyecatch }) {
         ))}
 
         <div style={{ height: "900px" }}></div>
+        <Center h="50px" color="gray">
+          ©︎ 2022 Teppei Kataoka. All rights Reserved.
+        </Center>
       </Container>
     </>
   );
