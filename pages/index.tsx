@@ -34,33 +34,25 @@ export default function Home({ blog, category, tag, eyecatch }) {
         <div style={{ height: "10px" }}></div>
         <ul>
           {tag.map((tag) => (
-            <Tag style={{ margin: "5px 5px" }}>
-              <Link href={`/tag/${tag.id}`}>
+            <Link href={`/tag/${tag.id}`}>
+              <Tag style={{ margin: "5px 5px" }}>
                 <a>{tag.name}</a>
-              </Link>
-            </Tag>
+              </Tag>
+            </Link>
           ))}
         </ul>
 
         <ul>
-          <Flex>
-            {tag.map((tag) => (
-              <Link href={`/tag/${tag.id}`}>
-                <Tag
-                  style={{
-                    margin: "5px 5px",
-                    padding: "0px 8px 0px 0px",
-                    borderRadius: "16px 0 0 16px",
-                  }}
-                >
-                  <Image src={tag.img.url} boxSize="32px" />
-                  <Box ml="1">
-                    <Text fontWeight={500}>{tag.name}</Text>
-                  </Box>
-                </Tag>
-              </Link>
-            ))}
-          </Flex>
+          {tag.map((tag) => (
+            <Link href={`/tag/${tag.id}`}>
+              <Tag className={styles.tags}>
+                <Image src={tag.img.url} boxSize="32px" />
+                <Box ml="1">
+                  <Text fontWeight={500}>{tag.name}</Text>
+                </Box>
+              </Tag>
+            </Link>
+          ))}
         </ul>
 
         <div style={{ height: "10px" }}></div>

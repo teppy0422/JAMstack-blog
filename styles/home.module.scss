@@ -153,3 +153,12 @@
     transition: 1s;
   }
 }
+
+span.tags {
+  margin: 5px 5px;
+  padding: 0px 8px 0px 0px;
+  border-radius: 16px 0 0 16px;
+  &:hover {
+    cursor: pointer;
+  }
+}

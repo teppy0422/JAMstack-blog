@@ -48,6 +48,3 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default MyApp;
-function changeMode() {
-  alert("aaa");
-}
