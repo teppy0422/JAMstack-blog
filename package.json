@@ -27,6 +27,8 @@
     "microcms-richedit-processer": "^1.0.5",
     "next": "latest",
     "next-seo": "^5.4.0",
+    "nextjs-progressbar": "^0.0.14",
+    "nprogress": "^0.2.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",

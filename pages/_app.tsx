@@ -2,8 +2,10 @@
 import { DefaultSeo } from "next-seo";
 import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
-import "../styles/globals.css"; //リセット用
-// import theme from "./theme";
+//プログレスバー
+import NextNprogress from "nextjs-progressbar"; // ここ！
+//リセット用
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -21,7 +23,7 @@ function MyApp({ Component, pageProps }) {
         openGraph={{
           type: "website",
           title: "teppy-Blog",
-          description: "ブログになりきれなかったメモ帳です",
+          description: "ブログにするつもりのメモ帳です",
           site_name: "teppy-Blog",
           url: "https://jam-stack-blog-teppy0422.vercel.app/",
           images: [
@@ -41,6 +43,8 @@ function MyApp({ Component, pageProps }) {
         }}
       />
       <ChakraProvider>
+        <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
+        {/* ここ！ */}
         <Component {...pageProps} />
       </ChakraProvider>
     </>
