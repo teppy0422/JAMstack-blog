@@ -10,13 +10,13 @@
   color: #000;
   background: #ffffff40;
   backdrop-filter: blur(10px);
-  border-color: #000 !important;
+  border-color: #000;
 }
 .myDark {
   color: #fff;
   background: #00000020;
   backdrop-filter: blur(10px);
-  border-color: #fff !important;
+  border-color: #fff;
   fill: pink;
 }
 .logo {
@@ -129,11 +129,11 @@
       animation: eyecatch_icon 0.5s linear forwards;
       @keyframes eyecatch_icon {
         0% {
-          opacity: 0;
+          opacity: 0.2;
           transform: translateX(0px);
         }
         10% {
-          transform: translateX(-50px);
+          transform: translateX(-40px);
         }
         100% {
           opacity: 1;
@@ -161,7 +161,12 @@ span.tags {
   margin: 5px 5px;
   padding: 0px 8px 0px 0px;
   border-radius: 16px 0 0 16px;
+  border: 1px solid lightgray;
   &:hover {
     cursor: pointer;
   }
+}
+.myChoice {
+  background: #f00;
+  color: #0f0;
 }

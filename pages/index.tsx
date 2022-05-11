@@ -1,4 +1,4 @@
-import Link from "next/link";
+import NextLink from "next/link";
 import { useState } from "react";
 import { client } from "../libs/client";
 import Header from "../components/header";
@@ -12,6 +12,8 @@ import {
   Text,
   Spacer,
   Center,
+  useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { RepeatClockIcon } from "@chakra-ui/icons";
 import styles from "../styles/home.module.scss";
@@ -19,17 +21,22 @@ import Moment from "react-moment";
 
 export default function Home({ blog, category, tag, blog2 }) {
   const [showBlogs, setShowBlogs] = useState(blog);
+
+  const { colorMode, toggleColorMode } = useColorMode();
+  const bg = useColorModeValue("gray.100", "pink.100");
+  const color = useColorModeValue("tomato", "pink");
+  const myClass = useColorModeValue(styles.myLight, styles.myDark);
   return (
     <Content>
       <Header />
       <div style={{ height: "56px" }}></div>
       <div style={{ height: "10px" }}></div>
-
       <ul>
         {tag.map((tag) => (
           <Tag
+            bg={bg}
             className={styles.tags}
-            onClick={() => testtttt(blog, tag, setShowBlogs)}
+            onClick={(e) => testtttt(e, blog, tag, setShowBlogs)}
           >
             <Image src={tag.img.url} boxSize="32px" />
             <Box ml="1">
@@ -42,7 +49,7 @@ export default function Home({ blog, category, tag, blog2 }) {
       <div style={{ height: "10px" }}></div>
 
       {showBlogs.map((blog) => (
-        <Link href={`/blog/${blog.id}`}>
+        <NextLink href={`/blog/${blog.id}`}>
           <a>
             <Flex className={styles.blogList}>
               <Box ml="3" style={{ margin: "10px 10px" }}>
@@ -67,7 +74,7 @@ export default function Home({ blog, category, tag, blog2 }) {
               </Box>
             </Flex>
           </a>
-        </Link>
+        </NextLink>
       ))}
 
       <div style={{ height: "500px" }}></div>
@@ -93,7 +100,19 @@ export const getStaticProps = async () => {
   };
 };
 
-const testtttt = async (blog, tag, setShowBlogs) => {
+const testtttt = async (e, blog, tag, setShowBlogs) => {
+  // 親要素をから複数の子要素を取得
+  let parent = e.currentTarget.parentNode;
+  let children = parent.children;
+  // タグを色をすべて解除
+  for (var i = 0; i < children.length; i++) {
+    children[i].style.color = "#111111";
+    children[i].style.borderColor = "lightgray";
+  }
+  // e.currentTarget.style.background = "rgba(255,0,0,0.4)";
+  e.currentTarget.style.color = "#ff1111";
+  e.currentTarget.style.borderColor = "#ff1111";
+  // タグでフィルター
   if (tag.name === "All") {
     setShowBlogs(blog);
   } else {
@@ -103,7 +122,7 @@ const testtttt = async (blog, tag, setShowBlogs) => {
     });
     setShowBlogs(selectedBlogs);
   }
-  //画面最上部へスクロールさせる
+  // 画面最上部へスクロールさせる
   window.scrollTo({
     top: 0,
     behavior: "smooth",
