@@ -18,13 +18,14 @@ import {
 import { RepeatClockIcon } from "@chakra-ui/icons";
 import styles from "../styles/home.module.scss";
 import Moment from "react-moment";
+import { motion } from "framer-motion";
 
 export default function Home({ blog, category, tag, blog2 }) {
   const [showBlogs, setShowBlogs] = useState(blog);
 
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("gray.100", "pink.100");
-  const color = useColorModeValue("tomato", "pink");
+  const color = useColorModeValue("#111111", "#111111");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   return (
     <Content>
@@ -32,6 +33,8 @@ export default function Home({ blog, category, tag, blog2 }) {
       <div style={{ height: "56px" }}></div>
       <div style={{ height: "10px" }}></div>
       <ul>
+        {/* tagにデータが無い場合 */}
+        {!tag.length && <Text>there are no posts...</Text>}
         {tag.map((tag) => (
           <Tag
             bg={bg}
@@ -40,13 +43,19 @@ export default function Home({ blog, category, tag, blog2 }) {
           >
             <Image src={tag.img.url} boxSize="30px" />
             <Box ml="1">
-              <Text fontWeight={500}>{tag.name}</Text>
+              <Text color={color} fontWeight={500}>
+                {tag.name}
+              </Text>
             </Box>
           </Tag>
         ))}
       </ul>
 
       <div style={{ height: "10px" }}></div>
+
+      <motion.button whileTap={{ scale: 1.5 }} className={styles.className}>
+        クリック
+      </motion.button>
 
       {showBlogs.map((blog) => (
         <NextLink href={`/blog/${blog.id}`}>
@@ -114,13 +123,19 @@ const testtttt = async (e, blog, tag, setShowBlogs) => {
   e.currentTarget.style.borderColor = "#ff1111";
   // タグでフィルター
   if (tag.name === "All") {
-    setShowBlogs(blog);
+    setShowBlogs([]);
+    setTimeout(function () {
+      setShowBlogs(blog);
+    }, 100);
   } else {
     const selectedBlogs = blog.filter((blog: any) => {
       const haveTags = blog.tags.map((tag: any) => tag.name);
       return haveTags.includes(tag.name);
     });
-    setShowBlogs(selectedBlogs);
+    setShowBlogs([]);
+    setTimeout(function () {
+      setShowBlogs(selectedBlogs);
+    }, 100);
   }
   // 画面最上部へスクロールさせる
   window.scrollTo({
