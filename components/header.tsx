@@ -60,6 +60,7 @@ export default function Header() {
             </Center>
             <Center w="100px">
               <IconButton
+                className={styles.modeChange}
                 _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 aria-label="DarkMode Switch"
                 icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />} //自分の好みでSunアイコンはreact-iconsを使用しています

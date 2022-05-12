@@ -119,12 +119,13 @@
 }
 .blogList {
   height: 80px;
-  transition: 2s;
+  transition: 0.5s;
   margin: 10px 0px;
   border: 1px #888 solid;
   border-radius: 10px;
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
+    border-color: #ff1111;
     .eyecatch {
       animation: eyecatch_icon 0.5s linear forwards;
       @keyframes eyecatch_icon {
@@ -176,11 +177,4 @@ span.tags {
   &:hover {
     cursor: pointer;
   }
-}
-.myChoice {
-  background: #f00;
-  color: #0f0;
-}
-
-.className {
 }

@@ -43,19 +43,13 @@ export default function Home({ blog, category, tag, blog2 }) {
           >
             <Image src={tag.img.url} boxSize="30px" />
             <Box ml="1">
-              <Text color={color} fontWeight={500}>
-                {tag.name}
-              </Text>
+              <Text fontWeight={500}>{tag.name}</Text>
             </Box>
           </Tag>
         ))}
       </ul>
 
       <div style={{ height: "10px" }}></div>
-
-      <motion.button whileTap={{ scale: 1.5 }} className={styles.className}>
-        クリック
-      </motion.button>
 
       {showBlogs.map((blog) => (
         <NextLink href={`/blog/${blog.id}`}>
