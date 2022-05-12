@@ -1,3 +1,5 @@
+import Moment from "react-moment";
+import { RepeatClockIcon } from "@chakra-ui/icons";
 import { Container, Divider, useColorModeValue } from "@chakra-ui/react";
 import { client } from "../../libs/client";
 import Header from "../../components/header";
@@ -21,7 +23,10 @@ export default function BlogId({ blog, highlightedBody }) {
         <Container className={styles.contain}>
           <h1 className={styles.title}>{blog.title}</h1>
           <Divider className={myClass} />
-          <p className={styles.publishedAt}>{blog.publishedAt}</p>
+          <RepeatClockIcon style={{ marginRight: "5px" }} />
+          <Moment format="YYYY/MM/DD" className={styles.publishedAt}>
+            {blog.publishedAt}
+          </Moment>
           {/* <p className="category">{blog.category && `${blog.category.name}`}</p> */}
 
           <div
