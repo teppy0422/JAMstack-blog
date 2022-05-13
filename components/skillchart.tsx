@@ -1,7 +1,8 @@
 import React from "react";
 import Highcharts from "highcharts";
-import HighchartsMore from "highcharts/highcharts-more";
+import HighchartsMore from "highcharts/modules/variable-pie";
 import HighchartsReact from "highcharts-react-official";
+import styles from "../styles/home.module.scss";
 
 const RadarChart: React.FunctionComponent = (): JSX.Element => {
   if (typeof Highcharts === "object") {
@@ -9,65 +10,84 @@ const RadarChart: React.FunctionComponent = (): JSX.Element => {
   }
   const options = {
     chart: {
-      polar: true,
-      type: "line",
+      type: "variablepie",
+      backgroundColor: "none",
     },
-
-    accessibility: {
-      description:
-        "A spiderweb chart compares the allocated budget against actual spending within an organization. The spider chart has six spokes. Each spoke represents one of the 6 departments within the organization: sales, marketing, development, customer support, information technology and administration. The chart is interactive, and each data point is displayed upon hovering. The chart clearly shows that 4 of the 6 departments have overspent their budget with Marketing responsible for the greatest overspend of $20,000. The allocated budget and actual spending data points for each department are as follows: Sales. Budget equals $43,000; spending equals $50,000. Marketing. Budget equals $19,000; spending equals $39,000. Development. Budget equals $60,000; spending equals $42,000. Customer support. Budget equals $35,000; spending equals $31,000. Information technology. Budget equals $17,000; spending equals $26,000. Administration. Budget equals $10,000; spending equals $14,000.",
+    credits: {
+      enabled: false,
     },
-
     title: {
-      text: "Budget vs spending",
-      x: -80,
-    },
-
-    pane: {
-      size: "80%",
-    },
-
-    xAxis: {
-      categories: [
-        "Sales",
-        "Marketing",
-        "Development",
-        "Customer Support",
-        "Information Technology",
-        "Administration",
-      ],
-      tickmarkPlacement: "on",
-      lineWidth: 0,
-    },
-
-    yAxis: {
-      gridLineInterpolation: "polygon",
-      lineWidth: 0,
-      min: 0,
+      text: "",
+      x: 0,
+      style: {
+        fontSize: "30px",
+      },
     },
 
     tooltip: {
-      shared: true,
+      headerFormat: "",
       pointFormat:
-        '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>',
+        '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
+        "自己評価: <b>{point.z}/100</b><br/>",
     },
-
-    legend: {
-      align: "right",
-      verticalAlign: "middle",
-      layout: "vertical",
-    },
-
     series: [
       {
-        name: "Allocated Budget",
-        data: [43000, 19000, 60000, 35000, 17000, 10000],
-        pointPlacement: "on",
-      },
-      {
-        name: "Actual Spending",
-        data: [50000, 39000, 42000, 31000, 26000, 14000],
-        pointPlacement: "on",
+        minPointSize: 0,
+        innerSize: "10%",
+        zMin: 0,
+        name: "language",
+
+        data: [
+          {
+            name: "VAB",
+            y: 100,
+            z: 95,
+            color: "#0c0",
+          },
+          {
+            name: "VB.net",
+            y: 100,
+            z: 30,
+            color: "#dd44dd",
+          },
+          {
+            name: "WEB-フロント",
+            y: 100,
+            z: 50,
+            color: "orange",
+          },
+          {
+            name: "WEB-サーバー",
+            y: 100,
+            z: 10,
+            color: "#3333ee",
+          },
+          {
+            name: "Arduino",
+            y: 100,
+            z: 60,
+            color: "#018F94",
+          },
+          {
+            name: "映像編集",
+            y: 100,
+            z: 40,
+            color: "#999999",
+          },
+          {
+            name: "イラスト",
+            y: 100,
+            z: 30,
+            color: "#666666",
+          },
+        ],
+        dataLabels: {
+          enabled: true,
+          style: {
+            fontSize: "14px",
+            fontFamily: "M PLUS Rounded 1c",
+          },
+        },
       },
     ],
 
@@ -82,9 +102,6 @@ const RadarChart: React.FunctionComponent = (): JSX.Element => {
               align: "center",
               verticalAlign: "bottom",
               layout: "horizontal",
-            },
-            pane: {
-              size: "70%",
             },
           },
         },

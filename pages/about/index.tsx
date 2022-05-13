@@ -20,6 +20,7 @@ export default function About() {
       <Header />
       <div style={{ height: "30px" }}></div>
       <div className={styles.me}>
+        <Text>-作成中-</Text>
         <Flex>
           <Box width={"75%"}>
             <Text fontSize={[28, 32, 36, 40]} className={styles.name}>
