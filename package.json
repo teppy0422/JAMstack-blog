@@ -21,6 +21,8 @@
     "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.10",
     "framer-motion": "^6.3.2",
+    "highcharts": "^10.1.0",
+    "highcharts-react-official": "^3.1.0",
     "highlight.js": "^11.5.1",
     "hljs": "^6.2.3",
     "microcms-js-sdk": "^2.0.0",

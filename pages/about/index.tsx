@@ -1,5 +1,6 @@
 import Content from "../../components/content";
 import Header from "../../components/header";
+import Skillchart from "../../components/skillchart";
 import {
   Center,
   Image,
@@ -69,6 +70,11 @@ export default function About() {
             現場の利用者と相談して更に発展させていくのが得意です。
           </Text>
         </Center>
+
+        <Text className={styles.subTitle}>スキル</Text>
+
+        <Skillchart />
+
         <NextImage
           src="/images/hippo.gif"
           alt="hippo_walking"
