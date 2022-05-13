@@ -1,3 +1,4 @@
+import React from "react";
 import Content from "../../components/content";
 import Header from "../../components/header";
 import Skillchart from "../../components/skillchart";
@@ -15,6 +16,7 @@ import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
 
 export default function About() {
+  const myheight = "400";
   return (
     <Content>
       <Header />
@@ -66,7 +68,7 @@ export default function About() {
         <Center>
           <Text>
             高知県出身のエンジニア。
-            自動車メーカーでワイヤーハーネスの製造/機械保全/生産計画/生産分析に従事。現場改善を繰り返す内にITや電子工学技術に興味を持つ。
+            自動車のワイヤーハーネス製造/機械保全/生産計画/生産分析に従事。現場改善を繰り返す内にITや電子工学技術に興味を持つ。
             EXCEL/ACCESSのソフトウェアからPLC/Arduinoなどのハードウェアを経験。それらをHTML/JavaScript/PHPで連携させる仕組みを構築。
             現場の利用者と相談して更に発展させていくのが得意です。
           </Text>
@@ -74,7 +76,7 @@ export default function About() {
 
         <Text className={styles.subTitle}>スキル</Text>
 
-        <Skillchart />
+        <Skillchart myHeight={myheight} />
 
         <NextImage
           src="/images/hippo.gif"

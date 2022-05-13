@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
+
 import Highcharts from "highcharts";
 import HighchartsMore from "highcharts/modules/variable-pie";
 import HighchartsReact from "highcharts-react-official";
 import styles from "../styles/home.module.scss";
 
-const RadarChart: React.FunctionComponent = (): JSX.Element => {
+const Skillchart: React.FunctionComponent = (props): JSX.Element => {
+  let myHeight: string = props.myHeight;
+  console.log(myHeight);
   if (typeof Highcharts === "object") {
     HighchartsMore(Highcharts);
   }
@@ -12,6 +15,7 @@ const RadarChart: React.FunctionComponent = (): JSX.Element => {
     chart: {
       type: "variablepie",
       backgroundColor: "none",
+      height: myHeight,
     },
     credits: {
       enabled: false,
@@ -20,7 +24,8 @@ const RadarChart: React.FunctionComponent = (): JSX.Element => {
       text: "",
       x: 0,
       style: {
-        fontSize: "30px",
+        fontSize: "18px",
+        fontWidth: 700,
       },
     },
 
@@ -28,7 +33,8 @@ const RadarChart: React.FunctionComponent = (): JSX.Element => {
       headerFormat: "",
       pointFormat:
         '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
-        "自己評価: <b>{point.z}/100</b><br/>",
+        "自己評価: <b>{point.z}/100</b><br/>" +
+        "<b>{point.detail}</b>",
     },
     series: [
       {
@@ -39,43 +45,50 @@ const RadarChart: React.FunctionComponent = (): JSX.Element => {
 
         data: [
           {
-            name: "VAB",
+            name: "VBA",
+            detail: "ほとんどの事が対応可能です",
             y: 100,
             z: 95,
             color: "#0c0",
           },
           {
             name: "VB.net",
+            detail: "一般的なアプリ作成が可能です",
             y: 100,
             z: 30,
             color: "#dd44dd",
           },
           {
-            name: "WEB-フロント",
+            name: "フロント",
+            detail: "HTML/CSS/JavaScript(Next)",
             y: 100,
             z: 50,
             color: "orange",
           },
           {
-            name: "WEB-サーバー",
+            name: "サーバー",
+            detail: "PHP/Pythonが少しだけ",
             y: 100,
             z: 10,
             color: "#3333ee",
           },
           {
             name: "Arduino",
+            detail: "ステッピングモーターを制御など",
             y: 100,
             z: 60,
             color: "#018F94",
           },
           {
             name: "映像編集",
+            detail: "Davinch Resolve",
             y: 100,
             z: 40,
             color: "#999999",
           },
           {
             name: "イラスト",
+            detail: "InkScape",
             y: 100,
             z: 30,
             color: "#666666",
@@ -84,7 +97,7 @@ const RadarChart: React.FunctionComponent = (): JSX.Element => {
         dataLabels: {
           enabled: true,
           style: {
-            fontSize: "14px",
+            fontSize: "13px",
             fontFamily: "M PLUS Rounded 1c",
           },
         },
@@ -108,7 +121,11 @@ const RadarChart: React.FunctionComponent = (): JSX.Element => {
       ],
     },
   };
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return (
+    <div className={styles.skillchart}>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </div>
+  );
 };
 
-export default RadarChart;
+export default Skillchart;
