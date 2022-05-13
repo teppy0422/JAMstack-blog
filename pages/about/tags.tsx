@@ -1,8 +1,8 @@
 import NextLink from "next/link";
 import { useState } from "react";
-import { client } from "../libs/client";
-import Header from "../components/header";
-import Content from "../components/content";
+import { client } from "../../libs/client";
+import Header from "../../components/header";
+import Content from "../../components/content";
 import {
   Container,
   Tag,
@@ -16,11 +16,11 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { RepeatClockIcon } from "@chakra-ui/icons";
-import styles from "../styles/home.module.scss";
+import styles from "../../styles/home.module.scss";
 import Moment from "react-moment";
 import { motion } from "framer-motion";
 
-export default function Home({ blog, category, tag, blog2 }) {
+export default function Tags({ blog, category, tag, blog2 }) {
   const [showBlogs, setShowBlogs] = useState(blog);
 
   const { colorMode, toggleColorMode } = useColorMode();
@@ -28,59 +28,22 @@ export default function Home({ blog, category, tag, blog2 }) {
   const color = useColorModeValue("#111111", "#111111");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   return (
-    <Content>
-      <Header />
-      <div style={{ height: "10px" }}></div>
-      <ul>
-        {/* tagにデータが無い場合 */}
-        {!tag.length && <Text>there are no posts...</Text>}
-        {tag.map((tag) => (
-          <Tag
-            bg={bg}
-            className={styles.tags}
-            onClick={(e) => testtttt(e, blog, tag, setShowBlogs)}
-          >
-            <Image src={tag.img.url} boxSize="30px" />
-            <Box ml="1">
-              <Text fontWeight={500}>{tag.name}</Text>
-            </Box>
-          </Tag>
-        ))}
-      </ul>
-
-      <div style={{ height: "10px" }}></div>
-
-      {showBlogs.map((blog) => (
-        <NextLink href={`/blog/${blog.id}`}>
-          <a>
-            <Flex className={styles.blogList}>
-              <Box ml="3" style={{ margin: "10px 10px" }}>
-                <Text className={styles.blogTitle} fontWeight="bold">
-                  {blog.title}
-                </Text>
-                <Text fontSize="sm">{blog.subtitle}</Text>
-                <Text fontSize="sm" style={{ opacity: "0.5" }}>
-                  <RepeatClockIcon style={{ marginRight: "5px" }} />
-                  <Moment format="YYYY/MM/DD">{blog.updatedAt}</Moment>
-                </Text>
-              </Box>
-              <Spacer />
-              <Box>
-                <Image
-                  className={styles.eyecatch}
-                  boxSize="80px"
-                  objectFit="cover"
-                  alt={blog.title}
-                  src={blog.eyecatch.url}
-                />
-              </Box>
-            </Flex>
-          </a>
-        </NextLink>
+    <ul>
+      {/* tagにデータが無い場合 */}
+      {!tag.length && <Text>there are no posts...</Text>}
+      {tag.map((tag) => (
+        <Tag
+          bg={bg}
+          className={styles.tags}
+          onClick={(e) => testtttt(e, blog, tag, setShowBlogs)}
+        >
+          <Image src={tag.img.url} boxSize="30px" />
+          <Box ml="1">
+            <Text fontWeight={500}>{tag.name}</Text>
+          </Box>
+        </Tag>
       ))}
-
-      <div style={{ height: "500px" }}></div>
-    </Content>
+    </ul>
   );
 }
 // データをテンプレートに受け渡す部分の処理を記述します

@@ -6,7 +6,6 @@ export default function Content({ children }) {
     <>
       <Container className={`container`}>{children}</Container>
       <hr />
-
       <Center h="50px" color="gray">
         ©︎ 2022 Teppei Kataoka. All rights Reserved.
       </Center>
