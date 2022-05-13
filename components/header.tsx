@@ -85,8 +85,6 @@ export default function Header() {
           </Flex>
         </VStack>
       </header>
-
-      <div style={{ height: "56px" }}></div>
     </>
   );
 }

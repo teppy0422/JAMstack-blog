@@ -1,13 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useRef } from "react";
 
 import Highcharts from "highcharts";
 import HighchartsMore from "highcharts/modules/variable-pie";
 import HighchartsReact from "highcharts-react-official";
+
 import styles from "../styles/home.module.scss";
 
+import GetWindowSize, { getWindowSize } from "../script/GetWindowSize";
+
 const Skillchart: React.FunctionComponent = (props): JSX.Element => {
-  let myHeight: string = props.myHeight;
-  console.log(myHeight);
+  const WindowSize = GetWindowSize();
+  let myWidth: number = WindowSize.width;
+  let myHeight: number = 0;
+  if (myWidth > 500) {
+    myHeight = 500;
+  } else {
+    myHeight = myWidth - 100;
+  }
+  console.log(myWidth);
   if (typeof Highcharts === "object") {
     HighchartsMore(Highcharts);
   }

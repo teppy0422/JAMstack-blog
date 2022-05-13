@@ -30,7 +30,7 @@ export default function Home({ blog, category, tag, blog2 }) {
   return (
     <Content>
       <Header />
-      <div style={{ height: "10px" }}></div>
+      <div style={{ height: "66px" }}></div>
       <ul>
         {/* tagにデータが無い場合 */}
         {!tag.length && <Text>there are no posts...</Text>}

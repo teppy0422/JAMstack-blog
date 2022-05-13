@@ -16,11 +16,10 @@ import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
 
 export default function About() {
-  const myheight = "400";
   return (
     <Content>
       <Header />
-      <div style={{ height: "30px" }}></div>
+      <div style={{ height: "66px" }}></div>
       <div className={styles.me}>
         <Text>-作成中-</Text>
         <Flex>
@@ -76,7 +75,7 @@ export default function About() {
 
         <Text className={styles.subTitle}>スキル</Text>
 
-        <Skillchart myHeight={myheight} />
+        <Skillchart />
 
         <NextImage
           src="/images/hippo.gif"
