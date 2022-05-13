@@ -179,3 +179,32 @@ span.tags {
     cursor: pointer;
   }
 }
+
+.me {
+  font-size: 16px;
+  .name {
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-weight: 700;
+    margin-right: 16px;
+    text-decoration: underline;
+  }
+  .tool {
+    margin: -6px 0 12px 6px;
+    line-height: 1em;
+    span {
+      cursor: pointer;
+      color: red;
+    }
+  }
+  .pic {
+    border-radius: 50%;
+  }
+  .subTitle {
+    font-family: "M PLUS Rounded 1c";
+    font-weight: 700;
+    font-size: 1.2em;
+    text-decoration: underline 4px;
+    text-underline-offset: 4px;
+    margin-bottom: 0.4em;
+  }
+}
