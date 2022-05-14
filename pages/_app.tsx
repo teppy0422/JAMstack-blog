@@ -2,6 +2,7 @@
 import { DefaultSeo } from "next-seo";
 import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
+import theme from "../libs/theme";
 //プログレスバー
 import NextNprogress from "nextjs-progressbar"; // ここ！
 //リセット用
@@ -42,7 +43,7 @@ function MyApp({ Component, pageProps }) {
           cardType: "summary_large_image",
         }}
       />
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
         {/* ここ！ */}
         <Component {...pageProps} />

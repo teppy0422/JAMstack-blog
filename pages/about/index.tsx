@@ -81,12 +81,31 @@ export default function About() {
         <Text className={styles.subTitle}>スキル</Text>
         <Skillchart />
 
-        <CircularProgress value={90} color="green.400" size="120px">
+        <CircularProgress
+          value={90}
+          color="excel"
+          size="120px"
+          trackColor="gray.300"
+        >
           <CircularProgressLabel fontSize={18}>EXCEL</CircularProgressLabel>
         </CircularProgress>
 
-        <CircularProgress value={30} color="purple.400" size="120px">
+        <CircularProgress
+          value={30}
+          color="vb"
+          size="120px"
+          trackColor="gray.300"
+        >
           <CircularProgressLabel fontSize={18}>VB.net</CircularProgressLabel>
+        </CircularProgress>
+
+        <CircularProgress
+          value={65}
+          color="front"
+          size="120px"
+          trackColor="gray.300"
+        >
+          <CircularProgressLabel fontSize={18}>HTML</CircularProgressLabel>
         </CircularProgress>
 
         <Text className={styles.subTitle}>Works</Text>

@@ -66,7 +66,7 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
             detail: "一般的なアプリ作成が可能です",
             y: 100,
             z: 30,
-            color: "#dd44dd",
+            color: "#9A4F96",
           },
           {
             name: "フロント",
