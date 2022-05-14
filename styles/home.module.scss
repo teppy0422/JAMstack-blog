@@ -216,3 +216,21 @@ span.tags {
 element.style {
   font-size: 20px !important;
 }
+.cir {
+  &:hover .cirText {
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.4s;
+  }
+  .cirText {
+    opacity: 0;
+    width: 118px;
+    height: 118px;
+    border-radius: 50%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    font-size: 18px;
+    transition: opacity 1s;
+  }
+}

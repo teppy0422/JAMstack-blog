@@ -17,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
+import { theme } from "highcharts";
 
 export default function About() {
   return (
@@ -91,12 +92,16 @@ export default function About() {
         </CircularProgress>
 
         <CircularProgress
+          className={styles.cir}
           value={30}
           color="vb"
           size="120px"
           trackColor="gray.300"
         >
           <CircularProgressLabel fontSize={18}>VB.net</CircularProgressLabel>
+          <Center className={styles.cirText} bg="vb">
+            <Text>VB.net</Text>
+          </Center>
         </CircularProgress>
 
         <CircularProgress

@@ -284,4 +284,24 @@ span.tags:hover {
 element.style {
   font-size: 20px !important;
 }
+
+.cir:hover .cirText {
+  cursor: pointer;
+  opacity: 1;
+  -webkit-transition: opacity 0.4s;
+  transition: opacity 0.4s;
+}
+
+.cir .cirText {
+  opacity: 0;
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  font-size: 18px;
+  -webkit-transition: opacity 1s;
+  transition: opacity 1s;
+}
 /*# sourceMappingURL=home.module.css.map */
