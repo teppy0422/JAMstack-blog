@@ -97,6 +97,18 @@ export default function About() {
             color="front"
           />
           <SkillCircle
+            value={60}
+            cirText={"CSS\n基本的な使い方"}
+            cir="CSS"
+            color="front"
+          />
+          <SkillCircle
+            value={40}
+            cirText={"JavaScript\n"}
+            cir="JavaScript"
+            color="front"
+          />
+          <SkillCircle
             value={30}
             cirText={"vb.net\nカメラ制御\n生産誘導"}
             cir="VB.net"
