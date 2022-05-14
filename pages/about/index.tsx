@@ -82,40 +82,27 @@ export default function About() {
 
         <Text className={styles.subTitle}>スキル</Text>
         <Skillchart />
+        <Box style={{ textAlign: "center" }}>
+          <SkillCircle
+            value={90}
+            cirText={"EXCEL\nvbaアプリ制御など"}
+            cir="EXCEL"
+            color="excel"
+          />
 
-        <CircularProgress
-          value={90}
-          color="excel"
-          size="120px"
-          trackColor="gray.300"
-        >
-          <CircularProgressLabel fontSize={18}>EXCEL</CircularProgressLabel>
-        </CircularProgress>
-
-        <CircularProgress
-          className={styles.cir}
-          value={30}
-          color="vb"
-          size="120px"
-          trackColor="gray.300"
-        >
-          <CircularProgressLabel fontSize={18}>VB.net</CircularProgressLabel>
-          <Center className={styles.cirText} bg="vb">
-            <Text>VB.net</Text>
-          </Center>
-        </CircularProgress>
-
-        <CircularProgress
-          value={65}
-          color="front"
-          size="120px"
-          trackColor="gray.300"
-        >
-          <CircularProgressLabel fontSize={18}>HTML</CircularProgressLabel>
-        </CircularProgress>
-
-        <SkillCircle cirText="test" />
-
+          <SkillCircle
+            value={65}
+            cirText={"HTML\n基本的な使い方"}
+            cir="HTML"
+            color="front"
+          />
+          <SkillCircle
+            value={30}
+            cirText={"vb.net\nカメラ制御\n生産誘導"}
+            cir="VB.net"
+            color="vb"
+          />
+        </Box>
         <Text className={styles.subTitle}>Works</Text>
         <Text>ここ最近の実績です。</Text>
 
