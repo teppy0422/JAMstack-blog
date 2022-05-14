@@ -3,6 +3,7 @@ import Content from "../../components/content";
 import Header from "../../components/header";
 import Skillchart from "../../components/skillchart";
 import ImageCard from "../../components/imageCard";
+import SkillCircle from "../../components/skillCircle";
 import {
   Center,
   Image,
@@ -112,6 +113,8 @@ export default function About() {
         >
           <CircularProgressLabel fontSize={18}>HTML</CircularProgressLabel>
         </CircularProgress>
+
+        <SkillCircle cirText="test" />
 
         <Text className={styles.subTitle}>Works</Text>
         <Text>ここ最近の実績です。</Text>
