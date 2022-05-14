@@ -8,7 +8,7 @@ import styles from "../styles/home.module.scss";
 
 import GetWindowSize, { getWindowSize } from "../script/GetWindowSize";
 
-const Skillchart: React.FunctionComponent = (props): JSX.Element => {
+const Skillchart: React.FunctionComponent = (): JSX.Element => {
   const WindowSize = GetWindowSize();
   let myWidth: number = WindowSize.width;
   let myHeight: number = 0;
@@ -55,11 +55,11 @@ const Skillchart: React.FunctionComponent = (props): JSX.Element => {
 
         data: [
           {
-            name: "VBA",
+            name: "エクセルVBA",
             detail: "ほとんどの事が対応可能です",
             y: 100,
             z: 95,
-            color: "#0c0",
+            color: "#48BB78",
           },
           {
             name: "VB.net",

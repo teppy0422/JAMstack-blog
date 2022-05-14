@@ -58,7 +58,7 @@
   height: 28px;
 }
 
-.contain {
+.container {
   background: #ffffff10;
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
