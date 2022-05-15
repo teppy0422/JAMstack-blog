@@ -84,59 +84,87 @@ export default function About() {
         <Box style={{ textAlign: "center" }}>
           <SkillCircle
             value={90}
-            cirText={"EXCEL\nvbaアプリ制御など"}
+            cirText={"EXCEL-vba\nアプリ制御など"}
             color="excel"
             timing={0}
             img="/images/logo_excel.svg"
           />
           <SkillCircle
+            value={65}
+            cirText={"ACCESS-vba\n"}
+            color="excel"
+            timing={1}
+            img="/images/logo_access.svg"
+          />
+          <SkillCircle
             value={30}
             cirText={"vb.net\nカメラ制御\n生産誘導"}
             color="dotNet"
-            timing={1}
+            timing={2}
             img="/images/logo_dotNet.svg"
           />
           <SkillCircle
             value={60}
             cirText={"HTML\n基本的な使い方"}
             color="front"
-            timing={2}
+            timing={3}
             img="/images/logo_html5.svg"
           />
           <SkillCircle
             value={65}
             cirText={"CSS\n基本的な使い方\n+SCSS"}
             color="front"
-            timing={3}
+            timing={4}
             img="/images/logo_css.svg"
           />
           <SkillCircle
             value={40}
             cirText={"JavaScript\n "}
             color="front"
-            timing={4}
+            timing={5}
             img="/images/logo_javascript.svg"
           />
           <SkillCircle
             value={35}
             cirText={"Next\nこのサイトで利用"}
             color="front"
-            timing={5}
+            timing={6}
             img="/images/logo_next.svg"
           />
           <SkillCircle
             value={30}
             cirText={"PHP\n "}
             color="php"
-            timing={6}
+            timing={7}
             img="/images/logo_php.svg"
           />
           <SkillCircle
             value={20}
-            cirText={"Python\n ほんの少しだけ"}
+            cirText={"Python\nほんの少しだけ"}
             color="php"
-            timing={7}
+            timing={8}
             img="/images/logo_python.svg"
+          />
+          <SkillCircle
+            value={60}
+            cirText={"Arduino\n "}
+            color="arduino"
+            timing={9}
+            img="/images/logo_arduino.svg"
+          />
+          <SkillCircle
+            value={30}
+            cirText={"Davinci Resolve\n "}
+            color="davinci"
+            timing={10}
+            img="/images/logo_davinci.svg"
+          />
+          <SkillCircle
+            value={30}
+            cirText={"InkScape\n "}
+            color="inkscape"
+            timing={11}
+            img="/images/logo_inkscape.svg"
           />
         </Box>
         <Text className={styles.subTitle}>Works</Text>

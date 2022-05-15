@@ -29,7 +29,7 @@ function skillCircle(pops) {
   };
   const onScroll = (): void => {
     const position = scrollTop();
-    console.log(property.timing);
+    // console.log(property.timing);
     if (position >= pops.timing * 40 + 400) {
       setCirValue(pops.value);
     } else {

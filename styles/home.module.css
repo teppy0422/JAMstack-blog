@@ -287,7 +287,7 @@ element.style {
 
 .cir:hover .cirText {
   cursor: pointer;
-  opacity: 1;
+  opacity: 0.95;
   -webkit-transition: opacity 0.4s;
   transition: opacity 0.4s;
 }

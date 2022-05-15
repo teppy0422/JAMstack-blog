@@ -10,6 +10,9 @@ const theme = extendTheme({
     dotNet: "#9A4F96",
     front: "#F1652A",
     php: "#4E5B92",
+    arduino: "#12999F",
+    davinci: "#888888",
+    inkscape: "#333333",
   },
 });
 export default theme;
