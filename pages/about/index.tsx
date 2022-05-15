@@ -4,6 +4,7 @@ import Header from "../../components/header";
 import Skillchart from "../../components/skillchart";
 import ImageCard from "../../components/imageCard";
 import SkillCircle from "../../components/skillCircle";
+import ModalWork from "../../components/modal";
 import {
   Center,
   Image,
@@ -167,13 +168,18 @@ export default function About() {
             img="/images/logo_inkscape.svg"
           />
         </Box>
+
         <Text className={styles.subTitle}>Works</Text>
         <Text>ここ最近の実績です。</Text>
 
         <div style={{ height: "66px" }}></div>
 
-        <ImageCard imagePath="../../public/images/sjp_menu.png" />
-        <ImageCard imagePath="../../public/images/sjp_menu.png" />
+        <ModalWork />
+
+        <Box style={{ textAlign: "center" }}>
+          <ImageCard imagePath="../../public/images/sjp_menu.png" />
+          <ImageCard imagePath="../../public/images/sjp_menu.png" />
+        </Box>
 
         <Box boxShadow="xl" rounded="md">
           <NextImage
@@ -183,6 +189,7 @@ export default function About() {
             height={178}
           />
         </Box>
+        <Text className={styles.subTitle}>経験した構成</Text>
       </div>
     </Content>
   );

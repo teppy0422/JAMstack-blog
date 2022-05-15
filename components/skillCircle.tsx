@@ -60,7 +60,7 @@ function skillCircle(pops) {
           />
         </CircularProgressLabel>
         <Center className={styles.cirText} bg={property.color}>
-          <Text>{property.cirText}</Text>
+          <Text color="white">{property.cirText}</Text>
         </Center>
       </CircularProgress>
     </>
