@@ -87,7 +87,7 @@ export default function About() {
             cirText={"EXCEL\nvbaアプリ制御など"}
             cir="EXCEL-vba"
             color="excel"
-            timing={300}
+            timing={350}
             img="/images/logo_excel.svg"
           />
           <SkillCircle
@@ -95,31 +95,31 @@ export default function About() {
             cirText={"vb.net\nカメラ制御\n生産誘導"}
             cir="VB.net"
             color="dotNet"
-            timing={350}
+            timing={400}
             img="/images/logo_dotNet.svg"
           />
           <SkillCircle
-            value={65}
+            value={60}
             cirText={"HTML\n基本的な使い方"}
             cir="HTML"
             color="front"
-            timing={400}
+            timing={450}
             img="/images/logo_html5.svg"
           />
           <SkillCircle
-            value={60}
-            cirText={"CSS\n基本的な使い方"}
+            value={65}
+            cirText={"CSS\n基本的な使い方\n+SCSS"}
             cir="CSS"
             color="front"
-            timing={450}
+            timing={500}
             img="/images/logo_css.svg"
           />
           <SkillCircle
             value={40}
-            cirText={"JavaScript\n"}
+            cirText={"JavaScript\n+Next"}
             cir="JavaScript"
             color="front"
-            timing={500}
+            timing={550}
             img="/images/logo_javascript.svg"
           />
         </Box>
