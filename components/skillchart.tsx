@@ -73,7 +73,7 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
             detail: "HTML/CSS/JavaScript(Next)",
             y: 100,
             z: 50,
-            color: "orange",
+            color: "#F1652A",
           },
           {
             name: "サーバー",

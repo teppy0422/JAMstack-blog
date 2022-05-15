@@ -85,37 +85,42 @@ export default function About() {
           <SkillCircle
             value={90}
             cirText={"EXCEL\nvbaアプリ制御など"}
-            cir="EXCEL"
+            cir="EXCEL-vba"
             color="excel"
-            timing={400}
+            timing={300}
+            img="/images/logo_excel.svg"
           />
           <SkillCircle
             value={30}
             cirText={"vb.net\nカメラ制御\n生産誘導"}
             cir="VB.net"
-            color="vb"
-            timing={450}
+            color="dotNet"
+            timing={350}
+            img="/images/logo_dotNet.svg"
           />
           <SkillCircle
             value={65}
             cirText={"HTML\n基本的な使い方"}
             cir="HTML"
             color="front"
-            timing={500}
+            timing={400}
+            img="/images/logo_html5.svg"
           />
           <SkillCircle
             value={60}
             cirText={"CSS\n基本的な使い方"}
             cir="CSS"
             color="front"
-            timing={550}
+            timing={450}
+            img="/images/logo_css.svg"
           />
           <SkillCircle
             value={40}
             cirText={"JavaScript\n"}
             cir="JavaScript"
             color="front"
-            timing={600}
+            timing={500}
+            img="/images/logo_javascript.svg"
           />
         </Box>
         <Text className={styles.subTitle}>Works</Text>

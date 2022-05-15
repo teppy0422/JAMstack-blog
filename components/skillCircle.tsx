@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   CircularProgress,
   CircularProgressLabel,
@@ -25,6 +26,7 @@ function skillCircle(pops) {
     color: pops.color,
     cir: pops.cir,
     timing: pops.timing,
+    img: pops.img,
   };
   const onScroll = (): void => {
     const position = scrollTop();
@@ -51,7 +53,12 @@ function skillCircle(pops) {
         trackColor="gray.300"
       >
         <CircularProgressLabel fontSize={18}>
-          {property.cir}
+          <Image
+            src={property.img}
+            width="72px"
+            height="72px"
+            alt="logo-excel"
+          />
         </CircularProgressLabel>
         <Center className={styles.cirText} bg={property.color}>
           <Text>{property.cirText}</Text>
