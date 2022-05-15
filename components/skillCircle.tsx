@@ -24,14 +24,13 @@ function skillCircle(pops) {
     cirText: pops.cirText,
     value: pops.value,
     color: pops.color,
-    cir: pops.cir,
     timing: pops.timing,
     img: pops.img,
   };
   const onScroll = (): void => {
     const position = scrollTop();
-    // console.log(e.currentTarget.charset);
-    if (position >= pops.timing) {
+    console.log(property.timing);
+    if (position >= pops.timing * 40 + 400) {
       setCirValue(pops.value);
     } else {
       setCirValue(0.01);
@@ -49,7 +48,7 @@ function skillCircle(pops) {
         className={styles.cir}
         value={cirValue}
         color={property.color}
-        size="180px"
+        size="160px"
         trackColor="gray.300"
       >
         <CircularProgressLabel fontSize={18}>
@@ -57,7 +56,7 @@ function skillCircle(pops) {
             src={property.img}
             width="72px"
             height="72px"
-            alt="logo-excel"
+            alt={property.color}
           />
         </CircularProgressLabel>
         <Center className={styles.cirText} bg={property.color}>

@@ -9,6 +9,7 @@ const theme = extendTheme({
     excel: "#1f9b60",
     dotNet: "#9A4F96",
     front: "#F1652A",
+    php: "#4E5B92",
   },
 });
 export default theme;

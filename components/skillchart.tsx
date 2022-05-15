@@ -76,11 +76,11 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
             color: "#F1652A",
           },
           {
-            name: "サーバー",
+            name: "バック",
             detail: "PHP/Pythonが少しだけ",
             y: 100,
             z: 10,
-            color: "#3333ee",
+            color: "#4E5B92",
           },
           {
             name: "Arduino",
