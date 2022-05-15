@@ -21,10 +21,8 @@ import styles from "../../styles/home.module.scss";
 import { theme } from "highcharts";
 
 export default function About() {
-  const name = "jijijij";
   return (
     <Content>
-      <div style={{ height: "66px" }}></div>
       <div className={styles.me}>
         <Text>-作成中-</Text>
         <VStack>
@@ -89,30 +87,35 @@ export default function About() {
             cirText={"EXCEL\nvbaアプリ制御など"}
             cir="EXCEL"
             color="excel"
+            timing={400}
           />
           <SkillCircle
             value={30}
             cirText={"vb.net\nカメラ制御\n生産誘導"}
             cir="VB.net"
             color="vb"
+            timing={450}
           />
           <SkillCircle
             value={65}
             cirText={"HTML\n基本的な使い方"}
             cir="HTML"
             color="front"
+            timing={500}
           />
           <SkillCircle
             value={60}
             cirText={"CSS\n基本的な使い方"}
             cir="CSS"
             color="front"
+            timing={550}
           />
           <SkillCircle
             value={40}
             cirText={"JavaScript\n"}
             cir="JavaScript"
             color="front"
+            timing={600}
           />
         </Box>
         <Text className={styles.subTitle}>Works</Text>

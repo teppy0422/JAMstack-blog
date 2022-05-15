@@ -1,11 +1,12 @@
 // レイアウトを決める
-import { Container, Center } from "@chakra-ui/react";
+import { Container, Center, Box } from "@chakra-ui/react";
 import Header from "../components/header";
 
 export default function Content({ children }) {
   return (
     <>
       <Header />
+      <Box height="66px"></Box>
       <Container
         maxWidth="960px"
         className={`container`}

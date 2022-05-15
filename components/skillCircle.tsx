@@ -24,13 +24,12 @@ function skillCircle(pops) {
     value: pops.value,
     color: pops.color,
     cir: pops.cir,
+    timing: pops.timing,
   };
-
   const onScroll = (): void => {
     const position = scrollTop();
-    console.log(position);
-
-    if (position >= 800) {
+    // console.log(e.currentTarget.charset);
+    if (position >= pops.timing) {
       setCirValue(pops.value);
     } else {
       setCirValue(0.01);
