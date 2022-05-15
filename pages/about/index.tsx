@@ -21,6 +21,7 @@ import styles from "../../styles/home.module.scss";
 import { theme } from "highcharts";
 
 export default function About() {
+  const name = "jijijij";
   return (
     <Content>
       <div style={{ height: "66px" }}></div>
@@ -89,7 +90,12 @@ export default function About() {
             cir="EXCEL"
             color="excel"
           />
-
+          <SkillCircle
+            value={30}
+            cirText={"vb.net\nカメラ制御\n生産誘導"}
+            cir="VB.net"
+            color="vb"
+          />
           <SkillCircle
             value={65}
             cirText={"HTML\n基本的な使い方"}
@@ -107,12 +113,6 @@ export default function About() {
             cirText={"JavaScript\n"}
             cir="JavaScript"
             color="front"
-          />
-          <SkillCircle
-            value={30}
-            cirText={"vb.net\nカメラ制御\n生産誘導"}
-            cir="VB.net"
-            color="vb"
           />
         </Box>
         <Text className={styles.subTitle}>Works</Text>
