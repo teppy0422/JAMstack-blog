@@ -4,7 +4,7 @@ import { StarIcon } from "@chakra-ui/icons";
 import styles from "../styles/home.module.scss";
 function imageCard(pops) {
   const property = {
-    imageUrl: "/images/sjp_menu.png",
+    imageUrl: pops.eyeCatchPath,
     imageAlt: "Rear view of modern home with pool",
     beds: 3,
     baths: 2,
@@ -15,11 +15,18 @@ function imageCard(pops) {
   };
 
   return (
-    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box
+      maxW="sm"
+      borderWidth="1px"
+      borderRadius="10px"
+      overflow="hidden"
+      borderColor="gray.500"
+      margin="10px"
+    >
       <Image
         src={property.imageUrl}
         alt={property.imageAlt}
-        borderRadius="lg"
+        borderRadius="12px 12px 0 0 "
       />
 
       <Box p="6">
@@ -51,7 +58,7 @@ function imageCard(pops) {
 
         <Box>
           {property.formattedPrice}
-          <Box as="span" color="gray.600" fontSize="sm">
+          <Box as="span" color="gray.900" fontSize="sm">
             / wk
           </Box>
         </Box>

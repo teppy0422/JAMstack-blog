@@ -2,7 +2,6 @@ import React from "react";
 import Content from "../../components/content";
 import Header from "../../components/header";
 import Skillchart from "../../components/skillchart";
-import ImageCard from "../../components/imageCard";
 import SkillCircle from "../../components/skillCircle";
 import ModalWork from "../../components/modal";
 import {
@@ -171,16 +170,16 @@ export default function About() {
 
         <Text className={styles.subTitle}>Works</Text>
         <Text>ここ最近の実績です。</Text>
+        <div style={{ height: "24px" }}></div>
 
+        <Center>
+          <Flex>
+            <ModalWork eyecatchpath="/images/sjp_menu.png" />
+            <Spacer />
+            <ModalWork eyecatchpath="/images/sjp_menu.png" />
+          </Flex>
+        </Center>
         <div style={{ height: "66px" }}></div>
-
-        <ModalWork />
-
-        <Box style={{ textAlign: "center" }}>
-          <ImageCard imagePath="../../public/images/sjp_menu.png" />
-          <ImageCard imagePath="../../public/images/sjp_menu.png" />
-        </Box>
-
         <Box boxShadow="xl" rounded="md">
           <NextImage
             src="/images/hippo.gif"

@@ -12,12 +12,18 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 
-function ModalWork() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+import ImageCard from "./imageCard";
 
+function ModalWork(pops) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const property = {
+    eyeCatchPath: pops.eyecatchpath,
+  };
   return (
     <>
-      <Button onClick={onOpen}>Trigger modal</Button>
+      <a onClick={onOpen} style={{ cursor: "pointer" }}>
+        <ImageCard eyeCatchPath={property.eyeCatchPath} onClick={onOpen} />
+      </a>
 
       <Modal
         onClose={onClose}
