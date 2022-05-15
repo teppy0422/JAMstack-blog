@@ -9,7 +9,7 @@ export default function Content({ children }) {
       <Container
         maxWidth="960px"
         className={`container`}
-        style={{ background: "rgba(255,255,255,0.1)", marginTop: "66px" }}
+        style={{ background: "rgba(255,255,255,0.1)" }}
       >
         {children}
       </Container>
