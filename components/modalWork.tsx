@@ -16,16 +16,16 @@ import Image from "next/image";
 import ImageCard from "./imageCard";
 import styles from "../styles/home.module.scss";
 
-export default function ModalWork({ children }, pops) {
+export default function ModalWork(pops) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const property = {
     imagetitle: pops.title,
-    eyeCatchPath: pops.eyecatchpath,
+    detail: pops.detail,
   };
   return (
     <>
       <a onClick={onOpen} style={{ cursor: "pointer" }}>
-        {children}
+        {pops.children}
       </a>
 
       <Modal
@@ -38,25 +38,13 @@ export default function ModalWork({ children }, pops) {
         <ModalOverlay
           bg="none"
           backdropFilter="auto"
-          backdropInvert="80%"
-          backdropBlur="2px"
+          backdropInvert="70%"
+          backdropBlur="4px"
         />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>{property.imagetitle}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <Image src="/images/hippo.gif" width={1000} height={1000}></Image>
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-          </ModalBody>
+          <ModalBody>{property.detail}</ModalBody>
           <ModalFooter>
             <Button onClick={onClose}>Close</Button>
           </ModalFooter>

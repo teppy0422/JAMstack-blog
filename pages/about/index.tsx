@@ -4,6 +4,8 @@ import Skillchart from "../../components/skillchart";
 import SkillCircle from "../../components/skillCircle";
 import ModalWork from "../../components/modalWork";
 import ImageCard from "../../components/imageCard";
+import SjpDetail from "../../components/worksDetail/SjpDetail";
+
 import {
   Center,
   Image,
@@ -25,8 +27,6 @@ import styles from "../../styles/home.module.scss";
 import { theme } from "highcharts";
 
 export default function About() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
     <Content>
       <div className={styles.me}>
@@ -180,20 +180,20 @@ export default function About() {
 
         <VStack>
           <Box textAlign="center">
-            <ModalWork>
-              <ImageCard
-                title="生産準備+"
-                eyeCatchPath="/images/sjp_menu.png"
-                onClick={onOpen}
-              />
-            </ModalWork>
-            <ModalWork>
+            <ModalWork title="生産準備+" detail={<SjpDetail />}>
               <ImageCard
                 title="生産準備+"
                 eyeCatchPath="/images/sjp_menu.png"
                 rate={5}
-                ursers={341}
-                onClick={onOpen}
+                users={341}
+              />
+            </ModalWork>
+            <ModalWork>
+              <ImageCard
+                title="検査結果表示+"
+                eyeCatchPath="/images/sjp_kensarireki_YCC.png"
+                rate={5}
+                users={120}
               />
             </ModalWork>
           </Box>

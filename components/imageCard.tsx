@@ -1,4 +1,5 @@
-import { Box, Image, Badge, StylesProvider } from "@chakra-ui/react";
+import { Box, Badge, StylesProvider } from "@chakra-ui/react";
+import NextImage from "next/image";
 import { StarIcon } from "@chakra-ui/icons";
 
 import styles from "../styles/home.module.scss";
@@ -25,11 +26,22 @@ export default function imageCard(pops) {
       borderColor="gray.400"
       mx="16px"
       my="8px"
+      width="300px"
+      boxShadow="md"
     >
-      <Image
+      <NextImage
         src={property.imageUrl}
         alt={property.imageAlt}
-        borderRadius="12px 12px 0 0 "
+        width={300}
+        height={200}
+        layout="responsive"
+        objectFit="cover"
+        style={{
+          position: "relative",
+          width: "100px",
+          height: "100px",
+          borderRadius: "8px 8px 0 0",
+        }}
       />
 
       <Box textAlign="left" p="6">
@@ -76,7 +88,7 @@ export default function imageCard(pops) {
               />
             ))}
           <Box as="span" ml="2" color="gray.600" fontSize="sm">
-            {property.reviewCount} reviews
+            {property.reviewCount} users
           </Box>
         </Box>
       </Box>
