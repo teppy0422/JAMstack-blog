@@ -306,4 +306,13 @@ element.style {
   white-space: pre-wrap;
   text-align: center;
 }
+
+.imageCard {
+  display: inline-block;
+  margin: 5px 10px;
+}
+
+.imageCard:hover {
+  background-color: rgba(100, 100, 100, 0.2);
+}
 /*# sourceMappingURL=home.module.css.map */

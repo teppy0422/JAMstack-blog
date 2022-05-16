@@ -1,9 +1,9 @@
 import React from "react";
 import Content from "../../components/content";
-import Header from "../../components/header";
 import Skillchart from "../../components/skillchart";
 import SkillCircle from "../../components/skillCircle";
-import ModalWork from "../../components/modal";
+import ModalWork from "../../components/modalWork";
+import ImageCard from "../../components/imageCard";
 import {
   Center,
   Image,
@@ -15,12 +15,18 @@ import {
   Spacer,
   CircularProgress,
   CircularProgressLabel,
+  Wrap,
+  WrapItem,
+  HStack,
+  useDisclosure,
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
 import { theme } from "highcharts";
 
 export default function About() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Content>
       <div className={styles.me}>
@@ -172,13 +178,27 @@ export default function About() {
         <Text>ここ最近の実績です。</Text>
         <div style={{ height: "24px" }}></div>
 
-        <Center>
-          <Flex>
-            <ModalWork eyecatchpath="/images/sjp_menu.png" />
-            <Spacer />
-            <ModalWork eyecatchpath="/images/sjp_menu.png" />
-          </Flex>
-        </Center>
+        <VStack>
+          <Box textAlign="center">
+            <ModalWork>
+              <ImageCard
+                title="生産準備+"
+                eyeCatchPath="/images/sjp_menu.png"
+                onClick={onOpen}
+              />
+            </ModalWork>
+            <ModalWork>
+              <ImageCard
+                title="生産準備+"
+                eyeCatchPath="/images/sjp_menu.png"
+                rate={5}
+                ursers={341}
+                onClick={onOpen}
+              />
+            </ModalWork>
+          </Box>
+        </VStack>
+
         <div style={{ height: "66px" }}></div>
         <Box boxShadow="xl" rounded="md">
           <NextImage

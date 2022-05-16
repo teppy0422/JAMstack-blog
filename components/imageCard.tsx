@@ -2,26 +2,29 @@ import { Box, Image, Badge, StylesProvider } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 
 import styles from "../styles/home.module.scss";
-function imageCard(pops) {
+
+export default function imageCard(pops) {
   const property = {
     imageUrl: pops.eyeCatchPath,
     imageAlt: "Rear view of modern home with pool",
     beds: 3,
     baths: 2,
-    title: "Modern home in city center in the heart of historic Los Angeles",
+    title: pops.title,
     formattedPrice: "$1,900.00",
-    reviewCount: 34,
-    rating: 4,
+    reviewCount: pops.users,
+    rating: pops.rate,
   };
 
   return (
     <Box
-      maxW="sm"
+      className={styles.imageCard}
+      maxW="xs"
       borderWidth="1px"
       borderRadius="10px"
       overflow="hidden"
-      borderColor="gray.500"
-      margin="10px"
+      borderColor="gray.400"
+      mx="16px"
+      my="8px"
     >
       <Image
         src={property.imageUrl}
@@ -29,7 +32,7 @@ function imageCard(pops) {
         borderRadius="12px 12px 0 0 "
       />
 
-      <Box p="6">
+      <Box textAlign="left" p="6">
         <Box display="flex" alignItems="baseline">
           <Badge borderRadius="full" px="2" colorScheme="teal">
             New
@@ -80,4 +83,3 @@ function imageCard(pops) {
     </Box>
   );
 }
-export default imageCard;

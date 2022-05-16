@@ -9,20 +9,23 @@ import {
   ModalBody,
   ModalFooter,
   Container,
+  StylesProvider,
 } from "@chakra-ui/react";
 import Image from "next/image";
 
 import ImageCard from "./imageCard";
+import styles from "../styles/home.module.scss";
 
-function ModalWork(pops) {
+export default function ModalWork({ children }, pops) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const property = {
+    imagetitle: pops.title,
     eyeCatchPath: pops.eyecatchpath,
   };
   return (
     <>
       <a onClick={onOpen} style={{ cursor: "pointer" }}>
-        <ImageCard eyeCatchPath={property.eyeCatchPath} onClick={onOpen} />
+        {children}
       </a>
 
       <Modal
@@ -62,4 +65,3 @@ function ModalWork(pops) {
     </>
   );
 }
-export default ModalWork;

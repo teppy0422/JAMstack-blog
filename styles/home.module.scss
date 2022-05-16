@@ -236,3 +236,10 @@ element.style {
     text-align: center;
   }
 }
+.imageCard {
+  display: inline-block;
+  margin: 5px 10px;
+  &:hover {
+    background-color: rgba(100, 100, 100, 0.2);
+  }
+}
