@@ -151,6 +151,11 @@
 
     text-overflow: ellipsis !important;
   }
+  .subTitle {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
   .eyecatch {
     border-radius: 0 8px 8px 0;
     height: 78px;

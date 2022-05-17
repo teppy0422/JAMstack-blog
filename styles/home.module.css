@@ -195,6 +195,12 @@
   text-overflow: ellipsis !important;
 }
 
+.blogList .subTitle {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .blogList .eyecatch {
   border-radius: 0 8px 8px 0;
   height: 78px;

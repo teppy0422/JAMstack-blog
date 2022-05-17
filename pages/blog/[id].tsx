@@ -46,7 +46,12 @@ export default function BlogId({ blog, highlightedBody }) {
 
 // 静的生成のためのパスを指定します
 export const getStaticPaths = async () => {
-  const data = await client.get({ endpoint: "blog" });
+  const data = await client.get({
+    endpoint: "blog",
+    queries: {
+      limit: 30,
+    },
+  });
 
   const paths = data.contents.map((content) => `/blog/${content.id}`);
   return { paths, fallback: false };
@@ -55,7 +60,13 @@ export const getStaticPaths = async () => {
 // データをテンプレートに受け渡す部分の処理を記述します
 export const getStaticProps = async (context) => {
   const id = context.params.id;
-  const data = await client.get({ endpoint: "blog", contentId: id });
+  const data = await client.get({
+    endpoint: "blog",
+    contentId: id,
+    queries: {
+      limit: 30,
+    },
+  });
 
   const $ = cheerio.load(data.content); // data.contentはmicroCMSから返されるリッチエディタ部分
   $("pre code").each((_, elm) => {

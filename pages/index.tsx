@@ -54,14 +54,24 @@ export default function Home({ blog, category, tag, blog2 }) {
         <div style={{ height: "10px" }}></div>
 
         {showBlogs.map((blog) => (
-          <NextLink href={`/blog/${blog.id}`} key={blog.id}>
+          <NextLink href={`/blog/${blog.id}`}>
             <a>
               <Flex className={styles.blogList}>
                 <Box ml="3" style={{ margin: "10px 10px" }}>
-                  <Text className={styles.blogTitle} fontWeight="bold">
+                  <Text
+                    className={styles.blogTitle}
+                    fontWeight="bold"
+                    maxWidth={["220px", "400px"]}
+                  >
                     {blog.title}
                   </Text>
-                  <Text fontSize="sm">{blog.subtitle}</Text>
+                  <Text
+                    fontSize="sm"
+                    className={styles.subTitle}
+                    maxWidth={["220px", "400px"]}
+                  >
+                    {blog.subtitle}
+                  </Text>
                   <Text fontSize="sm" style={{ opacity: "0.5" }}>
                     <RepeatClockIcon style={{ marginRight: "5px" }} />
                     <Moment format="YYYY/MM/DD">{blog.updatedAt}</Moment>
@@ -93,7 +103,7 @@ export const getStaticProps = async () => {
   const data = await client.get({
     endpoint: "blog",
     queries: {
-      limit: 3000,
+      limit: 30,
     },
   });
 
