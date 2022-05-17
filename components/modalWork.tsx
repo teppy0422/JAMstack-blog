@@ -10,6 +10,7 @@ import {
   ModalFooter,
   Container,
   StylesProvider,
+  Divider,
 } from "@chakra-ui/react";
 import Image from "next/image";
 
@@ -43,6 +44,7 @@ export default function ModalWork(pops) {
         />
         <ModalContent>
           <ModalHeader>{property.imagetitle}</ModalHeader>
+          <Divider />
           <ModalCloseButton />
           <ModalBody>{property.detail}</ModalBody>
           <ModalFooter>

@@ -46,8 +46,8 @@ export default function imageCard(pops) {
 
       <Box textAlign="left" p="6">
         <Box display="flex" alignItems="baseline">
-          <Badge borderRadius="full" px="2" colorScheme="teal">
-            New
+          <Badge borderRadius="full" px="2" colorScheme="green">
+            EXCEL
           </Badge>
           <Box
             color="gray.500"

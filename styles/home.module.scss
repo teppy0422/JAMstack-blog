@@ -248,11 +248,14 @@ element.style {
   .subTitle {
     font-family: "M PLUS Rounded 1c";
     font-weight: 700;
-    font-size: 1.2em;
+    font-size: 24px;
     text-decoration: underline;
     text-decoration-color: #666;
     text-decoration-thickness: 3px; //上にまとめて書いたらsafariとかで表示されないよ
     text-underline-offset: 5px;
-    margin: 1.8em 0 0.4em 0;
+    margin: 1.8em 0 0.5em 0;
+  }
+  .SjpChart01 {
+    font-weight: 700;
   }
 }
