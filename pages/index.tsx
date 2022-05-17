@@ -88,7 +88,13 @@ export default function Home({ blog, category, tag, blog2 }) {
 export const getStaticProps = async () => {
   // getStaticPropsで取得したtagsからtag名のみ抜き出す
 
-  const data = await client.get({ endpoint: "blog" });
+  const data = await client.get({
+    endpoint: "blog",
+    queries: {
+      limit: 20,
+    },
+  });
+
   // カテゴリーコンテンツの取得
   const categoryData = await client.get({ endpoint: "categories" });
   // タグコンテンツの取得

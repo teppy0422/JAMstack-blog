@@ -192,6 +192,8 @@ export default function About() {
               <ImageCard
                 title="検査結果表示+"
                 eyeCatchPath="/images/sjp_kensarireki_YCC.png"
+                categoryName="EXCEL"
+                categoryColor="green"
                 rate={5}
                 users={120}
               />
