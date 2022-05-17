@@ -10,6 +10,9 @@ nextjs
 
 ---
 
+chakra
+highcharts
+
 ## 参考
 
 [microCMD サンプル](https://blog.microcms.io/microcms-next-jamstack-blog/)

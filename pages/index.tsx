@@ -1,5 +1,5 @@
 import NextLink from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { client } from "../libs/client";
 import Content from "../components/content";
 import {
@@ -19,6 +19,8 @@ import styles from "../styles/home.module.scss";
 import Moment from "react-moment";
 import { motion } from "framer-motion";
 
+import InfiniteScroll from "react-infinite-scroller";
+
 export default function Home({ blog, category, tag, blog2 }) {
   const [showBlogs, setShowBlogs] = useState(blog);
 
@@ -34,6 +36,7 @@ export default function Home({ blog, category, tag, blog2 }) {
           {!tag.length && <Text>there are no posts...</Text>}
           {tag.map((tag) => (
             <Tag
+              key={tag.name}
               bg={bg}
               className={styles.tags}
               onClick={(e) => testtttt(e, blog, tag, setShowBlogs)}
@@ -51,7 +54,7 @@ export default function Home({ blog, category, tag, blog2 }) {
         <div style={{ height: "10px" }}></div>
 
         {showBlogs.map((blog) => (
-          <NextLink href={`/blog/${blog.id}`}>
+          <NextLink href={`/blog/${blog.id}`} key={blog.id}>
             <a>
               <Flex className={styles.blogList}>
                 <Box ml="3" style={{ margin: "10px 10px" }}>
@@ -79,7 +82,7 @@ export default function Home({ blog, category, tag, blog2 }) {
           </NextLink>
         ))}
 
-        <div style={{ height: "500px" }}></div>
+        <div style={{ height: "100vh" }}></div>
       </Content>
     </>
   );
@@ -87,11 +90,10 @@ export default function Home({ blog, category, tag, blog2 }) {
 // データをテンプレートに受け渡す部分の処理を記述します
 export const getStaticProps = async () => {
   // getStaticPropsで取得したtagsからtag名のみ抜き出す
-
   const data = await client.get({
     endpoint: "blog",
     queries: {
-      limit: 20,
+      limit: 3000,
     },
   });
 
