@@ -60,7 +60,7 @@ export default function SjpDetail() {
       <Text fontWeight={700} fontSize="20px">
         メニュー画面
       </Text>
-      <Text>誰でも操作できるような画面を用意しました。</Text>
+      <Text>誰でも操作できる画面を用意。</Text>
       <Image
         src="/images/sjp_menu.png"
         w={["100%", "100%", "90%", "90%"]}

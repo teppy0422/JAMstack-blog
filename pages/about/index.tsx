@@ -27,6 +27,80 @@ import styles from "../../styles/home.module.scss";
 import { theme } from "highcharts";
 
 export default function About() {
+  const skillCircles = [
+    {
+      value: 90,
+      cirText: "EXCEL-vba\nアプリ制御など",
+      color: "excel",
+      img: "/images/logo_excel.svg",
+    },
+    {
+      value: 65,
+      cirText: "ACCESS-vba\n",
+      color: "excel",
+      img: "/images/logo_access.svg",
+    },
+    {
+      value: 30,
+      cirText: "vb.net\nカメラ制御\n生産誘導",
+      color: "dotNet",
+      img: "/images/logo_dotNet.svg",
+    },
+    {
+      value: 60,
+      cirText: "HTML\n基本的な使い方",
+      color: "front",
+      img: "/images/logo_html5.svg",
+    },
+    {
+      value: 65,
+      cirText: "CSS\n基本的な使い方\n+SCSS",
+      color: "front",
+      img: "/images/logo_css.svg",
+    },
+    {
+      value: 40,
+      cirText: "JavaScript\n ",
+      color: "front",
+      img: "/images/logo_javascript.svg",
+    },
+    {
+      value: 35,
+      cirText: "Next\nこのサイトで利用",
+      color: "front",
+      img: "/images/logo_next.svg",
+    },
+    {
+      value: 30,
+      cirText: "PHP\n ",
+      color: "php",
+      img: "/images/logo_php.svg",
+    },
+    {
+      value: 20,
+      cirText: "Python\nほんの少しだけ",
+      color: "php",
+      img: "/images/logo_python.svg",
+    },
+    {
+      value: 60,
+      cirText: "Arduino\n ",
+      color: "arduino",
+      img: "/images/logo_arduino.svg",
+    },
+    {
+      value: 30,
+      cirText: "Davinci Resolve\n ",
+      color: "davinci",
+      img: "/images/logo_davinci.svg",
+    },
+    {
+      value: 30,
+      cirText: "InkScape\n ",
+      color: "inkscape",
+      img: "/images/logo_inkscape.svg",
+    },
+  ];
   return (
     <Content>
       <div className={styles.me}>
@@ -88,90 +162,18 @@ export default function About() {
         <Text className={styles.subTitle}>スキル</Text>
         <Skillchart />
         <Box style={{ textAlign: "center" }}>
-          <SkillCircle
-            value={90}
-            cirText={"EXCEL-vba\nアプリ制御など"}
-            color="excel"
-            timing={0}
-            img="/images/logo_excel.svg"
-          />
-          <SkillCircle
-            value={65}
-            cirText={"ACCESS-vba\n"}
-            color="excel"
-            timing={1}
-            img="/images/logo_access.svg"
-          />
-          <SkillCircle
-            value={30}
-            cirText={"vb.net\nカメラ制御\n生産誘導"}
-            color="dotNet"
-            timing={2}
-            img="/images/logo_dotNet.svg"
-          />
-          <SkillCircle
-            value={60}
-            cirText={"HTML\n基本的な使い方"}
-            color="front"
-            timing={3}
-            img="/images/logo_html5.svg"
-          />
-          <SkillCircle
-            value={65}
-            cirText={"CSS\n基本的な使い方\n+SCSS"}
-            color="front"
-            timing={4}
-            img="/images/logo_css.svg"
-          />
-          <SkillCircle
-            value={40}
-            cirText={"JavaScript\n "}
-            color="front"
-            timing={5}
-            img="/images/logo_javascript.svg"
-          />
-          <SkillCircle
-            value={35}
-            cirText={"Next\nこのサイトで利用"}
-            color="front"
-            timing={6}
-            img="/images/logo_next.svg"
-          />
-          <SkillCircle
-            value={30}
-            cirText={"PHP\n "}
-            color="php"
-            timing={7}
-            img="/images/logo_php.svg"
-          />
-          <SkillCircle
-            value={20}
-            cirText={"Python\nほんの少しだけ"}
-            color="php"
-            timing={8}
-            img="/images/logo_python.svg"
-          />
-          <SkillCircle
-            value={60}
-            cirText={"Arduino\n "}
-            color="arduino"
-            timing={9}
-            img="/images/logo_arduino.svg"
-          />
-          <SkillCircle
-            value={30}
-            cirText={"Davinci Resolve\n "}
-            color="davinci"
-            timing={10}
-            img="/images/logo_davinci.svg"
-          />
-          <SkillCircle
-            value={30}
-            cirText={"InkScape\n "}
-            color="inkscape"
-            timing={11}
-            img="/images/logo_inkscape.svg"
-          />
+          {skillCircles.map((item, index) => {
+            return (
+              <SkillCircle
+                key={index}
+                value={item.value}
+                cirText={item.cirText}
+                color={item.color}
+                timing={index}
+                img={item.img}
+              />
+            );
+          })}
         </Box>
 
         <Text className={styles.subTitle}>Works</Text>
@@ -192,8 +194,6 @@ export default function About() {
               <ImageCard
                 title="検査結果表示+"
                 eyeCatchPath="/images/sjp_kensarireki_YCC.png"
-                categoryName="EXCEL"
-                categoryColor="green"
                 rate={5}
                 users={120}
               />

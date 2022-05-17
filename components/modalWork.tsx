@@ -42,7 +42,7 @@ export default function ModalWork(pops) {
           backdropInvert="70%"
           backdropBlur="4px"
         />
-        <ModalContent m={0}>
+        <ModalContent>
           <ModalHeader>{property.imagetitle}</ModalHeader>
           <Divider />
           <ModalCloseButton />
