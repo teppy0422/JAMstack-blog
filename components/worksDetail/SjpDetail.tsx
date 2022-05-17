@@ -70,7 +70,9 @@ export default function SjpDetail() {
         成果物
       </Text>
 
-      <Text>このような画像を自動で作成。</Text>
+      <Text>
+        作成後に変更できるようにオートシェイプを採用。約3秒で1つの画像を作成。
+      </Text>
       <Image
         src="/images/sjp_terminal_520.png"
         w={["100%", "100%", "90%", "90%"]}
@@ -78,10 +80,10 @@ export default function SjpDetail() {
       />
 
       <Text className={styles.subTitle}>効果</Text>
-      <Text>画像作成時間が大幅に短縮出来ました。</Text>
+      <Text>画像作成時間を大幅に短縮。</Text>
       <SjpChart01 />
-
-      <Text>この自動作成した画像を他の取り組みで使います。</Text>
+      <br />
+      <Text>この自動作成した画像を他の取り組みで使っていきます。</Text>
     </Box>
   );
 }
