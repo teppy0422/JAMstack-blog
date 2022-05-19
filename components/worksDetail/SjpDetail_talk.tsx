@@ -122,44 +122,137 @@ export default function SjpDetail_talk() {
         わい「とりあえずこういうイメージやな」
       </Text>
       <Image src="/images/sjp_flow_01.png" my={3} />
-      <Text className={styles.subTitle}>2週間後</Text>
+      <Text className={styles.subTitle}>2週間後..</Text>
       <Text className={styles.text}>
         娘「パパー出来た？」
         <br />
         わい「できたで、見てくれるか？」
         <br />
         娘「みるみるー」
+        <br />
+        わい「ほい！」
       </Text>
-      <Image
-        src="/images/sjp_menu.png"
-        w={["100%", "100%", "90%", "90%"]}
-        my={3}
-      />
-      <Text fontWeight={700} fontSize="20px">
-        成果物
+      <video src="/images/sjp_movie_02.mp4" muted loop autoPlay></video>
+      <Text className={styles.text}>
+        娘「やったー、自動で作成できたね」
+        <br />
+        娘「ズレる問題はどうやって解決したの？」
+        <br />
+        わい「取得値をxとすると 0.747x<sup>1.0006</sup>
+        にするんや」
+        <br />
+        娘「等倍でズレないから気付きにくいんだね」
+        <br />
+        わい「パパも４時間ほどハマったで」
+        <br />
+        娘「あとはちょちょっと操作メニューを作ったら現場で使ってもらえるね」
+        <br />
+        わい「せやで、みんな待ってるから今日中に仕上げるで」
+        <br />
+        娘「わくわく」
       </Text>
-      <Text>
-        作成後に変更できるようにオートシェイプを採用。約3秒で1つの画像を作成。
-      </Text>
+      <Text className={styles.subTitle}>完成品</Text>
+
+      <video src="/images/sjp_movie_01.mp4" muted loop autoPlay></video>
+
+      <Text className={styles.subTitle}>作成した画像</Text>
+
       <Image
         src="/images/sjp_terminal_520.png"
         w={["100%", "100%", "90%", "90%"]}
         my={3}
       />
-      <Text className={styles.subTitle}>効果</Text>
-      <Text>画像作成時間を大幅に短縮。</Text>
-      <SjpChart01 />
-      <Text className={styles.subTitle}>講演会</Text>
-      <Text>
-        この取り組みが評価されて他会社でも使用できるように説明会を開きました。
+      <Text className={styles.subTitle}>半年後..</Text>
+      <Text className={styles.text}>
+        娘「ねぇパパ、そういえば画像の自動作成はどうなったの？」
+        <br />
+        わい「ああ、いまちょうど効果の確認をグラフにしてたんや」
+        <br />
+        娘「みたいみたい」
+        <br />
+        わい「こんな感じや」
+        <SjpChart01 />
+        娘「わぁーすごいすごい」
+        <br />
+        娘「残業も無くなったんだね
+        <br />
+        わい「そうやで、小さいお子さんがいる人には特に評判が良いよ」
+        <br />
+        娘「遅くまで預かってくれる保育園はこの辺りにないもんね」
+        <br />
+        わい「そうなんや、あっても倍率高いしな」
+        <br />
+        娘「そういうニーズともマッチした取り組みだったんだね」
+        <br />
+        娘「ご褒美にオムライス作るねー」
+        <br />
+        わい「わーい」
       </Text>
+      <Text className={styles.subTitle}>１年後..</Text>
+      <Text className={styles.text}>
+        娘「パパ、なにしてるの？」
+        <br />
+        わい「あのプログラムを他の工場でも使えるように変更してるんや」
+        <br />
+        娘「たのしそー」
+        <br />
+        娘「でもどうして変更が必要なの？」
+        <br />
+        わい「他の工場に配った後で、わいが追加した新しい機能を簡単に使えるようにするんや」
+        <br />
+        娘「バージョンアップ機能って事？」
+        <br />
+        わい「そうや、最近の子供はよく知ってるな」
+        <br />
+        わい「スマホアプリみたいにボタン一つで更新できたら便利やろ」
+        <br />
+        娘「いいね。他の工場の残業問題も解決できそうだね」
+        <br />
+        わい「できるだけ多くの人に使ってもらいたいからね」
+        <br />
+        娘「私にできることあるかなー」
+        <br />
+        わい「オムライス」
+        <br />
+        娘「はーい」
+        <video src="/images/sjp_select_ver.mp4" muted loop autoPlay></video>
+      </Text>
+      <Text className={styles.subTitle}>2年後..</Text>
+      <Text>取り組みが評価されて国内で講演会を開きました。</Text>
       <Image
         src="/images/sjp_pannel.png"
         w={["100%", "100%", "90%", "90%"]}
         my={3}
       />
-      <br />
-      <Text>この自動作成した画像を他の取り組みで使っていきます。</Text>
+      <Text className={styles.subTitle}>その後..</Text>
+      <Text className={styles.text}>
+        娘「ねぇパパ」
+        <br />
+        娘「あのプログラムはWEB技術と組み合わせたらもっと色んな会社の問題を解決できるんじゃないかな？」
+        <br />
+        わい「WEB技術？」
+        <br />
+        娘「うん、HTMLとかCSSとかそういうの」
+        <br />
+        わい「なんやそれ。。というか何で知ってるん」
+        <br />
+        娘「さいきん友達とWEB技術ごっこをやってるからね」
+        <br />
+        わい「なんちゅう幼稚園児や」
+        <br />
+        わい「でも、わい、そんなのやった事ないし」
+        <br />
+        娘「大丈夫、わたしがおしえてあげる」
+        <br />
+        わい「そ、そうか、じゃあ教えてもらおうかな」
+        <br />
+        娘「たのしみー」
+      </Text>
+
+      <Text className={styles.subTitle}>結果..</Text>
+      <Text>
+        この自動作成した画像を他の取り組みで使っていくことになりました
+      </Text>
     </Container>
   );
 }
