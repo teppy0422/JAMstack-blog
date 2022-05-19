@@ -45,8 +45,8 @@ export default function ModalWork(pops) {
         />
         <ModalContent
           className={styles.modalContent}
-          m={0}
-          maxHeight={["95%", "95%", "90%", "90%"]}
+          marginTop={["5rem", "5rem", "4rem", "4rem"]} //スマホの時はアドレスバーがあるから注意
+          maxHeight={["98%", "95%", "90%", "90%"]}
         >
           <ModalHeader p={2}>{property.imagetitle}</ModalHeader>
           <Divider />

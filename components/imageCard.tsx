@@ -47,7 +47,12 @@ export default function imageCard(pops) {
         <Box display="flex" alignItems="baseline">
           {property.skillTags.map((item, index) => {
             return (
-              <Badge borderRadius="full" px="2" colorScheme={item.skillColor}>
+              <Badge
+                key={index}
+                borderRadius="full"
+                px="2"
+                colorScheme={item.skillColor}
+              >
                 {item.skillName}
               </Badge>
             );

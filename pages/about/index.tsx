@@ -233,8 +233,14 @@ export default function About() {
           {skillCards.map((item, index) => {
             return (
               <Box display={"inline-block"}>
-                <ModalWork title={item.title} detail={item.detail} m={0}>
+                <ModalWork
+                  key={index}
+                  title={item.title}
+                  detail={item.detail}
+                  m={0}
+                >
                   <ImageCard
+                    key={index}
                     title={item.title}
                     subTitle={item.subTitle}
                     eyeCatchPath={item.eyeCatchPath}
@@ -254,9 +260,8 @@ export default function About() {
         </Box>
 
         <div style={{ height: "66px" }}></div>
-        <Box boxShadow="xl" rounded="md" w="100vw" position={"relative"}>
+        <Box boxShadow="xl" rounded="md" w="100%">
           <Image
-            className={styles.hippoWalking}
             src="/images/hippo.gif"
             alt="hippoWalking"
             width={100}
