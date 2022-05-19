@@ -5,6 +5,8 @@ import SkillCircle from "../../components/skillCircle";
 import ModalWork from "../../components/modalWork";
 import ImageCard from "../../components/imageCard";
 import SjpDetail from "../../components/worksDetail/SjpDetail";
+import CheckResult from "../../components/worksDetail/CheckResultDetail";
+import SjpDetail_talk from "../../components/worksDetail/SjpDetail_talk";
 
 import {
   Center,
@@ -190,7 +192,15 @@ export default function About() {
                 users={341}
               />
             </ModalWork>
-            <ModalWork>
+            <ModalWork title="生産準備+" detail={<SjpDetail_talk />}>
+              <ImageCard
+                title="画像作成を自動化"
+                eyeCatchPath="/images/sjp_menu.png"
+                rate={5}
+                users={341}
+              />
+            </ModalWork>
+            <ModalWork title="導通検査+" detail={<CheckResult />}>
               <ImageCard
                 title="検査結果表示+"
                 eyeCatchPath="/images/sjp_kensarireki_YCC.png"

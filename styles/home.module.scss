@@ -197,7 +197,7 @@ span.tags {
     text-underline-offset: 2px;
   }
   .tool {
-    margin: -6px 0 12px 6px;
+    margin: -2px 0 12px 6px;
     line-height: 1em;
     span {
       cursor: pointer;
@@ -262,5 +262,12 @@ element.style {
   }
   .SjpChart01 {
     font-weight: 700;
+  }
+  .text {
+    line-height: 30px;
+    span {
+      font-size: 15px;
+      vertical-align: top;
+    }
   }
 }

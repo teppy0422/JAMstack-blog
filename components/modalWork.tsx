@@ -46,7 +46,9 @@ export default function ModalWork(pops) {
           <ModalHeader>{property.imagetitle}</ModalHeader>
           <Divider />
           <ModalCloseButton />
-          <ModalBody>{property.detail}</ModalBody>
+          <ModalBody m={0} p={0}>
+            {property.detail}
+          </ModalBody>
           <ModalFooter>
             <Button onClick={onClose}>Close</Button>
           </ModalFooter>

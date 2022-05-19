@@ -5,9 +5,9 @@ import SjpChart01 from "../worksDetail/SjpChart01";
 
 export default function SjpDetail() {
   return (
-    <Box
-      w={["100%", "95%", "90%", "90%"]}
-      m={[0, 1, 2, 4]}
+    <Container
+      w={["100%", "95%", "90%", "80%"]}
+      m={[0, 1, 2, "30px"]}
       className={styles.workDetail}
     >
       <Stack direction="row">
@@ -82,8 +82,18 @@ export default function SjpDetail() {
       <Text className={styles.subTitle}>効果</Text>
       <Text>画像作成時間を大幅に短縮。</Text>
       <SjpChart01 />
+
+      <Text className={styles.subTitle}>講演会</Text>
+      <Text>
+        この取り組みが評価されて他会社でも使用できるように説明会を開きました。
+      </Text>
+      <Image
+        src="/images/sjp_pannel.png"
+        w={["100%", "100%", "90%", "90%"]}
+        my={3}
+      />
       <br />
       <Text>この自動作成した画像を他の取り組みで使っていきます。</Text>
-    </Box>
+    </Container>
   );
 }

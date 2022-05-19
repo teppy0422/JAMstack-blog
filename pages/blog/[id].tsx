@@ -23,7 +23,7 @@ export default function BlogId({ blog, highlightedBody }) {
         <Container className={styles.contain}>
           <h1 className={styles.title}>{blog.title}</h1>
           <Divider className={myClass} />
-          <RepeatClockIcon style={{ marginRight: "5px" }} />
+          <RepeatClockIcon marginRight="5px" />
           <Moment format="YYYY/MM/DD" className={styles.publishedAt}>
             {blog.publishedAt}
           </Moment>
