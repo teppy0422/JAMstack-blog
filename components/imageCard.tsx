@@ -8,12 +8,11 @@ export default function imageCard(pops) {
   const property = {
     imageUrl: pops.eyeCatchPath,
     imageAlt: "Rear view of modern home with pool",
-    beds: 3,
-    baths: 2,
     title: pops.title,
     formattedPrice: pops.subTitle,
     reviewCount: pops.users,
     rating: pops.rate,
+    skillTags: pops.skillTags,
   };
 
   return (
@@ -44,21 +43,15 @@ export default function imageCard(pops) {
         }}
       />
 
-      <Box textAlign="left" p="6">
+      <Box textAlign="left" p="3.5">
         <Box display="flex" alignItems="baseline">
-          <Badge borderRadius="full" px="2" colorScheme="green">
-            EXCEL
-          </Badge>
-          <Box
-            color="gray.500"
-            fontWeight="semibold"
-            letterSpacing="wide"
-            fontSize="xs"
-            textTransform="uppercase"
-            ml="2"
-          >
-            {property.beds} beds &bull; {property.baths} baths
-          </Box>
+          {property.skillTags.map((item, index) => {
+            return (
+              <Badge borderRadius="full" px="2" colorScheme={item.skillColor}>
+                {item.skillName}
+              </Badge>
+            );
+          })}
         </Box>
 
         <Box

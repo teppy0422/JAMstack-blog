@@ -7,7 +7,6 @@ import ImageCard from "../../components/imageCard";
 import SjpDetail from "../../components/worksDetail/SjpDetail";
 import CheckResult from "../../components/worksDetail/CheckResultDetail";
 import SjpDetail_talk from "../../components/worksDetail/SjpDetail_talk";
-import ImageCardOmit from "../../components/imageCardOmit";
 
 import {
   Center,
@@ -105,6 +104,52 @@ export default function About() {
       img: "/images/logo_inkscape.svg",
     },
   ];
+  const skillCards = [
+    {
+      title: "生産準備+",
+      subTitle: "画像を自動で作る",
+      eyeCatchPath: "/images/sjp_menu.png",
+      detail: <SjpDetail />,
+      detailTalk: <SjpDetail_talk />,
+      rate: 5,
+      users: 341,
+      skillTags: [
+        {
+          skillName: "EXCEL",
+          skillColor: "green",
+        },
+      ],
+      titleTalk: "詳細(茶番劇1話)を見る",
+    },
+    {
+      title: "導通検査+",
+      subTitle: "WEB技術の利用",
+      eyeCatchPath: "/images/sjp_kensarireki_YCC.png",
+      detail: <CheckResult />,
+      detailTalk: "",
+      rate: 5,
+      users: 120,
+      skillTags: [
+        {
+          skillName: "EXCEL",
+          skillColor: "green",
+        },
+        {
+          skillName: "HTML",
+          skillColor: "orange",
+        },
+        {
+          skillName: "CSS",
+          skillColor: "blue",
+        },
+        {
+          skillName: "JavaScript",
+          skillColor: "yellow",
+        },
+      ],
+      titleTalk: "詳細(茶番劇2話)を見る",
+    },
+  ];
   return (
     <Content>
       <div className={styles.me}>
@@ -185,46 +230,35 @@ export default function About() {
         <div style={{ height: "24px" }}></div>
 
         <Box style={{ textAlign: "center" }} className={styles.cardList}>
-          <Box display={"inline-block"}>
-            <ModalWork title="生産準備+" detail={<SjpDetail />}>
-              <ImageCard
-                title="生産準備+"
-                subTitle="画像を自動で作る"
-                eyeCatchPath="/images/sjp_menu.png"
-                rate={5}
-                users={341}
-              />
-            </ModalWork>
-            <ModalWork title="生産準備+" detail={<SjpDetail_talk />}>
-              <Box className={styles.balloon} boxShadow="md">
-                詳細(茶番劇1話)を見る
+          {skillCards.map((item, index) => {
+            return (
+              <Box display={"inline-block"}>
+                <ModalWork title={item.title} detail={item.detail} m={0}>
+                  <ImageCard
+                    title={item.title}
+                    subTitle={item.subTitle}
+                    eyeCatchPath={item.eyeCatchPath}
+                    rate={item.rate}
+                    users={item.users}
+                    skillTags={item.skillTags}
+                  />
+                </ModalWork>
+                <ModalWork title={item.title} detail={item.detailTalk}>
+                  <Box className={styles.balloon} boxShadow="md">
+                    {item.titleTalk}
+                  </Box>
+                </ModalWork>
               </Box>
-            </ModalWork>
-          </Box>
-
-          <Box display={"inline-block"}>
-            <ModalWork title="導通検査+" detail={<CheckResult />}>
-              <ImageCard
-                title="検査結果表示+"
-                subTitle="WEB技術の利用"
-                eyeCatchPath="/images/sjp_kensarireki_YCC.png"
-                rate={5}
-                users={120}
-              />
-            </ModalWork>
-            <ModalWork title="導通検査+">
-              <Box className={styles.balloon} boxShadow="md">
-                詳細(茶番劇2話)を見る
-              </Box>
-            </ModalWork>
-          </Box>
+            );
+          })}
         </Box>
 
         <div style={{ height: "66px" }}></div>
-        <Box boxShadow="xl" rounded="md">
-          <NextImage
+        <Box boxShadow="xl" rounded="md" w="100vw" position={"relative"}>
+          <Image
+            className={styles.hippoWalking}
             src="/images/hippo.gif"
-            alt="hippo_walking"
+            alt="hippoWalking"
             width={100}
             height={178}
           />

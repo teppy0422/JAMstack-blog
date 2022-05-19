@@ -7,7 +7,7 @@ export default function SjpDetail() {
   return (
     <Container
       w={["100%", "95%", "90%", "80%"]}
-      m={[0, 1, 2, "30px"]}
+      m="auto"
       className={styles.workDetail}
     >
       <Stack direction="row">

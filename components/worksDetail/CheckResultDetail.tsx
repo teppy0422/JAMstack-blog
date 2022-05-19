@@ -15,7 +15,7 @@ export default function SjpDetail() {
   return (
     <Container
       w={["100%", "95%", "90%", "80%"]}
-      m={[0, 1, 2, "30px"]}
+      m="auto"
       className={styles.workDetail}
     >
       <Stack direction="row">
@@ -61,12 +61,18 @@ export default function SjpDetail() {
         w={["100%", "100%", "90%", "90%"]}
         my={3}
       />
-      <video src="/images/check_movie.mp4" muted loop autoPlay></video>
+      <Text className={styles.subTitle}>実際の使用動画</Text>
+      <video
+        src="/images/check_movie.mp4"
+        muted
+        loop
+        autoPlay
+        playsInline
+      ></video>
       <Text className={styles.subTitle}>効果</Text>
       <Text>画像作成時間を大幅に短縮。</Text>
       <SjpChart01 />
       <br />
-      <Text>この自動作成した画像を他の取り組みで使っていきます。</Text>
     </Container>
   );
 }

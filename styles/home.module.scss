@@ -217,6 +217,21 @@ span.tags {
     text-underline-offset: 5px;
     margin: 1.8em 0 0.4em 0;
   }
+  .hippoWalking {
+    animation-name: hippoWalking;
+    animation-duration: 60s;
+    animation-iteration-count: infinite;
+    display: inline-block;
+    position: absolute;
+  }
+}
+@keyframes hippoWalking {
+  0% {
+    margin-left: 100vw;
+  }
+  100% {
+    margin-left: -40vw;
+  }
 }
 element.style {
   font-size: 20px !important;

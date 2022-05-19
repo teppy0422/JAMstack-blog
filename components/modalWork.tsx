@@ -11,6 +11,7 @@ import {
   Container,
   StylesProvider,
   Divider,
+  calc,
 } from "@chakra-ui/react";
 import Image from "next/image";
 
@@ -42,14 +43,20 @@ export default function ModalWork(pops) {
           backdropInvert="70%"
           backdropBlur="4px"
         />
-        <ModalContent>
-          <ModalHeader>{property.imagetitle}</ModalHeader>
+        <ModalContent
+          className={styles.modalContent}
+          m={0}
+          maxHeight={["95%", "95%", "90%", "90%"]}
+        >
+          <ModalHeader p={2}>{property.imagetitle}</ModalHeader>
           <Divider />
-          <ModalCloseButton />
+          <ModalCloseButton
+            _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+          />
           <ModalBody m={0} p={0}>
             {property.detail}
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter p={2}>
             <Button onClick={onClose}>Close</Button>
           </ModalFooter>
         </ModalContent>

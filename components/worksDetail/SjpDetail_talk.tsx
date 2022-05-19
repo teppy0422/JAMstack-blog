@@ -15,7 +15,7 @@ export default function SjpDetail_talk() {
   return (
     <Container
       w={["100%", "95%", "90%", "80%"]}
-      m={[0, 1, 2, "30px"]}
+      m="auto"
       className={styles.workDetail}
     >
       <Stack direction="row">
@@ -67,7 +67,7 @@ export default function SjpDetail_talk() {
         <br />
         わい「黒が
         <Badge colorScheme="gray">BLACK</Badge>
-        で同じBになるから、2番目の
+        で同じBになるから、2文字目の
         <Badge colorScheme="blue">L</Badge>になったんやな」
         <br />
         娘「・・・」
@@ -83,7 +83,7 @@ export default function SjpDetail_talk() {
       />
       <Text className={styles.text}>
         娘「わぁこれがあれば私でも作業できるね」 <br />
-        娘「でも作る人が大変そう。。」
+        娘「でも、作る人が大変そう。。」
         <br />
         わい「そうなんや、1枚を作るのに30分くらい掛かるんやけどな。これを2ヶ月で300枚くらい作る必要があるんやで」
         <br />
@@ -107,11 +107,13 @@ export default function SjpDetail_talk() {
       </Text>
       <Text className={styles.subTitle}>エクセルで作る</Text>
       <Text className={styles.text}>
-        娘「エクセルで作る事にしたの？」
+        娘「
+        <Badge colorScheme="green">エクセル</Badge>で作る事にしたの？」
         <br />
         わい「そうやで」
         <br />
-        娘「エクセルって印刷したらズレるし画像の扱いは向いてないんじゃないの？」
+        娘「<Badge colorScheme="green">エクセル</Badge>
+        って印刷したらズレるし画像の扱いは向いてないんじゃないの？」
         <br />
         わい「よく知ってるね」
         <br />
@@ -119,11 +121,13 @@ export default function SjpDetail_talk() {
         <br />
         わい「どんな会話や。。」
         <br />
-        わい「とにかく会社ではエクセルが正義なんや」
+        わい「とにかく会社では<Badge colorScheme="green">エクセル</Badge>
+        を使える人が多いからな、それに合わせるんや」
         <br />
         わい「それにな、画像形式にしたら後から変更が難しくなるんや」
         <br />
-        娘「エクセルのオートシェイプなら後から誰でも編集が出来るって事？」
+        娘「<Badge colorScheme="green">エクセル</Badge>
+        のオートシェイプなら後から誰でも編集が出来るって事？」
         <br />
         わい「そ、そういう事やな」
         <br />
@@ -152,16 +156,17 @@ export default function SjpDetail_talk() {
         <br />
         娘「ズレる問題はどうやって解決したの？」
         <br />
-        わい「取得値をxとすると 0.747x<sup>1.0006</sup>
-        にするんや」
+        わい「取得値 = x とすると出力時に 0.747x<sup>1.0006</sup> にするんや」
         <br />
-        娘「等倍でズレないから気付きにくいんだね」
+        娘「ズレるのが等倍じゃないから気付きにくいんだね」
         <br />
-        わい「パパも４時間ほどハマったで」
+        わい「パパも2時間ほどハマったで」
         <br />
-        娘「あとはちょちょっと操作メニューを作ったら現場で使ってもらえるね」
+        娘「あとは操作メニューを作ったら使ってもらえるね」
         <br />
-        わい「せやで、みんな待ってるから今日中に仕上げるで」
+        わい「せやで、みんな待ってるから今日中に仕上げるやで」
+        <br />
+        わい（どうして操作メニューって言葉を知ってるんや..）
         <br />
         娘「わくわく」
       </Text>
@@ -200,13 +205,15 @@ export default function SjpDetail_talk() {
         <br />
         娘「遅くまで預かってくれる保育園はこの辺りにないもんね」
         <br />
-        わい「そうなんや、あっても倍率高いしな」
+        わい「そうなんや、あっても倍率が高いしな」
         <br />
         娘「そういうニーズともマッチした取り組みだったんだね」
         <br />
         娘「ご褒美にオムライス作るねー」
         <br />
         わい「わーい」
+        <br />
+        わい（ニーズって言葉を誰が教えたんや..）
       </Text>
       <Text className={styles.subTitle}>１年後..</Text>
       <Text className={styles.text}>
@@ -263,7 +270,7 @@ export default function SjpDetail_talk() {
         <br />
         わい「でも、わい、そんなのやった事ないし」
         <br />
-        娘「大丈夫、わたしがおしえてあげる」
+        娘「大丈夫、わたしがおしえてあげるー」
         <br />
         わい「そ、そうか、じゃあ教えてもらおうかな」
         <br />
@@ -271,9 +278,7 @@ export default function SjpDetail_talk() {
       </Text>
 
       <Text className={styles.subTitle}>結果..</Text>
-      <Text>
-        この自動作成した画像を他の取り組みで使っていくことになりました
-      </Text>
+      <Text>娘に流されてWEB技術を学ぶ事になりました</Text>
     </Container>
   );
 }
