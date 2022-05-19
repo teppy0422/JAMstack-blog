@@ -1,4 +1,12 @@
-import { Text, Box, Container, Image, Stack, Badge } from "@chakra-ui/react";
+import {
+  Text,
+  Box,
+  Container,
+  Image,
+  Stack,
+  Badge,
+  AspectRatio,
+} from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
 import SjpChart01 from "../worksDetail/SjpChart01";
@@ -132,7 +140,13 @@ export default function SjpDetail_talk() {
         <br />
         わい「ほい！」
       </Text>
-      <video src="/images/sjp_movie_02.mp4" muted loop autoPlay></video>
+      <video
+        src="/images/sjp_movie_02.mp4"
+        muted
+        loop
+        autoPlay
+        playsInline
+      ></video>
       <Text className={styles.text}>
         娘「やったー、自動で作成できたね」
         <br />
@@ -153,7 +167,13 @@ export default function SjpDetail_talk() {
       </Text>
       <Text className={styles.subTitle}>完成品</Text>
 
-      <video src="/images/sjp_movie_01.mp4" muted loop autoPlay></video>
+      <video
+        src="/images/sjp_movie_01.mp4"
+        muted
+        loop
+        autoPlay
+        playsInline
+      ></video>
 
       <Text className={styles.subTitle}>作成した画像</Text>
 
@@ -215,8 +235,24 @@ export default function SjpDetail_talk() {
         わい「オムライス」
         <br />
         娘「はーい」
-        <video src="/images/sjp_select_ver.mp4" muted loop autoPlay></video>
       </Text>
+
+      <AspectRatio ratio={16 / 9}>
+        <video
+          src="/images/sjp_select_ver.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      </AspectRatio>
+      <video
+        src="/images/sjp_select_ver.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+      ></video>
       <Text className={styles.subTitle}>2年後..</Text>
       <Text>取り組みが評価されて国内で講演会を開きました。</Text>
       <Image
