@@ -237,22 +237,7 @@ export default function SjpDetail_talk() {
         娘「はーい」
       </Text>
 
-      <AspectRatio ratio={16 / 9}>
-        <video
-          src="/images/sjp_select_ver.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-      </AspectRatio>
-      <video
-        src="/images/sjp_select_ver.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-      ></video>
+      <video src="/images/sjp_select_ver.mp4" autoPlay muted loop playsInline />
       <Text className={styles.subTitle}>2年後..</Text>
       <Text>取り組みが評価されて国内で講演会を開きました。</Text>
       <Image
