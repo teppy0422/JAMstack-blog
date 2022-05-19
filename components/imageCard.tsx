@@ -1,4 +1,4 @@
-import { Box, Badge, StylesProvider } from "@chakra-ui/react";
+import { Box, Badge, StylesProvider, VStack } from "@chakra-ui/react";
 import NextImage from "next/image";
 import { StarIcon } from "@chakra-ui/icons";
 
@@ -11,7 +11,7 @@ export default function imageCard(pops) {
     beds: 3,
     baths: 2,
     title: pops.title,
-    formattedPrice: "$1,900.00",
+    formattedPrice: pops.subTitle,
     reviewCount: pops.users,
     rating: pops.rate,
   };
@@ -71,12 +71,7 @@ export default function imageCard(pops) {
           {property.title}
         </Box>
 
-        <Box>
-          {property.formattedPrice}
-          <Box as="span" color="gray.900" fontSize="sm">
-            / wk
-          </Box>
-        </Box>
+        <Box>{property.formattedPrice}</Box>
 
         <Box display="flex" mt="2" alignItems="center">
           {Array(5)

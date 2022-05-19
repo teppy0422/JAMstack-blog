@@ -7,6 +7,7 @@ import ImageCard from "../../components/imageCard";
 import SjpDetail from "../../components/worksDetail/SjpDetail";
 import CheckResult from "../../components/worksDetail/CheckResultDetail";
 import SjpDetail_talk from "../../components/worksDetail/SjpDetail_talk";
+import ImageCardOmit from "../../components/imageCardOmit";
 
 import {
   Center,
@@ -23,6 +24,7 @@ import {
   WrapItem,
   HStack,
   useDisclosure,
+  Stack,
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
@@ -182,34 +184,41 @@ export default function About() {
         <Text>ここ最近の実績です。</Text>
         <div style={{ height: "24px" }}></div>
 
-        <VStack>
-          <Box textAlign="center">
+        <Box style={{ textAlign: "center" }} className={styles.cardList}>
+          <Box display={"inline-block"}>
             <ModalWork title="生産準備+" detail={<SjpDetail />}>
               <ImageCard
                 title="生産準備+"
+                subTitle="画像を自動で作る"
                 eyeCatchPath="/images/sjp_menu.png"
                 rate={5}
                 users={341}
               />
             </ModalWork>
             <ModalWork title="生産準備+" detail={<SjpDetail_talk />}>
-              <ImageCard
-                title="画像作成を自動化"
-                eyeCatchPath="/images/sjp_menu.png"
-                rate={5}
-                users={341}
-              />
+              <Box className={styles.balloon} boxShadow="md">
+                詳細(茶番劇1話)を見る
+              </Box>
             </ModalWork>
+          </Box>
+
+          <Box display={"inline-block"}>
             <ModalWork title="導通検査+" detail={<CheckResult />}>
               <ImageCard
                 title="検査結果表示+"
+                subTitle="WEB技術の利用"
                 eyeCatchPath="/images/sjp_kensarireki_YCC.png"
                 rate={5}
                 users={120}
               />
             </ModalWork>
+            <ModalWork title="導通検査+">
+              <Box className={styles.balloon} boxShadow="md">
+                詳細(茶番劇2話)を見る
+              </Box>
+            </ModalWork>
           </Box>
-        </VStack>
+        </Box>
 
         <div style={{ height: "66px" }}></div>
         <Box boxShadow="xl" rounded="md">

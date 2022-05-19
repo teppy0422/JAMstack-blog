@@ -272,5 +272,49 @@ element.style {
   }
   video {
     position: relative;
+    margin: 16px 0;
+  }
+}
+.cardList {
+  /* 吹き出し本体 */
+  .balloon {
+    position: relative;
+    padding: 12px 20px;
+    background-color: none;
+    margin: 0 16px;
+    border: #f00 solid 1px;
+    border-radius: 10px;
+    top: -8px;
+    &:hover {
+      background-color: rgba(100, 100, 100, 0.2);
+    }
+  }
+  /* 三角アイコン */
+  .balloon::before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    left: 20px;
+    top: -11px;
+    border-right: 11px solid transparent;
+    border-bottom: 11px solid #f00;
+    border-left: 11px solid transparent;
+    box-shadow: 10px #a7a7a7; /* 吹き出し本体の影 */
+  }
+
+  /* beforeで本体の三角を表現 */
+  .balloon::after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    left: 20px;
+    top: -12px;
+    border-right: 11px solid transparent;
+    border-bottom: 11px solid #f00;
+    border-left: 11px solid transparent;
   }
 }
