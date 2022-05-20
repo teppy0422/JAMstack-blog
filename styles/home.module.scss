@@ -274,6 +274,21 @@ element.style {
     position: relative;
     margin: 16px 0;
   }
+  .simple {
+    .text {
+      line-height: 30px;
+    }
+    .side {
+    }
+    .pic {
+      display: inline-block;
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.1);
+        transition: 0.3s;
+      }
+    }
+  }
 }
 .cardList {
   /* 吹き出し本体 */
@@ -316,5 +331,23 @@ element.style {
     border-right: 11px solid transparent;
     border-bottom: 11px solid #f00;
     border-left: 11px solid transparent;
+  }
+}
+
+.borderText {
+  display: flex;
+  align-items: center;
+  &::before,
+  &::after {
+    content: "";
+    height: 1px;
+    flex-grow: 1;
+    background-color: #666;
+  }
+  &::before {
+    margin-right: 1rem;
+  }
+  &::after {
+    margin-left: 1rem;
   }
 }

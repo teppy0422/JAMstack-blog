@@ -4,9 +4,9 @@ import Skillchart from "../../components/skillchart";
 import SkillCircle from "../../components/skillCircle";
 import ModalWork from "../../components/modalWork";
 import ImageCard from "../../components/imageCard";
-import SjpDetail from "../../components/worksDetail/SjpDetail";
-import CheckResult from "../../components/worksDetail/CheckResultDetail";
+import SjpDetail from "../../components/worksDetail/SjpDetail2";
 import SjpDetail_talk from "../../components/worksDetail/SjpDetail_talk";
+import CheckResult from "../../components/worksDetail/CheckResultDetail";
 
 import {
   Center,
