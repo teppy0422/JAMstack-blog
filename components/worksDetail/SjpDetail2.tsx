@@ -22,9 +22,12 @@ export default function SjpDetail() {
       w={["100%", "100%", "100%", "100%"]}
       bg="gray.50"
       minHeight="80vh"
-      maxWidth={["100vw", "80vw"]}
+      maxWidth={["100vw", "90vw", "80vw", "70vw"]}
       m="0 auto"
     >
+      <Stack direction="row" mt={3}>
+        <Badge colorScheme="green">Excel-vba</Badge>
+      </Stack>
       <Stack
         direction={["column", "row"]}
         spacing="16px"
@@ -37,12 +40,12 @@ export default function SjpDetail() {
             style={{ fontSize: "14px", marginTop: "20px" }}
           >
             メーカーから送られてくるテキストデータを読み込んで、生産に必要な画像データを自動作成するシステムを作成。
-            従来は手動で作成、深夜残業が多く離職の原因。手作業ゆえのミスが発生により不良品が多かった。
-            自動作成で解決。
-            現場意見は多様で、それらの整合をとる過程で対話力が磨かれたと思います。
-            <br />
-            <br />
-            ボタン一つでバージョンアップする機能を追加。
+            従来は手動で作成していたので時間がかかり、深夜残業が多く離職の原因になっていた。
+            他の工場でも使う事を想定して作成。
+          </Text>
+          <Text className={styles.borderText}>特記</Text>
+          <Text className={styles.text} style={{ fontSize: "14px" }}>
+            エクセルのブックにバージョンアップ機能を追加
           </Text>
         </Box>
         <VStack w={["320px", "448px", "640px", "880px"]}>
