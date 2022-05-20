@@ -21,13 +21,16 @@ export default function SjpDetail() {
       className={styles.workDetail}
       w={["100%", "100%", "100%", "100%"]}
       bg="gray.50"
+      minHeight="80vh"
+      maxWidth={["100vw", "80vw"]}
+      m="0 auto"
     >
       <Stack
         direction={["column", "row"]}
-        spacing="24px"
+        spacing="16px"
         className={styles.simple}
       >
-        <Box w="300px" p={3} className={styles.side}>
+        <Box w="320px" p={3} className={styles.side}>
           <Text className={styles.borderText}>簡単な説明</Text>
           <Text
             className={styles.text}
@@ -42,7 +45,7 @@ export default function SjpDetail() {
             ボタン一つでバージョンアップする機能を追加。
           </Text>
         </Box>
-        <VStack w="400px">
+        <VStack w={["320px", "448px", "640px", "880px"]}>
           <HStack my={3} bg="gray.50">
             <Box boxShadow="lg" className={styles.pic}>
               <Image
@@ -75,7 +78,7 @@ export default function SjpDetail() {
               className={styles.mainImage}
               my={0}
               src="/images/sjp_menu.png"
-              w="300px"
+              w="100%"
               objectFit="contain"
             />
           </Box>
