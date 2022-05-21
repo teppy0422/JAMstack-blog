@@ -12,7 +12,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import styles from "../../styles/home.module.scss";
-import SjpChart01 from "./SjpChart01";
+import SjpChart01 from "./01_chart_1";
 
 export default function SjpDetail() {
   return (
@@ -26,6 +26,9 @@ export default function SjpDetail() {
     >
       <Stack direction="row" mt={3}>
         <Badge colorScheme="green">Excel-vba</Badge>
+        <Badge colorScheme="orange">HTML</Badge>
+        <Badge colorScheme="blue">css</Badge>
+        <Badge colorScheme="yellow">JavaScript</Badge>
       </Stack>
       <Stack
         direction={["column", "row"]}
@@ -42,13 +45,11 @@ export default function SjpDetail() {
             className={styles.text}
             style={{ fontSize: "14px", marginTop: "20px" }}
           >
-            メーカーから送られてくるテキストデータを読み込んで、生産に必要な画像データを自動作成するシステムを作成。
-            従来は手動で作成していたので時間がかかり、深夜残業が多く離職の原因になっていた。
-            他の工場でも使う事を想定して作成。
+            配線ミスがあった場合、間違い箇所と正常な状態が分かる画像を自動表示させました。それまではエラー番号(0-2000番)を図面から探していました。
           </Text>
           <Text className={styles.borderText}>特記</Text>
           <Text className={styles.text} style={{ fontSize: "14px" }}>
-            エクセルのブックにバージョンアップ機能を追加
+            20年前のPCでも点滅箇所がズレないようJavaScriptで点滅させる事に苦労しました。
           </Text>
         </Box>
         <VStack w={["320px", "448px", "640px", "880px"]}>
@@ -60,7 +61,7 @@ export default function SjpDetail() {
               boxSize="80px"
               overflow="hidden"
             >
-              <Image src="/images/sjp_menu.png" />
+              <Image src="/images/sjp_kensarireki_YCC.png" w="100%" />
             </Box>
             <Box
               boxShadow="lg"
@@ -69,7 +70,7 @@ export default function SjpDetail() {
               boxSize="80px"
               overflow="hidden"
             >
-              <Image src="/images/sjp_terminal_520.png" />
+              <Image src="/images/check_302.gif" w="100%" />
             </Box>
             <Box
               boxShadow="lg"
@@ -78,19 +79,35 @@ export default function SjpDetail() {
               boxSize="80px"
               overflow="hidden"
             >
-              <Image src="/images/sjp_pannel.png" />
+              <Image src="/images/check_401.gif" w="100%" />
+            </Box>
+            <Box
+              boxShadow="lg"
+              className={styles.pic}
+              onClick={(e) => changeImage(e)}
+              boxSize="80px"
+              overflow="hidden"
+            >
+              <video
+                src="/images/check_movie.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
             </Box>
           </HStack>
           <Box boxShadow="dark-lg" id="mainImage">
             <Image
               className={styles.mainImage}
               my={0}
-              src="/images/sjp_menu.png"
+              src="/images/sjp_kensarireki_YCC.png"
               w="100%"
               objectFit="contain"
             />
           </Box>
         </VStack>
+        <Box h={[300, 250, 200, 50]} />
       </Stack>
     </Container>
   );
@@ -101,6 +118,7 @@ function changeImage(e) {
   let parent = e.currentTarget.parentNode;
   let children = parent.children[0];
   //取得するクラス名が分からん
+  // document.querySelector(".css-sim8z3").setAttribute("src", changeSrc);
   let myid = document.getElementById("mainImage");
 
   myid.innerHTML = e.currentTarget.innerHTML;

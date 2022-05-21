@@ -1,7 +1,7 @@
 import { Text, Box, Container, Image, Stack, Badge } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
-import SjpChart01 from "../worksDetail/SjpChart01";
+import SjpChart01 from "./01_chart_1";
 
 export default function SjpDetail() {
   return (

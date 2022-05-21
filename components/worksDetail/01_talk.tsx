@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
-import SjpChart01 from "../worksDetail/SjpChart01";
+import SjpChart01 from "./01_chart_1";
 
 export default function SjpDetail_talk() {
   return (
@@ -278,7 +278,11 @@ export default function SjpDetail_talk() {
       </Text>
 
       <Text className={styles.subTitle}>結果..</Text>
-      <Text>娘に流されてWEB技術を学ぶ事になりました</Text>
+      <Text>
+        娘に流されてWEB技術を学ぶ事になりました。
+        <br />
+        2週間以内に探したいと思います。
+      </Text>
     </Container>
   );
 }

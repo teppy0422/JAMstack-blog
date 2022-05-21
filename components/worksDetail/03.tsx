@@ -12,7 +12,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import styles from "../../styles/home.module.scss";
-import SjpChart01 from "./SjpChart01";
+import SjpChart01 from "./01_chart_1";
 
 export default function SjpDetail() {
   return (

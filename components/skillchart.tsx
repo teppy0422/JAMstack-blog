@@ -69,17 +69,17 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
             color: "#9A4F96",
           },
           {
-            name: "フロントエンド",
+            name: "フロント",
             detail: "HTML/CSS/JavaScript(Next)",
             y: 100,
             z: 50,
             color: "#F1652A",
           },
           {
-            name: "バックエンド",
+            name: "バック",
             detail: "PHP/Pythonが少しだけ",
             y: 100,
-            z: 10,
+            z: 15,
             color: "#4E5B92",
           },
           {
@@ -106,7 +106,7 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
         ],
         dataLabels: {
           enabled: true,
-          distance: 10,
+          distance: 15,
           style: {
             fontSize: "12px",
             fontFamily: "M PLUS Rounded 1c",

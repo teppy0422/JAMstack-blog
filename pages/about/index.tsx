@@ -4,10 +4,11 @@ import Skillchart from "../../components/skillchart";
 import SkillCircle from "../../components/skillCircle";
 import ModalWork from "../../components/modalWork";
 import ImageCard from "../../components/imageCard";
-import SjpDetail from "../../components/worksDetail/SjpDetail";
-import SjpDetail_talk from "../../components/worksDetail/SjpDetail_talk";
-import CheckResult from "../../components/worksDetail/CheckResultDetail";
-import CheckResult_talk from "../../components/worksDetail/CheckResultDetail_talk";
+
+import Detail01 from "../../components/worksDetail/01";
+import Detail01talk from "../../components/worksDetail/01_talk";
+import Detail02 from "../../components/worksDetail/02";
+import Detail02talk from "../../components/worksDetail/02_talk";
 import Detail03 from "../../components/worksDetail/03";
 
 import {
@@ -111,8 +112,8 @@ export default function About() {
       title: "生産準備+",
       subTitle: "画像を自動で作る",
       eyeCatchPath: "/images/sjp_menu.png",
-      detail: <SjpDetail />,
-      detailTalk: <SjpDetail_talk />,
+      detail: <Detail01 />,
+      detailTalk: <Detail01talk />,
       rate: 5,
       users: 341,
       skillTags: [
@@ -127,8 +128,8 @@ export default function About() {
       title: "導通検査+",
       subTitle: "WEB技術の基礎",
       eyeCatchPath: "/images/sjp_kensarireki_YCC.png",
-      detail: <CheckResult />,
-      detailTalk: <CheckResult_talk />,
+      detail: <Detail02 />,
+      detailTalk: <Detail02talk />,
       rate: 5,
       users: 120,
       skillTags: [

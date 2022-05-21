@@ -9,8 +9,8 @@ import {
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
-import SjpChart01 from "../worksDetail/SjpChart01";
-import Talk from "../worksDetail/talk";
+import SjpChart01 from "./01_chart_1";
+import Talk from "./talk";
 export default function CheckResultDetail_talk() {
   return (
     <Container
