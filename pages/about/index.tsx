@@ -156,7 +156,7 @@ export default function About() {
       subTitle: "マイコン",
       eyeCatchPath: "/images/detail_03_title.png",
       detail: <Detail03 />,
-      detailTalk: "",
+      detailTalk: <Center>Comming soon. maybe</Center>,
       rate: 5,
       users: 8,
       skillTags: [

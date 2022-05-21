@@ -123,7 +123,6 @@ export default function CheckResultDetail_talk() {
       <Talk say="◇「そ、そうか」" />
       <Talk say="◇「でもそうなると一つの製品で1000ページも作る事になるで」" />
       <Talk say="娘「パパの得意なEXCEL-vbaで自動作成すればいいと思うの」" />
-      <Talk say="娘「パパの得意なEXCEL-vbaで自動作成すればいいと思うの」" />
       <Talk say="◇「自動作成できるの？」" />
       <Talk say="娘「うん、EXCEL-vbaはテキストファイルを作成できるよね？」" />
       <Talk say="◇「できるで」" />

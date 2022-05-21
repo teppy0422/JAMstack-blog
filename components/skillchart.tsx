@@ -48,7 +48,7 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
     },
     series: [
       {
-        minPointSize: 0,
+        minPointSize: 10,
         innerSize: "10%",
         zMin: 0,
         name: "language",
@@ -106,9 +106,12 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
         ],
         dataLabels: {
           enabled: true,
+          distance: 10,
           style: {
-            fontSize: "13px",
+            fontSize: "12px",
             fontFamily: "M PLUS Rounded 1c",
+            color: "#888888",
+            textOutline: 0,
           },
         },
       },
