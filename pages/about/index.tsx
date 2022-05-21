@@ -7,8 +7,8 @@ import ImageCard from "../../components/imageCard";
 import SjpDetail from "../../components/worksDetail/SjpDetail";
 import SjpDetail_talk from "../../components/worksDetail/SjpDetail_talk";
 import CheckResult from "../../components/worksDetail/CheckResultDetail";
-import CheckResult2 from "../../components/worksDetail/CheckResultDetail2";
 import CheckResult_talk from "../../components/worksDetail/CheckResultDetail_talk";
+import Detail03 from "../../components/worksDetail/03";
 
 import {
   Center,
@@ -125,9 +125,9 @@ export default function About() {
     },
     {
       title: "導通検査+",
-      subTitle: "WEB技術の利用",
+      subTitle: "WEB技術の基礎",
       eyeCatchPath: "/images/sjp_kensarireki_YCC.png",
-      detail: <CheckResult2 />,
+      detail: <CheckResult />,
       detailTalk: <CheckResult_talk />,
       rate: 5,
       users: 120,
@@ -152,13 +152,13 @@ export default function About() {
       titleTalk: "詳細(茶番劇2話)を見る",
     },
     {
-      title: "導通検査+",
-      subTitle: "WEB技術の利用",
-      eyeCatchPath: "/images/sjp_kensarireki_YCC.png",
-      detail: <CheckResult />,
+      title: "作業誘導+",
+      subTitle: "マイコン",
+      eyeCatchPath: "/images/detail_03_title.png",
+      detail: <Detail03 />,
       detailTalk: "",
       rate: 5,
-      users: 120,
+      users: 8,
       skillTags: [
         {
           skillName: "EXCEL",
@@ -176,8 +176,16 @@ export default function About() {
           skillName: "JavaScript",
           skillColor: "yellow",
         },
+        {
+          skillName: "VB.net",
+          skillColor: "purple",
+        },
+        {
+          skillName: "Arduino",
+          skillColor: "teal",
+        },
       ],
-      titleTalk: "詳細(茶番劇2話)を見る",
+      titleTalk: "詳細(茶番劇3話)を見る",
     },
   ];
   return (

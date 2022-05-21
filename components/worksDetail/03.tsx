@@ -29,6 +29,8 @@ export default function SjpDetail() {
         <Badge colorScheme="orange">HTML</Badge>
         <Badge colorScheme="blue">css</Badge>
         <Badge colorScheme="yellow">JavaScript</Badge>
+        <Badge colorScheme="purple">VB.net</Badge>
+        <Badge colorScheme="teal">Arduino</Badge>
       </Stack>
       <Stack
         direction={["column", "row"]}
@@ -45,11 +47,12 @@ export default function SjpDetail() {
             className={styles.text}
             style={{ fontSize: "14px", marginTop: "20px" }}
           >
-            配線ミスがあった場合、間違い箇所と正常な状態が分かる画像を自動表示させました。それまではエラー番号(0-2000番)を図面から探していました。
+            直感的に作業内容が分かる事を意識して作成しました。作業エリアが広い(横幅6m)為、ディスプレイを自動移動させる事にしました。
+            アプリ(VB.net)でWEBブラウザとArduinoをしました。QRリーダーで操作。必要な部品は3DプリンタやNCフライスで作成。
           </Text>
           <Text className={styles.borderText}>特記</Text>
           <Text className={styles.text} style={{ fontSize: "14px" }}>
-            20年前のPCでも点滅箇所がズレないようJavaScriptで点滅させる事に苦労しました。
+            この作業が未経験だったので作業者さんに教えてもらいながら一緒に作りました。
           </Text>
         </Box>
         <VStack w={["320px", "448px", "640px", "880px"]}>
@@ -61,7 +64,7 @@ export default function SjpDetail() {
               boxSize="80px"
               overflow="hidden"
             >
-              <Image src="/images/sjp_kensarireki_YCC.png" w="100%" />
+              <Image src="/images/detail_03.gif" w="100%" />
             </Box>
             <Box
               boxShadow="lg"
@@ -70,7 +73,7 @@ export default function SjpDetail() {
               boxSize="80px"
               overflow="hidden"
             >
-              <Image src="/images/check_302.gif" w="100%" />
+              <Image src="/images/detail_03_4.png" w="100%" />
             </Box>
             <Box
               boxShadow="lg"
@@ -79,7 +82,7 @@ export default function SjpDetail() {
               boxSize="80px"
               overflow="hidden"
             >
-              <Image src="/images/check_401.gif" w="100%" />
+              <Image src="/images/detail_03_3.png" w="100%" />
             </Box>
             <Box
               boxShadow="lg"
@@ -88,20 +91,14 @@ export default function SjpDetail() {
               boxSize="80px"
               overflow="hidden"
             >
-              <video
-                src="/images/check_movie.mp4"
-                autoPlay
-                muted
-                loop
-                playsInline
-              />
+              <Image src="/images/detail_03_6.png" w="100%" />
             </Box>
           </HStack>
           <Box boxShadow="dark-lg" id="mainImage">
             <Image
               className={styles.mainImage}
               my={0}
-              src="/images/sjp_kensarireki_YCC.png"
+              src="/images/detail_03.gif"
               w="100%"
               objectFit="contain"
             />

@@ -5,74 +5,121 @@ import {
   Image,
   Stack,
   Badge,
-  AspectRatio,
+  Grid,
+  GridItem,
+  HStack,
+  VStack,
+  Center,
 } from "@chakra-ui/react";
-import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
-import SjpChart01 from "../worksDetail/SjpChart01";
+import SjpChart01 from "./SjpChart01";
 
 export default function SjpDetail() {
   return (
     <Container
-      w={["100%", "95%", "90%", "80%"]}
-      m="auto"
       className={styles.workDetail}
+      w={["100%", "100%", "100%", "100%"]}
+      bg="gray.50"
+      minHeight="80vh"
+      maxWidth={["100vw", "90vw", "80vw", "70vw"]}
+      m="0 auto"
     >
-      <Stack direction="row">
+      <Stack direction="row" mt={3}>
         <Badge colorScheme="green">Excel-vba</Badge>
         <Badge colorScheme="orange">HTML</Badge>
-        <Badge colorScheme="blue">CSS</Badge>
-        <Badge colorScheme="yellow"> JavaScript</Badge>
+        <Badge colorScheme="blue">css</Badge>
+        <Badge colorScheme="yellow">JavaScript</Badge>
       </Stack>
-      <Text className={styles.subTitle}>Model Case</Text>
-      <Box style={{ position: "relative" }}>
-        <Image
-          src="/images/img_wireharness.png"
-          w={["100%", "100%", "90%", "90%"]}
-        />
-        <Text
-          position="absolute"
-          top={0}
-          m={3}
-          p={1}
-          fontWeight={500}
-          fontSize="18px"
-          backgroundColor="rgba(255, 255, 255, .8)"
+      <Stack
+        direction={["column", "row"]}
+        spacing="16px"
+        className={styles.simple}
+      >
+        <Box
+          w={["320px", "340px", "360px", "380px"]}
+          p={3}
+          className={styles.side}
         >
-          部品に電線を接続していく工場の場合
-        </Text>
-      </Box>
-      <Text className={styles.subTitle}>改善前</Text>
-      <Text>
-        配線が間違っていると検査機がエラー番号を表示します。その番号を図面から探して正しい配線を調べるのが手間でした。
-      </Text>
-      <Text className={styles.subTitle}>改善後</Text>
-      <Text>エクセルでエラー時に表示する画面を自動作成。</Text>
-      <Image src="/images/check_flow.png" my={3} />
-      <Text className={styles.subTitle}>成果物</Text>
-      <Text>古いPC(IE6)で動作させるのに苦労しました。</Text>
-      <Image
-        src="/images/check_302.gif"
-        w={["100%", "100%", "90%", "90%"]}
-        my={3}
-      />
-      <Image
-        src="/images/check_401.gif"
-        w={["100%", "100%", "90%", "90%"]}
-        my={3}
-      />
-      <Text className={styles.subTitle}>実際の使用動画</Text>
-      <video
-        src="/images/check_movie.mp4"
-        muted
-        loop
-        autoPlay
-        playsInline
-      ></video>
-      <Text className={styles.subTitle}>効果</Text>
-      <Text>画像作成時間を大幅に短縮。</Text>
-      <SjpChart01 />
-      <br />
+          <Text className={styles.borderText}>簡単な説明</Text>
+          <Text
+            className={styles.text}
+            style={{ fontSize: "14px", marginTop: "20px" }}
+          >
+            配線ミスがあった場合、間違い箇所と正常な状態が分かる画像を自動表示させました。それまではエラー番号(0-2000番)を図面から探していました。
+          </Text>
+          <Text className={styles.borderText}>特記</Text>
+          <Text className={styles.text} style={{ fontSize: "14px" }}>
+            20年前のPCでも点滅箇所がズレないようJavaScriptで点滅させる事に苦労しました。
+          </Text>
+        </Box>
+        <VStack w={["320px", "448px", "640px", "880px"]}>
+          <HStack my={3} bg="gray.50">
+            <Box
+              boxShadow="lg"
+              className={styles.pic}
+              onClick={(e) => changeImage(e)}
+              boxSize="80px"
+              overflow="hidden"
+            >
+              <Image src="/images/sjp_kensarireki_YCC.png" w="100%" />
+            </Box>
+            <Box
+              boxShadow="lg"
+              className={styles.pic}
+              onClick={(e) => changeImage(e)}
+              boxSize="80px"
+              overflow="hidden"
+            >
+              <Image src="/images/check_302.gif" w="100%" />
+            </Box>
+            <Box
+              boxShadow="lg"
+              className={styles.pic}
+              onClick={(e) => changeImage(e)}
+              boxSize="80px"
+              overflow="hidden"
+            >
+              <Image src="/images/check_401.gif" w="100%" />
+            </Box>
+            <Box
+              boxShadow="lg"
+              className={styles.pic}
+              onClick={(e) => changeImage(e)}
+              boxSize="80px"
+              overflow="hidden"
+            >
+              <video
+                src="/images/check_movie.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+            </Box>
+          </HStack>
+          <Box boxShadow="dark-lg" id="mainImage">
+            <Image
+              className={styles.mainImage}
+              my={0}
+              src="/images/sjp_kensarireki_YCC.png"
+              w="100%"
+              objectFit="contain"
+            />
+          </Box>
+        </VStack>
+        <Box h={[300, 250, 200, 50]} />
+      </Stack>
     </Container>
   );
+}
+//クリックで画像を変える
+function changeImage(e) {
+  // 親要素をから複数の子要素を取得
+  let parent = e.currentTarget.parentNode;
+  let children = parent.children[0];
+  //取得するクラス名が分からん
+  // document.querySelector(".css-sim8z3").setAttribute("src", changeSrc);
+  let myid = document.getElementById("mainImage");
+
+  myid.innerHTML = e.currentTarget.innerHTML;
 }
