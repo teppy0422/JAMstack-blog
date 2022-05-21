@@ -1,14 +1,25 @@
 //ここでimportしたものは全てのページで読み込まれる
+import React from "react";
 import { DefaultSeo } from "next-seo";
 import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
 import theme from "../libs/theme";
+import AOS from "aos";
+import "aos/dist/aos.css";
 //プログレスバー
-import NextNprogress from "nextjs-progressbar"; // ここ！
+import NextNprogress from "nextjs-progressbar";
 //リセット用
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
+  React.useEffect(() => {
+    AOS.init({
+      once: true,
+      easing: "ease-out-sine",
+      duration: 600,
+    });
+  }, []);
+
   return (
     <>
       <Head>
@@ -20,11 +31,11 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <DefaultSeo
         defaultTitle="teppy-Blog"
-        description="雑なメモ帳"
+        description="雑なポートフォリオ"
         openGraph={{
           type: "website",
           title: "teppy-Blog",
-          description: "ブログにするつもりのメモ帳です",
+          description: "ポートフォリオ+α",
           site_name: "teppy-Blog",
           url: "https://jam-stack-blog-teppy0422.vercel.app/",
           images: [
@@ -45,7 +56,6 @@ function MyApp({ Component, pageProps }) {
       />
       <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
-        {/* ここ！ */}
         <Component {...pageProps} />
       </ChakraProvider>
     </>

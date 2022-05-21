@@ -61,15 +61,6 @@ export default function SjpDetail() {
               boxSize="80px"
               overflow="hidden"
             >
-              <Image src="/images/sjp_kensarireki_YCC.png" w="100%" />
-            </Box>
-            <Box
-              boxShadow="lg"
-              className={styles.pic}
-              onClick={(e) => changeImage(e)}
-              boxSize="80px"
-              overflow="hidden"
-            >
               <Image src="/images/check_302.gif" w="100%" />
             </Box>
             <Box
@@ -101,7 +92,7 @@ export default function SjpDetail() {
             <Image
               className={styles.mainImage}
               my={0}
-              src="/images/sjp_kensarireki_YCC.png"
+              src="/images/check_302.gif"
               w="100%"
               objectFit="contain"
             />

@@ -237,7 +237,13 @@ export default function About() {
           </Flex>
         </VStack>
 
-        <Text className={styles.subTitle}>自己紹介</Text>
+        <div
+          data-aos="fade-right"
+          data-aos-once="false"
+          style={{ display: "inline-block" }}
+        >
+          <Text className={styles.subTitle}>自己紹介</Text>
+        </div>
         <Center>
           <Text>
             高知県出身のエンジニア。
@@ -251,20 +257,34 @@ export default function About() {
         <Skillchart />
         <Box style={{ textAlign: "center" }}>
           {skillCircles.map((item, index) => {
+            const aosOffset: number = index * 10;
             return (
-              <SkillCircle
-                key={index}
-                value={item.value}
-                cirText={item.cirText}
-                color={item.color}
-                timing={index}
-                img={item.img}
-              />
+              <div
+                data-aos="fade-up"
+                data-aos-once="false"
+                data-aos-offset={aosOffset}
+                style={{ display: "inline-block" }}
+              >
+                <SkillCircle
+                  data-aos="fade-up"
+                  key={index}
+                  value={item.value}
+                  cirText={item.cirText}
+                  color={item.color}
+                  timing={index}
+                  img={item.img}
+                />
+              </div>
             );
           })}
         </Box>
-
-        <Text className={styles.subTitle}>Works</Text>
+        <div
+          data-aos="fade-right"
+          data-aos-once="false"
+          style={{ display: "inline-block" }}
+        >
+          <Text className={styles.subTitle}>Works</Text>
+        </div>
         <Text>ここ最近の実績です。</Text>
         <div style={{ height: "24px" }}></div>
 

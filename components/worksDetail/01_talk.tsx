@@ -6,6 +6,7 @@ import {
   Stack,
   Badge,
   AspectRatio,
+  Center,
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
@@ -283,6 +284,9 @@ export default function SjpDetail_talk() {
         <br />
         2週間以内に探したいと思います。
       </Text>
+      <Center h="100px" color="gray" className={styles.borderText}>
+        つづく
+      </Center>
     </Container>
   );
 }

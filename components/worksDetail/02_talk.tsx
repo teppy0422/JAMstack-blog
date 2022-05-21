@@ -6,6 +6,7 @@ import {
   Stack,
   Badge,
   AspectRatio,
+  Center,
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
@@ -174,6 +175,9 @@ export default function CheckResultDetail_talk() {
       ></video>
       <Text className={styles.subTitle}>次回..</Text>
       <Text>マイコンが必要な問題を探すワイ</Text>
+      <Center h="100px" color="gray" className={styles.borderText}>
+        つづく
+      </Center>
     </Container>
   );
 }
