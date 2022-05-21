@@ -19,7 +19,7 @@ export default function SjpDetail() {
     <Container
       className={styles.workDetail}
       w={["100%", "100%", "100%", "100%"]}
-      bg="gray.50"
+      bg="rgba(255,255,255,0.05)"
       minHeight="80vh"
       maxWidth={["100vw", "90vw", "80vw", "70vw"]}
       m="0 auto"
@@ -68,7 +68,7 @@ export default function SjpDetail() {
           </Text>
         </Box>
         <VStack w={["320px", "448px", "640px", "880px"]}>
-          <HStack my={3} bg="gray.50">
+          <HStack my={3}>
             <Box
               boxShadow="lg"
               className={styles.pic}
@@ -108,7 +108,6 @@ export default function SjpDetail() {
           </HStack>
           <Box boxShadow="dark-lg" id="mainImage">
             <Image
-              className={styles.mainImage}
               my={0}
               src="/images/detail_03.gif"
               w="100%"

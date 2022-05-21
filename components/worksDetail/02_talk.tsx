@@ -156,14 +156,9 @@ export default function CheckResultDetail_talk() {
       <Talk say="娘「すぐに不具合箇所が分かるね」" />
       <Talk say="◇「娘ちゃんのおかげやで」" />
       <Talk say="娘「えへへ」" />
-      <Talk say="◇「ところでな、上の方の娘ちゃんが書いた図でマイコンってあったけどあれば何なん？」" />
-      <Talk say="娘「あれはマイクロコンピューターの略だよ」" />
-      <Talk say="娘「そんなに速くないけど安定感と安いのが魅力なの」" />
-      <Talk say="◇「む、娘ちゃんは機械のプログラミングもできるの？」" />
-      <Talk say="娘「うん、基本的な部品なら使えるよー」" />
-      <Talk say="◇「じゃあ、また必要な時に教えてくれるか」" />
-      <Talk say="娘「はーい」" />
-      <Talk say="（なんなんやこの娘ちゃんは...）" />
+      <Talk say="娘「WEB技術は分かった？」" />
+      <Talk say="◇「何となく分かった気がする」" />
+      <Talk say="娘「やったね」" />
 
       <Text className={styles.subTitle}>実際の使用動画</Text>
       <video
@@ -173,6 +168,18 @@ export default function CheckResultDetail_talk() {
         autoPlay
         playsInline
       ></video>
+
+      <Text className={styles.subTitle}>次回予告</Text>
+
+      <Talk say="◇「ところでな、上の方の娘ちゃんが書いた図でマイコンってあったけどあれは何なん？」" />
+      <Talk say="娘「あれはマイクロコンピューターの略だよ」" />
+      <Talk say="娘「シンプルで安いのが魅力なの」" />
+      <Talk say="◇「む、娘ちゃんは機械のプログラミングもできるの？」" />
+      <Talk say="娘「うん、基本的な部品なら使えるよー」" />
+      <Talk say="◇「じゃあ、また必要な時に教えてくれるか」" />
+      <Talk say="娘「はーい」" />
+      <Talk say="（なんなんやこの娘ちゃんは...）" />
+
       <Text className={styles.subTitle}>次回..</Text>
       <Text>マイコンが必要な問題を探すワイ</Text>
       <Center h="100px" color="gray" className={styles.borderText}>

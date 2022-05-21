@@ -237,23 +237,26 @@ export default function About() {
           </Flex>
         </VStack>
 
-        <div
-          data-aos="fade-right"
-          data-aos-once="false"
-          style={{ display: "inline-block" }}
-        >
-          <Text className={styles.subTitle}>自己紹介</Text>
-        </div>
+        <Box ml={[0, 18, 70, 115]}>
+          <div data-aos="fade-right" data-aos-duration="300">
+            <Text className={styles.subTitle}>自己紹介</Text>
+          </div>
+        </Box>
         <Center>
-          <Text>
+          <Text w={["100%", "95%", "85%", "75%"]}>
             高知県出身のエンジニア。
-            自動車のワイヤーハーネス製造/機械保全/生産計画/生産分析に従事。現場改善を繰り返す内にITや電子工学技術に興味を持つ。
+            自動車のワイヤーハーネス製造/機械保全/生産計画/生産分析に従事。現場の問題改善を繰り返す内にITや電子工学技術に興味を持つ。
             EXCEL/ACCESSのソフトウェアからPLC/Arduinoなどのハードウェアを経験。それらをHTML/JavaScript/PHPで連携させる仕組みを構築。
             現場の利用者と相談して更に発展させていくのが得意です。
           </Text>
         </Center>
 
-        <Text className={styles.subTitle}>スキル</Text>
+        <Box ml={[0, 18, 70, 115]}>
+          <div data-aos="fade-right" style={{ display: "inline-block" }}>
+            <Text className={styles.subTitle}>スキル</Text>
+          </div>
+        </Box>
+
         <Skillchart />
         <Box style={{ textAlign: "center" }}>
           {skillCircles.map((item, index) => {
@@ -261,12 +264,10 @@ export default function About() {
             return (
               <div
                 data-aos="fade-up"
-                data-aos-once="false"
                 data-aos-offset={aosOffset}
                 style={{ display: "inline-block" }}
               >
                 <SkillCircle
-                  data-aos="fade-up"
                   key={index}
                   value={item.value}
                   cirText={item.cirText}
@@ -278,14 +279,13 @@ export default function About() {
             );
           })}
         </Box>
-        <div
-          data-aos="fade-right"
-          data-aos-once="false"
-          style={{ display: "inline-block" }}
-        >
-          <Text className={styles.subTitle}>Works</Text>
-        </div>
-        <Text>ここ最近の実績です。</Text>
+
+        <Box ml={[0, 0, "8%", "16%"]}>
+          <div data-aos="fade-right" style={{ display: "inline-block" }}>
+            <Text className={styles.subTitle}>Works</Text>
+            <Text>ここ最近の実績です。</Text>
+          </div>
+        </Box>
         <div style={{ height: "24px" }}></div>
 
         <Box style={{ textAlign: "center" }} className={styles.cardList}>

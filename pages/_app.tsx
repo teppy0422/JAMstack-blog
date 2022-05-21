@@ -14,7 +14,7 @@ import "../styles/globals.css";
 function MyApp({ Component, pageProps }) {
   React.useEffect(() => {
     AOS.init({
-      once: true,
+      once: false,
       easing: "ease-out-sine",
       duration: 600,
     });

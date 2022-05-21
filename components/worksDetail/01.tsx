@@ -18,7 +18,7 @@ export default function SjpDetail() {
     <Container
       className={styles.workDetail}
       w={["100%", "100%", "100%", "100%"]}
-      bg="gray.50"
+      bg="rgba(255,255,255,0.05)"
       minHeight="80vh"
       maxWidth={["100vw", "90vw", "80vw", "70vw"]}
       m="0 auto"
@@ -26,11 +26,7 @@ export default function SjpDetail() {
       <Stack direction="row" mt={3}>
         <Badge colorScheme="green">Excel-vba</Badge>
       </Stack>
-      <Stack
-        direction={["column", "row"]}
-        spacing="16px"
-        className={styles.simple}
-      >
+      <Stack direction={["column", "row"]} spacing="16px">
         <Box
           w={["320px", "340px", "360px", "380px"]}
           p={3}
@@ -51,7 +47,7 @@ export default function SjpDetail() {
           </Text>
         </Box>
         <VStack w={["320px", "448px", "640px", "880px"]}>
-          <HStack my={3} bg="gray.50">
+          <HStack my={3}>
             <Box
               boxShadow="lg"
               className={styles.pic}
@@ -82,7 +78,6 @@ export default function SjpDetail() {
           </HStack>
           <Box boxShadow="dark-lg" id="mainImage">
             <Image
-              className={styles.mainImage}
               my={0}
               src="/images/sjp_menu.png"
               w="100%"
