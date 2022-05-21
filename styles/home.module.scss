@@ -278,8 +278,6 @@ element.style {
     .text {
       line-height: 30px;
     }
-    .side {
-    }
     .pic {
       display: inline-block;
       &:hover {
@@ -350,4 +348,10 @@ element.style {
   &::after {
     margin-left: 1rem;
   }
+}
+.quote {
+  padding: 0.5em 0.8em 0.5em 1em;
+  border-left: 4px solid #888;
+  opacity: 0.8;
+  margin: 0.5em 0.5em 0.5em 0;
 }

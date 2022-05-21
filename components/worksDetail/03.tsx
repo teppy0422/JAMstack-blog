@@ -24,14 +24,26 @@ export default function SjpDetail() {
       maxWidth={["100vw", "90vw", "80vw", "70vw"]}
       m="0 auto"
     >
-      <Stack direction="row" mt={3}>
-        <Badge colorScheme="green">Excel-vba</Badge>
-        <Badge colorScheme="orange">HTML</Badge>
-        <Badge colorScheme="blue">css</Badge>
-        <Badge colorScheme="yellow">JavaScript</Badge>
-        <Badge colorScheme="purple">VB.net</Badge>
-        <Badge colorScheme="teal">Arduino</Badge>
-      </Stack>
+      <Box mt={3}>
+        <Badge m={1} colorScheme="green">
+          Excel-vba
+        </Badge>
+        <Badge m={1} colorScheme="orange">
+          HTML
+        </Badge>
+        <Badge m={1} colorScheme="blue">
+          css
+        </Badge>
+        <Badge m={1} colorScheme="yellow">
+          JavaScript
+        </Badge>
+        <Badge m={1} colorScheme="purple">
+          VB.net
+        </Badge>
+        <Badge m={1} colorScheme="teal">
+          Arduino
+        </Badge>
+      </Box>
       <Stack
         direction={["column", "row"]}
         spacing="16px"
