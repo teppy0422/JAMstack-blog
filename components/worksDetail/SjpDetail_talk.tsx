@@ -18,7 +18,7 @@ export default function SjpDetail_talk() {
       m="auto"
       className={styles.workDetail}
     >
-      <Stack direction="row">
+      <Stack direction="row" mt={3}>
         <Badge colorScheme="green">Excel-vba</Badge>
       </Stack>
       <Text className={styles.subTitle}>Model Case</Text>
@@ -256,7 +256,7 @@ export default function SjpDetail_talk() {
       <Text className={styles.text}>
         娘「ねぇパパ」
         <br />
-        娘「あのプログラムはWEB技術と組み合わせたらもっと色んな会社の問題を解決できるんじゃないかな？」
+        娘「あのプログラムとWEB技術で会社の他の問題も解決できないかな？」
         <br />
         わい「WEB技術？」
         <br />

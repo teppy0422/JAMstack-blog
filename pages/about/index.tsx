@@ -4,9 +4,11 @@ import Skillchart from "../../components/skillchart";
 import SkillCircle from "../../components/skillCircle";
 import ModalWork from "../../components/modalWork";
 import ImageCard from "../../components/imageCard";
-import SjpDetail from "../../components/worksDetail/SjpDetail2";
+import SjpDetail from "../../components/worksDetail/SjpDetail";
 import SjpDetail_talk from "../../components/worksDetail/SjpDetail_talk";
 import CheckResult from "../../components/worksDetail/CheckResultDetail";
+import CheckResult2 from "../../components/worksDetail/CheckResultDetail2";
+import CheckResult_talk from "../../components/worksDetail/CheckResultDetail_talk";
 
 import {
   Center,
@@ -120,6 +122,34 @@ export default function About() {
         },
       ],
       titleTalk: "詳細(茶番劇1話)を見る",
+    },
+    {
+      title: "導通検査+",
+      subTitle: "WEB技術の利用",
+      eyeCatchPath: "/images/sjp_kensarireki_YCC.png",
+      detail: <CheckResult2 />,
+      detailTalk: <CheckResult_talk />,
+      rate: 5,
+      users: 120,
+      skillTags: [
+        {
+          skillName: "EXCEL",
+          skillColor: "green",
+        },
+        {
+          skillName: "HTML",
+          skillColor: "orange",
+        },
+        {
+          skillName: "CSS",
+          skillColor: "blue",
+        },
+        {
+          skillName: "JavaScript",
+          skillColor: "yellow",
+        },
+      ],
+      titleTalk: "詳細(茶番劇2話)を見る",
     },
     {
       title: "導通検査+",
