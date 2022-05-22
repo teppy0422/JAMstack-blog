@@ -36,49 +36,49 @@ export default function About() {
   const skillCircles = [
     {
       value: 90,
-      cirText: "EXCEL-vba\nアプリ制御など",
+      cirText: "EXCEL-vba\nアプリ制御など\n15年",
       color: "excel",
       img: "/images/logo_excel.svg",
     },
     {
       value: 65,
-      cirText: "ACCESS-vba\n",
+      cirText: "ACCESS-vba\n部品管理\n3年",
       color: "excel",
       img: "/images/logo_access.svg",
     },
     {
       value: 30,
-      cirText: "vb.net\nカメラ制御\n生産誘導",
+      cirText: "vb.net\nシリアル通信\nカメラ制御\n半年",
       color: "dotNet",
       img: "/images/logo_dotNet.svg",
     },
     {
       value: 60,
-      cirText: "HTML\n基本的な使い方",
+      cirText: "HTML\n基本的な使い方\n4年",
       color: "front",
       img: "/images/logo_html5.svg",
     },
     {
       value: 65,
-      cirText: "CSS\n基本的な使い方\n+SCSS",
+      cirText: "CSS\n基本的な使い方\n+SCSS\n4年",
       color: "front",
       img: "/images/logo_css.svg",
     },
     {
       value: 40,
-      cirText: "JavaScript\n ",
+      cirText: "JavaScript\n4年",
       color: "front",
       img: "/images/logo_javascript.svg",
     },
     {
       value: 35,
-      cirText: "Next\nこのサイトで利用",
+      cirText: "Next\nこのサイトで利用\n1年",
       color: "front",
       img: "/images/logo_next.svg",
     },
     {
       value: 30,
-      cirText: "PHP\n ",
+      cirText: "PHP\n半年",
       color: "php",
       img: "/images/logo_php.svg",
     },
@@ -90,19 +90,19 @@ export default function About() {
     },
     {
       value: 60,
-      cirText: "Arduino\n ",
+      cirText: "Arduino\n2年",
       color: "arduino",
       img: "/images/logo_arduino.svg",
     },
     {
       value: 30,
-      cirText: "Davinci Resolve\n ",
+      cirText: "Davinci Resolve\n半年",
       color: "davinci",
       img: "/images/logo_davinci.svg",
     },
     {
       value: 30,
-      cirText: "InkScape\n ",
+      cirText: "InkScape\n1年",
       color: "inkscape",
       img: "/images/logo_inkscape.svg",
     },
@@ -260,7 +260,7 @@ export default function About() {
         <Skillchart />
         <Box style={{ textAlign: "center" }}>
           {skillCircles.map((item, index) => {
-            const aosOffset: number = index * 10;
+            const aosOffset: number = (index % 5) * 70;
             return (
               <div
                 data-aos="fade-up"
