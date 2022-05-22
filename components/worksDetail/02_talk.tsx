@@ -50,7 +50,7 @@ export default function CheckResultDetail_talk() {
       </Box>
       <Text className={styles.subTitle}>取り組む内容を決める</Text>
       <Talk say="娘「とことこ」" />
-      <Talk say="娘「ねぇパパ、WEB技術を使えそうな問題は見つかった?" />
+      <Talk say="娘「ねぇパパ、WEB技術を使えそうな問題は見つかった?」" />
       <Talk say="◇「それよりお風呂入る時間やで」" />
       <Talk say="娘「...」" />
       <Talk say="◇「あ、そういえばな、自社開発の検査システム画面がWEBっぽいんや」" />

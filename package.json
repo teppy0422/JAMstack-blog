@@ -29,6 +29,7 @@
     "microcms-js-sdk": "^2.0.0",
     "microcms-richedit-processer": "^1.0.5",
     "next": "latest",
+    "next-auth": "^4.3.4",
     "next-seo": "^5.4.0",
     "nextjs-progressbar": "^0.0.14",
     "nprogress": "^0.2.0",
