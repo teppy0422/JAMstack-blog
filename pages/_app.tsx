@@ -1,10 +1,8 @@
 //ここでimportしたものは全てのページで読み込まれる
 import React from "react";
 import { DefaultSeo } from "next-seo";
-import Head from "next/head";
 import { ChakraProvider } from "@chakra-ui/react";
-import { SessionProvider } from "next-auth/react";
-
+import Head from "next/head";
 import theme from "../libs/theme";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -13,7 +11,7 @@ import NextNprogress from "nextjs-progressbar";
 //リセット用
 import "../styles/globals.css";
 
-function MyApp({ Component, pageProps: { sesstion, ...pageProps } }) {
+function MyApp({ Component, pageProps }) {
   React.useEffect(() => {
     AOS.init({
       once: false,
