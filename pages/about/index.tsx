@@ -1,6 +1,6 @@
 import React from "react";
 import Content from "../../components/content";
-import Skillchart from "../../components/skillchart";
+import Skillchart from "../../components/skillChart";
 import SkillCircle from "../../components/skillCircle";
 import ModalWork from "../../components/modalWork";
 import ImageCard from "../../components/imageCard";
