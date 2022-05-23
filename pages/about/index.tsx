@@ -1,6 +1,6 @@
 import React from "react";
 import Content from "../../components/content";
-import Skillchart from "../../components/skillChart";
+import SkillChart from "../../components/skillChart";
 import SkillCircle from "../../components/skillCircle";
 import ModalWork from "../../components/modalWork";
 import ImageCard from "../../components/imageCard";
@@ -257,7 +257,7 @@ export default function About() {
           </div>
         </Box>
 
-        <Skillchart />
+        <SkillChart />
         <Box style={{ textAlign: "center" }}>
           {skillCircles.map((item, index) => {
             const aosOffset: number = (index % 5) * 70;
