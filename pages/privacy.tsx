@@ -87,8 +87,7 @@ export default function Home({ blog, category, tag, blog2 }) {
               <br />
             </Text>
             <Text>2022年4月22日 策定</Text>
-            <br />
-
+            <Box h="6px"></Box>
             <Text>2022年5月27日 改訂</Text>
             <Box h="40px"></Box>
           </ul>
