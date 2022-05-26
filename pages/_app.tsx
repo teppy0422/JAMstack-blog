@@ -61,6 +61,8 @@ export default function MyApp({ Component, pageProps }) {
         }}
       />
       <ChakraProvider theme={theme}>
+        //アクセス解析
+        <script src="//accaii.com/teppy/script.js" async></script>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
         <Component {...pageProps} />
       </ChakraProvider>
