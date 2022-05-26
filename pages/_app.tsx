@@ -34,6 +34,7 @@ export default function MyApp({ Component, pageProps }) {
           name="google-site-verification"
           content="Ngi-RN_ZOG-QFnccw9v34-f0OEamGQnKIIJubGBUkgY"
         />
+        <script src="//accaii.com/teppy/script.js" async></script>
       </Head>
       <DefaultSeo
         defaultTitle="teppy-Blog"
@@ -61,8 +62,6 @@ export default function MyApp({ Component, pageProps }) {
         }}
       />
       <ChakraProvider theme={theme}>
-        //アクセス解析
-        <script src="//accaii.com/teppy/script.js" async></script>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
         <Component {...pageProps} />
       </ChakraProvider>
