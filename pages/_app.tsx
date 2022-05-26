@@ -10,8 +10,9 @@ import "aos/dist/aos.css";
 import NextNprogress from "nextjs-progressbar";
 //リセット用
 import "../styles/globals.css";
+//グーグルログイン
 
-function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
   React.useEffect(() => {
     AOS.init({
       once: false,
@@ -66,5 +67,3 @@ function MyApp({ Component, pageProps }) {
     </>
   );
 }
-
-export default MyApp;

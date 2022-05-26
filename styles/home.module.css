@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .headerNav {
   width: 100%;
   height: 56px;
@@ -336,5 +337,128 @@ element.style {
 
 .workDetail .SjpChart01 {
   font-weight: 700;
+}
+
+.workDetail .text {
+  line-height: 30px;
+}
+
+.workDetail .text span {
+  font-size: 15px;
+  vertical-align: top;
+}
+
+.workDetail video {
+  position: relative;
+  margin: 16px 0;
+}
+
+.workDetail img {
+  margin: 10px 0 20px 0;
+}
+
+.workDetail .simple .text {
+  line-height: 30px;
+}
+
+.workDetail .simple .pic {
+  display: inline-block;
+}
+
+.workDetail .simple .pic:hover {
+  cursor: pointer;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.cardList {
+  /* 吹き出し本体 */
+  /* 三角アイコン */
+  /* beforeで本体の三角を表現 */
+}
+
+.cardList .balloon {
+  position: relative;
+  padding: 12px 20px;
+  background-color: none;
+  margin: 0 16px;
+  border: #f00 solid 1px;
+  border-radius: 10px;
+  top: -8px;
+}
+
+.cardList .balloon:hover {
+  background-color: rgba(100, 100, 100, 0.2);
+}
+
+.cardList .balloon::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  left: 20px;
+  top: -11px;
+  border-right: 11px solid transparent;
+  border-bottom: 11px solid #f00;
+  border-left: 11px solid transparent;
+  -webkit-box-shadow: 10px #a7a7a7;
+          box-shadow: 10px #a7a7a7;
+  /* 吹き出し本体の影 */
+}
+
+.cardList .balloon::after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  left: 20px;
+  top: -12px;
+  border-right: 11px solid transparent;
+  border-bottom: 11px solid #f00;
+  border-left: 11px solid transparent;
+}
+
+.borderText {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.borderText::before, .borderText::after {
+  content: "";
+  height: 1px;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  background-color: #666;
+}
+
+.borderText::before {
+  margin-right: 1rem;
+}
+
+.borderText::after {
+  margin-left: 1rem;
+}
+
+.quote {
+  padding: 0.5em 0.8em 0.5em 1em;
+  border-left: 4px solid #888;
+  opacity: 0.8;
+  margin: 0.5em 0.5em 0.5em 0;
+}
+
+.privacy .subTitle {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
 }
 /*# sourceMappingURL=home.module.css.map */
