@@ -42,6 +42,7 @@
     "typescript": "^4.6.3"
   },
   "devDependencies": {
+    "next-sitemap": "^2.5.25",
     "react-infinite-scroller": "^1.2.6"
   }
 }
