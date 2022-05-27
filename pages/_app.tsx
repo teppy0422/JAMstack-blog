@@ -29,11 +29,12 @@ export default function MyApp({ Component, pageProps }) {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Yusei+Magic&display=swap"
         />
-        //グーグルログイン
+        {/* グーグルログイン */}
         <meta
           name="google-site-verification"
-          content="Ngi-RN_ZOG-QFnccw9v34-f0OEamGQnKIIJubGBUkgY"
+          content="4var2KY2gn9V8ETNT5Iny7qYQwuuYpfwHbALwJtkyPA"
         />
+        {/* アクセス解析 */}
         <script src="//accaii.com/teppy/script.js" async></script>
       </Head>
       <DefaultSeo
