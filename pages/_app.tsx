@@ -11,8 +11,12 @@ import NextNprogress from "nextjs-progressbar";
 //リセット用
 import "../styles/globals.css";
 //グーグルログイン
+import { SessionProvider } from "next-auth/react";
 
-export default function MyApp({ Component, pageProps }) {
+export default function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}) {
   React.useEffect(() => {
     AOS.init({
       once: false,
@@ -64,7 +68,9 @@ export default function MyApp({ Component, pageProps }) {
       />
       <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
-        <Component {...pageProps} />
+        <SessionProvider session={session}>
+          <Component {...pageProps} />
+        </SessionProvider>
       </ChakraProvider>
     </>
   );
