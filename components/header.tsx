@@ -69,6 +69,13 @@ export default function Header() {
                   <Text className={styles.logoText}>Blog</Text>
                 </Link>
               </NextLink>
+              <NextLink href="login">
+                <Link
+                  _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+                >
+                  <Text className={styles.logoText}>Login</Text>
+                </Link>
+              </NextLink>
             </Center>
             <Center w="100px">
               <IconButton
