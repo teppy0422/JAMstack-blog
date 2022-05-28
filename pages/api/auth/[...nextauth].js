@@ -36,7 +36,7 @@ const setting = {
     // },
   },
   // ここに NEXTAUTH_SECRET を入れる?
-  secret: NEXT_PUBLIC_SECRET,
+  secret: "2d2daf11b3de5310a99fd5b133e2a9482d82f8f347db0cccc12f27925094e688",
 };
 
 export default (req, res) => NextAuth(req, res, setting);
