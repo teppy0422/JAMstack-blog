@@ -1,5 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react";
-import { Button, Box } from "@chakra-ui/react";
+import { Button, Box, Avatar, Center } from "@chakra-ui/react";
 
 export default function Component() {
   const { data: session } = useSession();
@@ -12,7 +12,10 @@ export default function Component() {
           id="login"
           style={{ display: "none" }}
         >
-          {session.user.name}:Sign out
+          <Center>
+            {session.user.name} :Sign out
+            <Avatar ml={3} size="sm" src={session.user.image} />
+          </Center>
         </Button>
       ) : (
         <Button
