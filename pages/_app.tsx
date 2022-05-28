@@ -1,5 +1,5 @@
 //ここでimportしたものは全てのページで読み込まれる
-import React from "react";
+import React, { useEffect } from "react";
 import { DefaultSeo } from "next-seo";
 import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
@@ -23,6 +23,24 @@ export default function MyApp({
       easing: "ease-out-sine",
       duration: 600,
     });
+  }, []);
+
+  let keyFlag: boolean = false;
+  const handleKeyDown = (event: KeyboardEvent) => {
+    // Escapeキーの場合処理を行う
+    if (event.key === "Meta") {
+      if (keyFlag === false) {
+        document.getElementById("login").style.display = "block";
+        keyFlag = true;
+      } else {
+        document.getElementById("login").style.display = "none";
+        keyFlag = false;
+      }
+    }
+    console.log(event.key);
+  };
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown, false);
   }, []);
 
   return (

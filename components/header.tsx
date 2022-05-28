@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
 import Image from "next/image";
+import React from "react";
 
 export default function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -22,6 +23,7 @@ export default function Header() {
   const bg = useColorModeValue("red.500", "red.200");
   const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
+
   return (
     <>
       <header id="navTop">
@@ -69,11 +71,17 @@ export default function Header() {
                   <Text className={styles.logoText}>Blog_</Text>
                 </Link>
               </NextLink>
-              <NextLink href="login">
+              <NextLink href="/login">
                 <Link
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
-                  <Text className={styles.logoText}>Login</Text>
+                  <Text
+                    className={styles.logoText}
+                    id="login"
+                    style={{ display: "none" }}
+                  >
+                    Login
+                  </Text>
                 </Link>
               </NextLink>
             </Center>
