@@ -1,3 +1,5 @@
+import NextAuth from "next-auth";
+import { useSession, signIn, signOut } from "next-auth/react";
 import NextLink from "next/link";
 
 import {
@@ -17,9 +19,12 @@ import styles from "../styles/home.module.scss";
 import Image from "next/image";
 import React from "react";
 
-export default function Header() {
-  const { colorMode, toggleColorMode } = useColorMode();
+import LoginBtn from "../components/loginBtn";
 
+export default function Header() {
+  const { data: session } = useSession();
+
+  const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("red.500", "red.200");
   const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
@@ -68,22 +73,10 @@ export default function Header() {
                 <Link
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
-                  <Text className={styles.logoText}>Blog_</Text>
+                  <Text className={styles.logoText}>Blog</Text>
                 </Link>
               </NextLink>
-              <NextLink href="/login">
-                <Link
-                  _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
-                >
-                  <Text
-                    className={styles.logoText}
-                    id="login"
-                    style={{ display: "none" }}
-                  >
-                    Login
-                  </Text>
-                </Link>
-              </NextLink>
+              <LoginBtn />
             </Center>
             <Center w="100px">
               <IconButton

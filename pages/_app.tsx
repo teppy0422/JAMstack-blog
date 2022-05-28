@@ -25,6 +25,7 @@ export default function MyApp({
     });
   }, []);
 
+  // loginボタンを隠す
   let keyFlag: boolean = false;
   const handleKeyDown = (event: KeyboardEvent) => {
     // Escapeキーの場合処理を行う
@@ -37,7 +38,7 @@ export default function MyApp({
         keyFlag = false;
       }
     }
-    console.log(event.key);
+    // console.log(event.key);
   };
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown, false);
