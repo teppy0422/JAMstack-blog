@@ -9,7 +9,7 @@ import { signIn } from "next-auth/react";
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
 
-const { GOOGLE_ID, GOOGLE_SECRET, NEXT_PUBLIC_VERCEL_URL } = process.env;
+const { GOOGLE_ID, GOOGLE_SECRET, NEXT_PUBLIC_SECRET } = process.env;
 // if (!GOOGLE_ID) throw new Error("You must provide GOOGLE_ID env var.");
 // if (!GOOGLE_SECRET) throw new Error("You must provide GOOGLE_SECRET env var.");
 
@@ -36,7 +36,7 @@ const setting = {
     // },
   },
   // ここに NEXTAUTH_SECRET を入れる?
-  secret: NEXT_PUBLIC_VERCEL_URL,
+  secret: NEXT_PUBLIC_SECRET,
 };
 
 export default (req, res) => NextAuth(req, res, setting);
