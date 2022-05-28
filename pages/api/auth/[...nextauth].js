@@ -9,5 +9,6 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+  // ここに NEXTAUTH_SECRET を入れる?
   secret: process.env.NEXTAUTH_SECRET,
 });
