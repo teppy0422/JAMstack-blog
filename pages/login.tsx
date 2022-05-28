@@ -1,4 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react";
+import { Button } from "@chakra-ui/react";
 
 export default function Component() {
   const { data: session } = useSession();
@@ -6,14 +7,18 @@ export default function Component() {
     return (
       <>
         Signed in as {session.user.name} <br />
-        <button onClick={() => signOut()}>Sign out_</button>
+        <Button colorScheme="blue" onClick={() => signOut()}>
+          Sign out_
+        </Button>
       </>
     );
   }
   return (
     <>
       Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
+      <Button colorScheme="blue" onClick={() => signIn()}>
+        Sign in
+      </Button>
     </>
   );
 }
