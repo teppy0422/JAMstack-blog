@@ -21,9 +21,22 @@ const setting = {
       clientSecret: GOOGLE_SECRET,
     }),
   ],
-  callbacks: {},
+  callbacks: {
+    // emailのドメイン制限を入れたい場合は以下のcallbacksを入れてください
+    // signIn: async (user, account, profile) => {
+    //   if (
+    //     account.provider === "google" &&
+    //     profile.verified_email === true &&
+    //     profile.email.endsWith("@example.com")
+    //   ) {
+    //     return Promise.resolve(true);
+    //   } else {
+    //     return Promise.resolve(false);
+    //   }
+    // },
+  },
   // ここに NEXTAUTH_SECRET を入れる?
-  secret: NEXTAUTH_SECRET,
+  secret: NEXT_PUBLIC_VERCEL_URL,
 };
 
 export default (req, res) => NextAuth(req, res, setting);
