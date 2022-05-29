@@ -14,7 +14,7 @@ import "../styles/globals.css";
 // import { SessionProvider } from "next-auth/react";
 //グーグルログイン別のfirebase
 import type { AppProps } from "next/app";
-import { RecoilRoot } from "recoil";
+// import { RecoilRoot } from "recoil";
 // import { useAuth } from "../libs/auth";
 // type Props = {
 //   children: JSX.Element;
