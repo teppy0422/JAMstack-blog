@@ -21,7 +21,8 @@ type Props = {
 };
 const Auth = ({ children }: Props): JSX.Element => {
   const isLoading = useAuth();
-  return isLoading ? <p>Loading...</p> : children;
+  // return isLoading ? <p>Loading...</p> : children;
+  return children;
 };
 
 function MyApp({ Component, pageProps: { session, AppProps, ...pageProps } }) {
