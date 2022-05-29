@@ -24,6 +24,7 @@ import LoginBtn from "../components/loginBtn";
 
 import { LoginButton, LogoutButton } from "../components/loginBtn3";
 import { useAuthContext } from "../public/framework/context/AuthContext";
+import { env } from "process";
 
 export default function Header() {
   // const { data: session } = useSession();
@@ -83,6 +84,7 @@ export default function Header() {
                 </Link>
               </NextLink>
               {/* <LoginBtn /> */}
+              {process.env.NEXT_PUBLIC_FIREBASE_API_KEY}
               <Center>
                 {currentUser ? <LogoutButton /> : <LoginButton />}
               </Center>
