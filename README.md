@@ -21,4 +21,6 @@ highcharts
 
 [highcharts](https://www.highcharts.com/docs/index)
 
-## もうだめだー
+## next-auth
+
+デプロイしたらループ
