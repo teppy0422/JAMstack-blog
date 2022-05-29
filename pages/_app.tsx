@@ -24,7 +24,7 @@ const Auth = ({ children }: Props): JSX.Element => {
   cnt++;
   const isLoading = useAuth();
   console.log({ cnt });
-  return isLoading && cnt < 10 ? <p>Loading...</p> : children;
+  return isLoading && cnt < 10 ? <p>Loading...{cnt}</p> : children;
 };
 
 function MyApp({ Component, pageProps: { session, AppProps, ...pageProps } }) {
