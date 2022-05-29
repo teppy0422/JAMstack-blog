@@ -92,14 +92,14 @@ function MyApp({ Component, pageProps }: AppProps) {
           cardType: "summary_large_image",
         }}
       />
-      <AuthProvider>
-        <ChakraProvider theme={theme}>
-          <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
-          {/* <SessionProvider session={session}> */}
-          <Component {...pageProps} />
-          {/* </SessionProvider> */}
-        </ChakraProvider>
-      </AuthProvider>
+      {/* <AuthProvider> */}
+      <ChakraProvider theme={theme}>
+        <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
+        {/* <SessionProvider session={session}> */}
+        <Component {...pageProps} />
+        {/* </SessionProvider> */}
+      </ChakraProvider>
+      {/* </AuthProvider> */}
     </>
   );
 }
