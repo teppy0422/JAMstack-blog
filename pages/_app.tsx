@@ -26,7 +26,8 @@ import type { AppProps } from "next/app";
 //   console.log({ cnt });
 //   return isLoading && cnt < 10 ? <p>Loading...{cnt}</p> : children;
 // };
-import { AuthProvider } from "../public/framework/context/AuthContext";
+
+// import { AuthProvider } from "../public/framework/context/AuthContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   React.useEffect(() => {
