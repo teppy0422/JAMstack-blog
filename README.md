@@ -28,4 +28,6 @@ highcharts
 [firebase v9 の書き方](https://qiita.com/ShotaroHirose59/items/23565641612ebfee596a)
 
 import { AuthProvider } from "../public/framework/context/AuthContext";
-が呼ばれたらループになる
+をコメントアウトしたらリープしなくなった
+
+AuthProvider を...pageprops の最短に移動　 no
