@@ -20,3 +20,5 @@ highcharts
 ## グラフ
 
 [highcharts](https://www.highcharts.com/docs/index)
+
+## もうだめだー
