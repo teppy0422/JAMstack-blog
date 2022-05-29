@@ -16,10 +16,10 @@ import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
 // import { useAuth } from "../libs/auth";
-type Props = {
-  children: JSX.Element;
-};
-let cnt: number = 0;
+// type Props = {
+//   children: JSX.Element;
+// };
+// let cnt: number = 0;
 // const Auth = ({ children }: Props): JSX.Element => {
 //   cnt++;
 //   const isLoading = useAuth();
@@ -96,16 +96,16 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           cardType: "summary_large_image",
         }}
       />
-      {/* <RecoilRoot> */}
-      {/* <Auth> */}
-      <ChakraProvider theme={theme}>
-        <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
-        <SessionProvider session={session}>
-          <Component {...pageProps} />
-        </SessionProvider>
-      </ChakraProvider>
-      {/* </Auth> */}
-      {/* </RecoilRoot> */}
+      <RecoilRoot>
+        {/* <Auth> */}
+        <ChakraProvider theme={theme}>
+          <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
+          <SessionProvider session={session}>
+            <Component {...pageProps} />
+          </SessionProvider>
+        </ChakraProvider>
+        {/* </Auth> */}
+      </RecoilRoot>
     </>
   );
 }
