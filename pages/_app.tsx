@@ -15,7 +15,7 @@ import { SessionProvider } from "next-auth/react";
 //グーグルログイン別のfirebase
 import type { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
-import { useAuth } from "../libs/auth";
+// import { useAuth } from "../libs/auth";
 type Props = {
   children: JSX.Element;
 };
@@ -96,16 +96,16 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           cardType: "summary_large_image",
         }}
       />
-      <RecoilRoot>
-        {/* <Auth> */}
-        <ChakraProvider theme={theme}>
-          <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
-          {/* <SessionProvider session={session}> */}
+      {/* <RecoilRoot> */}
+      {/* <Auth> */}
+      <ChakraProvider theme={theme}>
+        <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
+        <SessionProvider session={session}>
           <Component {...pageProps} />
-          {/* </SessionProvider> */}
-        </ChakraProvider>
-        {/* </Auth> */}
-      </RecoilRoot>
+        </SessionProvider>
+      </ChakraProvider>
+      {/* </Auth> */}
+      {/* </RecoilRoot> */}
     </>
   );
 }

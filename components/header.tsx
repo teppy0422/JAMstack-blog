@@ -22,24 +22,13 @@ import React from "react";
 
 import LoginBtn from "../components/loginBtn";
 
-import { useUser, login, logout } from "../libs/auth";
-
 export default function Header() {
-  // const { data: session } = useSession();
+  const { data: session } = useSession();
 
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("red.500", "red.200");
   const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
-
-  // 別のfirebase
-  const user = useUser();
-  const handleLogin = (): void => {
-    login().catch((error) => console.error(error));
-  };
-  const handleLogout = (): void => {
-    logout().catch((error) => console.error(error));
-  };
 
   return (
     <>
@@ -78,27 +67,17 @@ export default function Header() {
                 <Link
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
-                  <Text className={styles.logoText}>T</Text>
+                  <Text className={styles.logoText}>Teppei</Text>
                 </Link>
               </NextLink>
               <NextLink href="../">
                 <Link
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
-                  <Text className={styles.logoText}>B</Text>
+                  <Text className={styles.logoText}>Blog</Text>
                 </Link>
               </NextLink>
-              {/* <LoginBtn /> */}
-
-              <Flex>
-                {user !== null ? <h2>logined</h2> : <h2>no</h2>}
-                <Button h={7} mr={2} onClick={handleLogin}>
-                  in__
-                </Button>
-                <Button h={7} onClick={handleLogout}>
-                  out
-                </Button>
-              </Flex>
+              <LoginBtn />
             </Center>
             <Center w="100px">
               <IconButton
