@@ -19,10 +19,11 @@ import { useAuth } from "../libs/auth";
 type Props = {
   children: JSX.Element;
 };
+let cnt: number = 0;
 const Auth = ({ children }: Props): JSX.Element => {
-  let cnt: number = 0;
   cnt++;
   const isLoading = useAuth();
+  console.log({ cnt });
   return isLoading && cnt < 10 ? <p>Loading...</p> : children;
 };
 
