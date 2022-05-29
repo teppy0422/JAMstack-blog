@@ -20,9 +20,10 @@ type Props = {
   children: JSX.Element;
 };
 const Auth = ({ children }: Props): JSX.Element => {
+  let cnt: number = 0;
+  cnt++;
   const isLoading = useAuth();
-  // return isLoading ? <p>Loading...</p> : children;
-  return children;
+  return isLoading && cnt < 10 ? <p>Loading...</p> : children;
 };
 
 function MyApp({ Component, pageProps: { session, AppProps, ...pageProps } }) {
