@@ -90,13 +90,9 @@ export default function Header() {
               <LoginBtn />
 
               <div>
-                {user !== null ? (
-                  <h2>ログインしている</h2>
-                ) : (
-                  <h2>ログインしていない</h2>
-                )}
-                <button onClick={handleLogin}>ログイン</button>
-                <button onClick={handleLogout}>ログアウト</button>
+                {user !== null ? <h2>logined</h2> : <h2>nologin</h2>}
+                <button onClick={handleLogin}>in__</button>
+                <button onClick={handleLogout}>out</button>
               </div>
             </Center>
             <Center w="100px">
