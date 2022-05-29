@@ -93,16 +93,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <AuthProvider>
-        {/* <RecoilRoot> */}
-        {/* <Auth> */}
         <ChakraProvider theme={theme}>
           <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
           {/* <SessionProvider session={session}> */}
           <Component {...pageProps} />
           {/* </SessionProvider> */}
         </ChakraProvider>
-        {/* </Auth> */}
-        {/* </RecoilRoot> */}
       </AuthProvider>
     </>
   );
