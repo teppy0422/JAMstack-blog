@@ -26,6 +26,7 @@ import { RecoilRoot } from "recoil";
 //   console.log({ cnt });
 //   return isLoading && cnt < 10 ? <p>Loading...{cnt}</p> : children;
 // };
+import { AuthProvider } from "../public/framework/context/AuthContext";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   React.useEffect(() => {
@@ -96,7 +97,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           cardType: "summary_large_image",
         }}
       />
-      <RecoilRoot>
+      <AuthProvider>
+        {/* <RecoilRoot> */}
         {/* <Auth> */}
         <ChakraProvider theme={theme}>
           <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
@@ -105,7 +107,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           </SessionProvider>
         </ChakraProvider>
         {/* </Auth> */}
-      </RecoilRoot>
+        {/* </RecoilRoot> */}
+      </AuthProvider>
     </>
   );
 }

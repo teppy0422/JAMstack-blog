@@ -22,8 +22,13 @@ import React from "react";
 
 import LoginBtn from "../components/loginBtn";
 
+import { LoginButton, LogoutButton } from "../components/loginBtn3";
+import { useAuthContext } from "../public/framework/context/AuthContext";
+
 export default function Header() {
   const { data: session } = useSession();
+
+  const { currentUser } = useAuthContext();
 
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("red.500", "red.200");
@@ -78,6 +83,9 @@ export default function Header() {
                 </Link>
               </NextLink>
               <LoginBtn />
+              <Center>
+                {currentUser ? <LogoutButton /> : <LoginButton />}
+              </Center>
             </Center>
             <Center w="100px">
               <IconButton
