@@ -32,4 +32,6 @@ import { AuthProvider } from "../public/framework/context/AuthContext";
 
 AuthProvider を...pageprops の最短に移動　 no
 
-.env.local の apikey を"で囲む
+.env.local の apikey を"で囲む no
+
+firebase.ts の値を直接書く ok
