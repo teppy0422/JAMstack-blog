@@ -11,7 +11,7 @@ import NextNprogress from "nextjs-progressbar";
 //リセット用
 import "../styles/globals.css";
 //グーグルログイン
-import { SessionProvider } from "next-auth/react";
+// import { SessionProvider } from "next-auth/react";
 //グーグルログイン別のfirebase
 import type { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
@@ -28,7 +28,7 @@ import { RecoilRoot } from "recoil";
 // };
 import { AuthProvider } from "../public/framework/context/AuthContext";
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+function MyApp({ Component, pageProps }: AppProps) {
   React.useEffect(() => {
     AOS.init({
       once: false,
@@ -52,9 +52,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   //   }
   // console.log(event.key);
   // };
-  useEffect(() => {
-    // document.addEventListener("keydown", handleKeyDown, false);
-  }, []);
+  // useEffect(() => {
+  // document.addEventListener("keydown", handleKeyDown, false);
+  // }, []);
 
   return (
     <>
@@ -97,9 +97,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         {/* <Auth> */}
         <ChakraProvider theme={theme}>
           <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
-          <SessionProvider session={session}>
-            <Component {...pageProps} />
-          </SessionProvider>
+          {/* <SessionProvider session={session}> */}
+          <Component {...pageProps} />
+          {/* </SessionProvider> */}
         </ChakraProvider>
         {/* </Auth> */}
         {/* </RecoilRoot> */}

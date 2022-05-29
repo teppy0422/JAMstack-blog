@@ -26,7 +26,7 @@ import { LoginButton, LogoutButton } from "../components/loginBtn3";
 import { useAuthContext } from "../public/framework/context/AuthContext";
 
 export default function Header() {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   const { currentUser } = useAuthContext();
 
