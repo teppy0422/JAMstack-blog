@@ -82,7 +82,7 @@ export default function Header() {
                   <Text className={styles.logoText}>Blog</Text>
                 </Link>
               </NextLink>
-              <LoginBtn />
+              {/* <LoginBtn /> */}
               <Center>
                 {currentUser ? <LogoutButton /> : <LoginButton />}
               </Center>
