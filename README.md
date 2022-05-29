@@ -31,3 +31,5 @@ import { AuthProvider } from "../public/framework/context/AuthContext";
 をコメントアウトしたらリープしなくなった
 
 AuthProvider を...pageprops の最短に移動　 no
+
+.env.local の apikey を"で囲む
