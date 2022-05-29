@@ -1,7 +1,7 @@
 import fb, { getApps, getApp, initializeApp } from "firebase/app";
 
 const config = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  apiKey: "AIzaSyCxexK6_cQH88tMDAGCHreAkdfnf0C00P0",
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
