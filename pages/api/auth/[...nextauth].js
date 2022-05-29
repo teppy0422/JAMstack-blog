@@ -22,19 +22,29 @@ const setting = {
     }),
   ],
   callbacks: {
-    // emailのドメイン制限を入れたい場合は以下のcallbacksを入れてください
-    // signIn: async (user, account, profile) => {
-    //   if (
-    //     account.provider === "google" &&
-    //     profile.verified_email === true &&
-    //     profile.email.endsWith("@example.com")
-    //   ) {
-    //     return Promise.resolve(true);
-    //   } else {
-    //     return Promise.resolve(false);
-    //   }
-    // },
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log("サインイン");
+      return true;
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      console.log(`アカウント:${JSON.stringify(account)}`);
+      return token;
+    },
   },
+  // callbacks: {
+  // emailのドメイン制限を入れたい場合は以下のcallbacksを入れてください
+  // signIn: async (user, account, profile) => {
+  //   if (
+  //     account.provider === "google" &&
+  //     profile.verified_email === true &&
+  //     profile.email.endsWith("@example.com")
+  //   ) {
+  //     return Promise.resolve(true);
+  //   } else {
+  //     return Promise.resolve(false);
+  //   }
+  // },
+  // },
   // ここに NEXTAUTH_SECRET を入れる?
   secret: NEXT_PUBLIC_SECRET,
 };
