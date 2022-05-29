@@ -84,7 +84,6 @@ export default function Header() {
                 </Link>
               </NextLink>
               {/* <LoginBtn /> */}
-              {process.env.NEXT_PUBLIC_FIREBASE_API_KEY}
               <Center>
                 {currentUser ? <LogoutButton /> : <LoginButton />}
               </Center>

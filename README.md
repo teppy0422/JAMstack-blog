@@ -35,3 +35,6 @@ AuthProvider を...pageprops の最短に移動　 no
 .env.local の apikey を"で囲む no
 
 firebase.ts の値を直接書く ok
+
+隠したい値は、環境変数を Vercel に登録
+Vercel > Setting > Env... > Add New > add
