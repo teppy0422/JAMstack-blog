@@ -38,22 +38,22 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   }, []);
 
   // loginボタンを隠す
-  let keyFlag: boolean = false;
-  const handleKeyDown = (event: KeyboardEvent) => {
-    // CMDキーの場合処理を行う
-    if (event.key === "Meta") {
-      if (keyFlag === false) {
-        document.getElementById("login").style.display = "block";
-        keyFlag = true;
-      } else {
-        document.getElementById("login").style.display = "none";
-        keyFlag = false;
-      }
-    }
-    // console.log(event.key);
-  };
+  // let keyFlag: boolean = false;
+  // const handleKeyDown = (event: KeyboardEvent) => {
+  //   // CMDキーの場合処理を行う
+  //   if (event.key === "Meta") {
+  //     if (keyFlag === false) {
+  //       document.getElementById("login").style.display = "block";
+  //       keyFlag = true;
+  //     } else {
+  //       document.getElementById("login").style.display = "none";
+  //       keyFlag = false;
+  //     }
+  //   }
+  // console.log(event.key);
+  // };
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown, false);
+    // document.addEventListener("keydown", handleKeyDown, false);
   }, []);
 
   return (
@@ -63,11 +63,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Yusei+Magic&display=swap"
-        />
-        {/* グーグルログイン */}
-        <meta
-          name="google-site-verification"
-          content="4var2KY2gn9V8ETNT5Iny7qYQwuuYpfwHbALwJtkyPA"
         />
         {/* アクセス解析 */}
         <script src="//accaii.com/teppy/script.js" async></script>
