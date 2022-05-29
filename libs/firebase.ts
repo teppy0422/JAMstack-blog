@@ -11,4 +11,5 @@ const config = {
 };
 
 const firebaseApp = !getApps().length ? initializeApp(config) : getApp();
+console.log(getApps().length);
 export default firebaseApp;
