@@ -27,7 +27,7 @@ const Auth = ({ children }: Props): JSX.Element => {
   return isLoading && cnt < 10 ? <p>Loading...{cnt}</p> : children;
 };
 
-function MyApp({ Component, pageProps: { session, AppProps, ...pageProps } }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   React.useEffect(() => {
     AOS.init({
       once: false,
@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps: { session, AppProps, ...pageProps } }) {
   // loginボタンを隠す
   let keyFlag: boolean = false;
   const handleKeyDown = (event: KeyboardEvent) => {
-    // Escapeキーの場合処理を行う
+    // CMDキーの場合処理を行う
     if (event.key === "Meta") {
       if (keyFlag === false) {
         document.getElementById("login").style.display = "block";

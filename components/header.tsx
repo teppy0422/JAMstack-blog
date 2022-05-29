@@ -11,6 +11,7 @@ import {
   useColorMode,
   useColorModeValue,
   Link,
+  Button,
 } from "@chakra-ui/react";
 import { PhoneIcon, AddIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -77,23 +78,27 @@ export default function Header() {
                 <Link
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
-                  <Text className={styles.logoText}>TeppeiKataoka</Text>
+                  <Text className={styles.logoText}>T</Text>
                 </Link>
               </NextLink>
               <NextLink href="../">
                 <Link
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
-                  <Text className={styles.logoText}>Blogt</Text>
+                  <Text className={styles.logoText}>B</Text>
                 </Link>
               </NextLink>
               <LoginBtn />
 
-              <div>
-                {user !== null ? <h2>logined</h2> : <h2>nologin</h2>}
-                <button onClick={handleLogin}>in__</button>
-                <button onClick={handleLogout}>out</button>
-              </div>
+              <Flex>
+                {user !== null ? <h2>logined</h2> : <h2>no</h2>}
+                <Button h={7} mr={2} onClick={handleLogin}>
+                  in__
+                </Button>
+                <Button h={7} onClick={handleLogout}>
+                  out
+                </Button>
+              </Flex>
             </Center>
             <Center w="100px">
               <IconButton
