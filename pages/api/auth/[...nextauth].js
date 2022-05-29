@@ -9,7 +9,7 @@ import { signIn } from "next-auth/react";
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
 
-const { GOOGLE_ID, GOOGLE_SECRET, NEXT_PUBLIC_SECRET } = process.env;
+const { GOOGLE_ID_, GOOGLE_SECRET_, NEXT_PUBLIC_SECRET } = process.env;
 // if (!GOOGLE_ID) throw new Error("You must provide GOOGLE_ID env var.");
 // if (!GOOGLE_SECRET) throw new Error("You must provide GOOGLE_SECRET env var.");
 
@@ -17,8 +17,8 @@ const setting = {
   // adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
-      clientId: GOOGLE_ID,
-      clientSecret: GOOGLE_SECRET,
+      clientId: GOOGLE_ID_,
+      clientSecret: GOOGLE_SECRET_,
     }),
   ],
   callbacks: {
