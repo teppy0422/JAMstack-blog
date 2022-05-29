@@ -27,7 +27,7 @@ import type { AppProps } from "next/app";
 //   return isLoading && cnt < 10 ? <p>Loading...{cnt}</p> : children;
 // };
 
-// import { AuthProvider } from "../public/framework/context/AuthContext";
+import { AuthProvider } from "../public/framework/context/AuthContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   React.useEffect(() => {
@@ -93,14 +93,14 @@ function MyApp({ Component, pageProps }: AppProps) {
           cardType: "summary_large_image",
         }}
       />
-      {/* <AuthProvider> */}
       <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
         {/* <SessionProvider session={session}> */}
-        <Component {...pageProps} />
+        <AuthProvider>
+          <Component {...pageProps} />
+        </AuthProvider>
         {/* </SessionProvider> */}
       </ChakraProvider>
-      {/* </AuthProvider> */}
     </>
   );
 }

@@ -12,7 +12,6 @@ export const AuthProvider: React.FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null | undefined>(
     undefined
   );
-
   useEffect(() => {
     onAuthStateChanged((user) => {
       // ログイン状態が変化すると呼ばれる
