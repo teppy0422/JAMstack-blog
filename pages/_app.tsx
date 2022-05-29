@@ -12,11 +12,19 @@ import NextNprogress from "nextjs-progressbar";
 import "../styles/globals.css";
 //グーグルログイン
 import { SessionProvider } from "next-auth/react";
+//グーグルログイン別のfirebase
+import type { AppProps } from "next/app";
+import { RecoilRoot } from "recoil";
+import { useAuth } from "../libs/auth";
+type Props = {
+  children: JSX.Element;
+};
+const Auth = ({ children }: Props): JSX.Element => {
+  const isLoading = useAuth();
+  return isLoading ? <p>Loading...</p> : children;
+};
 
-export default function MyApp({
-  Component,
-  pageProps: { session, ...pageProps },
-}) {
+function MyApp({ Component, pageProps: { session, AppProps, ...pageProps } }) {
   React.useEffect(() => {
     AOS.init({
       once: false,
@@ -85,12 +93,17 @@ export default function MyApp({
           cardType: "summary_large_image",
         }}
       />
-      <ChakraProvider theme={theme}>
-        <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
-        <SessionProvider session={session}>
-          <Component {...pageProps} />
-        </SessionProvider>
-      </ChakraProvider>
+      <RecoilRoot>
+        <Auth>
+          <ChakraProvider theme={theme}>
+            <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
+            <SessionProvider session={session}>
+              <Component {...pageProps} />
+            </SessionProvider>
+          </ChakraProvider>
+        </Auth>
+      </RecoilRoot>
     </>
   );
 }
+export default MyApp;

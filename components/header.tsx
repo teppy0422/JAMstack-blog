@@ -21,6 +21,8 @@ import React from "react";
 
 import LoginBtn from "../components/loginBtn";
 
+import { useUser, login, logout } from "../libs/auth";
+
 export default function Header() {
   const { data: session } = useSession();
 
@@ -28,6 +30,15 @@ export default function Header() {
   const bg = useColorModeValue("red.500", "red.200");
   const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
+
+  // 別のfirebase
+  const user = useUser();
+  const handleLogin = (): void => {
+    login().catch((error) => console.error(error));
+  };
+  const handleLogout = (): void => {
+    logout().catch((error) => console.error(error));
+  };
 
   return (
     <>
@@ -77,6 +88,16 @@ export default function Header() {
                 </Link>
               </NextLink>
               <LoginBtn />
+
+              <div>
+                {user !== null ? (
+                  <h2>ログインしている</h2>
+                ) : (
+                  <h2>ログインしていない</h2>
+                )}
+                <button onClick={handleLogin}>ログイン</button>
+                <button onClick={handleLogout}>ログアウト</button>
+              </div>
             </Center>
             <Center w="100px">
               <IconButton
