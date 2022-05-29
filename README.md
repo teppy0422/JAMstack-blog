@@ -24,3 +24,5 @@ highcharts
 ## next-auth
 
 デプロイしたらループ
+
+[firebase v9 の書き方](https://qiita.com/ShotaroHirose59/items/23565641612ebfee596a)
