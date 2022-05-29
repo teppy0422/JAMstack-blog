@@ -100,9 +100,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <Auth>
           <ChakraProvider theme={theme}>
             <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
-            <SessionProvider session={session}>
-              <Component {...pageProps} />
-            </SessionProvider>
+            {/* <SessionProvider session={session}> */}
+            <Component {...pageProps} />
+            {/* </SessionProvider> */}
           </ChakraProvider>
         </Auth>
       </RecoilRoot>

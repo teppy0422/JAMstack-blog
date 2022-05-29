@@ -25,7 +25,7 @@ import LoginBtn from "../components/loginBtn";
 import { useUser, login, logout } from "../libs/auth";
 
 export default function Header() {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("red.500", "red.200");
@@ -88,7 +88,7 @@ export default function Header() {
                   <Text className={styles.logoText}>B</Text>
                 </Link>
               </NextLink>
-              <LoginBtn />
+              {/* <LoginBtn /> */}
 
               <Flex>
                 {user !== null ? <h2>logined</h2> : <h2>no</h2>}
