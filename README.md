@@ -46,6 +46,11 @@ Vercel > Setting > Env... > Add New > add 　 ok
 DeveloperPortal にログインして、進めていったらいい  
 詳細は覚えてない
 
+### LINE
+
+LINE Developers にログインして...
+!!メールアドレスの使用目的を説明するスクリーンショットが無くて断念
+
 ## 問題点
 
 ブラウザにログインしてない場合、error403 になる
