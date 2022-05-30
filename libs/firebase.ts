@@ -9,7 +9,7 @@ const config = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
 };
-console.log(config);
+// console.log(config);
 // const firebaseApp = !getApps().length ? initializeApp(config) : getApp();
 const firebaseApp = initializeApp(config);
 export default firebaseApp;
