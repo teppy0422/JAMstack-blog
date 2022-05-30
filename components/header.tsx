@@ -16,12 +16,14 @@ import {
 } from "@chakra-ui/react";
 import { PhoneIcon, AddIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faPalette } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
 import Image from "next/image";
 import React from "react";
 
 import LoginBtn from "./loginBtn";
+import AwesomIcon from "./awesomIcon";
 
 import { env } from "process";
 
@@ -30,6 +32,8 @@ export default function Header() {
 
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("red.500", "red.200");
+  const bg2 = useColorModeValue("#000", "pink");
+
   const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
 
@@ -40,22 +44,11 @@ export default function Header() {
           <Flex className={`${myClass} ${styles.headerNav}`}>
             <Center w="64px">
               <LoginBtn />
-
               <Box style={{ display: "none" }} id="none">
-                <NextLink
-                  href="https://github.com/teppy0422/JAMstack-blog"
-                  passHref
-                >
-                  <Link
-                    _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
-                  >
-                    <FontAwesomeIcon
-                      color={color}
-                      icon={faGithub}
-                      className={styles.githubIcon}
-                    />
-                  </Link>
-                </NextLink>
+                <AwesomIcon
+                  link="https://github.com/teppy0422/JAMstack-blog"
+                  awesome={faGithub}
+                />
               </Box>
             </Center>
             <Center
@@ -82,6 +75,17 @@ export default function Header() {
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
                   <Text className={styles.logoText}>Blog</Text>
+                </Link>
+              </NextLink>
+
+              <NextLink href="/illust">
+                <Link
+                  _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+                >
+                  <FontAwesomeIcon
+                    icon={faPalette}
+                    className={styles.githubIcon}
+                  />
                 </Link>
               </NextLink>
             </Center>

@@ -152,41 +152,25 @@ export default function About() {
       ],
       titleTalk: "詳細(茶番劇2話)を見る",
     },
+  ];
+  const illusts = [
     {
-      title: "作業誘導+",
-      subTitle: "マイコン",
-      eyeCatchPath: "/images/detail_03_title.png",
-      detail: <Detail03 />,
-      detailTalk: <Center>Comming soon. maybe</Center>,
-      rate: 5,
-      users: 8,
-      skillTags: [
-        {
-          skillName: "EXCEL",
-          skillColor: "green",
-        },
-        {
-          skillName: "HTML",
-          skillColor: "orange",
-        },
-        {
-          skillName: "CSS",
-          skillColor: "blue",
-        },
-        {
-          skillName: "JavaScript",
-          skillColor: "yellow",
-        },
-        {
-          skillName: "VB.net",
-          skillColor: "purple",
-        },
-        {
-          skillName: "Arduino",
-          skillColor: "teal",
-        },
-      ],
-      titleTalk: "詳細(茶番劇3話)を見る",
+      src: "/images/illust/hippo_001.svg",
+    },
+    {
+      src: "/images/illust/hippo_002.png",
+    },
+    {
+      src: "/images/illust/hippo_003.png",
+    },
+    {
+      src: "/images/illust/hippo_004.png",
+    },
+    {
+      src: "/images/illust/hippo_005.png",
+    },
+    {
+      src: "/images/illust/hippo_006.png",
     },
   ];
   return (
@@ -196,6 +180,11 @@ export default function About() {
         <VStack>
           <Flex>
             <Box>
+              <Box className={styles.watercolor} h={100}>
+                <Text p={5} fontSize="32px" fontWeight="700">
+                  イラスト
+                </Text>
+              </Box>
               <Text fontSize={[28, 32, 36, 40]} className={styles.name}>
                 Teppei Kataoka
               </Text>
@@ -257,7 +246,14 @@ export default function About() {
           </div>
         </Box>
 
-        <SkillGraph />
+        <Box style={{ textAlign: "center" }}>
+          {illusts.map((item, inde) => {
+            return (
+              <Image src={item.src} style={{ display: "inline-block" }} m={3} />
+            );
+          })}
+        </Box>
+
         <Box style={{ textAlign: "center" }}>
           {skillCircles.map((item, index) => {
             const aosOffset: number = (index % 5) * 70;
