@@ -20,7 +20,7 @@ import styles from "../styles/home.module.scss";
 import Image from "next/image";
 import React from "react";
 
-import LoginBtn from "../components/loginBtn";
+import LoginBtn from "../components/loginBtn2";
 
 import { LoginButton, LogoutButton } from "../components/loginBtn3";
 import { useAuthContext } from "../public/framework/context/AuthContext";
@@ -83,7 +83,7 @@ export default function Header() {
                   <Text className={styles.logoText}>Blog</Text>
                 </Link>
               </NextLink>
-              {/* <LoginBtn /> */}
+              <LoginBtn />
               <Center>
                 {currentUser ? <LogoutButton /> : <LoginButton />}
               </Center>

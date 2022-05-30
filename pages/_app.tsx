@@ -38,23 +38,23 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   }, []);
 
   // loginボタンを隠す
-  // let keyFlag: boolean = false;
-  // const handleKeyDown = (event: KeyboardEvent) => {
-  //   // CMDキーの場合処理を行う
-  //   if (event.key === "Meta") {
-  //     if (keyFlag === false) {
-  //       document.getElementById("login").style.display = "block";
-  //       keyFlag = true;
-  //     } else {
-  //       document.getElementById("login").style.display = "none";
-  //       keyFlag = false;
-  //     }
-  //   }
-  // console.log(event.key);
-  // };
-  // useEffect(() => {
-  // document.addEventListener("keydown", handleKeyDown, false);
-  // }, []);
+  let keyFlag: boolean = false;
+  const handleKeyDown = (event: KeyboardEvent) => {
+    // CMDキーの場合処理を行う
+    if (event.key === "Meta") {
+      if (keyFlag === false) {
+        document.getElementById("login").style.display = "block";
+        keyFlag = true;
+      } else {
+        document.getElementById("login").style.display = "none";
+        keyFlag = false;
+      }
+    }
+    console.log(event.key);
+  };
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown, false);
+  }, []);
 
   return (
     <>
