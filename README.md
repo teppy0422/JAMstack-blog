@@ -23,11 +23,13 @@ highcharts
 
 ## next-auth
 
+### google
+
 デプロイしたらループ
 
 [firebase v9 の書き方](https://qiita.com/ShotaroHirose59/items/23565641612ebfee596a)
 
-import { AuthProvider } from "../public/framework/context/AuthContext";
+import { AuthProvider } from "../public/framework/context/AuthContext";  
 をコメントアウトしたらリープしなくなった
 
 AuthProvider を...pageprops の最短に移動　 no
@@ -36,7 +38,14 @@ AuthProvider を...pageprops の最短に移動　 no
 
 firebase.ts の値を直接書く ok
 
-隠したい値は、環境変数を Vercel に登録
-Vercel > Setting > Env... > Add New > add
+隠したい値は、環境変数を Vercel に登録  
+Vercel > Setting > Env... > Add New > add 　 ok
 
-不要っぽい値を削除
+### Twitter
+
+DeveloperPortal にログインして、進めていったらいい  
+詳細は覚えてない
+
+## 問題点
+
+ブラウザにログインしてない場合、error403 になる
