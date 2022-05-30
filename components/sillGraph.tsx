@@ -17,7 +17,6 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
   } else {
     myHeight = myWidth - 100;
   }
-  console.log(myWidth);
   if (typeof Highcharts === "object") {
     HighchartsMore(Highcharts);
   }

@@ -27,7 +27,7 @@ import { useAuthContext } from "../public/framework/context/AuthContext";
 import { env } from "process";
 
 export default function Header() {
-  // const { data: session } = useSession();
+  const { data: session } = useSession();
 
   const { currentUser } = useAuthContext();
 

@@ -14,7 +14,7 @@ import "../styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 //グーグルログイン別のfirebase
 import type { AppProps } from "next/app";
-import { RecoilRoot } from "recoil";
+// import { RecoilRoot } from "recoil";
 // import { useAuth } from "../libs/auth";
 // type Props = {
 //   children: JSX.Element;
@@ -26,9 +26,10 @@ import { RecoilRoot } from "recoil";
 //   console.log({ cnt });
 //   return isLoading && cnt < 10 ? <p>Loading...{cnt}</p> : children;
 // };
+
 import { AuthProvider } from "../public/framework/context/AuthContext";
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+function MyApp({ Component, pageProps }: AppProps, session) {
   React.useEffect(() => {
     AOS.init({
       once: false,
@@ -64,11 +65,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Yusei+Magic&display=swap"
         />
-        {/* グーグルログイン */}
-        <meta
-          name="google-site-verification"
-          content="4var2KY2gn9V8ETNT5Iny7qYQwuuYpfwHbALwJtkyPA"
-        />
         {/* アクセス解析 */}
         <script src="//accaii.com/teppy/script.js" async></script>
       </Head>
@@ -98,16 +94,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         }}
       />
       <AuthProvider>
-        {/* <RecoilRoot> */}
-        {/* <Auth> */}
         <ChakraProvider theme={theme}>
           <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
           <SessionProvider session={session}>
             <Component {...pageProps} />
           </SessionProvider>
         </ChakraProvider>
-        {/* </Auth> */}
-        {/* </RecoilRoot> */}
       </AuthProvider>
     </>
   );
