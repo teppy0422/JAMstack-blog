@@ -47,6 +47,11 @@
   width: 28px;
   height: 28px;
 }
+.loginAvatar {
+  &:hover {
+    cursor: pointer;
+  }
+}
 .container {
   background: #ffffff10;
   backdrop-filter: blur(10px);

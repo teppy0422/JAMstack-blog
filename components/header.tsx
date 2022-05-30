@@ -12,6 +12,8 @@ import {
   useColorModeValue,
   Link,
   Button,
+  Box,
+  Left,
 } from "@chakra-ui/react";
 import { PhoneIcon, AddIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,20 +40,24 @@ export default function Header() {
         <VStack>
           <Flex className={`${myClass} ${styles.headerNav}`}>
             <Center w="64px">
-              <NextLink
-                href="https://github.com/teppy0422/JAMstack-blog"
-                passHref
-              >
-                <Link
-                  _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+              <LoginBtn />
+
+              <Box style={{ display: "none" }} id="none">
+                <NextLink
+                  href="https://github.com/teppy0422/JAMstack-blog"
+                  passHref
                 >
-                  <FontAwesomeIcon
-                    color={color}
-                    icon={faGithub}
-                    className={styles.githubIcon}
-                  />
-                </Link>
-              </NextLink>
+                  <Link
+                    _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+                  >
+                    <FontAwesomeIcon
+                      color={color}
+                      icon={faGithub}
+                      className={styles.githubIcon}
+                    />
+                  </Link>
+                </NextLink>
+              </Box>
             </Center>
             <Center
               flex="1"
@@ -79,7 +85,6 @@ export default function Header() {
                   <Text className={styles.logoText}>Blog</Text>
                 </Link>
               </NextLink>
-              <LoginBtn />
             </Center>
             <Center w="100px">
               <IconButton

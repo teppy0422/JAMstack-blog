@@ -42,10 +42,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     // CMDキーの場合処理を行う
     if (event.key === "Meta") {
       if (keyFlag === false) {
-        document.getElementById("login").style.display = "block";
+        document.getElementById("none").style.display = "block";
         keyFlag = true;
       } else {
-        document.getElementById("login").style.display = "none";
+        document.getElementById("none").style.display = "none";
         keyFlag = false;
       }
     }
