@@ -19,7 +19,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/api/auth/[...nextauth].js"
+    "pages/api/auth/[...nextauth].js",
+    ".trash/_app copy.tsx"
   ],
   "exclude": ["node_modules"]
 }
