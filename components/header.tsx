@@ -85,7 +85,7 @@ export default function Header() {
                 </Link>
               </NextLink>
             </Center>
-            <Center w="100px">
+            <Center w="64px">
               <IconButton
                 className={styles.modeChange}
                 _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す

@@ -6,11 +6,20 @@ import {
   Center,
   StylesProvider,
   Tooltip,
+  Circle,
+  useColorModeValue,
 } from "@chakra-ui/react";
+
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import Styles from "../styles/home.module.scss";
 
 export default function Component() {
   const { data: session } = useSession();
+
+  const bg = useColorModeValue("tomato", "pink");
+  const color = useColorModeValue("#F4ECE4", "gray.700");
   return (
     <>
       {session ? (
@@ -24,12 +33,15 @@ export default function Component() {
         </Tooltip>
       ) : (
         <Tooltip label="ログイン" aria-label="A tooltip">
-          <Avatar
+          <Circle
             onClick={() => signIn()}
-            boxSize="42px"
-            src="https://bit.ly/broken-link"
             className={Styles.loginAvatar}
-          ></Avatar>
+            bg={bg}
+            color={color}
+            size="40px"
+          >
+            <FontAwesomeIcon icon={faUser} className={Styles.githubIcon} />
+          </Circle>
         </Tooltip>
       )}
     </>

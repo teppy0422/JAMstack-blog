@@ -61,8 +61,17 @@
   height: 28px;
 }
 
+.loginAvatar {
+  -webkit-transition: 0.6s;
+  transition: 0.6s;
+}
+
 .loginAvatar:hover {
   cursor: pointer;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  -webkit-transition: 0.6s;
+  transition: 0.6s;
 }
 
 .container {
