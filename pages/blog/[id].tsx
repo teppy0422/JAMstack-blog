@@ -1,6 +1,6 @@
 import Moment from "react-moment";
 import { RepeatClockIcon } from "@chakra-ui/icons";
-import { Container, Divider, useColorModeValue } from "@chakra-ui/react";
+import { Container, Divider, useColorModeValue, Box } from "@chakra-ui/react";
 import { client } from "../../libs/client";
 import Header from "../../components/header";
 import styles from "../../styles/home.module.scss";
@@ -33,6 +33,7 @@ export default function BlogId({ blog, highlightedBody }) {
             className={styles.post}
             dangerouslySetInnerHTML={{ __html: highlightedBody }}
           ></div>
+          <Box h={10} />
         </Container>
       </main>
       <style jsx>{`
