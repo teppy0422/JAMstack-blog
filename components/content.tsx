@@ -1,5 +1,5 @@
 // レイアウトを決める
-import { Container, Center, Box } from "@chakra-ui/react";
+import { Container, Center, Box, Spacer } from "@chakra-ui/react";
 import NextLink from "next/link";
 
 import Header from "../components/header";
@@ -17,13 +17,17 @@ export default function Content({ children }) {
         {children}
       </Container>
       <hr />
-      <Center mt="20px" color="gray">
-        ©︎ 2022 Teppei Kataoka. All rights Reserved.
-      </Center>
-      <Center mb="40px" color="gray">
+      <Center my="16px" color="gray">
         <NextLink href="/privacy">
-          <a>privacy policy</a>
+          <a>プライバシーポリシー</a>
         </NextLink>
+        <Box mr={5} />
+        <NextLink href="/terms">
+          <a>利用規約</a>
+        </NextLink>
+      </Center>
+      <Center mb="20px" color="gray">
+        ©︎ 2022 Teppei Kataoka. All rights Reserved.
       </Center>
     </>
   );

@@ -476,4 +476,16 @@ element.style {
   font-weight: 700;
   margin: 2rem 0 1rem 0;
 }
+
+.privacy ol {
+  margin-left: 1.4rem;
+}
+
+.privacy p {
+  margin-left: 0.2rem;
+}
+
+.privacy li {
+  margin-left: 0.4rem;
+}
 /*# sourceMappingURL=home.module.css.map */
