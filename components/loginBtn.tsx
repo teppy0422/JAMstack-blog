@@ -1,5 +1,12 @@
 import { useSession, signIn, signOut } from "next-auth/react";
-import { Button, Box, Avatar, Center, StylesProvider } from "@chakra-ui/react";
+import {
+  Button,
+  Box,
+  Avatar,
+  Center,
+  StylesProvider,
+  Tooltip,
+} from "@chakra-ui/react";
 import Styles from "../styles/home.module.scss";
 
 export default function Component() {
@@ -7,19 +14,23 @@ export default function Component() {
   return (
     <>
       {session ? (
-        <Avatar
-          onClick={() => signOut()}
-          boxSize="42px"
-          src={session.user.image}
-          className={Styles.loginAvatar}
-        />
+        <Tooltip label="ログアウト" aria-label="A tooltip">
+          <Avatar
+            onClick={() => signOut()}
+            boxSize="42px"
+            src={session.user.image}
+            className={Styles.loginAvatar}
+          />
+        </Tooltip>
       ) : (
-        <Avatar
-          onClick={() => signIn()}
-          boxSize="42px"
-          src="https://bit.ly/broken-link"
-          className={Styles.loginAvatar}
-        ></Avatar>
+        <Tooltip label="ログイン" aria-label="A tooltip">
+          <Avatar
+            onClick={() => signIn()}
+            boxSize="42px"
+            src="https://bit.ly/broken-link"
+            className={Styles.loginAvatar}
+          ></Avatar>
+        </Tooltip>
       )}
     </>
   );

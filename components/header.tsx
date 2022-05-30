@@ -13,7 +13,6 @@ import {
   Link,
   Button,
   Box,
-  Left,
 } from "@chakra-ui/react";
 import { PhoneIcon, AddIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
