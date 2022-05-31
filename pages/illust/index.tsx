@@ -1,15 +1,5 @@
 import React from "react";
 import Content from "../../components/content";
-import SkillGraph from "../../components/sillGraph";
-import SkillCircle from "../../components/skillCircle";
-import ModalWork from "../../components/modalWork";
-import ImageCard from "../../components/imageCard";
-
-import Detail01 from "../../components/worksDetail/01";
-import Detail01talk from "../../components/worksDetail/01_talk";
-import Detail02 from "../../components/worksDetail/02";
-import Detail02talk from "../../components/worksDetail/02_talk";
-import Detail03 from "../../components/worksDetail/03";
 
 import {
   Center,
@@ -33,144 +23,87 @@ import styles from "../../styles/home.module.scss";
 import { theme } from "highcharts";
 
 export default function About() {
-  const skillCircles = [
-    {
-      value: 90,
-      cirText: "EXCEL-vba\nアプリ制御など\n15年",
-      color: "excel",
-      img: "/images/logo_excel.svg",
-    },
-    {
-      value: 65,
-      cirText: "ACCESS-vba\n部品管理\n3年",
-      color: "excel",
-      img: "/images/logo_access.svg",
-    },
-    {
-      value: 30,
-      cirText: "vb.net\nシリアル通信\nカメラ制御\n半年",
-      color: "dotNet",
-      img: "/images/logo_dotNet.svg",
-    },
-    {
-      value: 60,
-      cirText: "HTML\n基本的な使い方\n4年",
-      color: "front",
-      img: "/images/logo_html5.svg",
-    },
-    {
-      value: 65,
-      cirText: "CSS\n基本的な使い方\n+SCSS\n4年",
-      color: "front",
-      img: "/images/logo_css.svg",
-    },
-    {
-      value: 40,
-      cirText: "JavaScript\n4年",
-      color: "front",
-      img: "/images/logo_javascript.svg",
-    },
-    {
-      value: 35,
-      cirText: "Next\nこのサイトで利用\n1年",
-      color: "front",
-      img: "/images/logo_next.svg",
-    },
-    {
-      value: 30,
-      cirText: "PHP\n半年",
-      color: "php",
-      img: "/images/logo_php.svg",
-    },
-    {
-      value: 20,
-      cirText: "Python\nほんの少しだけ",
-      color: "php",
-      img: "/images/logo_python.svg",
-    },
-    {
-      value: 60,
-      cirText: "Arduino\n2年",
-      color: "arduino",
-      img: "/images/logo_arduino.svg",
-    },
-    {
-      value: 30,
-      cirText: "Davinci Resolve\n半年",
-      color: "davinci",
-      img: "/images/logo_davinci.svg",
-    },
-    {
-      value: 30,
-      cirText: "InkScape\n1年",
-      color: "inkscape",
-      img: "/images/logo_inkscape.svg",
-    },
-  ];
-  const skillCards = [
-    {
-      title: "生産準備+",
-      subTitle: "画像を自動で作る",
-      eyeCatchPath: "/images/sjp_menu.png",
-      detail: <Detail01 />,
-      detailTalk: <Detail01talk />,
-      rate: 5,
-      users: 341,
-      skillTags: [
-        {
-          skillName: "EXCEL",
-          skillColor: "green",
-        },
-      ],
-      titleTalk: "詳細(茶番劇1話)を見る",
-    },
-    {
-      title: "導通検査+",
-      subTitle: "WEB技術の基礎",
-      eyeCatchPath: "/images/sjp_kensarireki_YCC.png",
-      detail: <Detail02 />,
-      detailTalk: <Detail02talk />,
-      rate: 5,
-      users: 120,
-      skillTags: [
-        {
-          skillName: "EXCEL",
-          skillColor: "green",
-        },
-        {
-          skillName: "HTML",
-          skillColor: "orange",
-        },
-        {
-          skillName: "CSS",
-          skillColor: "blue",
-        },
-        {
-          skillName: "JavaScript",
-          skillColor: "yellow",
-        },
-      ],
-      titleTalk: "詳細(茶番劇2話)を見る",
-    },
-  ];
   const illusts = [
     {
-      src: "/images/illust/hippo_001.svg",
+      src: "/images/illust/hippo/hippo_001.png",
     },
     {
-      src: "/images/illust/hippo_002.png",
+      src: "/images/illust/hippo/hippo_001_a.png",
     },
     {
-      src: "/images/illust/hippo_003.png",
+      src: "/images/illust/hippo/hippo_002.png",
     },
     {
-      src: "/images/illust/hippo_004.png",
+      src: "/images/illust/hippo/hippo_004.png",
     },
     {
-      src: "/images/illust/hippo_005.png",
+      src: "/images/illust/hippo/hippo_005.png",
     },
     {
-      src: "/images/illust/hippo_006.png",
+      src: "/images/illust/hippo/hippo_005_a.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_006.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_007.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_008.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_010.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_011.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_011_a.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_012.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_013.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_014.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_015.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_016.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_017.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_017_a.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_019.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_020.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_021.png",
+    },
+    {
+      src: "/images/illust/hippo/hippo_022.png",
+    },
+    {
+      src: "/images/illust/obj/obj_001.png",
+    },
+    {
+      src: "/images/illust/obj/obj_002.png",
+    },
+    {
+      src: "/images/illust/obj/obj_003.png",
+    },
+    {
+      src: "/images/illust/obj/obj_004.png",
     },
   ];
   return (
@@ -247,83 +180,23 @@ export default function About() {
         </Box>
 
         <Box style={{ textAlign: "center" }}>
-          {illusts.map((item, inde) => {
-            return (
-              <Image src={item.src} style={{ display: "inline-block" }} m={3} />
-            );
-          })}
-        </Box>
-
-        <Box style={{ textAlign: "center" }}>
-          {skillCircles.map((item, index) => {
-            const aosOffset: number = (index % 5) * 70;
+          {illusts.map((item, index) => {
+            const aosOffset: number = (index % 2) * 100;
             return (
               <div
-                data-aos="fade-up"
+                data-aos="flip-left"
                 data-aos-offset={aosOffset}
                 style={{ display: "inline-block" }}
               >
-                <SkillCircle
-                  key={index}
-                  value={item.value}
-                  cirText={item.cirText}
-                  color={item.color}
-                  timing={index}
-                  img={item.img}
+                <Image
+                  src={item.src}
+                  style={{ display: "inline-block" }}
+                  m={3}
                 />
               </div>
             );
           })}
         </Box>
-
-        <Box ml={[0, 0, "8%", "16%"]}>
-          <div data-aos="fade-right" style={{ display: "inline-block" }}>
-            <Text className={styles.subTitle}>Works</Text>
-            <Text>ここ最近の実績です。</Text>
-          </div>
-        </Box>
-        <div style={{ height: "24px" }}></div>
-
-        <Box style={{ textAlign: "center" }} className={styles.cardList}>
-          {skillCards.map((item, index) => {
-            return (
-              <Box display={"inline-block"}>
-                <ModalWork
-                  key={index}
-                  title={item.title}
-                  detail={item.detail}
-                  m={0}
-                >
-                  <ImageCard
-                    key={index}
-                    title={item.title}
-                    subTitle={item.subTitle}
-                    eyeCatchPath={item.eyeCatchPath}
-                    rate={item.rate}
-                    users={item.users}
-                    skillTags={item.skillTags}
-                  />
-                </ModalWork>
-                <ModalWork title={item.title} detail={item.detailTalk}>
-                  <Box className={styles.balloon} boxShadow="md">
-                    {item.titleTalk}
-                  </Box>
-                </ModalWork>
-              </Box>
-            );
-          })}
-        </Box>
-
-        <div style={{ height: "66px" }}></div>
-        <Box boxShadow="xl" rounded="md" w="100%">
-          <Image
-            src="/images/hippo.gif"
-            alt="hippoWalking"
-            width={100}
-            height={178}
-          />
-        </Box>
-        <Text className={styles.subTitle}>経験した構成</Text>
       </div>
     </Content>
   );
