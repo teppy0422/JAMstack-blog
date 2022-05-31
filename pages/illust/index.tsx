@@ -145,8 +145,8 @@ export default function About() {
         <Box style={{ textAlign: "center" }}>
           {illusts.map((item, index) => {
             const aosOffset: number = (index % 2) * 150;
-            const aosDuration = (index % 4) * 800;
-            const aosDelay = (index % 5) * 300;
+            const aosDuration = (index % 4) * 700;
+            const aosDelay = (index % 4) * 300;
             return (
               <div
                 data-aos="flip-left"

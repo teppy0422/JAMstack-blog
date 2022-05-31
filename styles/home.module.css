@@ -262,10 +262,6 @@ span.tags:hover {
   cursor: pointer;
 }
 
-.me {
-  font-size: 16px;
-}
-
 .me .name {
   font-family: "M PLUS Rounded 1c", sans-serif;
   font-weight: 700;
