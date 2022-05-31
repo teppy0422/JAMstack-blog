@@ -181,7 +181,7 @@ export default function About() {
 
         <Box style={{ textAlign: "center" }}>
           {illusts.map((item, index) => {
-            const aosOffset: number = (index % 2) * 100;
+            const aosOffset: number = (index % 2) * 150;
             const aosDuration: number = (index % 4) * 500;
             return (
               <div
