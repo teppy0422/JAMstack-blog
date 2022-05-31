@@ -112,88 +112,54 @@ export default function About() {
         <Text>-作成中-</Text>
         <VStack>
           <Flex>
-            <Box>
+            <Box mr={3}>
               <Box className={styles.watercolor} h={100}>
                 <Text p={5} fontSize="32px" fontWeight="700">
                   イラスト
                 </Text>
               </Box>
-              <Text fontSize={[28, 32, 36, 40]} className={styles.name}>
-                Teppei Kataoka
-              </Text>
-              <Text className={styles.tool}>
-                Programmer for{" "}
-                <Tooltip label="Arduino" hasArrow placement="top" bg="tomato">
-                  machines
-                </Tooltip>{" "}
-                and{" "}
-                <Tooltip
-                  label="VBA JavaScript.."
-                  hasArrow
-                  placement="top"
-                  bg="tomato"
-                >
-                  software
-                </Tooltip>
-                .
-              </Text>
-              <Text className={styles.tool}>
-                I do{" "}
-                <Tooltip label="InkScape" hasArrow placement="top" bg="tomato">
-                  design
-                </Tooltip>{" "}
-                sometimes.
+              <Text className={styles.tool} pl={5}>
+                by InkScape
               </Text>
             </Box>
             <Spacer />
             <Box filter="auto" brightness="110%">
               <NextImage
                 className={styles.pic}
-                src="/images/me.jpeg"
+                src="/images/illust/hippo/hippo_001_cir.png"
                 alt="me.jpeg"
                 objectFit="cover"
-                width={126}
-                height={126}
+                width={92}
+                height={92}
               />
             </Box>
           </Flex>
         </VStack>
 
         <Box ml={[0, 18, 70, 115]}>
-          <div data-aos="fade-right" data-aos-duration="300">
-            <Text className={styles.subTitle}>自己紹介</Text>
-          </div>
-        </Box>
-        <Center>
-          <Text w={["100%", "95%", "85%", "75%"]}>
-            高知県出身のエンジニア。
-            自動車のワイヤーハーネス製造/機械保全/生産計画/生産分析に従事。現場の問題改善を繰り返す内にITや電子工学技術に興味を持つ。
-            EXCEL/ACCESSのソフトウェアからPLC/Arduinoなどのハードウェアを経験。それらをHTML/JavaScript/PHPで連携させる仕組みを構築。
-            現場の利用者と相談して更に発展させていくのが得意です。カバが好き。
-          </Text>
-        </Center>
-
-        <Box ml={[0, 18, 70, 115]}>
           <div data-aos="fade-right" style={{ display: "inline-block" }}>
-            <Text className={styles.subTitle}>スキル</Text>
+            <Text className={styles.subTitle}>サンプル</Text>
           </div>
         </Box>
 
         <Box style={{ textAlign: "center" }}>
           {illusts.map((item, index) => {
             const aosOffset: number = (index % 2) * 150;
-            const aosDuration: number = (index % 4) * 500;
+            const aosDuration = (index % 4) * 800;
+            const aosDelay = (index % 5) * 300;
             return (
               <div
                 data-aos="flip-left"
                 data-aos-offset={aosOffset}
                 data-aos-duration={aosDuration}
+                data-aos-delay={aosDelay}
                 style={{ display: "inline-block" }}
               >
                 <Image
                   src={item.src}
                   style={{ display: "inline-block" }}
                   m={3}
+                  className={styles.purupuru}
                 />
               </div>
             );
