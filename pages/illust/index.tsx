@@ -182,10 +182,12 @@ export default function About() {
         <Box style={{ textAlign: "center" }}>
           {illusts.map((item, index) => {
             const aosOffset: number = (index % 2) * 100;
+            const aosDuration: number = (index % 4) * 500;
             return (
               <div
                 data-aos="flip-left"
                 data-aos-offset={aosOffset}
+                data-aos-duration={aosDuration}
                 style={{ display: "inline-block" }}
               >
                 <Image
