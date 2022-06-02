@@ -6,6 +6,11 @@ import TwitterProvider from "next-auth/providers/twitter";
 import LineProvider from "next-auth/providers/line";
 import { signIn } from "next-auth/react";
 
+// データベーステスト
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+
 // prisma adaptor 使って、user データ、認証データを永続化する
 // import { PrismaAdapter } from "@next-auth/prisma-adapter";
 // import { PrismaClient } from "@prisma/client";
@@ -32,6 +37,7 @@ const setting = {
       clientSecret: process.env.LINE_CLIENT_SECRET,
     }),
   ],
+  adapter: PrismaAdapter(prisma),
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       console.log("サインイン");

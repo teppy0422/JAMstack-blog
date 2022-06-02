@@ -32,7 +32,15 @@ export default function Component() {
           />
         </Tooltip>
       ) : (
-        <Tooltip label="ログイン" aria-label="A tooltip">
+        <Tooltip
+          label="ログイン"
+          aria-label="A tooltip"
+          hasArrow
+          defaultIsOpen={true}
+          fontSize="12px"
+          arrowSize={6}
+          gutter={2}
+        >
           <Circle
             onClick={() => signIn()}
             className={Styles.loginAvatar}

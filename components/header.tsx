@@ -16,11 +16,16 @@ import {
 } from "@chakra-ui/react";
 import { PhoneIcon, AddIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faPalette } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUser,
+  faPalette,
+  faBook,
+  faBookOpen,
+} from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 
 import LoginBtn from "./loginBtn";
 import AwesomIcon from "./awesomIcon";
@@ -36,6 +41,13 @@ export default function Header() {
 
   const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
+
+  // temp
+  useEffect(() => {
+    document.addEventListener("mouseover", function (event) {
+      console.log("aajdaskfla");
+    });
+  });
 
   return (
     <>
@@ -74,7 +86,11 @@ export default function Header() {
                 <Link
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
-                  <Text className={styles.logoText}>Blog</Text>
+                  <FontAwesomeIcon
+                    icon={faBook}
+                    className={styles.githubIcon}
+                    id="blog"
+                  />
                 </Link>
               </NextLink>
 
@@ -107,3 +123,4 @@ export default function Header() {
     </>
   );
 }
+function changeIcon() {}
