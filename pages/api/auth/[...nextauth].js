@@ -22,7 +22,6 @@ const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXT_PUBLIC_SECRET } =
 // if (!GOOGLE_SECRET) throw new Error("You must provide GOOGLE_SECRET env var.");
 
 const setting = {
-  // adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
   providers: [
     GoogleProvider({
       clientId: GOOGLE_CLIENT_ID,
@@ -37,6 +36,7 @@ const setting = {
       clientSecret: process.env.LINE_CLIENT_SECRET,
     }),
   ],
+  adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       console.log("サインイン");
