@@ -58,3 +58,11 @@ LINE Developers にログインして...
 ## DataBase
 
 https://zenn.dev/fjsh/articles/733a1334ffc1c8
+
+## Sqlite で開発では動作
+
+でも本番では動作しない(本番向きではない？)
+
+## vercel に env の値を登録
+
+rebuild
