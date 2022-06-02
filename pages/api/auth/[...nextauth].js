@@ -7,11 +7,11 @@ import LineProvider from "next-auth/providers/line";
 import { signIn } from "next-auth/react";
 
 // データベーステスト
+// prisma adaptor 使って、user データ、認証データを永続化する
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-// prisma adaptor 使って、user データ、認証データを永続化する
 // import { PrismaAdapter } from "@next-auth/prisma-adapter";
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
@@ -22,7 +22,7 @@ const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXT_PUBLIC_SECRET } =
 // if (!GOOGLE_SECRET) throw new Error("You must provide GOOGLE_SECRET env var.");
 
 const setting = {
-  // adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
   providers: [
     GoogleProvider({
       clientId: GOOGLE_CLIENT_ID,
@@ -37,7 +37,6 @@ const setting = {
       clientSecret: process.env.LINE_CLIENT_SECRET,
     }),
   ],
-  adapter: PrismaAdapter(prisma),
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       console.log("サインイン");
@@ -47,7 +46,28 @@ const setting = {
       console.log(`アカウント:${JSON.stringify(account)}`);
       return token;
     },
+    // session: async (session, user) => {
+    //   return Promise.resolve({
+    //     ...session,
+    //     user: {
+    //       ...session.user,
+    //       id: user.id,
+    //     },
+    //   });
+    // },
   },
+  // events: {
+  //   createUser: async ({ user }) => {
+  //     await prisma.user.update({
+  //       where: {
+  //         id: user.id,
+  //       },
+  //       data: {
+  //         mobile: "090-1111-1111",
+  //       },
+  //     });
+  //   },
+  // },
   // callbacks: {
   // emailのドメイン制限を入れたい場合は以下のcallbacksを入れてください
   // signIn: async (user, account, profile) => {
