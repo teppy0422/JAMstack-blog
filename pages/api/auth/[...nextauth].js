@@ -36,7 +36,7 @@ const setting = {
       clientSecret: process.env.LINE_CLIENT_SECRET,
     }),
   ],
-  adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
+  // adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       console.log("サインイン");
