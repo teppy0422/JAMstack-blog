@@ -12,10 +12,6 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-// import { PrismaAdapter } from "@next-auth/prisma-adapter";
-// import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
-
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXT_PUBLIC_SECRET } =
   process.env;
 // if (!GOOGLE_ID) throw new Error("You must provide GOOGLE_ID env var.");
@@ -37,25 +33,26 @@ const setting = {
     }),
   ],
   adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
-  // callbacks: {
-  //   async signIn({ user, account, profile, email, credentials }) {
-  //     console.log("サインイン");
-  //     return true;
-  //   },
-  //   async jwt({ token, user, account, profile, isNewUser }) {
-  //     console.log(`アカウント:${JSON.stringify(account)}`);
-  //     return token;
-  //   },
-  //   // session: async (session, user) => {
-  //   //   return Promise.resolve({
-  //   //     ...session,
-  //   //     user: {
-  //   //       ...session.user,
-  //   //       id: user.id,
-  //   //     },
-  //   //   });
-  //   // },
-  // },
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log("[...nextauth].js > setting > callbacks > signIn");
+      return true;
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      console.log(`アカウント:${JSON.stringify(account)}`);
+      return token;
+    },
+    // session: async (session, user) => {
+    //   return Promise.resolve({
+    //     ...session,
+    //     user: {
+    //       ...session.user,
+    //       id: user.id,
+    //     },
+    //   });
+    // },
+  },
+
   // events: {
   //   createUser: async ({ user }) => {
   //     await prisma.user.update({

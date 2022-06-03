@@ -5,6 +5,10 @@
     "build": "next build",
     "start": "next start"
   },
+  "author": {
+    "name": "teppeikataoka",
+    "email": "teppy@aol.jp"
+  },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.8.8",

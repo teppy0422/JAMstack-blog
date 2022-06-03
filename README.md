@@ -38,7 +38,7 @@ AuthProvider を...pageprops の最短に移動　 no
 
 firebase.ts の値を直接書く ok
 
-隠したい値は、環境変数を Vercel に登録  
+本番で隠したい値は、環境変数を Vercel に登録  
 Vercel > Setting > Env... > Add New > add 　 ok
 
 ### Twitter
@@ -59,10 +59,17 @@ LINE Developers にログインして...
 
 https://zenn.dev/fjsh/articles/733a1334ffc1c8
 
-## Sqlite で開発では動作
+## Sqlite で動作テスト
 
-でも本番では動作しない(本番向きではない？)
+開発では動作した  
+本番では動作しなかった  
+本番向きではないらしい
+
+## @prisma/adapter を削除、インストールをする
+
+prisma が開発で動作するようになった  
+本番では動作しない
 
 ## vercel に env の値を登録
 
-rebuild
+動作しない
