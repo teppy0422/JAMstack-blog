@@ -76,5 +76,5 @@ prisma が開発で動作するようになった
 
 ## pages/blog.tsx から投稿を追加
 
-デプロイでエラー
+デプロイでエラー  
 Type error: Property 'sampleBlog' does not exist on type 'PrismaClient<PrismaClientOptions, never, RejectOnNotFound | RejectPerOperation>'.
