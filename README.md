@@ -73,3 +73,5 @@ prisma が開発で動作するようになった
 ## vercel に env の値を登録
 
 動作しない
+
+## pages/blog.tsx から投稿を追加
