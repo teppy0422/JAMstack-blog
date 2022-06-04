@@ -81,4 +81,6 @@ Type error: Property 'sampleBlog' does not exist on type 'PrismaClient<PrismaCli
 
 sampleBlog に統一
 
-DATABASE_URL='mysql://z8...に変更
+DATABASE_URL='mysql://z8...に変更 ng
+
+DATABASE_URL='mysql://na...に変更
