@@ -80,3 +80,5 @@ prisma が開発で動作するようになった
 Type error: Property 'sampleBlog' does not exist on type 'PrismaClient<PrismaClientOptions, never, RejectOnNotFound | RejectPerOperation>'.
 
 sampleBlog に統一
+
+DATABASE_URL='mysql://z8...に変更
