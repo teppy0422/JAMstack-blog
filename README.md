@@ -79,8 +79,10 @@ prisma が開発で動作するようになった
 デプロイでエラー  
 Type error: Property 'sampleBlog' does not exist on type 'PrismaClient<PrismaClientOptions, never, RejectOnNotFound | RejectPerOperation>'.
 
-sampleBlog に統一
+sampleBlog に統一 ng
 
 DATABASE_URL='mysql://z8...に変更 ng
 
-DATABASE_URL='mysql://na...に変更
+DATABASE_URL='mysql://na...に変更 ng
+
+schema.prisma に@@map("sampleblog")を追記
