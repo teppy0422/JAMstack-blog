@@ -110,7 +110,10 @@ export const getStaticProps = async () => {
   // カテゴリーコンテンツの取得
   const categoryData = await client.get({ endpoint: "categories" });
   // タグコンテンツの取得
-  const tagData = await client.get({ endpoint: "tags" });
+  const tagData = await client.get({
+    endpoint: "tags",
+    queries: { limit: 30 },
+  });
 
   return {
     props: {
