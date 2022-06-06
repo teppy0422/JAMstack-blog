@@ -13,8 +13,20 @@ import {
   Link,
   Button,
   Box,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
 } from "@chakra-ui/react";
-import { PhoneIcon, AddIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import {
+  PhoneIcon,
+  AddIcon,
+  MoonIcon,
+  SunIcon,
+  ChevronDownIcon,
+  HamburgerIcon,
+} from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -43,12 +55,30 @@ export default function Header() {
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
 
   // temp
-  useEffect(() => {
-    document.addEventListener("mouseover", function (event) {
-      console.log("aajdaskfla");
-    });
-  });
+  // useEffect(() => {
+  // document.addEventListener("mouseover", function (event) {
+  //   console.log("aajdaskfla");
+  // });
+  // });
 
+  // loginボタンを隠す
+  let keyFlag: boolean = false;
+  const handleKeyDown = (event: KeyboardEvent) => {
+    // CMDキーの場合処理を行う
+    if (event.key === "Meta") {
+      if (keyFlag === false) {
+        document.getElementById("none").style.display = "block";
+        keyFlag = true;
+      } else {
+        document.getElementById("none").style.display = "none";
+        keyFlag = false;
+      }
+    }
+    console.log(event.key);
+  };
+  // useEffect(() => {
+  //   document.addEventListener("keydown", handleKeyDown, false);
+  // }, []);
   return (
     <>
       <header id="navTop">
@@ -104,6 +134,29 @@ export default function Header() {
                   />
                 </Link>
               </NextLink>
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  aria-label="Options"
+                  icon={<HamburgerIcon />}
+                  variant="outline"
+                  _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+                />
+                <MenuList>
+                  <MenuItem>
+                    <NextLink href="/app/searchPicture">
+                      <Link
+                        _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+                      >
+                        画像検索アプリ
+                      </Link>
+                    </NextLink>
+                  </MenuItem>
+                  <MenuDivider />
+                  <MenuItem>WEBアプリ2</MenuItem>
+                  <MenuItem>WEBアプリ3</MenuItem>
+                </MenuList>
+              </Menu>
             </Center>
             <Center w="64px">
               <IconButton
