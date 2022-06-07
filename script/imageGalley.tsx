@@ -30,7 +30,6 @@ const imageGalley = ({ fetchData }) => {
           </a>
         ))}
       </Box>
-      <Text>Pixabayから画像を検索します</Text>
     </>
   );
 };

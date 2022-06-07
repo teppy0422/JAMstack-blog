@@ -85,4 +85,10 @@ DATABASE_URL='mysql://z8...に変更 ng
 
 DATABASE_URL='mysql://na...に変更 ng
 
-schema.prisma に@@map("sampleblog")を追記
+schema.prisma に@@map("sampleblog")を追記 ok
+
+## 画像検索を追加
+
+## 無限スクロールを追加
+
+npm install react-infinite-scroller

@@ -23,14 +23,12 @@ export default function Component() {
   return (
     <>
       {session ? (
-        <Tooltip label="ログアウト" aria-label="A tooltip">
-          <Avatar
-            onClick={() => signOut()}
-            boxSize="42px"
-            src={session.user.image}
-            className={Styles.loginAvatar}
-          />
-        </Tooltip>
+        <Avatar
+          onClick={() => signOut()}
+          boxSize="42px"
+          src={session.user.image}
+          className={Styles.loginAvatar}
+        />
       ) : (
         <Tooltip
           label="ログイン"
