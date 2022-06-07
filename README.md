@@ -94,3 +94,11 @@ https://pixabay.com/api/docs/
 ## 無限スクロールを追加
 
 npm install react-infinite-scroller
+
+## 画像検索を追加 2
+
+https://www.flickr.com/  
+https://syncer.jp/flickr-api-matome
+
+ライセンスについて  
+https://relaxing-living-life.com/180/

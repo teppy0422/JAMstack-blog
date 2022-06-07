@@ -438,9 +438,9 @@ element.style {
   text-align: center;
   .image {
     display: inline-block;
-    margin: 16px;
     border-radius: 8px;
     &:hover {
+      cursor: pointer;
       transform: scale(1.1);
       transition: 0.3s;
     }

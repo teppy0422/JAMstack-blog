@@ -579,11 +579,11 @@ element.style {
 
 .imageGalley .image {
   display: inline-block;
-  margin: 16px;
   border-radius: 8px;
 }
 
 .imageGalley .image:hover {
+  cursor: pointer;
   -webkit-transform: scale(1.1);
           transform: scale(1.1);
   -webkit-transition: 0.3s;
