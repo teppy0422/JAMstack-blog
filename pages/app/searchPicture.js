@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, Link as Scroll } from "react";
 import Content from "../../components/content";
 import InfiniteScroll from "react-infinite-scroller";
 
 import ImageGalley from "../../script/imageGalley";
-
+import styles from "../../styles/home.module.scss";
 import {
   Center,
   Text,
@@ -12,8 +12,10 @@ import {
   Input,
   Stack,
   Box,
+  VStack,
+  StylesProvider,
 } from "@chakra-ui/react";
-import { Search2Icon } from "@chakra-ui/icons";
+import { Search2Icon, ChevronUpIcon } from "@chakra-ui/icons";
 
 function searchPicture() {
   const [fetchData, setFetchData] = useState([]); //表示するデータ
@@ -42,7 +44,7 @@ function searchPicture() {
   const loadMore = async (page) => {
     //APIURL
     setPage = setPage + 1;
-    const endpointURL = `https://pixabay.com/api/?key=${userKey}&q=${ref.current.value}&image_type=photo&page=${page}&per_page=50`;
+    const endpointURL = `https://pixabay.com/api/?key=${userKey}&q=なめこ&image_type=photo&page=${page}&per_page=50`;
     //APIを叩く(データフェッチング)
     fetch(endpointURL)
       //受け取ってjson化
@@ -54,7 +56,6 @@ function searchPicture() {
         console.log(data.hits);
         if (data.hits.length < 1) {
           setHasMore(false);
-          loader = <Text>That's all.</Text>;
           return;
         }
         setFetchData([...fetchData, ...data.hits]);
@@ -67,6 +68,14 @@ function searchPicture() {
       Loading ...
     </div>
   );
+  //ページトップに移動
+  const returnTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <Content>
       <Box h={16} />
@@ -92,7 +101,25 @@ function searchPicture() {
         >
           <ImageGalley fetchData={fetchData} />
         </InfiniteScroll>
-        <Box h="50vh" />
+
+        <Center>
+          <VStack
+            w={13}
+            position="relative"
+            onClick={returnTop}
+            className={styles.scrollTop}
+          >
+            <ChevronUpIcon w={12} h={12} m={0} p={0} />
+            <ChevronUpIcon
+              w={12}
+              h={12}
+              m={0}
+              p={0}
+              position="absolute"
+              top="-20px"
+            />
+          </VStack>
+        </Center>
       </Stack>
     </Content>
   );

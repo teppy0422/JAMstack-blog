@@ -446,3 +446,9 @@ element.style {
     }
   }
 }
+
+.scrollTop {
+  &:hover {
+    cursor: pointer;
+  }
+}

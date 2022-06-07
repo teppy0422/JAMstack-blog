@@ -589,4 +589,8 @@ element.style {
   -webkit-transition: 0.3s;
   transition: 0.3s;
 }
+
+.scrollTop:hover {
+  cursor: pointer;
+}
 /*# sourceMappingURL=home.module.css.map */
