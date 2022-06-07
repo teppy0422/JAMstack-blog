@@ -89,6 +89,8 @@ schema.prisma に@@map("sampleblog")を追記 ok
 
 ## 画像検索を追加
 
+https://pixabay.com/api/docs/
+
 ## 無限スクロールを追加
 
 npm install react-infinite-scroller

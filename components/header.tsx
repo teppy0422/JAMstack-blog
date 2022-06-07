@@ -26,6 +26,7 @@ import {
   SunIcon,
   ChevronDownIcon,
   HamburgerIcon,
+  Search2Icon,
 } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -143,7 +144,7 @@ export default function Header() {
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 />
                 <MenuList>
-                  <MenuItem>
+                  <MenuItem icon={<Search2Icon />}>
                     <NextLink href="/app/searchPicture">
                       <Link
                         _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す

@@ -14,6 +14,7 @@ import {
   Box,
   VStack,
   StylesProvider,
+  Badge,
 } from "@chakra-ui/react";
 import { Search2Icon, ChevronUpIcon } from "@chakra-ui/icons";
 
@@ -23,6 +24,7 @@ function searchPicture() {
   const [page, setPage] = useState(1); //ページのカウント
   const ref = useRef();
   const userKey = "27877116-580ccd7d517cea5b043633ed8";
+  const [totalHits, setTotalHits] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,13 +40,14 @@ function searchPicture() {
         // setFetchData(data);
         console.log(data.hits);
         setFetchData(data.hits);
+        setTotalHits(data.totalHits);
       });
   };
 
   const loadMore = async (page) => {
     //APIURL
     setPage = setPage + 1;
-    const endpointURL = `https://pixabay.com/api/?key=${userKey}&q=なめこ&image_type=photo&page=${page}&per_page=50`;
+    const endpointURL = `https://pixabay.com/api/?key=${userKey}&q=${ref.current.value}&image_type=photo&page=${page}&per_page=50`;
     //APIを叩く(データフェッチング)
     fetch(endpointURL)
       //受け取ってjson化
@@ -52,13 +55,13 @@ function searchPicture() {
         return res.json();
       })
       .then((data) => {
-        // setFetchData(data);
         console.log(data.hits);
         if (data.hits.length < 1) {
           setHasMore(false);
           return;
         }
         setFetchData([...fetchData, ...data.hits]);
+        setTotalHits(data.totalHits);
       });
   };
 
@@ -78,11 +81,16 @@ function searchPicture() {
 
   return (
     <Content>
-      <Box h={16} />
+      <Box h={12} />
       <Stack style={{ textAlign: "center" }}>
-        <Text style={{ fontSize: "24px" }}>Pixabay clone</Text>
+        <Text style={{ fontSize: "24px" }}>画像検索</Text>
         <Text>商用無料の画像を検索</Text>
-        <Box h={8} />
+        <Center>
+          <Stack direction="row">
+            <Badge colorScheme="gray">Pixabay={totalHits}</Badge>
+          </Stack>
+        </Center>
+        <Box h={4} />
 
         <form onSubmit={(e) => handleSubmit(e, 1)}>
           <InputGroup size="lg" borderColor="gray">
