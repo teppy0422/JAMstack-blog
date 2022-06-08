@@ -133,16 +133,6 @@ export default function Header() {
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 />
                 <MenuList>
-                  <NextLink href="/app/searchPicture" passHref>
-                    <Link
-                      className={styles.noDecoration}
-                      _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
-                      textDecoration="none"
-                    >
-                      <MenuItem icon={<Search2Icon />}>画像検索アプリ</MenuItem>
-                    </Link>
-                  </NextLink>
-
                   <NextLink href="/illust">
                     <Link
                       className={styles.noDecoration}
@@ -159,11 +149,21 @@ export default function Header() {
                           />
                         }
                       >
-                        画像検索アプリ
+                        イラスト
                       </MenuItem>
                     </Link>
                   </NextLink>
                   <MenuDivider />
+                  <NextLink href="/app/searchPicture" passHref>
+                    <Link
+                      className={styles.noDecoration}
+                      _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+                      textDecoration="none"
+                    >
+                      <MenuItem icon={<Search2Icon />}>画像検索アプリ</MenuItem>
+                    </Link>
+                  </NextLink>
+
                   <MenuItem>追加予定</MenuItem>
                   <MenuItem>追加予定</MenuItem>
                 </MenuList>

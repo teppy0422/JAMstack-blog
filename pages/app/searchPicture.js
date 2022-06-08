@@ -122,6 +122,7 @@ function searchPicture() {
   );
   //ページトップに移動
   const returnTop = () => {
+    window.document.getElementById("search").focus();
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -132,7 +133,9 @@ function searchPicture() {
     <Content>
       <Box h={12} />
       <Stack style={{ textAlign: "center" }}>
-        <Text style={{ fontSize: "24px" }}>画像検索</Text>
+        <Text className={styles.mPlus} style={{ fontSize: "24px" }}>
+          画像検索
+        </Text>
         <Text>商用利用無料 帰属表示は必要ありません</Text>
         <Center>
           <Stack direction="row">
@@ -148,7 +151,12 @@ function searchPicture() {
               pointerEvents="none"
               children={<Search2Icon color="gray" />}
             />
-            <Input type="text" placeholder="検索する文字を入力..." ref={ref} />
+            <Input
+              type="text"
+              placeholder="検索する文字を入力..."
+              ref={ref}
+              id="search"
+            />
           </InputGroup>
         </form>
 

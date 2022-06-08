@@ -38,6 +38,7 @@ export default function Component() {
           fontSize="12px"
           arrowSize={6}
           gutter={2}
+          top="12px"
         >
           <Circle
             onClick={() => signIn()}

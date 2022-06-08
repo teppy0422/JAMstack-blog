@@ -1,9 +1,18 @@
 @charset "UTF-8";
+.topest {
+  z-index: 1000001;
+  position: absolute;
+}
+
+.mPlus {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+}
+
 .headerNav {
   width: 100%;
   height: 56px;
   position: fixed;
-  z-index: 1;
+  z-index: 1000000;
   font-size: 18px;
   font-weight: 600;
 }
