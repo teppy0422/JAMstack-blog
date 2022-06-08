@@ -124,17 +124,6 @@ export default function Header() {
                   />
                 </Link>
               </NextLink>
-
-              <NextLink href="/illust">
-                <Link
-                  _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
-                >
-                  <FontAwesomeIcon
-                    icon={faPalette}
-                    className={styles.githubIcon}
-                  />
-                </Link>
-              </NextLink>
               <Menu>
                 <MenuButton
                   as={IconButton}
@@ -144,18 +133,39 @@ export default function Header() {
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 />
                 <MenuList>
-                  <MenuItem icon={<Search2Icon />}>
-                    <NextLink href="/app/searchPicture">
-                      <Link
-                        _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+                  <NextLink href="/app/searchPicture" passHref>
+                    <Link
+                      className={styles.noDecoration}
+                      _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+                      textDecoration="none"
+                    >
+                      <MenuItem icon={<Search2Icon />}>画像検索アプリ</MenuItem>
+                    </Link>
+                  </NextLink>
+
+                  <NextLink href="/illust">
+                    <Link
+                      className={styles.noDecoration}
+                      _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+                      textDecoration="none"
+                    >
+                      <MenuItem
+                        icon={
+                          <FontAwesomeIcon
+                            width="14px"
+                            height="14px"
+                            icon={faPalette}
+                            size="sm"
+                          />
+                        }
                       >
                         画像検索アプリ
-                      </Link>
-                    </NextLink>
-                  </MenuItem>
+                      </MenuItem>
+                    </Link>
+                  </NextLink>
                   <MenuDivider />
-                  <MenuItem>WEBアプリ2</MenuItem>
-                  <MenuItem>WEBアプリ3</MenuItem>
+                  <MenuItem>追加予定</MenuItem>
+                  <MenuItem>追加予定</MenuItem>
                 </MenuList>
               </Menu>
             </Center>
