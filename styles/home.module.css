@@ -599,6 +599,10 @@ element.style {
   transition: 0.3s;
 }
 
+.badge:hover {
+  cursor: pointer;
+}
+
 .scrollTop:hover {
   cursor: pointer;
 }

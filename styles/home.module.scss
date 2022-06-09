@@ -37,11 +37,11 @@
 }
 .logoAndText {
   text-decoration: none !important;
-
   &:hover .logo {
     transform: rotate(30deg);
   }
 }
+
 .logoText {
   font-family: "M PLUS Rounded 1c", sans-serif;
   font-weight: 700;
@@ -454,6 +454,11 @@ element.style {
   }
 }
 
+.badge {
+  &:hover {
+    cursor: pointer;
+  }
+}
 .scrollTop {
   &:hover {
     cursor: pointer;

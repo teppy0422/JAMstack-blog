@@ -22,8 +22,10 @@ function searchPicture() {
   const [fetchData, setFetchData] = useState([]); //表示するデータ
   const [hasMore, setHasMore] = useState(true); //再読み込み判定
   const [hasPixabay, setHasPixabay] = useState(false);
-  const [page, setPage] = useState(1); //ページのカウント
+  const [page, setPage] = useState(0); //ページのカウント
   const ref = useRef();
+  const [usePixabay, setUsePixabay] = useState(true);
+  const [useFlickr, setUseFlickr] = useState(false);
   const userKey_pixabay = "27877116-580ccd7d517cea5b043633ed8";
   const userKey_flickr = "48b0a5b3228baf7796f60e389e9c3397";
 
@@ -35,6 +37,7 @@ function searchPicture() {
     setPage(1);
     e.preventDefault();
     setHasPixabay(false);
+    setUseFlickr(true);
     //APIURL
     const endpointURL = `https://pixabay.com/api/?key=${userKey_pixabay}&q=${ref.current.value}&image_type=photo&page=${page}&per_page=50`;
     const endpointURL_flickr = `https://api.flickr.com/services/rest?api_key=${userKey_flickr}&method=flickr.photos.search&format=json&nojsoncallback=1&text=${
@@ -42,31 +45,36 @@ function searchPicture() {
     }&extras=url_s,url_o&per_page=50&page=${
       page - 1
     }&safe_search=1&license=9,10`;
-    //APIを叩く(データフェッチング)
-    fetch(endpointURL)
-      //受け取ってjson化
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setTotalPixabay(data.totalHits);
-        console.log(data.hits);
-        setFetchData(data.hits);
-      });
 
-    fetch(endpointURL_flickr)
-      //受け取ってjson化
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        if (data.photos.page >= data.photos.pages && hasPixabay === true) {
-          setHasMore(false);
-          return;
-        }
-        setTotalFlickr(data.photos.total);
-      });
+    if (usePixabay) {
+      //APIを叩く(データフェッチング)
+      fetch(endpointURL)
+        //受け取ってjson化
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setTotalPixabay(data.totalHits);
+          console.log(data.hits);
+          setFetchData(data.hits);
+        });
+    }
+
+    if (useFlickr) {
+      fetch(endpointURL_flickr)
+        //受け取ってjson化
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+          if (data.photos.page >= data.photos.pages && hasPixabay === true) {
+            setHasMore(false);
+            return;
+          }
+          setTotalFlickr(data.photos.total);
+        });
+    }
   };
 
   //リロード、スクロール時
@@ -81,37 +89,39 @@ function searchPicture() {
     }&safe_search=1&license=9,10`;
 
     // APIを叩く(データフェッチング);
-    fetch(endpointURL_pixabay)
-      //受け取ってjson化
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data.hits);
-        if (data.hits.length < 1) {
-          setHasPixabay(true);
-          return;
-        }
-        setTotalPixabay(data.total);
-        setFetchData([...fetchData, ...data.hits]);
-      });
+    if (usePixabay) {
+      fetch(endpointURL_pixabay)
+        //受け取ってjson化
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data.hits);
+          if (data.hits.length < 1) {
+            setHasPixabay(true);
+            return;
+          }
+          setTotalPixabay(data.total);
+          setFetchData([...fetchData, ...data.hits]);
+        });
+    }
 
-    console.log("______");
-
-    fetch(endpointURL_flickr)
-      //受け取ってjson化
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        if (data.photos.page >= data.photos.pages && hasPixabay === true) {
-          setHasMore(false);
-          return;
-        }
-        setTotalFlickr(data.photos.total);
-        setFetchData([...fetchData, ...data.photos.photo]);
-      });
+    if (useFlickr) {
+      fetch(endpointURL_flickr)
+        //受け取ってjson化
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+          if (data.photos.page >= data.photos.pages && hasPixabay === true) {
+            setHasMore(false);
+            return;
+          }
+          setTotalFlickr(data.photos.total);
+          setFetchData([...fetchData, ...data.photos.photo]);
+        });
+    }
   };
 
   //ロード中に表示する項目
@@ -131,33 +141,47 @@ function searchPicture() {
 
   return (
     <Content>
-      <Box h={12} />
+      <Box h={8} />
       <Stack style={{ textAlign: "center" }}>
         <Text className={styles.mPlus} style={{ fontSize: "24px" }}>
           画像検索
         </Text>
-        <Text>商用利用無料 帰属表示は必要ありません</Text>
+        <Text>商用利用無料 帰属表示が不要な画像のみを検索。</Text>
+        <Text>画像をクリックするとより高解像度でダウンロード可能です。</Text>
         <Center>
           <Stack direction="row">
-            <Badge colorScheme="green">Pixabay={total_pixabay}</Badge>
-            <Badge colorScheme="blue">flickr={total_flickr}</Badge>
+            <Badge
+              colorScheme="green"
+              // className={styles.badge}
+              // onClick={() => setUsePixabay(!usePixabay)}
+            >
+              Pixabay={total_pixabay}
+            </Badge>
+            <Badge
+              colorScheme="blue"
+              // className={styles.badge}
+              // onClick={() => setUseFlickr(!useFlickr)}
+            >
+              flickr={total_flickr}
+            </Badge>
           </Stack>
         </Center>
         <Box h={4} />
 
         <form onSubmit={(e) => handleSubmit(e, 1)}>
-          <InputGroup size="lg" borderColor="gray">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<Search2Icon color="gray" />}
-            />
-            <Input
-              type="text"
-              placeholder="検索する文字を入力..."
-              ref={ref}
-              id="search"
-            />
-          </InputGroup>
+          <Center>
+            <InputGroup
+              size="lg"
+              borderColor="gray"
+              w={["100%", "510px", "510px", "510px"]}
+            >
+              <InputLeftElement
+                pointerEvents="none"
+                children={<Search2Icon color="gray" />}
+              />
+              <Input type="text" placeholder="検索..." ref={ref} id="search" />
+            </InputGroup>
+          </Center>
         </form>
 
         <Box h="32px" />
