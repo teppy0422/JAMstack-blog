@@ -5,16 +5,16 @@ import { Environment, OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Text, Box } from "@chakra-ui/react";
 
-import Hippo_001 from "./Hippo_001";
+import Model from "./alagin";
 import RenderResult from "next/dist/server/render-result";
 
 const Rig = ({ v = new Vector3() }) => {
   return useFrame((state) => {
-    state.camera.position.lerp(v.set(state.mouse.x / 2, -10, 100), 0);
+    state.camera.position.lerp(v.set(state.mouse.x / 2, -20, 100), 0);
   });
 };
 
-const Hippo_001_wrap = () => (
+const Alagin_wrap = () => (
   <Box
     w={["240px", "260px", "290px", "320px"]}
     h={["300px", "320px", "350px", "380px"]}
@@ -22,10 +22,10 @@ const Hippo_001_wrap = () => (
   >
     <Canvas>
       <ambientLight intensity={0.45} />
-      <directionalLight position={[0, 0, -10]} intensity={0.8} />
+      <directionalLight position={[0, 0, -10]} intensity={0.4} />
       <OrbitControls
         autoRotate={true}
-        autoRotateSpeed={5}
+        autoRotateSpeed={3}
         enableZoom={true}
         zoomSpeed={1}
         enablePan={false}
@@ -34,9 +34,9 @@ const Hippo_001_wrap = () => (
         minZoom={0.1}
       />
       <Rig />
-      <Hippo_001 />
+      <Model />
     </Canvas>
   </Box>
 );
 
-export default Hippo_001_wrap;
+export default Alagin_wrap;

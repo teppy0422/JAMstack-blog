@@ -22,6 +22,8 @@ import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
 
 import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
+import Alagin_wrap from "../../components/3d/alagin_wrap";
+import Table_wrap from "../../components/3d/table_wrap";
 
 export default function About() {
   const illusts = [
@@ -168,9 +170,8 @@ export default function About() {
             );
           })}
           <Hippo_001_wrap />
-          <Hippo_001_wrap />
-          <Hippo_001_wrap />
-          <Hippo_001_wrap />
+          <Alagin_wrap />
+          <Table_wrap />
         </Box>
       </div>
     </Content>
