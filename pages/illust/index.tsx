@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
-import { theme } from "highcharts";
+import Sample3d from "../../components/3d/DrawCanvas";
 
 export default function About() {
   const illusts = [
@@ -141,6 +141,8 @@ export default function About() {
             <Text className={styles.subTitle}>サンプル</Text>
           </div>
         </Box>
+
+        {/* <Sample3d /> */}
 
         <Box style={{ textAlign: "center" }}>
           {illusts.map((item, index) => {
