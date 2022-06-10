@@ -17,9 +17,9 @@ export default function Model(props) {
           receiveShadow
           geometry={nodes.hippo_001_04.geometry}
           material={materials.palette}
-          position={[0, -2, 0]}
+          position={[0, -3, 2]}
           rotation={[Math.PI / 2, 0, 0]}
-          scale={2.5}
+          scale={2}
         />
       </group>
     </group>

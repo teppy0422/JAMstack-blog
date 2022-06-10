@@ -5,7 +5,7 @@ import { Environment, OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Text } from "@chakra-ui/react";
 
-import Hippo_001 from "../components/3d/Hippo_001";
+import Hippo_001 from "./Hippo_001";
 import RenderResult from "next/dist/server/render-result";
 
 const Rig = ({ v = new Vector3() }) => {
@@ -14,7 +14,7 @@ const Rig = ({ v = new Vector3() }) => {
   });
 };
 
-const Home = () => (
+const Hippo_001_wrap = () => (
   <div style={{ width: "100vw", height: "100vh" }}>
     <Canvas>
       <ambientLight intensity={0.45} />
@@ -35,4 +35,4 @@ const Home = () => (
   </div>
 );
 
-export default Home;
+export default Hippo_001_wrap;
