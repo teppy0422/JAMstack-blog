@@ -5,7 +5,7 @@ import { Environment, OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Text, Box } from "@chakra-ui/react";
 
-import Model from "./table";
+import Model from "./speaker";
 import RenderResult from "next/dist/server/render-result";
 
 const Rig = ({ v = new Vector3() }) => {
@@ -14,14 +14,14 @@ const Rig = ({ v = new Vector3() }) => {
   });
 };
 
-const Table = () => (
+const Speaker_wrap = () => (
   <Box
-    w={["300px", "290px", "330px", "360px"]}
+    w={["240px", "260px", "290px", "320px"]}
     h={["300px", "320px", "350px", "380px"]}
     display="inline-block"
   >
     <Canvas>
-      <ambientLight intensity={0.75} />
+      <ambientLight intensity={5} />
       <directionalLight position={[0, 0, -10]} intensity={0.4} />
       <OrbitControls
         autoRotate={true}
@@ -39,4 +39,4 @@ const Table = () => (
   </Box>
 );
 
-export default Table;
+export default Speaker_wrap;
