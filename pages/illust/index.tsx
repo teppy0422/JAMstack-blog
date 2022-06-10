@@ -20,7 +20,6 @@ import {
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
-import Sample3d from "../../components/3d/DrawCanvas";
 
 export default function About() {
   const illusts = [
