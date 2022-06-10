@@ -27,9 +27,9 @@ export default function Model(props) {
         receiveShadow
         geometry={nodes.alagin005.geometry}
         material={materials["palette.015"]}
-        position={[-7.45, -2, 0.56]}
+        position={[-0.01, -0.8, 0.04]}
         rotation={[Math.PI / 2, 0, 0]}
-        scale={2}
+        scale={1.8}
       />
     </group>
   );
