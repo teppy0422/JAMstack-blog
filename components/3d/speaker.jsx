@@ -17,8 +17,8 @@ export default function Model(props) {
           receiveShadow
           geometry={nodes.speaker_JBL.geometry}
           material={materials["palette.008"]}
-          position={[-0.01, -2, 0.01]}
-          rotation={[Math.PI / 2, 0, Math.PI]}
+          position={[0, 0, 0.5]}
+          rotation={[Math.PI / 2, 0, 0]}
           scale={1.41}
         />
       </group>

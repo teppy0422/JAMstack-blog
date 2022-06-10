@@ -11,15 +11,32 @@ export default function Model(props) {
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
+        <group
+          name="スポット"
+          position={[2.15, 4.19, 0.23]}
+          rotation={[-0.02, -0.36, -0.04]}
+        >
+          <spotLight
+            name="スポット_Orientation"
+            intensity={3}
+            angle={0.58}
+            penumbra={0.15}
+            decay={2}
+            color="#ffea3b"
+            rotation={[-Math.PI / 2, 0, 0]}
+          >
+            <group position={[0, 0, -1]} />
+          </spotLight>
+        </group>
         <mesh
           name="table002"
           castShadow
           receiveShadow
           geometry={nodes.table002.geometry}
           material={materials["palette.005"]}
-          position={[0, -2, -1.12]}
+          position={[0.08, 0, 0.07]}
           rotation={[Math.PI / 2, 0, 0]}
-          scale={1.3}
+          scale={1.45}
         />
       </group>
     </group>

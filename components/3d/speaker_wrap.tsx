@@ -25,7 +25,7 @@ const Speaker_wrap = () => (
       <directionalLight position={[0, 0, -10]} intensity={0.4} />
       <OrbitControls
         autoRotate={true}
-        autoRotateSpeed={5}
+        autoRotateSpeed={0}
         enableZoom={true}
         zoomSpeed={1}
         enablePan={false}

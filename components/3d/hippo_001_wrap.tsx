@@ -21,8 +21,8 @@ const Hippo_001_wrap = () => (
     display="inline-block"
   >
     <Canvas>
-      <ambientLight intensity={0.45} />
-      <directionalLight position={[0, 0, -10]} intensity={0.8} />
+      <ambientLight intensity={0.55} />
+      <directionalLight position={[0, 0, -100]} intensity={1.4} />
       <OrbitControls
         autoRotate={true}
         autoRotateSpeed={5}
