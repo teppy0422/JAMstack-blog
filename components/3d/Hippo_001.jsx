@@ -19,7 +19,7 @@ export default function Model(props) {
           material={materials.palette}
           position={[0, -3, 2]}
           rotation={[Math.PI / 2, 0, 0]}
-          scale={2}
+          scale={1.5}
         />
       </group>
     </group>

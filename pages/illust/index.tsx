@@ -167,8 +167,11 @@ export default function About() {
               </div>
             );
           })}
+          <Hippo_001_wrap />
+          <Hippo_001_wrap />
+          <Hippo_001_wrap />
+          <Hippo_001_wrap />
         </Box>
-        <Hippo_001_wrap />
       </div>
     </Content>
   );

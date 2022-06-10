@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { Mesh, Vector3, WebGLRenderer, Scene, OrthographicCamera } from "three";
 import { Environment, OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Text } from "@chakra-ui/react";
+import { Text, Box } from "@chakra-ui/react";
 
 import Hippo_001 from "./Hippo_001";
 import RenderResult from "next/dist/server/render-result";
@@ -15,7 +15,12 @@ const Rig = ({ v = new Vector3() }) => {
 };
 
 const Hippo_001_wrap = () => (
-  <div style={{ width: "100vw", height: "100vh" }}>
+  <Box
+    w={["240px", "320px", "480px", "320px"]}
+    h={["280px", "360px", "520px", "680px"]}
+    m={["10px"]}
+    display="inline-block"
+  >
     <Canvas>
       <ambientLight intensity={0.45} />
       <directionalLight position={[0, 0, -10]} intensity={0.4} />
@@ -32,7 +37,7 @@ const Hippo_001_wrap = () => (
       <Rig />
       <Hippo_001 />
     </Canvas>
-  </div>
+  </Box>
 );
 
 export default Hippo_001_wrap;
