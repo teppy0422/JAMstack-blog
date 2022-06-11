@@ -35,7 +35,7 @@ export default function Model(props) {
           geometry={nodes.table002.geometry}
           material={materials["palette.005"]}
           position={[0.08, 0, 0.07]}
-          rotation={[Math.PI / 2, 0, 0]}
+          rotation={[Math.PI / 1.6, 0, 0]}
           scale={1.45}
         />
       </group>
