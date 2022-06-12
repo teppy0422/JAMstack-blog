@@ -23,14 +23,20 @@ export default function Model(props) {
         />
       </group>
       <mesh
-        name="sushi_ebivox001"
         castShadow
         receiveShadow
-        position={[0, -1, 0]}
-        geometry={nodes.sushi_ebivox001.geometry}
-        material={materials["palette.001"]}
-        rotation={[Math.PI / 2, 0, 0.6]}
-        scale={1.1}
+        geometry={nodes.sushi_ebivox003.geometry}
+        material={materials["palette.004"]}
+        position={[0, 0.1, 0]}
+        rotation={[Math.PI / 2, 0, 0]}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.getavox.geometry}
+        material={materials["palette.003"]}
+        position={[0.05, 0.33, 0]}
+        rotation={[Math.PI / 2, 0, 0]}
       />
     </group>
   );
