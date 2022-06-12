@@ -24,7 +24,7 @@ const Alagin_wrap = () => (
       <ambientLight intensity={0.45} />
       <directionalLight position={[0, 0, -10]} intensity={0.4} />
       <OrbitControls
-        autoRotate={true}
+        autoRotate={false}
         autoRotateSpeed={0}
         enableZoom={true}
         zoomSpeed={1}

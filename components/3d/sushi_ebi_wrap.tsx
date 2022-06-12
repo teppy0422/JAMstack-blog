@@ -5,7 +5,7 @@ import { Environment, OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Text, Box } from "@chakra-ui/react";
 
-import Model from "./speaker";
+import Model from "./sushi_ebi";
 import RenderResult from "next/dist/server/render-result";
 
 const Rig = ({ v = new Vector3() }) => {
@@ -14,14 +14,14 @@ const Rig = ({ v = new Vector3() }) => {
   });
 };
 
-const Speaker_wrap = () => (
+const sushi_ebi_wrap = () => (
   <Box
     w={["240px", "260px", "290px", "320px"]}
     h={["300px", "320px", "350px", "380px"]}
     display="inline-block"
   >
     <Canvas>
-      <ambientLight intensity={5} />
+      <ambientLight intensity={2} />
       <directionalLight position={[0, 0, -10]} intensity={0.4} />
       <OrbitControls
         autoRotate={false}
@@ -39,4 +39,4 @@ const Speaker_wrap = () => (
   </Box>
 );
 
-export default Speaker_wrap;
+export default sushi_ebi_wrap;

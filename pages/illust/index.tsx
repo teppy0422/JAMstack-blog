@@ -25,6 +25,7 @@ import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 import Alagin_wrap from "../../components/3d/alagin_wrap";
 import Table_wrap from "../../components/3d/table_wrap";
 import Speaker_wrap from "../../components/3d/speaker_wrap";
+import Sushi_ebi_wrap from "../../components/3d/sushi_ebi_wrap";
 
 export default function About() {
   const illusts = [
@@ -174,6 +175,7 @@ export default function About() {
           <Alagin_wrap />
           <Table_wrap />
           <Speaker_wrap />
+          <Sushi_ebi_wrap />
         </Box>
       </div>
     </Content>
