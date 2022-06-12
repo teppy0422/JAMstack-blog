@@ -10,16 +10,28 @@ export default function Model(props) {
   const { nodes, materials } = useGLTF("/images/3d/sushi_ebi.glb");
   return (
     <group ref={group} {...props} dispose={null}>
-      <group name="Scene">
-        <mesh
-          name="sushi_ebivox"
-          castShadow
-          receiveShadow
-          geometry={nodes.sushi_ebivox.geometry}
-          material={materials["palette.001"]}
-          rotation={[Math.PI / 2, 0, 0]}
+      <group
+        position={[0, 2.6, -0.62]}
+        rotation={[-2.74, -0.22, 0]}
+        scale={[1.29, 1.29, 1.29]}
+      >
+        <pointLight
+          intensity={3}
+          decay={2}
+          color="#ff9900"
+          rotation={[-Math.PI / 2, 0, 0]}
         />
       </group>
+      <mesh
+        name="sushi_ebivox001"
+        castShadow
+        receiveShadow
+        position={[0, -1, 0]}
+        geometry={nodes.sushi_ebivox001.geometry}
+        material={materials["palette.001"]}
+        rotation={[Math.PI / 2, 0, 0.6]}
+        scale={1.1}
+      />
     </group>
   );
 }
