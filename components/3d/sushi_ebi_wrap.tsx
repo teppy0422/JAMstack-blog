@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { useRef, useState } from "react";
 import { Mesh, Vector3, WebGLRenderer, Scene, OrthographicCamera } from "three";
 import { Environment, OrbitControls } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Text, Box } from "@chakra-ui/react";
 
 import Model from "./sushi_ebi";
@@ -34,7 +34,9 @@ const sushi_ebi_wrap = () => (
         minZoom={0.1}
       />
       <Rig />
-      <Model />
+      <Suspense fallback={null}>
+        <Model />
+      </Suspense>
     </Canvas>
   </Box>
 );
