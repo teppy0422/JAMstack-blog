@@ -41,7 +41,7 @@ export default function Home({ blog, category, tag, blog2 }) {
               className={styles.tags}
               onClick={(e) => testtttt(e, blog, tag, setShowBlogs)}
             >
-              <Image src={tag.img.url} boxSize="30px" />
+              <Image src={tag.img.url} boxSize="30px" alt={tag.name} />
               <Box ml="1">
                 <Text fontWeight={500} color="#111111">
                   {tag.name}
