@@ -34,9 +34,7 @@ const sushi_ebi_wrap = () => (
         minZoom={0.1}
       />
       <Rig />
-      <Suspense fallback={null}>
-        <Model />
-      </Suspense>
+      <Model />
     </Canvas>
   </Box>
 );
