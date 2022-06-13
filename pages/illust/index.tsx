@@ -26,6 +26,8 @@ import Alagin_wrap from "../../components/3d/alagin_wrap";
 import Table_wrap from "../../components/3d/table_wrap";
 import Speaker_wrap from "../../components/3d/speaker_wrap";
 import Sushi_ebi_wrap from "../../components/3d/sushi_ebi_wrap";
+import Sushi_ebi_wrap2 from "../../components/3d/sushi_ebi_wrap2";
+import Sushi_ika_wrap from "../../components/3d/sushi_ika_wrap";
 
 export default function About() {
   const illusts = [
@@ -176,6 +178,8 @@ export default function About() {
           <Table_wrap />
           <Speaker_wrap />
           <Sushi_ebi_wrap />
+          <Sushi_ebi_wrap2 />
+          <Sushi_ika_wrap />
         </Box>
       </div>
     </Content>
