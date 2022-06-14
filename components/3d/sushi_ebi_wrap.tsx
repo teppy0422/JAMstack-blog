@@ -17,7 +17,7 @@ const Rig = ({ v = new Vector3() }) => {
 const sushi_ebi_wrap = () => (
   <Box
     w={["240px", "260px", "290px", "320px"]}
-    h={["300px", "320px", "350px", "380px"]}
+    h={["160px", "180px", "210px", "240px"]}
     display="inline-block"
   >
     <Canvas>

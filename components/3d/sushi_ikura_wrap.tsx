@@ -5,7 +5,7 @@ import { Environment, OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Text, Box } from "@chakra-ui/react";
 
-import Model from "./sushi_ebi2";
+import Model from "./sushi_ikura";
 import RenderResult from "next/dist/server/render-result";
 
 const Rig = ({ v = new Vector3() }) => {
@@ -14,10 +14,10 @@ const Rig = ({ v = new Vector3() }) => {
   });
 };
 
-const sushi_ebi_wrap = () => (
+const sushi_ikura_wrap = () => (
   <Box
     w={["240px", "260px", "290px", "320px"]}
-    h={["300px", "320px", "350px", "380px"]}
+    h={["160px", "180px", "210px", "240px"]}
     display="inline-block"
   >
     <Canvas>
@@ -39,4 +39,4 @@ const sushi_ebi_wrap = () => (
   </Box>
 );
 
-export default sushi_ebi_wrap;
+export default sushi_ikura_wrap;
