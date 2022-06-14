@@ -14,13 +14,6 @@ export default function Model(props) {
         <mesh
           castShadow
           receiveShadow
-          geometry={nodes.nori.geometry}
-          material={materials.nori}
-          position={[0.17, -0.08, 2.47]}
-        />
-        <mesh
-          castShadow
-          receiveShadow
           geometry={nodes.shari.geometry}
           material={materials.shari}
           position={[0.02, 1.22, 0.03]}
@@ -35,6 +28,13 @@ export default function Model(props) {
           position={[0.02, 0.68, 0.03]}
           rotation={[0, 1.57, 0]}
           scale={[0.45, 0.45, 0.45]}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.nori.geometry}
+          material={materials.nori}
+          position={[0.17, -0.08, 2.47]}
         />
         <mesh
           castShadow
