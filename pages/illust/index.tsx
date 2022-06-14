@@ -29,6 +29,7 @@ import Sushi_ebi_wrap from "../../components/3d/sushi_ebi_wrap";
 import Sushi_ebi_wrap2 from "../../components/3d/sushi_ebi_wrap2";
 import Sushi_ika_wrap from "../../components/3d/sushi_ika_wrap";
 import Sushi_ootoro_wrap from "../../components/3d/sushi_ootoro_wrap";
+import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap";
 
 export default function About() {
   const illusts = [
@@ -182,6 +183,7 @@ export default function About() {
           <Sushi_ebi_wrap2 />
           <Sushi_ika_wrap />
           <Sushi_ootoro_wrap />
+          <Sushi_tamago_wrap />
         </Box>
       </div>
     </Content>
