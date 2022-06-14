@@ -10,7 +10,7 @@ export default function Model(props) {
   const { nodes, materials } = useGLTF("/images/3d/sushi_ebi.glb");
   return (
     <group ref={group} {...props} dispose={null}>
-      <group position={[0, -1, 0]}>
+      <group position={[0, -1.3, 0]} scale={1.4}>
         <mesh
           castShadow
           receiveShadow

@@ -26,10 +26,10 @@ import Alagin_wrap from "../../components/3d/alagin_wrap";
 import Table_wrap from "../../components/3d/table_wrap";
 import Speaker_wrap from "../../components/3d/speaker_wrap";
 import Sushi_ebi_wrap from "../../components/3d/sushi_ebi_wrap";
-import Sushi_ebi_wrap2 from "../../components/3d/sushi_ebi_wrap2";
 import Sushi_ika_wrap from "../../components/3d/sushi_ika_wrap";
 import Sushi_ootoro_wrap from "../../components/3d/sushi_ootoro_wrap";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap";
+import Sushi_ikura_wrap from "../../components/3d/sushi_ikura_wrap";
 
 export default function About() {
   const illusts = [
@@ -180,10 +180,10 @@ export default function About() {
           <Table_wrap />
           <Speaker_wrap />
           <Sushi_ebi_wrap />
-          <Sushi_ebi_wrap2 />
           <Sushi_ika_wrap />
           <Sushi_ootoro_wrap />
           <Sushi_tamago_wrap />
+          <Sushi_ikura_wrap />
         </Box>
       </div>
     </Content>
