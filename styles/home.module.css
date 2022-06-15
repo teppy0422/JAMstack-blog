@@ -614,4 +614,65 @@ element.style {
 .noDecoration:hover {
   text-decoration: none !important;
 }
+
+.typing {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  height: 80vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  overflow: hidden;
+  background: -webkit-gradient(linear, right bottom, left top, from(#ffaa33), to(#33aaff));
+  background: linear-gradient(to left top, #ffaa33, #33aaff);
+}
+
+.typing .timer {
+  position: absolute;
+  top: 6rem;
+  font-size: 3rem;
+  font-weight: 600;
+  color: #ff3333;
+}
+
+.typing .container {
+  background-color: #5db7eb;
+  font-size: 2.4rem;
+  font-weight: 600;
+  padding: 4rem;
+  border-radius: 0.5rem;
+  min-height: 400px;
+  max-width: 90%;
+  -webkit-box-shadow: 1px 5px 6px #555;
+          box-shadow: 1px 5px 6px #555;
+}
+
+.typing .container .typeDisplay {
+  margin-bottom: 1rem;
+  margin-left: 0rem;
+}
+
+.typing .container .typeDisplay .correct {
+  color: #11ee11;
+  font-size: 100px;
+}
+
+.typing .container .typeInput {
+  margin-top: 2rem;
+  font-size: 2rem;
+  width: 100%;
+  background: transparent;
+  border: 2px solid #aa3333;
+  outline: none;
+  text-decoration: none;
+  margin: auto;
+  resize: none;
+  border-radius: 0.5rem;
+}
+
+.typing .container .typeInput:focus {
+  border-color: #1c1b19;
+}
 /*# sourceMappingURL=home.module.css.map */

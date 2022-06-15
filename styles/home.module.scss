@@ -471,3 +471,52 @@ element.style {
     text-decoration: none !important;
   }
 }
+
+.typing {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(to left top, #ffaa33, #33aaff);
+  .timer {
+    position: absolute;
+    top: 6rem;
+    font-size: 3rem;
+    font-weight: 600;
+    color: #ff3333;
+  }
+  .container {
+    background-color: rgb(93, 183, 235);
+    font-size: 2.4rem;
+    font-weight: 600;
+    padding: 4rem;
+    border-radius: 0.5rem;
+    min-height: 400px;
+    max-width: 90%;
+    box-shadow: 1px 5px 6px #555;
+    .typeDisplay {
+      margin-bottom: 1rem;
+      margin-left: 0rem;
+      .correct {
+        color: #11ee11;
+        font-size: 100px;
+      }
+    }
+    .typeInput {
+      margin-top: 2rem;
+      font-size: 2rem;
+      width: 100%;
+      background: transparent;
+      border: 2px solid #aa3333;
+      outline: none;
+      text-decoration: none;
+      margin: auto;
+      resize: none;
+      border-radius: 0.5rem;
+      &:focus {
+        border-color: #1c1b19;
+      }
+    }
+  }
+}
