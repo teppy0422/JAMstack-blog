@@ -65,7 +65,7 @@ export default function Header() {
   // loginボタンを隠す
   let keyFlag: boolean = false;
   const handleKeyDown = (event: KeyboardEvent) => {
-    // CMDキーの場合処理を行う
+    // CMDキー(Meta)の場合処理を行う
     if (event.key === "Meta") {
       if (keyFlag === false) {
         document.getElementById("none").style.display = "block";
