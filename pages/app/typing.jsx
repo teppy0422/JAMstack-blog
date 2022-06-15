@@ -5,6 +5,7 @@ import { Center, VStack, Box } from "@chakra-ui/react";
 import Content from "../../components/content";
 import ResponseCache from "next/dist/server/response-cache";
 import { type } from "os";
+import { now } from "lodash";
 
 const typing = () => {
   const [inputText, setInputText] = useState("");
@@ -23,23 +24,24 @@ const typing = () => {
       .getElementById("type-display")
       .querySelectorAll("span");
     // console.log(sentenceArray);
-    const typeValue = inputText.split("");
-    // console.log(typeValue);
-    sentenceArray.forEach((characterSpan, index) => {
-      const textType = characterSpan.innerText.toUpperCase();
-      const correctType = typeValue[index];
+    const inputTextSp = inputText.split("");
+    // console.log(inputTextSp);
+    sentenceArray.forEach((spans, index) => {
+      const inputTextTemp = inputTextSp[index];
+      const correctText = spans.innerText.toUpperCase();
+      if (inputTextTemp != null) {
+        if (inputTextTemp !== undefined) {
+          inputTextTemp = inputTextTemp.toUpperCase();
+        }
 
-      if (correctType !== undefined) {
-        correctType = correctType.toUpperCase();
-      }
+        console.log(inputTextTemp);
 
-      console.log(correctType);
-
-      if (textType == correctType) {
-        console.log("correct");
-        characterSpan.style.color = "red";
-      } else {
-        characterSpan.style.color = "black";
+        if (correctText == inputTextTemp) {
+          console.log("correct");
+          spans.style.color = "red";
+        } else {
+          spans.style.color = "black";
+        }
       }
     });
   }, [inputText]);
@@ -48,22 +50,48 @@ const typing = () => {
   async function RenderNextSentence() {
     const typeDisplay = document.getElementById("type-display");
     const typeInput = document.getElementById("type-input");
+    console.log(typeInput);
 
     const sentence = await GetRandomSentence();
     console.log(sentence);
     // typeDisplay.innerText = sentence;
     // 文章を一文字ずつ分解してspanタグを生成
     let oneText = sentence.split("");
-    console.log(oneText);
+    // console.log(oneText);
+    typeDisplay.innerText = "";
     oneText.forEach((character) => {
       const characterSpan = document.createElement("span");
       characterSpan.innerText = character;
       console.log(characterSpan);
       typeDisplay.appendChild(characterSpan);
-      characterSpan.classList.add("correct");
+      // characterSpan.classList.add("correct");
     });
     // テキストボックスの値を削除
-    typeInput.innerText = "";
+    typeInput.value = "";
+
+    StartTimer();
+  }
+
+  let startTime;
+  let originTime = 10;
+  function StartTimer() {
+    const timer = document.getElementById("timer");
+    timer.innerText = originTime;
+    startTime = new Date();
+    // console.log(startTime);
+    setInterval(() => {
+      timer.innerText = originTime - getTimerTime();
+      if (timer.innerText <= 0) TimeUp();
+    }, 1000);
+  }
+
+  function TimeUp() {
+    RenderNextSentence();
+    StartTimer();
+  }
+
+  function getTimerTime() {
+    return Math.floor((new Date() - startTime) / 1000);
   }
 
   //マウント時に一回だけ実行
