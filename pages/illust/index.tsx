@@ -183,7 +183,7 @@ export default function About() {
           <Sushi_ika_wrap />
           <Sushi_ootoro_wrap />
           <Sushi_tamago_wrap />
-          {/* <Sushi_ikura_wrap /> */}
+          <Sushi_ikura_wrap />
         </Box>
       </div>
     </Content>
