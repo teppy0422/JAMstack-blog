@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "../../styles/home.module.scss";
-import { Center, VStack, Box, Button } from "@chakra-ui/react";
+import { Center, VStack, Box, Button, Grid, GridItem } from "@chakra-ui/react";
 
 import Content from "../../components/content";
 import ResponseCache from "next/dist/server/response-cache";
@@ -8,6 +8,8 @@ import { type } from "os";
 import { now } from "lodash";
 
 import { getRomaji, getHiragana } from "../../libs/romaji.js";
+
+import Sushi_ootoro_wrap from "../../components/3d/sushi_ootoro_wrap";
 
 const typing = () => {
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
@@ -17,6 +19,7 @@ const typing = () => {
   const [A_romaji, setA_romaji] = useState(""); //答えローマ字
   const [correctCount, setCorrectCount] = useState(0);
   const renderFlgRef = useRef(false); //useEffectが初回走らせないフラグ
+  const [timerID, setTimerID] = useState("");
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -46,6 +49,7 @@ const typing = () => {
       console.log({ inputTextTempA });
 
       const matchCount = 0;
+      const complete = false;
       //正否チェック
       for (let key in temp) {
         //完全に一致
@@ -59,8 +63,16 @@ const typing = () => {
           sentenceArray.forEach((spans, index) => {
             if (index <= correctCount + tempp.length - 1) {
               spans.style.color = "red";
+              console.log("sentenceArray.length: " + sentenceArray.length);
+              console.log(index);
+              if (index === sentenceArray.length - 1) {
+                complete = true;
+              }
             }
           });
+          if (complete === true) {
+            TimeUp();
+          }
           document.getElementById("type-input").value = "";
           break;
         }
@@ -145,7 +157,10 @@ const typing = () => {
         }
       });
     } else {
+      //レンダー初回時だけ実行
       renderFlgRef.current = true;
+      TimeUp();
+      document.getElementById("type-input").focus();
     }
   }, [inputText]);
 
@@ -155,76 +170,25 @@ const typing = () => {
     const typeDisplayHiragana = document.getElementById(
       "type-display-hiragana"
     );
+    const typeDisplayRomaji = document.getElementById("type-display-romaji");
     const typeInput = document.getElementById("type-input");
     // console.log(typeInput);
 
     const Q = [
-      [
-        "他者と比較するのではなく、過去の自分と比較する",
-        "たしゃとひかくするのではなく、かこのじぶんとひかくする",
-      ],
-      [
-        "祝福は苦悩の仮面をかぶって訪れる",
-        "しゅくふくはくのうのかめんをかぶっておとずれる",
-      ],
-      [
-        "自分はいま幸福かと自分の胸に問うてみれば、とたんに幸福ではなくなってしまう",
-        "じぶんはいまこうふくかとじぶんのむねにとうてみれば、とたんにこうふくではなくなってしまう",
-      ],
-      [
-        "常識とは１８歳までに身に付けた偏見のコレクションのことを言う",
-        "じょうしきとは１８さいまでにみにつけたへんけんのこれくしょんのことをいう",
-      ],
-      [
-        "偉大な功績はどれも、かつては不可能だと考えられていた",
-        "いだいなこうせきはどれも、かつてはふかのうだとかんがえられていた",
-      ],
-      [
-        "あなたが転んでしまったことに関心はない。そこから立ち上がることに関心があるのだ",
-        "あなたがころんでしまったことにかんしんはない、そこからたちあげることにかんしんがあるのだ",
-      ],
-      [
-        "成功する方法は、たった一つだ。成功するまで、失敗し続けることだ",
-        "せいこうするほうほうは、たったひとつだ。せいこうするまで、しっぱいしつづけることだ",
-      ],
-      [
-        "人は他人から教わるのはきらいだけど，他人から学ぶのは好き",
-        "ひとはたにんからおそわるのはきらいだけど、たにんからまなぶのはすき",
-      ],
-      [
-        "根本的な才能とは、自分に何かが出来ると信じることだ",
-        "こんぽんてきなさいのうとは、じぶんになにかができるとしんじることだ",
-      ],
-      [
-        "自分の今行っていること、行ったことを心から楽しめる者は幸福である",
-        "じぶんのいまおこなっていること、おこなったことをこころからたのしめるものはこうふくである",
-      ],
-      [
-        "老いとは好奇心を失うことである",
-        "おいとはこうきしんをうしなうことである",
-      ],
-      [
-        "物事を難しく複雑にしているのは、自分自身なのかもしれない",
-        "ものごとをむつかしくふくざつにしているのは、じぶんじしんなのかもしれない",
-      ],
-      [
-        "なれなかった自分になるのに、遅すぎることはない",
-        "なれなかったじぶんになるのに、おそすぎることはない",
-      ],
-      ["やってはいけないことをやってみる", "やってはいけないことをやってみる"],
-      [
-        "中途半端にやると他人のマネになる。とことんやると他人がマネできないものになる",
-        "ちゅうとはんぱにやるとたにんのまねになる。とこんやるとたにんがまねできないものになる",
-      ],
+      ["トマト", "とまと"],
+      ["ジャコウ猫", "じゃこうねこ"],
+      ["しゃっくり", "しゃっくり"],
+      ["ウィスキー", "うぃすきー"],
+      ["とんかつ", "とんかつ"],
+      ["もんじゃ焼き", "もんじゃやき"],
+      ["カバ", "かば"],
+      ["岡本の椅子", "おかもとのいす"],
     ];
-    // console.log(Q);
     let Q_No = Math.floor(Math.random() * Q.length); //問題をランダムで出題する
-
-    // console.log(Q[Q_No][0]);
-    // console.log(Q[Q_No][1]);
 
     typeDisplay.innerText = "";
     typeDisplayHiragana.innerText = "";
+    typeDisplayRomaji.innerText = "";
     // 文章を一文字ずつ分解してspanタグを生成
     let oneText = Q[Q_No][0].split("");
     oneText.forEach((character) => {
@@ -243,29 +207,26 @@ const typing = () => {
     });
     // 問題のセット
     setQ_Texts(Q[Q_No][1]);
-    // テキストボックスの値を削除
-    typeInput.value = "";
-    StartTimer();
-  }
 
-  function getQnext() {
-    const temp = getRomaji(Q_Texts.substring(0, 1));
-    console.log("A_romaji: " + temp);
-    setA_romaji(temp);
+    setCorrectCount(0);
   }
 
   // タイマー
   let startTime;
-  let originTime = 300;
+  let originTime = 60;
+
   function StartTimer() {
     const timer = document.getElementById("timer");
     timer.innerText = originTime;
     startTime = new Date();
-    // console.log(startTime);
-    setInterval(() => {
+    clearInterval(timerID);
+    console.log({ timerID });
+    const timerID_ = setInterval(() => {
       timer.innerText = originTime - getTimerTime();
       if (timer.innerText <= 0) TimeUp();
     }, 500);
+    setTimerID(timerID_);
+    console.log({ timerID });
   }
 
   function TimeUp() {
@@ -278,10 +239,7 @@ const typing = () => {
   }
 
   //マウント時に一回だけ実行
-  useEffect(() => {
-    RenderNextSentence();
-    document.getElementById("type-input").focus();
-  }, []);
+  useEffect(() => {}, []);
 
   const audioRef = useRef(null); // ref経由でaudio要素利用
   const spectrumRef = useRef(null); // ref経由でcanvas要素利用(スペクトラムアナライザ用)
@@ -294,14 +252,41 @@ const typing = () => {
         />
       </audio>
       <VStack className={styles.typing}>
-        <div className={styles.timer} id="timer">
-          0
-        </div>
+        <Grid
+          templateAreas={`"nav main"
+                  "nav footer"
+                  "header header"`}
+          gridTemplateRows={"40px 1fr 40px"}
+          w="100%"
+          h="80px"
+          gap="1"
+          color="blackAlpha.700"
+          fontWeight="bold"
+        >
+          <GridItem pl="2" bg="pink.200" area={"nav"} id="totalTimer">
+            総合残り時間
+          </GridItem>
+          <GridItem pl="2" bg="green.200" area={"main"}>
+            トータル金額
+          </GridItem>
+          <GridItem pl="2" bg="yellow.200" area={"footer"}>
+            ネタ名と金額
+          </GridItem>
+          <GridItem pl="2" area={"header"} id="timer" className={styles.timer}>
+            <Center>timer</Center>
+          </GridItem>
+        </Grid>
+
+        <Sushi_ootoro_wrap />
         <Box className={styles.container}>
-          <div className={styles.typeDisplay} id="type-display"></div>
-          <div
+          <Center className={styles.typeDisplay} id="type-display"></Center>
+          <Center
             className={styles.typeDisplayHiragana}
             id="type-display-hiragana"
+          ></Center>
+          <div
+            className={styles.typeDisplayRomaji}
+            id="type-display-romaji"
           ></div>
           <textarea
             className={styles.typeInput}
