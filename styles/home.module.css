@@ -621,20 +621,18 @@ element.style {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-pack: top;
+      -ms-flex-pack: top;
+          justify-content: top;
   overflow: hidden;
   background: -webkit-gradient(linear, right bottom, left top, from(#ffaa33), to(#33aaff));
   background: linear-gradient(to left top, #ffaa33, #33aaff);
 }
 
 .typing .timer {
-  position: absolute;
-  top: 6rem;
-  font-size: 3rem;
-  font-weight: 600;
-  color: #ff3333;
+  margin: auto;
+  text-align: center;
+  font-size: 24px;
 }
 
 .typing .container {
