@@ -1,6 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "../../styles/home.module.scss";
-import { Center, VStack, Box, Button, Grid, GridItem } from "@chakra-ui/react";
+import {
+  Center,
+  VStack,
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Text,
+} from "@chakra-ui/react";
 
 import Content from "../../components/content";
 import ResponseCache from "next/dist/server/response-cache";
@@ -12,6 +28,17 @@ import { getRomaji, getHiragana } from "../../libs/romaji.js";
 import Sushi_ootoro_wrap from "../../components/3d/sushi_ootoro_wrap";
 
 const typing = () => {
+  const OverlayTwo = () => (
+    <ModalOverlay
+      bg="none"
+      backdropFilter="auto"
+      backdropInvert="80%"
+      backdropBlur="2px"
+    />
+  );
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [overlay, setOverlay] = React.useState(<OverlayTwo />);
+
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const [inputText, setInputText] = useState(""); //入力文字
   const [Q_Texts, setQ_Texts] = useState(""); //問題文
@@ -154,7 +181,7 @@ const typing = () => {
     setCorrectCount(0);
   }
 
-  // タイマー
+  // タイマー_ワード毎
   let startTime;
   let itemTime = 10;
   function StartTimer() {
@@ -178,6 +205,7 @@ const typing = () => {
     return Math.floor((new Date() - t) / 1000);
   }
 
+  //タイマー_トータル
   let totalStartTime;
   let totalTime = 20;
   function StartTotalTimer() {
@@ -194,8 +222,10 @@ const typing = () => {
     totalTimerIDref.current = totalTimerID_;
     console.log("初回のstartotaltime?:" + totalTimerID_);
   }
+  //ゲームオーバー
   function gameOver() {
     document.getElementById("type-input").disabled = true;
+    sound("finish");
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
     console.log("gameOver");
@@ -223,6 +253,16 @@ const typing = () => {
       >
         <source
           src="https://soundeffect-lab.info/sound/button/mp3/decision40.mp3"
+          type="audio/mp3"
+        />
+      </audio>
+      <audio
+        controls
+        id="finish"
+        style={{ display: "inline-block", width: "100px" }}
+      >
+        <source
+          src="https://soundeffect-lab.info/sound/anime/mp3/jean1.mp3"
           type="audio/mp3"
         />
       </audio>
@@ -276,6 +316,33 @@ const typing = () => {
           ></textarea>
         </Box>
       </VStack>
+      <Button
+        ml="4"
+        onClick={() => {
+          setOverlay(<OverlayTwo />);
+          onOpen();
+        }}
+      >
+        伝票を見る
+      </Button>
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        {overlay}
+        <ModalContent>
+          <ModalHeader>終了</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>{totalCost}円</Text>
+          </ModalBody>
+          <ModalFooter p={[2, 1, 3, 1]}>
+            <Button mr={2} onClick={onClose}>
+              ランキング登録
+            </Button>
+            <Button mr={2} onClick={onClose}>
+              閉じる
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Content>
   );
 };
