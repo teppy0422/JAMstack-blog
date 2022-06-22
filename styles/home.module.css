@@ -629,6 +629,14 @@ element.style {
   background: linear-gradient(to left top, #ffaa33, #33aaff);
 }
 
+.typing .cost {
+  font-size: 20px;
+}
+
+.typing .cost::after {
+  content: "円";
+}
+
 .typing .timer {
   margin: auto;
   text-align: center;
@@ -639,7 +647,7 @@ element.style {
   background-color: #5db7eb;
   font-size: 2.4rem;
   font-weight: 600;
-  padding: 4rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   min-height: 400px;
   max-width: 90%;
@@ -657,7 +665,7 @@ element.style {
 }
 
 .typing .container .typeInput {
-  margin-top: 2rem;
+  margin-top: 1rem;
   font-size: 2rem;
   width: 100%;
   background: transparent;
@@ -665,11 +673,12 @@ element.style {
   outline: none;
   text-decoration: none;
   margin: auto;
+  height: 2em;
   resize: none;
   border-radius: 0.5rem;
 }
 
-.typing .container .typeInput:focus {
+scroll .typing .container .typeInput:focus {
   border-color: #1c1b19;
 }
 /*# sourceMappingURL=home.module.css.map */
