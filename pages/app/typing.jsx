@@ -7,125 +7,146 @@ import ResponseCache from "next/dist/server/response-cache";
 import { type } from "os";
 import { now } from "lodash";
 
-import { getRomaji } from "../../libs/romaji.js";
-import useSound from "use-sound";
-import missedSound from "/public/sound/missed.mp3";
+import { getRomaji, getHiragana } from "../../libs/romaji.js";
 
 const typing = () => {
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
-  const [inputText, setInputText] = useState("");
+  const [inputText, setInputText] = useState(""); //入力文字
   const [inputTextTemp, setInputTextTemp] = useState("");
   const [Q_Texts, setQ_Texts] = useState(""); //問題文
   const [A_romaji, setA_romaji] = useState(""); //答えローマ字
   const [correctCount, setCorrectCount] = useState(0);
-  const [play, { stop, pause }] = useSound(missedSound, { volume: 1 });
-  let inputTextTempA = "";
+  const renderFlgRef = useRef(false); //useEffectが初回走らせないフラグ
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
       .then((response) => response.json())
       .then((data) => data.content);
   }
+  function soundMissed() {
+    const missed = document.getElementById("missed");
+    missed.volume = 0.5;
+    missed.pause();
+    missed.currentTime = 0;
+    missed.play();
+  }
 
   //入力毎のイベント
   useEffect(() => {
-    const sentenceArray = document
-      .getElementById("type-display-hiragana")
-      .querySelectorAll("span");
+    if (renderFlgRef.current) {
+      const sentenceArray = document
+        .getElementById("type-display-hiragana")
+        .querySelectorAll("span");
 
-    const temp = getRomaji(Q_Texts.substring(0, 1));
-    console.log("A_romaji: " + temp);
-    setA_romaji(temp);
+      const temp = getRomaji(Q_Texts.substring(0, 2));
+      console.log("A_romaji: " + temp);
 
-    inputTextTempA = inputTextTempA + inputText.charAt(inputText.length - 1);
-    console.log({ inputTextTempA });
+      // inputTextTempA = inputTextTempA + inputText.charAt(inputText.length - 1);
+      const inputTextTempA = inputText;
+      console.log({ inputTextTempA });
 
-    const matchCount = 0;
-    //正否チェック
-    for (let key in temp) {
-      console.log("tempkey: " + temp[key]);
-      //完全に一致
-      if (temp[key] === inputTextTempA) {
-        console.log("完全に一致");
-        break;
-      }
-      //部分一致
-      if (temp[key].startsWith(inputTextTempA, 0)) {
-        matchCount = matchCount + 1;
-        break;
-      }
-    }
-    console.log({ matchCount });
-
-    // 処理を中断
-    const test = true;
-    if (test) {
-      return;
-    }
-
-    switch (temp) {
-      // 初回
-      case "":
-        console.log("");
-        break;
-      //入力候補がない場合
-      case "notMore":
-        console.log("notMore");
-        document.getElementById("type-input").value = "";
-        break;
-      //入力候補がある場合
-      case "More":
-        console.log("More");
-        break;
-      //マッチした場合
-      default:
-        console.log("default");
-        // 入力文字が正しい場合
-        if (Q_Text.substr(0, temp.length) === temp) {
-          setQ_Text(Q_Text.substr(temp.length));
-          setCorrectCount(correctCount + temp.length);
-          document.getElementById("type-input").value = "";
+      const matchCount = 0;
+      //正否チェック
+      for (let key in temp) {
+        //完全に一致
+        if (temp[key] === inputTextTempA) {
+          console.log("完全に一致");
+          const tempp = getHiragana(inputTextTempA);
+          setQ_Texts(Q_Texts.substring(tempp.length));
+          setCorrectCount(correctCount + tempp.length);
+          matchCount = 1;
+          //文字色を変える
           sentenceArray.forEach((spans, index) => {
-            if (index <= correctCount + temp.length - 1) {
+            if (index <= correctCount + tempp.length - 1) {
               spans.style.color = "red";
-              console.log("index: " + index);
-              console.log("spans.length: " + spans.count);
             }
           });
+          document.getElementById("type-input").value = "";
+          break;
         }
-        break;
-    }
-    console.log("Q_Text: " + Q_Text.substr(temp.length));
-    console.log("correctCount: " + correctCount + temp.length);
-
-    // 処理を中断
-    if (test) {
-      return;
-    }
-
-    console.log("return");
-
-    const inputTextSp = inputText.split("");
-    console.log(inputTextSp);
-
-    sentenceArray.forEach((spans, index) => {
-      const inputTextTemp = inputTextSp[index];
-      const correctText = spans.innerText.toUpperCase();
-      if (inputTextTemp != null) {
-        if (inputTextTemp !== undefined) {
-          inputTextTemp = inputTextTemp.toUpperCase();
-        }
-
-        if (correctText == inputTextTemp) {
-          console.log("correct");
-          spans.style.color = "red";
-          count = count + 1;
-          console.log({ count });
-        } else {
-          spans.style.color = "black";
+        //部分一致
+        if (temp[key].startsWith(inputTextTempA, 0)) {
+          matchCount = matchCount + 1;
+          break;
         }
       }
-    });
+      //一致しない
+      if (matchCount === 0) {
+        document.getElementById("type-input").value = "";
+        soundMissed();
+      }
+      console.log({ matchCount });
+
+      // 処理を中断
+      const test = true;
+      if (test) {
+        return;
+      }
+
+      switch (temp) {
+        // 初回
+        case "":
+          console.log("");
+          break;
+        //入力候補がない場合
+        case "notMore":
+          console.log("notMore");
+          document.getElementById("type-input").value = "";
+          break;
+        //入力候補がある場合
+        case "More":
+          console.log("More");
+          break;
+        //マッチした場合
+        default:
+          console.log("default");
+          // 入力文字が正しい場合
+          if (Q_Text.substr(0, temp.length) === temp) {
+            setQ_Text(Q_Text.substr(temp.length));
+            setCorrectCount(correctCount + temp.length);
+            document.getElementById("type-input").value = "";
+            sentenceArray.forEach((spans, index) => {
+              if (index <= correctCount + temp.length - 1) {
+                spans.style.color = "red";
+                console.log("index: " + index);
+                console.log("spans.length: " + spans.count);
+              }
+            });
+          }
+          break;
+      }
+      console.log("Q_Text: " + Q_Text.substr(temp.length));
+      console.log("correctCount: " + correctCount + temp.length);
+
+      // 処理を中断
+      if (test) {
+        return;
+      }
+
+      const inputTextSp = inputText.split("");
+      console.log(inputTextSp);
+
+      sentenceArray.forEach((spans, index) => {
+        const inputTextTemp = inputTextSp[index];
+        const correctText = spans.innerText.toUpperCase();
+        if (inputTextTemp != null) {
+          if (inputTextTemp !== undefined) {
+            inputTextTemp = inputTextTemp.toUpperCase();
+          }
+
+          if (correctText == inputTextTemp) {
+            console.log("correct");
+            spans.style.color = "red";
+            count = count + 1;
+            console.log({ count });
+          } else {
+            spans.style.color = "black";
+          }
+        }
+      });
+    } else {
+      renderFlgRef.current = true;
+    }
   }, [inputText]);
 
   // ランダムな文章を取得して表示
@@ -266,7 +287,12 @@ const typing = () => {
   const spectrumRef = useRef(null); // ref経由でcanvas要素利用(スペクトラムアナライザ用)
   return (
     <Content>
-      <audio src="../../public/sound/missed.mp3" preload loop controls />
+      <audio controls id="missed">
+        <source
+          src="https://soundeffect-lab.info/sound/button/mp3/beep4.mp3"
+          type="audio/mp3"
+        />
+      </audio>
       <VStack className={styles.typing}>
         <div className={styles.timer} id="timer">
           0
@@ -284,15 +310,6 @@ const typing = () => {
               setInputText(e.target.value);
             }}
           ></textarea>
-          <Button onClick={() => play()}>音を鳴らす</Button>
-          <Button onClick={() => stop()}>停止</Button>
-          <Button onClick={() => pause()}>ポーズ</Button>{" "}
-          <audio controls loop>
-            <source
-              src="https://www.ne.jp/asahi/music/myuu/wave/menuettm.mp3"
-              type="audio/mp3"
-            />
-          </audio>
         </Box>
       </VStack>
     </Content>

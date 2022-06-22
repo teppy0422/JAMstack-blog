@@ -654,9 +654,8 @@ element.style {
   margin-left: 0rem;
 }
 
-.typing .container .typeDisplay .correct {
-  color: #11ee11;
-  font-size: 100px;
+.typing .container .typeDisplayHiragana {
+  font-size: 20px;
 }
 
 .typing .container .typeInput {
