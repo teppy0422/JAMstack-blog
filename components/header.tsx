@@ -34,6 +34,7 @@ import {
   faPalette,
   faBook,
   faBookOpen,
+  faKeyboard,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
@@ -161,7 +162,28 @@ export default function Header() {
                       _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                       textDecoration="none"
                     >
-                      <MenuItem icon={<Search2Icon />}>画像検索アプリ</MenuItem>
+                      <MenuItem icon={<Search2Icon />}>フリー画像検索</MenuItem>
+                    </Link>
+                  </NextLink>
+
+                  <NextLink href="/app/typing">
+                    <Link
+                      className={styles.noDecoration}
+                      _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+                      textDecoration="none"
+                    >
+                      <MenuItem
+                        icon={
+                          <FontAwesomeIcon
+                            width="14px"
+                            height="14px"
+                            icon={faKeyboard}
+                            size="sm"
+                          />
+                        }
+                      >
+                        タイピング
+                      </MenuItem>
                     </Link>
                   </NextLink>
 
