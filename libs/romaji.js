@@ -331,9 +331,15 @@ const data = {
 };
 export const getRomaji = (text) => {
   const arr = new Array();
+  //二文字の場合
   for (let key in data) {
     if (data[key] === text) {
-      console.log(key);
+      arr.push(key);
+    }
+  }
+  //一文字の場合
+  for (let key in data) {
+    if (data[key] === text.substring(0, 1)) {
       arr.push(key);
     }
   }
@@ -359,4 +365,14 @@ export const getRomaji = (text) => {
   // } else {
   //   return "More";
   // }
+};
+
+export const getHiragana = (text) => {
+  const str = "";
+  for (let key in data) {
+    if (key === text) {
+      str = data[key];
+    }
+  }
+  return str;
 };

@@ -498,10 +498,9 @@ element.style {
     .typeDisplay {
       margin-bottom: 1rem;
       margin-left: 0rem;
-      .correct {
-        color: #11ee11;
-        font-size: 100px;
-      }
+    }
+    .typeDisplayHiragana {
+      font-size: 20px;
     }
     .typeInput {
       margin-top: 2rem;
