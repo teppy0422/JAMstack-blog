@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "../../styles/home.module.scss";
-import { Center, VStack, Box } from "@chakra-ui/react";
+import { Center, VStack, Box, Button } from "@chakra-ui/react";
 
 import Content from "../../components/content";
 import ResponseCache from "next/dist/server/response-cache";
 import { type } from "os";
 import { now } from "lodash";
 
-import { romaji } from "../../libs/romaji.js";
+import { getRomaji } from "../../libs/romaji.js";
+import useSound from "use-sound";
+import missedSound from "/public/sound/missed.mp3";
 
 const typing = () => {
+  const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const [inputText, setInputText] = useState("");
   const [inputTextTemp, setInputTextTemp] = useState("");
-  const [Q_Text, setQ_Text] = useState("");
+  const [Q_Texts, setQ_Texts] = useState(""); //問題文
+  const [A_romaji, setA_romaji] = useState(""); //答えローマ字
   const [correctCount, setCorrectCount] = useState(0);
-  const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
+  const [play, { stop, pause }] = useSound(missedSound, { volume: 1 });
   let inputTextTempA = "";
   // 非同期処理
   function GetRandomSentence() {
@@ -29,15 +33,35 @@ const typing = () => {
       .getElementById("type-display-hiragana")
       .querySelectorAll("span");
 
-    console.log({ inputText });
+    const temp = getRomaji(Q_Texts.substring(0, 1));
+    console.log("A_romaji: " + temp);
+    setA_romaji(temp);
 
     inputTextTempA = inputTextTempA + inputText.charAt(inputText.length - 1);
-
     console.log({ inputTextTempA });
 
-    var temp = romaji(inputText);
+    const matchCount = 0;
+    //正否チェック
+    for (let key in temp) {
+      console.log("tempkey: " + temp[key]);
+      //完全に一致
+      if (temp[key] === inputTextTempA) {
+        console.log("完全に一致");
+        break;
+      }
+      //部分一致
+      if (temp[key].startsWith(inputTextTempA, 0)) {
+        matchCount = matchCount + 1;
+        break;
+      }
+    }
+    console.log({ matchCount });
 
-    console.log({ temp });
+    // 処理を中断
+    const test = true;
+    if (test) {
+      return;
+    }
 
     switch (temp) {
       // 初回
@@ -62,9 +86,10 @@ const typing = () => {
           setCorrectCount(correctCount + temp.length);
           document.getElementById("type-input").value = "";
           sentenceArray.forEach((spans, index) => {
-            // console.log(index);
             if (index <= correctCount + temp.length - 1) {
               spans.style.color = "red";
+              console.log("index: " + index);
+              console.log("spans.length: " + spans.count);
             }
           });
         }
@@ -74,7 +99,6 @@ const typing = () => {
     console.log("correctCount: " + correctCount + temp.length);
 
     // 処理を中断
-    const test = true;
     if (test) {
       return;
     }
@@ -91,8 +115,6 @@ const typing = () => {
         if (inputTextTemp !== undefined) {
           inputTextTemp = inputTextTemp.toUpperCase();
         }
-
-        // console.log(inputTextTemp);
 
         if (correctText == inputTextTemp) {
           console.log("correct");
@@ -199,13 +221,19 @@ const typing = () => {
       typeDisplayHiragana.appendChild(characterSpan);
     });
     // 問題のセット
-    setQ_Text(Q[Q_No][1]);
+    setQ_Texts(Q[Q_No][1]);
     // テキストボックスの値を削除
     typeInput.value = "";
-
     StartTimer();
   }
 
+  function getQnext() {
+    const temp = getRomaji(Q_Texts.substring(0, 1));
+    console.log("A_romaji: " + temp);
+    setA_romaji(temp);
+  }
+
+  // タイマー
   let startTime;
   let originTime = 300;
   function StartTimer() {
@@ -234,8 +262,11 @@ const typing = () => {
     document.getElementById("type-input").focus();
   }, []);
 
+  const audioRef = useRef(null); // ref経由でaudio要素利用
+  const spectrumRef = useRef(null); // ref経由でcanvas要素利用(スペクトラムアナライザ用)
   return (
     <Content>
+      <audio src="../../public/sound/missed.mp3" preload loop controls />
       <VStack className={styles.typing}>
         <div className={styles.timer} id="timer">
           0
@@ -253,6 +284,10 @@ const typing = () => {
               setInputText(e.target.value);
             }}
           ></textarea>
+
+          <Button onClick={() => play()}>音を鳴らす</Button>
+          <Button onClick={() => stop()}>停止</Button>
+          <Button onClick={() => pause()}>ポーズ</Button>
         </Box>
       </VStack>
     </Content>
