@@ -13,10 +13,15 @@ const BoopButton = () => {
           {boopSfx}
         </a>
       </div>
-      <audio src={boopSfx} controls></audio>
+      <audio src={boopSfx} controls>
+        対応していません
+      </audio>
 
       <audio controls loop>
-        <source src="/missed.mp3" type="audio/mp3" />
+        <source
+          src="https://www.ne.jp/asahi/music/myuu/wave/menuettm.mp3"
+          type="audio/mp3"
+        />
       </audio>
     </div>
   );

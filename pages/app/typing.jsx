@@ -284,10 +284,15 @@ const typing = () => {
               setInputText(e.target.value);
             }}
           ></textarea>
-
           <Button onClick={() => play()}>音を鳴らす</Button>
           <Button onClick={() => stop()}>停止</Button>
-          <Button onClick={() => pause()}>ポーズ</Button>
+          <Button onClick={() => pause()}>ポーズ</Button>{" "}
+          <audio controls loop>
+            <source
+              src="https://www.ne.jp/asahi/music/myuu/wave/menuettm.mp3"
+              type="audio/mp3"
+            />
+          </audio>
         </Box>
       </VStack>
     </Content>
