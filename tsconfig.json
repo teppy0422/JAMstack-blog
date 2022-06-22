@@ -22,8 +22,8 @@
     "pages/api/auth/[...nextauth].js",
     ".trash/_app copy.tsx",
     "components/3d/Hippo_001.jsx",
-    "components/3d/Hippo_001.jsx",
-    "components/3d/Hippo_001.jsx"
+    "**/*.mp3", //わからん
+    "**/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }
