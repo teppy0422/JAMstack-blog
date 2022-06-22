@@ -479,6 +479,12 @@ element.style {
   justify-content: top;
   overflow: hidden;
   background: linear-gradient(to left top, #ffaa33, #33aaff);
+  .cost {
+    font-size: 20px;
+    &::after {
+      content: "円";
+    }
+  }
   .timer {
     margin: auto;
     text-align: center;
@@ -488,7 +494,7 @@ element.style {
     background-color: rgb(93, 183, 235);
     font-size: 2.4rem;
     font-weight: 600;
-    padding: 4rem;
+    padding: 1rem;
     border-radius: 0.5rem;
     min-height: 400px;
     max-width: 90%;
@@ -501,7 +507,7 @@ element.style {
       font-size: 20px;
     }
     .typeInput {
-      margin-top: 2rem;
+      margin-top: 1rem;
       font-size: 2rem;
       width: 100%;
       background: transparent;
@@ -509,9 +515,10 @@ element.style {
       outline: none;
       text-decoration: none;
       margin: auto;
+      height: 2em;
       resize: none;
       border-radius: 0.5rem;
-      &:focus {
+      scroll &:focus {
         border-color: #1c1b19;
       }
     }

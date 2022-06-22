@@ -14,24 +14,25 @@ import Sushi_ootoro_wrap from "../../components/3d/sushi_ootoro_wrap";
 const typing = () => {
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const [inputText, setInputText] = useState(""); //入力文字
-  const [inputTextTemp, setInputTextTemp] = useState("");
   const [Q_Texts, setQ_Texts] = useState(""); //問題文
-  const [A_romaji, setA_romaji] = useState(""); //答えローマ字
   const [correctCount, setCorrectCount] = useState(0);
   const renderFlgRef = useRef(false); //useEffectが初回走らせないフラグ
-  const [timerID, setTimerID] = useState("");
+  const timerIDref = useRef(""); //タイマーリセット用のID
+  const totalTimerIDref = useRef(""); //トータルタイマー用のID
+  const [totalCost, setTotalCose] = useState(0); //トータル金額
+  const [cost, setCost] = useState(0); //金額
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
       .then((response) => response.json())
       .then((data) => data.content);
   }
-  function soundMissed() {
-    const missed = document.getElementById("missed");
-    missed.volume = 0.5;
-    missed.pause();
-    missed.currentTime = 0;
-    missed.play();
+  function sound(id) {
+    const sound = document.getElementById(id);
+    sound.volume = 0.6;
+    sound.pause();
+    sound.currentTime = 0;
+    sound.play();
   }
 
   //入力毎のイベント
@@ -44,7 +45,6 @@ const typing = () => {
       const temp = getRomaji(Q_Texts.substring(0, 2));
       console.log("A_romaji: " + temp);
 
-      // inputTextTempA = inputTextTempA + inputText.charAt(inputText.length - 1);
       const inputTextTempA = inputText;
       console.log({ inputTextTempA });
 
@@ -63,14 +63,14 @@ const typing = () => {
           sentenceArray.forEach((spans, index) => {
             if (index <= correctCount + tempp.length - 1) {
               spans.style.color = "red";
-              console.log("sentenceArray.length: " + sentenceArray.length);
-              console.log(index);
               if (index === sentenceArray.length - 1) {
                 complete = true;
               }
             }
           });
           if (complete === true) {
+            setTotalCose(Number(totalCost) + Number(cost));
+            sound("success");
             TimeUp();
           }
           document.getElementById("type-input").value = "";
@@ -85,104 +85,45 @@ const typing = () => {
       //一致しない
       if (matchCount === 0) {
         document.getElementById("type-input").value = "";
-        soundMissed();
+        sound("missed");
       }
       console.log({ matchCount });
-
-      // 処理を中断
-      const test = true;
-      if (test) {
-        return;
-      }
-
-      switch (temp) {
-        // 初回
-        case "":
-          console.log("");
-          break;
-        //入力候補がない場合
-        case "notMore":
-          console.log("notMore");
-          document.getElementById("type-input").value = "";
-          break;
-        //入力候補がある場合
-        case "More":
-          console.log("More");
-          break;
-        //マッチした場合
-        default:
-          console.log("default");
-          // 入力文字が正しい場合
-          if (Q_Text.substr(0, temp.length) === temp) {
-            setQ_Text(Q_Text.substr(temp.length));
-            setCorrectCount(correctCount + temp.length);
-            document.getElementById("type-input").value = "";
-            sentenceArray.forEach((spans, index) => {
-              if (index <= correctCount + temp.length - 1) {
-                spans.style.color = "red";
-                console.log("index: " + index);
-                console.log("spans.length: " + spans.count);
-              }
-            });
-          }
-          break;
-      }
-      console.log("Q_Text: " + Q_Text.substr(temp.length));
-      console.log("correctCount: " + correctCount + temp.length);
-
-      // 処理を中断
-      if (test) {
-        return;
-      }
-
-      const inputTextSp = inputText.split("");
-      console.log(inputTextSp);
-
-      sentenceArray.forEach((spans, index) => {
-        const inputTextTemp = inputTextSp[index];
-        const correctText = spans.innerText.toUpperCase();
-        if (inputTextTemp != null) {
-          if (inputTextTemp !== undefined) {
-            inputTextTemp = inputTextTemp.toUpperCase();
-          }
-
-          if (correctText == inputTextTemp) {
-            console.log("correct");
-            spans.style.color = "red";
-            count = count + 1;
-            console.log({ count });
-          } else {
-            spans.style.color = "black";
-          }
-        }
-      });
     } else {
       //レンダー初回時だけ実行
       renderFlgRef.current = true;
       TimeUp();
       document.getElementById("type-input").focus();
+      StartTotalTimer();
+      console.log("初回だけ");
     }
   }, [inputText]);
 
   // ランダムな文章を取得して表示
   async function RenderNextSentence() {
+    const cost = document.getElementById("cost");
     const typeDisplay = document.getElementById("type-display");
     const typeDisplayHiragana = document.getElementById(
       "type-display-hiragana"
     );
     const typeDisplayRomaji = document.getElementById("type-display-romaji");
-    const typeInput = document.getElementById("type-input");
-    // console.log(typeInput);
 
     const Q = [
-      ["トマト", "とまと"],
-      ["ジャコウ猫", "じゃこうねこ"],
-      ["しゃっくり", "しゃっくり"],
-      ["ウィスキー", "うぃすきー"],
-      ["とんかつ", "とんかつ"],
-      ["もんじゃ焼き", "もんじゃやき"],
-      ["カバ", "かば"],
-      ["岡本の椅子", "おかもとのいす"],
+      ["トマト", "とまと", "100"],
+      ["ジャコウ猫", "じゃこうねこ", "200"],
+      ["しゃっくり", "しゃっくり", "200"],
+      ["ウィスキー", "うぃすきー", "200"],
+      ["とんかつ", "とんかつ", "100"],
+      ["もんじゃ焼き", "もんじゃやき", "200"],
+      ["カバ", "かば", "100"],
+      ["岡本の椅子", "おかもとのいす", "200"],
+      ["直島がおすすめ", "なおしまがおすすめ", "200"],
+      ["彷彿させる", "ほうふつさせる", "200"],
+      ["真夏のホラーゲーム", "まなつのほらーげーむ", "300"],
+      ["沢田マンション", "さわだまんしょん", "250"],
+      ["よろしくお願いします", "よろしくおねがいします", "150"],
+      ["この機能は使えない", "このきのうはつかえない", "150"],
+      ["タイピングの練習", "たいぴんぐのれんしゅう", "200"],
+      ["ウィンナーは水で焼く", "うぃんなーはみずでやく", "250"],
     ];
     let Q_No = Math.floor(Math.random() * Q.length); //問題をランダムで出題する
 
@@ -207,47 +148,81 @@ const typing = () => {
     });
     // 問題のセット
     setQ_Texts(Q[Q_No][1]);
+    // コストのセット
+    setCost(Q[Q_No][2]);
 
     setCorrectCount(0);
   }
 
   // タイマー
   let startTime;
-  let originTime = 60;
-
+  let itemTime = 10;
   function StartTimer() {
     const timer = document.getElementById("timer");
-    timer.innerText = originTime;
+    timer.innerText = itemTime;
     startTime = new Date();
-    clearInterval(timerID);
-    console.log({ timerID });
+    clearInterval(timerIDref.current);
+    console.log(timerIDref.current);
     const timerID_ = setInterval(() => {
-      timer.innerText = originTime - getTimerTime();
+      timer.innerText = itemTime - getTimerTime(startTime);
       if (timer.innerText <= 0) TimeUp();
     }, 500);
-    setTimerID(timerID_);
-    console.log({ timerID });
+    timerIDref.current = timerID_;
+    console.log(timerIDref.current);
   }
-
   function TimeUp() {
     RenderNextSentence();
     StartTimer();
   }
+  function getTimerTime(t) {
+    return Math.floor((new Date() - t) / 1000);
+  }
 
-  function getTimerTime() {
-    return Math.floor((new Date() - startTime) / 1000);
+  let totalStartTime;
+  let totalTime = 20;
+  function StartTotalTimer() {
+    const totalTimer = document.getElementById("totalTimer");
+    totalTimer.innerText = totalTime;
+    totalStartTime = new Date();
+    const totalTimerID_ = setInterval(() => {
+      totalTimer.innerText = totalTime - getTimerTime(totalStartTime);
+      if (totalTimer.innerText <= 0) {
+        clearInterval(totalTimerIDref.current);
+        gameOver();
+      }
+    }, 500);
+    totalTimerIDref.current = totalTimerID_;
+    console.log("初回のstartotaltime?:" + totalTimerID_);
+  }
+  function gameOver() {
+    document.getElementById("type-input").disabled = true;
+    clearInterval(timerIDref.current);
+    clearInterval(totalTimerIDref.current);
+    console.log("gameOver");
   }
 
   //マウント時に一回だけ実行
   useEffect(() => {}, []);
 
-  const audioRef = useRef(null); // ref経由でaudio要素利用
-  const spectrumRef = useRef(null); // ref経由でcanvas要素利用(スペクトラムアナライザ用)
   return (
     <Content>
-      <audio controls id="missed">
+      <audio
+        controls
+        id="missed"
+        style={{ display: "inline-block", width: "100px" }}
+      >
         <source
           src="https://soundeffect-lab.info/sound/button/mp3/beep4.mp3"
+          type="audio/mp3"
+        />
+      </audio>
+      <audio
+        controls
+        id="success"
+        style={{ display: "inline-block", width: "100px" }}
+      >
+        <source
+          src="https://soundeffect-lab.info/sound/button/mp3/decision40.mp3"
           type="audio/mp3"
         />
       </audio>
@@ -266,11 +241,11 @@ const typing = () => {
           <GridItem pl="2" bg="pink.200" area={"nav"} id="totalTimer">
             総合残り時間
           </GridItem>
-          <GridItem pl="2" bg="green.200" area={"main"}>
-            トータル金額
+          <GridItem pl="2" bg="green.200" area={"main"} id="totalCost">
+            トータル金額: {totalCost} 円
           </GridItem>
           <GridItem pl="2" bg="yellow.200" area={"footer"}>
-            ネタ名と金額
+            最高金額との比率
           </GridItem>
           <GridItem pl="2" area={"header"} id="timer" className={styles.timer}>
             <Center>timer</Center>
@@ -278,7 +253,11 @@ const typing = () => {
         </Grid>
 
         <Sushi_ootoro_wrap />
-        <Box className={styles.container}>
+
+        <Center id="cost" className={styles.cost}>
+          {cost}
+        </Center>
+        <Box className={styles.container} w="100%">
           <Center className={styles.typeDisplay} id="type-display"></Center>
           <Center
             className={styles.typeDisplayHiragana}
