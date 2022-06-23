@@ -25,7 +25,7 @@ import { now } from "lodash";
 
 import { getRomaji, getHiragana } from "../../libs/romaji.js";
 
-import Sushi_ootoro_wrap from "../../components/3d/sushi_ootoro_wrap";
+import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 
 const typing = () => {
   const OverlayTwo = () => (
@@ -297,7 +297,7 @@ const typing = () => {
           </GridItem>
         </Grid>
 
-        <Sushi_ootoro_wrap />
+        <Sushi_tamago_wrap />
 
         <Center id="cost" className={styles.cost}>
           {cost}
