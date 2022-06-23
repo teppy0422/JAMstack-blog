@@ -46,9 +46,11 @@ const typing = () => {
   const renderFlgRef = useRef(false); //useEffectを初回走らせないフラグ
   const timerIDref = useRef(""); //タイマーリセット用のID
   const totalTimerIDref = useRef(""); //トータルタイマー用のID
-  const [totalCost, setTotalCose] = useState(0); //トータル金額
+  const [totalCost, setTotalCost] = useState(0); //トータル金額
   const [cost, setCost] = useState(0); //金額
-  const voucherRef = useRef(null); //伝票を開くボタンを押す
+  const inputTextRef = useRef(null); //入力欄
+  const voucherOpenRef = useRef(null); //伝票を開くボタン
+  const voucherCloseRef = useRef(null); //伝票を閉じるボタン
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -97,7 +99,7 @@ const typing = () => {
             }
           });
           if (complete === true) {
-            setTotalCose(Number(totalCost) + Number(cost));
+            setTotalCost(Number(totalCost) + Number(cost));
             sound("success");
             TimeUp();
           }
@@ -207,12 +209,13 @@ const typing = () => {
   }
 
   //タイマー_トータル
-  let totalStartTime;
-  let totalTime = 20;
   function StartTotalTimer() {
+    let totalStartTime;
+    let totalTime = 20;
     const totalTimer = document.getElementById("totalTimer");
     totalTimer.innerText = totalTime;
     totalStartTime = new Date();
+    clearInterval(totalTimerIDref.current);
     const totalTimerID_ = setInterval(() => {
       totalTimer.innerText = totalTime - getTimerTime(totalStartTime);
       if (totalTimer.innerText <= 0) {
@@ -230,9 +233,18 @@ const typing = () => {
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
     console.log("gameOver");
-    voucherRef.current.click();
+    voucherOpenRef.current.click();
   }
+  //リプレイ
+  function gameReplay() {
+    document.getElementById("type-input").disabled = false;
 
+    inputTextRef.current.focus();
+
+    setTotalCost(0);
+    StartTotalTimer();
+    TimeUp();
+  }
   //マウント時に一回だけ実行
   useEffect(() => {}, []);
 
@@ -312,6 +324,7 @@ const typing = () => {
           <textarea
             className={styles.typeInput}
             id="type-input"
+            ref={inputTextRef}
             onChange={(e) => {
               setInputText(e.target.value);
             }}
@@ -324,7 +337,7 @@ const typing = () => {
           setOverlay(<OverlayTwo />);
           onOpen();
         }}
-        ref={voucherRef}
+        ref={voucherOpenRef}
       >
         伝票を見る
       </Button>
@@ -336,11 +349,20 @@ const typing = () => {
           <ModalBody>
             <Text>{totalCost}円</Text>
           </ModalBody>
-          <ModalFooter p={[2, 1, 3, 1]}>
+          <ModalFooter py={4}>
+            <Button
+              mr={2}
+              onClick={(e) => {
+                voucherCloseRef.current.click();
+                setTimeout(gameReplay, 500);
+              }}
+            >
+              もう一度プレイする
+            </Button>
             <Button mr={2} onClick={onClose}>
               ランキング登録
             </Button>
-            <Button mr={2} onClick={onClose}>
+            <Button mr={2} onClick={onClose} ref={voucherCloseRef}>
               閉じる
             </Button>
           </ModalFooter>
