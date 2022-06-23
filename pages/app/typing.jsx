@@ -310,7 +310,7 @@ const typing = () => {
           </GridItem>
         </Grid>
 
-        {/* <Sushi_tamago_wrap /> */}
+        <Sushi_tamago_wrap />
 
         <Center id="cost" className={styles.cost}>
           {cost}
@@ -408,7 +408,10 @@ const typing = () => {
         ref={sound_BGM}
         style={{ display: "inline-block", width: "100px" }}
       >
-        <source src="http://www.hmix.net/music/n/n42.mp3" type="audio/mp3" />
+        <source
+          src="https://music.storyinvention.com/wp-content/uploads/kutsurogi-koto.mp3"
+          type="audio/mp3"
+        />
       </audio>
     </Content>
   );
