@@ -144,14 +144,13 @@ const typing = () => {
       console.log({ matchCount });
     } else {
       //レンダー初回時だけ実行
-      renderFlgRef.current = true;
-      TimeUp();
-      document.getElementById("type-input").focus();
-      StartTotalTimer();
       console.log("初回だけ");
+      renderFlgRef.current = true;
       //入力イベント
       document.addEventListener("keypress", keypress_ivent);
       document.addEventListener("keyup", keyup_ivent);
+      //全てのロードが終わったら
+      window.addEventListener("load", gameReplay);
     }
   }, [inputText]);
 
