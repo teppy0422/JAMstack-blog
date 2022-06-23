@@ -310,7 +310,7 @@ const typing = () => {
           </GridItem>
         </Grid>
 
-        <Sushi_tamago_wrap />
+        {/* <Sushi_tamago_wrap /> */}
 
         <Center id="cost" className={styles.cost}>
           {cost}
