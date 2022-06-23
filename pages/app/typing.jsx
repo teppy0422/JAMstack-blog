@@ -226,7 +226,9 @@ const typing = () => {
   function StartTotalTimer() {
     let totalStartTime;
     let totalTime_origin = 30;
+    sound_BGM.current.pause();
     sound_BGM.current.currentTime = 0;
+    sound_BGM.current.playbackRate = 1;
     sound_BGM.current.volume = 0.5;
     sound_BGM.current.play();
 
