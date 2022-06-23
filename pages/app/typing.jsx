@@ -45,12 +45,17 @@ const typing = () => {
   const [correctCount, setCorrectCount] = useState(0);
   const renderFlgRef = useRef(false); //useEffectを初回走らせないフラグ
   const timerIDref = useRef(""); //タイマーリセット用のID
-  const totalTimerIDref = useRef(""); //トータルタイマー用のID
+  const totalTimerIDref = useRef(""); //トータルタイマーリセット用のID
+  const [totalTime, setTotalTime] = useState(100); //トータルタイムの値
+  const totalTimeRef = useRef(null); //トータルタイム
   const [totalCost, setTotalCost] = useState(0); //トータル金額
   const [cost, setCost] = useState(0); //金額
   const inputTextRef = useRef(null); //入力欄
   const voucherOpenRef = useRef(null); //伝票を開くボタン
   const voucherCloseRef = useRef(null); //伝票を閉じるボタン
+
+  const sound_BGM = useRef(null); //BGM
+
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -64,6 +69,15 @@ const typing = () => {
     sound.currentTime = 0;
     sound.play();
   }
+
+  useEffect(() => {
+    if (totalTime <= 15) {
+      sound_BGM.current.playbackRate = 1.25;
+    }
+    if (totalTime <= 10) {
+      sound_BGM.current.playbackRate = 1.5;
+    }
+  }, [totalTime]);
 
   //入力毎のイベント
   useEffect(() => {
@@ -211,14 +225,19 @@ const typing = () => {
   //タイマー_トータル
   function StartTotalTimer() {
     let totalStartTime;
-    let totalTime = 20;
-    const totalTimer = document.getElementById("totalTimer");
-    totalTimer.innerText = totalTime;
+    let totalTime_origin = 30;
+    sound_BGM.current.currentTime = 0;
+    sound_BGM.current.volume = 0.5;
+    sound_BGM.current.play();
+
+    // totalTimeRef.current.innerText = totalTime_origin;
+    setTotalTime(totalTime_origin);
     totalStartTime = new Date();
     clearInterval(totalTimerIDref.current);
     const totalTimerID_ = setInterval(() => {
-      totalTimer.innerText = totalTime - getTimerTime(totalStartTime);
-      if (totalTimer.innerText <= 0) {
+      setTotalTime(totalTime_origin - getTimerTime(totalStartTime));
+      console.log("totalTime: " + totalTimeRef.current.innerText);
+      if (totalTimeRef.current.innerText <= 0) {
         clearInterval(totalTimerIDref.current);
         gameOver();
       }
@@ -229,16 +248,16 @@ const typing = () => {
   //ゲームオーバー
   function gameOver() {
     document.getElementById("type-input").disabled = true;
-    sound("finish");
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
-    console.log("gameOver");
     voucherOpenRef.current.click();
+    sound_BGM.current.pause();
+    sound("finish");
   }
   //リプレイ
   function gameReplay() {
     document.getElementById("type-input").disabled = false;
-
+    inputTextRef.current.value = "";
     inputTextRef.current.focus();
 
     setTotalCost(0);
@@ -250,36 +269,6 @@ const typing = () => {
 
   return (
     <Content>
-      <audio
-        controls
-        id="missed"
-        style={{ display: "inline-block", width: "100px" }}
-      >
-        <source
-          src="https://soundeffect-lab.info/sound/button/mp3/beep4.mp3"
-          type="audio/mp3"
-        />
-      </audio>
-      <audio
-        controls
-        id="success"
-        style={{ display: "inline-block", width: "100px" }}
-      >
-        <source
-          src="https://soundeffect-lab.info/sound/button/mp3/decision40.mp3"
-          type="audio/mp3"
-        />
-      </audio>
-      <audio
-        controls
-        id="finish"
-        style={{ display: "inline-block", width: "100px" }}
-      >
-        <source
-          src="https://soundeffect-lab.info/sound/anime/mp3/jean1.mp3"
-          type="audio/mp3"
-        />
-      </audio>
       <VStack className={styles.typing}>
         <Grid
           templateAreas={`"nav main"
@@ -292,8 +281,8 @@ const typing = () => {
           color="blackAlpha.700"
           fontWeight="bold"
         >
-          <GridItem pl="2" bg="pink.200" area={"nav"} id="totalTimer">
-            総合残り時間
+          <GridItem pl="2" bg="pink.200" area={"nav"} ref={totalTimeRef}>
+            {totalTime}
           </GridItem>
           <GridItem pl="2" bg="green.200" area={"main"} id="totalCost">
             トータル金額: {totalCost} 円
@@ -368,6 +357,44 @@ const typing = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <audio
+        controls
+        id="missed"
+        style={{ display: "inline-block", width: "100px" }}
+      >
+        <source
+          src="https://soundeffect-lab.info/sound/button/mp3/beep4.mp3"
+          type="audio/mp3"
+        />
+      </audio>
+      <audio
+        controls
+        id="success"
+        style={{ display: "inline-block", width: "100px" }}
+      >
+        <source
+          src="https://soundeffect-lab.info/sound/button/mp3/decision40.mp3"
+          type="audio/mp3"
+        />
+      </audio>
+      <audio
+        controls
+        id="finish"
+        style={{ display: "inline-block", width: "100px" }}
+      >
+        <source
+          src="https://soundeffect-lab.info/sound/anime/mp3/roll-finish1.mp3"
+          type="audio/mp3"
+        />
+      </audio>
+      <audio
+        controls
+        id="bgm"
+        ref={sound_BGM}
+        style={{ display: "inline-block", width: "100px" }}
+      >
+        <source src="http://www.hmix.net/music/n/n42.mp3" type="audio/mp3" />
+      </audio>
     </Content>
   );
 };
