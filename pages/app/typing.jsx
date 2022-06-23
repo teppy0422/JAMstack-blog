@@ -43,11 +43,12 @@ const typing = () => {
   const [inputText, setInputText] = useState(""); //入力文字
   const [Q_Texts, setQ_Texts] = useState(""); //問題文
   const [correctCount, setCorrectCount] = useState(0);
-  const renderFlgRef = useRef(false); //useEffectが初回走らせないフラグ
+  const renderFlgRef = useRef(false); //useEffectを初回走らせないフラグ
   const timerIDref = useRef(""); //タイマーリセット用のID
   const totalTimerIDref = useRef(""); //トータルタイマー用のID
   const [totalCost, setTotalCose] = useState(0); //トータル金額
   const [cost, setCost] = useState(0); //金額
+  const voucherRef = useRef(null); //伝票を開くボタンを押す
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -229,6 +230,7 @@ const typing = () => {
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
     console.log("gameOver");
+    voucherRef.current.click();
   }
 
   //マウント時に一回だけ実行
@@ -322,6 +324,7 @@ const typing = () => {
           setOverlay(<OverlayTwo />);
           onOpen();
         }}
+        ref={voucherRef}
       >
         伝票を見る
       </Button>
