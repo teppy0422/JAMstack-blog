@@ -79,6 +79,16 @@ const typing = () => {
     }
   }, [totalTime]);
 
+  // 入力方法変更
+  function keypress_ivent(e) {
+    console.log("keypress: " + e.key);
+    return false;
+  }
+  function keyup_ivent(e) {
+    console.log("keyup: " + e.key);
+    return false;
+  }
+
   //入力毎のイベント
   useEffect(() => {
     if (renderFlgRef.current) {
@@ -139,6 +149,9 @@ const typing = () => {
       document.getElementById("type-input").focus();
       StartTotalTimer();
       console.log("初回だけ");
+      //入力イベント
+      document.addEventListener("keypress", keypress_ivent);
+      document.addEventListener("keyup", keyup_ivent);
     }
   }, [inputText]);
 

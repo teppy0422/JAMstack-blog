@@ -665,7 +665,6 @@ element.style {
 }
 
 .typing .container .typeInput {
-  ime-mode: disabled;
   margin-top: 1rem;
   font-size: 2rem;
   width: 100%;
