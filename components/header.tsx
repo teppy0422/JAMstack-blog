@@ -186,9 +186,6 @@ export default function Header() {
                       </MenuItem>
                     </Link>
                   </NextLink>
-
-                  <MenuItem>追加予定</MenuItem>
-                  <MenuItem>追加予定</MenuItem>
                 </MenuList>
               </Menu>
             </Center>
