@@ -22,6 +22,12 @@ import {
   StatNumber,
   StatHelpText,
   StatArrow,
+  Progress,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
 } from "@chakra-ui/react";
 
 import Content from "../../components/content";
@@ -61,6 +67,7 @@ const typing = () => {
   const inputTextRef = useRef(null); //入力欄
   const voucherOpenRef = useRef(null); //伝票を開くボタン
   const voucherCloseRef = useRef(null); //伝票を閉じるボタン
+  const startMenuRef = useRef(null); //スタートメニュー
 
   const sound_BGM = useRef(null); //BGM
 
@@ -156,12 +163,16 @@ const typing = () => {
       console.log("初回だけ");
       renderFlgRef.current = true;
       //入力イベント
-      document.addEventListener("keypress", keypress_ivent);
-      document.addEventListener("keyup", keyup_ivent);
+      // document.addEventListener("keypress", keypress_ivent);
+      // document.addEventListener("keyup", keyup_ivent);
       //全てのロードが終わったら
-      window.addEventListener("load", gameReplay);
+      window.addEventListener("load", loadEnd);
     }
   }, [inputText]);
+
+  function loadEnd() {
+    startMenuRef.current.style.display = "block";
+  }
 
   // ランダムな文章を取得して表示
   async function RenderNextSentence() {
@@ -250,7 +261,7 @@ const typing = () => {
     sound_BGM.current.pause();
     sound_BGM.current.currentTime = 0;
     sound_BGM.current.playbackRate = 1;
-    sound_BGM.current.volume = 0.5;
+    sound_BGM.current.volume = 0.1;
     sound_BGM.current.play();
 
     // totalTimeRef.current.innerText = totalTime_origin;
@@ -282,7 +293,7 @@ const typing = () => {
     document.getElementById("type-input").disabled = false;
     inputTextRef.current.value = "";
     inputTextRef.current.focus();
-
+    setMissedCount(0);
     setTotalCost(0);
     StartTotalTimer();
     TimeUp();
@@ -291,13 +302,13 @@ const typing = () => {
   useEffect(() => {}, []);
 
   return (
-    <Content>
+    <Content style={{ position: "relative" }}>
       <VStack className={styles.typing}>
         <Grid
           templateAreas={`"nav main"
                   "nav footer"
                   "header header"`}
-          gridTemplateRows={"50px 1fr 40px"}
+          gridTemplateRows={"64px 1fr 40px"}
           w="100%"
           h="80px"
           gap="1"
@@ -331,15 +342,22 @@ const typing = () => {
                 <StatLabel>トータル金額</StatLabel>
                 <StatNumber
                   mr={1.5}
-                  style={{ textAlign: "right", fontSize: "20px" }}
+                  style={{ textAlign: "right", fontSize: "24px" }}
                 >
                   {totalCost}円
                 </StatNumber>
               </Stat>
             </StatGroup>
           </GridItem>
-          <GridItem pl="2" bg="yellow.200" area={"footer"}>
-            最高金額との比率
+          <GridItem area={"footer"} style={{ position: "relative" }}>
+            <Progress colorScheme="green" hasStripe value={64} h="24px" />
+            <Text
+              style={{ position: "absolute", top: "0", left: "8px" }}
+              color="white.800"
+              fontSize="14px"
+            >
+              特別なナニカ
+            </Text>
           </GridItem>
           <GridItem pl="2" area={"header"} id="timer" className={styles.timer}>
             <Center>timer</Center>
@@ -351,6 +369,7 @@ const typing = () => {
         <Center id="cost" className={styles.cost}>
           {cost}
         </Center>
+
         <Box className={styles.container} w="100%">
           <Center className={styles.typeDisplay} id="type-display"></Center>
           <Center
@@ -386,8 +405,9 @@ const typing = () => {
         <ModalContent>
           <ModalHeader>終了</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <Text>{totalCost}円</Text>
+          <ModalBody fontSize="22px">
+            <Center>{totalCost}円</Center>
+            <Center>ミス:{missedCount}回</Center>
           </ModalBody>
           <ModalFooter py={4}>
             <Button
@@ -408,6 +428,59 @@ const typing = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <Tabs
+        defaultIndex={2}
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%,-50%)",
+          display: "none",
+        }}
+        colorScheme="white"
+        bgColor="white"
+        borderRadius={6}
+        p={8}
+        ref={startMenuRef}
+      >
+        <TabList>
+          <Tab>自宅</Tab>
+          <Tab>村の寿司屋</Tab>
+          <Tab>高級店</Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel>
+            <Center>制限時間:60秒</Center>
+            <Center> ランキング登録不可能</Center>
+            <Center>まだ作ってないよ</Center>
+          </TabPanel>
+          <TabPanel>
+            <Center>制限時間:80秒</Center>
+            <Center> ランキング登録不可能</Center>
+            <Center>まだ作ってないよ</Center>
+          </TabPanel>
+          <TabPanel>
+            <Center>制限時間:100秒</Center>
+            <Center> ランキング登録可能</Center>
+            <Center>
+              <Button
+                mt={6}
+                p={3}
+                onClick={(e) => {
+                  gameReplay();
+                  startMenuRef.current.style.display = "none";
+                }}
+              >
+                START
+                <br />
+                [Enter]
+              </Button>
+            </Center>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
 
       <audio
         controls

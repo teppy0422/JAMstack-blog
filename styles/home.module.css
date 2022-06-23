@@ -617,7 +617,8 @@ element.style {
 
 .typing {
   font-family: "M PLUS Rounded 1c", sans-serif;
-  height: 80vh;
+  margin-top: 16px;
+  height: 70vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -649,7 +650,7 @@ element.style {
   font-weight: 600;
   padding: 1rem;
   border-radius: 0.5rem;
-  min-height: 400px;
+  min-height: 280px;
   max-width: 90%;
   -webkit-box-shadow: 1px 5px 6px #555;
           box-shadow: 1px 5px 6px #555;
