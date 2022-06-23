@@ -16,6 +16,12 @@ import {
   ModalCloseButton,
   useDisclosure,
   Text,
+  StatGroup,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  StatArrow,
 } from "@chakra-ui/react";
 
 import Content from "../../components/content";
@@ -37,6 +43,7 @@ const typing = () => {
     />
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen2, onOpen2, onClose2 } = useDisclosure();
   const [overlay, setOverlay] = React.useState(<OverlayTwo />);
 
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
@@ -48,6 +55,7 @@ const typing = () => {
   const totalTimerIDref = useRef(""); //トータルタイマーリセット用のID
   const [totalTime, setTotalTime] = useState(100); //トータルタイムの値
   const totalTimeRef = useRef(null); //トータルタイム
+  const [missedCount, setMissedCount] = useState(0); //タイプミス回数
   const [totalCost, setTotalCost] = useState(0); //トータル金額
   const [cost, setCost] = useState(0); //金額
   const inputTextRef = useRef(null); //入力欄
@@ -140,6 +148,7 @@ const typing = () => {
       if (matchCount === 0) {
         document.getElementById("type-input").value = "";
         sound("missed");
+        setMissedCount(missedCount + 1);
       }
       console.log({ matchCount });
     } else {
@@ -288,18 +297,46 @@ const typing = () => {
           templateAreas={`"nav main"
                   "nav footer"
                   "header header"`}
-          gridTemplateRows={"40px 1fr 40px"}
+          gridTemplateRows={"50px 1fr 40px"}
           w="100%"
           h="80px"
           gap="1"
           color="blackAlpha.700"
           fontWeight="bold"
         >
-          <GridItem pl="2" bg="pink.200" area={"nav"} ref={totalTimeRef}>
-            {totalTime}
+          <GridItem pl="2" bg="pink.200" area={"nav"}>
+            <StatGroup>
+              <Stat>
+                <StatLabel>残り時間</StatLabel>
+                <StatNumber ref={totalTimeRef}>{totalTime}</StatNumber>
+                <StatHelpText>
+                  <StatArrow type="increase" />
+                  23.36%
+                </StatHelpText>
+              </Stat>
+
+              <Stat>
+                <StatLabel>タイプミス</StatLabel>
+                <StatNumber>{missedCount}</StatNumber>
+                <StatHelpText>
+                  <StatArrow type="decrease" />
+                  9.05%
+                </StatHelpText>
+              </Stat>
+            </StatGroup>
           </GridItem>
           <GridItem pl="2" bg="green.200" area={"main"} id="totalCost">
-            トータル金額: {totalCost} 円
+            <StatGroup>
+              <Stat>
+                <StatLabel>トータル金額</StatLabel>
+                <StatNumber
+                  mr={1.5}
+                  style={{ textAlign: "right", fontSize: "20px" }}
+                >
+                  {totalCost}円
+                </StatNumber>
+              </Stat>
+            </StatGroup>
           </GridItem>
           <GridItem pl="2" bg="yellow.200" area={"footer"}>
             最高金額との比率
@@ -371,6 +408,7 @@ const typing = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
       <audio
         controls
         id="missed"
