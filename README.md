@@ -116,3 +116,16 @@ https://gltf.pmnd.rs/
 https://qiita.com/naberyo34/items/181f817ddd38c74dbc76#blender%E3%81%A7%E8%87%AA%E4%BD%9C%E3%81%97%E3%81%9F%E3%83%A2%E3%83%87%E3%83%AB%E3%82%92%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%82%80
 
 https://threejs.org/docs/#examples/en/controls/OrbitControls
+
+## 追加予定
+
+サウンド  
+入力判定
+
+タイピング速度  
+結果を登録  
+ランキング
+
+## 参考サイト
+
+https://graphicbeats.net/

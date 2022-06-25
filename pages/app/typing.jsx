@@ -28,6 +28,7 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  Tooltip,
 } from "@chakra-ui/react";
 
 import Content from "../../components/content";
@@ -53,9 +54,10 @@ const typing = () => {
   const [overlay, setOverlay] = React.useState(<OverlayTwo />);
 
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
-  const [inputText, setInputText] = useState(""); //入力文字
-  const [Q_Texts, setQ_Texts] = useState(""); //問題文
-  const [correctCount, setCorrectCount] = useState(0);
+  const inputText = useRef(""); //入力文字
+  const Q_Texts = useRef(""); //問題文
+  const Q_cost = useRef(0); //問題文の値段
+  const correctCount = useRef(0);
   const renderFlgRef = useRef(false); //useEffectを初回走らせないフラグ
   const timerIDref = useRef(""); //タイマーリセット用のID
   const totalTimerIDref = useRef(""); //トータルタイマーリセット用のID
@@ -69,8 +71,23 @@ const typing = () => {
   const voucherCloseRef = useRef(null); //伝票を閉じるボタン
   const startMenuRef = useRef(null); //スタートメニュー
 
+  const totalTime_origin = useRef(30); //トータルタイムの値
+  const typeCountRef = useRef(0); //タイプ数
+  const [typePerSocund, setTypePerSocund] = useState("0"); //タイプ速度の値
   const sound_BGM = useRef(null); //BGM
+  const mode = useRef("menu");
 
+  //マウント時に一回だけ実行
+  useEffect(() => {
+    //レンダー初回時だけ実行
+    console.log("初回だけ");
+    // renderFlgRef.current = true;
+    //入力イベント
+    document.addEventListener("keypress", keypress_ivent);
+    // document.addEventListener("keyup", keyup_ivent);
+    //全てのロードが終わったら
+    window.addEventListener("load", loadEnd);
+  }, []);
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -85,6 +102,7 @@ const typing = () => {
     sound.play();
   }
 
+  // レンダー時に実行
   useEffect(() => {
     if (totalTime <= 15) {
       sound_BGM.current.playbackRate = 1.25;
@@ -94,81 +112,87 @@ const typing = () => {
     }
   }, [totalTime]);
 
-  // 入力方法変更
+  // 入力イベント
   function keypress_ivent(e) {
     console.log("keypress: " + e.key);
+    switch (mode.current) {
+      case "menu":
+        if (e.code === "Space") {
+          gameReplay();
+        }
+        break;
+      case "play":
+        const sentenceArray = document
+          .getElementById("type-display-hiragana")
+          .querySelectorAll("span");
+
+        const temp = getRomaji(Q_Texts.current.substring(0, 2));
+        console.log("A_romaji: " + temp);
+
+        inputText.current = inputText.current + e.key;
+        const inputTextTempA = inputText.current;
+        console.log({ inputTextTempA });
+
+        const matchCount = 0;
+        const complete = false;
+        //正否チェック
+        for (let key in temp) {
+          //部分一致
+          if (temp[key].startsWith(inputTextTempA, 0)) {
+            typeCountRef.current = typeCountRef.current + 1;
+            matchCount = matchCount + 1;
+          }
+          //完全に一致
+          if (temp[key] === inputTextTempA) {
+            console.log("完全に一致");
+            const tempp = getHiragana(inputTextTempA);
+            Q_Texts.current = Q_Texts.current.substring(tempp.length);
+            correctCount.current = correctCount.current + tempp.length;
+            matchCount = 1;
+            //文字色を変える
+            sentenceArray.forEach((spans, index) => {
+              if (index <= correctCount.current - 1) {
+                spans.style.color = "red";
+                if (index === sentenceArray.length - 1) {
+                  complete = true;
+                }
+              }
+            });
+            //一つの文章が終了
+            if (complete === true) {
+              console.log("cost000:" + cost);
+              setTotalCost((totalCost) => totalCost + Q_cost.current);
+              setTotalCost((totalCost) => {
+                return totalCost;
+              });
+              sound("success");
+              TimeUp();
+            }
+            console.log("afdad: " + cost);
+            inputText.current = "";
+            break;
+          }
+        }
+        //もう一致しない
+        if (matchCount === 0) {
+          inputText.current = "";
+          sound("missed");
+          setMissedCount((missedCount) => missedCount + 1);
+          setMissedCount((missedCount) => {
+            return missedCount;
+          });
+          console.log("missedCount: " + missedCount);
+        }
+        console.log({ matchCount });
+        break;
+    }
     return false;
   }
+
   function keyup_ivent(e) {
     console.log("keyup: " + e.key);
     return false;
   }
-
-  //入力毎のイベント
-  useEffect(() => {
-    if (renderFlgRef.current) {
-      const sentenceArray = document
-        .getElementById("type-display-hiragana")
-        .querySelectorAll("span");
-
-      const temp = getRomaji(Q_Texts.substring(0, 2));
-      console.log("A_romaji: " + temp);
-
-      const inputTextTempA = inputText;
-      console.log({ inputTextTempA });
-
-      const matchCount = 0;
-      const complete = false;
-      //正否チェック
-      for (let key in temp) {
-        //完全に一致
-        if (temp[key] === inputTextTempA) {
-          console.log("完全に一致");
-          const tempp = getHiragana(inputTextTempA);
-          setQ_Texts(Q_Texts.substring(tempp.length));
-          setCorrectCount(correctCount + tempp.length);
-          matchCount = 1;
-          //文字色を変える
-          sentenceArray.forEach((spans, index) => {
-            if (index <= correctCount + tempp.length - 1) {
-              spans.style.color = "red";
-              if (index === sentenceArray.length - 1) {
-                complete = true;
-              }
-            }
-          });
-          if (complete === true) {
-            setTotalCost(Number(totalCost) + Number(cost));
-            sound("success");
-            TimeUp();
-          }
-          document.getElementById("type-input").value = "";
-          break;
-        }
-        //部分一致
-        if (temp[key].startsWith(inputTextTempA, 0)) {
-          matchCount = matchCount + 1;
-          break;
-        }
-      }
-      //一致しない
-      if (matchCount === 0) {
-        document.getElementById("type-input").value = "";
-        sound("missed");
-        setMissedCount(missedCount + 1);
-      }
-      console.log({ matchCount });
-    } else {
-      //レンダー初回時だけ実行
-      console.log("初回だけ");
-      renderFlgRef.current = true;
-      //入力イベント
-      // document.addEventListener("keypress", keypress_ivent);
-      // document.addEventListener("keyup", keyup_ivent);
-      //全てのロードが終わったら
-      window.addEventListener("load", loadEnd);
-    }
-  }, [inputText]);
 
   function loadEnd() {
     startMenuRef.current.style.display = "block";
@@ -176,7 +200,6 @@ const typing = () => {
 
   // ランダムな文章を取得して表示
   async function RenderNextSentence() {
-    const cost = document.getElementById("cost");
     const typeDisplay = document.getElementById("type-display");
     const typeDisplayHiragana = document.getElementById(
       "type-display-hiragana"
@@ -184,8 +207,8 @@ const typing = () => {
     const typeDisplayRomaji = document.getElementById("type-display-romaji");
 
     const Q = [
-      ["トマト", "とまと", "100"],
-      ["ジャコウ猫", "じゃこうねこ", "200"],
+      ["トマト", "とまと", 100],
+      ["ジャコウ猫", "じゃこうねこ", 200],
       ["しゃっくり", "しゃっくり", "200"],
       ["ウィスキー", "うぃすきー", "200"],
       ["とんかつ", "とんかつ", "100"],
@@ -223,11 +246,10 @@ const typing = () => {
       typeDisplayHiragana.appendChild(characterSpan);
     });
     // 問題のセット
-    setQ_Texts(Q[Q_No][1]);
+    Q_Texts.current = Q[Q_No][1];
     // コストのセット
-    setCost(Q[Q_No][2]);
-
-    setCorrectCount(0);
+    Q_cost.current = Number(Q[Q_No][2]);
+    correctCount.current = 0;
   }
 
   // タイマー_ワード毎
@@ -242,9 +264,10 @@ const typing = () => {
     const timerID_ = setInterval(() => {
       timer.innerText = itemTime - getTimerTime(startTime);
       if (timer.innerText <= 0) TimeUp();
+      // console.log(typeCountRef.current);
     }, 500);
     timerIDref.current = timerID_;
-    console.log(timerIDref.current);
+    // console.log(timerIDref.current);
   }
   function TimeUp() {
     RenderNextSentence();
@@ -257,7 +280,6 @@ const typing = () => {
   //タイマー_トータル
   function StartTotalTimer() {
     let totalStartTime;
-    let totalTime_origin = 30;
     sound_BGM.current.pause();
     sound_BGM.current.currentTime = 0;
     sound_BGM.current.playbackRate = 1;
@@ -265,12 +287,12 @@ const typing = () => {
     sound_BGM.current.play();
 
     // totalTimeRef.current.innerText = totalTime_origin;
-    setTotalTime(totalTime_origin);
+    setTotalTime(totalTime_origin.current);
     totalStartTime = new Date();
     clearInterval(totalTimerIDref.current);
     const totalTimerID_ = setInterval(() => {
-      setTotalTime(totalTime_origin - getTimerTime(totalStartTime));
-      console.log("totalTime: " + totalTimeRef.current.innerText);
+      setTotalTime(totalTime_origin.current - getTimerTime(totalStartTime));
+      // console.log("totalTime: " + totalTimeRef.current.innerText);
       if (totalTimeRef.current.innerText <= 0) {
         clearInterval(totalTimerIDref.current);
         gameOver();
@@ -281,25 +303,25 @@ const typing = () => {
   }
   //ゲームオーバー
   function gameOver() {
-    document.getElementById("type-input").disabled = true;
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
+    setTypePerSocund((typeCountRef.current / totalTime_origin.current) * 60);
     voucherOpenRef.current.click();
     sound_BGM.current.pause();
     sound("finish");
   }
   //リプレイ
   function gameReplay() {
-    document.getElementById("type-input").disabled = false;
-    inputTextRef.current.value = "";
-    inputTextRef.current.focus();
+    inputText.current = "";
+    setTypePerSocund(0);
+    typeCountRef.current = 0;
     setMissedCount(0);
     setTotalCost(0);
     StartTotalTimer();
     TimeUp();
+    startMenuRef.current.style.display = "none";
+    mode.current = "play";
   }
-  //マウント時に一回だけ実行
-  useEffect(() => {}, []);
 
   return (
     <Content style={{ position: "relative" }}>
@@ -336,7 +358,7 @@ const typing = () => {
               </Stat>
             </StatGroup>
           </GridItem>
-          <GridItem pl="2" bg="green.200" area={"main"} id="totalCost">
+          <GridItem pl="2" bg="green.200" area={"main"}>
             <StatGroup>
               <Stat>
                 <StatLabel>トータル金額</StatLabel>
@@ -366,9 +388,7 @@ const typing = () => {
 
         <Sushi_tamago_wrap />
 
-        <Center id="cost" className={styles.cost}>
-          {cost}
-        </Center>
+        <Center className={styles.cost}>{Q_cost.current}</Center>
 
         <Box className={styles.container} w="100%">
           <Center className={styles.typeDisplay} id="type-display"></Center>
@@ -380,14 +400,6 @@ const typing = () => {
             className={styles.typeDisplayRomaji}
             id="type-display-romaji"
           ></div>
-          <textarea
-            className={styles.typeInput}
-            id="type-input"
-            ref={inputTextRef}
-            onChange={(e) => {
-              setInputText(e.target.value);
-            }}
-          ></textarea>
         </Box>
       </VStack>
       <Button
@@ -408,6 +420,9 @@ const typing = () => {
           <ModalBody fontSize="22px">
             <Center>{totalCost}円</Center>
             <Center>ミス:{missedCount}回</Center>
+            <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
+              <Center>タイプ速度:{typePerSocund}/KPM</Center>
+            </Tooltip>
           </ModalBody>
           <ModalFooter py={4}>
             <Button
@@ -437,6 +452,7 @@ const typing = () => {
           left: "50%",
           transform: "translate(-50%,-50%)",
           display: "none",
+          minHeight: "320px",
         }}
         colorScheme="white"
         bgColor="white"
@@ -445,9 +461,9 @@ const typing = () => {
         ref={startMenuRef}
       >
         <TabList>
-          <Tab>自宅</Tab>
-          <Tab>村の寿司屋</Tab>
-          <Tab>高級店</Tab>
+          <Tab _focus={{ _focus: "none" }}>自宅</Tab>
+          <Tab _focus={{ _focus: "none" }}>村の寿司屋</Tab>
+          <Tab _focus={{ _focus: "none" }}>高級店</Tab>
         </TabList>
 
         <TabPanels>
@@ -466,11 +482,10 @@ const typing = () => {
             <Center> ランキング登録可能</Center>
             <Center>
               <Button
-                mt={6}
-                p={3}
+                mt={10}
+                p={7}
                 onClick={(e) => {
                   gameReplay();
-                  startMenuRef.current.style.display = "none";
                 }}
               >
                 START
@@ -481,48 +496,67 @@ const typing = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
+      <>
+        <audio
+          controls
+          id="missed"
+          style={{ display: "inline-block", width: "100px" }}
+        >
+          <source
+            src="https://soundeffect-lab.info/sound/button/mp3/beep4.mp3"
+            type="audio/mp3"
+          />
+        </audio>
+        <audio
+          controls
+          id="success"
+          style={{ display: "inline-block", width: "100px" }}
+        >
+          <source
+            src="https://soundeffect-lab.info/sound/button/mp3/decision40.mp3"
+            type="audio/mp3"
+          />
+        </audio>
+        <audio
+          controls
+          id="finish"
+          style={{ display: "inline-block", width: "100px" }}
+        >
+          <source
+            // src="https://soundeffect-lab.info/sound/anime/mp3/roll-finish1.mp3"
+            src="https://soundeffect-lab.info/sound/anime/mp3/drum-japanese-kaka1.mp3"
+            type="audio/mp3"
+          />
+        </audio>
+        <audio
+          controls
+          id="bgm"
+          ref={sound_BGM}
+          style={{ display: "inline-block", width: "100px" }}
+        >
+          <source
+            src="https://music.storyinvention.com/wp-content/uploads/kutsurogi-koto.mp3"
+            // src="https://wwww.teppy.link/sound/%E6%B4%A5%E8%BB%BD%E4%B8%89%E5%91%B3%E7%B7%9A%E4%B9%B1%E8%88%9E.mp3"
+            type="audio/mp3"
+          />
+        </audio>
+      </>
+      <div className={styles.cardContainer}>
+        <div className={styles.card}>
+          <h1>
+            <i className={styles.fa}></i>結果
+          </h1>
 
-      <audio
-        controls
-        id="missed"
-        style={{ display: "inline-block", width: "100px" }}
-      >
-        <source
-          src="https://soundeffect-lab.info/sound/button/mp3/beep4.mp3"
-          type="audio/mp3"
-        />
-      </audio>
-      <audio
-        controls
-        id="success"
-        style={{ display: "inline-block", width: "100px" }}
-      >
-        <source
-          src="https://soundeffect-lab.info/sound/button/mp3/decision40.mp3"
-          type="audio/mp3"
-        />
-      </audio>
-      <audio
-        controls
-        id="finish"
-        style={{ display: "inline-block", width: "100px" }}
-      >
-        <source
-          src="https://soundeffect-lab.info/sound/anime/mp3/roll-finish1.mp3"
-          type="audio/mp3"
-        />
-      </audio>
-      <audio
-        controls
-        id="bgm"
-        ref={sound_BGM}
-        style={{ display: "inline-block", width: "100px" }}
-      >
-        <source
-          src="https://music.storyinvention.com/wp-content/uploads/kutsurogi-koto.mp3"
-          type="audio/mp3"
-        />
-      </audio>
+          <h3>{totalCost}円</h3>
+          <h3>ミス:{missedCount}回</h3>
+          <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
+            <h3>タイプ速度:{typePerSocund}/KPM</h3>
+          </Tooltip>
+
+          <div className={styles.circle}></div>
+          <div className={styles.circle}></div>
+        </div>
+      </div>
     </Content>
   );
 };
