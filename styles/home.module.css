@@ -683,4 +683,124 @@ element.style {
 scroll .typing .container .typeInput:focus {
   border-color: #1c1b19;
 }
+
+.cardContainer {
+  display: none;
+  position: absolute;
+  margin: auto;
+  top: 0px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-width: 500px;
+  height: 500px;
+}
+
+.cardContainer .card {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  height: 200px;
+  padding: 20px;
+  overflow: hidden;
+  background: #eeeeff;
+  border-radius: 10px;
+  -webkit-box-shadow: -2px 2px 0px 0px #202020, -10px 10px 40px 0px rgba(0, 0, 0, 0.3);
+          box-shadow: -2px 2px 0px 0px #202020, -10px 10px 40px 0px rgba(0, 0, 0, 0.3);
+  -webkit-transform: translate(0px, 0px) rotateX(5deg) rotateZ(-1deg);
+          transform: translate(0px, 0px) rotateX(5deg) rotateZ(-1deg);
+  z-index: 2;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+.cardContainer .card:hover {
+  -webkit-transform: translate(0px, 0px) rotateX(0deg) rotateZ(0deg);
+          transform: translate(0px, 0px) rotateX(0deg) rotateZ(0deg);
+  -webkit-box-shadow: -2px 1px 0px 0px #202020, -40px 40px 40px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: -2px 1px 0px 0px #202020, -40px 40px 40px 0 rgba(0, 0, 0, 0.2);
+}
+
+.cardContainer .card h1 {
+  color: crimson;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+}
+
+.cardContainer .card h1:nth-of-type(2) {
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.cardContainer .card h3 {
+  color: crimson;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cardContainer .card h3:nth-of-type(2) {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.cardContainer .card i {
+  margin-right: 5px;
+  color: crimson;
+}
+
+.cardContainer .card .circle {
+  position: absolute;
+  margin: auto;
+  top: 10%;
+  bottom: 0;
+  right: -50%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: #e9e9ff;
+  z-index: -2;
+}
+
+.cardContainer .card .circle:nth-of-type(2) {
+  width: 100px;
+  height: 100px;
+  top: 90%;
+  right: -20%;
+  z-index: -1;
+  background: crimson;
+}
+
+@media only screen and (max-width: 780px) {
+  .card-container .card {
+    width: 250px;
+    height: 150px;
+    -webkit-animation: hvr 5s infinite ease-in-out;
+            animation: hvr 5s infinite ease-in-out;
+    -webkit-transition: none;
+    transition: none;
+  }
+  .card-container .card h1 {
+    font-size: 18px;
+  }
+  .card-container .card h1:nth-of-type(2) {
+    font-size: 14px;
+  }
+  .card-container .card h3 {
+    font-size: 12px;
+  }
+  .card-container .card h3:nth-of-type(2) {
+    font-size: 10px;
+  }
+  .card-container .card .circle {
+    right: -70%;
+  }
+}
 /*# sourceMappingURL=home.module.css.map */
