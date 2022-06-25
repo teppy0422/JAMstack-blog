@@ -309,6 +309,7 @@ const typing = () => {
     voucherOpenRef.current.click();
     sound_BGM.current.pause();
     sound("finish");
+    mode.current = "menu";
   }
   //リプレイ
   function gameReplay() {
@@ -432,7 +433,7 @@ const typing = () => {
                 setTimeout(gameReplay, 500);
               }}
             >
-              もう一度プレイする
+              もう一度プレイ[SPACE]
             </Button>
             <Button mr={2} onClick={onClose}>
               ランキング登録
@@ -490,7 +491,7 @@ const typing = () => {
               >
                 START
                 <br />
-                [Enter]
+                [SPACE]]
               </Button>
             </Center>
           </TabPanel>
