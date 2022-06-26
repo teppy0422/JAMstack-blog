@@ -46,6 +46,8 @@ import {
   makeSpan,
 } from "../../libs/romaji.js";
 
+import { getQuiz } from "../../libs/romaji_quiz.js";
+
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 
 const typing = () => {
@@ -77,7 +79,7 @@ const typing = () => {
   const [totalTime, setTotalTime] = useState(100); //トータルタイムの値
   const totalTimeRef = useRef(null); //トータルタイム
   const [missedCount, setMissedCount] = useState(0); //タイプミス回数
-  const [totalCost, setTotalCost] = useState(0); //トータル金額
+  const totalCost = useRef(0); //トータル金額
   const [cost, setCost] = useState(0); //金額
   const inputTextRef = useRef(null); //入力欄
   const voucherOpenRef = useRef(null); //伝票を開くボタン
@@ -88,7 +90,8 @@ const typing = () => {
   const typeCountRef = useRef(0); //タイプ数
   const [typePerSocund, setTypePerSocund] = useState("0"); //タイプ速度の値
   const sound_BGM = useRef(null); //BGM
-  const mode = useRef("play");
+  const mode = useRef("play"); //モードの状態
+  const Q_used = useRef(""); //出題済みの問題の番号
 
   //マウント時に一回だけ実行
   useEffect(() => {
@@ -137,12 +140,9 @@ const typing = () => {
         break;
       case "play":
         const temp = getRomaji(Q_Texts.current.substring(0, 2));
-        console.log("A_romaji: " + temp);
 
         inputText.current = inputText.current + e.key;
         const inputTextTempA = inputText.current;
-        console.log({ inputTextTempA });
-
         const matchCount = 0;
         const complete = false;
         //temp[key]は正解が入った配列
@@ -192,10 +192,11 @@ const typing = () => {
 
             //一つの文章が終了
             if (complete === true) {
-              setTotalCost((totalCost) => totalCost + Q_cost.current);
-              setTotalCost((totalCost) => {
-                return totalCost;
-              });
+              // setTotalCost((totalCost) => totalCost + Q_cost.current);
+              // setTotalCost((totalCost) => {
+              //   return totalCost;
+              // });
+              totalCost.current = totalCost.current + Q_cost.current;
               sound("success");
               TimeUp();
             } else {
@@ -223,10 +224,8 @@ const typing = () => {
           setMissedCount((missedCount) => {
             return missedCount;
           });
-          console.log("missedCount: " + missedCount);
           changeColor("type-display-romaji", 0);
         }
-        console.log({ matchCount });
         break;
     }
     return false;
@@ -249,19 +248,15 @@ const typing = () => {
     );
     const typeDisplayRomaji = document.getElementById("type-display-romaji");
 
-    const Q = [
-      ["シャシュショ", "しゃしゅしょ", 100],
-      ["ジャコウ猫", "じゃこうねこ", 200],
-      ["しゃっくり", "しゃっくり", "200"],
-    ];
-    let Q_No = Math.floor(Math.random() * Q.length); //問題をランダムで出題する
+    const quiz = getQuiz(Q_used.current);
+    Q_used.current = Q_used.current + quiz[1] + ",";
 
     // 文章を一文字ずつ分解してspanタグを生成
-    makeSpan(Q[Q_No][0], typeDisplay);
+    makeSpan(quiz[0][0], typeDisplay);
     // 文章を一文字ずつ分解してspanタグを生成_ひらがな
-    makeSpan(Q[Q_No][1], typeDisplayHiragana);
+    makeSpan(quiz[0][1], typeDisplayHiragana);
     // 問題のセット
-    Q_Texts.current = Q[Q_No][1];
+    Q_Texts.current = quiz[0][1];
     // 入力候補
     setTypeDisplayRomaji_0("");
 
@@ -275,7 +270,7 @@ const typing = () => {
     );
     setTypeDisplayRomaji_2(getRomajiForecast(inputSuggestOver));
     // コストのセット
-    Q_cost.current = Number(Q[Q_No][2]);
+    Q_cost.current = Number(quiz[0][2]);
     correctCount.current = 0;
   }
 
@@ -321,7 +316,6 @@ const typing = () => {
       }
     }, 500);
     totalTimerIDref.current = totalTimerID_;
-    console.log("初回のstartotaltime?:" + totalTimerID_);
   }
   //ゲームオーバー
   function gameOver() {
@@ -339,7 +333,7 @@ const typing = () => {
     setTypePerSocund(0);
     typeCountRef.current = 0;
     setMissedCount(0);
-    setTotalCost(0);
+    totalCost.current = 0;
     StartTotalTimer();
     TimeUp();
     startMenuRef.current.style.display = "none";
@@ -389,7 +383,7 @@ const typing = () => {
                   mr={1.5}
                   style={{ textAlign: "right", fontSize: "24px" }}
                 >
-                  {totalCost}円
+                  {totalCost.current}円
                 </StatNumber>
               </Stat>
             </StatGroup>
@@ -447,7 +441,7 @@ const typing = () => {
           <ModalHeader>終了</ModalHeader>
           <ModalCloseButton />
           <ModalBody fontSize="22px">
-            <Center>{totalCost}円</Center>
+            <Center>{totalCost.current}円</Center>
             <Center>ミス:{missedCount}回</Center>
             <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
               <Center>タイプ速度:{typePerSocund}/KPM</Center>
@@ -576,7 +570,7 @@ const typing = () => {
             <i className={styles.fa}></i>結果
           </h1>
 
-          <h3>{totalCost}円</h3>
+          <h3>{totalCost.current}円</h3>
           <h3>ミス:{missedCount}回</h3>
           <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
             <h3>タイプ速度:{typePerSocund}/KPM</h3>

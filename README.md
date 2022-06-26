@@ -67,6 +67,10 @@ https://zenn.dev/fjsh/articles/733a1334ffc1c8
 本番では動作しなかった  
 本番向きではないらしい
 
+## Prisma
+
+pscale connect teppy-link main --port 3309
+
 ## @prisma/adapter を削除、インストールをする
 
 prisma が開発で動作するようになった  
@@ -125,7 +129,6 @@ https://threejs.org/docs/#examples/en/controls/OrbitControls
 色を変更  
 タイピング速度
 
-入力
 結果を登録  
 ランキング
 
