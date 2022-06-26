@@ -53,8 +53,6 @@ const data = {
   byi: "びぃ",
   byo: "びょ",
   byu: "びゅ",
-  ca: "か",
-  ce: "せ",
   cha: "ちゃ",
   che: "ちぇ",
   chi: "ち",
@@ -159,8 +157,8 @@ const data = {
   lka: "ヵ",
   lke: "ヶ",
   lo: "ぉ",
-  ltsu: "っ",
   ltu: "っ",
+  ltsu: "っ",
   lu: "ぅ",
   lwa: "ゎ",
   lya: "ゃ",
@@ -267,8 +265,8 @@ const data = {
   tse: "つぇ",
   tsi: "つぃ",
   tso: "つぉ",
-  tsu: "つ",
   tu: "つ",
+  tsu: "つ",
   twa: "とぁ",
   twe: "とぇ",
   twi: "とぃ",
@@ -309,8 +307,8 @@ const data = {
   xke: "ヶ",
   xn: "ん",
   xo: "ぉ",
-  xtsu: "っ",
   xtu: "っ",
+  xtsu: "っ",
   xu: "ぅ",
   xwa: "ゎ",
   xya: "ゃ",
@@ -380,4 +378,69 @@ export const getHiragana = (text) => {
     }
   }
   return str;
+};
+export const getRomaji2 = (text) => {
+  const arr = new Array();
+  //二文字の場合
+  for (let key in data) {
+    if (data[key] === text) {
+      arr.push(key);
+      arr.push(2);
+      return arr;
+    }
+  }
+  //一文字の場合
+  for (let key in data) {
+    if (data[key] === text.substring(0, 1)) {
+      arr.push(key);
+      arr.push(1);
+      return arr;
+    }
+  }
+};
+export const getInputCandidate = (input, arr) => {
+  const newArr = new Array();
+  for (let key in arr) {
+    if (arr[key].startsWith(input, 0)) {
+      newArr.push(arr[key]);
+    }
+  }
+  return newArr;
+};
+
+export const changeColor = (id, count) => {
+  const arr = document.getElementById(id).querySelectorAll("span");
+  arr.forEach((spans, index) => {
+    if (index < count) {
+      spans.style.color = "red";
+    } else {
+      spans.style.color = "black";
+    }
+  });
+  //残りの文字数
+  return arr.length - count;
+};
+
+//ひらがなをローマ字に変換
+export const getRomajiForecast = (text) => {
+  const str = "";
+  while (text.length !== 0) {
+    const hiragana_ = text.substring(0, 2);
+    const getRomaji_ = getRomaji2(hiragana_);
+
+    str = str + getRomaji_[0];
+    text = text.substring(getRomaji_[1]);
+  }
+  return str;
+};
+
+//文字ごとにspanタグを作成
+export const makeSpan = (text, id) => {
+  let oneText = text.split("");
+  id.innerText = "";
+  oneText.forEach((character) => {
+    const characterSpan = document.createElement("span");
+    characterSpan.innerText = character;
+    id.appendChild(characterSpan);
+  });
 };
