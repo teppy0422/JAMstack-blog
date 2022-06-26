@@ -121,8 +121,11 @@ https://threejs.org/docs/#examples/en/controls/OrbitControls
 
 サウンド  
 入力判定
+ローマ字入力候補を表示  
+色を変更  
+タイピング速度
 
-タイピング速度  
+入力
 結果を登録  
 ランキング
 

@@ -36,7 +36,15 @@ import ResponseCache from "next/dist/server/response-cache";
 import { type } from "os";
 import { now } from "lodash";
 
-import { getRomaji, getHiragana } from "../../libs/romaji.js";
+import {
+  getRomaji,
+  getHiragana,
+  getRomaji2,
+  getInputCandidate,
+  changeColor,
+  getRomajiForecast,
+  makeSpan,
+} from "../../libs/romaji.js";
 
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 
@@ -57,7 +65,12 @@ const typing = () => {
   const inputText = useRef(""); //入力文字
   const Q_Texts = useRef(""); //問題文
   const Q_cost = useRef(0); //問題文の値段
-  const correctCount = useRef(0);
+  const correctCount = useRef(0); //ひらがなの正解文字数
+  const correctCountRomaji = useRef(0); //ローマ字の正解文字数
+  const correctCountRomajiTemp = useRef(0); //ローマ字の正解文字数の端数
+  const [typeDisplayRomaji_0, setTypeDisplayRomaji_0] = useState("");
+  const [typeDisplayRomaji_1, setTypeDisplayRomaji_1] = useState("");
+  const [typeDisplayRomaji_2, setTypeDisplayRomaji_2] = useState("");
   const renderFlgRef = useRef(false); //useEffectを初回走らせないフラグ
   const timerIDref = useRef(""); //タイマーリセット用のID
   const totalTimerIDref = useRef(""); //トータルタイマーリセット用のID
@@ -71,11 +84,11 @@ const typing = () => {
   const voucherCloseRef = useRef(null); //伝票を閉じるボタン
   const startMenuRef = useRef(null); //スタートメニュー
 
-  const totalTime_origin = useRef(30); //トータルタイムの値
+  const totalTime_origin = useRef(3000); //トータルタイムの値
   const typeCountRef = useRef(0); //タイプ数
   const [typePerSocund, setTypePerSocund] = useState("0"); //タイプ速度の値
   const sound_BGM = useRef(null); //BGM
-  const mode = useRef("menu");
+  const mode = useRef("play");
 
   //マウント時に一回だけ実行
   useEffect(() => {
@@ -114,6 +127,7 @@ const typing = () => {
 
   // 入力イベント
   function keypress_ivent(e) {
+    const typeDisplayRomaji = document.getElementById("type-display-romaji");
     console.log("keypress: " + e.key);
     switch (mode.current) {
       case "menu":
@@ -122,10 +136,6 @@ const typing = () => {
         }
         break;
       case "play":
-        const sentenceArray = document
-          .getElementById("type-display-hiragana")
-          .querySelectorAll("span");
-
         const temp = getRomaji(Q_Texts.current.substring(0, 2));
         console.log("A_romaji: " + temp);
 
@@ -135,40 +145,72 @@ const typing = () => {
 
         const matchCount = 0;
         const complete = false;
-        //正否チェック
+        //temp[key]は正解が入った配列
         for (let key in temp) {
           //部分一致
           if (temp[key].startsWith(inputTextTempA, 0)) {
+            //入力候補の更新
+            const newTemp = getInputCandidate(inputTextTempA, temp);
+            //文章を一文字ずつ分解してspanタグを生成_ローマ字_1
+            makeSpan(newTemp[0], typeDisplayRomaji);
+            //色を変更
+            changeColor("type-display-romaji", inputTextTempA.length);
+            //入力文字オーバーの更新
+            const inputSuggestHiragana = getHiragana(newTemp[0]);
+            const inputSuggestOver = Q_Texts.current.substring(
+              inputSuggestHiragana.length
+            );
+            setTypeDisplayRomaji_2(getRomajiForecast(inputSuggestOver));
+
+            //KPMを求めるカウント
             typeCountRef.current = typeCountRef.current + 1;
             matchCount = matchCount + 1;
           }
           //完全に一致
           if (temp[key] === inputTextTempA) {
             console.log("完全に一致");
-            const tempp = getHiragana(inputTextTempA);
-            Q_Texts.current = Q_Texts.current.substring(tempp.length);
-            correctCount.current = correctCount.current + tempp.length;
+            const tempHiragana = getHiragana(inputTextTempA);
+            Q_Texts.current = Q_Texts.current.substring(tempHiragana.length);
+
+            correctCount.current = correctCount.current + tempHiragana.length;
             matchCount = 1;
-            //文字色を変える
-            sentenceArray.forEach((spans, index) => {
-              if (index <= correctCount.current - 1) {
-                spans.style.color = "red";
-                if (index === sentenceArray.length - 1) {
-                  complete = true;
-                }
-              }
+            //文字色を変える_ひらがな
+            const last = changeColor(
+              "type-display-hiragana",
+              correctCount.current
+            );
+            if (last === 0) {
+              complete = true;
+            }
+            //これのせいで更新が遅い気がする
+            setTypeDisplayRomaji_0(
+              (typeDisplayRomaji_0) => typeDisplayRomaji_0 + temp[key]
+            );
+            setTypeDisplayRomaji_0((typeDisplayRomaji_0) => {
+              return typeDisplayRomaji_0;
             });
+
             //一つの文章が終了
             if (complete === true) {
-              console.log("cost000:" + cost);
               setTotalCost((totalCost) => totalCost + Q_cost.current);
               setTotalCost((totalCost) => {
                 return totalCost;
               });
               sound("success");
               TimeUp();
+            } else {
+              // 次の文字の正解を表示
+              const nextWord = getRomaji(Q_Texts.current.substring(0, 2));
+              makeSpan(nextWord[0], typeDisplayRomaji);
+              setTypeDisplayRomaji_2(getRomajiForecast(Q_Texts.current));
+
+              //入力文字オーバーの更新
+              const inputSuggestHiragana = getHiragana(nextWord[0]);
+              const inputSuggestOver = Q_Texts.current.substring(
+                inputSuggestHiragana.length
+              );
+              setTypeDisplayRomaji_2(getRomajiForecast(inputSuggestOver));
             }
-            console.log("afdad: " + cost);
             inputText.current = "";
             break;
           }
@@ -182,6 +224,7 @@ const typing = () => {
             return missedCount;
           });
           console.log("missedCount: " + missedCount);
+          changeColor("type-display-romaji", 0);
         }
         console.log({ matchCount });
         break;
@@ -198,7 +241,7 @@ const typing = () => {
     startMenuRef.current.style.display = "block";
   }
 
-  // ランダムな文章を取得して表示
+  // 問題文を作成
   async function RenderNextSentence() {
     const typeDisplay = document.getElementById("type-display");
     const typeDisplayHiragana = document.getElementById(
@@ -207,46 +250,30 @@ const typing = () => {
     const typeDisplayRomaji = document.getElementById("type-display-romaji");
 
     const Q = [
-      ["トマト", "とまと", 100],
+      ["シャシュショ", "しゃしゅしょ", 100],
       ["ジャコウ猫", "じゃこうねこ", 200],
       ["しゃっくり", "しゃっくり", "200"],
-      ["ウィスキー", "うぃすきー", "200"],
-      ["とんかつ", "とんかつ", "100"],
-      ["もんじゃ焼き", "もんじゃやき", "200"],
-      ["カバ", "かば", "100"],
-      ["岡本の椅子", "おかもとのいす", "200"],
-      ["直島がおすすめ", "なおしまがおすすめ", "200"],
-      ["彷彿させる", "ほうふつさせる", "200"],
-      ["真夏のホラーゲーム", "まなつのほらーげーむ", "300"],
-      ["沢田マンション", "さわだまんしょん", "250"],
-      ["よろしくお願いします", "よろしくおねがいします", "150"],
-      ["この機能は使えない", "このきのうはつかえない", "150"],
-      ["タイピングの練習", "たいぴんぐのれんしゅう", "200"],
-      ["ウィンナーは水で焼く", "うぃんなーはみずでやく", "250"],
     ];
     let Q_No = Math.floor(Math.random() * Q.length); //問題をランダムで出題する
 
-    typeDisplay.innerText = "";
-    typeDisplayHiragana.innerText = "";
-    typeDisplayRomaji.innerText = "";
     // 文章を一文字ずつ分解してspanタグを生成
-    let oneText = Q[Q_No][0].split("");
-    oneText.forEach((character) => {
-      const characterSpan = document.createElement("span");
-      characterSpan.innerText = character;
-      // console.log(characterSpan);
-      typeDisplay.appendChild(characterSpan);
-    });
+    makeSpan(Q[Q_No][0], typeDisplay);
     // 文章を一文字ずつ分解してspanタグを生成_ひらがな
-    let oneTextHiragana = Q[Q_No][1].split("");
-    oneTextHiragana.forEach((character) => {
-      const characterSpan = document.createElement("span");
-      characterSpan.innerText = character;
-      // console.log(characterSpan);
-      typeDisplayHiragana.appendChild(characterSpan);
-    });
+    makeSpan(Q[Q_No][1], typeDisplayHiragana);
     // 問題のセット
     Q_Texts.current = Q[Q_No][1];
+    // 入力候補
+    setTypeDisplayRomaji_0("");
+
+    const inputSuggest = getRomaji(Q_Texts.current.substring(0, 2));
+    makeSpan(inputSuggest[0], typeDisplayRomaji);
+
+    //ひらがなから入力候補を除いた入力候補
+    const inputSuggestHiragana = getHiragana(inputSuggest[0]);
+    const inputSuggestOver = Q_Texts.current.substring(
+      inputSuggestHiragana.length
+    );
+    setTypeDisplayRomaji_2(getRomajiForecast(inputSuggestOver));
     // コストのセット
     Q_cost.current = Number(Q[Q_No][2]);
     correctCount.current = 0;
@@ -254,20 +281,17 @@ const typing = () => {
 
   // タイマー_ワード毎
   let startTime;
-  let itemTime = 10;
+  let itemTime = 1000;
   function StartTimer() {
     const timer = document.getElementById("timer");
     timer.innerText = itemTime;
     startTime = new Date();
     clearInterval(timerIDref.current);
-    console.log(timerIDref.current);
     const timerID_ = setInterval(() => {
       timer.innerText = itemTime - getTimerTime(startTime);
       if (timer.innerText <= 0) TimeUp();
-      // console.log(typeCountRef.current);
     }, 500);
     timerIDref.current = timerID_;
-    // console.log(timerIDref.current);
   }
   function TimeUp() {
     RenderNextSentence();
@@ -283,16 +307,14 @@ const typing = () => {
     sound_BGM.current.pause();
     sound_BGM.current.currentTime = 0;
     sound_BGM.current.playbackRate = 1;
-    sound_BGM.current.volume = 0.1;
+    sound_BGM.current.volume = 0;
     sound_BGM.current.play();
 
-    // totalTimeRef.current.innerText = totalTime_origin;
     setTotalTime(totalTime_origin.current);
     totalStartTime = new Date();
     clearInterval(totalTimerIDref.current);
     const totalTimerID_ = setInterval(() => {
       setTotalTime(totalTime_origin.current - getTimerTime(totalStartTime));
-      // console.log("totalTime: " + totalTimeRef.current.innerText);
       if (totalTimeRef.current.innerText <= 0) {
         clearInterval(totalTimerIDref.current);
         gameOver();
@@ -309,7 +331,7 @@ const typing = () => {
     voucherOpenRef.current.click();
     sound_BGM.current.pause();
     sound("finish");
-    mode.current = "menu";
+    mode.current = "play";
   }
   //リプレイ
   function gameReplay() {
@@ -397,10 +419,16 @@ const typing = () => {
             className={styles.typeDisplayHiragana}
             id="type-display-hiragana"
           ></Center>
-          <div
-            className={styles.typeDisplayRomaji}
-            id="type-display-romaji"
-          ></div>
+          <Center>
+            <p className={styles.typeDisplayRomaji}>
+              <span style={{ color: "red" }}>{typeDisplayRomaji_0}</span>
+            </p>
+            <Text
+              className={styles.typeDisplayRomaji}
+              id="type-display-romaji"
+            ></Text>
+            <p className={styles.typeDisplayRomaji}>{typeDisplayRomaji_2}</p>
+          </Center>
         </Box>
       </VStack>
       <Button
