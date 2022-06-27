@@ -42,7 +42,7 @@ const App = () => {
     try {
       await magicGoogle.oauth.loginWithRedirect({
         provider: "google",
-        redirectURI: "http://localhost:3000/login",
+        redirectURI: "https://www.teppy.link/",
       });
     } catch (err) {
       console.log(err);
