@@ -30,7 +30,7 @@ highcharts
 [firebase v9 の書き方](https://qiita.com/ShotaroHirose59/items/23565641612ebfee596a)
 
 import { AuthProvider } from "../public/framework/context/AuthContext";  
-をコメントアウトしたらリープしなくなった
+をコメントアウトしたらループしなくなった
 
 AuthProvider を...pageprops の最短に移動　 no
 
@@ -85,10 +85,8 @@ prisma が開発で動作するようになった
 デプロイでエラー  
 Type error: Property 'sampleBlog' does not exist on type 'PrismaClient<PrismaClientOptions, never, RejectOnNotFound | RejectPerOperation>'.
 
-sampleBlog に統一 ng
-
-DATABASE_URL='mysql://z8...に変更 ng
-
+sampleBlog に統一 ng  
+DATABASE_URL='mysql://z8...に変更 ng  
 DATABASE_URL='mysql://na...に変更 ng
 
 schema.prisma に@@map("sampleblog")を追記 ok
