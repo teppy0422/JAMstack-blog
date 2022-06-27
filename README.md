@@ -32,8 +32,7 @@ highcharts
 import { AuthProvider } from "../public/framework/context/AuthContext";  
 をコメントアウトしたらループしなくなった
 
-AuthProvider を...pageprops の最短に移動　 no
-
+AuthProvider を...pageprops の最短に移動　 no  
 .env.local の apikey を"で囲む no
 
 firebase.ts の値を直接書く ok
@@ -65,7 +64,7 @@ https://zenn.dev/fjsh/articles/733a1334ffc1c8
 
 開発では動作した  
 本番では動作しなかった  
-本番向きではないらしい
+本番向きではないらしい 中止
 
 ## Prisma
 

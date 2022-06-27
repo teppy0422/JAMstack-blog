@@ -17,7 +17,7 @@ const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXT_PUBLIC_SECRET } =
 // if (!GOOGLE_ID) throw new Error("You must provide GOOGLE_ID env var.");
 // if (!GOOGLE_SECRET) throw new Error("You must provide GOOGLE_SECRET env var.");
 
-const setting = {
+export default NextAuth({
   providers: [
     GoogleProvider({
       clientId: GOOGLE_CLIENT_ID,
@@ -81,6 +81,4 @@ const setting = {
   // },
   // ここに NEXTAUTH_SECRET を入れる?
   secret: NEXT_PUBLIC_SECRET,
-};
-
-export default (req, res) => NextAuth(req, res, setting);
+});
