@@ -341,246 +341,278 @@ const typing = () => {
   }
 
   return (
-    <Content style={{ position: "relative" }}>
-      <VStack className={styles.typing}>
-        <Grid
-          templateAreas={`"nav main"
+    <>
+      <DefaultSeo
+        defaultTitle="teppy-Blog"
+        description="afadadフォリオ"
+        openGraph={{
+          type: "website",
+          title: "teppy-Blog",
+          description: "typing_line_test",
+          site_name: "teppy-Blog",
+          url: "https://jam-stack-blog-teppy0422.vercel.app/",
+          images: [
+            {
+              url: "https://jam-stack-blog-teppy0422.vercel.app/",
+              width: 800,
+              height: 600,
+              alt: "Og Image Alt",
+              type: "image/jpeg",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@",
+          site: "@",
+          cardType: "summary_large_image",
+        }}
+      />
+      <Content style={{ position: "relative" }}>
+        <VStack className={styles.typing}>
+          <Grid
+            templateAreas={`"nav main"
                   "nav footer"
                   "header header"`}
-          gridTemplateRows={"64px 1fr 40px"}
-          w="100%"
-          h="80px"
-          gap="1"
-          color="blackAlpha.700"
-          fontWeight="bold"
-        >
-          <GridItem pl="2" bg="pink.200" area={"nav"}>
-            <StatGroup>
-              <Stat>
-                <StatLabel>残り時間</StatLabel>
-                <StatNumber ref={totalTimeRef}>{totalTime}</StatNumber>
-                <StatHelpText>
-                  <StatArrow type="increase" />
-                  23.36%
-                </StatHelpText>
-              </Stat>
+            gridTemplateRows={"64px 1fr 40px"}
+            w="100%"
+            h="80px"
+            gap="1"
+            color="blackAlpha.700"
+            fontWeight="bold"
+          >
+            <GridItem pl="2" bg="pink.200" area={"nav"}>
+              <StatGroup>
+                <Stat>
+                  <StatLabel>残り時間</StatLabel>
+                  <StatNumber ref={totalTimeRef}>{totalTime}</StatNumber>
+                  <StatHelpText>
+                    <StatArrow type="increase" />
+                    23.36%
+                  </StatHelpText>
+                </Stat>
 
-              <Stat>
-                <StatLabel>タイプミス</StatLabel>
-                <StatNumber>{missedCount}</StatNumber>
-                <StatHelpText>
-                  <StatArrow type="decrease" />
-                  9.05%
-                </StatHelpText>
-              </Stat>
-            </StatGroup>
-          </GridItem>
-          <GridItem pl="2" bg="green.200" area={"main"}>
-            <StatGroup>
-              <Stat>
-                <StatLabel>トータル金額</StatLabel>
-                <StatNumber
-                  mr={1.5}
-                  style={{ textAlign: "right", fontSize: "24px" }}
-                >
-                  {totalCost.current}円
-                </StatNumber>
-              </Stat>
-            </StatGroup>
-          </GridItem>
-          <GridItem area={"footer"} style={{ position: "relative" }}>
-            <Progress colorScheme="green" hasStripe value={64} h="24px" />
-            <Text
-              style={{ position: "absolute", top: "0", left: "8px" }}
-              color="white.800"
-              fontSize="14px"
+                <Stat>
+                  <StatLabel>タイプミス</StatLabel>
+                  <StatNumber>{missedCount}</StatNumber>
+                  <StatHelpText>
+                    <StatArrow type="decrease" />
+                    9.05%
+                  </StatHelpText>
+                </Stat>
+              </StatGroup>
+            </GridItem>
+            <GridItem pl="2" bg="green.200" area={"main"}>
+              <StatGroup>
+                <Stat>
+                  <StatLabel>トータル金額</StatLabel>
+                  <StatNumber
+                    mr={1.5}
+                    style={{ textAlign: "right", fontSize: "24px" }}
+                  >
+                    {totalCost.current}円
+                  </StatNumber>
+                </Stat>
+              </StatGroup>
+            </GridItem>
+            <GridItem area={"footer"} style={{ position: "relative" }}>
+              <Progress colorScheme="green" hasStripe value={64} h="24px" />
+              <Text
+                style={{ position: "absolute", top: "0", left: "8px" }}
+                color="white.800"
+                fontSize="14px"
+              >
+                特別なナニカ
+              </Text>
+            </GridItem>
+            <GridItem
+              pl="2"
+              area={"header"}
+              id="timer"
+              className={styles.timer}
             >
-              特別なナニカ
-            </Text>
-          </GridItem>
-          <GridItem pl="2" area={"header"} id="timer" className={styles.timer}>
-            <Center>timer</Center>
-          </GridItem>
-        </Grid>
+              <Center>timer</Center>
+            </GridItem>
+          </Grid>
 
-        <Sushi_tamago_wrap />
+          <Sushi_tamago_wrap />
 
-        <Center className={styles.cost}>{Q_cost.current}</Center>
+          <Center className={styles.cost}>{Q_cost.current}</Center>
 
-        <Box className={styles.container} w="100%">
-          <Center className={styles.typeDisplay} id="type-display"></Center>
-          <Center
-            className={styles.typeDisplayHiragana}
-            id="type-display-hiragana"
-          ></Center>
-          <Center>
-            <p className={styles.typeDisplayRomaji}>
-              <span style={{ color: "red" }}>{typeDisplayRomaji_0}</span>
-            </p>
-            <Text
-              className={styles.typeDisplayRomaji}
-              id="type-display-romaji"
-            ></Text>
-            <p className={styles.typeDisplayRomaji}>{typeDisplayRomaji_2}</p>
-          </Center>
-        </Box>
-      </VStack>
-      <Button
-        ml="4"
-        onClick={() => {
-          setOverlay(<OverlayTwo />);
-          onOpen();
-        }}
-        ref={voucherOpenRef}
-      >
-        伝票を見る
-      </Button>
-      <Modal isCentered isOpen={isOpen} onClose={onClose}>
-        {overlay}
-        <ModalContent>
-          <ModalHeader>終了</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody fontSize="22px">
-            <Center>{totalCost.current}円</Center>
-            <Center>ミス:{missedCount}回</Center>
-            <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
-              <Center>タイプ速度:{typePerSocund}/KPM</Center>
-            </Tooltip>
-          </ModalBody>
-          <ModalFooter py={4}>
-            <Button
-              mr={2}
-              onClick={(e) => {
-                voucherCloseRef.current.click();
-                setTimeout(gameReplay, 500);
-              }}
-            >
-              もう一度プレイ[SPACE]
-            </Button>
-            <Button mr={2} onClick={onClose}>
-              ランキング登録
-            </Button>
-            <Button mr={2} onClick={onClose} ref={voucherCloseRef}>
-              閉じる
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-      <Tabs
-        defaultIndex={2}
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%,-50%)",
-          display: "none",
-          minHeight: "320px",
-        }}
-        colorScheme="white"
-        bgColor="white"
-        borderRadius={6}
-        p={8}
-        ref={startMenuRef}
-      >
-        <TabList>
-          <Tab _focus={{ _focus: "none" }}>自宅</Tab>
-          <Tab _focus={{ _focus: "none" }}>村の寿司屋</Tab>
-          <Tab _focus={{ _focus: "none" }}>高級店</Tab>
-        </TabList>
-
-        <TabPanels>
-          <TabPanel>
-            <Center>制限時間:60秒</Center>
-            <Center> ランキング登録不可能</Center>
-            <Center>まだ作ってないよ</Center>
-          </TabPanel>
-          <TabPanel>
-            <Center>制限時間:80秒</Center>
-            <Center> ランキング登録不可能</Center>
-            <Center>まだ作ってないよ</Center>
-          </TabPanel>
-          <TabPanel>
-            <Center>制限時間:100秒</Center>
-            <Center> ランキング登録可能</Center>
+          <Box className={styles.container} w="100%">
+            <Center className={styles.typeDisplay} id="type-display"></Center>
+            <Center
+              className={styles.typeDisplayHiragana}
+              id="type-display-hiragana"
+            ></Center>
             <Center>
+              <p className={styles.typeDisplayRomaji}>
+                <span style={{ color: "red" }}>{typeDisplayRomaji_0}</span>
+              </p>
+              <Text
+                className={styles.typeDisplayRomaji}
+                id="type-display-romaji"
+              ></Text>
+              <p className={styles.typeDisplayRomaji}>{typeDisplayRomaji_2}</p>
+            </Center>
+          </Box>
+        </VStack>
+        <Button
+          ml="4"
+          onClick={() => {
+            setOverlay(<OverlayTwo />);
+            onOpen();
+          }}
+          ref={voucherOpenRef}
+        >
+          伝票を見る
+        </Button>
+        <Modal isCentered isOpen={isOpen} onClose={onClose}>
+          {overlay}
+          <ModalContent>
+            <ModalHeader>終了</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody fontSize="22px">
+              <Center>{totalCost.current}円</Center>
+              <Center>ミス:{missedCount}回</Center>
+              <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
+                <Center>タイプ速度:{typePerSocund}/KPM</Center>
+              </Tooltip>
+            </ModalBody>
+            <ModalFooter py={4}>
               <Button
-                mt={10}
-                p={7}
+                mr={2}
                 onClick={(e) => {
-                  gameReplay();
+                  voucherCloseRef.current.click();
+                  setTimeout(gameReplay, 500);
                 }}
               >
-                START
-                <br />
-                [SPACE]]
+                もう一度プレイ[SPACE]
               </Button>
-            </Center>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-      <>
-        <audio
-          controls
-          id="missed"
-          style={{ display: "inline-block", width: "100px" }}
-        >
-          <source
-            src="https://soundeffect-lab.info/sound/button/mp3/beep4.mp3"
-            type="audio/mp3"
-          />
-        </audio>
-        <audio
-          controls
-          id="success"
-          style={{ display: "inline-block", width: "100px" }}
-        >
-          <source
-            src="https://soundeffect-lab.info/sound/button/mp3/decision40.mp3"
-            type="audio/mp3"
-          />
-        </audio>
-        <audio
-          controls
-          id="finish"
-          style={{ display: "inline-block", width: "100px" }}
-        >
-          <source
-            // src="https://soundeffect-lab.info/sound/anime/mp3/roll-finish1.mp3"
-            src="https://soundeffect-lab.info/sound/anime/mp3/drum-japanese-kaka1.mp3"
-            type="audio/mp3"
-          />
-        </audio>
-        <audio
-          controls
-          id="bgm"
-          ref={sound_BGM}
-          style={{ display: "inline-block", width: "100px" }}
-        >
-          <source
-            src="https://music.storyinvention.com/wp-content/uploads/kutsurogi-koto.mp3"
-            // src="https://wwww.teppy.link/sound/%E6%B4%A5%E8%BB%BD%E4%B8%89%E5%91%B3%E7%B7%9A%E4%B9%B1%E8%88%9E.mp3"
-            type="audio/mp3"
-          />
-        </audio>
-      </>
-      <div className={styles.cardContainer}>
-        <div className={styles.card}>
-          <h1>
-            <i className={styles.fa}></i>結果
-          </h1>
+              <Button mr={2} onClick={onClose}>
+                ランキング登録
+              </Button>
+              <Button mr={2} onClick={onClose} ref={voucherCloseRef}>
+                閉じる
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
 
-          <h3>{totalCost.current}円</h3>
-          <h3>ミス:{missedCount}回</h3>
-          <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
-            <h3>タイプ速度:{typePerSocund}/KPM</h3>
-          </Tooltip>
+        <Tabs
+          defaultIndex={2}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+            display: "none",
+            minHeight: "320px",
+          }}
+          colorScheme="white"
+          bgColor="white"
+          borderRadius={6}
+          p={8}
+          ref={startMenuRef}
+        >
+          <TabList>
+            <Tab _focus={{ _focus: "none" }}>自宅</Tab>
+            <Tab _focus={{ _focus: "none" }}>村の寿司屋</Tab>
+            <Tab _focus={{ _focus: "none" }}>高級店</Tab>
+          </TabList>
 
-          <div className={styles.circle}></div>
-          <div className={styles.circle}></div>
+          <TabPanels>
+            <TabPanel>
+              <Center>制限時間:60秒</Center>
+              <Center> ランキング登録不可能</Center>
+              <Center>まだ作ってないよ</Center>
+            </TabPanel>
+            <TabPanel>
+              <Center>制限時間:80秒</Center>
+              <Center> ランキング登録不可能</Center>
+              <Center>まだ作ってないよ</Center>
+            </TabPanel>
+            <TabPanel>
+              <Center>制限時間:100秒</Center>
+              <Center> ランキング登録可能</Center>
+              <Center>
+                <Button
+                  mt={10}
+                  p={7}
+                  onClick={(e) => {
+                    gameReplay();
+                  }}
+                >
+                  START
+                  <br />
+                  [SPACE]]
+                </Button>
+              </Center>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+        <>
+          <audio
+            controls
+            id="missed"
+            style={{ display: "inline-block", width: "100px" }}
+          >
+            <source
+              src="https://soundeffect-lab.info/sound/button/mp3/beep4.mp3"
+              type="audio/mp3"
+            />
+          </audio>
+          <audio
+            controls
+            id="success"
+            style={{ display: "inline-block", width: "100px" }}
+          >
+            <source
+              src="https://soundeffect-lab.info/sound/button/mp3/decision40.mp3"
+              type="audio/mp3"
+            />
+          </audio>
+          <audio
+            controls
+            id="finish"
+            style={{ display: "inline-block", width: "100px" }}
+          >
+            <source
+              // src="https://soundeffect-lab.info/sound/anime/mp3/roll-finish1.mp3"
+              src="https://soundeffect-lab.info/sound/anime/mp3/drum-japanese-kaka1.mp3"
+              type="audio/mp3"
+            />
+          </audio>
+          <audio
+            controls
+            id="bgm"
+            ref={sound_BGM}
+            style={{ display: "inline-block", width: "100px" }}
+          >
+            <source
+              src="https://music.storyinvention.com/wp-content/uploads/kutsurogi-koto.mp3"
+              // src="https://wwww.teppy.link/sound/%E6%B4%A5%E8%BB%BD%E4%B8%89%E5%91%B3%E7%B7%9A%E4%B9%B1%E8%88%9E.mp3"
+              type="audio/mp3"
+            />
+          </audio>
+        </>
+        <div className={styles.cardContainer}>
+          <div className={styles.card}>
+            <h1>
+              <i className={styles.fa}></i>結果
+            </h1>
+
+            <h3>{totalCost.current}円</h3>
+            <h3>ミス:{missedCount}回</h3>
+            <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
+              <h3>タイプ速度:{typePerSocund}/KPM</h3>
+            </Tooltip>
+
+            <div className={styles.circle}></div>
+            <div className={styles.circle}></div>
+          </div>
         </div>
-      </div>
-    </Content>
+      </Content>
+    </>
   );
 };
 
