@@ -52,7 +52,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         {/* アクセス解析 */}
         <script src="//accaii.com/teppy/script.js" async></script>
       </Head>
-      <DefaultSeo
+      {/* <DefaultSeo
         defaultTitle="teppy-Blog"
         description="雑なポートフォリオ"
         openGraph={{
@@ -76,7 +76,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           site: "@",
           cardType: "summary_large_image",
         }}
-      />
+      /> */}
       {/* <RecoilRoot> */}
       {/* <Auth> */}
       <ChakraProvider theme={theme}>
