@@ -132,3 +132,7 @@ https://threejs.org/docs/#examples/en/controls/OrbitControls
 ## 参考サイト
 
 https://graphicbeats.net/
+
+## magic.link に変更を検討
+
+https://dashboard.magic.link/

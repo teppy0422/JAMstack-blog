@@ -37,6 +37,7 @@
     "highcharts-react-official": "^3.1.0",
     "highlight.js": "^11.5.1",
     "hljs": "^6.2.3",
+    "magic-sdk": "^8.1.1",
     "microcms-js-sdk": "^2.0.0",
     "microcms-richedit-processer": "^1.0.5",
     "moment": "^2.29.3",

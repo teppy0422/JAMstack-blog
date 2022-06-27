@@ -351,10 +351,10 @@ const typing = () => {
           title: "teppy-Blog",
           description: "typing_line_test",
           site_name: "teppy-Blog",
-          url: "https://jam-stack-blog-teppy0422.vercel.app/",
+          url: "https://www.teppy.link/app/typing",
           images: [
             {
-              url: "https://jam-stack-blog-teppy0422.vercel.app/",
+              url: "https://www.teppy.link/app/typing",
               width: 800,
               height: 600,
               alt: "Og Image Alt",

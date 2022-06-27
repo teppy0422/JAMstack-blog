@@ -665,6 +665,10 @@ element.style {
   font-size: 20px;
 }
 
+.typing .container .typeDisplayRomaji {
+  font-size: 18px;
+}
+
 .typing .container .typeInput {
   margin-top: 1rem;
   font-size: 2rem;
