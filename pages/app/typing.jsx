@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { DefaultSeo } from "next-seo";
 import styles from "../../styles/home.module.scss";
 import {
   Center,
