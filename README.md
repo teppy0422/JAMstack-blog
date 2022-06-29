@@ -162,4 +162,4 @@ npx prisma generate
 session が怪しい
 
 vercel > setting > general > Node.jsVersion
-16.x > 14.x
+16.x > 14.x >12.x
