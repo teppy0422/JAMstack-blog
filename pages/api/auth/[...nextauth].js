@@ -54,10 +54,23 @@ export default (req, res) =>
       //   session.accessToken = token.accessToken;
       //   return session;
       // },
+
+      // emailのドメイン制限を入れたい場合は以下のcallbacksを入れてください
+      // signIn: async (user, account, profile) => {
+      //   if (
+      //     account.provider === "google" &&
+      //     profile.verified_email === true &&
+      //     profile.email.endsWith("@example.com")
+      //   ) {
+      //     return Promise.resolve(true);
+      //   } else {
+      //     return Promise.resolve(false);
+      //   }
+      // },
     },
-    pages: {
-      signIn: "/login2",
-    },
+    // pages: {
+    //   signIn: "/login2",
+    // },
     // events: {
     //   createUser: async ({ user }) => {
     //     await prisma.user.update({
@@ -69,20 +82,6 @@ export default (req, res) =>
     //       },
     //     });
     //   },
-    // },
-    // callbacks: {
-    // emailのドメイン制限を入れたい場合は以下のcallbacksを入れてください
-    // signIn: async (user, account, profile) => {
-    //   if (
-    //     account.provider === "google" &&
-    //     profile.verified_email === true &&
-    //     profile.email.endsWith("@example.com")
-    //   ) {
-    //     return Promise.resolve(true);
-    //   } else {
-    //     return Promise.resolve(false);
-    //   }
-    // },
     // },
     // ここに NEXTAUTH_SECRET を入れる?
     secret: NEXT_PUBLIC_SECRET,
