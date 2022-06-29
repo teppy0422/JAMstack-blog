@@ -41,7 +41,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void =>
       colorScheme: "light",
     },
     // ログイン情報を保存してくれる
-    adapter: PrismaAdapter(prisma),
+    // adapter: PrismaAdapter(prisma),
     callbacks: {
       async signIn({ user, account, profile, email, credentials }) {
         // console.log("[...nextauth].js > setting > callbacks > signIn");
