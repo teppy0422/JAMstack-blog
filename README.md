@@ -153,3 +153,5 @@ nextauth.js を変更
 <SessionProvider session={pageProps.session}>
 
 signin を co
+
+debug:true を追加
