@@ -136,3 +136,6 @@ https://graphicbeats.net/
 ## magic.link に変更を検討
 
 https://dashboard.magic.link/
+
+node のバージョン変更  
+node v16.14.2 > v17.9.1
