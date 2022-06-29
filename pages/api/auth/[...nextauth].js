@@ -56,7 +56,7 @@ export default (req, res) =>
       // },
     },
     pages: {
-      signIn: "/pages/login2.tsx",
+      signIn: "/login2",
     },
     // events: {
     //   createUser: async ({ user }) => {
