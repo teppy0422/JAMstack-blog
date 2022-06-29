@@ -12,10 +12,13 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
+// envファイルの読み込みを確認
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXT_PUBLIC_SECRET } =
   process.env;
-// if (!GOOGLE_ID) throw new Error("You must provide GOOGLE_ID env var.");
-// if (!GOOGLE_SECRET) throw new Error("You must provide GOOGLE_SECRET env var.");
+if (!GOOGLE_CLIENT_ID)
+  throw new Error("You must provide GOOGLE_CLIENT_ID env var.");
+if (!GOOGLE_CLIENT_SECRET)
+  throw new Error("You must provide GOOGLE_CLIENT_SECRET env var.");
 
 export default (req, res) =>
   NextAuth(req, res, {
@@ -33,7 +36,7 @@ export default (req, res) =>
         clientSecret: process.env.LINE_CLIENT_SECRET,
       }),
     ],
-    adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
+    // adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
     callbacks: {
       async signIn({ user, account, profile, email, credentials }) {
         console.log("[...nextauth].js > setting > callbacks > signIn");
