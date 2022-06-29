@@ -21,6 +21,9 @@ const {
   LINE_CLIENT_ID,
   LINE_CLIENT_SECRET,
 } = process.env;
+
+if (!NEXT_PUBLIC_SECRET)
+  throw new Error("You must provide NEXT_PUBLIC_SECRET env var.");
 if (!GOOGLE_CLIENT_ID)
   throw new Error("You must provide GOOGLE_CLIENT_ID env var.");
 if (!GOOGLE_CLIENT_SECRET)
