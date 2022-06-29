@@ -151,3 +151,5 @@ nextauth.js を変更
 <SessionProvider session={session}>
 ↓
 <SessionProvider session={pageProps.session}>
+
+signin を co
