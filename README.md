@@ -157,3 +157,5 @@ signin を co
 debug:true を追加
 
 callback を co
+
+npx prisma generate
