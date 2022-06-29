@@ -49,13 +49,15 @@ export default (req, res) =>
         }
         return token;
       },
-      async session({ session, token, user }) {
-        // Send properties to the client, like an access_token from a provider.
-        session.accessToken = token.accessToken;
-        return session;
-      },
+      // async session({ session, token, user }) {
+      //   // Send properties to the client, like an access_token from a provider.
+      //   session.accessToken = token.accessToken;
+      //   return session;
+      // },
     },
-
+    pages: {
+      signIn: "/pages/login2.tsx",
+    },
     // events: {
     //   createUser: async ({ user }) => {
     //     await prisma.user.update({
