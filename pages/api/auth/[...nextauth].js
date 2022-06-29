@@ -17,70 +17,69 @@ const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXT_PUBLIC_SECRET } =
 // if (!GOOGLE_ID) throw new Error("You must provide GOOGLE_ID env var.");
 // if (!GOOGLE_SECRET) throw new Error("You must provide GOOGLE_SECRET env var.");
 
-const setting = {
-  providers: [
-    GoogleProvider({
-      clientId: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-    }),
-    TwitterProvider({
-      clientId: process.env.TWITTER_CLIENT_ID,
-      clientSecret: process.env.TWITTER_CLIENT_SECRET,
-    }),
-    LineProvider({
-      clientId: process.env.LINE_CLIENT_ID,
-      clientSecret: process.env.LINE_CLIENT_SECRET,
-    }),
-  ],
-  adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
-  callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log("[...nextauth].js > setting > callbacks > signIn");
-      return true;
+export default (req, res) =>
+  NextAuth(req, res, {
+    providers: [
+      GoogleProvider({
+        clientId: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
+      }),
+      TwitterProvider({
+        clientId: process.env.TWITTER_CLIENT_ID,
+        clientSecret: process.env.TWITTER_CLIENT_SECRET,
+      }),
+      LineProvider({
+        clientId: process.env.LINE_CLIENT_ID,
+        clientSecret: process.env.LINE_CLIENT_SECRET,
+      }),
+    ],
+    adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
+    callbacks: {
+      async signIn({ user, account, profile, email, credentials }) {
+        console.log("[...nextauth].js > setting > callbacks > signIn");
+        return true;
+      },
+      async jwt({ token, user, account, profile, isNewUser }) {
+        console.log(`アカウント:${JSON.stringify(account)}`);
+        return token;
+      },
+      // session: async (session, user) => {
+      //   return Promise.resolve({
+      //     ...session,
+      //     user: {
+      //       ...session.user,
+      //       id: user.id,
+      //     },
+      //   });
+      // },
     },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      console.log(`アカウント:${JSON.stringify(account)}`);
-      return token;
-    },
-    // session: async (session, user) => {
-    //   return Promise.resolve({
-    //     ...session,
-    //     user: {
-    //       ...session.user,
-    //       id: user.id,
-    //     },
-    //   });
+
+    // events: {
+    //   createUser: async ({ user }) => {
+    //     await prisma.user.update({
+    //       where: {
+    //         id: user.id,
+    //       },
+    //       data: {
+    //         mobile: "090-1111-1111",
+    //       },
+    //     });
+    //   },
     // },
-  },
-
-  // events: {
-  //   createUser: async ({ user }) => {
-  //     await prisma.user.update({
-  //       where: {
-  //         id: user.id,
-  //       },
-  //       data: {
-  //         mobile: "090-1111-1111",
-  //       },
-  //     });
-  //   },
-  // },
-  // callbacks: {
-  // emailのドメイン制限を入れたい場合は以下のcallbacksを入れてください
-  // signIn: async (user, account, profile) => {
-  //   if (
-  //     account.provider === "google" &&
-  //     profile.verified_email === true &&
-  //     profile.email.endsWith("@example.com")
-  //   ) {
-  //     return Promise.resolve(true);
-  //   } else {
-  //     return Promise.resolve(false);
-  //   }
-  // },
-  // },
-  // ここに NEXTAUTH_SECRET を入れる?
-  secret: NEXT_PUBLIC_SECRET,
-};
-
-export default (req, res) => NextAuth(req, res, setting);
+    // callbacks: {
+    // emailのドメイン制限を入れたい場合は以下のcallbacksを入れてください
+    // signIn: async (user, account, profile) => {
+    //   if (
+    //     account.provider === "google" &&
+    //     profile.verified_email === true &&
+    //     profile.email.endsWith("@example.com")
+    //   ) {
+    //     return Promise.resolve(true);
+    //   } else {
+    //     return Promise.resolve(false);
+    //   }
+    // },
+    // },
+    // ここに NEXTAUTH_SECRET を入れる?
+    secret: NEXT_PUBLIC_SECRET,
+  });

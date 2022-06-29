@@ -41,18 +41,18 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         {/* アクセス解析 */}
         <script src="//accaii.com/teppy/script.js" async></script>
       </Head>
-      {/* <DefaultSeo
+      <DefaultSeo
         defaultTitle="teppy-Blog"
-        description="雑なポートフォリオ"
+        description="ブログ"
         openGraph={{
           type: "website",
           title: "teppy-Blog",
-          description: "ポートフォリオ+α",
+          description: "ブログ",
           site_name: "teppy-Blog",
-          url: "https://jam-stack-blog-teppy0422.vercel.app/",
+          url: "https://www.teppy.link/",
           images: [
             {
-              url: "https://jam-stack-blog-teppy0422.vercel.app/",
+              url: "https://www.teppy.link/",
               width: 800,
               height: 600,
               alt: "Og Image Alt",
@@ -65,7 +65,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           site: "@",
           cardType: "summary_large_image",
         }}
-      /> */}
+      />
       {/* <RecoilRoot> */}
       <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
