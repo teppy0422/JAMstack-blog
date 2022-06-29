@@ -44,8 +44,8 @@ export default (req, res) =>
       },
       async jwt({ token, user, account, profile, isNewUser }) {
         console.log(`アカウント:${JSON.stringify(account)}`);
-        if (account) {
-          token.accessToken = account.access_token;
+        if (account?.accessToken) {
+          token.accessToken = account.accessToken;
         }
         return token;
       },
