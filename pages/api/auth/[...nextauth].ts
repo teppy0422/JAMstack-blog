@@ -41,12 +41,12 @@ export default (req: NextApiRequest, res: NextApiResponse): void =>
       colorScheme: "light",
     },
     //ログイン情報を保存してくれる
-    adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
+    adapter: PrismaAdapter(prisma),
     callbacks: {
-      // async signIn({ user, account, profile, email }) {
-      //   // console.log("[...nextauth].js > setting > callbacks > signIn");
-      //   return true;
-      // },
+      async signIn({ user, account, profile, email, credentials }) {
+        // console.log("[...nextauth].js > setting > callbacks > signIn");
+        return true;
+      },
       //
       async jwt({ token, user, account, profile, isNewUser }) {
         // console.log(`アカウント:${JSON.stringify(account)}`);
@@ -93,4 +93,5 @@ export default (req: NextApiRequest, res: NextApiResponse): void =>
     // },
     // ここに NEXTAUTH_SECRET を入れる?
     secret: NEXT_PUBLIC_SECRET,
+    debug: true,
   });
