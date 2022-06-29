@@ -37,6 +37,9 @@ export default (req: NextApiRequest, res: NextApiResponse): void =>
         clientSecret: process.env.LINE_CLIENT_SECRET,
       }),
     ],
+    theme: {
+      colorScheme: "light",
+    },
     adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
     callbacks: {
       async signIn({ user, account, profile, email, credentials }) {
@@ -48,6 +51,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void =>
         if (account?.accessToken) {
           token.accessToken = account.accessToken;
         }
+        console.log(token);
         return token;
       },
 
