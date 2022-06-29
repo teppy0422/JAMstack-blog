@@ -36,7 +36,7 @@ export default (req, res) =>
         clientSecret: process.env.LINE_CLIENT_SECRET,
       }),
     ],
-    // adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
+    adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
     callbacks: {
       async signIn({ user, account, profile, email, credentials }) {
         console.log("[...nextauth].js > setting > callbacks > signIn");
@@ -44,16 +44,15 @@ export default (req, res) =>
       },
       async jwt({ token, user, account, profile, isNewUser }) {
         console.log(`アカウント:${JSON.stringify(account)}`);
+        if (account) {
+          token.accessToken = account.access_token;
+        }
         return token;
       },
-      // session: async (session, user) => {
-      //   return Promise.resolve({
-      //     ...session,
-      //     user: {
-      //       ...session.user,
-      //       id: user.id,
-      //     },
-      //   });
+      // async session({ session, token, user }) {
+      //   // Send properties to the client, like an access_token from a provider.
+      //   session.accessToken = token.accessToken;
+      //   return session;
       // },
     },
 
