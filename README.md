@@ -161,5 +161,7 @@ prisma.adpter を co
 npx prisma generate
 session が怪しい
 
-vercel > setting > general > Node.jsVersion
-16.x > 14.x >12.x
+vercel > setting > general > Node.jsVersion  
+16.x > 14.x > 12.x >14.x
+
+prisma の更新。軌道からデプロイまで
