@@ -166,3 +166,7 @@ vercel > setting > general > Node.jsVersion
 
 prisma の更新。軌道からデプロイまで
 404 ページにログインを実装
+
+package.json に追加
+
+    "migrate:deploy": "prisma migrate deploy"

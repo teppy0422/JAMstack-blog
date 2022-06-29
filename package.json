@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build && next export && next-sitemap --config sitemap.config.js",
-    "start": "next start"
+    "start": "next start",
+    "migrate:deploy": "prisma migrate deploy"
   },
   "author": {
     "name": "teppeikataoka",
