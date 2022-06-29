@@ -159,3 +159,4 @@ callback を co
 prisma.adpter を co
 
 npx prisma generate
+session が怪しい
