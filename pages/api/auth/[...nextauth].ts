@@ -14,12 +14,21 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 // envファイルの読み込みを確認
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXT_PUBLIC_SECRET } =
-  process.env;
+const {
+  NEXT_PUBLIC_SECRET,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  LINE_CLIENT_ID,
+  LINE_CLIENT_SECRET,
+} = process.env;
 if (!GOOGLE_CLIENT_ID)
   throw new Error("You must provide GOOGLE_CLIENT_ID env var.");
 if (!GOOGLE_CLIENT_SECRET)
   throw new Error("You must provide GOOGLE_CLIENT_SECRET env var.");
+if (!LINE_CLIENT_ID)
+  throw new Error("You must provide LINE_CLIENT_ID env var.");
+if (!LINE_CLIENT_SECRET)
+  throw new Error("You must provide LINE_CLIENT_SECRET env var.");
 
 export default (req: NextApiRequest, res: NextApiResponse): void =>
   NextAuth(req, res, {
@@ -28,13 +37,13 @@ export default (req: NextApiRequest, res: NextApiResponse): void =>
         clientId: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
       }),
-      TwitterProvider({
-        clientId: process.env.TWITTER_CLIENT_ID,
-        clientSecret: process.env.TWITTER_CLIENT_SECRET,
-      }),
+      // TwitterProvider({
+      //   clientId: process.env.TWITTER_CLIENT_ID,
+      //   clientSecret: process.env.TWITTER_CLIENT_SECRET,
+      // }),
       LineProvider({
-        clientId: process.env.LINE_CLIENT_ID,
-        clientSecret: process.env.LINE_CLIENT_SECRET,
+        clientId: LINE_CLIENT_ID,
+        clientSecret: LINE_CLIENT_SECRET,
       }),
     ],
     theme: {
