@@ -5,6 +5,7 @@ import Content from "../components/content";
 
 import { Magic } from "magic-sdk";
 import { OAuthExtension } from "@magic-ext/oauth";
+import { locale } from "moment";
 
 let magicEmail: any;
 let magicGoogle: any;
@@ -18,9 +19,11 @@ const App = () => {
     magicEmail = new Magic("pk_live_6F968428E7D10FDA");
     magicGoogle = new Magic("pk_live_6F968428E7D10FDA", {
       extensions: [new OAuthExtension()],
+      locale: "ja",
     });
-    const magicGithub = new Magic("pk_live_6F968428E7D10FDA", {
+    magicGithub = new Magic("pk_live_6F968428E7D10FDA", {
       extensions: [new OAuthExtension()],
+      locale: "ja",
     });
   }, []);
 
@@ -40,10 +43,14 @@ const App = () => {
 
   async function handleLoginWithGoogle() {
     try {
-      await magicGoogle.oauth.loginWithRedirect({
+      const aaa = await magicGoogle.oauth.loginWithRedirect({
         provider: "google",
-        redirectURI: "https://www.teppy.link/",
+        redirectURI: "http://localhost:3000/login2",
       });
+      const metadata = await magicGoogle.user.getMetadata();
+      alert(metadata);
+      console.log(aaa);
+      throw new Error("処理を終了");
     } catch (err) {
       console.log(err);
     }
@@ -51,10 +58,11 @@ const App = () => {
 
   async function handleGoginWithGithub() {
     try {
-      await magicGithub.oauth.loginWithRedirect({
+      const aaa = await magicGithub.oauth.loginWithRedirect({
         provider: "github",
-        redirectURI: "https://www.teppy.link/",
+        redirectURI: "https://www.teppy.link/login2",
       });
+      console.log({ aaa });
     } catch (err) {
       console.log("err:");
       console.log(err);
