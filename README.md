@@ -144,3 +144,6 @@ prisma のバージョン変更
 
 prisma/adapter の更新  
 v3.14 > v4.0
+
+nextauth.js を変更
+.js > .ts

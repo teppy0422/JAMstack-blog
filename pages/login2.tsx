@@ -50,6 +50,8 @@ const App = () => {
       const metadata = await magicGoogle.user.getMetadata();
       alert(metadata);
       console.log(aaa);
+      console.log(metadata);
+      sessionStorage.setItem("metadata", metadata);
       throw new Error("処理を終了");
     } catch (err) {
       console.log(err);

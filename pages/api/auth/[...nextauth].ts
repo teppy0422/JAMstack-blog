@@ -1,4 +1,5 @@
 import axios from "axios";
+import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -20,7 +21,7 @@ if (!GOOGLE_CLIENT_ID)
 if (!GOOGLE_CLIENT_SECRET)
   throw new Error("You must provide GOOGLE_CLIENT_SECRET env var.");
 
-export default (req, res) =>
+export default (req: NextApiRequest, res: NextApiResponse): void =>
   NextAuth(req, res, {
     providers: [
       GoogleProvider({
@@ -39,16 +40,17 @@ export default (req, res) =>
     adapter: PrismaAdapter(prisma), //エラーになるからとりあえずCO
     callbacks: {
       async signIn({ user, account, profile, email, credentials }) {
-        console.log("[...nextauth].js > setting > callbacks > signIn");
+        // console.log("[...nextauth].js > setting > callbacks > signIn");
         return true;
       },
       async jwt({ token, user, account, profile, isNewUser }) {
-        console.log(`アカウント:${JSON.stringify(account)}`);
+        // console.log(`アカウント:${JSON.stringify(account)}`);
         if (account?.accessToken) {
           token.accessToken = account.accessToken;
         }
         return token;
       },
+
       // async session({ session, token, user }) {
       //   // Send properties to the client, like an access_token from a provider.
       //   session.accessToken = token.accessToken;
