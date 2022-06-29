@@ -42,40 +42,40 @@ export default (req: NextApiRequest, res: NextApiResponse): void =>
     },
     //ログイン情報を保存してくれる
     adapter: PrismaAdapter(prisma),
-    callbacks: {
-      async signIn({ user, account, profile, email, credentials }) {
-        // console.log("[...nextauth].js > setting > callbacks > signIn");
-        return true;
-      },
-      //
-      async jwt({ token, user, account, profile, isNewUser }) {
-        // console.log(`アカウント:${JSON.stringify(account)}`);
-        if (account?.accessToken) {
-          token.accessToken = account.accessToken;
-        }
-        console.log(token);
-        return token;
-      },
+    // callbacks: {
+    //   async signIn({ user, account, profile, email, credentials }) {
+    //     // console.log("[...nextauth].js > setting > callbacks > signIn");
+    //     return true;
+    //   },
+    //   //
+    //   async jwt({ token, user, account, profile, isNewUser }) {
+    //     // console.log(`アカウント:${JSON.stringify(account)}`);
+    //     if (account?.accessToken) {
+    //       token.accessToken = account.accessToken;
+    //     }
+    //     console.log(token);
+    //     return token;
+    //   },
 
-      // async session({ session, token, user }) {
-      //   // Send properties to the client, like an access_token from a provider.
-      //   session.accessToken = token.accessToken;
-      //   return session;
-      // },
+    //   // async session({ session, token, user }) {
+    //   //   // Send properties to the client, like an access_token from a provider.
+    //   //   session.accessToken = token.accessToken;
+    //   //   return session;
+    //   // },
 
-      // emailのドメイン制限を入れたい場合は以下のcallbacksを入れてください
-      // signIn: async (user, account, profile) => {
-      //   if (
-      //     account.provider === "google" &&
-      //     profile.verified_email === true &&
-      //     profile.email.endsWith("@example.com")
-      //   ) {
-      //     return Promise.resolve(true);
-      //   } else {
-      //     return Promise.resolve(false);
-      //   }
-      // },
-    },
+    //   // emailのドメイン制限を入れたい場合は以下のcallbacksを入れてください
+    //   // signIn: async (user, account, profile) => {
+    //   //   if (
+    //   //     account.provider === "google" &&
+    //   //     profile.verified_email === true &&
+    //   //     profile.email.endsWith("@example.com")
+    //   //   ) {
+    //   //     return Promise.resolve(true);
+    //   //   } else {
+    //   //     return Promise.resolve(false);
+    //   //   }
+    //   // },
+    // },
     // pages: {
     //   signIn: "/login2",
     // },

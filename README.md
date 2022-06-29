@@ -155,3 +155,5 @@ nextauth.js を変更
 signin を co
 
 debug:true を追加
+
+callback を co
