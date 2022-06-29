@@ -139,3 +139,5 @@ https://dashboard.magic.link/
 
 node のバージョン変更  
 node v16.14.2 > v17.9.1
+
+prisma の更新
