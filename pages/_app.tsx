@@ -69,7 +69,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       {/* <RecoilRoot> */}
       <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
-        <SessionProvider session={session}>
+        <SessionProvider session={pageProps.session}>
           <Component {...pageProps} />
         </SessionProvider>
       </ChakraProvider>
