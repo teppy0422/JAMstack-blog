@@ -153,9 +153,9 @@ nextauth.js を変更
 <SessionProvider session={pageProps.session}>
 
 signin を co
-
 debug:true を追加
-
 callback を co
+
+prisma.adpter を co
 
 npx prisma generate

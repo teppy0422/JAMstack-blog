@@ -20,6 +20,7 @@ export default function Component() {
 
   const bg = useColorModeValue("tomato", "pink");
   const color = useColorModeValue("#F4ECE4", "gray.700");
+  console.log(session);
   return (
     <>
       {session ? (
