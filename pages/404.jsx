@@ -9,7 +9,7 @@ export default function Custom404() {
         {!session && (
           <>
             サインインしてください。 <br />
-            <button onClick={signIn}>Sign in</button>
+            <button onClick={() => signIn("google")}>Sign in</button>
           </>
         )}
         {session && (
