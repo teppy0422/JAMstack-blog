@@ -88,10 +88,10 @@ export default (req: NextApiRequest, res: NextApiResponse): void =>
       //   }
       // },
     },
-    session: {
-      strategy: "database",
-      maxAge: 30 * 24 * 60 * 60,
-    },
+    // session: {
+    //   strategy: "database",
+    //   maxAge: 30 * 24 * 60 * 60,//30日
+    // },
     // pages: {
     //   signIn: "/login2",
     // },
