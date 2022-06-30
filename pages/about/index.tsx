@@ -32,7 +32,17 @@ import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
 import { theme } from "highcharts";
 
+import AOS from "aos";
+
 export default function About() {
+  React.useEffect(() => {
+    AOS.init({
+      once: false,
+      easing: "ease-out-sine",
+      duration: 600,
+    });
+  }, []);
+
   const skillCircles = [
     {
       value: 90,
