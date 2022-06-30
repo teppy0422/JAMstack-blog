@@ -8,14 +8,6 @@ import {
   Button,
   Grid,
   GridItem,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
   Text,
   StatGroup,
   Stat,
@@ -24,11 +16,6 @@ import {
   StatHelpText,
   StatArrow,
   Progress,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
   Tooltip,
 } from "@chakra-ui/react";
 
@@ -47,23 +34,13 @@ import {
   makeSpan,
 } from "../../libs/romaji.js";
 
-import { getQuiz } from "../../libs/romaji_quiz.js";
+import Voucher from "../../components/typing/voucher";
+import Menu from "../../components/typing/menu";
 
+import { getQuiz } from "../../libs/romaji_quiz.js";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 
-const typing = () => {
-  const OverlayTwo = () => (
-    <ModalOverlay
-      bg="none"
-      backdropFilter="auto"
-      backdropInvert="80%"
-      backdropBlur="2px"
-    />
-  );
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen2, onOpen2, onClose2 } = useDisclosure();
-  const [overlay, setOverlay] = React.useState(<OverlayTwo />);
-
+export const typing = () => {
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const inputText = useRef(""); //入力文字
   const Q_Texts = useRef(""); //問題文
@@ -77,21 +54,20 @@ const typing = () => {
   const renderFlgRef = useRef(false); //useEffectを初回走らせないフラグ
   const timerIDref = useRef(""); //タイマーリセット用のID
   const totalTimerIDref = useRef(""); //トータルタイマーリセット用のID
-  const [totalTime, setTotalTime] = useState(100); //トータルタイムの値
+  const [totalTime, setTotalTime] = useState(30); //トータルタイムの値
   const totalTimeRef = useRef(null); //トータルタイム
   const [missedCount, setMissedCount] = useState(0); //タイプミス回数
   const totalCost = useRef(0); //トータル金額
   const [cost, setCost] = useState(0); //金額
   const inputTextRef = useRef(null); //入力欄
-  const voucherOpenRef = useRef(null); //伝票を開くボタン
-  const voucherCloseRef = useRef(null); //伝票を閉じるボタン
-  const startMenuRef = useRef(null); //スタートメニュー
+  const menuRef = useRef(null); //menu
+  const voucherRef = useRef(null); //伝票
 
-  const totalTime_origin = useRef(3000); //トータルタイムの値
+  const totalTime_origin = useRef(30); //トータルタイムの値
   const typeCountRef = useRef(0); //タイプ数
   const [typePerSocund, setTypePerSocund] = useState("0"); //タイプ速度の値
   const sound_BGM = useRef(null); //BGM
-  const mode = useRef("play"); //モードの状態
+  const mode = useRef("menu"); //モードの状態
   const Q_used = useRef(""); //出題済みの問題の番号
 
   //マウント時に一回だけ実行
@@ -102,9 +78,8 @@ const typing = () => {
     //入力イベント
     document.addEventListener("keypress", keypress_ivent);
     // document.addEventListener("keyup", keyup_ivent);
-    //全てのロードが終わったら
-    window.addEventListener("load", loadEnd);
   }, []);
+
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -137,6 +112,7 @@ const typing = () => {
       case "menu":
         if (e.code === "Space") {
           gameReplay();
+          menuRef.current.style.display = "none";
         }
         break;
       case "play":
@@ -237,10 +213,6 @@ const typing = () => {
     return false;
   }
 
-  function loadEnd() {
-    startMenuRef.current.style.display = "block";
-  }
-
   // 問題文を作成
   async function RenderNextSentence() {
     const typeDisplay = document.getElementById("type-display");
@@ -277,7 +249,7 @@ const typing = () => {
 
   // タイマー_ワード毎
   let startTime;
-  let itemTime = 1000;
+  let itemTime = 10;
   function StartTimer() {
     const timer = document.getElementById("timer");
     timer.innerText = itemTime;
@@ -303,7 +275,7 @@ const typing = () => {
     sound_BGM.current.pause();
     sound_BGM.current.currentTime = 0;
     sound_BGM.current.playbackRate = 1;
-    sound_BGM.current.volume = 0;
+    sound_BGM.current.volume = 0.1;
     sound_BGM.current.play();
 
     setTotalTime(totalTime_origin.current);
@@ -323,24 +295,22 @@ const typing = () => {
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
     setTypePerSocund((typeCountRef.current / totalTime_origin.current) * 60);
-    voucherOpenRef.current.click();
+    voucherRef.current.style.display = "block";
     sound_BGM.current.pause();
     sound("finish");
     mode.current = "play";
   }
   //リプレイ
   function gameReplay() {
-    inputText.current = "";
     setTypePerSocund(0);
-    typeCountRef.current = 0;
     setMissedCount(0);
-    totalCost.current = 0;
     StartTotalTimer();
     TimeUp();
-    startMenuRef.current.style.display = "none";
+    inputText.current = "";
+    typeCountRef.current = 0;
+    totalCost.current = 0;
     mode.current = "play";
   }
-
   return (
     <>
       <DefaultSeo
@@ -368,6 +338,13 @@ const typing = () => {
           cardType: "summary_large_image",
         }}
       />
+      <Box ref={menuRef}>
+        <Menu
+          gameReplay={() => {
+            gameReplay();
+          }}
+        />
+      </Box>
       <Content style={{ position: "relative" }}>
         <VStack className={styles.typing}>
           <Grid
@@ -431,7 +408,7 @@ const typing = () => {
               id="timer"
               className={styles.timer}
             >
-              <Center>timer</Center>
+              <Center>作成中..</Center>
             </GridItem>
           </Grid>
 
@@ -457,100 +434,16 @@ const typing = () => {
             </Center>
           </Box>
         </VStack>
-        <Button
-          ml="4"
-          onClick={() => {
-            setOverlay(<OverlayTwo />);
-            onOpen();
-          }}
-          ref={voucherOpenRef}
-        >
-          伝票を見る
-        </Button>
-        <Modal isCentered isOpen={isOpen} onClose={onClose}>
-          {overlay}
-          <ModalContent>
-            <ModalHeader>終了</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody fontSize="22px">
-              <Center>{totalCost.current}円</Center>
-              <Center>ミス:{missedCount}回</Center>
-              <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
-                <Center>タイプ速度:{typePerSocund}/KPM</Center>
-              </Tooltip>
-            </ModalBody>
-            <ModalFooter py={4}>
-              <Button
-                mr={2}
-                onClick={(e) => {
-                  voucherCloseRef.current.click();
-                  setTimeout(gameReplay, 500);
-                }}
-              >
-                もう一度プレイ[SPACE]
-              </Button>
-              <Button mr={2} onClick={onClose}>
-                ランキング登録
-              </Button>
-              <Button mr={2} onClick={onClose} ref={voucherCloseRef}>
-                閉じる
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
-        <Tabs
-          defaultIndex={2}
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%,-50%)",
-            display: "none",
-            minHeight: "320px",
-          }}
-          colorScheme="white"
-          bgColor="white"
-          borderRadius={6}
-          p={8}
-          ref={startMenuRef}
-        >
-          <TabList>
-            <Tab _focus={{ _focus: "none" }}>自宅</Tab>
-            <Tab _focus={{ _focus: "none" }}>村の寿司屋</Tab>
-            <Tab _focus={{ _focus: "none" }}>高級店</Tab>
-          </TabList>
-
-          <TabPanels>
-            <TabPanel>
-              <Center>制限時間:60秒</Center>
-              <Center> ランキング登録不可能</Center>
-              <Center>まだ作ってないよ</Center>
-            </TabPanel>
-            <TabPanel>
-              <Center>制限時間:80秒</Center>
-              <Center> ランキング登録不可能</Center>
-              <Center>まだ作ってないよ</Center>
-            </TabPanel>
-            <TabPanel>
-              <Center>制限時間:100秒</Center>
-              <Center> ランキング登録可能</Center>
-              <Center>
-                <Button
-                  mt={10}
-                  p={7}
-                  onClick={(e) => {
-                    gameReplay();
-                  }}
-                >
-                  START
-                  <br />
-                  [SPACE]]
-                </Button>
-              </Center>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+        <Box ref={voucherRef}>
+          <Voucher
+            totalCost={totalCost.current}
+            missedCount={missedCount}
+            typePerSocund={typePerSocund}
+            gameReplay={() => {
+              gameReplay();
+            }}
+          />
+        </Box>
         <>
           <audio
             controls
@@ -601,7 +494,6 @@ const typing = () => {
             <h1>
               <i className={styles.fa}></i>結果
             </h1>
-
             <h3>{totalCost.current}円</h3>
             <h3>ミス:{missedCount}回</h3>
             <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">

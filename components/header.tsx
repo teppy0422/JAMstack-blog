@@ -11,7 +11,6 @@ import {
   useColorMode,
   useColorModeValue,
   Link,
-  Button,
   Box,
   Menu,
   MenuButton,
@@ -20,17 +19,13 @@ import {
   MenuDivider,
 } from "@chakra-ui/react";
 import {
-  PhoneIcon,
-  AddIcon,
   MoonIcon,
   SunIcon,
-  ChevronDownIcon,
   HamburgerIcon,
   Search2Icon,
 } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser,
   faPalette,
   faBook,
   faBookOpen,
@@ -38,13 +33,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
-import Image from "next/image";
 import React, { useEffect } from "react";
 
 import LoginBtn from "./loginBtn";
 import AwesomIcon from "./awesomIcon";
-
-import { env } from "process";
 
 export default function Header() {
   const { data: session } = useSession();
@@ -95,6 +87,13 @@ export default function Header() {
                 />
               </Box>
             </Center>
+            {session ? (
+              <Text fontSize={["0px", "16px", "16px", "16px"]}>
+                {session.user.name}
+              </Text>
+            ) : (
+              <Text>ログインしていません</Text>
+            )}
             <Center
               flex="1"
               style={{ gap: "4px" }}
