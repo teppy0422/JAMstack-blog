@@ -167,6 +167,15 @@ vercel > setting > general > Node.jsVersion
 prisma の更新。軌道からデプロイまで
 404 ページにログインを実装
 
-package.json に追加
+package.json に追加  
+ "migrate:deploy": "prisma migrate deploy"
 
-    "migrate:deploy": "prisma migrate deploy"
+nextauth.js に追加
+"session:{strategy:"database",maxage:30*24*60\*60}
+
+package.json を編集  
+ "build": "next build && next export && next-sitemap --config sitemap.config.js",
+
+> "build": "next build && next-sitemap --config sitemap.config.js",
+
+out を削除
