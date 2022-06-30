@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
-    "build": "next build && next export && next-sitemap --config sitemap.config.js",
+    "build": "next build && next-sitemap --config sitemap.config.js",
     "start": "next start",
     "migrate:deploy": "prisma migrate deploy"
   },
