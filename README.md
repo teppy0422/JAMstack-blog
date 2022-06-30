@@ -179,3 +179,9 @@ package.json を編集
 > "build": "next build && next-sitemap --config sitemap.config.js",
 
 out を削除 ok
+
+node のバージョンを変更  
+v17.9.1 > v16.15.1
+
+Vercel node のバージョンを変更  
+14.x > 16.x
