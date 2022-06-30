@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, forwardRef, useImperativeHandle } from "react";
 import {
   Button,
   Modal,
@@ -15,12 +15,13 @@ import {
 
 import { useSession, signIn, signOut } from "next-auth/react";
 
-const voucher = (pops) => {
+let voucher = (pops, ref) => {
   const property = {
     totalCost: pops.totalCost,
     missedCount: pops.missedCount,
     typePerSocund: pops.typePerSocund,
     gameReplay: pops.gameReplay,
+    voucherCloseRef: pops.voucherCloseRef,
   };
   const voucherOpenRef = useRef(null); //伝票を開くボタン
   const voucherCloseRef = useRef(null); //伝票を開くボタン
@@ -35,6 +36,14 @@ const voucher = (pops) => {
   const [overlay, setOverlay] = React.useState(<OverlayTwo />);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
+
+  // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
+  useImperativeHandle(ref, () => ({
+    clickChildOpen() {
+      voucherOpenRef.current.click();
+    },
+  }));
+
   return (
     <>
       <Button
@@ -88,5 +97,5 @@ const voucher = (pops) => {
     </>
   );
 };
-
+voucher = forwardRef(voucher);
 export default voucher;

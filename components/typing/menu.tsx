@@ -18,14 +18,14 @@ const menu = (pops) => {
   };
   const startMenuRef = useRef(null);
 
-  function loadEnd() {
-    startMenuRef.current.style.display = "block";
-  }
   useEffect(() => {
     //全てのロードが終わったら
     window.addEventListener("load", loadEnd);
   }, []);
 
+  function loadEnd() {
+    startMenuRef.current.style.display = "block";
+  }
   const { colorMode, toggleColorMode } = useColorMode();
   return (
     <>

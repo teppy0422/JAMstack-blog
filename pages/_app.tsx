@@ -4,27 +4,15 @@ import { DefaultSeo } from "next-seo";
 import { ChakraProvider, useColorMode } from "@chakra-ui/react";
 import Head from "next/head";
 import theme from "../libs/theme";
-import AOS from "aos";
 import "aos/dist/aos.css";
 //プログレスバー
 import NextNprogress from "nextjs-progressbar";
 //リセット用
 import "../styles/globals.css";
-//グーグルログイン
+//ログイン認証
 import { SessionProvider } from "next-auth/react";
-//グーグルログイン別のfirebase
-import type { AppProps } from "next/app";
-import { RecoilRoot } from "recoil";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
-  React.useEffect(() => {
-    AOS.init({
-      once: false,
-      easing: "ease-out-sine",
-      duration: 600,
-    });
-  }, []);
-
   return (
     <>
       <Head>

@@ -21,8 +21,6 @@ import {
 
 import Content from "../../components/content";
 import ResponseCache from "next/dist/server/response-cache";
-import { type } from "os";
-import { now } from "lodash";
 
 import {
   getRomaji,
@@ -46,8 +44,6 @@ export const typing = () => {
   const Q_Texts = useRef(""); //問題文
   const Q_cost = useRef(0); //問題文の値段
   const correctCount = useRef(0); //ひらがなの正解文字数
-  const correctCountRomaji = useRef(0); //ローマ字の正解文字数
-  const correctCountRomajiTemp = useRef(0); //ローマ字の正解文字数の端数
   const [typeDisplayRomaji_0, setTypeDisplayRomaji_0] = useState("");
   const [typeDisplayRomaji_1, setTypeDisplayRomaji_1] = useState("");
   const [typeDisplayRomaji_2, setTypeDisplayRomaji_2] = useState("");
@@ -295,10 +291,10 @@ export const typing = () => {
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
     setTypePerSocund((typeCountRef.current / totalTime_origin.current) * 60);
-    voucherRef.current.style.display = "block";
     sound_BGM.current.pause();
     sound("finish");
-    mode.current = "play";
+    mode.current = "menu";
+    voucherRef.current.clickChildOpen();
   }
   //リプレイ
   function gameReplay() {
@@ -434,17 +430,23 @@ export const typing = () => {
             </Center>
           </Box>
         </VStack>
-        <Box ref={voucherRef}>
-          <Voucher
-            totalCost={totalCost.current}
-            missedCount={missedCount}
-            typePerSocund={typePerSocund}
-            gameReplay={() => {
-              gameReplay();
-            }}
-          />
-        </Box>
+        <Voucher
+          ref={voucherRef}
+          totalCost={totalCost.current}
+          missedCount={missedCount}
+          typePerSocund={typePerSocund}
+          gameReplay={() => {
+            gameReplay();
+          }}
+        />
         <>
+          <Button
+            onClick={() => {
+              voucherRef.current.clickChildOpen();
+            }}
+          >
+            test
+          </Button>
           <audio
             controls
             id="missed"
