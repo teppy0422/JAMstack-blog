@@ -8,11 +8,13 @@ export default function Content({ children }) {
   return (
     <>
       <Header />
+
       <Box height="66px" />
       <Container
         maxWidth="980px"
-        className={`container`}
+        className={`container2`}
         style={{ background: "rgba(255,255,255,0.1)" }}
+        px={0}
       >
         {children}
       </Container>

@@ -655,33 +655,31 @@ element.style {
   font-size: 24px;
 }
 
-.typing .container {
+.typing .question {
   text-align: center;
-  background-color: #5db7eb;
-  font-size: 2.4rem;
   font-weight: 600;
   padding: 1rem 0 1rem 0;
   border-radius: 0.5rem;
-  min-height: 280px;
   max-width: 100%;
   -webkit-box-shadow: 1px 5px 6px #555;
           box-shadow: 1px 5px 6px #555;
 }
 
-.typing .container .typeDisplay {
-  margin-bottom: 1rem;
+.typing .question .typeDisplay {
+  font-size: 2.4rem;
+  margin-bottom: -0.2rem;
   margin-left: 0rem;
 }
 
-.typing .container .typeDisplayHiragana {
+.typing .question .typeDisplayHiragana {
   font-size: 20px;
 }
 
-.typing .container .typeDisplayRomaji {
+.typing .question .typeDisplayRomaji {
   font-size: 18px;
 }
 
-.typing .container .typeInput {
+.typing .question .typeInput {
   margin-top: 1rem;
   font-size: 2rem;
   width: 100%;
@@ -696,7 +694,7 @@ element.style {
   border-radius: 0.5rem;
 }
 
-scroll .typing .container .typeInput:focus {
+scroll .typing .question .typeInput:focus {
   border-color: #1c1b19;
 }
 

@@ -39,6 +39,8 @@ import Menu from "../../components/typing/menu";
 import { getQuiz } from "../../libs/romaji_quiz.js";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 
+import Keyboard from "../../components/typing/kyeboard";
+
 export const typing = () => {
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const inputText = useRef(""); //入力文字
@@ -74,7 +76,7 @@ export const typing = () => {
     // renderFlgRef.current = true;
     //入力イベント
     document.addEventListener("keypress", keypress_ivent);
-    // document.addEventListener("keyup", keyup_ivent);
+    document.addEventListener("keyup", keyup_ivent);
   }, []);
 
   const { colorMode, toggleColorMode } = useColorMode();
@@ -102,10 +104,25 @@ export const typing = () => {
     }
   }, [totalTime]);
 
-  // 入力イベント
+  // キーアップイベント
+  function keyup_ivent(e) {
+    const keyUpID = document.getElementById(e.key);
+    if (keyUpID !== null) {
+      keyUpID.style.background = null;
+    }
+    return false;
+  }
+
+  // キーダウンイベント
   function keypress_ivent(e) {
     const typeDisplayRomaji = document.getElementById("type-display-romaji");
     console.log("keypress: " + e.key);
+    //入力したキーを着色
+    const inputKeyID = document.getElementById(e.key);
+    console.log(inputKeyID);
+    if (inputKeyID !== null) {
+      document.getElementById(e.key).style.background = "pink";
+    }
     switch (mode.current) {
       case "menu":
         if (e.code === "Space") {
@@ -199,11 +216,6 @@ export const typing = () => {
         }
         break;
     }
-    return false;
-  }
-
-  function keyup_ivent(e) {
-    console.log("keyup: " + e.key);
     return false;
   }
 
@@ -332,7 +344,7 @@ export const typing = () => {
           cardType: "summary_large_image",
         }}
       />
-      <Box ref={menuRef}>
+      <Box ref={menuRef} style={{ display: "none" }}>
         <Menu
           gameReplay={() => {
             gameReplay();
@@ -416,7 +428,7 @@ export const typing = () => {
 
             <Center className={styles.cost}>{Q_cost.current}</Center>
 
-            <Box className={styles.container} w="100%">
+            <Box className={styles.question} w="100%">
               <Center className={styles.typeDisplay} id="type-display"></Center>
               <Center
                 className={styles.typeDisplayHiragana}
@@ -434,6 +446,7 @@ export const typing = () => {
                   {typeDisplayRomaji_2}
                 </p>
               </Center>
+              <Keyboard />
             </Box>
           </Box>
         </VStack>

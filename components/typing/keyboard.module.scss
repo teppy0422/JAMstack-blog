@@ -1,0 +1,19 @@
+.keyboard {
+  .key1 {
+    border-radius: 3px;
+    border: 1px solid;
+    transform: translateX(-0.8rem);
+    display: inline-block;
+  }
+  .key2 {
+    border-radius: 3px;
+    border: 1px solid;
+    display: inline-block;
+  }
+  .key3 {
+    border-radius: 3px;
+    border: 1px solid;
+    transform: translateX(0.8rem);
+    display: inline-block;
+  }
+}

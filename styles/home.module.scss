@@ -499,19 +499,20 @@ element.style {
     text-align: center;
     font-size: 24px;
   }
-  .container {
+  .question {
     text-align: center;
-    background-color: rgb(93, 183, 235);
-    font-size: 2.4rem;
+    // background-color: rgb(93, 183, 235);
+    // font-size: 2.4rem;
     font-weight: 600;
     padding: 1rem 0 1rem 0;
     border-radius: 0.5rem;
-    min-height: 280px;
+    // min-height: 280px;
     max-width: 100%;
 
     box-shadow: 1px 5px 6px #555;
     .typeDisplay {
-      margin-bottom: 1rem;
+      font-size: 2.4rem;
+      margin-bottom: -0.2rem;
       margin-left: 0rem;
     }
     .typeDisplayHiragana {
