@@ -10,7 +10,7 @@ const keyValues3 = ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"];
 const keyboard = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
-    <Box className={styles.keyboard}>
+    <Box className={styles.keyboard} id="keyboard">
       <Box className={styles.keys1}>
         {keyValues1.map((k, index) => {
           return (
@@ -26,7 +26,7 @@ const keyboard = () => {
                 colorMode === "light" ? styles.backLight : styles.backDark
               }
             >
-              <span className={styles.k}>{k}</span>
+              {k}
             </Box>
           );
         })}
@@ -43,7 +43,7 @@ const keyboard = () => {
               key={index}
               id={k}
             >
-              <span className={styles.k}>{k}</span>
+              {k}
             </Box>
           );
         })}
@@ -60,7 +60,7 @@ const keyboard = () => {
               key={index}
               id={k}
             >
-              <span className={styles.k}>{k}</span>
+              {k}
             </Box>
           );
         })}

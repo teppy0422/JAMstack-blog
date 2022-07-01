@@ -116,10 +116,8 @@ export const typing = () => {
   // キーダウンイベント
   function keypress_ivent(e) {
     const typeDisplayRomaji = document.getElementById("type-display-romaji");
-    console.log("keypress: " + e.key);
     //入力したキーを着色
     const inputKeyID = document.getElementById(e.key);
-    console.log(inputKeyID);
     if (inputKeyID !== null) {
       document.getElementById(e.key).style.background = "pink";
     }
@@ -147,12 +145,15 @@ export const typing = () => {
             makeSpan(newTemp[0], typeDisplayRomaji);
             //色を変更
             changeColor("type-display-romaji", inputTextTempA.length);
-            //入力文字オーバーの更新
+            //入力文字オーバーの更新_ひらがな
             const inputSuggestHiragana = getHiragana(newTemp[0]);
             const inputSuggestOver = Q_Texts.current.substring(
               inputSuggestHiragana.length
             );
             setTypeDisplayRomaji_2(getRomajiForecast(inputSuggestOver));
+            // 入力アシストの表示
+            clearSuggest();
+            nextSuggest(newTemp[0].charAt(inputTextTempA.length));
 
             //KPMを求めるカウント
             typeCountRef.current = typeCountRef.current + 1;
@@ -193,6 +194,9 @@ export const typing = () => {
               makeSpan(nextWord[0], typeDisplayRomaji);
               setTypeDisplayRomaji_2(getRomajiForecast(Q_Texts.current));
 
+              // 入力アシストの表示
+              nextSuggest(nextWord[0].charAt(0));
+
               //入力文字オーバーの更新
               const inputSuggestHiragana = getHiragana(nextWord[0]);
               const inputSuggestOver = Q_Texts.current.substring(
@@ -213,6 +217,9 @@ export const typing = () => {
             return missedCount;
           });
           changeColor("type-display-romaji", 0);
+          // 入力アシストの表示
+          clearSuggest();
+          nextSuggest(temp[0].charAt(0));
         }
         break;
     }
@@ -251,8 +258,15 @@ export const typing = () => {
     // コストのセット
     Q_cost.current = Number(quiz[0][2]);
     correctCount.current = 0;
+    let nextRomaji = inputSuggest[0].charAt(0);
+    nextSuggest(nextRomaji);
   }
-
+  function nextSuggest(r) {
+    let nextType = document.getElementById(r);
+    if (nextType !== null) {
+      nextType.style.background = "red";
+    }
+  }
   // タイマー_ワード毎
   let startTime;
   let itemTime = 10;
@@ -268,9 +282,50 @@ export const typing = () => {
     timerIDref.current = timerID_;
   }
   function TimeUp() {
+    clearSuggest();
     RenderNextSentence();
     StartTimer();
   }
+  function clearSuggest() {
+    const id = [
+      "q",
+      "w",
+      "e",
+      "r",
+      "t",
+      "y",
+      "u",
+      "i",
+      "o",
+      "p",
+      "a",
+      "s",
+      "d",
+      "f",
+      "g",
+      "h",
+      "j",
+      "k",
+      "l",
+      ";",
+      "z",
+      "x",
+      "c",
+      "v",
+      "b",
+      "n",
+      "m",
+      ",",
+      ".",
+      "/",
+    ];
+    {
+      id.map((item, index) => {
+        document.getElementById(item).style.background = null;
+      });
+    }
+  }
+
   function getTimerTime(t) {
     return Math.floor((new Date() - t) / 1000);
   }
