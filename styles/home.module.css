@@ -89,7 +89,7 @@
           backdrop-filter: blur(10px);
   margin-top: 2em;
   margin-bottom: 20px;
-  padding: 16px;
+  padding: 16px 0 16px 0;
 }
 
 .title {
@@ -626,8 +626,19 @@ element.style {
       -ms-flex-pack: top;
           justify-content: top;
   overflow: hidden;
+}
+
+.typing .backLight {
   background: -webkit-gradient(linear, right bottom, left top, from(#ffaa33), to(#33aaff));
   background: linear-gradient(to left top, #ffaa33, #33aaff);
+  -webkit-transition: all 0.6s;
+  transition: all 0.6s;
+}
+
+.typing .backDark {
+  background: linear-gradient(-215deg, #3a297f 10%, #f57762 70%, #b32717);
+  -webkit-transition: all 0.6s;
+  transition: all 0.6s;
 }
 
 .typing .cost {
@@ -645,13 +656,14 @@ element.style {
 }
 
 .typing .container {
+  text-align: center;
   background-color: #5db7eb;
   font-size: 2.4rem;
   font-weight: 600;
-  padding: 1rem;
+  padding: 1rem 0 1rem 0;
   border-radius: 0.5rem;
   min-height: 280px;
-  max-width: 90%;
+  max-width: 100%;
   -webkit-box-shadow: 1px 5px 6px #555;
           box-shadow: 1px 5px 6px #555;
 }

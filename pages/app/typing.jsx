@@ -17,6 +17,7 @@ import {
   StatArrow,
   Progress,
   Tooltip,
+  useColorMode,
 } from "@chakra-ui/react";
 
 import Content from "../../components/content";
@@ -76,6 +77,7 @@ export const typing = () => {
     // document.addEventListener("keyup", keyup_ivent);
   }, []);
 
+  const { colorMode, toggleColorMode } = useColorMode();
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -165,10 +167,6 @@ export const typing = () => {
 
             //一つの文章が終了
             if (complete === true) {
-              // setTotalCost((totalCost) => totalCost + Q_cost.current);
-              // setTotalCost((totalCost) => {
-              //   return totalCost;
-              // });
               totalCost.current = totalCost.current + Q_cost.current;
               sound("success");
               TimeUp();
@@ -343,91 +341,100 @@ export const typing = () => {
       </Box>
       <Content style={{ position: "relative" }}>
         <VStack className={styles.typing}>
-          <Grid
-            templateAreas={`"nav main"
+          <Box
+            className={
+              colorMode === "light" ? styles.backLight : styles.backDark
+            }
+            w="100%"
+          >
+            <Grid
+              templateAreas={`"nav main"
                   "nav footer"
                   "header header"`}
-            gridTemplateRows={"64px 1fr 40px"}
-            w="100%"
-            h="80px"
-            gap="1"
-            color="blackAlpha.700"
-            fontWeight="bold"
-          >
-            <GridItem pl="2" bg="pink.200" area={"nav"}>
-              <StatGroup>
-                <Stat>
-                  <StatLabel>残り時間</StatLabel>
-                  <StatNumber ref={totalTimeRef}>{totalTime}</StatNumber>
-                  <StatHelpText>
-                    <StatArrow type="increase" />
-                    23.36%
-                  </StatHelpText>
-                </Stat>
-
-                <Stat>
-                  <StatLabel>タイプミス</StatLabel>
-                  <StatNumber>{missedCount}</StatNumber>
-                  <StatHelpText>
-                    <StatArrow type="decrease" />
-                    9.05%
-                  </StatHelpText>
-                </Stat>
-              </StatGroup>
-            </GridItem>
-            <GridItem pl="2" bg="green.200" area={"main"}>
-              <StatGroup>
-                <Stat>
-                  <StatLabel>トータル金額</StatLabel>
-                  <StatNumber
-                    mr={1.5}
-                    style={{ textAlign: "right", fontSize: "24px" }}
-                  >
-                    {totalCost.current}円
-                  </StatNumber>
-                </Stat>
-              </StatGroup>
-            </GridItem>
-            <GridItem area={"footer"} style={{ position: "relative" }}>
-              <Progress colorScheme="green" hasStripe value={64} h="24px" />
-              <Text
-                style={{ position: "absolute", top: "0", left: "8px" }}
-                color="white.800"
-                fontSize="14px"
-              >
-                特別なナニカ
-              </Text>
-            </GridItem>
-            <GridItem
-              pl="2"
-              area={"header"}
-              id="timer"
-              className={styles.timer}
+              gridTemplateRows={"64px 1fr 40px"}
+              w="100%"
+              h="80px"
+              gap="1"
+              color="blackAlpha.700"
+              fontWeight="bold"
             >
-              <Center>作成中..</Center>
-            </GridItem>
-          </Grid>
+              <GridItem pl="2" bg="pink.200" area={"nav"}>
+                <StatGroup>
+                  <Stat>
+                    <StatLabel>残り時間</StatLabel>
+                    <StatNumber ref={totalTimeRef}>{totalTime}</StatNumber>
+                    <StatHelpText>
+                      <StatArrow type="increase" />
+                      23.36%
+                    </StatHelpText>
+                  </Stat>
 
-          <Sushi_tamago_wrap />
+                  <Stat>
+                    <StatLabel>タイプミス</StatLabel>
+                    <StatNumber>{missedCount}</StatNumber>
+                    <StatHelpText>
+                      <StatArrow type="decrease" />
+                      9.05%
+                    </StatHelpText>
+                  </Stat>
+                </StatGroup>
+              </GridItem>
+              <GridItem pl="2" bg="green.200" area={"main"}>
+                <StatGroup>
+                  <Stat>
+                    <StatLabel>トータル金額</StatLabel>
+                    <StatNumber
+                      mr={1.5}
+                      style={{ textAlign: "right", fontSize: "24px" }}
+                    >
+                      {totalCost.current}円
+                    </StatNumber>
+                  </Stat>
+                </StatGroup>
+              </GridItem>
+              <GridItem area={"footer"} style={{ position: "relative" }}>
+                <Progress colorScheme="green" hasStripe value={64} h="24px" />
+                <Text
+                  style={{ position: "absolute", top: "0", left: "8px" }}
+                  color="white.800"
+                  fontSize="14px"
+                >
+                  特別なナニカ
+                </Text>
+              </GridItem>
+              <GridItem
+                pl="2"
+                area={"header"}
+                id="timer"
+                className={styles.timer}
+              >
+                <Center>作成中..</Center>
+              </GridItem>
+            </Grid>
 
-          <Center className={styles.cost}>{Q_cost.current}</Center>
+            <Sushi_tamago_wrap />
 
-          <Box className={styles.container} w="100%">
-            <Center className={styles.typeDisplay} id="type-display"></Center>
-            <Center
-              className={styles.typeDisplayHiragana}
-              id="type-display-hiragana"
-            ></Center>
-            <Center>
-              <p className={styles.typeDisplayRomaji}>
-                <span style={{ color: "red" }}>{typeDisplayRomaji_0}</span>
-              </p>
-              <Text
-                className={styles.typeDisplayRomaji}
-                id="type-display-romaji"
-              ></Text>
-              <p className={styles.typeDisplayRomaji}>{typeDisplayRomaji_2}</p>
-            </Center>
+            <Center className={styles.cost}>{Q_cost.current}</Center>
+
+            <Box className={styles.container} w="100%">
+              <Center className={styles.typeDisplay} id="type-display"></Center>
+              <Center
+                className={styles.typeDisplayHiragana}
+                id="type-display-hiragana"
+              ></Center>
+              <Center>
+                <p className={styles.typeDisplayRomaji}>
+                  <span style={{ color: "red" }}>{typeDisplayRomaji_0}</span>
+                </p>
+                <Text
+                  className={styles.typeDisplayRomaji}
+                  id="type-display-romaji"
+                ></Text>
+                <p className={styles.typeDisplayRomaji}>
+                  {typeDisplayRomaji_2}
+                </p>
+              </Center>
+            </Box>
           </Box>
         </VStack>
         <Voucher

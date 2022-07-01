@@ -37,7 +37,7 @@ const menu = (pops) => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%,-50%)",
-          display: "none",
+          // display: "none",
           minHeight: "320px",
         }}
         colorScheme="red"

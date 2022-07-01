@@ -4,7 +4,6 @@ import { DefaultSeo } from "next-seo";
 import { ChakraProvider, useColorMode } from "@chakra-ui/react";
 import Head from "next/head";
 import theme from "../libs/theme";
-import "aos/dist/aos.css";
 //プログレスバー
 import NextNprogress from "nextjs-progressbar";
 //リセット用

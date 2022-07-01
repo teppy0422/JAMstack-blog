@@ -8,14 +8,15 @@ export default function Content({ children }) {
   return (
     <>
       <Header />
-      <Box height="66px"></Box>
+      <Box height="66px" />
       <Container
-        maxWidth="960px"
+        maxWidth="980px"
         className={`container`}
         style={{ background: "rgba(255,255,255,0.1)" }}
       >
         {children}
       </Container>
+
       <hr />
       <Center my="16px" color="gray">
         <NextLink href="/privacy">
