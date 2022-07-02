@@ -3,8 +3,13 @@
 
 datasource db {
   provider = "mysql"
+  //本番サーバー
   url = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  //テーブル作成
+  // url = env("SHADOW_DATABASE_URL")
+
+
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 
   referentialIntegrity = "prisma"
 }
@@ -60,14 +65,18 @@ model User {
   @@map("users")
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+model TypingResult {
+  id        Int      @default(autoincrement()) @id
+  userId  String?  @map("user_id")
+  name    String?
+  image   String?
+  course  String
+  result  Int
+  resulet Int?
 
-  @@unique([identifier, token])
-  @@map("verificationtokens")
+  @@map("typingresults")
 }
+
 
 model SampleBlog {
   id        Int      @default(autoincrement()) @id
@@ -86,3 +95,13 @@ model SampleBlog2 {
   content   String
   @@map("sampleblog2")
 }
+
+model SampleBlog3 {
+  id        Int      @default(autoincrement()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @db.VarChar(255)
+  content   String
+  @@map("sampleblog3")
+}
+

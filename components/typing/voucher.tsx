@@ -44,6 +44,18 @@ let voucher = (pops, ref) => {
     },
   }));
 
+  const handlePost = () => {
+    const result = +property.typePerSocund;
+    const course = "こーす1";
+    fetch("/api/typingPost", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ result, course }),
+    });
+  };
+
   return (
     <>
       <Button
@@ -85,9 +97,15 @@ let voucher = (pops, ref) => {
             >
               もう一度プレイ[SPACE]
             </Button>
-            <Button mr={2} onClick={onClose}>
-              ランキング登録
-            </Button>
+            {session ? (
+              <Button mr={2} onClick={handlePost}>
+                登録
+              </Button>
+            ) : (
+              <Button mr={2} disabled>
+                登録
+              </Button>
+            )}
             <Button mr={2} onClick={onClose} ref={voucherCloseRef}>
               閉じる
             </Button>

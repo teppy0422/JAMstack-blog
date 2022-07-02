@@ -339,7 +339,6 @@ export const typing = () => {
 
     const totalTimerID_ = setInterval(() => {
       setTotalTime(totalTime_origin.current - getTimerTime(totalStartTime));
-      console.log("temp:", totalTimeRef.current.innerText);
       if (totalTimeRef.current.innerText <= 0) {
         clearInterval(totalTimerIDref.current);
         gameOver();
@@ -351,7 +350,9 @@ export const typing = () => {
   function gameOver() {
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
-    setTypePerSocund((typeCountRef.current / totalTime_origin.current) * 60);
+    setTypePerSocund(
+      Math.floor((typeCountRef.current / totalTime_origin.current) * 60)
+    );
     sound_BGM.current.pause();
     sound("finish");
     mode.current = "menu";
@@ -396,7 +397,7 @@ export const typing = () => {
           cardType: "summary_large_image",
         }}
       />
-      <Box ref={menuRef} style={{ display: "none" }}>
+      <Box ref={menuRef} style={{ display: "block" }}>
         <Menu
           gameReplay={() => {
             gameReplay();
