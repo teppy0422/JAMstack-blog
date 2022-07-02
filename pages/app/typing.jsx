@@ -18,6 +18,7 @@ import {
   Progress,
   Tooltip,
   useColorMode,
+  Divider,
 } from "@chakra-ui/react";
 
 import Content from "../../components/content";
@@ -109,13 +110,50 @@ export const typing = () => {
   function keyup_ivent(e) {
     clearSuggest();
     let nextType = document.getElementById(suggestKeyRef.current);
-    console.log(suggestKeyRef.current);
     if (nextType !== null) {
       nextType.style.background = "red";
     }
     return false;
   }
-
+  function clearSuggest() {
+    const id = [
+      "q",
+      "w",
+      "e",
+      "r",
+      "t",
+      "y",
+      "u",
+      "i",
+      "o",
+      "p",
+      "a",
+      "s",
+      "d",
+      "f",
+      "g",
+      "h",
+      "j",
+      "k",
+      "l",
+      ";",
+      "z",
+      "x",
+      "c",
+      "v",
+      "b",
+      "n",
+      "m",
+      ",",
+      ".",
+      "/",
+    ];
+    {
+      id.map((item, index) => {
+        document.getElementById(item).style.background = null;
+      });
+    }
+  }
   // キーダウンイベント
   function keypress_ivent(e) {
     const typeDisplayRomaji = document.getElementById("type-display-romaji");
@@ -281,45 +319,6 @@ export const typing = () => {
     RenderNextSentence();
     StartTimer();
   }
-  function clearSuggest() {
-    const id = [
-      "q",
-      "w",
-      "e",
-      "r",
-      "t",
-      "y",
-      "u",
-      "i",
-      "o",
-      "p",
-      "a",
-      "s",
-      "d",
-      "f",
-      "g",
-      "h",
-      "j",
-      "k",
-      "l",
-      ";",
-      "z",
-      "x",
-      "c",
-      "v",
-      "b",
-      "n",
-      "m",
-      ",",
-      ".",
-      "/",
-    ];
-    {
-      id.map((item, index) => {
-        document.getElementById(item).style.background = null;
-      });
-    }
-  }
 
   function getTimerTime(t) {
     return Math.floor((new Date() - t) / 1000);
@@ -337,8 +336,10 @@ export const typing = () => {
     setTotalTime(totalTime_origin.current);
     totalStartTime = new Date();
     clearInterval(totalTimerIDref.current);
+
     const totalTimerID_ = setInterval(() => {
       setTotalTime(totalTime_origin.current - getTimerTime(totalStartTime));
+      console.log("temp:", totalTimeRef.current.innerText);
       if (totalTimeRef.current.innerText <= 0) {
         clearInterval(totalTimerIDref.current);
         gameOver();
@@ -410,77 +411,94 @@ export const typing = () => {
             }
             w="100%"
           >
-            <Grid
-              templateAreas={`"nav main"
-                  "nav footer"
-                  "header header"`}
-              gridTemplateRows={"40px 1fr 40px"}
-              w="100%"
-              h="80px"
-              gap="1"
-              color="blackAlpha.700"
-              fontWeight="bold"
-            >
-              <GridItem pl="2" bg="pink.200" area={"nav"}>
-                <StatGroup>
-                  <Stat>
-                    <StatLabel>残り時間</StatLabel>
-                    <StatNumber ref={totalTimeRef} fontSize={"18px"}>
-                      {totalTime}
-                    </StatNumber>
-                    <StatHelpText>
-                      <StatArrow type="increase" />
-                      23.36%
-                    </StatHelpText>
-                  </Stat>
-
-                  <Stat>
-                    <StatLabel>タイプミス</StatLabel>
-                    <StatNumber fontSize={"18px"}>{missedCount}</StatNumber>
-                    <StatHelpText>
-                      <StatArrow type="decrease" />
-                      9.05%
-                    </StatHelpText>
-                  </Stat>
-                </StatGroup>
-              </GridItem>
-              <GridItem pl="2" bg="green.200" area={"main"}>
-                <StatGroup>
-                  <Stat>
-                    <StatLabel>トータル金額</StatLabel>
-                    <StatNumber
-                      mr={1.5}
-                      style={{
-                        textAlign: "right",
-                        fontSize: "18px",
-                        top: "20px",
-                        transform: "translateY(-0.8rem)",
-                      }}
-                    >
-                      {totalCost.current}円
-                    </StatNumber>
-                  </Stat>
-                </StatGroup>
-              </GridItem>
-              <GridItem area={"footer"} style={{ position: "relative" }}>
-                <Progress colorScheme="green" hasStripe value={64} h="24px" />
-                <Text
-                  style={{ position: "absolute", top: "0", left: "8px" }}
-                  color="white.800"
-                  fontSize="14px"
-                >
-                  特別なナニカ
-                </Text>
-              </GridItem>
-              <GridItem
-                pl="2"
-                area={"header"}
-                id="timer"
-                className={styles.timer}
+            <Center mt={2}>
+              <Grid
+                templateColumns="repeat(3, 1fr)"
+                gap={[1, 2, 4, 6]}
+                w={["100%", "90%", "80%", "70%"]}
+                h="14"
+                mt={10}
+                className={styles.navi}
               >
-                <Center style={{ zIndex: "999999" }}>作成中..</Center>
-              </GridItem>
-            </Grid>
+                <GridItem w="100%" h="14" colSpan={1}>
+                  <Text fontSize="13px" pl="10px">
+                    残り時間
+                  </Text>
+                  <Center>
+                    <Divider
+                      w="90%"
+                      style={
+                        colorMode === "light"
+                          ? { borderColor: "black" }
+                          : { borderColor: "white" }
+                      }
+                    />
+                  </Center>
+                  <Text
+                    fontSize="18px"
+                    fontWeight="bold"
+                    textAlign="right"
+                    mr="12px"
+                    mt="4px"
+                    ref={totalTimeRef}
+                  >
+                    {totalTime}
+                  </Text>
+                </GridItem>
+                <GridItem w="100%" h="14" colSpan={1}>
+                  <Text fontSize="13px" pl="10px">
+                    タイプミス
+                  </Text>
+                  <Center>
+                    <Divider
+                      w="90%"
+                      style={
+                        colorMode === "light"
+                          ? { borderColor: "black" }
+                          : { borderColor: "white" }
+                      }
+                    />
+                  </Center>
+                  <Text
+                    fontSize="18px"
+                    fontWeight="bold"
+                    textAlign="right"
+                    mr="12px"
+                    mt="4px"
+                  >
+                    {missedCount}
+                  </Text>
+                </GridItem>
+                <GridItem w="100%" h="14" colSpan={1}>
+                  <Text fontSize="13px" pl="10px">
+                    金額
+                  </Text>
+                  <Center>
+                    <Divider
+                      w="90%"
+                      style={
+                        colorMode === "light"
+                          ? { borderColor: "black" }
+                          : { borderColor: "white" }
+                      }
+                    />
+                  </Center>
+                  <Text
+                    fontSize="18px"
+                    fontWeight="bold"
+                    textAlign="right"
+                    mr="12px"
+                    mt="4px"
+                  >
+                    {totalCost.current}円{" "}
+                  </Text>
+                </GridItem>
+              </Grid>
+            </Center>
+
+            <Center style={{ zIndex: "999999" }} id="timer">
+              作成中..
+            </Center>
 
             <Sushi_tamago_wrap />
 
