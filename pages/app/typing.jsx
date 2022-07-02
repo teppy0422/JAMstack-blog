@@ -68,6 +68,7 @@ export const typing = () => {
   const sound_BGM = useRef(null); //BGM
   const mode = useRef("menu"); //モードの状態
   const Q_used = useRef(""); //出題済みの問題の番号
+  const suggestKeyRef = useRef(""); //入力候補の着色用
 
   //マウント時に一回だけ実行
   useEffect(() => {
@@ -106,9 +107,11 @@ export const typing = () => {
 
   // キーアップイベント
   function keyup_ivent(e) {
-    const keyUpID = document.getElementById(e.key);
-    if (keyUpID !== null) {
-      keyUpID.style.background = null;
+    clearSuggest();
+    let nextType = document.getElementById(suggestKeyRef.current);
+    console.log(suggestKeyRef.current);
+    if (nextType !== null) {
+      nextType.style.background = "red";
     }
     return false;
   }
@@ -121,6 +124,7 @@ export const typing = () => {
     if (inputKeyID !== null) {
       document.getElementById(e.key).style.background = "pink";
     }
+    // console.log(e.key);
     switch (mode.current) {
       case "menu":
         if (e.code === "Space") {
@@ -130,7 +134,6 @@ export const typing = () => {
         break;
       case "play":
         const temp = getRomaji(Q_Texts.current.substring(0, 2));
-
         inputText.current = inputText.current + e.key;
         const inputTextTempA = inputText.current;
         const matchCount = 0;
@@ -151,10 +154,8 @@ export const typing = () => {
               inputSuggestHiragana.length
             );
             setTypeDisplayRomaji_2(getRomajiForecast(inputSuggestOver));
-            // 入力アシストの表示
-            clearSuggest();
-            nextSuggest(newTemp[0].charAt(inputTextTempA.length));
 
+            suggestKeyRef.current = newTemp[0].charAt(inputTextTempA.length);
             //KPMを求めるカウント
             typeCountRef.current = typeCountRef.current + 1;
             matchCount = matchCount + 1;
@@ -195,7 +196,7 @@ export const typing = () => {
               setTypeDisplayRomaji_2(getRomajiForecast(Q_Texts.current));
 
               // 入力アシストの表示
-              nextSuggest(nextWord[0].charAt(0));
+              suggestKeyRef.current = nextWord[0].charAt(0);
 
               //入力文字オーバーの更新
               const inputSuggestHiragana = getHiragana(nextWord[0]);
@@ -218,8 +219,7 @@ export const typing = () => {
           });
           changeColor("type-display-romaji", 0);
           // 入力アシストの表示
-          clearSuggest();
-          nextSuggest(temp[0].charAt(0));
+          suggestKeyRef.current = temp[0].charAt(0);
         }
         break;
     }
@@ -258,15 +258,10 @@ export const typing = () => {
     // コストのセット
     Q_cost.current = Number(quiz[0][2]);
     correctCount.current = 0;
-    let nextRomaji = inputSuggest[0].charAt(0);
-    nextSuggest(nextRomaji);
+    // 入力アシストの表示
+    suggestKeyRef.current = inputSuggest[0].charAt(0);
   }
-  function nextSuggest(r) {
-    let nextType = document.getElementById(r);
-    if (nextType !== null) {
-      nextType.style.background = "red";
-    }
-  }
+
   // タイマー_ワード毎
   let startTime;
   let itemTime = 10;
@@ -371,6 +366,7 @@ export const typing = () => {
     typeCountRef.current = 0;
     totalCost.current = 0;
     mode.current = "play";
+    Q_used.current = "";
   }
   return (
     <>
@@ -475,7 +471,7 @@ export const typing = () => {
                 id="timer"
                 className={styles.timer}
               >
-                <Center>作成中..</Center>
+                <Center style={{ zIndex: "999999" }}>作成中..</Center>
               </GridItem>
             </Grid>
 
@@ -484,11 +480,15 @@ export const typing = () => {
             <Center className={styles.cost}>{Q_cost.current}</Center>
 
             <Box className={styles.question} w="100%">
-              <Center className={styles.typeDisplay} id="type-display"></Center>
+              <Center className={styles.typeDisplay} id="type-display">
+                　
+              </Center>
               <Center
                 className={styles.typeDisplayHiragana}
                 id="type-display-hiragana"
-              ></Center>
+              >
+                　
+              </Center>
               <Center>
                 <p className={styles.typeDisplayRomaji}>
                   <span style={{ color: "red" }}>{typeDisplayRomaji_0}</span>
@@ -496,7 +496,9 @@ export const typing = () => {
                 <Text
                   className={styles.typeDisplayRomaji}
                   id="type-display-romaji"
-                ></Text>
+                >
+                  　
+                </Text>
                 <p className={styles.typeDisplayRomaji}>
                   {typeDisplayRomaji_2}
                 </p>

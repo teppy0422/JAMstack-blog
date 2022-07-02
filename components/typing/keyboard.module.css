@@ -1,3 +1,7 @@
+.keyboard {
+  min-height: 400px;
+}
+
 .keyboard .key1 {
   border-radius: 3px;
   border: 1px solid;
