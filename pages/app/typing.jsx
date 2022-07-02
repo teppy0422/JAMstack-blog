@@ -414,7 +414,7 @@ export const typing = () => {
               templateAreas={`"nav main"
                   "nav footer"
                   "header header"`}
-              gridTemplateRows={"64px 1fr 40px"}
+              gridTemplateRows={"40px 1fr 40px"}
               w="100%"
               h="80px"
               gap="1"
@@ -425,7 +425,9 @@ export const typing = () => {
                 <StatGroup>
                   <Stat>
                     <StatLabel>残り時間</StatLabel>
-                    <StatNumber ref={totalTimeRef}>{totalTime}</StatNumber>
+                    <StatNumber ref={totalTimeRef} fontSize={"18px"}>
+                      {totalTime}
+                    </StatNumber>
                     <StatHelpText>
                       <StatArrow type="increase" />
                       23.36%
@@ -434,7 +436,7 @@ export const typing = () => {
 
                   <Stat>
                     <StatLabel>タイプミス</StatLabel>
-                    <StatNumber>{missedCount}</StatNumber>
+                    <StatNumber fontSize={"18px"}>{missedCount}</StatNumber>
                     <StatHelpText>
                       <StatArrow type="decrease" />
                       9.05%
@@ -448,7 +450,12 @@ export const typing = () => {
                     <StatLabel>トータル金額</StatLabel>
                     <StatNumber
                       mr={1.5}
-                      style={{ textAlign: "right", fontSize: "24px" }}
+                      style={{
+                        textAlign: "right",
+                        fontSize: "18px",
+                        top: "20px",
+                        transform: "translateY(-0.8rem)",
+                      }}
                     >
                       {totalCost.current}円
                     </StatNumber>
