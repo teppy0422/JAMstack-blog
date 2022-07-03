@@ -44,10 +44,10 @@ let voucher = (pops, ref) => {
     },
   }));
 
-  const handlePost = () => {
+  const handlePost = async () => {
     const result = +property.typePerSocund;
     const course = "こーす1";
-    fetch("/api/typingPost", {
+    await fetch("/api/typingPost", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
