@@ -25,6 +25,7 @@ export default async function handler(
           // userId,
           result: req.body.result,
           course: req.body.course,
+          name: req.body.name,
         },
       });
       console.log("aaa: ", author);

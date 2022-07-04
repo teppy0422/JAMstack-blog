@@ -44,16 +44,20 @@ let voucher = (pops, ref) => {
     },
   }));
 
-  const handlePost = () => {
-    const result = +property.typePerSocund;
-    const course = "こーす1";
-    fetch("/api/typingPost", {
+  const handleClick = async () => {
+    const data = {
+      course: "高級",
+      result: property.typePerSocund,
+      name: session.user.name,
+    };
+    await fetch("/api/typing", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ result, course }),
+      body: JSON.stringify(data), // 本文のデータ型は "Content-Type" ヘッダーと一致させる必要があります
     });
+    // return response.json();
   };
 
   return (
@@ -98,7 +102,7 @@ let voucher = (pops, ref) => {
               もう一度プレイ[SPACE]
             </Button>
             {session ? (
-              <Button mr={2} onClick={handlePost}>
+              <Button mr={2} onClick={handleClick}>
                 登録
               </Button>
             ) : (

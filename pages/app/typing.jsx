@@ -371,17 +371,6 @@ export const typing = () => {
     Q_used.current = "";
   }
 
-  const handleClick = async () => {
-    const data = { course: "高級", result: typePerSocund };
-    await fetch("/api/typing", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data), // 本文のデータ型は "Content-Type" ヘッダーと一致させる必要があります
-    });
-    // return response.json();
-  };
   return (
     <>
       <DefaultSeo
@@ -416,8 +405,6 @@ export const typing = () => {
           }}
         />
       </Box>
-
-      <button onClick={handleClick}>testtt</button>
 
       <Content style={{ position: "relative" }}>
         <VStack className={styles.typing} h="620px">
