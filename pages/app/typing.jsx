@@ -405,7 +405,7 @@ export const typing = () => {
         />
       </Box>
       <Content style={{ position: "relative" }}>
-        <VStack className={styles.typing}>
+        <VStack className={styles.typing} h="620px">
           <Box
             className={
               colorMode === "light" ? styles.backLight : styles.backDark

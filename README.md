@@ -151,7 +151,7 @@ nextauth.js を変更
 .js > .ts
 
 <SessionProvider session={session}>
-↓
+↓　
 <SessionProvider session={pageProps.session}>
 
 signin を co
@@ -202,3 +202,7 @@ typing の一部を component にまとめる
 
 /ページ遷移時の処理  
 /イベントリスナーを解除
+
+本番環境で実行したら反映されない時がある
+
+voucher.tsx に async,await を追加 ng
