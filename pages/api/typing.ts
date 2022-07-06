@@ -24,10 +24,9 @@ export default async function handler(
         data: {
           userId: req.body.userId,
           result: req.body.result,
-          course: req.body.course,
+          course: req.body.email,
           name: req.body.name,
           image: req.body.image,
-          email: req.body.email,
         },
       });
       console.log("aaa: ", author);

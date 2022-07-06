@@ -47,11 +47,10 @@ let voucher = (pops, ref) => {
   const handleClick = async () => {
     const data = {
       userId: "user",
-      course: "高級",
+      course: session.user.email,
       result: property.typePerSocund,
       name: session.user.name,
       image: session.user.image,
-      email: session.user.email,
     };
     console.log(data.image);
 
