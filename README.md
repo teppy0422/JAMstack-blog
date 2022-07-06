@@ -205,4 +205,4 @@ typing の一部を component にまとめる
 
 本番環境で実行したら反映されない時がある
 
-voucher.tsx に async,await を追加 ng
+処理を変更

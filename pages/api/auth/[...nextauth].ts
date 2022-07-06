@@ -61,18 +61,19 @@ export default (req: NextApiRequest, res: NextApiResponse): void =>
       },
       //
       async jwt({ token, user, account, profile, isNewUser }) {
-        // console.log(`アカウント:${JSON.stringify(account)}`);
+        console.log(`jwt____:${JSON.stringify(account)}`);
+
         if (account?.accessToken) {
           token.accessToken = account.accessToken;
         }
         console.log(token);
         return token;
       },
-
       // async session({ session, token, user }) {
-      //   // Send properties to the client, like an access_token from a provider.
-      //   session.accessToken = token.accessToken;
-      //   return session;
+      // Send properties to the client, like an access_token from a provider.
+      // session.accessToken = token.accessToken; //これがあるとログインできない。。
+      // alert(session);
+      // return session;
       // },
 
       // emailのドメイン制限を入れたい場合は以下のcallbacksを入れてください

@@ -73,6 +73,7 @@ model TypingResult {
   course  String
   result  Int
   resulet Int?
+  email   String?
 
   @@map("typingresults")
 }

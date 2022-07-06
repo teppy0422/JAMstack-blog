@@ -22,10 +22,12 @@ export default async function handler(
     case "POST":
       const author = await prisma.typingResult.create({
         data: {
-          // userId,
+          userId: req.body.userId,
           result: req.body.result,
           course: req.body.course,
           name: req.body.name,
+          image: req.body.image,
+          email: req.body.email,
         },
       });
       console.log("aaa: ", author);

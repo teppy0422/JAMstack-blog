@@ -41,6 +41,7 @@ import { getQuiz } from "../../libs/romaji_quiz.js";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 
 import Keyboard from "../../components/typing/kyeboard";
+import GraphResultTrasition from "../../components/typing/graphResultTransition";
 
 export const typing = () => {
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
@@ -371,6 +372,23 @@ export const typing = () => {
     Q_used.current = "";
   }
 
+  let email = [];
+  let result = [];
+  async function myAsync(url) {
+    const response = await fetch(url, { method: "GET" }); //await で fetch() が完了するまで待つ
+    const data = await response.json(); //await で response.json() が完了するまで待つ
+    console.log("data", data);
+    const arr = data.map((item, index, array) => {
+      if (item.email !== null) {
+        email.push(item.email);
+        result.push(item.result);
+      }
+    });
+    console.log("email", email);
+    console.log("result", result);
+    return email;
+  }
+
   return (
     <>
       <DefaultSeo
@@ -398,6 +416,9 @@ export const typing = () => {
           cardType: "summary_large_image",
         }}
       />
+
+      <button onClick={() => myAsync("/api/typing")}>myAsync</button>
+
       <Box ref={menuRef} style={{ display: "block" }}>
         <Menu
           gameReplay={() => {
@@ -407,6 +428,7 @@ export const typing = () => {
       </Box>
 
       <Content style={{ position: "relative" }}>
+        {/* <GraphResultTrasition /> */}
         <VStack className={styles.typing} h="620px">
           <Box
             className={

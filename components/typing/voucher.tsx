@@ -46,10 +46,15 @@ let voucher = (pops, ref) => {
 
   const handleClick = async () => {
     const data = {
+      userId: "user",
       course: "高級",
       result: property.typePerSocund,
       name: session.user.name,
+      image: session.user.image,
+      email: session.user.email,
     };
+    console.log(data.image);
+
     await fetch("/api/typing", {
       method: "POST",
       headers: {
@@ -83,7 +88,7 @@ let voucher = (pops, ref) => {
                 {session.user.name}
               </Center>
             ) : (
-              <Center>ログインしていません</Center>
+              <Center fontSize="14px">ログインしていません</Center>
             )}
             <Center>{property.totalCost}円</Center>
             <Center>ミス:{property.missedCount}回</Center>
