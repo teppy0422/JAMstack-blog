@@ -372,21 +372,21 @@ export const typing = () => {
     Q_used.current = "";
   }
 
-  let email = [];
+  let userID = [];
   let result = [];
   async function myAsync(url) {
     const response = await fetch(url, { method: "GET" }); //await で fetch() が完了するまで待つ
     const data = await response.json(); //await で response.json() が完了するまで待つ
     console.log("data", data);
     const arr = data.map((item, index, array) => {
-      if (item.email !== null) {
-        email.push(item.email);
+      if (item.userId !== null) {
+        userID.push(item.userId);
         result.push(item.result);
       }
     });
-    console.log("email", email);
+    console.log("userID", userID);
     console.log("result", result);
-    return email;
+    return userID;
   }
 
   return (

@@ -24,7 +24,7 @@ export default async function handler(
         data: {
           userId: req.body.userId,
           result: req.body.result,
-          course: req.body.email,
+          course: req.body.course,
           name: req.body.name,
           image: req.body.image,
         },
