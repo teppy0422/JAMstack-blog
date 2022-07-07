@@ -9,9 +9,28 @@ import styles from "../../styles/home.module.scss";
 
 import GetWindowSize, { getWindowSize } from "../../script/GetWindowSize";
 
-const Skillchart: React.FunctionComponent = (): JSX.Element => {
+type Props = {
+  results: {
+    userId: string;
+    result: Number;
+    time: Number;
+    date: string;
+  }[];
+};
+
+let results = [];
+let chart;
+const Skillchart: React.FC<Props> = ({ results }): JSX.Element => {
+  console.log("____");
+
   const { data: session } = useSession();
-  console.log("session:", session);
+  console.log("session::", session);
+
+  console.log("results.length", results.length);
+
+  for (let g of results) {
+    console.log("g:", g.date);
+  }
 
   const WindowSize = GetWindowSize();
   let myWidth: number = WindowSize.width;
@@ -25,13 +44,34 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
     HighchartsMore(Highcharts);
   }
 
+  async function myAsync(url) {
+    const response = await fetch(url, { method: "GET" }); //await で fetch() が完了するまで待つ
+    const data = await response.json(); //await で response.json() が完了するまで待つ
+    console.log("data", data);
+
+    const arr = data.map((item, index, array) => {
+      if (item.userId !== null) {
+        results.push({
+          userId: item.userId,
+          result: item.result,
+          time: item.times,
+          date: item.date,
+        });
+      }
+    });
+    console.log("results", results);
+    console.log("email", results[0].userId);
+    // return results;
+    // options["series"] = [{ name: "aaa", data: [0, 1], color: "#444444" }];
+  }
+
   const options = {
     title: {
       text: "タイピング履歴",
     },
 
     subtitle: {
-      text: "Source: thesolarfoundation.com",
+      text: "",
     },
 
     yAxis: {
@@ -64,7 +104,7 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
     series: [
       {
         name: "KPM",
-        data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175],
+        data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 164175],
         color: "#444444",
       },
       {
@@ -91,9 +131,21 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
       ],
     },
   };
+  // function onClick() {
+  // highcharts.addSeries({
+  //   name: "新しく追加したデータ",
+  //   data: [100000, 110000, 120000, 100000, 130000, 140000],
+  // });
+  // }
   return (
     <div>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <button onClick={() => myAsync("/api/typing")}>myAsync</button>
+
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={options}
+        results={results}
+      />
     </div>
   );
 };

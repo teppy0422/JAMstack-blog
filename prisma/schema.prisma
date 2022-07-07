@@ -9,7 +9,7 @@ datasource db {
   // url = env("SHADOW_DATABASE_URL")
 
 
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 
   referentialIntegrity = "prisma"
 }
@@ -74,10 +74,11 @@ model TypingResult {
   result  Int
   resulet Int?
   email   String?
+  times   Int?
+  date    DateTime @default(now())
 
   @@map("typingresults")
 }
-
 
 model SampleBlog {
   id        Int      @default(autoincrement()) @id

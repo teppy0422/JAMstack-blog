@@ -43,6 +43,8 @@ import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 import Keyboard from "../../components/typing/kyeboard";
 import GraphResultTrasition from "../../components/typing/graphResultTransition";
 
+import GraphTemp from "../../components/typing/graphTemp";
+
 export const typing = () => {
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const inputText = useRef(""); //入力文字
@@ -372,23 +374,24 @@ export const typing = () => {
     Q_used.current = "";
   }
 
-  let userID = [];
-  let result = [];
+  let results = [];
   async function myAsync(url) {
     const response = await fetch(url, { method: "GET" }); //await で fetch() が完了するまで待つ
     const data = await response.json(); //await で response.json() が完了するまで待つ
     console.log("data", data);
     const arr = data.map((item, index, array) => {
       if (item.userId !== null) {
-        userID.push(item.userId);
-        result.push(item.result);
+        results.push({
+          userId: item.userId,
+          result: item.result,
+          time: item.times,
+          date: item.date,
+        });
       }
     });
-    console.log("userID", userID);
-    console.log("result", result);
-    return userID;
+    console.log("results", results);
+    return results;
   }
-
   return (
     <>
       <DefaultSeo
@@ -428,7 +431,6 @@ export const typing = () => {
       </Box>
 
       <Content style={{ position: "relative" }}>
-        {/* <GraphResultTrasition /> */}
         <VStack className={styles.typing} h="620px">
           <Box
             className={
@@ -557,11 +559,14 @@ export const typing = () => {
             </Box>
           </Box>
         </VStack>
+        <GraphTemp />
+        {/* <GraphResultTrasition results={results} /> */}
         <Voucher
           ref={voucherRef}
           totalCost={totalCost.current}
           missedCount={missedCount}
           typePerSocund={typePerSocund}
+          times={totalTime_origin.current}
           gameReplay={() => {
             gameReplay();
           }}

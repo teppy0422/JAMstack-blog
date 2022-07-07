@@ -22,6 +22,7 @@ let voucher = (pops, ref) => {
     typePerSocund: pops.typePerSocund,
     gameReplay: pops.gameReplay,
     voucherCloseRef: pops.voucherCloseRef,
+    times: pops.times,
   };
   const voucherOpenRef = useRef(null); //伝票を開くボタン
   const voucherCloseRef = useRef(null); //伝票を開くボタン
@@ -51,6 +52,7 @@ let voucher = (pops, ref) => {
       result: property.typePerSocund,
       name: session.user.name,
       image: session.user.image,
+      times: property.times,
     };
     console.log(data.image);
 
@@ -87,7 +89,7 @@ let voucher = (pops, ref) => {
                 {session.user.name}
               </Center>
             ) : (
-              <Center fontSize="14px">ログインしていません</Center>
+              <Center fontSize="10px">ログインしていません</Center>
             )}
             <Center>{property.totalCost}円</Center>
             <Center>ミス:{property.missedCount}回</Center>
