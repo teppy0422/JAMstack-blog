@@ -419,8 +419,6 @@ export const typing = () => {
         }}
       />
 
-      <button onClick={() => myAsync("/api/typing")}>myAsync</button>
-
       <Box ref={menuRef} style={{ display: "block" }}>
         <Menu
           gameReplay={() => {
