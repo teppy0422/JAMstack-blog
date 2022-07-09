@@ -63,6 +63,7 @@ let LineChart = (pops, ref) => {
     let times = [];
     let dates = [];
     console.log("session,", session);
+
     if (session !== undefined) {
       const count = 0;
       const email = session.user.email;
