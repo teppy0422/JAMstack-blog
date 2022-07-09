@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { render } from "react-dom";
 import {
   useColorMode,
@@ -11,13 +17,23 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
+  Center,
+  Tooltip,
 } from "@chakra-ui/react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
 
 import { useSession, signIn, signOut } from "next-auth/react";
 
-const LineChart = () => {
+let LineChart = (pops, ref) => {
+  const property = {
+    totalCost: pops.totalCost,
+    missedCount: pops.missedCount,
+    typePerSocund: pops.typePerSocund,
+    gameReplay: pops.gameReplay,
+    voucherCloseRef: pops.voucherCloseRef,
+    times: pops.times,
+  };
   const { data: session } = useSession();
   const [hoverData, setHoverData] = useState(null);
   const { colorMode, toggleColorMode } = useColorMode();
@@ -25,6 +41,11 @@ const LineChart = () => {
   const [chartOptions, setChartOptions] = useState({});
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  //それぞれのボタン
+  const openRef = useRef(null);
+  const updateRef = useRef(null);
+  const closeRef = useRef(null);
 
   const valueRef = useRef(0);
   const timesRef = useRef(0);
@@ -37,6 +58,7 @@ const LineChart = () => {
   let dates = [];
 
   const getResult = async () => {
+    const count = 0;
     const email = session.user.email;
     console.log("email", email);
     const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
@@ -51,8 +73,9 @@ const LineChart = () => {
           date: item.date,
         });
         if (item.userId === email) {
+          count++;
           values.push(item.result);
-          times.push(index + 1);
+          times.push(count);
           dates.push(item.date);
         }
       }
@@ -185,12 +208,6 @@ const LineChart = () => {
       },
     });
   }
-  useEffect(() => {
-    window.onload = function () {
-      setTimeout(graphOpen, 500);
-      setTimeout(graphOpen, 1000);
-    };
-  }, []);
   function graphOpen() {
     const button = document.getElementById("button");
     if (button !== null) {
@@ -198,10 +215,40 @@ const LineChart = () => {
     }
     console.log("clicked");
   }
+  const OverlayTwo = () => (
+    <ModalOverlay
+      bg="none"
+      backdropFilter="auto"
+      backdropInvert="80%"
+      backdropBlur="2px"
+    />
+  );
+  const [overlay, setOverlay] = React.useState(<OverlayTwo />);
+  // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
+  useImperativeHandle(ref, () => ({
+    childClick() {
+      openRef.current.click();
+      setTimeout(updateSeries, 1000);
+      setTimeout(updateSeries, 1500);
+    },
+  }));
   return (
     <>
-      {session ? <Button onClick={onOpen}>履歴</Button> : <Button>履歴</Button>}
+      {session ? (
+        <Button
+          onClick={() => {
+            onOpen();
+            setOverlay(<OverlayTwo />);
+          }}
+          ref={openRef}
+        >
+          履歴
+        </Button>
+      ) : (
+        <Button disabled>履歴</Button>
+      )}
       <Modal isOpen={isOpen} onClose={onClose}>
+        {overlay}
         <ModalOverlay />
         <ModalContent top="60px" w="100%" maxWidth="100%">
           <ModalHeader>Modal Title</ModalHeader>
@@ -211,18 +258,47 @@ const LineChart = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" id="button" onClick={() => updateSeries()}>
+            {session ? (
+              <Center fontSize={["0px", "16px", "16px", "16px"]}>
+                {session.user.name}
+              </Center>
+            ) : (
+              <Center fontSize="10px">ログインしていません</Center>
+            )}
+            <Center>{property.totalCost}円</Center>
+            <Center>ミス:{property.missedCount}回</Center>
+            <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
+              <Center>タイプ速度:{property.typePerSocund}/KPM</Center>
+            </Tooltip>
+            <Button
+              mr={2}
+              onClick={(e) => {
+                closeRef.current.click();
+                setTimeout(property.gameReplay, 500);
+              }}
+            >
+              もう一度プレイ[SPACE]
+            </Button>
+
+            <Button
+              variant="ghost"
+              id="button"
+              onClick={() => {
+                updateSeries();
+              }}
+              ref={updateRef}
+            >
               更新
             </Button>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme="blue" mr={3} ref={closeRef} onClick={onClose}>
               Close
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
       <h3>Hovering over {hoverData}</h3>
-      <button>Update Series</button>
     </>
   );
 };
+LineChart = forwardRef(LineChart);
 export default LineChart;

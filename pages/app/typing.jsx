@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useSession, signIn, signOut } from "next-auth/react";
+
 import { DefaultSeo } from "next-seo";
 import styles from "../../styles/home.module.scss";
 import {
@@ -46,6 +48,8 @@ import GraphResultTrasition from "../../components/typing/graphResultTransition"
 import GraphTemp from "../../components/typing/graphTemp";
 
 export const typing = () => {
+  const { data: session } = useSession();
+
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const inputText = useRef(""); //入力文字
   const Q_Texts = useRef(""); //問題文
@@ -65,6 +69,7 @@ export const typing = () => {
   const inputTextRef = useRef(null); //入力欄
   const menuRef = useRef(null); //menu
   const voucherRef = useRef(null); //伝票
+  const graphTempRef = useRef(null); //履歴グラフ
 
   const totalTime_origin = useRef(30); //トータルタイムの値
   const typeCountRef = useRef(0); //タイプ数
@@ -359,8 +364,31 @@ export const typing = () => {
     sound_BGM.current.pause();
     sound("finish");
     mode.current = "menu";
-    voucherRef.current.clickChildOpen();
+    // voucherRef.current.clickChildOpen();
+    postResult();
+    graphTempRef.current.childClick();
   }
+  // DBに登録
+  const postResult = async () => {
+    const data = {
+      userId: session.user.email,
+      course: "高級",
+      result: typePerSocund,
+      name: session.user.name,
+      image: session.user.image,
+      times: totalTime_origin.current,
+    };
+    console.log(data.image);
+
+    await fetch("/api/typing", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data), // 本文のデータ型は "Content-Type" ヘッダーと一致させる必要があります
+    });
+    // return response.json();
+  };
   //リプレイ
   function gameReplay() {
     setTypePerSocund(0);
@@ -559,7 +587,23 @@ export const typing = () => {
             </Box>
           </Box>
         </VStack>
-        <GraphTemp />
+        <GraphTemp
+          ref={graphTempRef}
+          totalCost={totalCost.current}
+          missedCount={missedCount}
+          typePerSocund={typePerSocund}
+          times={totalTime_origin.current}
+          gameReplay={() => {
+            gameReplay();
+          }}
+        />
+        <Button
+          onClick={() => {
+            graphTempRef.current.childClick();
+          }}
+        >
+          test
+        </Button>
         {/* <GraphResultTrasition results={results} /> */}
         <Voucher
           ref={voucherRef}
