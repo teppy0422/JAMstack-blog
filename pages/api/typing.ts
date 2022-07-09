@@ -30,7 +30,6 @@ export default async function handler(
           times: req.body.times,
         },
       });
-      console.log("aaa: ", author);
       res.status(200).json(author); // idを含む保存したデータを返す
       break;
 

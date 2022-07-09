@@ -378,7 +378,6 @@ export const typing = () => {
       image: session.user.image,
       times: 0,
     };
-    console.log(data.image);
 
     await fetch("/api/typing", {
       method: "POST",
