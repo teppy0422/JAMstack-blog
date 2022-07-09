@@ -373,24 +373,6 @@ export const typing = () => {
     Q_used.current = "";
   }
 
-  let results = [];
-  async function myAsync(url) {
-    const response = await fetch(url, { method: "GET" }); //await で fetch() が完了するまで待つ
-    const data = await response.json(); //await で response.json() が完了するまで待つ
-    console.log("data", data);
-    const arr = data.map((item, index, array) => {
-      if (item.userId !== null) {
-        results.push({
-          userId: item.userId,
-          result: item.result,
-          time: item.times,
-          date: item.date,
-        });
-      }
-    });
-    console.log("results", results);
-    return results;
-  }
   return (
     <>
       <DefaultSeo
