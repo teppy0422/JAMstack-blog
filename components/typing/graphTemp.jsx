@@ -5,7 +5,6 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { render } from "react-dom";
 import {
   useColorMode,
   Button,
@@ -145,10 +144,10 @@ let LineChart = (pops, ref) => {
           labels: [
             {
               point: {
-                xAxis: 2,
-                yAxis: 200,
-                x: 0,
-                y: 0,
+                xAxis: 0,
+                yAxis: 0,
+                x: 8,
+                y: 200,
               },
               text: "Arbois",
             },
@@ -200,6 +199,11 @@ let LineChart = (pops, ref) => {
         minorTickWidth: 1,
         minorTickLength: 5,
         minorTickColor: getColor("backborder"),
+      },
+      tooltip: {
+        headerFormat: "{point.x}<br>",
+        pointFormat: "{point.y} /KPM",
+        shared: true,
       },
       // series: [{ name: "KPM", data: getValue(), color: getColor() }],
       series: [{ name: "KPM", data: getValue(), color: getColor("text") }],
@@ -282,15 +286,6 @@ let LineChart = (pops, ref) => {
             <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
               <Center>タイプ速度:{property.typePerSocund}/KPM</Center>
             </Tooltip>
-            <Button
-              mr={2}
-              onClick={(e) => {
-                closeRef.current.click();
-                setTimeout(property.gameReplay, 500);
-              }}
-            >
-              もう一度プレイ[SPACE]
-            </Button>
 
             <Button
               variant="ghost"

@@ -121,7 +121,13 @@ let voucher = (pops, ref) => {
                 >
                   登録
                 </Button>
-                <GraphTemp ref={graphTempRef} />
+                <GraphTemp
+                  ref={graphTempRef}
+                  totalCost={property.totalCost}
+                  missedCount={property.missedCount}
+                  typePerSocund={property.typePerSocund}
+                  times={property.times}
+                />
               </>
             ) : (
               <>
