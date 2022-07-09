@@ -208,3 +208,5 @@ typing の一部を component にまとめる
 処理を変更
 
 email を追加
+
+times がないってエラー
