@@ -376,7 +376,7 @@ export const typing = () => {
       result: typePerSocund,
       name: session.user.name,
       image: session.user.image,
-      times: totalTime_origin.current,
+      times: 0,
     };
     console.log(data.image);
 
