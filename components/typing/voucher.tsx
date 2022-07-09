@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 
 import { useSession, signIn, signOut } from "next-auth/react";
+import GraphTemp from "../../components/typing/graphTemp";
 
 let voucher = (pops, ref) => {
   const property = {
@@ -26,6 +27,8 @@ let voucher = (pops, ref) => {
   };
   const voucherOpenRef = useRef(null); //伝票を開くボタン
   const voucherCloseRef = useRef(null); //伝票を開くボタン
+  const graphTempRef = useRef(null); //履歴グラフ
+
   const OverlayTwo = () => (
     <ModalOverlay
       bg="none"
@@ -108,13 +111,27 @@ let voucher = (pops, ref) => {
               もう一度プレイ[SPACE]
             </Button>
             {session ? (
-              <Button mr={2} onClick={handleClick}>
-                登録
-              </Button>
+              <>
+                <Button
+                  mr={2}
+                  onClick={(e) => {
+                    handleClick();
+                    graphTempRef.current.childClick();
+                  }}
+                >
+                  登録
+                </Button>
+                <GraphTemp ref={graphTempRef} />
+              </>
             ) : (
-              <Button mr={2} disabled>
-                登録
-              </Button>
+              <>
+                <Button mr={2} disabled>
+                  登録
+                </Button>
+                <Button mr={2} disabled>
+                  履歴
+                </Button>
+              </>
             )}
             <Button mr={2} onClick={onClose} ref={voucherCloseRef}>
               閉じる

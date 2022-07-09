@@ -11,13 +11,6 @@ import {
   Grid,
   GridItem,
   Text,
-  StatGroup,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
-  StatArrow,
-  Progress,
   Tooltip,
   useColorMode,
   Divider,
@@ -364,30 +357,9 @@ export const typing = () => {
     sound_BGM.current.pause();
     sound("finish");
     mode.current = "menu";
-    // voucherRef.current.clickChildOpen();
-    postResult();
-    graphTempRef.current.childClick();
+    voucherRef.current.clickChildOpen();
   }
-  // DBに登録
-  const postResult = async () => {
-    const data = {
-      userId: session.user.email,
-      course: "高級",
-      result: typePerSocund,
-      name: session.user.name,
-      image: session.user.image,
-      times: 0,
-    };
 
-    await fetch("/api/typing", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data), // 本文のデータ型は "Content-Type" ヘッダーと一致させる必要があります
-    });
-    // return response.json();
-  };
   //リプレイ
   function gameReplay() {
     setTypePerSocund(0);
@@ -601,7 +573,7 @@ export const typing = () => {
             graphTempRef.current.childClick();
           }}
         >
-          test
+          履歴
         </Button>
         {/* <GraphResultTrasition results={results} /> */}
         <Voucher

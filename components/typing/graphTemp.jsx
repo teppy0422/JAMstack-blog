@@ -51,42 +51,49 @@ let LineChart = (pops, ref) => {
   const timesRef = useRef(0);
   const datesRef = useRef("");
 
-  const dd = 99;
-  let results = [];
-  let values = [];
-  let times = [];
-  let dates = [];
+  useEffect(() => {
+    getValue();
+    setTimeout(updateSeries, 1000);
+    setTimeout(updateSeries, 1500);
+  }, []);
 
   const getResult = async () => {
-    const count = 0;
-    const email = session.user.email;
-    console.log("email", email);
-    const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
-    const data = await response.json(); //await で response.json() が完了するまで待つ
-    console.log("data", data);
-    const arr = data.map((item, index, array) => {
-      if (item.userId !== null) {
-        results.push({
-          userId: item.userId,
-          result: item.result,
-          time: item.times,
-          date: item.date,
-        });
-        if (item.userId === email) {
-          count++;
-          values.push(item.result);
-          times.push(count);
-          dates.push(item.date);
+    let results = [];
+    let values = [];
+    let times = [];
+    let dates = [];
+    console.log("session,", session);
+    if (session !== undefined) {
+      const count = 0;
+      const email = session.user.email;
+      console.log("email", email);
+      const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
+      const data = await response.json(); //await で response.json() が完了するまで待つ
+      console.log("data", data);
+      const arr = data.map((item, index, array) => {
+        if (item.userId !== null) {
+          results.push({
+            userId: item.userId,
+            result: item.result,
+            time: item.times,
+            date: item.date,
+          });
+          if (item.userId === email) {
+            count++;
+            values.push(item.result);
+            times.push(count);
+            dates.push(item.date);
+          }
         }
-      }
-    });
-    console.log("results", results);
-    console.log("values", values);
-    console.log("dates", dates);
-    // console.log("email", results[0].userId);
-    valueRef.current = values;
-    timesRef.current = times;
-    datesRef.current = dates;
+      });
+      console.log("results", results);
+      console.log("values", values);
+      console.log("dates", dates);
+      // console.log("email", results[0].userId);
+      valueRef.current = values;
+      timesRef.current = times;
+      datesRef.current = dates;
+    }
     return 50;
   };
 
@@ -236,11 +243,15 @@ let LineChart = (pops, ref) => {
     <>
       {session ? (
         <Button
+          id="openButton"
           onClick={() => {
             onOpen();
             setOverlay(<OverlayTwo />);
+            setTimeout(updateSeries, 1000);
+            setTimeout(updateSeries, 1500);
           }}
           ref={openRef}
+          display="none"
         >
           履歴
         </Button>
@@ -296,7 +307,7 @@ let LineChart = (pops, ref) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <h3>Hovering over {hoverData}</h3>
+      {/* <h3>Hovering over {hoverData}</h3> */}
     </>
   );
 };
