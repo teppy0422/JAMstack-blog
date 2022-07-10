@@ -36,7 +36,6 @@ import { getQuiz } from "../../libs/romaji_quiz.js";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 
 import Keyboard from "../../components/typing/kyeboard";
-import GraphResultTrasition from "../../components/typing/graphResultTransition";
 
 import GraphTemp from "../../components/typing/graphTemp";
 
