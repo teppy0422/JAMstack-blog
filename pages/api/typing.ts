@@ -27,7 +27,7 @@ export default async function handler(
           course: req.body.course,
           name: req.body.name,
           image: req.body.image,
-          // times: req.body.times,
+          times: req.body.times,
         },
       });
       res.status(200).json(author); // idを含む保存したデータを返す
