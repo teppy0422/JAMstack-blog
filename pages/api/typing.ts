@@ -6,12 +6,13 @@ const prisma = new PrismaClient();
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<TypingResult[] | TypingResult>
+  res: NextApiResponse<TypingResult[] | TypingResult>,
+  delete_id
 ) {
   const { method } = req;
 
-  console.log(method);
-  console.log(req.body.result);
+  console.log({ delete_id });
+  console.log({ method });
 
   switch (method) {
     case "GET":
@@ -27,13 +28,25 @@ export default async function handler(
           course: req.body.course,
           name: req.body.name,
           image: req.body.image,
+          missed: req.body.missed,
         },
       });
       res.status(200).json(author); // idを含む保存したデータを返す
       break;
 
+    case "DELETE":
+      console.log("delete:", req.body.delete_id);
+      const delete_result = await prisma.typingResult.delete({
+        where: {
+          id: Number(req.body.delete_id),
+        },
+      });
+      console.log("typing_delete_id");
+      res.status(200).json(delete_result); // idを含む保存したデータを返す
+      break;
+
     default:
-      res.setHeader("Allow", ["GET", "POST"]);
+      res.setHeader("Allow", ["GET", "POST", "DELETE_ID"]);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 }

@@ -57,6 +57,7 @@ let voucher = (pops, ref) => {
       name: session.user.name,
       image: session.user.image,
       times: property.times,
+      missed: property.missedCount,
     };
     console.log(data.image);
 

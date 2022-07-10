@@ -48,6 +48,7 @@ let LineChart = (pops, ref) => {
   //保存データ
   const valueRef = useRef(0);
   const timesRef = useRef(0);
+  const missedRef = useRef(0);
   const datesRef = useRef("");
   const idRef = useRef(0);
 
@@ -55,6 +56,7 @@ let LineChart = (pops, ref) => {
     getValue();
     setTimeout(updateSeries, 1000);
     setTimeout(updateSeries, 1500);
+    setTimeout(updateSeries, 2000);
   }, []);
 
   const getResult = async () => {
@@ -63,6 +65,7 @@ let LineChart = (pops, ref) => {
     let times = [];
     let dates = [];
     let ids = [];
+    let misseds = [];
     console.log("session,", session);
 
     if (session !== undefined) {
@@ -86,6 +89,7 @@ let LineChart = (pops, ref) => {
             times.push(count);
             dates.push(item.date);
             ids.push(item.id);
+            misseds.push(item.missed);
           }
         }
       });
@@ -97,16 +101,62 @@ let LineChart = (pops, ref) => {
       timesRef.current = times;
       datesRef.current = dates;
       idRef.current = ids;
+      missedRef.current = misseds;
     }
     return 50;
   };
-
+  const getIDRef = useRef("");
+  const getId = async (getCount) => {
+    if (session !== undefined) {
+      const count = 0;
+      const email = session.user.email;
+      const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
+      const data = await response.json(); //await で response.json() が完了するまで待つ
+      const arr = data.map((item, index, array) => {
+        if (item.userId !== null) {
+          if (item.userId === email) {
+            count++;
+            if (getCount === count) {
+              console.log(item.id);
+              getIDRef.current = item.id;
+              return false;
+            }
+          }
+        }
+      });
+    }
+  };
+  const delete_one = async (delete_id) => {
+    const data = {
+      delete_id: delete_id,
+    };
+    console.log({ session });
+    if (session !== undefined) {
+      await fetch("/api/typing", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data), // 本文のデータ型は "Content-Type" ヘッダーと一致させる必要があります
+      }); //await で fetch() が完了するまで待つ
+      // const data = await response.json(); //await で response.json() が完了するまで待つ
+      // console.log("delete_one:", response);
+      console.log("delete_one;end_in");
+    }
+    console.log("delete_one;end_out");
+  };
   function getValue() {
     getResult();
     return valueRef.current;
   }
   function getTimes() {
     return timesRef.current;
+  }
+  function getMisseds() {
+    return missedRef.current;
+  }
+  function getIds() {
+    return idRef.current;
   }
   function getColor(type) {
     switch (type) {
@@ -124,7 +174,6 @@ let LineChart = (pops, ref) => {
         }
     }
   }
-
   function updateSeries() {
     setChartOptions({
       chart: {
@@ -198,7 +247,6 @@ let LineChart = (pops, ref) => {
         style: {
           lineColor: getColor("text"),
         },
-
         minorTickInterval: 100, // 'auto'
         minorTickWidth: 1,
         minorTickLength: 5,
@@ -206,13 +254,13 @@ let LineChart = (pops, ref) => {
       },
       tooltip: {
         headerFormat: "{point.x}<br>",
-        pointFormat: "{point.y} /KPM",
+        pointFormat: "{point.y} /{series.name}<br>",
         shared: true,
       },
       // series: [{ name: "KPM", data: getValue(), color: getColor() }],
       series: [
         { name: "KPM", data: getValue(), color: getColor("text") },
-        { name: "missed", data: [10, 20], color: "red" },
+        { name: "ミス", data: getMisseds(), color: "red" },
       ],
       plotOptions: {
         series: {
@@ -233,7 +281,12 @@ let LineChart = (pops, ref) => {
   }
   function deleteQuestion(obj) {
     console.log(obj.point);
-    console.log(obj.point.category);
+    console.log(obj.point.y);
+    console.log("obj.point.category:", obj.point.category);
+    getId(obj.point.category);
+    console.log("getIDRef:", getIDRef.current);
+
+    delete_one(getIDRef.current);
   }
 
   function graphOpen() {
