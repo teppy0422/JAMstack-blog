@@ -25,9 +25,10 @@ let voucher = (pops, ref) => {
     voucherCloseRef: pops.voucherCloseRef,
     times: pops.times,
   };
+  const graphTempRef = useRef(null); //履歴グラフ
   const voucherOpenRef = useRef(null); //伝票を開くボタン
   const voucherCloseRef = useRef(null); //伝票を開くボタン
-  const graphTempRef = useRef(null); //履歴グラフ
+  const voucherPostRef = useRef(null); //登録ボタン
 
   const OverlayTwo = () => (
     <ModalOverlay
@@ -114,9 +115,11 @@ let voucher = (pops, ref) => {
               <>
                 <Button
                   mr={2}
+                  ref={voucherPostRef}
                   onClick={(e) => {
                     handleClick();
                     graphTempRef.current.childClick();
+                    voucherPostRef.current.setAttribute("disabled", "");
                   }}
                 >
                   登録
