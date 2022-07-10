@@ -45,10 +45,11 @@ let LineChart = (pops, ref) => {
   const openRef = useRef(null);
   const updateRef = useRef(null);
   const closeRef = useRef(null);
-
+  //保存データ
   const valueRef = useRef(0);
   const timesRef = useRef(0);
   const datesRef = useRef("");
+  const idRef = useRef(0);
 
   useEffect(() => {
     getValue();
@@ -61,6 +62,7 @@ let LineChart = (pops, ref) => {
     let values = [];
     let times = [];
     let dates = [];
+    let ids = [];
     console.log("session,", session);
 
     if (session !== undefined) {
@@ -83,6 +85,7 @@ let LineChart = (pops, ref) => {
             values.push(item.result);
             times.push(count);
             dates.push(item.date);
+            ids.push(item.id);
           }
         }
       });
@@ -93,6 +96,7 @@ let LineChart = (pops, ref) => {
       valueRef.current = values;
       timesRef.current = times;
       datesRef.current = dates;
+      idRef.current = ids;
     }
     return 50;
   };
@@ -206,13 +210,20 @@ let LineChart = (pops, ref) => {
         shared: true,
       },
       // series: [{ name: "KPM", data: getValue(), color: getColor() }],
-      series: [{ name: "KPM", data: getValue(), color: getColor("text") }],
+      series: [
+        { name: "KPM", data: getValue(), color: getColor("text") },
+        { name: "missed", data: [10, 20], color: "red" },
+      ],
       plotOptions: {
         series: {
+          cursor: "pointer",
           point: {
             events: {
               mouseOver(e) {
                 setHoverData(e.target.category);
+              },
+              click: function (e) {
+                deleteQuestion(e);
               },
             },
           },
@@ -220,6 +231,11 @@ let LineChart = (pops, ref) => {
       },
     });
   }
+  function deleteQuestion(obj) {
+    console.log(obj.point);
+    console.log(obj.point.category);
+  }
+
   function graphOpen() {
     const button = document.getElementById("button");
     if (button !== null) {
@@ -303,7 +319,7 @@ let LineChart = (pops, ref) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      {/* <h3>Hovering over {hoverData}</h3> */}
+      <h3>Hovering over {hoverData}</h3>
     </>
   );
 };
