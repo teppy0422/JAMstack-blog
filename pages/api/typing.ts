@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default async function handler(
-  req: NextApiRequest,
+  req,
   res: NextApiResponse<TypingResult[] | TypingResult>
 ) {
   const { method } = req;
