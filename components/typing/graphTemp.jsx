@@ -128,7 +128,7 @@ let LineChart = (pops, ref) => {
   };
   const delete_one = async (delete_id) => {
     const data = {
-      delete_id: delete_id,
+      delete_id: Number(delete_id),
     };
     console.log({ session });
     if (session !== undefined) {

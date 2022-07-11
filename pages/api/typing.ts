@@ -6,12 +6,9 @@ const prisma = new PrismaClient();
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<TypingResult[] | TypingResult>,
-  delete_id
+  res: NextApiResponse<TypingResult[] | TypingResult>
 ) {
   const { method } = req;
-
-  console.log({ delete_id });
   console.log({ method });
 
   switch (method) {
