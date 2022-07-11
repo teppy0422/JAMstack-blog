@@ -317,9 +317,9 @@ let LineChart = (pops, ref) => {
   // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
   useImperativeHandle(ref, () => ({
     childClick() {
+      getResult();
+      setTimeout(updateSeries, 500);
       openRef.current.click();
-      setTimeout(updateSeries, 1000);
-      setTimeout(updateSeries, 1500);
     },
   }));
   return (
