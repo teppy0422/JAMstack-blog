@@ -285,9 +285,6 @@ export const typing = () => {
     setTypeDisplayRomaji_0("");
 
     const inputSuggest = getRomaji(Q_Texts.current.substring(0, 3));
-    console.log("x", Q_Texts.current);
-    console.log("y:", Q_Texts.current.substring(0, 3));
-    console.log("z:", inputSuggest);
     makeSpan(inputSuggest[0], typeDisplayRomaji);
 
     //ひらがなから入力候補を除いた入力候補
