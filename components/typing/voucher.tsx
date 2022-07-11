@@ -74,6 +74,7 @@ let voucher = (pops, ref) => {
     <>
       <Button
         ml="4"
+        _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
         onClick={() => {
           setOverlay(<OverlayTwo />);
           onOpen();
@@ -104,6 +105,7 @@ let voucher = (pops, ref) => {
           <ModalFooter py={4}>
             <Button
               mr={2}
+              _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
               onClick={(e) => {
                 voucherCloseRef.current.click();
                 setTimeout(property.gameReplay, 500);
@@ -114,6 +116,7 @@ let voucher = (pops, ref) => {
             {session ? (
               <>
                 <Button
+                  _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                   mr={2}
                   ref={voucherPostRef}
                   onClick={(e) => {
@@ -144,7 +147,12 @@ let voucher = (pops, ref) => {
                 </Button>
               </>
             )}
-            <Button mr={2} onClick={onClose} ref={voucherCloseRef}>
+            <Button
+              mr={2}
+              onClick={onClose}
+              ref={voucherCloseRef}
+              _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+            >
               閉じる
             </Button>
           </ModalFooter>

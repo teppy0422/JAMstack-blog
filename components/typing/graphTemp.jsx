@@ -25,8 +25,6 @@ import Highcharts from "highcharts/highstock";
 
 import { useSession, signIn, signOut } from "next-auth/react";
 
-let valueTest = [];
-
 let LineChart = (pops, ref) => {
   const property = {
     totalCost: pops.totalCost,
@@ -58,7 +56,6 @@ let LineChart = (pops, ref) => {
   useEffect(() => {
     console.log("更新");
     getResult();
-    updateSeries();
   }, [session]);
 
   const getResult = async () => {
@@ -91,7 +88,11 @@ let LineChart = (pops, ref) => {
             times.push(count);
             dates.push(item.date);
             ids.push(item.id);
-            misseds.push(item.missed);
+            if (item.missed === 0) {
+              misseds.push(null);
+            } else {
+              misseds.push(item.missed);
+            }
           }
         }
       });
@@ -104,8 +105,6 @@ let LineChart = (pops, ref) => {
       datesRef.current = dates;
       idRef.current = ids;
       missedRef.current = misseds;
-
-      valueTest = values;
     }
     return 50;
   };
@@ -133,7 +132,6 @@ let LineChart = (pops, ref) => {
   };
   function getValue() {
     console.log("getValue:", valueRef.current);
-    console.log("valueText:", valueTest);
     return valueRef.current;
   }
   function getTimes() {
@@ -160,9 +158,6 @@ let LineChart = (pops, ref) => {
           return "#999999";
         }
     }
-  }
-  function deleteSeries() {
-    setChartOptions({});
   }
   function updateSeries() {
     setChartOptions({
@@ -332,14 +327,14 @@ let LineChart = (pops, ref) => {
       {session ? (
         <Button
           id="openButton"
+          _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
           onClick={() => {
             onOpen();
             getResult();
             setOverlay(<OverlayTwo />);
             // updateSeries();
 
-            deleteSeries();
-            setTimeout(updateSeries, 100);
+            updateSeries();
           }}
           ref={openRef}
         >
@@ -373,6 +368,7 @@ let LineChart = (pops, ref) => {
             </Tooltip>
 
             <Button
+              _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
               variant="ghost"
               id="button"
               onClick={() => {
