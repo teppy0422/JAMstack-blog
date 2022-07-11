@@ -349,9 +349,15 @@ const data = {
 };
 export const getRomaji = (text) => {
   const arr = new Array();
-  //二文字の場合
+  //三文字の場合
   for (let key in data) {
     if (data[key] === text) {
+      arr.push(key);
+    }
+  }
+  //二文字の場合
+  for (let key in data) {
+    if (data[key] === text.substring(0, 2)) {
       arr.push(key);
     }
   }
@@ -400,6 +406,14 @@ export const getRomaji2 = (text) => {
   for (let key in data) {
     if (data[key] === text) {
       arr.push(key);
+      arr.push(3);
+      return arr;
+    }
+  }
+  //二文字の場合
+  for (let key in data) {
+    if (data[key] === text.substring(0, 2)) {
+      arr.push(key);
       arr.push(2);
       return arr;
     }
@@ -440,7 +454,7 @@ export const changeColor = (id, count) => {
 export const getRomajiForecast = (text) => {
   const str = "";
   while (text.length !== 0) {
-    const hiragana_ = text.substring(0, 2);
+    const hiragana_ = text.substring(0, 3);
     const getRomaji_ = getRomaji2(hiragana_);
 
     str = str + getRomaji_[0];

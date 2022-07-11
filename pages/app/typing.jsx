@@ -171,7 +171,7 @@ export const typing = () => {
         }
         break;
       case "play":
-        const temp = getRomaji(Q_Texts.current.substring(0, 2));
+        const temp = getRomaji(Q_Texts.current.substring(0, 3));
         inputText.current = inputText.current + e.key;
         const inputTextTempA = inputText.current;
         const matchCount = 0;
@@ -229,7 +229,7 @@ export const typing = () => {
               TimeUp();
             } else {
               // 次の文字の正解を表示
-              const nextWord = getRomaji(Q_Texts.current.substring(0, 2));
+              const nextWord = getRomaji(Q_Texts.current.substring(0, 3));
               makeSpan(nextWord[0], typeDisplayRomaji);
               setTypeDisplayRomaji_2(getRomajiForecast(Q_Texts.current));
 
@@ -284,7 +284,10 @@ export const typing = () => {
     // 入力候補
     setTypeDisplayRomaji_0("");
 
-    const inputSuggest = getRomaji(Q_Texts.current.substring(0, 2));
+    const inputSuggest = getRomaji(Q_Texts.current.substring(0, 3));
+    console.log("x", Q_Texts.current);
+    console.log("y:", Q_Texts.current.substring(0, 3));
+    console.log("z:", inputSuggest);
     makeSpan(inputSuggest[0], typeDisplayRomaji);
 
     //ひらがなから入力候補を除いた入力候補
