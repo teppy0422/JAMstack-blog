@@ -25,10 +25,10 @@ export default async function handler(
       const post = await prisma.typingResult.create({
         data: {
           userId: String(req.body.userId),
-          result: req.body.result,
-          course: req.body.course,
-          name: req.body.name,
-          image: req.body.image,
+          result: Number(req.body.result),
+          course: String(req.body.course),
+          name: String(req.body.name),
+          image: String(req.body.image),
           times: Number(req.body.times),
           missed: Number(req.body.missed),
         },
