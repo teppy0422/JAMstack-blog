@@ -20,9 +20,15 @@ import {
   Center,
   Tooltip,
 } from "@chakra-ui/react";
-import HighchartsReact from "highcharts-react-official";
-import Highcharts from "highcharts/highstock";
 
+import Highcharts from "highcharts/highcharts";
+// import Highcharts from "highcharts/highstock"; //上記との違いわからん
+import HighchartsReact from "highcharts-react-official";
+import highchartsAccessibility from "highcharts/modules/accessibility";
+// init the module
+if (typeof window !== `undefined`) {
+  highchartsAccessibility(Highcharts);
+}
 import { useSession, signIn, signOut } from "next-auth/react";
 
 let LineChart = (pops, ref) => {
