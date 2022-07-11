@@ -9,7 +9,7 @@ datasource db {
   // url = env("SHADOW_DATABASE_URL")
 
 
-  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 
   referentialIntegrity = "prisma"
 }
