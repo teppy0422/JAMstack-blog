@@ -547,13 +547,13 @@ export const typing = () => {
             gameReplay();
           }}
         />
-        <Button
+        {/* <Button
           onClick={() => {
             graphTempRef.current.childClick();
           }}
         >
           履歴
-        </Button>
+        </Button> */}
         {/* <GraphResultTrasition results={results} /> */}
         <Voucher
           ref={voucherRef}

@@ -41,12 +41,11 @@ export default async function handler(
           id: Number(req.body.delete_id),
         },
       });
-      console.log("typing_delete_id");
       res.status(200).json(delete_result); // idを含む保存したデータを返す
       break;
 
     default:
-      res.setHeader("Allow", ["GET", "POST", "DELETE_ID"]);
+      res.setHeader("Allow", ["GET", "POST", "DELETE"]);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 }

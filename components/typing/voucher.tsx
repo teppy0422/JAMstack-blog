@@ -59,7 +59,6 @@ let voucher = (pops, ref) => {
       times: property.times,
       missed: property.missedCount,
     };
-    console.log(data.image);
 
     await fetch("/api/typing", {
       method: "POST",
@@ -125,13 +124,15 @@ let voucher = (pops, ref) => {
                 >
                   登録
                 </Button>
-                <GraphTemp
-                  ref={graphTempRef}
-                  totalCost={property.totalCost}
-                  missedCount={property.missedCount}
-                  typePerSocund={property.typePerSocund}
-                  times={property.times}
-                />
+                <div style={{ display: "none" }}>
+                  <GraphTemp
+                    ref={graphTempRef}
+                    totalCost={property.totalCost}
+                    missedCount={property.missedCount}
+                    typePerSocund={property.typePerSocund}
+                    times={property.times}
+                  />
+                </div>
               </>
             ) : (
               <>

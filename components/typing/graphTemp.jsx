@@ -4,6 +4,7 @@ import React, {
   useEffect,
   forwardRef,
   useImperativeHandle,
+  useReducer,
 } from "react";
 import {
   useColorMode,
@@ -23,6 +24,8 @@ import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
 
 import { useSession, signIn, signOut } from "next-auth/react";
+
+let valueTest = [];
 
 let LineChart = (pops, ref) => {
   const property = {
@@ -53,11 +56,10 @@ let LineChart = (pops, ref) => {
   const idRef = useRef(0);
 
   useEffect(() => {
-    getValue();
-    setTimeout(updateSeries, 1000);
-    setTimeout(updateSeries, 1500);
-    setTimeout(updateSeries, 2000);
-  }, []);
+    console.log("更新");
+    getResult();
+    updateSeries();
+  }, [session]);
 
   const getResult = async () => {
     let results = [];
@@ -66,8 +68,8 @@ let LineChart = (pops, ref) => {
     let dates = [];
     let ids = [];
     let misseds = [];
-    console.log("session,", session);
 
+    console.log("session:", session);
     if (session !== undefined) {
       const count = 0;
       const email = session.user.email;
@@ -75,7 +77,7 @@ let LineChart = (pops, ref) => {
       const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
       const data = await response.json(); //await で response.json() が完了するまで待つ
       console.log("data", data);
-      const arr = data.map((item, index, array) => {
+      const arr = await data.map((item, index, array) => {
         if (item.userId !== null) {
           results.push({
             userId: item.userId,
@@ -93,18 +95,21 @@ let LineChart = (pops, ref) => {
           }
         }
       });
-      console.log("results", results);
-      console.log("values", values);
-      console.log("dates", dates);
+      // console.log("results", results);
+      // console.log("values", values);
+      // console.log("dates", dates);
       // console.log("email", results[0].userId);
       valueRef.current = values;
       timesRef.current = times;
       datesRef.current = dates;
       idRef.current = ids;
       missedRef.current = misseds;
+
+      valueTest = values;
     }
     return 50;
   };
+
   const getIDRef = useRef("");
   const getId = async (getCount) => {
     if (session !== undefined) {
@@ -112,41 +117,23 @@ let LineChart = (pops, ref) => {
       const email = session.user.email;
       const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
       const data = await response.json(); //await で response.json() が完了するまで待つ
-      const arr = data.map((item, index, array) => {
+      const arr = await data.map((item, index, array) => {
         if (item.userId !== null) {
           if (item.userId === email) {
             count++;
             if (getCount === count) {
-              console.log(item.id);
+              console.log("ggg", item.id);
               getIDRef.current = item.id;
-              return false;
+              return item.id;
             }
           }
         }
       });
     }
   };
-  const delete_one = async (delete_id) => {
-    const data = {
-      delete_id: Number(delete_id),
-    };
-    console.log({ session });
-    if (session !== undefined) {
-      await fetch("/api/typing", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data), // 本文のデータ型は "Content-Type" ヘッダーと一致させる必要があります
-      }); //await で fetch() が完了するまで待つ
-      // const data = await response.json(); //await で response.json() が完了するまで待つ
-      // console.log("delete_one:", response);
-      console.log("delete_one;end_in");
-    }
-    console.log("delete_one;end_out");
-  };
   function getValue() {
-    getResult();
+    console.log("getValue:", valueRef.current);
+    console.log("valueText:", valueTest);
     return valueRef.current;
   }
   function getTimes() {
@@ -173,6 +160,9 @@ let LineChart = (pops, ref) => {
           return "#999999";
         }
     }
+  }
+  function deleteSeries() {
+    setChartOptions({});
   }
   function updateSeries() {
     setChartOptions({
@@ -209,7 +199,7 @@ let LineChart = (pops, ref) => {
       ],
       colors: "#ff0000",
       title: {
-        text: "タイピング履歴",
+        text: "クリックでデータの削除",
         style: {
           color: getColor("text"),
         },
@@ -286,9 +276,33 @@ let LineChart = (pops, ref) => {
     getId(obj.point.category);
     console.log("getIDRef:", getIDRef.current);
 
-    delete_one(getIDRef.current);
+    delete_one(obj.point.category);
   }
 
+  const delete_one = async (count) => {
+    let delete_id = await getId(count);
+    console.log("consooooole", delete_id);
+    console.log("getidrefffffff", getIDRef.current);
+    const data = {
+      delete_id: Number(getIDRef.current),
+    };
+    console.log({ session });
+    if (session !== undefined) {
+      await fetch("/api/typing", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data), // 本文のデータ型は "Content-Type" ヘッダーと一致させる必要があります
+      }); //await で fetch() が完了するまで待つ
+      // const data = await response.json(); //await で response.json() が完了するまで待つ
+      // console.log("delete_one:", response);
+      console.log("delete_one;end_in");
+    }
+    console.log("delete_one;end_out");
+    getResult(); //画面の更新;
+    setTimeout(updateSeries, 100);
+  };
   function graphOpen() {
     const button = document.getElementById("button");
     if (button !== null) {
@@ -320,12 +334,14 @@ let LineChart = (pops, ref) => {
           id="openButton"
           onClick={() => {
             onOpen();
+            getResult();
             setOverlay(<OverlayTwo />);
-            setTimeout(updateSeries, 1000);
-            setTimeout(updateSeries, 1500);
+            // updateSeries();
+
+            deleteSeries();
+            setTimeout(updateSeries, 100);
           }}
           ref={openRef}
-          display="none"
         >
           履歴
         </Button>
@@ -336,7 +352,7 @@ let LineChart = (pops, ref) => {
         {overlay}
         <ModalOverlay />
         <ModalContent top="60px" w="100%" maxWidth="100%">
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>タイピング履歴:高級店</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <HighchartsReact highcharts={Highcharts} options={chartOptions} />
