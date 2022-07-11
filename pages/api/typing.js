@@ -1,8 +1,10 @@
-import { TypingResult } from "@prisma/client";
+// import { TypingResult } from "@prisma/client";
 // import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
+import Prisma from "../../libs/prisma";
 
 import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+
+const prisma = Prisma;
 
 export default async function handler(
   // req: NextApiRequest,
