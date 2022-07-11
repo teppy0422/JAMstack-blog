@@ -22,7 +22,7 @@ export default async function handler(
       break;
 
     case "POST":
-      const author = await prisma.typingResult.create({
+      const post = await prisma.typingResult.create({
         data: {
           userId: req.body.userId,
           result: req.body.result,
@@ -33,7 +33,7 @@ export default async function handler(
           missed: req.body.missed,
         },
       });
-      res.status(200).json(author); // idを含む保存したデータを返す
+      res.status(200).json(post); // idを含む保存したデータを返す
       break;
 
     case "DELETE":
@@ -50,7 +50,8 @@ export default async function handler(
       res.setHeader("Allow", ["GET", "POST", "DELETE"]);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
-  async () => {
-    await prisma.$disconnect();
-  };
+  // async () => {
+  //   await prisma.$disconnect();
+  //   console.log("$disconnect");
+  // };
 }
