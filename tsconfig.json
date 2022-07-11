@@ -24,7 +24,7 @@
     "components/3d/Hippo_001.jsx",
     "**/*.mp3", //わからん
     "**/*.d.ts",
-    "pages/api/typing.js"
+    "pages/api/typing.ts"
   ],
   "exclude": ["node_modules"]
 }

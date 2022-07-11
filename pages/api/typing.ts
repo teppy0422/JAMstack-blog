@@ -24,13 +24,13 @@ export default async function handler(
     case "POST":
       const post = await prisma.typingResult.create({
         data: {
-          userId: req.body.userId,
+          userId: String(req.body.userId),
           result: req.body.result,
           course: req.body.course,
           name: req.body.name,
           image: req.body.image,
-          times: req.body.times,
-          missed: req.body.missed,
+          times: Number(req.body.times),
+          missed: Number(req.body.missed),
         },
       });
       res.status(200).json(post); // idを含む保存したデータを返す

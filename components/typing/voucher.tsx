@@ -53,11 +53,11 @@ let voucher = (pops, ref) => {
     const data = {
       userId: session.user.email,
       course: "高級",
-      result: property.typePerSocund,
+      result: Number(property.typePerSocund),
       name: session.user.name,
       image: session.user.image,
-      times: property.times,
-      missed: property.missedCount,
+      times: Number(property.times),
+      missed: Number(property.missedCount),
     };
 
     await fetch("/api/typing", {
