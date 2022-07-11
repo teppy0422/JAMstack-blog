@@ -54,9 +54,14 @@ let LineChart = (pops, ref) => {
   const idRef = useRef(0);
 
   useEffect(() => {
-    console.log("更新");
+    console.log("更新1");
     getResult();
   }, [session]);
+
+  useEffect(() => {
+    console.log("更新2");
+    getResult();
+  }, [valueRef.current]);
 
   const getResult = async () => {
     let results = [];
@@ -298,13 +303,6 @@ let LineChart = (pops, ref) => {
     getResult(); //画面の更新;
     setTimeout(updateSeries, 100);
   };
-  function graphOpen() {
-    const button = document.getElementById("button");
-    if (button !== null) {
-      button.click();
-    }
-    console.log("clicked");
-  }
   const OverlayTwo = () => (
     <ModalOverlay
       bg="none"
@@ -317,9 +315,10 @@ let LineChart = (pops, ref) => {
   // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
   useImperativeHandle(ref, () => ({
     childClick() {
-      getResult();
-      setTimeout(updateSeries, 500);
       openRef.current.click();
+      setTimeout(updateSeries, 1000);
+      setTimeout(updateSeries, 1500);
+      console.log("クリックされたchild");
     },
   }));
   return (
@@ -332,9 +331,9 @@ let LineChart = (pops, ref) => {
             onOpen();
             getResult();
             setOverlay(<OverlayTwo />);
-            // updateSeries();
-
             updateSeries();
+            setTimeout(updateSeries, 100);
+            console.log("クリックされた");
           }}
           ref={openRef}
         >

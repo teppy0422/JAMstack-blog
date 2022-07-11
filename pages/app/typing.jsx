@@ -546,9 +546,6 @@ export const typing = () => {
           missedCount={missedCount}
           typePerSocund={typePerSocund}
           times={totalTime_origin.current}
-          gameReplay={() => {
-            gameReplay();
-          }}
         />
         {/* <Button
           onClick={() => {
