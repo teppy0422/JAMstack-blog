@@ -116,7 +116,6 @@ let voucher = (pops, ref) => {
             {session ? (
               <>
                 <Button
-                  _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                   mr={2}
                   ref={voucherPostRef}
                   onClick={(e) => {
@@ -124,6 +123,7 @@ let voucher = (pops, ref) => {
                     graphTempRef.current.childClick();
                     voucherPostRef.current.setAttribute("disabled", "");
                   }}
+                  _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
                   登録
                 </Button>

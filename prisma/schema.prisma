@@ -6,7 +6,7 @@ datasource db {
   //本番サーバー
   url      = env("DATABASE_URL")
   //テーブル作成
-  // url = env("SHADOW_DATABASE_URL")
+  // url      = env("SHADOW_DATABASE_URL")
 
 
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")

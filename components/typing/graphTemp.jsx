@@ -58,10 +58,10 @@ let LineChart = (pops, ref) => {
     getResult();
   }, [session]);
 
-  useEffect(() => {
-    console.log("更新2");
-    getResult();
-  }, [valueRef.current]);
+  // useEffect(() => {
+  //   console.log("更新2");
+  //   getResult();
+  // }, [valueRef.current]);
 
   const getResult = async () => {
     let results = [];
