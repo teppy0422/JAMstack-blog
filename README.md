@@ -230,6 +230,8 @@ name: String(req.body.name),
 
 33 | missed: Number(req.body.missed),
 
+prisma/client が vercel にないっぽい
+
 ##########そのうち必要になりそう###########
 
 prisma でテーブルのリレーション
