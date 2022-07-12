@@ -175,12 +175,19 @@ package.json に追加
 nextauth.js に追加
 "session:{strategy:"database",maxage:30*24*60\*60}
 
+############nextauth に接続できた##############
+以下で静的サイトを削除
+
+out を削除
+
 package.json を編集  
  "build": "next build && next export && next-sitemap --config sitemap.config.js",
 
 > "build": "next build && next-sitemap --config sitemap.config.js",
 
-out を削除 ok
+npm run build
+
+############################################
 
 node のバージョンを変更  
 v17.9.1 > v16.15.1
@@ -231,6 +238,11 @@ name: String(req.body.name),
 33 | missed: Number(req.body.missed),
 
 prisma/client が vercel にない?
+
+次のいずれかによってデプロイができた
+
+1.上記のオプションをつけて実行してみた
+npx prisma format && npx prisma db push 　--force-reset
 
 ##########そのうち必要になりそう###########
 
