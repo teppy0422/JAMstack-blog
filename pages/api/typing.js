@@ -29,6 +29,8 @@ export default async function handler(
           course: String(req.body.course),
           name: String(req.body.name),
           image: String(req.body.image),
+          times: Number(req.body.times),
+          missed: Number(req.body.missed),
         },
       });
       await res.status(200).json(post); // idを含む保存したデータを返す

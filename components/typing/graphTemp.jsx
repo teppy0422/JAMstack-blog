@@ -78,7 +78,7 @@ let LineChart = (pops, ref) => {
     let misseds = [];
 
     console.log("session:", session);
-    if (session !== undefined) {
+    if (session !== undefined && session !== null) {
       const count = 0;
       const email = session.user.email;
       console.log("email", email);

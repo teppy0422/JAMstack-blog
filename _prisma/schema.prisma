@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
   //テーブル作成
   // url      = env("SHADOW_DATABASE_URL")
-  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 
   referentialIntegrity = "prisma"
 }
@@ -80,21 +80,6 @@ model TypingResult {
   @@map("typingresults")
 }
 
-model TypingResult2 {
-  id     Int      @id @default(autoincrement())
-  userId String?  @map("user_id")
-  name   String?
-  image  String?
-  course String
-  result Int
-  times  Int?
-  date   DateTime @default(now())
-  missed Int?
-  cost   Int?
-
-  @@map("typingresult2")
-}
-
 model SampleBlog {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -113,4 +98,14 @@ model SampleBlog2 {
   content   String
 
   @@map("sampleblog2")
+}
+
+model SampleBlog3 {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @db.VarChar(255)
+  content   String
+
+  @@map("sampleblog3")
 }
