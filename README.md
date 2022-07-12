@@ -247,6 +247,11 @@ npx prisma format && npx prisma db push 　--force-reset
 
 > なぜかデプロイできた..
 
+Vercel がキャッシュの型を参照してエラーにしてる？
+
+> キャッシュなしでデプロイを実行
+> とりあえず Vercel の Deployments の画面から実行できる
+
 ##########そのうち必要になりそう###########
 
 prisma でテーブルのリレーション
