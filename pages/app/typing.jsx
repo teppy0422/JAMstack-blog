@@ -156,13 +156,13 @@ export const typing = () => {
   }
   // キーダウンイベント
   function keypress_ivent(e) {
+    let eKey = e.key.toLowerCase();
     const typeDisplayRomaji = document.getElementById("type-display-romaji");
     //入力したキーを着色
-    const inputKeyID = document.getElementById(e.key);
+    const inputKeyID = document.getElementById(eKey);
     if (inputKeyID !== null) {
-      document.getElementById(e.key).style.background = "pink";
+      document.getElementById(eKey).style.background = "pink";
     }
-    // console.log(e.key);
     switch (mode.current) {
       case "menu":
         if (e.code === "Space") {
@@ -172,7 +172,7 @@ export const typing = () => {
         break;
       case "play":
         const temp = getRomaji(Q_Texts.current.substring(0, 3));
-        inputText.current = inputText.current + e.key;
+        inputText.current = inputText.current + eKey;
         const inputTextTempA = inputText.current;
         const matchCount = 0;
         const complete = false;
