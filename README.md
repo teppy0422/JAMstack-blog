@@ -256,5 +256,11 @@ ESLint の導入
 
 ############nextauth に接続できない##############
 
-schema.prisma の url を本番に変更
+schema.prisma の url を本番に変更 ng
 npm run build
+
+main-shadow をリセット
+npx prisma db push --accept-data-loss --schema=./prisma/reset.prisma
+
+main-shadow に強制プッシュ
+npx prisma format && npx prisma db push --accept-data-loss
