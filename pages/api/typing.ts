@@ -22,7 +22,7 @@ export default async function handler(
       break;
 
     case "POST":
-      const post = await prisma.TypingResult.create({
+      const post = await prisma.typingResult.create({
         data: {
           userId: String(req.body.userId),
           result: Number(req.body.result),
