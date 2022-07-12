@@ -12,9 +12,9 @@ export default async function post(
   req,
   res
 ) {
-  const post = await prisma.typingresults2.create({
+  const post = await prisma.typingResult.create({
     data: {
-      user_id: String(req.body.userId),
+      userId: String(req.body.userId),
       result: Number(req.body.result),
       course: String(req.body.course),
       name: String(req.body.name),

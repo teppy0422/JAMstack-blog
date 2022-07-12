@@ -17,7 +17,7 @@ export default async function handler(
 
   switch (method) {
     case "GET":
-      const authors = await prisma.typingresults2.findMany();
+      const authors = await prisma.typingResult.findMany();
       res.status(200).json(authors);
       break;
 
@@ -39,7 +39,7 @@ export default async function handler(
 
     case "DELETE":
       console.log("delete:", req.body.delete_id);
-      const delete_result = await prisma.typingresults2.delete({
+      const delete_result = await prisma.typingResult.delete({
         where: {
           id: Number(req.body.delete_id),
         },

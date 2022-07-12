@@ -268,3 +268,5 @@ scheme.prisma の acount,user,session がない？
 > npx prisma format && npx prisma db push --accept-data-loss
 >
 > github からログインできていた頃に戻した?けどログインできない -> 戻せてない prisma が原因?
+>
+> schema.prisma に shadow-database を追加

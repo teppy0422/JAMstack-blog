@@ -1,16 +1,23 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider             = "mysql"
+  url      = env("DATABASE_URL")
+  // url                  = env("SHADOW_DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
-datasource db {
-  provider             = "mysql"
-  // 本番への反映
-  url                  = env("DATABASE_URL")
-  // このファイルの編集時
-  // url                  = env("SHADOW_DATABASE_URL")
-  referentialIntegrity = "prisma"
-}
+// datasource db {
+//   provider = "sqlite"
+//   url      = "file:dev.db"
+// }
 
 model Account {
   id                String  @id @default(cuid())
@@ -55,19 +62,18 @@ model User {
 }
 
 model TypingResult {
-  id      Int      @id @default(autoincrement())
-  userId  String?  @map("user_id")
-  name    String?
-  image   String?
-  course  String
-  result  Int
-  resulet Int?
-  email   String?
-  times   Int?
-  date    DateTime @default(now())
-  missed  Int?
+  id     Int      @id @default(autoincrement())
+  userId String?
+  name   String?
+  image  String?
+  course String
+  result Int
+  email  String?
+  time   Int?
+  date   DateTime @default(now())
+  missed Int?
 
-  @@map("typingresults")
+  @@map("typingresult")
 }
 
 model SampleBlog {
@@ -86,31 +92,16 @@ model SampleBlog2 {
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
   content   String
-  tt        String?
 
   @@map("sampleblog2")
 }
 
-model vt_HOLD_32a1f1a8b64d5a3b8f22f8bb404d3e44_20220713042905 {
+model SampleBlog3 {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
   content   String
 
-  @@map("_vt_HOLD_32a1f1a8b64d5a3b8f22f8bb404d3e44_20220713042905")
-}
-
-model typingresults2 {
-  id      Int      @id @default(autoincrement())
-  user_id String?
-  name    String?
-  image   String?
-  course  String
-  result  Int
-  times   Int?
-  time    Int?
-  date    DateTime @default(now())
-  missed  Int?
-  cost    Int?
+  @@map("sampleblog3")
 }
