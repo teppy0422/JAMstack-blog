@@ -259,8 +259,12 @@ ESLint の導入
 schema.prisma の url を本番に変更 ng
 npm run build
 
-main-shadow をリセット
-npx prisma db push --accept-data-loss --schema=./prisma/reset.prisma
+scheme.prisma の acount,user,session がない？
 
-main-shadow に強制プッシュ
-npx prisma format && npx prisma db push --accept-data-loss
+> main-shadow をリセット
+> npx prisma db push --accept-data-loss --schema=./prisma/reset.prisma
+>
+> main-shadow に強制プッシュ
+> npx prisma format && npx prisma db push --accept-data-loss
+>
+> github からログインできていた頃に戻した?けどログインできない -> 戻せてない prisma が原因?
