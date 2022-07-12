@@ -21,21 +21,21 @@ export default async function handler(
       res.status(200).json(authors);
       break;
 
-    case "POST":
-      const post = await prisma.typingResult.create({
-        data: {
-          userId: String(req.body.userId),
-          result: Number(req.body.result),
-          course: String(req.body.course),
-          name: String(req.body.name),
-          image: String(req.body.image),
-          times: Number(req.body.times),
-          missed: Number(req.body.missed),
-        },
-      });
-      await res.status(200).json(post); // idを含む保存したデータを返す
-      console.log(post);
-      break;
+    // case "POST":
+    //   const post = await prisma.typingResult.create({
+    //     data: {
+    //       userId: String(req.body.userId),
+    //       result: Number(req.body.result),
+    //       course: String(req.body.course),
+    //       name: String(req.body.name),
+    //       image: String(req.body.image),
+    //       times: Number(req.body.times),
+    //       missed: Number(req.body.missed),
+    //     },
+    //   });
+    //   await res.status(200).json(post); // idを含む保存したデータを返す
+    //   console.log(post);
+    //   break;
 
     case "DELETE":
       console.log("delete:", req.body.delete_id);
