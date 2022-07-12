@@ -557,7 +557,7 @@ export const typing = () => {
           totalCost={totalCost.current}
           missedCount={missedCount}
           typePerSocund={typePerSocund}
-          times={totalTime_origin.current}
+          time={totalTime_origin.current}
           gameReplay={() => {
             gameReplay();
           }}

@@ -12,14 +12,14 @@ export default async function post(
   req,
   res
 ) {
-  const post = await prisma.typingResult.create({
+  const post = await prisma.typingresults2.create({
     data: {
-      userId: String(req.body.userId),
+      user_id: String(req.body.userId),
       result: Number(req.body.result),
       course: String(req.body.course),
       name: String(req.body.name),
       image: String(req.body.image),
-      times: Number(req.body.times),
+      time: Number(req.body.time),
       missed: Number(req.body.missed),
     },
   });
