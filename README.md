@@ -212,7 +212,7 @@ times がないってエラー <-type が問題?
 
 main-shadow を作り直して push から deploy まで実行
 
-/グラフのコメント  
+/グラフのコメントが表示されない
 ダイナミックインポートをやってみる
 
 #############ブログに追加###############
@@ -230,7 +230,7 @@ name: String(req.body.name),
 
 33 | missed: Number(req.body.missed),
 
-prisma/client が vercel にないっぽい
+prisma/client が vercel にない?
 
 ##########そのうち必要になりそう###########
 
