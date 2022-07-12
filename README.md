@@ -274,4 +274,11 @@ scheme.prisma の acount,user,session がない？
 >
 > github からログインできていた頃に戻した?けどログインできない -> 戻せてない prisma が原因?
 >
-> schema.prisma に shadow-database を追加
+> リセットとプッシュを再度実行
+> 接続できていた頃の schema.prisma で上書き
+>
+> schema.prisma に shadow-database を追加 -> co しても接続できるから関係ないっぽい
+>
+> 繋がった
+
+#################################################

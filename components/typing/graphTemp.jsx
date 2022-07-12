@@ -88,12 +88,12 @@ let LineChart = (pops, ref) => {
       const arr = await data.map((item, index, array) => {
         if (item.userId !== null) {
           results.push({
-            user_id: item.user_id,
+            userId: item.userId,
             result: item.result,
             time: item.times,
             date: item.date,
           });
-          if (item.user_id === email) {
+          if (item.userId === email) {
             count++;
             values.push(item.result);
             times.push(count);
