@@ -1,0 +1,26 @@
+.keyboard {
+  min-height: 400px;
+}
+
+.keyboard .key1 {
+  border-radius: 3px;
+  border: 1px solid;
+  -webkit-transform: translateX(-0.8rem);
+          transform: translateX(-0.8rem);
+  display: inline-block;
+}
+
+.keyboard .key2 {
+  border-radius: 3px;
+  border: 1px solid;
+  display: inline-block;
+}
+
+.keyboard .key3 {
+  border-radius: 3px;
+  border: 1px solid;
+  -webkit-transform: translateX(0.8rem);
+          transform: translateX(0.8rem);
+  display: inline-block;
+}
+/*# sourceMappingURL=keyboard.module.css.map */
