@@ -1,5 +1,5 @@
-import { TypingResult } from "@prisma/client";
-// import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
+import { TypingResult2 } from "@prisma/client";
+import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
 import Prisma from "../../libs/prisma";
 
 import { PrismaClient } from "@prisma/client";
@@ -7,22 +7,22 @@ import { PrismaClient } from "@prisma/client";
 const prisma = Prisma;
 
 export default async function handler(
-  // req: NextApiRequest,
-  // res: NextApiResponse<TypingResult[] | TypingResult>
-  req,
-  res
+  req: NextApiRequest,
+  res: NextApiResponse<TypingResult2[] | TypingResult2>
+  // req,
+  // res
 ) {
   const { method } = req;
   console.log({ method });
 
   switch (method) {
     case "GET":
-      const authors = await prisma.typingResult.findMany();
+      const authors = await prisma.typingResult2.findMany();
       res.status(200).json(authors);
       break;
 
     case "POST":
-      const post = await prisma.typingResult.create({
+      const post = await prisma.typingResult2.create({
         data: {
           userId: String(req.body.userId),
           result: Number(req.body.result),
@@ -39,7 +39,7 @@ export default async function handler(
 
     case "DELETE":
       console.log("delete:", req.body.delete_id);
-      const delete_result = await prisma.typingResult.delete({
+      const delete_result = await prisma.typingResult2.delete({
         where: {
           id: Number(req.body.delete_id),
         },
