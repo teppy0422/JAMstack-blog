@@ -1,4 +1,4 @@
-import { TypingResult } from "@prisma/client";
+// import { TypingResult } from "@prisma/client";
 // import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
 import Prisma from "../../libs/prisma";
 

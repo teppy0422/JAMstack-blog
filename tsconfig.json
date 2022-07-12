@@ -25,7 +25,7 @@
     "**/*.mp3", //わからん
     "**/*.d.ts",
     "pages/api/typing_.js",
-    "pages/api/typing.js"
+    "pages/api/typing.ts"
   ],
   "exclude": ["node_modules"]
 }

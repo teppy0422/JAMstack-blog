@@ -60,7 +60,7 @@ let voucher = (pops, ref) => {
       missed: Number(property.missedCount),
     };
 
-    await fetch("/api/typing", {
+    await fetch("/api/typing/post", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
