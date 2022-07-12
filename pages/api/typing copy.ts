@@ -1,5 +1,5 @@
 import { TypingResult } from "@prisma/client";
-import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
+// import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
 import Prisma from "../../libs/prisma";
 
 import { PrismaClient } from "@prisma/client";
@@ -7,10 +7,10 @@ import { PrismaClient } from "@prisma/client";
 const prisma = Prisma;
 
 export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<TypingResult[] | TypingResult>
-  // req,
-  // res
+  // req: NextApiRequest,
+  // res: NextApiResponse<TypingResult[] | TypingResult>
+  req,
+  res
 ) {
   const { method } = req;
   console.log({ method });
@@ -22,26 +22,15 @@ export default async function handler(
       break;
 
     case "POST":
-      type Request = {
-        userId: string;
-        result: number;
-        course: string;
-        name: string;
-        image: string;
-        times: number;
-        missed: number;
-      };
-      const { userId, result, course, name, image, times, missed } =
-        req.body as Request;
       const post = await prisma.typingResult.create({
         data: {
-          userId: userId,
-          result: result,
-          course: course,
-          name: name,
-          image: image,
-          times: times,
-          missed: missed,
+          userId: String(req.body.userId),
+          result: Number(req.body.result),
+          course: String(req.body.course),
+          name: String(req.body.name),
+          image: String(req.body.image),
+          times: Number(req.body.times),
+          missed: Number(req.body.missed),
         },
       });
       await res.status(200).json(post); // idを含む保存したデータを返す

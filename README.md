@@ -214,3 +214,23 @@ main-shadow を作り直して push から deploy まで実行
 
 /グラフのコメント  
 ダイナミックインポートをやってみる
+
+#############ブログに追加###############
+
+デプロイしたらこういうエラーがでる
+Type error: Type '{ userId: string; result: number; course: string; name: string; image: string; times: number; missed: number; }' is not assignable to type '(Without<TypingResultCreateInput, TypingResultUncheckedCreateInput> & TypingResultUncheckedCreateInput) | (Without<...> & TypingResultCreateInput)'.
+
+エラー箇所はこんな感じ
+name: String(req.body.name),
+31 | image: String(req.body.image),
+
+> 32 | times: Number(req.body.times),
+
+     |           ^
+
+33 | missed: Number(req.body.missed),
+
+##########そのうち必要になりそう###########
+
+prisma でテーブルのリレーション
+https://zenn.dev/kanasugi/articles/e11ba9cdea9911
