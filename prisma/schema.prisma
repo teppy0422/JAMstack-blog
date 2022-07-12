@@ -5,7 +5,9 @@ generator client {
 
 datasource db {
   provider             = "mysql"
+  // 本番への反映
   url                  = env("DATABASE_URL")
+  // このファイルの編集時
   // url                  = env("SHADOW_DATABASE_URL")
   referentialIntegrity = "prisma"
 }

@@ -175,7 +175,7 @@ package.json に追加
 nextauth.js に追加
 "session:{strategy:"database",maxage:30*24*60\*60}
 
-############nextauth に接続できた##############
+############nextauth に接続できない##############
 以下で静的サイトを削除
 
 out を削除
@@ -187,7 +187,8 @@ package.json を編集
 
 npm run build
 
-############################################
+> ok
+> ############################################
 
 node のバージョンを変更  
 v17.9.1 > v16.15.1
@@ -222,7 +223,7 @@ main-shadow を作り直して push から deploy まで実行
 /グラフのコメントが表示されない
 ダイナミックインポートをやってみる
 
-#############ブログに追加###############
+#############vercel にデプロイでエラー###############
 
 デプロイしたらこういうエラーがでる
 Type error: Type '{ userId: string; result: number; course: string; name: string; image: string; times: number; missed: number; }' is not assignable to type '(Without<TypingResultCreateInput, TypingResultUncheckedCreateInput> & TypingResultUncheckedCreateInput) | (Without<...> & TypingResultCreateInput)'.
@@ -244,9 +245,16 @@ prisma/client が vercel にない?
 1.上記のオプションをつけて実行してみた
 npx prisma format && npx prisma db push 　--force-reset
 
+> なぜかデプロイできた..
+
 ##########そのうち必要になりそう###########
 
 prisma でテーブルのリレーション
 https://zenn.dev/kanasugi/articles/e11ba9cdea9911
 
 ESLint の導入
+
+############nextauth に接続できない##############
+
+schema.prisma の url を本番に変更
+npm run build
