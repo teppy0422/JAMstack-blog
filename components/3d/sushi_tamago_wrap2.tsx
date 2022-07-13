@@ -5,7 +5,7 @@ import { Environment, OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Text, Box } from "@chakra-ui/react";
 
-import Model from "./sushi_ikura";
+import Model from "./sushi_ootoro";
 import RenderResult from "next/dist/server/render-result";
 
 const Rig = ({ v = new Vector3() }) => {

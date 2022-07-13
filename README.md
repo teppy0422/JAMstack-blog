@@ -220,9 +220,6 @@ times がないってエラー <-type が問題?
 
 main-shadow を作り直して push から deploy まで実行
 
-/グラフのコメントが表示されない
-ダイナミックインポートをやってみる
-
 #############vercel にデプロイでエラー###############
 
 デプロイしたらこういうエラーがでる
@@ -308,3 +305,7 @@ https://pixabay.com/api/docs/#api_search_videos
 オーディオビジュアライザー
 https://notes.sharesl.net/articles/1846/
 https://qiita.com/su3aki/items/24b21e9337732a64bf3e
+
+############## 不具合 ###################
+
+window.height が低い場合に space でスクロールする
