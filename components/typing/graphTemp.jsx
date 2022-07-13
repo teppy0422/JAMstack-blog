@@ -61,13 +61,19 @@ let LineChart = (pops, ref) => {
 
   useEffect(() => {
     console.log("更新1");
-    getResult();
+    // getResult();
   }, [session]);
 
   // useEffect(() => {
   //   console.log("更新2");
   //   getResult();
   // }, [valueRef.current]);
+
+  function makeChart() {
+    getResult().then((value) => {
+      updateSeries();
+    });
+  }
 
   const getResult = async () => {
     let results = [];
@@ -76,15 +82,16 @@ let LineChart = (pops, ref) => {
     let dates = [];
     let ids = [];
     let misseds = [];
+    const count = 0;
 
-    console.log("session:", session);
     if (session !== undefined && session !== null) {
-      const count = 0;
+      console.log(
+        "ログインしています,session.user.email: ",
+        session.user.email
+      );
       const email = session.user.email;
-      console.log("email", email);
       const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
       const data = await response.json(); //await で response.json() が完了するまで待つ
-      console.log("data", data);
       const arr = await data.map((item, index, array) => {
         if (item.userId !== null) {
           results.push({
@@ -107,69 +114,17 @@ let LineChart = (pops, ref) => {
           }
         }
       });
-      // console.log("results", results);
-      // console.log("values", values);
-      // console.log("dates", dates);
-      // console.log("email", results[0].userId);
       valueRef.current = values;
       timesRef.current = times;
       datesRef.current = dates;
       idRef.current = ids;
       missedRef.current = misseds;
+    } else {
+      console.log("ログインしていません");
     }
-    return 50;
+    return "getResultRow" + count;
   };
 
-  const getIDRef = useRef("");
-  const getId = async (getCount) => {
-    if (session !== undefined) {
-      const count = 0;
-      const email = session.user.email;
-      const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
-      const data = await response.json(); //await で response.json() が完了するまで待つ
-      const arr = await data.map((item, index, array) => {
-        if (item.userId !== null) {
-          if (item.userId === email) {
-            count++;
-            if (getCount === count) {
-              console.log("ggg", item.id);
-              getIDRef.current = item.id;
-              return item.id;
-            }
-          }
-        }
-      });
-    }
-  };
-  function getValue() {
-    console.log("getValue:", valueRef.current);
-    return valueRef.current;
-  }
-  function getTimes() {
-    return timesRef.current;
-  }
-  function getMisseds() {
-    return missedRef.current;
-  }
-  function getIds() {
-    return idRef.current;
-  }
-  function getColor(type) {
-    switch (type) {
-      case "text":
-        if (colorMode === "light") {
-          return "#444444";
-        } else {
-          return "#ffffff";
-        }
-      case "backborder":
-        if (colorMode === "light") {
-          return "#999999";
-        } else {
-          return "#999999";
-        }
-    }
-  }
   function updateSeries() {
     setChartOptions({
       chart: {
@@ -275,22 +230,70 @@ let LineChart = (pops, ref) => {
       },
     });
   }
+  const getIDRef = useRef("");
+  const getId = async (getCount) => {
+    if (session !== undefined && session !== null) {
+      const count = 0;
+      const email = session.user.email;
+      const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
+      const data = await response.json(); //await で response.json() が完了するまで待つ
+      const arr = await data.map((item, index, array) => {
+        if (item.userId !== null) {
+          if (item.userId === email) {
+            count++;
+            if (getCount === count) {
+              console.log("ggg", item.id);
+              getIDRef.current = item.id;
+              return false;
+            }
+          }
+        }
+      });
+    }
+  };
+  function getValue() {
+    console.log("getValue:", valueRef.current);
+    return valueRef.current;
+  }
+  function getTimes() {
+    return timesRef.current;
+  }
+  function getMisseds() {
+    return missedRef.current;
+  }
+  function getIds() {
+    return idRef.current;
+  }
+  function getColor(type) {
+    switch (type) {
+      case "text":
+        if (colorMode === "light") {
+          return "#444444";
+        } else {
+          return "#ffffff";
+        }
+      case "backborder":
+        if (colorMode === "light") {
+          return "#999999";
+        } else {
+          return "#999999";
+        }
+    }
+  }
   function deleteQuestion(obj) {
-    console.log(obj.point);
-    console.log(obj.point.y);
-    console.log("obj.point.category:", obj.point.category);
-    getId(obj.point.category);
-    console.log("getIDRef:", getIDRef.current);
-
-    delete_one(obj.point.category);
+    getId(obj.point.category).then((value) => {
+      delete_one(getIDRef.current).then((value) => {
+        getResult().then((value) => {
+          updateSeries();
+        });
+      });
+    });
   }
 
-  const delete_one = async (count) => {
-    let delete_id = await getId(count);
-    console.log("consooooole", delete_id);
-    console.log("getidrefffffff", getIDRef.current);
+  const delete_one = async (delete_id) => {
+    console.log("adfa", delete_id);
     const data = {
-      delete_id: Number(getIDRef.current),
+      delete_id: Number(delete_id),
     };
     console.log({ session });
     if (session !== undefined) {
@@ -301,13 +304,7 @@ let LineChart = (pops, ref) => {
         },
         body: JSON.stringify(data), // 本文のデータ型は "Content-Type" ヘッダーと一致させる必要があります
       }); //await で fetch() が完了するまで待つ
-      // const data = await response.json(); //await で response.json() が完了するまで待つ
-      // console.log("delete_one:", response);
-      console.log("delete_one;end_in");
     }
-    console.log("delete_one;end_out");
-    getResult(); //画面の更新;
-    setTimeout(updateSeries, 100);
   };
   const OverlayTwo = () => (
     <ModalOverlay
@@ -322,8 +319,6 @@ let LineChart = (pops, ref) => {
   useImperativeHandle(ref, () => ({
     childClick() {
       openRef.current.click();
-      setTimeout(updateSeries, 1000);
-      setTimeout(updateSeries, 1500);
       console.log("クリックされたchild");
     },
   }));
@@ -335,10 +330,13 @@ let LineChart = (pops, ref) => {
           _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
           onClick={() => {
             onOpen();
-            getResult();
             setOverlay(<OverlayTwo />);
-            updateSeries();
-            setTimeout(updateSeries, 100);
+
+            makeChart();
+
+            // getResult();
+            // updateSeries();
+            // setTimeout(updateSeries, 100);
             console.log("クリックされた");
           }}
           ref={openRef}

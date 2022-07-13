@@ -119,8 +119,9 @@ let voucher = (pops, ref) => {
                   mr={2}
                   ref={voucherPostRef}
                   onClick={(e) => {
-                    handleClick();
-                    graphTempRef.current.childClick();
+                    handleClick().then((value) => {
+                      graphTempRef.current.childClick();
+                    });
                     voucherPostRef.current.setAttribute("disabled", "");
                   }}
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
