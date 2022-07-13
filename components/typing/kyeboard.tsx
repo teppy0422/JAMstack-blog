@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, useColorMode } from "@chakra-ui/react";
+import { Box, useColorMode, Center } from "@chakra-ui/react";
 
 import styles from "./keyboard.module.scss";
 const keyValues1 = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
@@ -64,6 +64,21 @@ const keyboard = () => {
             </Box>
           );
         })}
+      </Box>
+      <Box
+        className={styles.key4}
+        w="160px"
+        h={8}
+        m={1}
+        fontSize="14px"
+        color="#000"
+      >
+        <Box color="#ccc" className={styles.keyG}>
+          GAMESTART
+        </Box>
+        <Box color="#333" className={styles.keyS}>
+          SPACE
+        </Box>
       </Box>
     </Box>
   );

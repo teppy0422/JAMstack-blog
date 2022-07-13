@@ -17,7 +17,7 @@ const Rig = ({ v = new Vector3() }) => {
 const sushi_tamago_wrap = () => (
   <Box
     w={"100%"}
-    h={["160px", "180px", "210px", "240px"]}
+    h={["160px", "180px", "210px", "210px"]}
     display="inline-block"
   >
     <Canvas>

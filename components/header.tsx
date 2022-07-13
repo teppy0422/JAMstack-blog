@@ -92,7 +92,9 @@ export default function Header() {
                 {session.user.name}
               </Text>
             ) : (
-              <Text>ログインしていません</Text>
+              <Text fontSize={["0px", "12px", "12px", "12px"]}>
+                ログインしていません
+              </Text>
             )}
             <Center
               flex="1"

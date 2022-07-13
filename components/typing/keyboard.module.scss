@@ -1,4 +1,5 @@
 .keyboard {
+  font-weight: 100;
   min-height: 400px;
   .key1 {
     border-radius: 3px;
@@ -16,5 +17,45 @@
     border: 1px solid;
     transform: translateX(0.8rem);
     display: inline-block;
+  }
+  .key4 {
+    position: relative;
+    border-radius: 3px;
+    border: 1px solid;
+    display: inline-block;
+    line-height: 2.2;
+    letter-spacing: 0.2em;
+    font-weight: 100;
+    animation: back 3s ease infinite;
+  }
+  .keyS {
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    font-weight: 600;
+    animation: space 3s ease infinite;
+  }
+  .keyG {
+    font-weight: 600;
+  }
+}
+
+@keyframes back {
+  0%,
+  100% {
+    background-color: #333;
+  }
+  50% {
+    background-color: #ccc;
+  }
+}
+@keyframes space {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
   }
 }

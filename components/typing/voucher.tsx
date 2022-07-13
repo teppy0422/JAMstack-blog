@@ -88,7 +88,7 @@ let voucher = (pops, ref) => {
         {overlay}
         <ModalContent>
           <ModalHeader>終了</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton _focus={{ _focus: "none" }} />
           <ModalBody fontSize="22px">
             {session ? (
               <Center fontSize={["0px", "16px", "16px", "16px"]}>
@@ -105,8 +105,9 @@ let voucher = (pops, ref) => {
           </ModalBody>
           <ModalFooter py={4}>
             <Button
+              display="none"
               mr={2}
-              _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+              _focus={{ _focus: "none" }}
               onClick={(e) => {
                 voucherCloseRef.current.click();
                 setTimeout(property.gameReplay, 500);

@@ -1,4 +1,5 @@
 .keyboard {
+  font-weight: 100;
   min-height: 400px;
 }
 
@@ -22,5 +23,72 @@
   -webkit-transform: translateX(0.8rem);
           transform: translateX(0.8rem);
   display: inline-block;
+}
+
+.keyboard .key4 {
+  position: relative;
+  border-radius: 3px;
+  border: 1px solid;
+  display: inline-block;
+  line-height: 2.2;
+  letter-spacing: 0.2em;
+  font-weight: 100;
+  -webkit-animation: back 3s ease infinite;
+          animation: back 3s ease infinite;
+}
+
+.keyboard .keyS {
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  -webkit-transform: translate(-50%, 0%);
+          transform: translate(-50%, 0%);
+  font-weight: 600;
+  -webkit-animation: space 3s ease infinite;
+          animation: space 3s ease infinite;
+}
+
+.keyboard .keyG {
+  font-weight: 600;
+}
+
+@-webkit-keyframes back {
+  0%,
+  100% {
+    background-color: #333;
+  }
+  50% {
+    background-color: #ccc;
+  }
+}
+
+@keyframes back {
+  0%,
+  100% {
+    background-color: #333;
+  }
+  50% {
+    background-color: #ccc;
+  }
+}
+
+@-webkit-keyframes space {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes space {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 /*# sourceMappingURL=keyboard.module.css.map */

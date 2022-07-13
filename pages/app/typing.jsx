@@ -399,15 +399,14 @@ export const typing = () => {
           cardType: "summary_large_image",
         }}
       />
-
-      <Box ref={menuRef} style={{ display: "block" }}>
+      {/* todo */}
+      <Box ref={menuRef} style={{ display: "none" }}>
         <Menu
           gameReplay={() => {
             gameReplay();
           }}
         />
       </Box>
-
       <Content style={{ position: "relative" }}>
         <VStack className={styles.typing} h="620px">
           <Box
@@ -505,7 +504,7 @@ export const typing = () => {
               作成中..
             </Center>
 
-            <Sushi_tamago_wrap />
+            <Sushi_tamago_wrap h="200px" />
 
             <Center className={styles.cost}>{Q_cost.current}</Center>
 
