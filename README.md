@@ -282,3 +282,20 @@ scheme.prisma の acount,user,session がない？
 > 繋がった
 
 #################################################
+
+################ HighCharts with Nextjs #####################
+
+1.annotation 等が表示されない場合は以下のようにする
+
+module 名は公式サイトの js インポートの名前から推測
+
+import Highcharts from "highcharts";
+import AnnotationsFactory from "highcharts/modules/annotations";
+import highchartsAccessibility from "highcharts/modules/accessibility";
+
+if (typeof window !== `undefined`) {
+AnnotationsFactory(Highcharts);
+highchartsAccessibility(Highcharts);
+}
+
+https://yubais.net/doc/highcharts/configure.html

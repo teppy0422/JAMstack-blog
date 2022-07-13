@@ -36,7 +36,6 @@ import { getQuiz } from "../../libs/romaji_quiz.js";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 
 import Keyboard from "../../components/typing/kyeboard";
-
 import GraphTemp from "../../components/typing/graphTemp";
 
 export const typing = () => {
@@ -99,10 +98,10 @@ export const typing = () => {
   // レンダー時に実行
   useEffect(() => {
     if (totalTime <= 15) {
-      sound_BGM.current.playbackRate = 1.25;
+      sound_BGM.current.playbackRate = 1.1;
     }
     if (totalTime <= 10) {
-      sound_BGM.current.playbackRate = 1.5;
+      sound_BGM.current.playbackRate = 1.2;
     }
   }, [totalTime]);
 
@@ -330,7 +329,7 @@ export const typing = () => {
     sound_BGM.current.pause();
     sound_BGM.current.currentTime = 0;
     sound_BGM.current.playbackRate = 1;
-    sound_BGM.current.volume = 0.1;
+    sound_BGM.current.volume = 0.08;
     sound_BGM.current.play();
 
     setTotalTime(totalTime_origin.current);
@@ -503,10 +502,12 @@ export const typing = () => {
             <Center style={{ zIndex: "999999" }} id="timer">
               作成中..
             </Center>
-
-            <Sushi_tamago_wrap h="200px" />
-
-            <Center className={styles.cost}>{Q_cost.current}</Center>
+            <Box position="relative">
+              <Sushi_tamago_wrap />
+              <Center position="absolute" className={styles.cost}>
+                {Q_cost.current}
+              </Center>
+            </Box>
 
             <Box className={styles.question} w="100%">
               <Center className={styles.typeDisplay} id="type-display">
@@ -518,12 +519,17 @@ export const typing = () => {
               >
                 　
               </Center>
-              <Center>
+              <Center mb="4px">
                 <p className={styles.typeDisplayRomaji}>
                   <span style={{ color: "red" }}>{typeDisplayRomaji_0}</span>
                 </p>
                 <Text
                   className={styles.typeDisplayRomaji}
+                  style={{ border: "solid 1px", borderRadius: "3px" }}
+                  borderColor={
+                    colorMode === "light" ? styles.backLight : styles.backDark
+                  }
+                  px="1.5"
                   id="type-display-romaji"
                 >
                   　

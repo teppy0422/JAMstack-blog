@@ -70,6 +70,7 @@ const keyboard = () => {
         w="160px"
         h={8}
         m={1}
+        mt={3}
         fontSize="14px"
         color="#000"
       >

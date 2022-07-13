@@ -27,10 +27,8 @@ import Highcharts from "highcharts/highcharts";
 // import Highcharts from "highcharts/highstock"; //上記との違いわからん
 import HighchartsReact from "highcharts-react-official";
 import highchartsAccessibility from "highcharts/modules/accessibility";
-// init the module
-if (typeof window !== `undefined`) {
-  highchartsAccessibility(Highcharts);
-}
+import AnnotationsFactory from "highcharts/modules/annotations";
+
 import { useSession, signIn, signOut } from "next-auth/react";
 
 let LineChart = (pops, ref) => {
@@ -45,11 +43,13 @@ let LineChart = (pops, ref) => {
   const { data: session } = useSession();
   const [hoverData, setHoverData] = useState(null);
   const { colorMode, toggleColorMode } = useColorMode();
-
   const [chartOptions, setChartOptions] = useState({});
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  if (typeof window !== `undefined`) {
+    AnnotationsFactory(Highcharts);
+    highchartsAccessibility(Highcharts);
+  }
   //それぞれのボタン
   const openRef = useRef(null);
   const closeRef = useRef(null);
@@ -145,19 +145,95 @@ let LineChart = (pops, ref) => {
         {
           draggable: "",
           labelOptions: {
-            backgroundColor: "rgba(255,255,255,0.5)",
-            verticalAlign: "top",
-            y: 0,
+            backgroundColor: "rgba(255,255,255,0.8)",
+            y: -40,
           },
           labels: [
             {
               point: {
                 xAxis: 0,
                 yAxis: 0,
-                x: 8,
-                y: 200,
+                x: 3,
+                y: 376,
               },
-              text: "Arbois",
+              text: "7/12",
+            },
+            {
+              point: {
+                xAxis: 0,
+                yAxis: 0,
+                x: 4,
+                y: 282,
+              },
+              text: "7/13",
+            },
+          ],
+        },
+        {
+          draggable: "",
+          labelOptions: {
+            shape: "connector",
+            align: "right",
+            justify: false,
+            crop: true,
+            style: {
+              fontSize: "1em",
+              textOutline: "1px white",
+            },
+            backgroundColor: "rgba(255,255,255,0.8)",
+          },
+          labels: [
+            {
+              point: {
+                xAxis: 0,
+                yAxis: 0,
+                x: 2,
+                y: 166,
+              },
+              text: "7/11<br>金",
+            },
+            {
+              point: {
+                xAxis: 0,
+                yAxis: 0,
+                x: 5,
+                y: 170,
+              },
+              text: "7/14<br>金",
+            },
+          ],
+        },
+        {
+          draggable: "",
+          labels: [
+            {
+              point: {
+                xAxis: 0,
+                yAxis: 0,
+                x: 1,
+                y: 36,
+              },
+              x: -30,
+              text: "7/10",
+            },
+            {
+              point: {
+                xAxis: 0,
+                yAxis: 0,
+                x: 6,
+                y: 398,
+              },
+              x: -30,
+              text: "7/15",
+            },
+            {
+              point: {
+                xAxis: 0,
+                yAxis: 0,
+                x: 176.4,
+                y: 1202,
+              },
+              text: "Montée de la Combe <br>de Laisia Les Molunes",
             },
           ],
         },
@@ -232,8 +308,9 @@ let LineChart = (pops, ref) => {
       // series: [{ name: "KPM", data: getValue(), color: getColor() }],
       series: [
         {
-          yAxis: 1,
           name: "金額",
+          yAxis: 1,
+          legendIndex: 2,
           type: "column",
           data: getCosts(),
           tooltip: { valueSuffix: " 円" },
@@ -241,6 +318,7 @@ let LineChart = (pops, ref) => {
         },
         {
           name: "ミス",
+          legendIndex: 1,
           type: "spline",
           data: getMisseds(),
           tooltip: { valueSuffix: " 回" },
@@ -248,6 +326,7 @@ let LineChart = (pops, ref) => {
         },
         {
           name: "KPM",
+          legendIndex: 0,
           type: "spline",
           data: getValue(),
           tooltip: { valueSuffix: " " },

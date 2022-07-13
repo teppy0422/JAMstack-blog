@@ -651,6 +651,10 @@ element.style {
 
 .typing .cost {
   font-size: 20px;
+  text-align: center;
+  left: 48%;
+  -webkit-transform: translateY(-28px);
+          transform: translateY(-28px);
 }
 
 .typing .cost::after {

@@ -499,6 +499,9 @@ element.style {
     &::after {
       content: "円";
     }
+    text-align: center;
+    left: 48%;
+    transform: translateY(-28px);
   }
   .timer {
     margin: auto;

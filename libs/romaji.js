@@ -548,8 +548,6 @@ export const changeColor = (id, count) => {
   arr.forEach((spans, index) => {
     if (index < count) {
       spans.style.color = "red";
-    } else {
-      spans.style.color = "black";
     }
   });
   //残りの文字数
