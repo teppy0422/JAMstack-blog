@@ -259,7 +259,7 @@ https://zenn.dev/kanasugi/articles/e11ba9cdea9911
 
 ESLint の導入
 
-############nextauth に接続できない##############
+############ nextauth に接続できない##############
 
 schema.prisma の url を本番に変更 ng
 npm run build
@@ -274,10 +274,10 @@ scheme.prisma の acount,user,session がない？
 >
 > github からログインできていた頃に戻した?けどログインできない -> 戻せてない prisma が原因?
 >
+> schema.prisma に shadow-database を追加 -> co しても接続できるから関係ないっぽい
+>
 > リセットとプッシュを再度実行
 > 接続できていた頃の schema.prisma で上書き
->
-> schema.prisma に shadow-database を追加 -> co しても接続できるから関係ないっぽい
 >
 > 繋がった
 
@@ -299,3 +299,12 @@ highchartsAccessibility(Highcharts);
 }
 
 https://yubais.net/doc/highcharts/configure.html
+
+###############################################################
+
+素材検索に video とか vector を追加
+https://pixabay.com/api/docs/#api_search_videos
+
+オーディオビジュアライザー
+https://notes.sharesl.net/articles/1846/
+https://qiita.com/su3aki/items/24b21e9337732a64bf3e

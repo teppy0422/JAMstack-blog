@@ -501,7 +501,7 @@ element.style {
     }
     text-align: center;
     left: 48%;
-    transform: translateY(-28px);
+    transform: translateY(-34px);
   }
   .timer {
     margin: auto;
@@ -520,7 +520,8 @@ element.style {
 
     box-shadow: 1px 5px 6px #555;
     .typeDisplay {
-      font-size: 2.4rem;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
       margin-bottom: -0.2rem;
       margin-left: 0rem;
     }
