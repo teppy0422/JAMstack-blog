@@ -59,6 +59,7 @@ let LineChart = (pops, ref) => {
   const missedRef = useRef(0);
   const datesRef = useRef("");
   const idRef = useRef(0);
+  const costsRef = useRef(0);
 
   useEffect(() => {
     console.log("更新1");
@@ -83,6 +84,7 @@ let LineChart = (pops, ref) => {
     let dates = [];
     let ids = [];
     let misseds = [];
+    let costs = [];
     const count = 0;
 
     if (session !== undefined && session !== null) {
@@ -107,6 +109,7 @@ let LineChart = (pops, ref) => {
             times.push(count);
             dates.push(item.date);
             ids.push(item.id);
+            costs.push(item.cost);
             if (item.missed === 0) {
               misseds.push(null);
             } else {
@@ -120,6 +123,7 @@ let LineChart = (pops, ref) => {
       datesRef.current = dates;
       idRef.current = ids;
       missedRef.current = misseds;
+      costsRef.current = costs;
     } else {
       console.log("ログインしていません");
     }
@@ -129,10 +133,9 @@ let LineChart = (pops, ref) => {
   function updateSeries() {
     setChartOptions({
       chart: {
-        type: "spline",
         backgroundColor: "none",
-        // zoomType: "x",
-        // scrollablePlotArea: { minWidth: 100 },
+        zoomType: "x",
+        scrollablePlotArea: { minWidth: 100 },
       },
       credits: {
         enabled: false,
@@ -177,42 +180,79 @@ let LineChart = (pops, ref) => {
         lineColor: getColor("text"),
         lineWidth: 1,
       },
-      yAxis: {
-        min: 0,
-        gridLineColor: getColor("backborder"),
-        lineColor: getColor("backborder"),
-        lineWidth: 1,
-        title: {
-          text: "",
-          color: "#ff0000",
-          style: {
-            color: getColor("text"),
-            fontSize: "16px",
+      yAxis: [
+        {
+          min: 0,
+          gridLineColor: getColor("backborder"),
+          lineColor: getColor("backborder"),
+          lineWidth: 1,
+          title: {
+            text: "",
+            color: "#ff0000",
+            style: {
+              color: getColor("text"),
+              fontSize: "16px",
+            },
           },
-        },
-        labels: {
-          style: {
-            color: getColor("text"),
-            fontSize: "14px",
+          labels: {
+            style: {
+              color: getColor("text"),
+              fontSize: "14px",
+            },
           },
+          style: {
+            lineColor: getColor("text"),
+          },
+          minorTickInterval: 100, // 'auto'
+          minorTickWidth: 1,
+          minorTickLength: 5,
+          minorTickColor: getColor("backborder"),
         },
-        style: {
-          lineColor: getColor("text"),
+        {
+          labels: {
+            format: "{value}円",
+            style: {
+              color: "#aB96f1",
+            },
+          },
+          title: {
+            text: "",
+            style: {
+              color: "#aB96f1",
+            },
+          },
+          opposite: true,
         },
-        minorTickInterval: 100, // 'auto'
-        minorTickWidth: 1,
-        minorTickLength: 5,
-        minorTickColor: getColor("backborder"),
-      },
+      ],
       tooltip: {
-        headerFormat: "{point.x}<br>",
-        pointFormat: "{point.y} /{series.name}<br>",
+        // headerFormat: "{point.x}<br>",
+        // pointFormat: "{point.y} /{series.name}<br>",
         shared: true,
       },
       // series: [{ name: "KPM", data: getValue(), color: getColor() }],
       series: [
-        { name: "KPM", data: getValue(), color: getColor("text") },
-        { name: "ミス", data: getMisseds(), color: "red" },
+        {
+          yAxis: 1,
+          name: "金額",
+          type: "column",
+          data: getCosts(),
+          tooltip: { valueSuffix: " 円" },
+          color: "#aB96f1",
+        },
+        {
+          name: "ミス",
+          type: "spline",
+          data: getMisseds(),
+          tooltip: { valueSuffix: " 回" },
+          color: "red",
+        },
+        {
+          name: "KPM",
+          type: "spline",
+          data: getValue(),
+          tooltip: { valueSuffix: " " },
+          color: getColor("text"),
+        },
       ],
       plotOptions: {
         series: {
@@ -264,6 +304,9 @@ let LineChart = (pops, ref) => {
   }
   function getIds() {
     return idRef.current;
+  }
+  function getCosts() {
+    return costsRef.current;
   }
   function getColor(type) {
     switch (type) {
