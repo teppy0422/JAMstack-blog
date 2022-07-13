@@ -19,6 +19,8 @@ import {
   ModalFooter,
   Center,
   Tooltip,
+  Stack,
+  Badge,
 } from "@chakra-ui/react";
 
 import Highcharts from "highcharts/highcharts";
@@ -50,7 +52,6 @@ let LineChart = (pops, ref) => {
 
   //それぞれのボタン
   const openRef = useRef(null);
-  const updateRef = useRef(null);
   const closeRef = useRef(null);
   //保存データ
   const valueRef = useRef(0);
@@ -351,37 +352,37 @@ let LineChart = (pops, ref) => {
         <ModalOverlay />
         <ModalContent top="60px" w="100%" maxWidth="100%">
           <ModalHeader>タイピング履歴:高級店</ModalHeader>
-          <ModalCloseButton />
+
+          <ModalCloseButton _focus={{ _focus: "none" }} />
           <ModalBody>
             <HighchartsReact highcharts={Highcharts} options={chartOptions} />
           </ModalBody>
 
-          <ModalFooter>
-            {session ? (
-              <Center fontSize={["0px", "16px", "16px", "16px"]}>
-                {session.user.name}
-              </Center>
-            ) : (
-              <Center fontSize="10px">ログインしていません</Center>
-            )}
-            <Center>{property.totalCost}円</Center>
-            <Center>ミス:{property.missedCount}回</Center>
-            <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
-              <Center>タイプ速度:{property.typePerSocund}/KPM</Center>
-            </Tooltip>
-
+          <ModalFooter position="relative">
+            <Stack direction="row" margin="auto">
+              <Badge>Default</Badge>
+              <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
+                <Badge
+                  colorScheme="green"
+                  variant="solid"
+                  style={{ cursor: "default" }}
+                >
+                  {property.typePerSocund}/KPM
+                </Badge>
+              </Tooltip>
+              <Badge colorScheme="red" variant="outline">
+                ミス:{property.missedCount}回
+              </Badge>
+              <Badge colorScheme="purple">{property.totalCost}円</Badge>
+            </Stack>
             <Button
-              _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
-              variant="ghost"
-              id="button"
-              onClick={() => {
-                updateSeries();
-              }}
-              ref={updateRef}
+              colorScheme="blue"
+              mr={3}
+              ref={closeRef}
+              onClick={onClose}
+              _focus={{ _focus: "none" }}
+              position="absolute"
             >
-              更新
-            </Button>
-            <Button colorScheme="blue" mr={3} ref={closeRef} onClick={onClose}>
               Close
             </Button>
           </ModalFooter>

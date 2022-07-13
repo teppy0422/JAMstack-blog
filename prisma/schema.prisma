@@ -72,6 +72,7 @@ model TypingResult {
   time   Int?
   date   DateTime @default(now())
   missed Int?
+  cost   Int?
 
   @@map("typingresult")
 }

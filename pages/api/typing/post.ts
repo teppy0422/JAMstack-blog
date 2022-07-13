@@ -21,6 +21,7 @@ export default async function post(
       image: String(req.body.image),
       time: Number(req.body.time),
       missed: Number(req.body.missed),
+      cost: Number(req.body.cost),
     },
   });
   await res.status(200).json(post); // idを含む保存したデータを返す

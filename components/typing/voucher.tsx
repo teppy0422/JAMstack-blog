@@ -58,6 +58,7 @@ let voucher = (pops, ref) => {
       image: session.user.image,
       time: Number(property.time),
       missed: Number(property.missedCount),
+      cost: Number(property.totalCost),
     };
 
     await fetch("/api/typing/post", {
