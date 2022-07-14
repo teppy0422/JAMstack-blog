@@ -626,6 +626,7 @@ element.style {
       -ms-flex-pack: top;
           justify-content: top;
   overflow: hidden;
+  /* This was made with GlassGenerator.netlify.app */
 }
 
 .typing .backLight {
@@ -690,6 +691,7 @@ element.style {
 
 .typing .question .typeDisplayRomaji {
   font-size: 18px;
+  letter-spacing: 0.03em;
 }
 
 .typing .question .typeInput {
@@ -734,6 +736,31 @@ scroll .typing .question .typeInput:focus {
 
 .graphTemp:hover {
   cursor: pointer;
+}
+
+.glassContainer {
+  width: 700px;
+  height: 375px;
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 20px;
+  border-radius: 11px;
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  background-color: rgba(0, 191, 255, 0.102);
+  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px;
+          box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px;
+  border: 1px rgba(255, 255, 255, 0.4) solid;
+  border-bottom: 1px rgba(40, 40, 40, 0.35) solid;
+  border-right: 1px rgba(40, 40, 40, 0.35) solid;
 }
 
 .cardContainer {

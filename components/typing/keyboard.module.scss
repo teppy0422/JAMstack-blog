@@ -26,7 +26,7 @@
     line-height: 2.2;
     letter-spacing: 0.2em;
     font-weight: 100;
-    animation: back 4s ease infinite;
+    animation: back 4s ease-in-out infinite;
   }
   .keyS {
     position: absolute;
@@ -34,7 +34,7 @@
     left: 50%;
     transform: translate(-50%, 0%);
     font-weight: 600;
-    animation: space 4s ease infinite;
+    animation: space 4s ease-in-out infinite;
   }
   .keyG {
     font-weight: 600;

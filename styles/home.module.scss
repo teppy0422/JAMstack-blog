@@ -530,6 +530,7 @@ element.style {
     }
     .typeDisplayRomaji {
       font-size: 18px;
+      letter-spacing: 0.03em;
     }
     .typeInput {
       margin-top: 1rem;
@@ -548,7 +549,7 @@ element.style {
         border-color: #1c1b19;
       }
     }
-  }
+  } /* This was made with GlassGenerator.netlify.app */
 }
 
 .graphTemp {
@@ -567,6 +568,22 @@ element.style {
   &:hover {
     cursor: pointer;
   }
+}
+.glassContainer {
+  width: 700px;
+  height: 375px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  border-radius: 11px;
+  backdrop-filter: blur(6px);
+  background-color: rgba(0, 191, 255, 0.102);
+  box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px;
+  border: 1px rgba(255, 255, 255, 0.4) solid;
+  border-bottom: 1px rgba(40, 40, 40, 0.35) solid;
+  border-right: 1px rgba(40, 40, 40, 0.35) solid;
 }
 // クレジットカード風デザイン
 // @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");

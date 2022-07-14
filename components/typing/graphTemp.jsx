@@ -62,6 +62,7 @@ let LineChart = (pops, ref) => {
   const datesRef = useRef("");
   const idRef = useRef(0);
   const costsRef = useRef(0);
+  const getIDRef = useRef("");
 
   useEffect(() => {
     console.log("更新1");
@@ -75,14 +76,14 @@ let LineChart = (pops, ref) => {
   }
 
   const getResult = async () => {
-    let results = [];
     let values = [];
     let times = [];
     let dates = [];
     let ids = [];
     let misseds = [];
     let costs = [];
-    const count = 0;
+    let count = 0;
+    let mdBak = ""; //日付変化の確認
 
     if (session !== undefined && session !== null) {
       console.log(
@@ -94,17 +95,10 @@ let LineChart = (pops, ref) => {
       const data = await response.json(); //await で response.json() が完了するまで待つ
       const arr = await data.map((item, index, array) => {
         if (item.userId !== null) {
-          results.push({
-            userId: item.userId,
-            result: item.result,
-            time: item.times,
-            date: item.date,
-          });
           if (item.userId === email) {
             count++;
             values.push(item.result);
             times.push(count);
-            dates.push(item.date);
             ids.push(item.id);
             costs.push(item.cost);
             if (item.missed === 0) {
@@ -112,15 +106,32 @@ let LineChart = (pops, ref) => {
             } else {
               misseds.push(item.missed);
             }
+            const dd = new Date(item.date);
+            console.log(dd);
+            let md = dd.getMonth() + 1 + "/" + dd.getDate();
+            if (md !== mdBak) {
+              let obj = {
+                point: {
+                  xAxis: 0,
+                  yAxis: 0,
+                  x: count - 1,
+                  y: item.result,
+                },
+                // x: 10,
+                text: md,
+              };
+              dates.push(obj);
+              mdBak = md;
+            }
           }
         }
       });
       valueRef.current = values;
       timesRef.current = times;
-      datesRef.current = dates;
       idRef.current = ids;
       missedRef.current = misseds;
       costsRef.current = costs;
+      datesRef.current = dates;
     } else {
       console.log("ログインしていません");
     }
@@ -139,100 +150,64 @@ let LineChart = (pops, ref) => {
       },
       labels: [],
       annotations: [
+        // {
+        //   draggable: "",
+        //   labelOptions: {
+        //     backgroundColor: "rgba(255,255,255,0.8)",
+        //     y: -40,
+        //   },
+        //   labels: [
+        //     {
+        //       point: {
+        //         xAxis: 0,
+        //         yAxis: 0,
+        //         x: 3,
+        //         y: 376,
+        //       },
+        //       text: "7/12",
+        //     },
+        //   ],
+        // },
+        // {
+        //   draggable: "",
+        //   labelOptions: {
+        //     shape: "connector",
+        //     align: "right",
+        //     justify: false,
+        //     crop: true,
+        //     style: {
+        //       fontSize: "1em",
+        //       textOutline: "1px white",
+        //     },
+        //     backgroundColor: "rgba(255,255,255,0.8)",
+        //   },
+        //   labels: [
+        //     {
+        //       point: {
+        //         xAxis: 0,
+        //         yAxis: 0,
+        //         x: 2,
+        //         y: 166,
+        //       },
+        //       text: "7/11<br>金",
+        //     },
+        //   ],
+        // },
         {
           draggable: "",
           labelOptions: {
-            backgroundColor: "rgba(255,255,255,0.8)",
-            y: -40,
-          },
-          labels: [
-            {
-              point: {
-                xAxis: 0,
-                yAxis: 0,
-                x: 3,
-                y: 376,
-              },
-              text: "7/12",
-            },
-            {
-              point: {
-                xAxis: 0,
-                yAxis: 0,
-                x: 4,
-                y: 282,
-              },
-              text: "7/13",
-            },
-          ],
-        },
-        {
-          draggable: "",
-          labelOptions: {
-            shape: "connector",
-            align: "right",
-            justify: false,
-            crop: true,
+            // shape: "connector",
+            // align: "top",
+            // justify: true,
+            // crop: true,
             style: {
               fontSize: "1em",
-              textOutline: "1px white",
+              // textOutline: "1px white",
             },
+            y: -20,
             backgroundColor: "rgba(255,255,255,0.8)",
           },
-          labels: [
-            {
-              point: {
-                xAxis: 0,
-                yAxis: 0,
-                x: 2,
-                y: 166,
-              },
-              text: "7/11<br>金",
-            },
-            {
-              point: {
-                xAxis: 0,
-                yAxis: 0,
-                x: 5,
-                y: 170,
-              },
-              text: "7/14<br>金",
-            },
-          ],
-        },
-        {
-          draggable: "",
-          labels: [
-            {
-              point: {
-                xAxis: 0,
-                yAxis: 0,
-                x: 1,
-                y: 36,
-              },
-              x: -30,
-              text: "7/10",
-            },
-            {
-              point: {
-                xAxis: 0,
-                yAxis: 0,
-                x: 6,
-                y: 398,
-              },
-              x: -30,
-              text: "7/15",
-            },
-            {
-              point: {
-                xAxis: 0,
-                yAxis: 0,
-                x: 176.4,
-                y: 1202,
-              },
-              text: "Montée de la Combe <br>de Laisia Les Molunes",
-            },
-          ],
+          labels: getDates(),
         },
       ],
       colors: "#ff0000",
@@ -240,6 +215,7 @@ let LineChart = (pops, ref) => {
         text: "クリックでデータの削除",
         style: {
           color: getColor("text"),
+          fontSize: "16px",
         },
       },
       xAxis: {
@@ -261,7 +237,7 @@ let LineChart = (pops, ref) => {
           lineWidth: 1,
           title: {
             text: "",
-            color: "#ff0000",
+            color: "#ee0000",
             style: {
               color: getColor("text"),
               fontSize: "16px",
@@ -276,14 +252,14 @@ let LineChart = (pops, ref) => {
           style: {
             lineColor: getColor("text"),
           },
-          minorTickInterval: 100, // 'auto'
-          minorTickWidth: 1,
-          minorTickLength: 5,
+          // minorTickInterval: 100, // 'auto'
+          // minorTickWidth: 1,
+          // minorTickLength: 5,
           minorTickColor: getColor("backborder"),
         },
         {
           labels: {
-            format: "{value}円",
+            format: "{value}",
             style: {
               color: "#aB96f1",
             },
@@ -311,7 +287,7 @@ let LineChart = (pops, ref) => {
           type: "column",
           data: getCosts(),
           tooltip: { valueSuffix: " 円" },
-          color: "#aB96f1",
+          color: "#dBc6f1",
         },
         {
           name: "ミス",
@@ -328,6 +304,7 @@ let LineChart = (pops, ref) => {
           data: getValue(),
           tooltip: { valueSuffix: " " },
           color: getColor("text"),
+          marker: { symbol: "ball" },
         },
       ],
       plotOptions: {
@@ -347,7 +324,7 @@ let LineChart = (pops, ref) => {
       },
     });
   }
-  const getIDRef = useRef("");
+
   const getId = async (getCount) => {
     if (session !== undefined && session !== null) {
       const count = 0;
@@ -359,7 +336,6 @@ let LineChart = (pops, ref) => {
           if (item.userId === email) {
             count++;
             if (getCount === count) {
-              console.log("ggg", item.id);
               getIDRef.current = item.id;
               return false;
             }
@@ -369,7 +345,6 @@ let LineChart = (pops, ref) => {
     }
   };
   function getValue() {
-    console.log("getValue:", valueRef.current);
     return valueRef.current;
   }
   function getTimes() {
@@ -384,6 +359,10 @@ let LineChart = (pops, ref) => {
   function getCosts() {
     return costsRef.current;
   }
+  function getDates() {
+    console.log(datesRef.current);
+    return datesRef.current;
+  }
   function getColor(type) {
     switch (type) {
       case "text":
@@ -396,7 +375,7 @@ let LineChart = (pops, ref) => {
         if (colorMode === "light") {
           return "#999999";
         } else {
-          return "#999999";
+          return "#ffffff";
         }
     }
   }
@@ -471,7 +450,7 @@ let LineChart = (pops, ref) => {
         {overlay}
         <ModalOverlay />
         <ModalContent top="60px" w="100%" maxWidth="100%">
-          <ModalHeader>タイピング履歴:高級店</ModalHeader>
+          <ModalHeader fontSize="16px">タイピング履歴</ModalHeader>
 
           <ModalCloseButton _focus={{ _focus: "none" }} />
           <ModalBody>

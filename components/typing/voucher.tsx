@@ -17,6 +17,9 @@ import {
 import { useSession, signIn, signOut } from "next-auth/react";
 import GraphTemp from "../../components/typing/graphTemp";
 
+import styles from "../../styles/home.module.scss";
+import { RGBADepthPacking } from "three";
+
 let voucher = (pops, ref) => {
   const property = {
     totalCost: pops.totalCost,
@@ -35,7 +38,7 @@ let voucher = (pops, ref) => {
     <ModalOverlay
       bg="none"
       backdropFilter="auto"
-      backdropInvert="80%"
+      backdropInvert="90%"
       backdropBlur="2px"
     />
   );
@@ -87,8 +90,17 @@ let voucher = (pops, ref) => {
       </Text>
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         {overlay}
-        <ModalContent>
-          <ModalHeader>終了</ModalHeader>
+        <ModalContent
+          color="#000"
+          style={{
+            backgroundColor: "rgba(191,191,220,0.6",
+            border: "1px rgba(255, 255, 255, 0.4) solid",
+            borderBottom: "1px rgba(40, 40, 40, 0.35) solid",
+            borderRight: "1px rgba(40, 40, 40, 0.35) solid",
+            boxShadow: "rgba(0, 0, 0, 0.3) 2px 8px 8px",
+          }}
+        >
+          <ModalHeader>GAMEOVER</ModalHeader>
           <ModalCloseButton _focus={{ _focus: "none" }} />
           <ModalBody fontSize="22px">
             {session ? (
@@ -145,9 +157,6 @@ let voucher = (pops, ref) => {
               <>
                 <Button mr={2} disabled>
                   登録
-                </Button>
-                <Button mr={2} disabled>
-                  履歴
                 </Button>
               </>
             )}

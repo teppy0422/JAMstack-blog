@@ -17,6 +17,7 @@ import {
   Divider,
   Flex,
   Spacer,
+  Progress,
 } from "@chakra-ui/react";
 
 import Content from "../../components/content";
@@ -55,7 +56,7 @@ export const typing = () => {
   const renderFlgRef = useRef(false); //useEffectを初回走らせないフラグ
   const timerIDref = useRef(""); //タイマーリセット用のID
   const totalTimerIDref = useRef(""); //トータルタイマーリセット用のID
-  const [totalTime, setTotalTime] = useState(30); //トータルタイムの値
+  const [totalTime, setTotalTime] = useState(50); //トータルタイムの値
   const totalTimeRef = useRef(null); //トータルタイム
   const [missedCount, setMissedCount] = useState(0); //タイプミス回数
   const totalCost = useRef(0); //トータル金額
@@ -65,7 +66,7 @@ export const typing = () => {
   const voucherRef = useRef(null); //伝票
   const graphTempRef = useRef(null); //履歴グラフ
 
-  const totalTime_origin = useRef(30); //トータルタイムの値
+  const totalTime_origin = useRef(50); //トータルタイムの値
   const typeCountRef = useRef(0); //タイプ数
   const [typePerSocund, setTypePerSocund] = useState(0); //タイプ速度の値
   const sound_BGM = useRef(null); //BGM
@@ -341,6 +342,7 @@ export const typing = () => {
   }
 
   function getTimerTime(t) {
+    console.log(Math.floor((new Date() - t) / 10) / 100);
     return Math.floor((new Date() - t) / 1000);
   }
 
@@ -363,7 +365,7 @@ export const typing = () => {
         clearInterval(totalTimerIDref.current);
         gameOver();
       }
-    }, 500);
+    }, 200);
     totalTimerIDref.current = totalTimerID_;
   }
   //ゲームオーバー
@@ -458,16 +460,31 @@ export const typing = () => {
                       }
                     />
                   </Center>
-                  <Text
-                    fontSize="18px"
-                    fontWeight="bold"
-                    textAlign="right"
-                    mr="12px"
-                    mt="4px"
-                    ref={totalTimeRef}
-                  >
-                    {totalTime}
-                  </Text>
+                  <Box h="33px" position="relative">
+                    <Progress
+                      hasStripe
+                      value={totalTime}
+                      h="100%"
+                      colorScheme="green"
+                      backgroundColor="transparent"
+                      style={{ opacity: "0.7" }}
+                      mx="10px"
+                      max={totalTime_origin.current}
+                    />
+                    <Text
+                      position="absolute"
+                      top="0"
+                      right="4px"
+                      fontSize="18px"
+                      fontWeight="bold"
+                      textAlign="right"
+                      mr="12px"
+                      mt="4px"
+                      ref={totalTimeRef}
+                    >
+                      {totalTime}
+                    </Text>
+                  </Box>
                 </GridItem>
                 <GridItem w="100%" h="14" colSpan={1}>
                   <Text fontSize="13px" pl="10px">
