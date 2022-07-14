@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalOverlay,
   useDisclosure,
+  Text,
 } from "@chakra-ui/react";
 
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -73,8 +74,8 @@ let voucher = (pops, ref) => {
 
   return (
     <>
-      <Button
-        ml="4"
+      <Text
+        p="0"
         _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
         onClick={() => {
           setOverlay(<OverlayTwo />);
@@ -83,7 +84,7 @@ let voucher = (pops, ref) => {
         ref={voucherOpenRef}
       >
         伝票を見る
-      </Button>
+      </Text>
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         {overlay}
         <ModalContent>

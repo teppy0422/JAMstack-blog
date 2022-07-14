@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 import { DefaultSeo } from "next-seo";
 import styles from "../../styles/home.module.scss";
@@ -14,6 +15,8 @@ import {
   Tooltip,
   useColorMode,
   Divider,
+  Flex,
+  Spacer,
 } from "@chakra-ui/react";
 
 import Content from "../../components/content";
@@ -75,9 +78,26 @@ export const typing = () => {
     //レンダー初回時だけ実行
     console.log("初回だけ");
     // renderFlgRef.current = true;
-    //入力イベント
+    //入力イベントをオン
     document.addEventListener("keypress", keypress_ivent);
     document.addEventListener("keyup", keyup_ivent);
+  }, []);
+  //ページ遷移時にイベントとかをオフ
+  const router = useRouter();
+  const pageChangeHandler = () => {
+    document.removeEventListener("keypress", keypress_ivent);
+    document.removeEventListener("keyup", keyup_ivent);
+    clearInterval(timerIDref.current);
+    clearInterval(totalTimerIDref.current);
+    sound_BGM.current.pause();
+    sound("finish");
+    mode.current = "menu";
+  };
+  useEffect(() => {
+    router.events.on("routeChangeStart", pageChangeHandler);
+    return () => {
+      router.events.off("routeChangeStart", pageChangeHandler);
+    };
   }, []);
 
   const { colorMode, toggleColorMode } = useColorMode();
@@ -155,6 +175,7 @@ export const typing = () => {
   }
   // キーダウンイベント
   function keypress_ivent(e) {
+    e.preventDefault();
     let eKey = e.key.toLowerCase();
     const typeDisplayRomaji = document.getElementById("type-display-romaji");
     //入力したキーを着色
@@ -498,10 +519,26 @@ export const typing = () => {
                 </GridItem>
               </Grid>
             </Center>
-
-            <Center style={{ zIndex: "999999" }} id="timer">
-              作成中..
+            <Center>
+              <Flex w={["100%", "90%", "80%", "70%"]} h="40px">
+                <GraphTemp
+                  ref={graphTempRef}
+                  totalCost={totalCost.current}
+                  missedCount={missedCount}
+                  typePerSocund={typePerSocund}
+                  times={totalTime_origin.current}
+                />
+                <Spacer />
+                <Text mt="4px" id="timer">
+                  作成中...
+                </Text>
+                <Spacer />
+                <Box className={styles.graphTemp} w="56px">
+                  {/* Box 2 */}
+                </Box>
+              </Flex>
             </Center>
+
             <Box position="relative">
               <Sushi_tamago_wrap />
               <Center position="absolute" className={styles.cost}>
@@ -542,21 +579,6 @@ export const typing = () => {
             </Box>
           </Box>
         </VStack>
-        <GraphTemp
-          ref={graphTempRef}
-          totalCost={totalCost.current}
-          missedCount={missedCount}
-          typePerSocund={typePerSocund}
-          times={totalTime_origin.current}
-        />
-        {/* <Button
-          onClick={() => {
-            graphTempRef.current.childClick();
-          }}
-        >
-          履歴
-        </Button> */}
-        {/* <GraphResultTrasition results={results} /> */}
         <Voucher
           ref={voucherRef}
           totalCost={totalCost.current}
@@ -567,14 +589,7 @@ export const typing = () => {
             gameReplay();
           }}
         />
-        <>
-          <Button
-            onClick={() => {
-              voucherRef.current.clickChildOpen();
-            }}
-          >
-            test
-          </Button>
+        <Flex display="none">
           <audio
             controls
             id="missed"
@@ -618,7 +633,7 @@ export const typing = () => {
               type="audio/mp3"
             />
           </audio>
-        </>
+        </Flex>
         <div className={styles.cardContainer}>
           <div className={styles.card}>
             <h1>

@@ -21,6 +21,7 @@ import {
   Tooltip,
   Stack,
   Badge,
+  Box,
 } from "@chakra-ui/react";
 
 import Highcharts from "highcharts/highcharts";
@@ -30,6 +31,7 @@ import highchartsAccessibility from "highcharts/modules/accessibility";
 import AnnotationsFactory from "highcharts/modules/annotations";
 
 import { useSession, signIn, signOut } from "next-auth/react";
+import styles from "../../styles/home.module.scss";
 
 let LineChart = (pops, ref) => {
   const property = {
@@ -65,11 +67,6 @@ let LineChart = (pops, ref) => {
     console.log("更新1");
     // getResult();
   }, [session]);
-
-  // useEffect(() => {
-  //   console.log("更新2");
-  //   getResult();
-  // }, [valueRef.current]);
 
   function makeChart() {
     getResult().then((value) => {
@@ -448,26 +445,27 @@ let LineChart = (pops, ref) => {
   return (
     <>
       {session ? (
-        <Button
+        <Box
+          className={styles.graphTemp}
           id="openButton"
+          w="56px"
           _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
           onClick={() => {
             onOpen();
             setOverlay(<OverlayTwo />);
-
             makeChart();
-
-            // getResult();
-            // updateSeries();
-            // setTimeout(updateSeries, 100);
             console.log("クリックされた");
           }}
           ref={openRef}
         >
           履歴
-        </Button>
+        </Box>
       ) : (
-        <Button disabled>履歴</Button>
+        <Tooltip hasArrow label="ログインしていると開けます" bg="gray.600">
+          <Box className={styles.graphTemp} w="56px" disabled>
+            履歴
+          </Box>
+        </Tooltip>
       )}
       <Modal isOpen={isOpen} onClose={onClose}>
         {overlay}
@@ -510,7 +508,7 @@ let LineChart = (pops, ref) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <h3>Hovering over {hoverData}</h3>
+      <h5>{hoverData}</h5>
     </>
   );
 };

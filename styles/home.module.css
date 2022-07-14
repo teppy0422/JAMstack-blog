@@ -711,6 +711,31 @@ scroll .typing .question .typeInput:focus {
   border-color: #1c1b19;
 }
 
+.graphTemp {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: "56px";
+  border: 1px solid;
+  border-radius: 3px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: transparent;
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 3px;
+}
+
+.graphTemp:hover {
+  cursor: pointer;
+}
+
 .cardContainer {
   display: none;
   position: absolute;

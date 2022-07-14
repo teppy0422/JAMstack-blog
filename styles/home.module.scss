@@ -551,6 +551,23 @@ element.style {
   }
 }
 
+.graphTemp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: "56px";
+  border: 1px solid;
+  border-radius: 3px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: transparent;
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 3px;
+  &:hover {
+    cursor: pointer;
+  }
+}
 // クレジットカード風デザイン
 // @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
 

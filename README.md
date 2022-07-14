@@ -306,6 +306,38 @@ https://pixabay.com/api/docs/#api_search_videos
 https://notes.sharesl.net/articles/1846/
 https://qiita.com/su3aki/items/24b21e9337732a64bf3e
 
+############## ページ遷移時にイベントを実行 #################
+
+const router = useRouter();
+const pageChangeHandler = () => {
+//この中身が遷移前に実行される
+document.removeEventListener("keypress", keypress_ivent);
+document.removeEventListener("keyup", keyup_ivent);
+};
+useEffect(() => {
+router.events.on("routeChangeStart", pageChangeHandler);
+return () => {
+router.events.off("routeChangeStart", pageChangeHandler);
+};
+}, []);
+
+###########################################################
+
+############## 上下中央揃え ##############
+
+display: flex;
+justify-content: center;
+align-items: center;
+
+########################################
+
 ############## 不具合 ###################
 
 window.height が低い場合に space でスクロールする
+
+> e.preventDefault();の追加
+>
+> > ページ遷移後にも効かなくなる
+> >
+> > > タイマーイベントも実行される
+> > > 下記で遷移前にイベントをオフにできる
