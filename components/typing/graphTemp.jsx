@@ -86,10 +86,6 @@ let LineChart = (pops, ref) => {
     let mdBak = ""; //日付変化の確認
 
     if (session !== undefined && session !== null) {
-      console.log(
-        "ログインしています,session.user.email: ",
-        session.user.email
-      );
       const email = session.user.email;
       const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
       const data = await response.json(); //await で response.json() が完了するまで待つ
@@ -107,7 +103,6 @@ let LineChart = (pops, ref) => {
               misseds.push(item.missed);
             }
             const dd = new Date(item.date);
-            console.log(dd);
             let md = dd.getMonth() + 1 + "/" + dd.getDate();
             if (md !== mdBak) {
               let obj = {

@@ -12,6 +12,13 @@ import {
   ModalOverlay,
   useDisclosure,
   Text,
+  Box,
+  SimpleGrid,
+  Flex,
+  Spacer,
+  Badge,
+  VStack,
+  Divider,
 } from "@chakra-ui/react";
 
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -19,6 +26,8 @@ import GraphTemp from "../../components/typing/graphTemp";
 
 import styles from "../../styles/home.module.scss";
 import { RGBADepthPacking } from "three";
+
+import Sushi_tamago_wrap3 from "../../components/3d/sushi_tamago_wrap3";
 
 let voucher = (pops, ref) => {
   const property = {
@@ -93,28 +102,32 @@ let voucher = (pops, ref) => {
         <ModalContent
           color="#000"
           style={{
-            backgroundColor: "rgba(191,191,220,0.6",
+            backgroundColor: "rgba(191,191,220,0.7",
             border: "1px rgba(255, 255, 255, 0.4) solid",
             borderBottom: "1px rgba(40, 40, 40, 0.35) solid",
             borderRight: "1px rgba(40, 40, 40, 0.35) solid",
             boxShadow: "rgba(0, 0, 0, 0.3) 2px 8px 8px",
           }}
         >
-          <ModalHeader>GAMEOVER</ModalHeader>
+          <ModalHeader>タイピング速度は「たまご」でした</ModalHeader>
           <ModalCloseButton _focus={{ _focus: "none" }} />
           <ModalBody fontSize="22px">
-            {session ? (
-              <Center fontSize={["0px", "16px", "16px", "16px"]}>
-                {session.user.name}
-              </Center>
-            ) : (
-              <Center fontSize="10px">ログインしていません</Center>
-            )}
-            <Center>{property.totalCost}円</Center>
-            <Center>ミス:{property.missedCount}回</Center>
-            <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
-              <Center>タイプ速度:{property.typePerSocund}/KPM</Center>
-            </Tooltip>
+            <Flex>
+              <Box w={["260px"]} position="relative">
+                <Center position="absolute" top={["-100px"]} left={["-180px"]}>
+                  <Sushi_tamago_wrap3 />
+                </Center>
+              </Box>
+              <Spacer />
+              <VStack textAlign="right" w={["150px"]} fontSize="16px">
+                <Text variant="solid">{property.typePerSocund}/KPM</Text>
+                <Divider style={{ marginTop: "2px" }} borderColor="#000" />
+                <Box>ミス:{property.missedCount}回</Box>
+                <Divider style={{ marginTop: "2px" }} borderColor="#000" />
+                <Box>{property.totalCost}円</Box>
+                <Divider style={{ marginTop: "2px" }} borderColor="#000" />
+              </VStack>
+            </Flex>
           </ModalBody>
           <ModalFooter py={4}>
             <Button

@@ -179,7 +179,7 @@ export default function Header() {
                           />
                         }
                       >
-                        タイピング
+                        タイピング練習
                       </MenuItem>
                     </Link>
                   </NextLink>
