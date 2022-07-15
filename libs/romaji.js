@@ -1,3 +1,5 @@
+import { SimpleGrid } from "@chakra-ui/react";
+
 const data = {
   " ": "　",
   "!": "！",
@@ -543,11 +545,17 @@ export const getInputCandidate = (input, arr) => {
   return newArr;
 };
 
-export const changeColor = (id, count) => {
+export const changeColor = (id, count, colorMode) => {
   const arr = document.getElementById(id).querySelectorAll("span");
   arr.forEach((spans, index) => {
     if (index < count) {
       spans.style.color = "red";
+    } else {
+      if (colorMode === "light") {
+        spans.style.color = "#000000";
+      } else {
+        spans.style.color = "#ffffff";
+      }
     }
   });
   //残りの文字数

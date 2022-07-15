@@ -18,6 +18,7 @@ import {
   Flex,
   Spacer,
   Progress,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 import Content from "../../components/content";
@@ -41,6 +42,9 @@ import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 
 import Keyboard from "../../components/typing/kyeboard";
 import GraphTemp from "../../components/typing/graphTemp";
+import { useContext } from "react";
+
+import { myContext } from "../../pages/_app";
 
 export const typing = () => {
   const { data: session } = useSession();
@@ -70,10 +74,12 @@ export const typing = () => {
   const typeCountRef = useRef(0); //タイプ数
   const [typePerSocund, setTypePerSocund] = useState(0); //タイプ速度の値
   const sound_BGM = useRef(null); //BGM
-  const mode = useRef("menu"); //モードの状態
+  const gameMode = useRef("menu"); //モードの状態
   const Q_used = useRef(""); //出題済みの問題の番号
   const suggestKeyRef = useRef(""); //入力候補の着色用
 
+  const myState = useContext(myContext);
+  const fontColor = "";
   //マウント時に一回だけ実行
   useEffect(() => {
     //レンダー初回時だけ実行
@@ -83,6 +89,7 @@ export const typing = () => {
     document.addEventListener("keypress", keypress_ivent);
     document.addEventListener("keyup", keyup_ivent);
   }, []);
+
   //ページ遷移時にイベントとかをオフ
   const router = useRouter();
   const pageChangeHandler = () => {
@@ -92,7 +99,7 @@ export const typing = () => {
     clearInterval(totalTimerIDref.current);
     sound_BGM.current.pause();
     sound("finish");
-    mode.current = "menu";
+    gameMode.current = "menu";
   };
   useEffect(() => {
     router.events.on("routeChangeStart", pageChangeHandler);
@@ -184,7 +191,7 @@ export const typing = () => {
     if (inputKeyID !== null) {
       document.getElementById(eKey).style.background = "pink";
     }
-    switch (mode.current) {
+    switch (gameMode.current) {
       case "menu":
         if (e.code === "Space") {
           gameReplay();
@@ -206,7 +213,12 @@ export const typing = () => {
             //文章を一文字ずつ分解してspanタグを生成_ローマ字_1
             makeSpan(newTemp[0], typeDisplayRomaji);
             //色を変更
-            changeColor("type-display-romaji", inputTextTempA.length);
+            changeColor(
+              "type-display-romaji",
+              inputTextTempA.length,
+              myState.colorMode
+            );
+            console.log(myState.colorMode);
             //入力文字オーバーの更新_ひらがな
             const inputSuggestHiragana = getHiragana(newTemp[0]);
             const inputSuggestOver = Q_Texts.current.substring(
@@ -230,7 +242,8 @@ export const typing = () => {
             //文字色を変える_ひらがな
             const last = changeColor(
               "type-display-hiragana",
-              correctCount.current
+              correctCount.current,
+              myState.colorMode
             );
             if (last === 0) {
               complete = true;
@@ -276,7 +289,7 @@ export const typing = () => {
           setMissedCount((missedCount) => {
             return missedCount;
           });
-          changeColor("type-display-romaji", 0);
+          changeColor("type-display-romaji", 0, myState.colorMode);
           // 入力アシストの表示
           suggestKeyRef.current = temp[0].charAt(0);
         }
@@ -342,7 +355,6 @@ export const typing = () => {
   }
 
   function getTimerTime(t) {
-    console.log(Math.floor((new Date() - t) / 10) / 100);
     return Math.floor((new Date() - t) / 1000);
   }
 
@@ -377,7 +389,7 @@ export const typing = () => {
     );
     sound_BGM.current.pause();
     sound("finish");
-    mode.current = "menu";
+    gameMode.current = "menu";
     voucherRef.current.clickChildOpen();
   }
 
@@ -390,7 +402,7 @@ export const typing = () => {
     inputText.current = "";
     typeCountRef.current = 0;
     totalCost.current = 0;
-    mode.current = "play";
+    gameMode.current = "play";
     Q_used.current = "";
   }
 
@@ -550,7 +562,13 @@ export const typing = () => {
                   作成中...
                 </Text>
                 <Spacer />
-                <Box className={styles.graphTemp} w="56px">
+                <Box
+                  className={styles.graphTemp}
+                  w="56px"
+                  onClick={() => {
+                    console.log(myState.colorMode);
+                  }}
+                >
                   {/* Box 2 */}
                 </Box>
               </Flex>

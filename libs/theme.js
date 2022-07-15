@@ -1,5 +1,21 @@
 import { extendTheme } from "@chakra-ui/react";
-const theme = extendTheme({
+
+// NB: Chakra gives you access to `colorMode` and `theme` in `props`
+export const theme = extendTheme({
+  styles: {
+    global: (props) => ({
+      "html, body": {
+        // color: props.colorMode === "dark" ? "white" : "gray.600",
+        // lineHeight: "tall",
+        padding: 0,
+        margin: 0,
+      },
+      a: {
+        // color: props.colorMode === "dark" ? "white" : "gray.600",
+        textDecoration: "none",
+      },
+    }),
+  },
   colors: {
     brand: {
       100: "#ff00ff",
@@ -15,4 +31,3 @@ const theme = extendTheme({
     inkscape: "#333333",
   },
 });
-export default theme;
