@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useImperativeHandle, forwardRef, useRef } from "react";
 
 import { Box, useColorMode, Center } from "@chakra-ui/react";
 
@@ -7,8 +7,18 @@ const keyValues1 = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
 const keyValues2 = ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";"];
 const keyValues3 = ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"];
 
-const keyboard = () => {
+let keyboard = (pops, ref) => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const keyboardRef = useRef(null);
+  // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
+  useImperativeHandle(ref, () => ({
+    Open() {
+      keyboardRef.current.style.visibility = "visible";
+    },
+    Close() {
+      keyboardRef.current.style.visibility = "hidden";
+    },
+  }));
   return (
     <Box className={styles.keyboard} id="keyboard">
       <Box className={styles.keys1}>
@@ -67,6 +77,7 @@ const keyboard = () => {
       </Box>
       <Box
         className={styles.key4}
+        ref={keyboardRef}
         w="160px"
         h={8}
         m={1}
@@ -84,5 +95,5 @@ const keyboard = () => {
     </Box>
   );
 };
-
+keyboard = forwardRef(keyboard);
 export default keyboard;

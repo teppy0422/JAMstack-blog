@@ -79,7 +79,7 @@ export const typing = () => {
   const suggestKeyRef = useRef(""); //入力候補の着色用
 
   const myState = useContext(myContext);
-  const fontColor = "";
+  const keyboardRef = useRef(null);
   //マウント時に一回だけ実行
   useEffect(() => {
     //レンダー初回時だけ実行
@@ -218,7 +218,6 @@ export const typing = () => {
               inputTextTempA.length,
               myState.colorMode
             );
-            console.log(myState.colorMode);
             //入力文字オーバーの更新_ひらがな
             const inputSuggestHiragana = getHiragana(newTemp[0]);
             const inputSuggestOver = Q_Texts.current.substring(
@@ -360,6 +359,7 @@ export const typing = () => {
 
   //タイマー_トータル
   function StartTotalTimer() {
+    keyboardRef.current.Close();
     let totalStartTime;
     sound_BGM.current.pause();
     sound_BGM.current.currentTime = 0;
@@ -382,6 +382,7 @@ export const typing = () => {
   }
   //ゲームオーバー
   function gameOver() {
+    keyboardRef.current.Open();
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
     setTypePerSocund(
@@ -567,10 +568,9 @@ export const typing = () => {
                   w="56px"
                   onClick={() => {
                     console.log(myState.colorMode);
+                    keyboardRef.current.Open();
                   }}
-                >
-                  {/* Box 2 */}
-                </Box>
+                ></Box>
               </Flex>
             </Center>
 
@@ -610,7 +610,7 @@ export const typing = () => {
                   {typeDisplayRomaji_2}
                 </p>
               </Center>
-              <Keyboard />
+              <Keyboard ref={keyboardRef} />
             </Box>
           </Box>
         </VStack>
@@ -669,21 +669,6 @@ export const typing = () => {
             />
           </audio>
         </Flex>
-        <div className={styles.cardContainer}>
-          <div className={styles.card}>
-            <h1>
-              <i className={styles.fa}></i>結果
-            </h1>
-            <h3>{totalCost.current}円</h3>
-            <h3>ミス:{missedCount}回</h3>
-            <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
-              <h3>タイプ速度:{typePerSocund}/KPM</h3>
-            </Tooltip>
-
-            <div className={styles.circle}></div>
-            <div className={styles.circle}></div>
-          </div>
-        </div>
       </Content>
     </>
   );
