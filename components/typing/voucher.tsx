@@ -40,6 +40,7 @@ import Amaebi from "../3d/sushi_amaebi";
 import Samon from "../3d/sushi_samon";
 import Ebi from "../3d/sushi_ebi";
 import Ootoro from "../3d/sushi_ootoro";
+import SanmaYaki from "../3d/sushi_sanma_yaki";
 
 let voucher = (pops, ref) => {
   const property = {
@@ -81,6 +82,7 @@ let voucher = (pops, ref) => {
     { path: <Samon />, text: "サーモン" },
     { path: <Ebi />, text: "エビ" },
     { path: <Ootoro />, text: "大トロ" },
+    { path: <SanmaYaki />, text: "さんま焼き" },
   ];
   // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
   useImperativeHandle(ref, () => ({
@@ -89,6 +91,7 @@ let voucher = (pops, ref) => {
       console.log(Sushi[rnd].path);
       sushiRef.current = Sushi[rnd].path;
       sushiCommentRef.current = Sushi[rnd].text;
+      console.log(Sushi[rnd].text);
       voucherOpenRef.current.click();
     },
   }));

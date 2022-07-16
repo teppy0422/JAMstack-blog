@@ -5,6 +5,7 @@ import styles from "./keyboard.module.scss";
 export default function sushi_menu() {
   const netaList = [
     { name: "大トロ" },
+    { name: "さんま" },
     { name: "えび" },
     { name: "甘えび" },
     { name: "サーモン" },

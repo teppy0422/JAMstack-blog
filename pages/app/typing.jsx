@@ -568,10 +568,8 @@ export const typing = () => {
                   className={styles.graphTemp}
                   w="56px"
                   onClick={() => {
-                    console.log(myState.colorMode);
                     keyboardRef.current.Open();
-
-                    const rnd = Math.floor(Math.random() * 11); //0-3をランダムで取得
+                    const rnd = Math.floor(Math.random() * 12); //0-3をランダムで取得
                     console.log(rnd);
                     voucherRef.current.clickChildOpen(rnd);
                   }}
