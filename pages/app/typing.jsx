@@ -39,6 +39,7 @@ import Menu from "../../components/typing/menu";
 
 import { getQuiz } from "../../libs/romaji_quiz.js";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
+import Sushi_menu from "../../components/typing/sushi_menu";
 
 import Keyboard from "../../components/typing/kyeboard";
 import GraphTemp from "../../components/typing/graphTemp";
@@ -392,6 +393,8 @@ export const typing = () => {
     sound("finish");
     gameMode.current = "menu";
     voucherRef.current.clickChildOpen();
+    const rnd = Math.floor(Math.random() * 2);
+    console.log(rnd);
   }
 
   //リプレイ
@@ -406,7 +409,13 @@ export const typing = () => {
     gameMode.current = "play";
     Q_used.current = "";
   }
-
+  function getSushi() {
+    const sushies = [
+      { result: 0, name: "sushi_gari.jsx" },
+      { result: 1, name: "sushi_tukemono.jsx" },
+      { result: 2, name: "sushi_umeboshi" },
+    ];
+  }
   return (
     <>
       <DefaultSeo
@@ -574,12 +583,8 @@ export const typing = () => {
               </Flex>
             </Center>
 
-            <Box position="relative">
-              <Sushi_tamago_wrap />
-              <Center position="absolute" className={styles.cost}>
-                {Q_cost.current}
-              </Center>
-            </Box>
+            <Sushi_menu />
+            <Center className={styles.cost}>{Q_cost.current}</Center>
 
             <Box className={styles.question} w="100%">
               <Center className={styles.typeDisplay} id="type-display">

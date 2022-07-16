@@ -114,7 +114,11 @@ let voucher = (pops, ref) => {
           <ModalBody fontSize="22px">
             <Flex>
               <Box w={["260px"]} position="relative">
-                <Center position="absolute" top={["-100px"]} left={["-180px"]}>
+                <Center
+                  position="absolute"
+                  top={["-50px", "-80px", "-90px", "-100px"]}
+                  left={["-80px", "-120px", "-160px", "-180px"]}
+                >
                   <Sushi_tamago_wrap3 />
                 </Center>
               </Box>
