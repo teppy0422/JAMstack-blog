@@ -392,11 +392,10 @@ export const typing = () => {
     sound_BGM.current.pause();
     sound("finish");
     gameMode.current = "menu";
-    voucherRef.current.clickChildOpen();
-    const rnd = Math.floor(Math.random() * 2);
+    const rnd = Math.floor(Math.random() * 3); //0-3をランダムで取得
     console.log(rnd);
+    voucherRef.current.clickChildOpen(rnd);
   }
-
   //リプレイ
   function gameReplay() {
     setTypePerSocund(0);
@@ -408,13 +407,6 @@ export const typing = () => {
     totalCost.current = 0;
     gameMode.current = "play";
     Q_used.current = "";
-  }
-  function getSushi() {
-    const sushies = [
-      { result: 0, name: "sushi_gari.jsx" },
-      { result: 1, name: "sushi_tukemono.jsx" },
-      { result: 2, name: "sushi_umeboshi" },
-    ];
   }
   return (
     <>
@@ -578,8 +570,14 @@ export const typing = () => {
                   onClick={() => {
                     console.log(myState.colorMode);
                     keyboardRef.current.Open();
+
+                    const rnd = Math.floor(Math.random() * 11); //0-3をランダムで取得
+                    console.log(rnd);
+                    voucherRef.current.clickChildOpen(rnd);
                   }}
-                ></Box>
+                >
+                  TEST
+                </Box>
               </Flex>
             </Center>
 

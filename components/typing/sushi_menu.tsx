@@ -4,10 +4,10 @@ import styles from "./keyboard.module.scss";
 
 export default function sushi_menu() {
   const netaList = [
-    { name: "中トロ" },
+    { name: "大トロ" },
     { name: "えび" },
     { name: "甘えび" },
-    { name: "まぐろ" },
+    { name: "サーモン" },
     { name: "鉄火巻き" },
     { name: "鰯" },
     { name: "いか" },

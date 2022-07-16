@@ -29,6 +29,18 @@ import { RGBADepthPacking } from "three";
 
 import Sushi_tamago_wrap3 from "../../components/3d/sushi_tamago_wrap3";
 
+import Gari from "../3d/sushi_gari";
+import Tukemono from "../3d/sushi_tukemono";
+import Umeboshi from "../3d/sushi_umeboshi";
+import Tamago from "../3d/sushi_tamago";
+import Ika from "../3d/sushi_ika";
+import Iwashi from "../3d/sushi_iwashi";
+import Tekka from "../3d/sushi_tekka";
+import Amaebi from "../3d/sushi_amaebi";
+import Samon from "../3d/sushi_samon";
+import Ebi from "../3d/sushi_ebi";
+import Ootoro from "../3d/sushi_ootoro";
+
 let voucher = (pops, ref) => {
   const property = {
     totalCost: pops.totalCost,
@@ -42,6 +54,8 @@ let voucher = (pops, ref) => {
   const voucherOpenRef = useRef(null); //伝票を開くボタン
   const voucherCloseRef = useRef(null); //伝票を開くボタン
   const voucherPostRef = useRef(null); //登録ボタン
+  const sushiRef = useRef(null); //寿司アドレス
+  const sushiCommentRef = useRef(""); //寿司なまえ
 
   const OverlayTwo = () => (
     <ModalOverlay
@@ -55,9 +69,26 @@ let voucher = (pops, ref) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
 
+  const Sushi = [
+    { path: <Gari />, text: "ガリ" },
+    { path: <Tukemono />, text: "つけもの" },
+    { path: <Umeboshi />, text: "梅干" },
+    { path: <Tamago />, text: "たまご" },
+    { path: <Ika />, text: "いか" },
+    { path: <Iwashi />, text: "鰯" },
+    { path: <Tekka />, text: "鉄火巻き" },
+    { path: <Amaebi />, text: "甘エビ" },
+    { path: <Samon />, text: "サーモン" },
+    { path: <Ebi />, text: "エビ" },
+    { path: <Ootoro />, text: "大トロ" },
+  ];
   // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
   useImperativeHandle(ref, () => ({
-    clickChildOpen() {
+    clickChildOpen(rnd) {
+      console.log("childrnd", rnd);
+      console.log(Sushi[rnd].path);
+      sushiRef.current = Sushi[rnd].path;
+      sushiCommentRef.current = Sushi[rnd].text;
       voucherOpenRef.current.click();
     },
   }));
@@ -109,7 +140,9 @@ let voucher = (pops, ref) => {
             boxShadow: "rgba(0, 0, 0, 0.3) 2px 8px 8px",
           }}
         >
-          <ModalHeader>タイピング速度は「たまご」でした</ModalHeader>
+          <ModalHeader>
+            タイピング速度は「{sushiCommentRef.current}」でした
+          </ModalHeader>
           <ModalCloseButton _focus={{ _focus: "none" }} />
           <ModalBody fontSize="22px">
             <Flex>
@@ -119,7 +152,7 @@ let voucher = (pops, ref) => {
                   top={["-50px", "-80px", "-90px", "-100px"]}
                   left={["-80px", "-120px", "-160px", "-180px"]}
                 >
-                  <Sushi_tamago_wrap3 />
+                  <Sushi_tamago_wrap3 path={sushiRef.current} />
                 </Center>
               </Box>
               <Spacer />
