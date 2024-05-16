@@ -1,0 +1,1030 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0048)http://10.150.10.218/DesignSource/MenuParts.aspx -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>
+			Design Source Web
+		</title>
+		<link href="./Design Source Web_files/DesignSourceStyleJp.css" type="text/css" rel="stylesheet">
+		<script language="JavaScript">
+		<!--
+		//検索結果スクロール位置記憶用関数
+		//divPartMenuに以下のイベントを追加：onscroll="PartMenuScroll_Y(this)"
+		function PartMenuScroll_Y(Panel){
+			document.getElementById('txtPartMenuScroll').value = Panel.scrollTop;
+		}
+		//divPartDetailに以下のイベントを追加：onscroll="PartDetailScroll_Y(this)"
+		function PartDetailScroll_Y(Panel){
+			document.getElementById('txtPartDetailScroll').value = Panel.scrollTop;
+		}
+		
+		//メニュー高さを設定
+		//body に以下のイベントを追加：onresize="SetMenuHeight();"
+		function SetMenuHeight(){
+			var intTopPos		= document.body.scrollTop;
+			var intBodyHeight	= document.body.clientHeight;
+
+			var intMenuHeight;		
+			var intListHeight;
+			
+			//サブメニュー表示／非表示判定
+			//高さ設定
+			if(document.getElementById('divPartMenu') != null){
+				intMenuHeight	= intBodyHeight - 98;
+				if(document.getElementById('txtPartSubViewFlg').value == 'true'){
+					intListHeight = intMenuHeight - 154;
+				}else{
+					intListHeight = intMenuHeight - 86;
+				}
+				if(intListHeight < 1){
+					return;
+				}
+				
+				document.getElementById('divPartMenu').style.height		= intMenuHeight;
+				document.getElementById('divPartQuery').style.height	= intListHeight;
+				document.getElementById('divPartDetail').style.height	= intMenuHeight;
+			}
+		}	
+		-->
+		</script>
+	</head>
+	<body onresize="SetMenuHeight();" style="PADDING: 0px 0px 0px 0px; MARGIN: 5px 0px 0px 5px;">
+		<form name="Form1" method="post" action="http://10.150.10.218/DesignSource/MenuParts.aspx" id="Form1">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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AgEPZBYGZg8PFgIfAQUFSE9OREFkZAIBD2QWAmYPDxYEHwEFEVRXSVNUIFdSQVAgMTNYMzIwHwIFigEuLi9Gb3JtTmFtZUluZm8uYXNweD9uYW1laWQ9NzE5NDM3NzIzMCZta2dDZD1IT05EQSZta0NkPTQ0MDM0Jm5hbWU9VFdJU1QrV1JBUCsxM1gzMjAmYWlyYj0wJnRpdGxlPSZiYWNrZmxnPWZhbHNlJnBhcnR0eXBlPUoxJmlkdHlwZT1wYXJ0aWRkZAICDw8WAh8BBRE4MTA2Ouagg+acqOW3peWgtGRkAgIPZBYGZg8PFgIfAQUFTUFaREFkZAIBD2QWAmYPDxYEHwEFDVRXUkFQLUIxM0wzMjAfAgWFAS4uL0Zvcm1OYW1lSW5mby5hc3B4P25hbWVpZD03MTk0Mzc3MjMwJm1rZ0NkPU1BWkRBJm1rQ2Q9Tk9ORSZuYW1lPVRXUkFQLUIxM0wzMjAmYWlyYj0wJnRpdGxlPSZiYWNrZmxnPWZhbHNlJnBhcnR0eXBlPUoxJmlkdHlwZT1wYXJ0aWRkZAICDw8WAh8BBRE3ODMyOuaWsOimi+W3peWgtGRkAgMPZBYGZg8PFgIfAQUFU09OT1RkZAIBD2QWAmYPDxYEHwEFEFRXMjQwM0IxM01NMDMyMEgfAgWJAS4uL0Zvcm1OYW1lSW5mby5hc3B4P25hbWVpZD03MTk0Mzc3MjMwJm1rZ0NkPVNPTk9UJm1rQ2Q9NzE0NDAmbmFtZT1UVzI0MDNCMTNNTTAzMjBIJmFpcmI9MCZ0aXRsZT0mYmFja2ZsZz1mYWxzZSZwYXJ0dHlwZT1KMSZpZHR5cGU9cGFydGlkZGQCAg8PFgIfAQUaNzJTMjrmqZ/pm7vnlJ/nlKPkuovmpa3pg6hkZAIED2QWBmYPDxYCHwEFBVRPWU9UZGQCAQ9kFgJmDw8WBB8BBQ9UVzI0MDNCLUIxM0wzMjAfAgWzAS4uL0Zvcm1OYW1lSW5mby5hc3B4P25hbWVpZD03MTk0Mzc3MjMwJm1rZ0NkPVRPWU9UJm1rQ2Q9Tk9ORSZuYW1lPVRXMjQwM0ItQjEzTDMyMCZhaXJiPTAmdGl0bGU9VFdJU1RXUkFQKzI0MDNCK05PTi1UUkFDRVIoJWNmJTg2MTMrTCUzZDMyMCkmYmFja2ZsZz1mYWxzZSZwYXJ0dHlw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BRBjdGwwMSRncmRQdG1TeW1iDzwrAAoBCGZkBRJjdGwwMSRncmRKYWlyc0thaGkPPCsACgEIZmQFEmN0bDAxJGdyZEphaXJzU2ppcw88KwAKAQgCAWQFEWN0bDAxJGdyZFB0bU9yZGVyDzwrAAoBCGZkBRdjdGwwMSRncmRKYWlyc1N1cHBseWVycw88KwAKAQgCAWQFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYJBRJjdGwwMSRpbWdKYWlyc1NwZWMFEmN0bDAxJGltZ0phaXJzU2l6ZQUTY3RsMDEkaW1nSmFpcnNBbGlhcwUSY3RsMDEkaW1nSmFpcnNSZWx0BRFjdGwwMSRpbWdKYWlyc0NhcgUSY3RsMDEkaW1nSmFpcnNEcmF3BRVjdGwwMSRpbWdKYWlyc1Byb2R1Y3QFFGN0bDAxJGltZ0phaXJzTW9kaWZ5BRRjdGwwMSRpbWdKYWlyc0h5b2p1bgUSY3RsMDEkZ3JkSmFpcnNTaXplDzwrAAoBCAIBZAUTY3RsMDEkZ3JkSmFpcnNTcGVjcw88KwAKAQgCAWQFFGN0bDAxJGdyZEphaXJzTW9kaWZ5DzwrAAoBCGZkBRVjdGwwMSRncmRFbXRyU3VwcGxpZXIPPCsACgEIZmQFD2N0bDAxJGdyZFB0bVJlbA88KwAKAQhmZAUSY3RsMDEkZ3JkSmFpcnNTamlyDzwrAAoBCAIBZAUSY3RsMDEkZ3JkVGVybUdyb3VwDzwrAAoBCGZkBS5jdGwwMSRVQ3RybFN5bWJvbFhtbEluZm9ybWF0aW9uMSRncmRTeW1ib2xJbmZvDzwrAAoBCGZkBRdjdGwwMSRncmRKYWlyc0FwcGx5V2lyZQ88KwAKAQhmZAUSY3RsMDEkZ3JkVGNzc0FwcGx5DzwrAAoBCGZkBRFjdGwwMSRncmRKYWlyc0Nhcg88KwAKAQgCAWQFEWN0bDAxJGdyZEVtdHJDb21wDzwrAAoBCGZkBRJjdGwwMSRncmRQdG1JbmRpdnMPPCsACgEIAgFkBRRjdGwwMSRncmRKYWlyc0h5b2p1bg88KwAKAQhmZAURY3RsMDEkZ3JkUHRtQ29uc3QPPCsACgEIZmQFEGN0bDAxJGdyZFB0bVB0cmQPPCsACgEIAgFkBRNjdGwwMSRncmRFbXRyQ29tbW9uDzwrAAoBCAIBZAUUY3RsMDEkZ3JkSmFpcnNDb21tb24PPCsACgEIAgFkBRJjdGwwMSRncmRKYWlyc1NiYXMPPCsACgEIAgFkBRNjdGwwMSRncmRKYWlyc1N1YnN0DzwrAAoBCGZkBRJjdGwwMSRncmRKYWlyc0traGkPPCsACgEIZmQFEWN0bDAxJGdyZFB0bUhvc2VpDzwrAAoBCGZkBRJjdGwwMSRncmRKYWlyc0h5b3UPPCsACgEIAgFkBQ9jdGwwMSRncmRKZ0xpc3QPPCsACgEIZmQFEmN0bDAxJGdyZEphaXJzRHJhdw88KwAKAQgCAWQFEmN0bDAxJGdyZEphaXJzU2Z1Zw88KwAKAQgCAWQFEmN0bDAxJGdyZEphaXJzVGt5bw88KwAKAQhmZAUTY3RsMDEkZ3JkSmFpcnNQcm90bw88KwAKAQhmZAUVY3RsMDEkZ3JkRW10ckN1c3RvbWVyDzwrAAoBCGZkBRJjdGwwMSRncmRSYWJyR3JvdXAPPCsACgEIZmQ8GDXEdzb9jbXMnAqssf9H1cSaPQ==">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['Form1'];
+if (!theForm) {
+    theForm = document.Form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script language="javascript" src="./Design Source Web_files/TextEnter.js.ダウンロード"></script><script language="javascript" src="./Design Source Web_files/ToClipBoard.js.ダウンロード"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="237EBF2B">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWNQKWxqjlCgKf5Zi5DwKuz9/RCQKG0a3NCwLwn6n5AQLYz7/FCwKNifuNDgKgtMJMAq2j+s8FAoOT8XgC7pKtYwKHk92hDgKm7+i4DgLg1ZyVDQKM7p/KDgL9n+COAgKfqs/vCgK5o8qcAQLd85LQAQKUzIvoDwKC+NCDDgLd+KWwCQLQzpGOBALv58s3AqGKht0MAryj+KsFAryjxM4MAt379ZcJAuTp6v0HAoOD89wLAqDbhPwBAr/0lr4JAr/0opcEAvGmqYkOAvGmtawJAvGmgVcC9pHORAKNq5S6CgK875vCDwL2kc6SAwKNq4TdBQLP74fCDwKw1oHnBQKm2ZXbBQLg9rvgCgLl9o+sDAKeht3BAQLy36HUAwKdisGlCQLJ6pGSAwLtute+BQL054aBCQL7gMX/AZpRcpyfhZDBHoXcxRxGT9sDsZYo">
+</div>
+			<table cellspacing="0" cellpadding="0">
+				<tbody><tr>
+					<td>
+					    <input name="txtPartSubViewFlg" type="hidden" id="txtPartSubViewFlg" style="WIDTH: 1px;" value="false">
+					    <input name="txtPartMenuScroll" type="hidden" id="txtPartMenuScroll" style="WIDTH: 1px;">
+					    <input name="txtPartDetailScroll" type="hidden" id="txtPartDetailScroll" style="WIDTH: 1px;">
+					</td>
+				</tr>
+			</tbody></table>
+			
+
+<table style="PADDING-RIGHT: 5px;MARGIN-BOTTOM: 5px;" cellspacing="0" cellpadding="0" width="990" border="1" bordercolor="#ffffff">
+	<tbody><tr>
+		<td nowrap="" width="100">
+		    <img src="./Design Source Web_files/YzkLogo.gif" id="ctlMenuHead_imgYzk" height="13" width="83" onclick="OpenWindow(&#39;http://yweb.jp.yazaki.com/sites/yweb/Pages/top.aspx&#39;);">
+		</td>
+		<td nowrap="" width="230">
+			<div style="FONT-SIZE: 22px" class="cssTitle">Design Source Web</div>
+		</td>
+		<td valign="bottom" nowrap="" width="480"><a id="ctlMenuHead_lnkEEDS" class="cssHelp" href="http://10.2.134.77/eeds/" target="_blank">Digital Design Technology Development Dept.</a></td>
+		<td valign="bottom" nowrap="" width="40"><span id="ctlMenuHead_lblTitleSince" style="font-size:12px;">Since</span></td>
+		<td valign="bottom" nowrap="" width="80"><span id="ctlMenuHead_lblCountFrom" style="font-size:12px;">2009/07/28</span></td>
+		<td></td>
+	</tr>
+</tbody></table>
+<table style="PADDING-RIGHT: 5px;" cellspacing="0" cellpadding="0" width="990" border="0">
+	<tbody><tr>
+		<td valign="bottom">
+			<table cellspacing="0" cellpadding="0" border="1" bordercolor="#000000" style="BORDER-STYLE: none;">
+				<tbody><tr>
+					<td nowrap="" valign="bottom" style="BORDER-RIGHT: 0px;BORDER-LEFT: 0px;BORDER-TOP: 0px">
+            			<table cellspacing="0" cellpadding="0" border="1" bordercolor="#000000" style="BORDER-STYLE: none;">
+			            	<tbody><tr>
+		            			<td nowrap="" width="100" style="BORDER-RIGHT: 0px;BORDER-BOTTOM: 0px;">
+            						<input type="submit" name="ctlMenuHead$btnPart" value="部品部材検索" id="ctlMenuHead_btnPart" disabled="disabled" style="color:Blue;background-color:White;border-style:None;font-weight:bold;text-decoration:underline;width:100px;">
+					            </td>
+					            <td nowrap="" width="100" style="BORDER-RIGHT: 0px;BORDER-BOTTOM: 0px;">
+						            <input type="submit" name="ctlMenuHead$btnJg" value="治工具検索" id="ctlMenuHead_btnJg" style="color:Blue;background-color:White;border-style:None;font-weight:bold;text-decoration:underline;width:100px;">
+					            </td>
+					            <td nowrap="" width="100" style="BORDER-RIGHT: 0px;BORDER-BOTTOM: 0px;">
+						            <input type="submit" name="ctlMenuHead$btnTcss" value="圧着規格検索" id="ctlMenuHead_btnTcss" style="color:Blue;background-color:White;border-style:None;font-weight:bold;text-decoration:underline;width:100px;">
+					            </td>
+					            <td nowrap="" width="100" style="BORDER-BOTTOM: 0px;">
+						            <input type="submit" name="ctlMenuHead$btnDetails" value="絞り込み検索" id="ctlMenuHead_btnDetails" style="color:Blue;background-color:White;border-style:None;font-weight:bold;text-decoration:underline;width:100px;">
+					            </td>
+                        	</tr>
+                        </tbody></table>
+					</td>
+					<td nowrap="" width="70" style="BORDER-RIGHT: 0px;BORDER-LEFT: 0px;BORDER-TOP: 0px;">&nbsp;</td>
+					<td nowrap="" width="5" style="BORDER-RIGHT: 0px;BORDER-LEFT: 0px;BORDER-TOP: 0px;"><div>|</div>
+					</td>
+					<td nowrap="" align="center" width="110" style="BORDER-RIGHT: 0px;BORDER-LEFT: 0px;BORDER-TOP: 0px;"><a id="ctlMenuHead_lnkInquiries" class="cssHelp" href="mailto:ml_digital_support@jp.yazaki.com" style="display:inline-block;border-style:None;">問い合わせ</a></td>
+					<td nowrap="" width="5" style="BORDER-RIGHT: 0px;BORDER-LEFT: 0px;BORDER-TOP: 0px;"><div>|</div>
+					</td>
+					<td nowrap="" align="center" width="110" style="BORDER-RIGHT: 0px;BORDER-LEFT: 0px;BORDER-TOP: 0px;"><a id="ctlMenuHead_lnkLogOff" class="cssHelp" href="http://10.150.10.218/DesignSource/Logoff.aspx">ログアウト</a></td>
+					<td nowrap="" width="5" style="BORDER-RIGHT: 0px;BORDER-LEFT: 0px;BORDER-TOP: 0px;"><div>|</div>
+					</td>
+					<td nowrap="" align="center" width="110" style="BORDER-RIGHT: 0px;BORDER-LEFT: 0px;BORDER-TOP: 0px;"><input type="submit" name="ctlMenuHead$btnSize" value="画面フィット" onclick="window.resizeTo(1024,738);" id="ctlMenuHead_btnSize" style="color:White;background-color:Blue;border-style:None;font-size:10pt;height:16px;width:100px;"></td>
+					<td nowrap="" width="5" style="BORDER-RIGHT: 0px;BORDER-LEFT: 0px;BORDER-TOP: 0px;"><div>|</div>
+					</td>
+					<td nowrap="" style="BORDER-RIGHT: 0px;BORDER-LEFT: 0px;BORDER-TOP: 0px;">
+            			<table cellspacing="0" cellpadding="0" border="0" width="160">
+            				<tbody><tr>
+					            <td nowrap="" align="right" width="80"><span id="ctlMenuHead_lblTitleLogin" style="font-size:12px;">ログイン数：</span></td>
+					            <td nowrap="" align="right" width="60"><span id="ctlMenuHead_lblAccCount" style="font-size:12px;">4204238</span></td>
+				            </tr>
+				            <tr>
+					            <td nowrap="" align="right" width="80"><span id="ctlMenuHead_lblTitleAccess" style="font-size:12px;">検索数：</span></td>
+					            <td nowrap="" align="right" width="60"><span id="ctlMenuHead_lblSearchCont" style="font-size:12px;">18549344</span></td>
+				            </tr>
+			            </tbody></table>
+					</td>
+				</tr>
+			</tbody></table>
+		</td>
+	</tr>
+</tbody></table>
+			<table cellspacing="0" cellpadding="0" border="0" style="margin-top:5px">
+				<tbody><tr>
+					<td valign="top">
+						<table cellspacing="0" cellpadding="0" width="100%">
+							<tbody><tr>
+								<td nowrap="">
+								    <span id="lblTitlePartSearch" style="font-size:15px;font-weight:bold;">検索方法</span>
+								</td>
+								<td style="PADDING-RIGHT: 20px" nowrap="" align="right" width="40">
+								    <a id="lnkMenuHelp" class="cssHelp" href="http://10.150.10.218/DesignSourceHelp/index3.html#PG120" target="_Help">HELP</a>
+								</td>
+							</tr>
+						</tbody></table>
+						<div id="divPartMenu" style="overflow-y: scroll; width: 248px; height: 837px;" onscroll="PartMenuScroll_Y(this)">
+							<div class="cssMenu">
+							    <input type="submit" name="btnTmc" value="" id="btnTmc" disabled="disabled" class="cssMenu" style="color:Black;background-color:White;background-color:Silver;">
+							</div>
+							
+							<div class="cssMenu" style="BORDER-TOP: navy 0px solid; BORDER-BOTTOM: navy 1px solid">
+							    <input type="submit" name="btnYzk" value="矢崎品番からの検索" id="btnYzk" class="cssMenu" style="color:White;background-color:Blue;">
+							</div>
+							<div class="cssMenu" style="BORDER-TOP: navy 0px solid">
+							    <input type="submit" name="btnCae" value="得意先・CAE入力用品番からの検索" id="btnCae" class="cssMenu" style="color:Black;background-color:White;">
+							</div>
+							<div class="cssMenu" style="BORDER-TOP: navy 0px solid">
+							    <input type="submit" name="btnAssy" value="ASSY品番からの検索" id="btnAssy" class="cssMenu" style="color:Black;background-color:White;">
+							</div>
+							<div class="cssMenu" style="BORDER-TOP: navy 0px solid">
+							    <input type="submit" name="btnSupplier" value="購入先品番からの検索" id="btnSupplier" class="cssMenu" style="color:Black;background-color:White;">
+							</div>
+							<div id="divPartQuery" style="padding: 10px 2px 10px 5px; width: 100%; height: 751px; background-color: rgb(51, 102, 128);">
+
+<div>
+	<div>
+		<span id="ctl00_lblTitleMenu" class="cssSearchMenu" style="font-weight:bold;">YBM コード検索</span>
+	</div>
+	<div>
+		<hr width="100%" size="1">
+	</div>
+	<table cellspacing="0" cellpadding="0" width="100%" border="0">
+		<tbody><tr>
+			<td colspan="2"><span id="ctl00_lblTitleYbm" class="cssSearchTitle">YBM コード</span></td>
+		</tr>
+		<tr>
+			<td colspan="2" style="PADDING-LEFT: 15px"><span id="ctl00_lblYbmInfo1" class="cssSearchInfo">(ワイルドカード[%,_])</span></td>
+		</tr>
+		<tr>
+			<td colspan="2" style="PADDING-LEFT: 15px"><input name="ctl00$txtYbm" type="text" value="7194377230" id="ctl00_txtYbm" class="QueryItem" onkeydown="return text_keydown(event,&#39;ctl00$btnSearch&#39;);" style="color:Black;width:129px;"></td>
+		</tr>
+		<tr>
+			<td colspan="2" style="PADDING-LEFT: 15px"><span id="ctl00_lblYbmEx1" class="cssSearchEx">ex.71838927,7047-1110-30</span></td>
+		</tr>
+	</tbody></table>
+	<div style="PADDING-TOP: 10px"><input type="submit" name="ctl00$btnSearch" value="検索" id="ctl00_btnSearch" style="width:64px;"></div>
+	<div>
+		<hr width="100%" size="1">
+	</div>
+	<div><span id="ctl00_lblErrMsg" style="color:Red;"></span></div>
+	<div>
+		<span id="ctl00_lblTitleList" class="cssSearchTitle">PTM &amp; JAIRS - 検索結果</span>
+        <div>
+	<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl00_grdList" style="background-color:White;border-width:1px;border-style:solid;width:95%;border-collapse:collapse;">
+		<tbody><tr>
+			<th scope="col" style="background-color:Silver;font-weight:normal;">YBMコード</th><th scope="col" style="background-color:Silver;font-weight:normal;">分類</th>
+		</tr><tr>
+			<td style="background-color:PowderBlue;"><a href="javascript:__doPostBack(&#39;ctl00$grdList&#39;,&#39;grdList$0&#39;)">7194377230</a></td><td style="background-color:PowderBlue;">腹裂チューブ</td>
+		</tr>
+	</tbody></table>
+</div>
+	</div>
+</div>
+</div>
+						</div>
+					</td>
+					<td valign="top">
+						<table style="MARGIN-BOTTOM: 2px" cellspacing="0" cellpadding="0" width="740" bgcolor="#d4f5ff" border="0">
+							<tbody><tr>
+								<td nowrap="" width="10"></td>
+								<td nowrap="" width="100"><span id="lblTitleMGroup">メーカーグループ</span></td>
+								<td nowrap="" width="60" style="PADDING-LEFT: 5px; BACKGROUND-COLOR: gray"><span id="lblMakerGroup">指定なし</span></td>
+								<td nowrap="" width="370"></td>
+								<td nowrap="" width="5">
+									<div class="cssSepa">|</div>
+								</td>
+								<td nowrap="" align="center" width="60"><a id="lnkPartSymbol" href="http://10.150.10.218/DesignSource/MenuParts.aspx#Symbol" style="color:Blue;">略画</a></td>
+								<td nowrap="" width="5">
+									<div class="cssSepa">|</div>
+								</td>
+								<td nowrap="" align="center" width="60"><a id="lnkPartTop" href="http://10.150.10.218/DesignSource/MenuParts.aspx#DetailTop" style="color:Blue;">Top</a></td>
+								<td nowrap="" width="5">
+									<div class="cssSepa">|</div>
+								</td>
+							</tr>
+						</tbody></table>
+						<div id="divPartDetail" style="border-top-width: 1px; padding-left: 0px; overflow: scroll; width: 740px; border-top-color: rgb(240, 240, 192); padding-top: 0px; height: 837px; background-color: silver;" onscroll="PartDetailScroll_Y(this)">
+							
+							
+                        
+
+<a name="DetailTop"></a>
+<table id="tblMain" cellpadding="1" width="724" bgcolor="#e8e8e0" border="0">
+	<tbody><tr valign="top">
+		<!-- PTM -->
+		<td id="ctl01_tdPtmInfo" width="50%">
+			<table cellspacing="1" cellpadding="1" width="100%" bgcolor="#d0d0cc" border="0">
+				<tbody><tr>
+					<td valign="bottom" nowrap=""><span id="ctl01_lblTitlePtm" class="cssDetailTitle">PTM情報</span></td>
+					<td valign="bottom" align="right"><span id="ctl01_lblTitlePtmUpd">更新日：</span><span id="ctl01_lblPtmUpdate">2022/09/25 3:07:09</span></td>
+				</tr>
+			</tbody></table>
+			<table cellspacing="1" cellpadding="1" width="100%" bgcolor="#e8e8e0" border="0">
+				<tbody><tr>
+					<td nowrap="" colspan="3" height="16"><span id="ctl01_lblMsgPtm" style="color:Red;"></span></td>
+				</tr>
+				<tr>
+					<td width="95%" colspan="3">
+                        <div>
+	<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdPtmCommn" style="background-color:White;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+		<tbody><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">ＹＢＭコード</td><td style="border-color:#CCCCCC;">7194377230</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">部品種別</td><td style="border-color:#CCCCCC;">J1&nbsp;:&nbsp;チューブ</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">部品分類</td><td style="border-color:#CCCCCC;">352&nbsp;:&nbsp;腹裂チューブ</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">部品名称</td><td style="border-color:#CCCCCC;">TWISTWRAP 2403B NON-TRACER(φ13 L=320)</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">購入内製コード</td><td style="border-color:#CCCCCC;">P&nbsp;:&nbsp;購入品</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">投入工程コード</td><td style="border-color:#CCCCCC;">50&nbsp;:&nbsp;組立</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">詳細図管理NO</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">ＡＢ要否区分</td><td style="border-color:#CCCCCC;">0&nbsp;:&nbsp;なし</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">品番ステータス</td><td style="border-color:#CCCCCC;">3&nbsp;:&nbsp;量産品番（矢崎）</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">登録日付</td><td style="border-color:#CCCCCC;">2018/04/19 8:42:03</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">登録工場</td><td style="border-color:#CCCCCC;">7311&nbsp;:&nbsp;鷲津工場</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">廃番要否区分</td><td style="border-color:#CCCCCC;">0&nbsp;:&nbsp;なし</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">部品バージョン</td><td style="border-color:#CCCCCC;">2</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">海外部品要否区分</td><td style="border-color:#CCCCCC;">0&nbsp;:&nbsp;なし</td>
+		</tr>
+	</tbody></table>
+</div>
+                    </td>
+				</tr>
+				<tr>
+					<td width="95%" colspan="2">
+						<div class="cssHeadPtmAll"><span id="ctl01_lblTitlePtmSym">シンボル</span></div>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td class="cssIndent" colspan="3">
+						
+					</td>
+				</tr>
+				<tr>
+					<td width="95%" colspan="2">
+						<div class="cssHeadPtmAll"><span id="ctl01_lblTitlePtmRel">関連部品</span></div>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td class="cssIndent" colspan="3">
+						
+					</td>
+				</tr>
+				<tr>
+					<td width="95%" colspan="2">
+						<div class="cssHeadPtmAll"><span id="ctl01_lblTitlePtmPtrd">購入先</span></div>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td class="cssIndent" colspan="3">
+						<div id="ctl01_divPtmPtrd" style="OVERFLOW: auto">
+                        <div>
+	<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdPtmPtrd" style="background-color:White;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+		<tbody><tr>
+			<th scope="col" style="color:White;background-color:#006699;border-color:#CCCCCC;font-weight:normal;">名称</th><th scope="col" style="color:White;background-color:#006699;border-color:#CCCCCC;font-weight:normal;">部品品番</th>
+		</tr><tr>
+			<td style="border-color:#CCCCCC;">4H4&nbsp;:&nbsp;FEDERAL-MOGUL</td><td style="border-color:#CCCCCC;">TW2403B 13MM-0320H</td>
+		</tr>
+	</tbody></table>
+</div>
+                        </div>
+					</td>
+				</tr>
+				<tr>
+					<td width="95%" colspan="2">
+						<div class="cssHeadPtmAll"><span id="ctl01_lblTitlePtmNames">名前情報</span></div>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td class="cssIndent" colspan="3">
+						<div id="ctl01_divPtmNames" style="OVERFLOW: auto">
+                        <div>
+	<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdPtmNames" style="background-color:White;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+		<tbody><tr>
+			<th scope="col" style="color:White;background-color:#006699;border-color:#CCCCCC;font-weight:normal;">メーカーグループ</th><th scope="col" style="color:White;background-color:#006699;border-color:#CCCCCC;font-weight:normal;">CAE入力用品番</th><th scope="col" style="color:White;background-color:#006699;border-color:#CCCCCC;font-weight:normal;">登録工場</th>
+		</tr><tr>
+			<td style="border-color:#CCCCCC;">HONDA</td><td style="border-color:#CCCCCC;"><a href="http://10.150.10.218/DesignSource/FormNameInfo.aspx?nameid=7194377230&amp;mkgCd=HONDA&amp;mkCd=44034&amp;name=TWIST+WRAP+13X320&amp;airb=0&amp;title=&amp;backflg=false&amp;parttype=J1&amp;idtype=partid" target="_blank">TWIST WRAP 13X320</a></td><td style="border-color:#CCCCCC;">8106:栃木工場</td>
+		</tr><tr>
+			<td style="border-color:#CCCCCC;">MAZDA</td><td style="border-color:#CCCCCC;"><a href="http://10.150.10.218/DesignSource/FormNameInfo.aspx?nameid=7194377230&amp;mkgCd=MAZDA&amp;mkCd=NONE&amp;name=TWRAP-B13L320&amp;airb=0&amp;title=&amp;backflg=false&amp;parttype=J1&amp;idtype=partid" target="_blank">TWRAP-B13L320</a></td><td style="border-color:#CCCCCC;">7832:新見工場</td>
+		</tr><tr>
+			<td style="border-color:#CCCCCC;">SONOT</td><td style="border-color:#CCCCCC;"><a href="http://10.150.10.218/DesignSource/FormNameInfo.aspx?nameid=7194377230&amp;mkgCd=SONOT&amp;mkCd=71440&amp;name=TW2403B13MM0320H&amp;airb=0&amp;title=&amp;backflg=false&amp;parttype=J1&amp;idtype=partid" target="_blank">TW2403B13MM0320H</a></td><td style="border-color:#CCCCCC;">72S2:機電生産事業部</td>
+		</tr><tr>
+			<td style="border-color:#CCCCCC;">TOYOT</td><td style="border-color:#CCCCCC;"><a href="http://10.150.10.218/DesignSource/FormNameInfo.aspx?nameid=7194377230&amp;mkgCd=TOYOT&amp;mkCd=NONE&amp;name=TW2403B-B13L320&amp;airb=0&amp;title=TWISTWRAP+2403B+NON-TRACER(%cf%8613+L%3d320)&amp;backflg=false&amp;parttype=J1&amp;idtype=partid" target="_blank">TW2403B-B13L320</a></td><td style="border-color:#CCCCCC;">7311:鷲津工場</td>
+		</tr>
+	</tbody></table>
+</div>
+                        </div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<div style="PADDING-LEFT: 2px"><a id="ctl01_lnkPtmPartStatus" class="cssHelp" href="http://10.150.10.218/DesignSource/FormPartsStatusInfo.aspx?ybm=7194377230" target="_blank" style="color:Blue;font-weight:bold;">部品状態表示</a></div>
+					</td>
+				</tr>
+				<tr>
+					<td id="ctl01_tdPtmIndiv" style="PADDING-RIGHT: 0px" colspan="3">
+						<table width="100%" border="0">
+							<tbody><tr>
+								<td width="95%">
+									<div class="cssHeadPtmAll"><span id="ctl01_lblTitlePtmIndiv">チューブ</span></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent">
+									<table width="100%" border="0">
+										<tbody><tr>
+											<td><div>
+	<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdPtmIndivs" style="background-color:White;border-color:#CCCCCC;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+		<tbody><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">チューブタイプ</td><td style="border-color:#CCCCCC;">02&nbsp;:&nbsp;腹裂タイプ</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">チューブ品種</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">内外径コード</td><td style="border-color:#CCCCCC;">729&nbsp;:&nbsp;13x14.6</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">チューブ内径</td><td style="border-color:#CCCCCC;">13.0</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">チューブ外径</td><td style="border-color:#CCCCCC;">14.6</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">呼び径</td><td style="border-color:#CCCCCC;">0</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">チューブ厚さ</td><td style="border-color:#CCCCCC;">0.80</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">チューブ長さ</td><td style="border-color:#CCCCCC;">320.0</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">チューブ色</td><td style="border-color:#CCCCCC;">30&nbsp;:&nbsp;B</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">腹裂き区分</td><td style="border-color:#CCCCCC;">S&nbsp;:&nbsp;スリット有り</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">耐熱区分</td><td style="border-color:#CCCCCC;">0&nbsp;:&nbsp;非耐熱</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">収縮要否区分</td><td style="border-color:#CCCCCC;">0&nbsp;:&nbsp;収縮でない</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">硬質区分</td><td style="border-color:#CCCCCC;">1&nbsp;:&nbsp;硬質</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">長尺要否区分</td><td style="border-color:#CCCCCC;">0&nbsp;:&nbsp;定尺である</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">WH径FROM</td><td style="border-color:#CCCCCC;">0</td>
+		</tr><tr>
+			<td style="color:White;background-color:#006699;border-color:#CCCCCC;width:120px;">WH径TO</td><td style="border-color:#CCCCCC;">0</td>
+		</tr>
+	</tbody></table>
+</div>
+                                                
+                                            </td>
+										</tr>
+										
+										
+										<tr>
+										    <td>
+                                                </td>
+										</tr>
+										
+										
+										
+										
+										
+									</tbody></table>
+								</td>
+							</tr>
+						</tbody></table>
+					</td>
+
+				</tr>
+				<tr>
+					<td colspan="3">
+						<table cellspacing="0" cellpadding="0" width="100%" border="0">
+							<tbody><tr>
+								<td style="BORDER-RIGHT: 2px solid; BORDER-TOP: 2px solid; BORDER-LEFT: 2px solid; BORDER-BOTTOM: 0px solid" bordercolor="#009900" bgcolor="#d0d0cc">
+									<table cellspacing="0" cellpadding="0" width="99.8%" bgcolor="#d0d0cc" border="0">
+										<tbody><tr>
+											<td nowrap="" width="148"><span id="ctl01_lblTitleJg" class="cssDetailTitle">JG情報</span></td>
+											<td valign="bottom" nowrap="" align="right"><span id="ctl01_lblTitleJgUpd">更新日：</span><span id="ctl01_lblJgUpdate">2022/09/25 3:07:09</span></td>
+										</tr>
+									</tbody></table>
+								</td>
+							</tr>
+							<tr>
+								<td style="BORDER-RIGHT: 2px solid; BORDER-TOP: 0px solid; BORDER-LEFT: 2px solid; BORDER-BOTTOM: 2px solid" bordercolor="#009900">
+									<table style="PADDING-RIGHT: 0px; MARGIN-LEFT: 5px" cellspacing="0" cellpadding="0" width="98%">
+										<tbody><tr>
+											<td colspan="2">
+												<table cellspacing="0" cellpadding="0" width="100%">
+													<tbody><tr>
+														<td colspan="2"><span id="ctl01_lblJgDispInfo">YBMコードに関連する治工具の表示</span></td>
+													</tr>
+													<tr>
+														<td style="PADDING-LEFT: 5px" colspan="2"><table id="ctl01_rgpJgDisp" cellspacing="0" cellpadding="0" border="0" style="width:120px;border-collapse:collapse;">
+	<tbody><tr>
+		<td><input id="ctl01_rgpJgDisp_0" type="radio" name="ctl01$rgpJgDisp" value="true" checked="checked"><label for="ctl01_rgpJgDisp_0">する</label></td><td><input id="ctl01_rgpJgDisp_1" type="radio" name="ctl01$rgpJgDisp" value="false"><label for="ctl01_rgpJgDisp_1">しない</label></td>
+	</tr>
+</tbody></table></td>
+													</tr>
+													<tr>
+														<td colspan="2"><span id="ctl01_lblJgInputInfo">登録部署の指定</span></td>
+													</tr>
+													<tr>
+														<td class="cssIndent" style="HEIGHT: 17px"><select name="ctl01$cmbJgFactory" id="ctl01_cmbJgFactory" style="width:120px;">
+	<option selected="selected" value="">指定なし</option>
+	<option value="1227">1227&nbsp;:&nbsp;IT Div.</option>
+	<option value="32A4">32A4&nbsp;:&nbsp;YES</option>
+	<option value="32B1">32B1&nbsp;:&nbsp;ARCN</option>
+	<option value="32D1">32D1&nbsp;:&nbsp;YOT</option>
+	<option value="32E8">32E8&nbsp;:&nbsp;YSP</option>
+	<option value="32E9">32E9&nbsp;:&nbsp;YDS</option>
+	<option value="32H8">32H8&nbsp;:&nbsp;TYC</option>
+	<option value="32M8">32M8&nbsp;:&nbsp;PEMI</option>
+	<option value="32N1">32N1&nbsp;:&nbsp;YIPL</option>
+	<option value="32Q8">32Q8&nbsp;:&nbsp;EMI</option>
+	<option value="32R7">32R7&nbsp;:&nbsp;YCIC</option>
+	<option value="32R8">32R8&nbsp;:&nbsp;TJY</option>
+	<option value="32T1">32T1&nbsp;:&nbsp;TAP-B</option>
+	<option value="32T2">32T2&nbsp;:&nbsp;TAP-C</option>
+	<option value="32T3">32T3&nbsp;:&nbsp;TAP-P</option>
+	<option value="7230">7230&nbsp;:&nbsp;SSN</option>
+	<option value="7246">7246&nbsp;:&nbsp;RNBU</option>
+	<option value="7311">7311&nbsp;:&nbsp;WSZ</option>
+	<option value="7832">7832&nbsp;:&nbsp;NIM</option>
+	<option value="7947">7947&nbsp;:&nbsp;HIB</option>
+	<option value="8011">8011&nbsp;:&nbsp;DIT</option>
+	<option value="8106">8106&nbsp;:&nbsp;TCS</option>
+
+</select></td>
+														<td style="HEIGHT: 17px" align="right"><input type="submit" name="ctl01$btnJgSearch" value="表示" id="ctl01_btnJgSearch" style="width:80px;"></td>
+													</tr>
+													<tr>
+														<td colspan="2" height="5"></td>
+													</tr>
+													<tr>
+														<td colspan="2">
+															<div class="cssHeadJgAll"><span id="ctl01_lblJgListInfo" style="color:White;">YBMコードに関連する治工具</span></div>
+														</td>
+													</tr>
+													<tr>
+														<td class="cssIndent" colspan="2">
+															
+															<span id="ctl01_lblJgMsg" style="color:Red;">Not Found</span></td>
+													</tr>
+												</tbody></table>
+											</td>
+										</tr>
+									</tbody></table>
+								</td>
+							</tr>
+						</tbody></table>
+					</td>
+				</tr>
+			</tbody></table>
+		</td>
+
+		<!-- JAIRS -->
+		<td id="ctl01_tdJairsInfo" width="50%">
+			<table cellspacing="1" cellpadding="1" width="100%" bgcolor="#d0d0cc" border="0">
+				<tbody><tr>
+					<td valign="bottom" nowrap=""><span id="ctl01_lblTitleJcmp" class="cssDetailTitle">JAIRS情報(JCMP)</span></td>
+					<td valign="bottom" nowrap="" align="right"><span id="ctl01_lblTitleJcmpUpd">更新日：</span><span id="ctl01_lblJairsUpdate">2022/09/24 17:15:00</span></td>
+				</tr>
+			</tbody></table>
+			<table cellspacing="1" cellpadding="1" width="100%" bgcolor="#e8e8e0" border="0">
+				<tbody><tr>
+					<td colspan="3" style="height: 16px;"><span id="ctl01_lblMsgJairs" style="color:Red;"></span></td>
+				</tr>
+				<tr>
+					<td colspan="3">
+                        <div>
+	<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsCommon" style="background-color:White;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+		<tbody><tr>
+			<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">矢崎部品品番</td><td style="border-color:#CCCCCC;">7194-3772-30</td>
+		</tr><tr>
+			<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">DELETE</td><td style="color:Red;border-color:#CCCCCC;">&nbsp;</td>
+		</tr><tr>
+			<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">品名</td><td style="border-color:#CCCCCC;">TWISTWRAP 2403B</td>
+		</tr><tr>
+			<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">購入品･内製品区別</td><td style="border-color:#CCCCCC;">P</td>
+		</tr><tr>
+			<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">品番設定日</td><td style="border-color:#CCCCCC;">2018/04/18</td>
+		</tr><tr>
+			<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">設計主管部署</td><td style="border-color:#CCCCCC;">TBU   C</td>
+		</tr>
+	</tbody></table>
+</div>
+                    </td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<div class="cssHeadJcmpAll">
+						    <input type="image" name="ctl01$imgJairsSpec" id="ctl01_imgJairsSpec" class="cssImgView" src="./Design Source Web_files/minus.gif" align="absmiddle" style="border-width:0px;"><span id="ctl01_lblTitleJairsSpecs">仕様</span>
+						</div>
+					</td>
+				</tr>
+				<tr id="ctl01_trJairsSpecs">
+	<td class="cssIndent" colspan="3">
+						<div id="ctl01_divJairsSpecs" style="OVERFLOW: auto">
+                            <div>
+		<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsSpecs" style="background-color:White;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+			<tbody><tr>
+				<td style="color:White;background-color:Purple;width:120px;">材質</td><td style="border-color:#CCCCCC;">PLASTIC</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">色</td><td style="border-color:#CCCCCC;">B</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">表面処理方法</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">極数</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">仕様１</td><td style="border-color:#CCCCCC;">YPES-25-09-506</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">仕様２</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">材料仕様</td><td style="border-color:#CCCCCC;">POLYESTER</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">品種</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">タイプ</td><td style="border-color:#CCCCCC;">TW2403B</td>
+			</tr><tr>
+				<td style="color:White;background-color:#999999;width:120px;">端子タブ - インチ</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:#999999;width:120px;">端子タブ - ミリ</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td colspan="2" style="color:White;background-color:#E8E8E0;width:0px;white-space:nowrap;"><a class="cssHelp" href="http://10.150.10.218/DesignSourceHelp/index4.html" target="_blank">端子タブリスト表示</a></td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">ファミリー</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">防水 / 非防水</td><td style="border-color:#CCCCCC;">&nbsp;&nbsp;/&nbsp;&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">オス/メス</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">製品規格</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">取扱説明書</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr>
+		</tbody></table>
+	</div>
+                        </div>
+					</td>
+</tr>
+
+				<tr>
+					<td colspan="3">
+						<div class="cssHeadJcmpAll"><input type="image" name="ctl01$imgJairsSize" id="ctl01_imgJairsSize" class="cssImgView" src="./Design Source Web_files/minus.gif" align="absmiddle" style="border-width:0px;"><span id="ctl01_lblTitleJairsSize">適用・サイズ</span></div>
+					</td>
+				</tr>
+				<tr id="ctl01_trJairsSize">
+	<td class="cssIndent" colspan="3">
+						<div id="ctl01_divJairsSize" style="OVERFLOW: auto">
+                            <div>
+		<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsSize" style="background-color:White;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+			<tbody><tr>
+				<td style="color:White;background-color:Purple;width:120px;">D</td><td style="border-color:#CCCCCC;">320.0</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">W</td><td style="border-color:#CCCCCC;">14.6</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">H</td><td style="border-color:#CCCCCC;">0.8</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">WD</td><td style="border-color:#CCCCCC;">13.0</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">適用ポスト</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">適用ボルト</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">PD1 (min / max)</td><td style="border-color:#CCCCCC;">&nbsp;&nbsp;/&nbsp;&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">PT1 (min / max)</td><td style="border-color:#CCCCCC;">&nbsp;&nbsp;/&nbsp;&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">PD2 (min / max)</td><td style="border-color:#CCCCCC;">&nbsp;&nbsp;/&nbsp;&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">PT2 (min / max)</td><td style="border-color:#CCCCCC;">&nbsp;&nbsp;/&nbsp;&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">重量</td><td style="border-color:#CCCCCC;">6.40</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">重量精度フラグ</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;width:120px;">電気特性</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr>
+		</tbody></table>
+	</div>
+							<table cellspacing="1" cellpadding="1" width="100%" border="0">
+								<tbody><tr>
+									<td nowrap="" colspan="2">
+										<div class="cssHeadJcmp"><span id="ctl01_lblTitleJairsApllyWire">代表適用電線</span></div>
+									</td>
+								</tr>
+								<tr>
+									<td class="cssIndent" colspan="2">
+										
+									</td>
+								</tr>
+							</tbody></table>
+						</div>
+					</td>
+</tr>
+
+				<tr>
+					<td colspan="3">
+						<div class="cssHeadJcmpAll"><input type="image" name="ctl01$imgJairsAlias" id="ctl01_imgJairsAlias" class="cssImgView" src="./Design Source Web_files/minus.gif" align="absmiddle" style="border-width:0px;"><span id="ctl01_lblTitleJairsAlias">別名</span></div>
+					</td>
+				</tr>
+				<tr id="ctl01_trJairsAlias">
+	<td colspan="3">
+						<table cellspacing="1" cellpadding="1" width="100%" border="0">
+							<tbody><tr>
+								<td class="cssIndent" nowrap="" colspan="2">
+									<div class="cssHeadJcmpAll"><span id="ctl01_lblTitleJairsCustomers">得意先</span></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent2" colspan="2">
+									<div id="ctl01_divJairsCustomers" style="OVERFLOW: auto">
+                                    <div>
+		<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsCustomers" style="background-color:White;border-color:#CCCCCC;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+			<tbody><tr>
+				<th scope="col" style="color:White;background-color:Purple;font-weight:normal;">得意先名称</th><th scope="col" style="color:White;background-color:Purple;font-weight:normal;">得意先品番</th>
+			</tr><tr>
+				<td style="border-color:#CCCCCC;">TOYOTA</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr>
+		</tbody></table>
+	</div>
+                                    </div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent" nowrap="" colspan="2">
+									<div class="cssHeadJcmp"><span id="ctl01_lblTitleJairsSupplyers">購入先</span></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent2" colspan="2">
+									<div id="ctl01_divJairsSupplyers" style="OVERFLOW: auto">
+                                    <div>
+		<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsSupplyers" style="background-color:White;border-color:#CCCCCC;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+			<tbody><tr>
+				<th scope="col" style="color:White;background-color:Purple;font-weight:normal;">名称コード</th><th scope="col" style="color:White;background-color:Purple;font-weight:normal;">購入先名称</th><th scope="col" style="color:White;background-color:Purple;font-weight:normal;">購入先品番</th>
+			</tr><tr>
+				<td style="border-color:#CCCCCC;">4H4</td><td style="border-color:#CCCCCC;">FEDERAL-MOGUL</td><td style="border-color:#CCCCCC;">TW2403B13MM0320H</td>
+			</tr>
+		</tbody></table>
+	</div>
+                                    </div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent" nowrap="" colspan="2">
+									<div class="cssHeadJcmp"><span id="ctl01_lblTitleJairsProto">試作品番</span></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent2" colspan="2">
+									
+								</td>
+							</tr>
+						</tbody></table>
+					</td>
+</tr>
+
+				<tr>
+					<td colspan="3">
+						<div class="cssHeadJcmpAll"><input type="image" name="ctl01$imgJairsRelt" id="ctl01_imgJairsRelt" class="cssImgView" src="./Design Source Web_files/minus.gif" align="absmiddle" style="border-width:0px;"><span id="ctl01_lblTitleJairsRelt">関連部品</span></div>
+					</td>
+				</tr>
+				<tr id="ctl01_trJairsRelt">
+	<td colspan="3">
+						<table cellspacing="1" cellpadding="1" width="100%" border="0">
+							<tbody><tr>
+								<td class="cssIndent" colspan="2">
+                                    <div>
+		<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsHyou" style="background-color:White;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+			<tbody><tr>
+				<td style="color:White;background-color:Purple;width:120px;">標準品</td><td>
+                                                    <a id="ctl01_grdJairsHyou_ctl02_HyperLink1" href="http://10.150.10.218/DesignSource/FormPartsInfo.aspx?ybm=" target="_blank"></a>
+                                                </td>
+			</tr>
+		</tbody></table>
+	</div>
+                                </td>
+							</tr>
+							<tr>
+								<td class="cssIndent" nowrap="" colspan="2">
+									<div class="cssHeadJcmp"><span id="ctl01_lblJairsKkhi">関連工場品番</span>
+                                    </div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent2" colspan="2">
+									
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent" nowrap="" colspan="2">
+									<div class="cssHeadJcmp"><span id="ctl01_lblTitleJairsKous">構成</span>
+                                    </div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent2" colspan="2">
+									
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent" nowrap="" colspan="2">
+									<div class="cssHeadJcmp"><span id="ctl01_lblTitleJairsTrhi">取付可能部品</span>
+                                    </div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent2" colspan="2">
+									
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent" nowrap="" colspan="2">
+									<div class="cssHeadJcmp"><span id="ctl01_lblTitleJairsKahi">篏合相手品番</span>
+                                    </div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent2" colspan="2">
+									
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent" nowrap="" colspan="2">
+									<div class="cssHeadJcmp"><span id="ctl01_lblTitleJairsTkyo">他社競合品</span></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent2" colspan="2">
+									
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent" nowrap="" colspan="2">
+									<div class="cssHeadJcmp"><span id="ctl01_lblTitleJairsSubst">代替品番</span></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent2" colspan="2">
+									
+								</td>
+							</tr>
+						</tbody></table>
+					</td>
+</tr>
+
+				<tr>
+					<td colspan="3">
+						<div class="cssHeadJcmpAll"><input type="image" name="ctl01$imgJairsCar" id="ctl01_imgJairsCar" class="cssImgView" src="./Design Source Web_files/minus.gif" align="absmiddle" style="border-width:0px;"><span id="ctl01_lblTitleJairsCar">車種</span></div>
+					</td>
+				</tr>
+				<tr id="ctl01_trJairsCar">
+	<td class="cssIndent" colspan="3">
+                        <div>
+		<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsCar" style="background-color:White;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+			<tbody><tr>
+				<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">共同開発メーカー</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">初期使用車種</td><td style="border-color:#CCCCCC;">645B</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">初期使用車種年式</td><td style="border-color:#CCCCCC;">2020</td>
+			</tr>
+		</tbody></table>
+	</div>
+                    </td>
+</tr>
+
+				<tr>
+					<td colspan="3">
+						<div class="cssHeadJcmpAll"><input type="image" name="ctl01$imgJairsDraw" id="ctl01_imgJairsDraw" class="cssImgView" src="./Design Source Web_files/minus.gif" align="absmiddle" style="border-width:0px;"><span id="ctl01_lblTitleJairsDraw">図番</span>&nbsp;
+						</div>
+					</td>
+				</tr>
+				<tr id="ctl01_trJairsDraw">
+	<td class="cssIndent" colspan="3">
+					    <a id="ctl01_lnkSeine" class="cssHelp" href="http://10.1.30.40/seine2/externalSystemDrawingLink.do?partId=7194377230" target="_blank">[SEINE2へ]</a>
+						<div id="ctl01_divJairsDraw" style="OVERFLOW: auto">
+                            <div>
+		<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsDraw" style="background-color:White;border-color:#CCCCCC;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+			<tbody><tr>
+				<th scope="col" style="color:White;background-color:Purple;border-color:#CCCCCC;font-weight:normal;">図面番号</th>
+			</tr><tr>
+				<td style="border-color:#CCCCCC;">
+                                            <a id="ctl01_grdJairsDraw_ctl02_HyperLink1" href="http://10.150.10.218/DesignSource/FormJairsDrawInfo.aspx?zuban=7194-3320-30:PZ" target="_blank">7194-3320-30:PZ</a>
+                                        </td>
+			</tr>
+		</tbody></table>
+	</div>
+						</div>
+					</td>
+</tr>
+
+				<tr>
+					<td colspan="3">
+						<div class="cssHeadJcmpAll"><input type="image" name="ctl01$imgJairsProduct" id="ctl01_imgJairsProduct" class="cssImgView" src="./Design Source Web_files/minus.gif" align="absmiddle" style="border-width:0px;"><span id="ctl01_lblTitleJairsProduct">製造</span></div>
+					</td>
+				</tr>
+				<tr id="ctl01_trJairsProduct">
+	<td colspan="3">
+						<table cellspacing="1" cellpadding="1" width="100%" border="0">
+							<tbody><tr>
+								<td class="cssIndent" nowrap="" colspan="2">
+									<div class="cssHeadJcmp"><span id="ctl01_lblTitleJairsSbas">製造場所</span></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent2" colspan="2">
+								    <div id="ctl01_divJairsSbas" style="OVERFLOW: auto">
+                                    <div>
+		<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsSbas" style="background-color:White;border-color:#CCCCCC;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+			<tbody><tr>
+				<th align="left" scope="col" style="color:White;background-color:Purple;font-weight:normal;white-space:nowrap;">製造場所</th>
+			</tr><tr>
+				<td style="border-color:#CCCCCC;">4H4</td>
+			</tr>
+		</tbody></table>
+	</div>
+								    </div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent" colspan="2">
+                                    <div>
+		<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsSjis" style="background-color:White;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+			<tbody><tr>
+				<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">出荷開始月</td><td style="border-color:#CCCCCC;font-weight:normal;">2018/06</td>
+			</tr><tr>
+				<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">出荷実績（前月）</td><td style="border-color:#CCCCCC;font-weight:normal;">0000000U</td>
+			</tr>
+		</tbody></table>
+	</div>
+                                </td>
+							</tr>
+							<tr>
+								<td class="cssIndent" nowrap="" colspan="2">
+									<div class="cssHeadJcmp"><span id="ctl01_lblTitleJairsSjir">出荷実績(累計)</span></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="cssIndent2" colspan="2">
+								<div id="ctl01_divJairsSjir" style="OVERFLOW: auto">
+                                    <div>
+		<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsSjir" style="background-color:White;border-color:#CCCCCC;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+			<tbody><tr>
+				<th scope="col" style="color:White;background-color:Purple;border-color:#CCCCCC;font-weight:normal;white-space:nowrap;">年度</th><th scope="col" style="color:White;background-color:Purple;border-color:#CCCCCC;font-weight:normal;white-space:nowrap;">出荷実績</th>
+			</tr><tr>
+				<td style="border-color:#CCCCCC;">2018</td><td style="border-color:#CCCCCC;">0000120U</td>
+			</tr><tr>
+				<td style="border-color:#CCCCCC;">2019</td><td style="border-color:#CCCCCC;">0000330U</td>
+			</tr><tr>
+				<td style="border-color:#CCCCCC;">2020</td><td style="border-color:#CCCCCC;">0000800U</td>
+			</tr><tr>
+				<td style="border-color:#CCCCCC;">2021</td><td style="border-color:#CCCCCC;">0000300U</td>
+			</tr>
+		</tbody></table>
+	</div>
+								</div>
+								</td>
+							</tr>
+						</tbody></table>
+					</td>
+</tr>
+
+				<tr>
+					<td colspan="3">
+						<div class="cssHeadJcmpAll"><input type="image" name="ctl01$imgJairsModify" id="ctl01_imgJairsModify" class="cssImgView" src="./Design Source Web_files/minus.gif" align="absmiddle" style="border-width:0px;"><span id="ctl01_lblTitleJairsModify">設変</span></div>
+					</td>
+				</tr>
+				<tr id="ctl01_trJairsModify">
+	<td class="cssIndent" colspan="3">
+                        <div>
+		<table cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl01_grdJairsSfug" style="background-color:White;border-width:1px;border-style:solid;width:100%;border-collapse:collapse;">
+			<tbody><tr>
+				<td style="color:White;background-color:Purple;border-color:#CCCCCC;width:120px;">設変符号</td><td style="border-color:#CCCCCC;">&nbsp;</td>
+			</tr>
+		</tbody></table>
+	</div>
+					</td>
+</tr>
+
+				<tr id="ctl01_trJairsModifyGrd">
+	<td class="cssIndent" colspan="3">
+						<div id="ctl01_divJairsModify" style="OVERFLOW: auto">
+                            <div>
+
+	</div>
+						</div>
+					</td>
+</tr>
+
+				<tr>
+					<td colspan="3">
+						<div class="cssHeadJcmpAll"><input type="image" name="ctl01$imgJairsHyojun" id="ctl01_imgJairsHyojun" class="cssImgView" src="./Design Source Web_files/minus.gif" align="absmiddle" style="border-width:0px;"><span id="ctl01_lblTitleJairsHyojun">標準形状管理</span></div>
+					</td>
+				</tr>
+				<tr id="ctl01_trJairsHyojun">
+	<td class="cssIndent" colspan="3">
+						
+					</td>
+</tr>
+
+			</tbody></table>
+		</td>
+
+		<!-- EMTR -->
+		
+	</tr>
+</tbody></table>
+<!-- -->
+<table cellspacing="1" cellpadding="1" width="100%" bgcolor="white" border="0">
+	<tbody>
+		
+		
+		<tr>
+			<td colspan="2"><span id="ctl01_lblTitleDrawInfo" style="color:Red;">※略図はドラッグ＆ドロップでExcelやWord等に貼り付けることができます。</span></td>
+		</tr>
+		<tr>
+			<td colspan="2"><a name="Symbol"></a>
+				<div class="cssHeadPtmAll"><span id="ctl01_lblTitleSymbol">略画</span></div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<div class="cssHeadPtmAll"><span id="ctl01_lblTitleDetailSymbol">詳細図</span></div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"></td>
+		</tr>
+		
+		
+	</tbody>
+</table>
+</div>
+					</td>
+				</tr>
+			</tbody></table>
+		
+<script language="JavaScript">SetMenuHeight()</script><script language="JavaScript">if(document.getElementById('divPartMenu') != null){var intTop=0;var strTop='';if( strTop!= '') intTop=strTop;document.getElementById('divPartMenu').scrollTop = intTop;}</script><script language="JavaScript">if(document.getElementById('divPartDetail') != null){var intTop=0;var strTop='';if( strTop!= '') intTop=strTop;document.getElementById('divPartDetail').scrollTop = intTop;}</script><script language="javascript" src="./Design Source Web_files/OpenWindow.js.ダウンロード"></script><script language="JavaScript">var intTop=0;var strTop='';if( strTop!= '') intTop=strTop;document.getElementById('divPartDetail').scrollTop = intTop;</script></form>
+	
+
+</body></html>

@@ -1,0 +1,21 @@
+﻿// JScript ファイル
+
+//----------------------------------------------------------------------------------
+//RegisterClientScriptBlock("OpenWindow","<script language=\"javascript\" src=\"OpenWindow.js\"></script>");
+//----------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------
+//YZKイメージが押下された際、Windowをあげる
+//	argumet	:strAddress	:表示ページ
+//----------------------------------------------------------------------------------
+//Server 側で以下のコードを追加(control:テキストオブジェクト,name:ボタン名)
+//control.Attributes["onclick"] = "return OpenWindow('" + アドレス + "');";
+//----------------------------------------------------------------------------------
+function OpenWindow(strAddress)
+{
+	if(strAddress == '') return false;
+	window.open(strAddress,"_blank");
+	return true;
+}
+
+

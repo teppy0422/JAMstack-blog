@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- saved from url=(0082)http://10.7.1.35/nim_intra/70_busyobetsu/30_sekkei/program/hentu/search/search.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+		<title>設計変更通知書</title>
+		
+		<link rel="stylesheet" type="text/css" href="./設計変更通知書_files/hentu.css">
+		<link rel="stylesheet" type="text/css" href="./設計変更通知書_files/jquery-ui.min.css">
+		<script src="./設計変更通知書_files/jquery-1.9.1.min.js.ダウンロード"></script>
+		<script src="./設計変更通知書_files/jquery-ui.min.js.ダウンロード"></script>
+		<script src="./設計変更通知書_files/datepicker-ja.js.ダウンロード"></script>
+		<script language="JavaScript">
+			<!--
+				// jQuery
+				jQuery(function($) {
+					// カレンダー表示(jQuery)
+					$('.calendar').datepicker();
+				});
+
+
+				function Check(){
+					//空白チェック用スクリプト
+					if(document.f1.S_Hinban.value=="" && document.f1.S_Seppen.value=="" && document.f1.S_HentuNo.value=="" && document.f1.S_Sakuseibi1.value=="" && document.f1.S_Sakuseibi2.value==""){
+						alert("検索条件を指定して下さい！");
+						document.f1.S_Hinban.focus();
+					} else {
+
+						//設変変更通知書No. 大文字化 → 頭2桁が"JC"の場合は、その部分のみ削除
+						if(document.f1.S_HentuNo.value!=""){
+							document.f1.S_HentuNo.value = document.f1.S_HentuNo.value.toUpperCase();
+							if(document.f1.S_HentuNo.value.substring(0,2)=="JC"){
+								document.f1.S_HentuNo.value = document.f1.S_HentuNo.value.slice(2);
+							}
+						}
+
+
+
+						document.f1.submit();
+					}
+				}
+			-->
+		</script>
+		<style>
+			/* カレンダー表示調整 */
+			.ui-datepicker {
+				font-size: 80%;
+			}
+		</style>
+	</head>
+	<body class="css-body" onload="document.f1.S_D_Hinban.focus()">
+		<h5 class="css-h5-title">[設計変更通知書]&nbsp;&gt;&nbsp;[台帳検索]</h5>
+		<br><br>
+		<h2 class="css-h2-title">変通台帳検索</h2><br>
+		<form action="http://10.7.1.35/nim_intra/70_busyobetsu/30_sekkei/program/hentu/search/search_chk.asp" method="post" autocomplete="OFF" name="f1" style="margin:0;">
+			<div align="center">
+				<p style="background-color:#606060;color:#FFFFFF;font-size:16px;padding:3px;width:414px;"><b>検索条件指定</b></p>
+				<table class="css-table">
+					<tbody>
+						<tr>
+							<th>製品品番・設変</th><th>
+							</th><td align="left"><input type="text" name="S_Hinban" size="20" maxlength="15" style="ime-mode: disabled;">&nbsp;<input type="text" name="S_Seppen" size="7" maxlength="5" style="ime-mode: disabled;"></td>
+						</tr>
+						<tr>
+							<th>設変変更通知書No.</th><th>
+							</th><td align="left">JC<input type="text" name="S_HentuNo" size="20" maxlength="15" style="ime-mode: disabled;"></td>
+						</tr>
+						<tr>
+							<th>作成日</th><th>
+							</th><td align="left"><input type="text" name="S_Sakuseibi1" value="" maxlength="10" size="12" class="calendar hasDatepicker" style="ime-mode:disabled" id="dp1664173493209">&nbsp;～&nbsp;<input type="text" name="S_Sakuseibi2" value="" maxlength="10" size="12" class="calendar hasDatepicker" style="ime-mode:disabled" id="dp1664173493210"></td>
+						</tr>
+					</tbody>
+				</table><br>
+				<input type="button" class="css-button-bl" style="width:125px;height:30px;" value="検索" onclick="Check();">&nbsp;<input type="reset" class="css-button-r" style="width:125px;height:30px;" value="リセット"><br><br>
+				<input type="button" class="css-button-o" style="width:125px;height:30px;" value="戻る" onclick="location.href=&quot;../hentu_index.htm&quot;">
+			</div>
+		</form>
+	
+<div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div></body></html>

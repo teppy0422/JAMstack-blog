@@ -1,0 +1,499 @@
+/* 共通スタイル	*/
+body,div,span,table
+{
+	font-Size:		12px;
+/*	font-family:	"ＭＳ Ｐゴシック";*/
+	font-family:	MS PGothic;
+}
+select.cssMaker
+{
+	font-family:	MS PGothic;
+}
+/*	DesignSource スタイル	*/
+div.cssTitle
+{
+	font-family:	MS PGothic;
+	font-weight:	bolder;
+	color:			#336600;
+	font-style:		italic;
+}
+/*	セパレータ用スタイル	*/
+div.cssSepa
+{
+	font-Size:		10px;
+	margin-bottom:	1px;
+}
+/*	検索メニュー用スタイル	*/
+div.cssMenu
+{
+	BORDER-TOP:		navy 1px solid;
+	BORDER-BOTTOM:	navy 1px solid;
+	BORDER-LEFT:	navy 1px solid;
+	BORDER-RIGHT:	navy 1px solid;
+	WIDTH: 			100%;
+}
+/*	検索メニュー用スタイル	*/
+div.cssMenuJg
+{
+	BORDER-TOP: 	#004000 1px solid;
+	BORDER-BOTTOM:	#004000 1px solid;
+	BORDER-LEFT:	#004000 1px solid;
+	BORDER-RIGHT:	#004000 1px solid;
+	WIDTH: 			100%;
+}
+/*	検索メニュー用スタイル	*/
+input.cssMenu
+{
+	font-Size:		12px;
+	padding-left:	2px;
+	text-align:		left;
+	font-weight:	bold;
+	border-style:	none;
+	height:			16px;
+	width:			100%;
+	background-color:White;
+}
+span.cssSearchMenu
+{
+	font-Size:		16px;
+	font-weight:	bold;
+	color:			White;
+}
+/* 検索画面タイトル用スタイル	*/
+span.cssSearchTitle
+{
+	color:			White;
+}
+/* 検索画面タイトル用スタイル	*/
+table.cssSearchTitle
+{
+	color:			White;
+}
+/* 検索画面補足説明用スタイル	*/
+span.cssSearchInfo
+{
+	font-Size:		11px;
+	font-family:	MS PGothic;
+	color:			Silver;
+}
+/* 検索画面補足説明用スタイル	*/
+span.cssSearchEx
+{
+	font-Size:		11px;
+	font-family:	MS Gothic;
+	color:			Silver;
+}
+/* 詳細画面タイトル用スタイル*/
+span.cssDetailTitle
+{
+	font-weight:	bold;
+	font-Size:		18px;
+	color:			#404040;
+}
+span.cssSubTitle
+{
+	font-Size:		14px;
+	color:			Navy;
+	font-weight:	bold;
+}
+span.cssTitleVal
+{
+	font-Size:		16px;
+}
+/*	リンク共通スタイル	*/
+A.cssHelp,A.cssHelp:link,A.cssHelp:visited,A.cssHelp:hover
+{
+	font-Size:			13px;
+	font-family:		MS PGothic;
+	color:				Blue;
+	font-weight:		bold;
+	text-decoration:	underline;
+}
+
+/*	リンク共通スタイル	*/
+A,A:link,A:visited,A:hover
+{
+	font-Size:			13px;
+	font-family:		Arial,MS PGothic;
+	color:				Blue;
+	font-weight:		bold;
+	text-decoration:	none;
+}
+A:link
+{
+}
+A:visited
+{
+}
+A:hover
+{
+	text-decoration:underline;
+}
+A.cssDmy,A.cssDmy:link,A.cssDmy:visited,A.cssDmy:hover
+{
+	color:				Black;
+	font-weight:		normal;
+	font-Size:			12px;
+	font-family:		"ＭＳ Ｐゴシック";
+	text-decoration:	none;
+}
+input.cssImgView
+{
+	width:				11px;
+	height:				11px;
+	margin-right:		5px;
+}
+/* 詳細情報用スタイルシート */
+td.cssIndent
+{
+	padding-left:		16px;
+	padding-right:		5px;
+}
+td.cssIndent2
+{
+	padding-left:		32px;
+	padding-right:		5px;
+}
+div.cssHeadPtm
+{
+	color: 				white;
+	background-color:	#006699;
+	padding-left: 		10px;
+	padding-right:		10px;
+	width:				130px;
+	padding-top:		1px;
+}
+div.cssHeadPtmAll
+{
+	color: 				white;
+	background-color:	#006699;
+	padding-left: 		10px;
+	padding-top:		1px;
+}
+div.cssHeadJcmp
+{
+	color: 				white;
+	background-color: 	Purple;
+	padding-left: 		10px;
+	padding-right:		10px;
+	width:				130px;
+	padding-top:		1px;
+}
+div.cssHeadJcmpAll
+{
+	color: 				white;
+	background-color: 	Purple;
+	padding-left: 		10px;
+	padding-top:		1px;
+}
+div.cssHeadEmtrAll
+{
+	color: 				white;
+	background-color: 	Purple;
+	padding-left: 		10px;
+	padding-right:		10px;
+	padding-top:		1px;
+}
+div.cssHeadMT
+{
+	color: 				white;
+	background-color: 	#ff6633;
+	padding-left: 		10px;
+	padding-right:		10px;
+	padding-top:		1px;
+}
+div.cssHeadJg
+{
+	color: 				white;
+	background-color: 	#009900;
+	padding-left: 		10px;
+	padding-right:		10px;
+	width:				160px;
+	padding-top:		1px;
+}
+div.cssHeadJgAll
+{
+	color: 				white;
+	background-color: 	#009900; 
+	padding-left: 		10px;
+	padding-top:		1px;
+}
+div.cssHeadTcss
+{
+	color: 				white;
+	background-color: 	#C04000;
+	padding-left: 		10px;
+	padding-right:		10px;
+	width:				160px;
+	padding-top:		1px;
+}
+
+/*	絞込み検索メニュー用スタイル	*/
+input.cssDetailsMenu
+{
+	font-Size:			13px;
+	font-family:		MS PGothic;
+	border-style:		none;
+	background-color:	White;
+	color:				Blue;
+	font-weight:		bold;
+/*	text-decoration:	underline;*/
+	height:18px;
+	width:100%;
+}
+input.cssDetailsInpText
+{
+	padding:			0px; 
+	margin:				0px;
+	border-style:		groove;
+	width:				100%;
+}
+select.cssDetailsSelList
+{
+	padding:			0px; 
+	margin:				0px;
+	width:				100%;
+}
+span.cssDetailsItemInfo
+{
+	font-size:			11px;
+}
+/*	絞込み検索メニュー用スタイル PTM */
+input.cssDetailsPtmMenu
+{
+	font-Size:			12px;
+	font-family:		MS PGothic;
+	border-style:		none;
+	background-color:	White;
+	color:				Blue;
+	font-weight:		normal;
+/*	text-decoration:	underline;*/
+	height:18px;
+	width:100%;
+}
+td.cssDetailsPtmItemHead
+{
+	padding-left:		5px; 
+	width:				160px; 
+	background-color:	#006699;
+}
+td.cssDetailsPtmItemData
+{
+	padding-left:		0px; 
+	padding-right:		0px; 
+	width:				200px; 
+}
+td.cssDetailsPtmItemInfo
+{
+	padding-left:		5px; 
+	width:				140px; 
+}
+/*	絞込み検索メニュー用スタイル JAIRS	*/
+td.cssDetailsJairsItemHead
+{
+	padding-left:		5px; 
+	width:				160px; 
+	background-color:	Purple;
+}
+td.cssDetailsJairsItemData
+{
+	padding-left:		0px; 
+	padding-right:		0px; 
+	width:				200px; 
+}
+td.cssDetailsJairsItemInfo
+{
+	padding-left:		5px; 
+	width:				140px; 
+}
+/*	絞込み検索メニュー用スタイル JDRW	*/
+td.cssDetailsJdrwItemHead
+{
+	padding-left:		5px; 
+	width:				160px; 
+	background-color:	Purple;
+}
+td.cssDetailsJdrwItemData
+{
+	padding-left:		0px; 
+	padding-right:		0px; 
+	width:				200px; 
+}
+td.cssDetailsJdrwItemInfo
+{
+	padding-left:		5px; 
+	width:				140px; 
+}
+/*	絞込み検索メニュー用スタイル EMTR	*/
+td.cssDetailsEmtrItemHead
+{
+	padding-left:		5px; 
+	width:				160px; 
+	background-color:	Purple;
+}
+td.cssDetailsEmtrItemData
+{
+	padding-left:		0px; 
+	padding-right:		0px; 
+	width:				200px; 
+}
+td.cssDetailsEmtrItemInfo
+{
+	padding-left:		5px; 
+	width:				140px; 
+}
+/*	絞込み検索メニュー用スタイル JG */
+input.cssDetailsJgMenu
+{
+	font-Size:			12px;
+	font-family:		MS PGothic;
+	border-style:		none;
+	background-color:	White;
+	color:				Blue;
+	font-weight:		normal;
+/*	text-decoration:	underline;*/
+	height:18px;
+	width:30px;
+}
+td.cssDetailsJgItemHead
+{
+	padding-left:		5px; 
+	width:				160px; 
+	background-color:	#009900;
+}
+td.cssDetailsJgItemData
+{
+	padding-left:		0px; 
+	padding-right:		0px; 
+	width:				200px; 
+}
+td.cssDetailsJgItemInfo
+{
+	padding-left:		5px; 
+	width:				140px; 
+}
+
+/*	圧着規格検索メニュー用メニュー用スタイル */
+td.cssTermItemHead
+{
+	padding-left:		5px; 
+	background-color:	#C04000;
+}
+input.cssTermInpText
+{
+	padding:			0px; 
+	margin:				0px;
+	border-style:		groove;
+	width:				100%;
+}
+/*	圧着規格表示スタイル	*/
+A.cssTcssShow,A.cssTcssShow:link,A.cssTcssShow:visited,A.cssTcssShow:hover
+{
+	font-Size:			12px;
+}
+/* 圧着規格詳細表示スタイル */
+table.cssTcssTemp
+{
+	border-collapse:	collapse; 
+	background-color:	white;
+}
+table.cssTcssList
+{
+	border-collapse:	collapse; 
+	background-color:	white;
+	width:				300px;
+}
+table.cssTcssList td
+{
+	padding-left:		2px;
+	padding-top:		2px;
+	padding-bottom:		2px;
+	width:				150px;
+}
+table.cssTcssList td.cssTcssTitle
+{
+	padding-left:		2px;
+	padding-top:		2px;
+	padding-bottom:		2px;
+	width:				150px;
+	background-color:	#C04000;
+}
+table.cssTcssList td.cssTcssTitle span
+{
+	color:				White;
+}
+table.cssTcssListEx
+{
+	border-collapse:	collapse; 
+	background-color:	white;
+}
+table.cssTcssListEx td
+{
+	padding-left:		2px;
+	padding-top:		2px;
+	padding-bottom:		2px;
+}
+table.cssTcssListEx td.cssTcssTitle
+{
+	padding-left:		2px;
+	padding-top:		2px;
+	padding-bottom:		2px;
+	background-color:	#C04000;
+}
+table.cssTcssListEx td.cssTcssTitle span
+{
+	color:				White;
+}
+
+table.cssTcssGroup
+{
+	margin-top:			0px;
+	border-collapse:	collapse; 
+	background-color:	white;
+	width:				970px;
+}
+table.cssTcssGroup td.cssTcssHead
+{
+	padding-left:		2px;
+	padding-top:		2px;
+	padding-bottom:		2px;
+	background-color:	#C04000;
+}
+table.cssTcssGroup td.cssTcssHead span
+{
+	color:				White;
+}
+table.cssTcssGroup td.cssTcssGroupIndent
+{
+	padding-left:		20px;
+}
+table.cssTcssFactory
+{
+	border-collapse:	collapse; 
+	background-color:	white;
+	width:				330px;
+}
+table.cssTcssFactory td
+{
+	padding-left:		2px;
+	padding-top:		2px;
+	padding-bottom:		2px;
+	text-align:			center;
+	width:				40px;
+}
+table.cssTcssFactory td.cssTcssTitle
+{
+	padding-left:		2px;
+	padding-top:		2px;
+	padding-bottom:		2px;
+	text-align:			left;
+	width:				40px;
+	background-color:	#C04000;
+}
+table.cssTcssFactory td.cssTcssTitle span
+{
+	color:				White;
+}
+select.combobox {
+    font-family: 'Courier New', Consolas, monospace;
+}

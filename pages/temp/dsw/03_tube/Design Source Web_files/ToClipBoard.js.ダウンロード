@@ -1,0 +1,16 @@
+﻿// JScript ファイル
+
+//----------------------------------------------------------------------------------
+//RegisterClientScriptBlock("ClipBoardCopy","<script language=\"javascript\" src=\"ClipBoardCopy.js\"></script>");
+//----------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------
+//Xmlシンボル情報をクリップボードへコピーする
+//	argumet	:SymbolInfo	:シンボル情報
+//----------------------------------------------------------------------------------
+//Server 側で以下のコードを追加(control:テキストオブジェクト,name:ボタン名)
+//control.Attributes["onclick"] = "ToClipBoard('" + シンボル情報 + "');";
+//----------------------------------------------------------------------------------
+function ToClipBoard(SymbolInfo){
+    clipboardData.setData("Text", unescape(decodeURIComponent(SymbolInfo)));
+}

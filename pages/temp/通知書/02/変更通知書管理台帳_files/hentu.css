@@ -1,0 +1,448 @@
+/* 変通管理SYS各ページにて使用中のCSS */
+/* クラスで分割し、指定項目で表示制限 */
+/* 作成 '2019/11/29 システム 山崎 */
+
+/* ------------------------------------------------------------------------------------------------------- */
+
+/* ALL */
+*{
+}
+
+/* クラス：ボディ */
+BODY.css-body{
+	background:#FFFFFF;
+}
+BODY.css-body-r{
+	background:#FEF7F9;
+}
+
+
+/* クラス：新規リンク */
+A.maru-a:link{
+	color:#0000FF;
+	font-size:15px;
+	text-decoration:none;
+}
+A.maru-a:visited{
+	color:#0000FF;
+	font-size:15px;
+	text-decoration:none;
+}
+A.maru-a:active{
+	color:#FF8C00;
+	font-size:15px;
+	text-decoration:none;
+}
+A.maru-a:hover{
+	color:#FF8C00;
+	font-size:15px;
+	text-decoration:none;
+}
+
+
+/* クラス：タイトル用の表示 */
+h5.css-h5-title {
+	text-align:left;
+	color:#949799;
+	margin:0px;
+}
+h5.css-h5-title-b {
+	text-align:left;
+	color:#767DF7;
+	margin:0px;
+}
+h2.css-h2-title {
+	text-align:center;
+	color:#606060;
+	padding:5px;
+	margin:0px;
+}
+
+
+/* クラス：タイトル用の表示(エラー用) */
+h5.css-h5-title-r {
+	text-align:left;
+	color:#EF454A;
+	margin:0px;
+}
+h2.css-h2-title-r {
+	text-align:left;
+	color:#EF454A;
+	padding:5px;
+	margin:0px;
+}
+
+
+/* クラス：区切り線 */
+hr.css-hr {
+	color:#B7B7B7;
+}
+
+
+/* クラス：ボタン(サイズは各ページで行う)　*/
+/* hover：マウスオーバー時処理 */
+INPUT.css-button-bl{
+	background-color:#E6E6F7;
+	color:#767DF7;
+	border:none;
+	font-weight:bold;
+}
+INPUT.css-button-bl:hover{
+	background-color:#767DF7;
+	color:#E6E6F7;
+}
+INPUT.css-button-r{
+	background-color: #FFF0F5;
+	color: #FF00FF;
+	border:none;
+	font-weight:bold;
+}
+INPUT.css-button-r:hover{
+	background-color: #FF00FF;
+	color: #FFF0F5;
+}
+INPUT.css-button-o{
+	background-color: #FFFF99;
+	color: #FF6600;
+	border:none;
+	font-weight:bold;
+}
+INPUT.css-button-o:hover{
+	background-color: #FF9933;
+	color: #FFFF99;
+}
+
+INPUT.css-button-g{
+	background-color:#E5FFF2;
+	color:#63D25F;
+	border:none;
+	font-weight:bold;
+}
+INPUT.css-button-g:hover{
+	background-color:#63D25F;
+	color:#E5FFF2;
+}
+
+
+
+/* クラス：基本テーブル(パスワード用) */
+TABLE.css-table-pass{
+	padding:1;
+	border:none;
+	white-space:nowrap;
+}
+TABLE.css-table-pass tbody th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:12px;
+}
+TABLE.css-table-pass tbody td{
+	padding:3px;
+	font-size:12px;
+}
+
+TABLE.css-table-pass tbody tr {
+	background-color:#FFFFFF;
+}
+/* クラス：基本テーブル(検索画面用) */
+TABLE.css-table-search{
+	background-color:#606060;
+	white-space:nowrap;
+	border-collapse:collapse;
+}
+TABLE.css-table-search thead th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:14px;
+	padding:3px;
+}
+TABLE.css-table-search thead td{
+	background-color:#FFFFFF;
+	font-size:14px;
+}
+TABLE.css-table-search tbody th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:14px;
+}
+TABLE.css-table-search tbody td{
+	padding:4px;
+	font-size:12px;
+}
+TABLE.css-table-search tbody {
+	background-color:#FFFFFF;
+}
+/* マウスオーバー時 */
+TABLE.css-table-search tbody tr:hover {
+	background-color:#D1FFE5;
+}
+TABLE.css-table-search tbody tr.err {
+	background-color:#FFDDFC;
+}
+
+/* クラス：基本テーブル(枠無：hover無) */
+TABLE.css-table{
+	background-color:#606060;
+	white-space:nowrap;
+	border-collapse:collapse;
+	width:420px;
+}
+TABLE.css-table thead th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:14px;
+	padding:3px;
+}
+TABLE.css-table tbody th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:16px;
+	height:20px;
+}
+TABLE.css-table tbody td{
+	padding:4px;
+	font-size:12px;
+}
+TABLE.css-table tbody {
+	background-color:#FFFFFF;
+}
+
+/* クラス：基本テーブル(枠無：hover無)別色 */
+TABLE.css-table-b{
+	background-color:#DB3D36;
+	white-space:nowrap;
+	border-collapse:collapse;
+	width:400px;
+}
+TABLE.css-table-b thead th{
+	background-color:#DB3D36;
+	color:#FFFFFF;
+	font-size:14px;
+	padding:3px;
+}
+TABLE.css-table-b tbody th{
+	background-color:#DB3D36;
+	color:#FFFFFF;
+	font-size:16px;
+	height:20px;
+}
+TABLE.css-table-b tbody td{
+	padding:4px;
+	font-size:12px;
+}
+TABLE.css-table-b tbody {
+	background-color:#FFFFFF;
+}
+
+/* クラス：基本テーブル(枠無：hover無)別色 */
+TABLE.css-table-r{
+	background-color:#DB3D36;
+	white-space:nowrap;
+	border-collapse:collapse;
+	width:400px;
+}
+TABLE.css-table-r thead th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:14px;
+	padding:3px;
+}
+TABLE.css-table-r tbody th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:16px;
+	height:20px;
+}
+TABLE.css-table-r tbody td{
+	padding:4px;
+	font-size:12px;
+}
+TABLE.css-table-r tbody {
+	background-color:#FEF7F9;
+}
+
+/* クラス：基本テーブル(枠無：hover有) */
+TABLE.css-table-h{
+	background-color:#606060;
+	white-space:nowrap;
+	border-collapse:collapse;
+}
+TABLE.css-table-h thead th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:14px;
+	padding:3px;
+}
+TABLE.css-table-h tfoot {
+	background-color:#FFFFFF;
+}
+TABLE.css-table-h tbody th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:14px;
+}
+TABLE.css-table-h tbody td{
+	padding:4px;
+	font-size:12px;
+}
+TABLE.css-table-h tbody {
+	background-color:#FFFFFF;
+}
+/* マウスオーバー時 */
+TABLE.css-table-h tbody tr:hover {
+	background-color:#D1FFE5;
+}
+TABLE.css-table-h tbody tr.err {
+	background-color:#FFDDFC;
+}
+
+/* クラス：基本テーブル(枠無：hover有)別色 */
+TABLE.css-table-h-r{
+	background-color:#DB3D36;
+	white-space:nowrap;
+	border-collapse:collapse;
+	width:400px;
+}
+TABLE.css-table-h-r thead th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:14px;
+	padding:3px;
+}
+TABLE.css-table-h-r tbody th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:16px;
+	height:20px;
+}
+TABLE.css-table-h-r tbody td{
+	padding:4px;
+	font-size:12px;
+}
+TABLE.css-table-h-r tbody {
+	background-color:#FEF7F9;
+}
+/* マウスオーバー時 */
+TABLE.css-table-h-r tbody tr:hover {
+	background-color:#E6F4F3;
+}
+
+/* クラス：基本テーブル(枠有：hover無) */
+TABLE.css-table-w{
+	background-color:#606060;
+	white-space:nowrap;
+}
+TABLE.css-table-w thead th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:14px;
+	padding:3px;
+}
+TABLE.css-table-w tbody th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:14px;
+}
+TABLE.css-table-w tbody td{
+	padding:4px;
+	font-size:12px;
+}
+TABLE.css-table-w tbody {
+	background-color:#FFFFFF;
+}
+
+/* クラス：基本テーブル(枠有：hover有) */
+TABLE.css-table-wh{
+	background-color:#606060;
+	white-space:nowrap;
+}
+TABLE.css-table-wh thead th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:14px;
+	padding:3px;
+}
+TABLE.css-table-wh tfoot {
+	background-color:#FFFFFF;
+}
+TABLE.css-table-wh tbody th{
+	background-color:#606060;
+	color:#FFFFFF;
+	font-size:14px;
+}
+TABLE.css-table-wh tbody td{
+	padding:4px;
+	font-size:12px;
+}
+TABLE.css-table-wh tbody {
+	background-color:#FFFFFF;
+}
+/* マウスオーバー時 */
+TABLE.css-table-wh tbody tr:hover {
+	background-color:#D1FFE5;
+}
+TABLE.css-table-wh tbody tr.err {
+	background-color:#FFDDFC;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* クラス：基本テーブル(マウスオーバー無し) */
+TABLE.css-table-n{
+	background-color:#767DF7;
+	padding:1;
+	border:none;
+	white-space:nowrap;
+}
+TABLE.css-table-n thead th{
+	background-color:#767DF7;
+	color:#FFFFFF;
+	font-size:12px;
+}
+TABLE.css-table-n tbody th{
+	background-color:#767DF7;
+	color:#FFFFFF;
+	font-size:12px;
+}
+TABLE.css-table-n tbody td{
+	text-align:left;
+	padding:3px;
+	font-size:12px;
+}
+TABLE.css-table-n tbody tr {
+	background-color:#FFFFFF;
+}
+
+/* クラス：基本テーブル(エラー)(マウスオーバー無し) */
+TABLE.css-table-rn{
+	background-color:#FF00FF;
+	padding:1;
+	border:0;
+	white-space:nowrap;
+}
+TABLE.css-table-rn thead th{
+	background-color:#FF00FF;
+	color:#FFFFFF;
+}
+TABLE.css-table-rn tbody th{
+	background-color:#FF00FF;
+	color:#FFFFFF;
+}
+TABLE.css-table-rn tbody td{
+	text-align:left;
+	padding:3px;
+}
+TABLE.css-table-rn tbody tr {
+	background-color:#FFFFFF;
+}

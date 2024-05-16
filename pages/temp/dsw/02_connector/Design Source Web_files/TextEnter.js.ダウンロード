@@ -1,0 +1,31 @@
+﻿
+//----------------------------------------------------------------------------------
+//RegisterClientScriptBlock("TextEnter","<script language=\"javascript\" src=\"TextEnter.js\"></script>");
+//----------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------
+//テキストエリアでエンターキーが押下された場合に発生するクリックイベントを制御
+//	argumet	:e		:event
+//	argumet	:name	:ボタン名
+//----------------------------------------------------------------------------------
+//Server 側で以下のコードを追加(control:テキストオブジェクト,name:ボタン名)
+//control.Attributes["onkeydown"] = "return text_keydown(event, '" + name + "');";
+//----------------------------------------------------------------------------------
+function text_keydown(e, name)
+{
+	var key = 0;
+	if (typeof(e.keyCode) != 'undefined') {
+		key = e.keyCode;
+	} else if (typeof(e.which) != 'undefined') {
+		key = e.which;
+	}
+	if (key == 0xd) {
+		if (typeof(name) != 'undefined' && name != '') {
+			document.forms[0].elements[name].click();
+		}
+		return false;
+	}
+	return true;
+}
+
+

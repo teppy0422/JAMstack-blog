@@ -135,6 +135,12 @@ export default function About() {
       color: "inkscape",
       img: "/images/logo_inkscape.svg",
     },
+    {
+      value: 30,
+      cirText: "InkScape\n1年",
+      color: "inkscape",
+      img: "/images/logo_inkscape.svg",
+    },
   ];
   const skillCards = [
     {
@@ -273,7 +279,7 @@ export default function About() {
         </Box>
         <Center>
           <Text w={["100%", "95%", "85%", "75%"]}>
-            高知県出身のエンジニア。
+            高知県出身のエンジニア-2。
             自動車のワイヤーハーネス製造/機械保全/生産計画/生産分析に従事。現場の問題改善を繰り返す内にITや電子工学技術に興味を持つ。
             EXCEL/ACCESSのソフトウェア、PLC/Arduinoなどのハードウェアを経験。それらをWEB技術と連携させる仕組みを構築。
             現場の利用者と相談して発展させていくのが得意。カバが好き。

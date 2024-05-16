@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- saved from url=(0089)http://10.7.1.35/nim_intra/70_busyobetsu/30_sekkei/program/hentu/search/search_result.asp -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+		<title>変更通知書管理台帳</title>
+		
+		<link rel="stylesheet" type="text/css" href="./変更通知書管理台帳_files/hentu.css">
+		<script src="./変更通知書管理台帳_files/jquery-1.9.1.min.js.ダウンロード"></script>
+		<script src="./変更通知書管理台帳_files/multifilter.min.js.ダウンロード"></script>
+		<script type="text/JavaScript">
+			<!--
+				// jQuery：フィルター用
+				$(document).ready(function() {
+					$('.filter').multifilter();
+				});
+
+				// jQuery
+				jQuery(function($) {
+					// テーブルのTR要素をリンク化
+					$('tbody tr[data-href]').addClass('clickable').delegate('*', 'click', function() {
+						if(this.tagName!=='A' && this.tagName!=='INPUT'){
+							if($(this).parents('tr').data('href')!='×'){
+								location.href="http://10.7.1.35/nim_intra/70_busyobetsu/30_sekkei/hentsu/" + $(this).parents('tr').data('href') + ".pdf";
+							}
+						}
+						return false;
+					});
+
+					// フィルター解除用
+				  $('#search_reset').click(function(){
+				    $('#search1').val('');
+				    $('#search2').val('');
+				    $('#search3').val('');
+				    $('#search4').val('');
+				    $('#search5').val('');
+				    $('#search6').val('');
+
+						//Multifilterの条件削除
+				    $('td').removeAttr('data-filtered');
+				    $('tr').show();
+				  });
+				});
+
+				function Edit(hentuno){
+					document.f1.S_HentuNo.value=hentuno;
+					document.f1.action='kanri/login.asp'
+					document.f1.submit();
+				}
+			-->
+		</script>
+	</head>
+	<body class="css-body">
+		<h5 class="css-h5-title">[設計変更通知書]&nbsp;&gt;&nbsp;[台帳検索]&nbsp;&gt;&nbsp;[検索結果]</h5>
+		<br><br>
+		<h2 class="css-h2-title">検索結果</h2><br>
+		<div align="center">
+			<form action="http://10.7.1.35/nim_intra/70_busyobetsu/30_sekkei/program/hentu/search/search_result.asp" method="post" name="f1" style="margin:0">
+				<input type="hidden" name="S_HentuNo" value="">
+				<font color="#767DF7" size="-1"><b>※レコードをクリックする事で、発行された内容を表示します。<br>(発行欄：○&nbsp;のみ)</b></font><br><br>
+				<input type="button" class="css-button-r" style="width:100px;height:25px;" value="検索解除" id="search_reset"><br><br>
+
+				<table class="css-table-wh" cellpadding="5">
+					<thead>
+						<tr>
+							<th>変通No.</th>
+							<th>作成日</th>
+							<th>品番</th>
+							<th>設変</th>
+							<th>作成者</th>
+							<th>発行</th>
+						</tr>
+						<tr>
+							<!-- input,select内の各属性は、フィルターの為に使用 -->
+							<th><input type="text" class="filter" id="search1" name="変通No." data-col="変通No." style="width:100px;ime-mode:enabled;"></th>
+							<th><input type="text" class="filter" id="search2" name="作成日" data-col="作成日" style="width:100px;ime-mode:disabled;"></th>
+							<th><input type="text" class="filter" id="search3" name="品番" data-col="品番" style="width:120px;ime-mode:disabled;"></th>
+							<th><input type="text" class="filter" id="search4" name="設変" data-col="設変" style="width:60px;ime-mode:disabled;"></th>
+							<th><input type="text" class="filter" id="search5" name="作成者" data-col="作成者" style="width:60px;ime-mode:disabled;"></th>
+							<th>
+								<select class="filter" id="search6" name="発行" data-col="発行">
+									<option value=""></option>
+									<option value="○">○</option>
+									<option value="×">×</option>
+								</select>
+							</th>
+							<th><br></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr height="20px" data-href="P22-0023" class="clickable">
+							<td>P22-0023</td>
+							<td>2022/08/31</td>
+							<td>82166V2390</td>
+							<td>A0011</td>
+							<td>金田</td>
+							<td><b><font color="#767DF7">○</font></b></td>
+							<td><input type="button" class="css-button-g" value="編集" onclick="Edit(&#39;P22-0023&#39;)"></td>
+						</tr>
+						<tr height="20px" data-href="T22-1053" class="clickable">
+							<td>T22-1053</td>
+							<td>2022/07/15</td>
+							<td>82166V2390</td>
+							<td>A0011</td>
+							<td>中嶋</td>
+							<td><b><font color="#767DF7">○</font></b></td>
+							<td><input type="button" class="css-button-g" value="編集" onclick="Edit(&#39;T22-1053&#39;)"></td>
+						</tr>
+
+					</tbody>
+				</table>
+				<br>
+				<input type="button" class="css-button-o" style="width:125px;height:30px;" value="戻る" onclick="history.go(-2)">
+			</form>
+		</div>
+	
+
+</body></html>
