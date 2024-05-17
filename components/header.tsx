@@ -88,7 +88,7 @@ export default function Header() {
               </Box>
             </Center>
             <Text fontSize={["0px", "16px", "16px", "16px"]}>
-              {session.user.name}
+              {session?.user?.name}
             </Text>
             <Center
               flex="1"
