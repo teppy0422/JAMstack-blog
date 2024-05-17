@@ -27,5 +27,8 @@
     "pages/api/typing_.js",
     "pages/api/typing.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    ".trash/**/*" // この行を追加
+  ]
 }
