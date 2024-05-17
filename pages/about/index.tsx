@@ -163,6 +163,12 @@ export default function About() {
       color: "inkscape",
       img: "/images/logo_inkscape.svg",
     },
+    {
+      value: 90,
+      cirText: "InkScape\n1年",
+      color: "inkscape",
+      img: "/images/logo_inkscape.svg",
+    },
   ];
   const skillCards = [
     {
