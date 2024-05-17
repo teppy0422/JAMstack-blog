@@ -40,19 +40,23 @@ export default function About() {
   //AOS用_ページ遷移時に表示されないからだけど変化しない
   const router = useRouter();
   useEffect(() => {
-    router.events.on("routeChangeComplete", handleChangeRoute);
-
-    return () => {
-      router.events.off("routeChangeComplete", handleChangeRoute);
-    };
-  }, []);
-  function handleChangeRoute(path) {
     AOS.init({
-      once: false,
+      once: true, // アニメーションを一度だけ実行
       easing: "ease-out-sine",
       duration: 600,
     });
-  }
+
+    // ルート変更が完了したときにAOSを再初期化
+    router.events.on("routeChangeComplete", () => {
+      AOS.refresh();
+    });
+
+    return () => {
+      router.events.off("routeChangeComplete", () => {
+        AOS.refresh();
+      });
+    };
+  }, [router.events]); // router.eventsを依存配列に追加
 
   // React.useEffect(() => {
   //   AOS.init({
@@ -128,6 +132,12 @@ export default function About() {
       cirText: "Davinci Resolve\n半年",
       color: "davinci",
       img: "/images/logo_davinci.svg",
+    },
+    {
+      value: 30,
+      cirText: "InkScape\n1年",
+      color: "inkscape",
+      img: "/images/logo_inkscape.svg",
     },
     {
       value: 30,
@@ -279,7 +289,7 @@ export default function About() {
         </Box>
         <Center>
           <Text w={["100%", "95%", "85%", "75%"]}>
-            高知県出身のエンジニア-2。
+            高知県出身のエンジニア-4
             自動車のワイヤーハーネス製造/機械保全/生産計画/生産分析に従事。現場の問題改善を繰り返す内にITや電子工学技術に興味を持つ。
             EXCEL/ACCESSのソフトウェア、PLC/Arduinoなどのハードウェアを経験。それらをWEB技術と連携させる仕組みを構築。
             現場の利用者と相談して発展させていくのが得意。カバが好き。

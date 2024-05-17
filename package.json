@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect' next dev",
+    "dev": "NODE_OPTIONS='--inspect=9250' next dev",
     "build": "next build && next-sitemap --config sitemap.config.js",
     "start": "next start",
     "migrate:deploy": "prisma migrate deploy"
@@ -25,7 +25,7 @@
     "@react-three/drei": "^9.2.0",
     "@react-three/fiber": "^8.0.10",
     "@types/jest": "^27.4.1",
-    "@types/react": "^17.0.44",
+    "@types/react": "18.3.2",
     "@types/react-dom": "^18.0.0",
     "@types/three": "^0.141.0",
     "aos": "^3.0.0-beta.6",
@@ -60,11 +60,11 @@
     "use-sound": "^4.0.1"
   },
   "devDependencies": {
-    "@types/node": "^18.0.3",
+    "@types/node": "20.12.12",
     "next-sitemap": "^2.5.28",
     "prisma": "^4.0.0",
     "react-infinite-scroller": "^1.2.6",
     "ts-node": "^10.8.2",
-    "typescript": "^4.7.4"
+    "typescript": "5.4.5"
   }
 }
