@@ -34,10 +34,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Yusei+Magic&display=swap"
         />
         {/* グーグルログイン */}
-        <meta
+        {/* <meta
           name="google-site-verification"
           content="4var2KY2gn9V8ETNT5Iny7qYQwuuYpfwHbALwJtkyPA"
-        />
+        /> */}
         {/* アクセス解析 */}
         <script src="//accaii.com/teppy/script.js" async></script>
       </Head>
@@ -69,7 +69,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       {/* <RecoilRoot> */}
       <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
-        <SessionProvider session={pageProps.session}>
+        <SessionProvider session={session}>
           <Component {...pageProps} />
         </SessionProvider>
       </ChakraProvider>

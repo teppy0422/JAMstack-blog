@@ -133,17 +133,19 @@ https://threejs.org/docs/#examples/en/controls/OrbitControls
 
 https://graphicbeats.net/
 
-## magic.link に変更を検討
+## magic.link に変更を検討 cancel
 
 https://dashboard.magic.link/
 
 node のバージョン変更  
 node v16.14.2 > v17.9.1
 
-prisma のバージョン変更
-
 prisma/adapter の更新  
 v3.14 > v4.0
+
+## nextauth に変更
+
+LINE 認証があるから
 
 nextauth.js を変更
 .js > .ts
@@ -185,3 +187,7 @@ v17.9.1 > v16.15.1
 
 Vercel node のバージョンを変更  
 14.x > 16.x
+
+--ここで保存--
+
+## ログイン情報の取得
