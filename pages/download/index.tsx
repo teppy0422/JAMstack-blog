@@ -1,24 +1,16 @@
 import React from "react";
 import Content from "../../components/content";
 import Link from "next/link";
-import { Button, Input } from "@chakra-ui/react";
-
 import {
-  Center,
+  Button,
+  Input,
   Image,
   Text,
   VStack,
   Box,
-  Tooltip,
   Flex,
   Spacer,
-  CircularProgress,
-  CircularProgressLabel,
-  Wrap,
-  WrapItem,
-  HStack,
   useDisclosure,
-  Stack,
   Drawer,
   DrawerBody,
   DrawerFooter,
@@ -26,7 +18,17 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
+  List,
+  ListItem,
+  ListIcon,
+  OrderedList,
+  UnorderedList,
+  LinkBox,
+  LinkOverlay,
+  Heading,
+  SimpleGrid,
 } from "@chakra-ui/react";
+import { MdSettings, MdCheckCircle } from "react-icons/md";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
 
@@ -40,40 +42,7 @@ import Sushi_ootoro_wrap from "../../components/3d/sushi_ootoro_wrap";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap";
 import Sushi_ikura_wrap from "../../components/3d/sushi_ikura_wrap";
 
-function DrawerExample() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
-  return (
-    <>
-      <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
-        Open
-      </Button>
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Create your account</DrawerHeader>
-
-          <DrawerBody>
-            <Input placeholder="Type here..." />
-          </DrawerBody>
-
-          <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="blue">Save</Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    </>
-  );
-}
+import CustomLinkBox from "../../components/customLinkBox";
 
 export default function About() {
   const illusts = [
@@ -85,6 +54,17 @@ export default function About() {
   return (
     <Content>
       <div className={styles.me}>
+        <List spacing={3} px={12} textAlign="center">
+          <ListItem>
+            <ListIcon as={MdCheckCircle} color="green.500" />
+            3.004.62
+          </ListItem>
+          <ListItem>
+            <ListIcon as={MdCheckCircle} color="green.500" />
+            3.004.61
+          </ListItem>
+        </List>
+
         <VStack>
           <Flex>
             <Box mr={3}>
@@ -110,6 +90,25 @@ export default function About() {
             </Box>
           </Flex>
         </VStack>
+
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
+          <CustomLinkBox
+            dateTime="2021-01-15 15:30:00 +0000 UTC"
+            daysAgo="2 days ago"
+            heading="3.004.62"
+            description="MenuからWEBサイトにアクセスするアドレスの修正"
+            linkHref="#inner-link"
+            linkText="Download"
+          />
+          <CustomLinkBox
+            dateTime="2021-01-15 15:30:00 +0000 UTC"
+            daysAgo="2 days ago"
+            heading="3.004.63"
+            description="何か"
+            linkHref="#inner-link"
+            linkText="Download"
+          />
+        </SimpleGrid>
 
         <Box ml={[0, 18, 70, 115]}>
           <div data-aos="fade-right" style={{ display: "inline-block" }}>
@@ -164,7 +163,6 @@ export default function About() {
             </a>
           </Link>
         </Box>
-        <DrawerExample />
       </div>
     </Content>
   );
