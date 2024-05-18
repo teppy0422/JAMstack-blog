@@ -118,7 +118,6 @@ export default function About() {
   return (
     <Content>
       <div className={styles.me}>
-        <Text>-作成中-</Text>
         <VStack>
           <Flex>
             <Box mr={3}>
@@ -183,7 +182,7 @@ export default function About() {
           <Sushi_ika_wrap />
           <Sushi_ootoro_wrap />
           <Sushi_tamago_wrap />
-          {/* <Sushi_ikura_wrap /> */}
+          <Sushi_ikura_wrap />
         </Box>
       </div>
     </Content>
