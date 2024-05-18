@@ -1,5 +1,7 @@
 import React from "react";
 import Content from "../../components/content";
+import Link from "next/link";
+import { Button, Input } from "@chakra-ui/react";
 
 import {
   Center,
@@ -17,6 +19,13 @@ import {
   HStack,
   useDisclosure,
   Stack,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
@@ -31,90 +40,48 @@ import Sushi_ootoro_wrap from "../../components/3d/sushi_ootoro_wrap";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap";
 import Sushi_ikura_wrap from "../../components/3d/sushi_ikura_wrap";
 
+function DrawerExample() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
+  return (
+    <>
+      <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+        Open
+      </Button>
+      <Drawer
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Create your account</DrawerHeader>
+
+          <DrawerBody>
+            <Input placeholder="Type here..." />
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button variant="outline" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue">Save</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </>
+  );
+}
+
 export default function About() {
   const illusts = [
-    {
-      src: "/images/illust/hippo/hippo_001.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_001_a.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_002.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_004.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_005.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_005_a.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_006.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_007.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_008.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_010.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_011.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_011_a.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_012.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_013.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_014.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_015.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_016.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_017.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_017_a.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_019.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_020.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_021.png",
-    },
-    {
-      src: "/images/illust/hippo/hippo_022.png",
-    },
-    {
-      src: "/images/illust/obj/obj_001.png",
-    },
-    {
-      src: "/images/illust/obj/obj_002.png",
-    },
-    {
-      src: "/images/illust/obj/obj_003.png",
-    },
-    {
-      src: "/images/illust/obj/obj_004.png",
-    },
+    { src: "/images/illust/hippo/hippo_001.png" },
+    { src: "/images/illust/hippo/hippo_001_a.png" },
   ];
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
   return (
     <Content>
       <div className={styles.me}>
@@ -184,6 +151,20 @@ export default function About() {
           <Sushi_tamago_wrap />
           <Sushi_ikura_wrap />
         </Box>
+        <Box mt={10} textAlign="center">
+          <Link href="/files/downloadTxt.txt" passHref>
+            <a download="downloadTxt.txt">こちらからダウンロードaaa</a>
+          </Link>
+          <Link
+            href="/files/Sjp3.004.62_464D_82161-6BN31㈹aテスト.zip"
+            passHref
+          >
+            <a download="Sjp3.004.62_464D_82161-6BN31㈹aテスト.zip">
+              こちらからダウンロードaaa
+            </a>
+          </Link>
+        </Box>
+        <DrawerExample />
       </div>
     </Content>
   );
