@@ -190,7 +190,7 @@ export default function About() {
     },
   ];
   return (
-    <Content>
+    <Content isCustomHeader={false}>
       <div className={styles.me}>
         <Text>-作成中-</Text>
         <VStack>

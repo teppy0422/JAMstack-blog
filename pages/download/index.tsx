@@ -25,7 +25,7 @@ import CustomPopver from "../../components/popver";
 export default function About() {
   const illusts = [{ src: "/images/illust/hippo/hippo_001.png" }];
   return (
-    <Content>
+    <Content isCustomHeader={true}>
       <div className={styles.me}>
         <VStack>
           <Flex>
@@ -55,19 +55,31 @@ export default function About() {
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
           <CustomLinkBox
-            dateTime="2024-05-19T14:30:00+0900"
+            dateTime="2024-05-19T24:55:00+0900"
             description="先ハメのみでも空詮表示をする"
             linkHref="/files/Sjp3.004.63_.xlsm"
             ver="3.004.63"
           />
           <CustomLinkBox
-            dateTime="2024-05-18T02:21:00+0900"
+            dateTime="2024-05-19T23:55:00+0900"
+            description="先ハメのみでも空詮表示をする"
+            linkHref="/files/Sjp3.004.63_.xlsm"
+            ver="3.004.63"
+          />
+          <CustomLinkBox
+            dateTime="2024-05-19T18:20:00+0900"
             description="MenuからWEBサイトにアクセスするアドレスの修正"
             linkHref="/files/Sjp3.004.62_.xlsm"
             ver="3.004.62"
           />
           <CustomLinkBox
             dateTime="2024-05-16T02:21:00+0900"
+            description="MenuからWEBサイトにアクセスするアドレスの修正"
+            linkHref="/files/Sjp3.004.61_.xlsm"
+            ver="3.004.61"
+          />
+          <CustomLinkBox
+            dateTime="2022-05-16T02:21:00+0900"
             description="MenuからWEBサイトにアクセスするアドレスの修正"
             linkHref="/files/Sjp3.004.61_.xlsm"
             ver="3.004.61"
