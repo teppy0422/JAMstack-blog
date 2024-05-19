@@ -3,11 +3,12 @@ import { Container, Center, Box, Spacer } from "@chakra-ui/react";
 import NextLink from "next/link";
 
 import Header from "../components/header";
+import CustomHeader from "../components/header_";
 
-export default function Content({ children }) {
+export default function Content({ children, isCustomHeader }) {
   return (
     <>
-      <Header />
+      {isCustomHeader ? <CustomHeader /> : <Header />}
       <Box height="66px"></Box>
       <Container
         maxWidth="960px"
