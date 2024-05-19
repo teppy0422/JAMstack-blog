@@ -1,4 +1,5 @@
 {
   "nuxt.isNuxtApp": false,
-  "editor.autoClosingQuotes": "languageDefined"
+  "editor.autoClosingQuotes": "languageDefined",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

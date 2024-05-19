@@ -13,11 +13,11 @@ import {
 const CustomPopover = ({ isOpen, onOpen, onClose }) => (
   <Popover isOpen={isOpen} onClose={onClose}>
     <PopoverTrigger>
-      <Button onClick={onOpen} _focus="none">
+      <Button onClick={onOpen} _focus={{ _focus: "none" }}>
         Trigger
       </Button>
     </PopoverTrigger>
-    <PopoverContent _focus="none">
+    <PopoverContent _focus={{ _focus: "none" }}>
       <PopoverArrow />
       <PopoverCloseButton />
       <PopoverHeader>Download</PopoverHeader>
