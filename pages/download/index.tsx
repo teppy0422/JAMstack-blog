@@ -43,7 +43,7 @@ import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap";
 import Sushi_ikura_wrap from "../../components/3d/sushi_ikura_wrap";
 
 import CustomLinkBox from "../../components/customLinkBox";
-
+import CustomPopver from "../../components/popver";
 export default function About() {
   const illusts = [
     { src: "/images/illust/hippo/hippo_001.png" },
@@ -93,10 +93,19 @@ export default function About() {
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
           <CustomLinkBox
+            dateTime="2021-01-15T15:30:00+0000"
+            daysAgo="2 days ago"
+            heading="3.004.64"
+            description="MenuからWEBサイトにアクセスするアドレスの修正"
+            linkHref="#inner-link"
+            linkText="Download"
+            onBoxClick={() => setIsOpen(true)} // CustomLinkBoxのクリックでPopoverを開く
+          />
+          <CustomLinkBox
             dateTime="2021-01-15 15:30:00 +0000 UTC"
             daysAgo="2 days ago"
-            heading="3.004.62"
-            description="MenuからWEBサイトにアクセスするアドレスの修正"
+            heading="3.004.63"
+            description="何か"
             linkHref="#inner-link"
             linkText="Download"
           />
@@ -108,6 +117,24 @@ export default function About() {
             linkHref="#inner-link"
             linkText="Download"
           />
+          <CustomLinkBox
+            dateTime="2021-01-15 15:30:00 +0000 UTC"
+            daysAgo="2 days ago"
+            heading="3.004.63"
+            description="何か"
+            linkHref="#inner-link"
+            linkText="Download"
+          />
+          <CustomLinkBox
+            dateTime="2021-01-15 15:30:00 +0000 UTC"
+            daysAgo="2 days ago"
+            heading="3.004.63"
+            description="何か"
+            linkHref="#inner-link"
+            linkText="Download"
+          />
+
+          <CustomPopver />
         </SimpleGrid>
 
         <Box ml={[0, 18, 70, 115]}>
