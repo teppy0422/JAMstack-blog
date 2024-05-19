@@ -368,7 +368,7 @@ const typing = () => {
           cardType: "summary_large_image",
         }}
       />
-      <Content style={{ position: "relative" }}>
+      <Content isCustomHeader={false} style={{ position: "relative" }}>
         <VStack className={styles.typing}>
           <Grid
             templateAreas={`"nav main"

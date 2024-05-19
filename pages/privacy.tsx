@@ -28,7 +28,7 @@ export default function Home({ blog, category, tag, blog2 }) {
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   return (
     <>
-      <Content>
+      <Content isCustomHeader={false}>
         <Box mx={[0, 0, 8, 20]} my={[1, 1, 2, 4]}>
           <Box h="10px" />
           <ul className={styles.privacy}>

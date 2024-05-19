@@ -140,7 +140,7 @@ function searchPicture() {
   };
 
   return (
-    <Content>
+    <Content isCustomHeader={false}>
       <Box h={8} />
       <Stack style={{ textAlign: "center" }}>
         <Text className={styles.mPlus} style={{ fontSize: "24px" }}>
