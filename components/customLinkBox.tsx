@@ -29,7 +29,19 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
       (new Date().getTime() - new Date(this.props.dateTime).getTime()) /
         (1000 * 60 * 60)
     );
-    const daysAgo = `${elapsedHours / 24} days ago`;
+    let agoText = "";
+    let timeDiff = elapsedHours / 24;
+    if (timeDiff >= 365) {
+      agoText = Math.floor(timeDiff / 365) + " years ago";
+    } else if (timeDiff >= 1) {
+      agoText = Math.floor(timeDiff) + " days ago";
+    } else if (timeDiff < 0) {
+      agoText = Math.floor(elapsedHours) + " hours ago";
+    } else if (elapsedHours > 1) {
+      agoText = Math.floor(elapsedHours * 60) + " minutes ago";
+    } else {
+      agoText = "A moment ago";
+    }
     return (
       <Popover>
         <PopoverTrigger>
@@ -42,7 +54,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
             borderColor="gray.500"
           >
             <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
-              {daysAgo}
+              {agoText}
             </Box>
             <Heading size="md" my="2">
               <LinkOverlay href="#">{this.props.ver}</LinkOverlay>
