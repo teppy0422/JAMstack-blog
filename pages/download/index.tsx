@@ -2,8 +2,6 @@ import React from "react";
 import Content from "../../components/content";
 import Link from "next/link";
 import {
-  Button,
-  Input,
   Image,
   Text,
   VStack,
@@ -11,21 +9,9 @@ import {
   Flex,
   Spacer,
   useDisclosure,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
   List,
   ListItem,
   ListIcon,
-  OrderedList,
-  UnorderedList,
-  LinkBox,
-  LinkOverlay,
-  Heading,
   SimpleGrid,
 } from "@chakra-ui/react";
 import { MdSettings, MdCheckCircle } from "react-icons/md";
@@ -38,22 +24,9 @@ import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 export default function About() {
   const illusts = [{ src: "/images/illust/hippo/hippo_001.png" }];
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
   return (
     <Content>
       <div className={styles.me}>
-        <List spacing={3} px={12} textAlign="center">
-          <ListItem>
-            <ListIcon as={MdCheckCircle} color="green.500" />
-            3.004.62
-          </ListItem>
-          <ListItem>
-            <ListIcon as={MdCheckCircle} color="green.500" />
-            3.004.61
-          </ListItem>
-        </List>
-
         <VStack>
           <Flex>
             <Box mr={3}>
@@ -80,10 +53,9 @@ export default function About() {
           </Flex>
         </VStack>
 
-        <Text>aaa</Text>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
           <CustomLinkBox
-            dateTime="2024-05-19T13:30:00+0900"
+            dateTime="2024-05-19T14:30:00+0900"
             description="先ハメのみでも空詮表示をする"
             linkHref="/files/Sjp3.004.63_.xlsm"
             ver="3.004.63"
@@ -93,6 +65,12 @@ export default function About() {
             description="MenuからWEBサイトにアクセスするアドレスの修正"
             linkHref="/files/Sjp3.004.62_.xlsm"
             ver="3.004.62"
+          />
+          <CustomLinkBox
+            dateTime="2024-05-16T02:21:00+0900"
+            description="MenuからWEBサイトにアクセスするアドレスの修正"
+            linkHref="/files/Sjp3.004.61_.xlsm"
+            ver="3.004.61"
           />
         </SimpleGrid>
 
