@@ -16,7 +16,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
       <LinkBox
         as="article"
         maxW="sm"
-        p="5"
+        p="4"
         borderWidth="1px"
         rounded="md"
         borderColor="gray.500"
