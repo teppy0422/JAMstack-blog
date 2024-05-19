@@ -13,7 +13,7 @@ export default function CategoryId({ blog }) {
     <div>
       <Header />
       <div style={{ height: "56px" }}></div>
-      <Content>
+      <Content isCustomHeader={false}>
         <ul>
           {blog.map((blog) => (
             <li key={blog.id}>

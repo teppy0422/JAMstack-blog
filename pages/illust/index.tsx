@@ -116,7 +116,7 @@ export default function About() {
     },
   ];
   return (
-    <Content>
+    <Content isCustomHeader={false}>
       <div className={styles.me}>
         <VStack>
           <Flex>
