@@ -26,40 +26,8 @@ export default function About() {
   const illusts = [{ src: "/images/illust/hippo/hippo_001.png" }];
   return (
     <Content isCustomHeader={true}>
-      <div className={styles.me}>
-        <VStack>
-          <Flex>
-            <Box mr={3}>
-              <Box className={styles.watercolor} h={100}>
-                <Text p={6} fontSize="32px" fontWeight="700">
-                  ダウンロード
-                </Text>
-              </Box>
-              <Text className={styles.tool} pl={5}>
-                by InkScape
-              </Text>
-            </Box>
-            <Spacer />
-            <Box filter="auto" brightness="110%">
-              <NextImage
-                className={styles.pic}
-                src="/images/illust/hippo/hippo_001_cir.png"
-                alt="me.jpeg"
-                objectFit="cover"
-                width={92}
-                height={92}
-              />
-            </Box>
-          </Flex>
-        </VStack>
-
+      <div className={styles.me} style={{ paddingTop: "50px" }}>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
-          <CustomLinkBox
-            dateTime="2024-05-19T24:55:00+0900"
-            description="先ハメのみでも空詮表示をする"
-            linkHref="/files/Sjp3.004.63_.xlsm"
-            ver="3.004.63"
-          />
           <CustomLinkBox
             dateTime="2024-05-19T23:55:00+0900"
             description="先ハメのみでも空詮表示をする"
@@ -71,18 +39,6 @@ export default function About() {
             description="MenuからWEBサイトにアクセスするアドレスの修正"
             linkHref="/files/Sjp3.004.62_.xlsm"
             ver="3.004.62"
-          />
-          <CustomLinkBox
-            dateTime="2024-05-16T02:21:00+0900"
-            description="MenuからWEBサイトにアクセスするアドレスの修正"
-            linkHref="/files/Sjp3.004.61_.xlsm"
-            ver="3.004.61"
-          />
-          <CustomLinkBox
-            dateTime="2022-05-16T02:21:00+0900"
-            description="MenuからWEBサイトにアクセスするアドレスの修正"
-            linkHref="/files/Sjp3.004.61_.xlsm"
-            ver="3.004.61"
           />
         </SimpleGrid>
 

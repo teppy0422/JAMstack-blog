@@ -5,7 +5,7 @@ import NextLink from "next/link";
 import Header from "../components/header";
 import CustomHeader from "../components/header_";
 
-export default function Content({ children, isCustomHeader }) {
+export default function Content({ children, isCustomHeader = false }) {
   return (
     <>
       {isCustomHeader ? <CustomHeader /> : <Header />}

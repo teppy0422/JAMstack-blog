@@ -29,6 +29,17 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
     const elapsedHours =
       (new Date().getTime() - new Date(this.props.dateTime).getTime()) /
       (1000 * 60 * 60);
+    const formattedDateTime = new Date(this.props.dateTime).toLocaleString(
+      "ja-JP",
+      {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }
+    );
+    const downloadFileName = this.props.linkHref.replace(/^\/files\//, "");
     let agoText = "";
     let time_ = new Date().getTime() / (1000 * 60 * 60);
     let timeDiff = elapsedHours / 24;
@@ -66,6 +77,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
             <Heading size="md" my="2">
               <LinkOverlay href="#">{this.props.ver}</LinkOverlay>
             </Heading>
+            {formattedDateTime}
             <Text mb="3">{this.props.description}</Text>
           </LinkBox>
         </PopoverTrigger>
@@ -79,7 +91,9 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
           <PopoverFooter>
             <Link href={this.props.linkHref} _focus={{ _focus: "none" }}>
               <Button colorScheme={badgeColor}>
-                <a download="Sjp3.004.99_.xlsm">Download</a>
+                <a download={downloadFileName} href={this.props.linkHref}>
+                  Download
+                </a>
               </Button>
             </Link>
           </PopoverFooter>

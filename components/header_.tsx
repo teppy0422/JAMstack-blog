@@ -109,38 +109,6 @@ export default function Header() {
                   <Text className={styles.logoText}>ダウンロードのテスト</Text>
                 </Link>
               </NextLink>
-
-              <Menu>
-                <MenuButton
-                  as={IconButton}
-                  aria-label="Options"
-                  icon={<HamburgerIcon />}
-                  variant="outline"
-                  _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
-                />
-                <MenuList>
-                  <NextLink href="/app/typing">
-                    <Link
-                      className={styles.noDecoration}
-                      _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
-                      textDecoration="none"
-                    >
-                      <MenuItem
-                        icon={
-                          <FontAwesomeIcon
-                            width="14px"
-                            height="14px"
-                            icon={faKeyboard}
-                            size="sm"
-                          />
-                        }
-                      >
-                        タイピング
-                      </MenuItem>
-                    </Link>
-                  </NextLink>
-                </MenuList>
-              </Menu>
             </Center>
             <Center w="64px">
               <IconButton
