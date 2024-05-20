@@ -16,12 +16,15 @@ import {
   Button,
   Link,
   Badge,
+  Divider,
 } from "@chakra-ui/react";
+import { TimeIcon } from "@chakra-ui/icons";
 type CustomLinkBoxProps = {
   dateTime: string;
   description: string;
   linkHref: string;
   ver: string;
+  inCharge: string;
 };
 // elapsedHoursを画面に表示する処理を追加
 class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
@@ -40,6 +43,10 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
       }
     );
     const downloadFileName = this.props.linkHref.replace(/^\/files\//, "");
+    let inChargeColor = "gray";
+    if (this.props.inCharge === "不具合") {
+      inChargeColor = "red";
+    }
     let agoText = "";
     let time_ = new Date().getTime() / (1000 * 60 * 60);
     let timeDiff = elapsedHours / 24;
@@ -77,7 +84,10 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
             <Heading size="md" my="2">
               <LinkOverlay href="#">{this.props.ver}</LinkOverlay>
             </Heading>
+            <TimeIcon boxSize={4} paddingRight={1} />
             {formattedDateTime}
+            <Divider />
+            <Badge colorScheme={inChargeColor}>{this.props.inCharge}</Badge>
             <Text mb="3">{this.props.description}</Text>
           </LinkBox>
         </PopoverTrigger>
