@@ -35,19 +35,12 @@ export default function About() {
             ver="3.004.63"
           />
           <CustomLinkBox
-            dateTime="2024-05-19T18:20:00+0900"
+            dateTime="2024-05-16T15:16:00+0900"
             description="MenuからWEBサイトにアクセスするアドレスの修正"
             linkHref="/files/Sjp3.004.62_.xlsm"
             ver="3.004.62"
           />
         </SimpleGrid>
-
-        <Box ml={[0, 18, 70, 115]}>
-          <div data-aos="fade-right" style={{ display: "inline-block" }}>
-            <Text className={styles.subTitle}>サンプル</Text>
-          </div>
-        </Box>
-        {/* <Sample3d /> */}
 
         <Box style={{ textAlign: "center" }}>
           {illusts.map((item, index) => {

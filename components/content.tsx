@@ -28,7 +28,7 @@ export default function Content({ children, isCustomHeader = false }) {
         </NextLink>
       </Center>
       <Center mb="20px" color="gray">
-        ©︎ 2022 Teppei Kataoka. All rights Reserved.
+        ©︎ 2022-2024 Teppei Kataoka. All rights Reserved.
       </Center>
     </>
   );
