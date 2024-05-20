@@ -29,16 +29,18 @@ export default function About() {
       <div className={styles.me} style={{ paddingTop: "50px" }}>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
           <CustomLinkBox
-            dateTime="2024-05-19T23:55:00+0900"
-            description="先ハメのみでも空詮表示をする"
-            linkHref="/files/Sjp3.004.63_.xlsm"
+            dateTime="2024-05-20T15:55:00+0900"
+            description="空表示を先ハメ表示のみを別途選択できるように変更"
+            linkHref="/files/Sjp3.004.63_.zip"
             ver="3.004.63"
+            inCharge="秋山さん"
           />
           <CustomLinkBox
             dateTime="2024-05-16T15:16:00+0900"
             description="MenuからWEBサイトにアクセスするアドレスの修正"
-            linkHref="/files/Sjp3.004.62_.xlsm"
+            linkHref="/files/Sjp3.004.62_.zip"
             ver="3.004.62"
+            inCharge="不具合"
           />
         </SimpleGrid>
 
