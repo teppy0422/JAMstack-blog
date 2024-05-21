@@ -13,6 +13,7 @@ import {
   ListItem,
   ListIcon,
   SimpleGrid,
+  Badge,
 } from "@chakra-ui/react";
 import { MdSettings, MdCheckCircle } from "react-icons/md";
 import NextImage from "next/image";
@@ -22,11 +23,28 @@ import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
+
 export default function About() {
   const illusts = [{ src: "/images/illust/hippo/hippo_001.png" }];
   return (
     <Content isCustomHeader={true}>
       <div className={styles.me} style={{ paddingTop: "50px" }}>
+        <Box textAlign="center" mb={8}>
+          <Text fontSize="lg" color="gray.600">
+            以下の中からバージョンを選択してダウンロードしてください
+            <br />
+            通常は
+            <Badge colorScheme="teal" margin={1}>
+              {" "}
+              LATEST
+            </Badge>
+            を選択します
+            <br />
+            ダウンロード完了後はファイルを開いてアップロードを実行してください
+            <br />
+            アップロード後は他の全ての生産準備+からバージョンアップが可能になります
+          </Text>
+        </Box>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
           <CustomLinkBox
             dateTime="2024-05-21T14:21:00+0900"
