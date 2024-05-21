@@ -1,20 +1,7 @@
 import React from "react";
 import Content from "../../components/content";
 import Link from "next/link";
-import {
-  Image,
-  Text,
-  VStack,
-  Box,
-  Flex,
-  Spacer,
-  useDisclosure,
-  List,
-  ListItem,
-  ListIcon,
-  SimpleGrid,
-  Badge,
-} from "@chakra-ui/react";
+import { Image, Text, Box, SimpleGrid, Badge, Kbd } from "@chakra-ui/react";
 import { MdSettings, MdCheckCircle } from "react-icons/md";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
@@ -30,19 +17,19 @@ export default function About() {
     <Content isCustomHeader={true}>
       <div className={styles.me} style={{ paddingTop: "50px" }}>
         <Box textAlign="center" mb={8}>
-          <Text fontSize="lg" color="gray.600">
-            以下の中からバージョンを選択してダウンロードしてください
+          <Text fontSize="lg" colorScheme="black">
+            以下からバージョンを選択
             <br />
             通常は
             <Badge colorScheme="teal" margin={1}>
               {" "}
               LATEST
             </Badge>
-            を選択します
+            を選択
             <br />
-            ダウンロード完了後はファイルを開いてアップロードを実行してください
+            ダウンロードしたファイルを開いてMenuのVerupからアップロードを実行
             <br />
-            アップロード後は他の全ての生産準備+からバージョンアップが可能になります
+            その後は全ての生産準備+からそのバージョンに更新が可能
           </Text>
         </Box>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
@@ -50,23 +37,20 @@ export default function About() {
             dateTime="2024-05-21T14:21:00+0900"
             description="プロシージャ:参照設定の確認をコメントアウト"
             linkHref="/files/Sjp3.004.65_.zip"
-            ver="3.004.65"
             inCharge="不具合"
             isLatest={true}
           />
           <CustomLinkBox
             dateTime="2024-05-20T15:55:00+0900"
-            description="空表示を先ハメ表示のみを別途選択できるように変更.OSでzip圧縮"
+            description="空表示を先ハメ表示のみを別途選択できるように変更"
             linkHref="/files/Sjp3.004.63_.zip"
-            ver="3.004.63"
             inCharge="秋山さん"
             isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-05-16T15:16:00+0900"
-            description="MenuからWEBサイトにアクセスするアドレスの修正.7zipでzip圧縮"
+            description="MenuからWEBサイトにアクセスするアドレスの修正"
             linkHref="/files/Sjp3.004.62_.zip"
-            ver="3.004.62"
             inCharge="不具合"
             isLatest={false}
           />

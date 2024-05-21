@@ -23,13 +23,15 @@ type CustomLinkBoxProps = {
   dateTime: string;
   description: string;
   linkHref: string;
-  ver: string;
   inCharge: string;
   isLatest: boolean;
 };
 // elapsedHoursを画面に表示する処理を追加
 class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
   render() {
+    const versionMatch = this.props.linkHref.match(/Sjp([\d.]+)_/);
+    const ver = versionMatch ? versionMatch[1] : "N/A";
+
     const elapsedHours =
       (new Date().getTime() - new Date(this.props.dateTime).getTime()) /
       (1000 * 60 * 60);
@@ -88,8 +90,9 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
               <Badge colorScheme={badgeColor}>{agoText}</Badge>
             </Box>
             <Heading size="md" my="2">
-              <LinkOverlay href="#">{this.props.ver}</LinkOverlay>
+              <LinkOverlay href="#">{ver}</LinkOverlay>
             </Heading>
+            <Divider />
             <TimeIcon boxSize={4} paddingRight={1} />
             {formattedDateTime}
             <Badge colorScheme={inChargeColor}>{this.props.inCharge}</Badge>
@@ -102,12 +105,12 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
         >
           <PopoverArrow />
           <PopoverCloseButton _focus={{ _focus: "none" }} />
-          <PopoverHeader>{this.props.ver}</PopoverHeader>
+          <PopoverHeader>{ver}</PopoverHeader>
           <PopoverBody style={{ border: "none" }}>
             {this.props.isLatest ? (
-              <Text>これは最新のバージョンです</Text>
+              <Text>最新のバージョンです</Text>
             ) : (
-              <Text color="red">これは最新のバージョンではありません</Text>
+              <Text colorScheme="red">最新のバージョンではありません</Text>
             )}
           </PopoverBody>
           <PopoverFooter>
