@@ -34,6 +34,8 @@ export default function About() {
               <Kbd>Shift</Kbd>
             </span>
             を押しながら[このVerのアップロード]をクリックします
+            <br />
+            その後は全ての生産準備+からそのバージョンへの更新が可能になります
           </Text>
         </Box>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
