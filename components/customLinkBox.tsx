@@ -77,6 +77,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
             borderWidth="1px"
             rounded="md"
             borderColor="gray.500"
+            _hover={{ boxShadow: "dark-lg" }}
           >
             <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
               {this.props.isLatest && (
@@ -91,17 +92,23 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
             </Heading>
             <TimeIcon boxSize={4} paddingRight={1} />
             {formattedDateTime}
-            <Divider />
             <Badge colorScheme={inChargeColor}>{this.props.inCharge}</Badge>
             <Text mb="3">{this.props.description}</Text>
           </LinkBox>
         </PopoverTrigger>
-        <PopoverContent _focus={{ boxShadow: "none" }}>
+        <PopoverContent
+          _focus={{ boxShadow: "none" }}
+          style={{ border: "1px solid transparent" }}
+        >
           <PopoverArrow />
           <PopoverCloseButton _focus={{ _focus: "none" }} />
           <PopoverHeader>{this.props.ver}</PopoverHeader>
-          <PopoverBody>
-            ダウンロードファイルを開いてアップロードを実行してください。これはテストです。不具合がある場合は連絡ください。
+          <PopoverBody style={{ border: "none" }}>
+            {this.props.isLatest ? (
+              <Text>これは最新のバージョンです</Text>
+            ) : (
+              <Text color="red">これは最新のバージョンではありません</Text>
+            )}
           </PopoverBody>
           <PopoverFooter>
             <Link href={this.props.linkHref}>
