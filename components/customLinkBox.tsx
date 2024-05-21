@@ -25,6 +25,7 @@ type CustomLinkBoxProps = {
   linkHref: string;
   ver: string;
   inCharge: string;
+  isLatest: boolean;
 };
 // elapsedHoursを画面に表示する処理を追加
 class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
@@ -48,7 +49,6 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
       inChargeColor = "red";
     }
     let agoText = "";
-    let time_ = new Date().getTime() / (1000 * 60 * 60);
     let timeDiff = elapsedHours / 24;
     let badgeColor = "gray";
     if (timeDiff >= 365) {
@@ -79,6 +79,11 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
             borderColor="gray.500"
           >
             <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
+              {this.props.isLatest && (
+                <Badge colorScheme="teal" marginRight={2}>
+                  Latest
+                </Badge>
+              )}
               <Badge colorScheme={badgeColor}>{agoText}</Badge>
             </Box>
             <Heading size="md" my="2">
@@ -91,15 +96,15 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
             <Text mb="3">{this.props.description}</Text>
           </LinkBox>
         </PopoverTrigger>
-        <PopoverContent _focus={{ _focus: "none" }}>
+        <PopoverContent _focus={{ boxShadow: "none" }}>
           <PopoverArrow />
-          <PopoverCloseButton />
-          <PopoverHeader borderTopRadius="md">{this.props.ver}</PopoverHeader>
+          <PopoverCloseButton _focus={{ _focus: "none" }} />
+          <PopoverHeader>{this.props.ver}</PopoverHeader>
           <PopoverBody>
             ダウンロードファイルを開いてアップロードを実行してください。これはテストです。不具合がある場合は連絡ください。
           </PopoverBody>
           <PopoverFooter>
-            <Link href={this.props.linkHref} _focus={{ _focus: "none" }}>
+            <Link href={this.props.linkHref}>
               <Button colorScheme={badgeColor}>
                 <a download={downloadFileName} href={this.props.linkHref}>
                   Download

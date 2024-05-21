@@ -29,11 +29,20 @@ export default function About() {
       <div className={styles.me} style={{ paddingTop: "50px" }}>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
           <CustomLinkBox
+            dateTime="2024-05-21T14:21:00+0900"
+            description="プロシージャ:参照設定の確認をコメントアウト"
+            linkHref="/files/Sjp3.004.65_.zip"
+            ver="3.004.65"
+            inCharge="不具合"
+            isLatest={true}
+          />
+          <CustomLinkBox
             dateTime="2024-05-20T15:55:00+0900"
             description="空表示を先ハメ表示のみを別途選択できるように変更.OSでzip圧縮"
             linkHref="/files/Sjp3.004.63_.zip"
             ver="3.004.63"
             inCharge="秋山さん"
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-05-16T15:16:00+0900"
@@ -41,6 +50,7 @@ export default function About() {
             linkHref="/files/Sjp3.004.62_.zip"
             ver="3.004.62"
             inCharge="不具合"
+            isLatest={false}
           />
         </SimpleGrid>
 
