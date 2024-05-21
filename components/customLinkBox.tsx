@@ -131,5 +131,4 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
     );
   }
 }
-
 export default CustomLinkBox;
