@@ -18,7 +18,7 @@ export default function About() {
       <div className={styles.me} style={{ paddingTop: "50px" }}>
         <Box textAlign="center" mb={8}>
           <Text fontSize="lg" colorScheme="black">
-            以下からバージョンを選択
+            以下からバージョンを選んでください
             <br />
             通常は
             <Badge colorScheme="teal" margin={1}>
@@ -27,9 +27,13 @@ export default function About() {
             </Badge>
             を選択
             <br />
-            ダウンロードしたファイルを開いてMenuのVerupからアップロードを実行
+            ダウンロードしたらファイルを開いてMenuのVerupからアップロードを実行
             <br />
-            その後は全ての生産準備+からそのバージョンに更新が可能
+            この時
+            <span>
+              <Kbd>Shift</Kbd>
+            </span>
+            を押しながら[このVerのアップロード]をクリックします
           </Text>
         </Box>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>

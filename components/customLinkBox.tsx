@@ -108,9 +108,13 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
           <PopoverHeader>{ver}</PopoverHeader>
           <PopoverBody style={{ border: "none" }}>
             {this.props.isLatest ? (
-              <Text>最新のバージョンです</Text>
+              <Badge colorScheme="teal" padding={2}>
+                最新のバージョンです
+              </Badge>
             ) : (
-              <Text colorScheme="red">最新のバージョンではありません</Text>
+              <Badge colorScheme="red" padding={2}>
+                最新のバージョンではありません
+              </Badge>
             )}
           </PopoverBody>
           <PopoverFooter>
