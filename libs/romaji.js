@@ -1,3 +1,5 @@
+import { SimpleGrid } from "@chakra-ui/react";
+
 const data = {
   " ": "　",
   "!": "！",
@@ -42,6 +44,121 @@ const data = {
   7: "7",
   8: "8",
   9: "9",
+  kkya: "っきゃ",
+  kkyu: "っきゅ",
+  kkyo: "っきょ",
+  jja: "っじゃ",
+  jju: "っじゅ",
+  jjo: "っじょ",
+  qqa: "っくぁ",
+  qqi: "っくぃ",
+  qqu: "っくぅ",
+  qqwu: "っくぅ",
+  qqe: "っくぇ",
+  qqo: "っくぉ",
+  ggya: "っぎゃ",
+  ggyi: "っぎぃ",
+  ggyu: "っぎゅ",
+  ggye: "っぎぇ",
+  ggyo: "っぎょ",
+  ggwa: "っぐぁ",
+  ggwi: "っぐぃ",
+  ggwu: "っぐぅ",
+  ggwe: "っぐぇ",
+  ggwo: "っぐぉ",
+  ssha: "っしゃ",
+  sshu: "っしゅ",
+  sshe: "っしぇ",
+  ssho: "っしょ",
+  ssya: "っしゃ",
+  ssyu: "っしゅ",
+  ssye: "っしぇ",
+  ssyo: "っしょ",
+  sswa: "っすぁ",
+  sswi: "っすぃ",
+  sswu: "っすぅ",
+  sswe: "っすぇ",
+  sswo: "っすぉ",
+  jja: "っじゃ",
+  zzya: "っじゃ",
+  zzyi: "っじぃ",
+  jju: "っじゅ",
+  zzyu: "っじゅ",
+  jje: "っじぇ",
+  zzye: "っじぇ",
+  jjo: "っじょ",
+  zzyo: "っじょ",
+  ccha: "っちゃ",
+  ttya: "っちゃ",
+  ccya: "っちゃ",
+  ttyi: "っちぃ",
+  cchu: "っちゅ",
+  ttyu: "っちゅ",
+  ccyu: "っちゅ",
+  cche: "っちぇ",
+  ttye: "っちぇ",
+  ccho: "っちょ",
+  ccyo: "っちょ",
+  ttyo: "っちょ",
+  ttha: "ってゃ",
+  tthi: "ってぃ",
+  tthu: "ってゅ",
+  tthe: "ってぇ",
+  ttho: "ってょ",
+  ttwa: "っとぁ",
+  ttwi: "っとぃ",
+  ttwu: "っとぅ",
+  ttwe: "っとぇ",
+  ttwo: "っとぉ",
+  ddya: "っぢゃ",
+  ddyi: "っぢぃ",
+  ddyu: "っぢゅ",
+  ddye: "っぢぇ",
+  ddyo: "っぢょ",
+  ddha: "っでゃ",
+  ddhi: "っでぃ",
+  ddhu: "っでゅ",
+  ddhe: "っでぇ",
+  ddho: "っでょ",
+  ddwa: "っどぁ",
+  ddwi: "っどぃ",
+  ddwu: "っどぅ",
+  ddwe: "っどぇ",
+  ddwo: "っどぉ",
+  hhya: "っひゃ",
+  hhyi: "っひぃ",
+  hhyu: "っひゅ",
+  hhye: "っひぇ",
+  hhyo: "っひょ",
+  ffa: "っふぁ",
+  ffi: "っふぃ",
+  ffyu: "っふゅ",
+  ffe: "っふぇ",
+  ffo: "っふぉ",
+  bbya: "っびゃ",
+  bbyi: "っびぃ",
+  bbyu: "っびゅ",
+  bbye: "っびぇ",
+  bbyo: "っびょ",
+  ppya: "っぴゃ",
+  ppyi: "っぴぃ",
+  ppyu: "っぴゅ",
+  ppye: "っぴぇ",
+  ppyo: "っぴょ",
+  mmya: "っみゃ",
+  mmyi: "っみぃ",
+  mmyu: "っみゅ",
+  mmye: "っみぇ",
+  mmyo: "っみょ",
+  rrya: "っりゃ",
+  rryi: "っりぃ",
+  rryu: "っりゅ",
+  rrye: "っりぇ",
+  rryo: "っりょ",
+  wwha: "っうぁ",
+  wwi: "っうぃ",
+  wwe: "っうぇ",
+  wwho: "っうぉ",
   bya: "びゃ",
   bye: "びぇ",
   byi: "びぃ",
@@ -228,6 +345,7 @@ const data = {
   bi: "び",
   bo: "ぼ",
   bu: "ぶ",
+  ti: "ち",
   chi: "ち",
   da: "だ",
   de: "で",
@@ -297,7 +415,6 @@ const data = {
   su: "す",
   ta: "た",
   te: "て",
-  ti: "ち",
   to: "と",
   tu: "つ",
   tsu: "つ",
@@ -340,9 +457,15 @@ const data = {
 };
 export const getRomaji = (text) => {
   const arr = new Array();
-  //二文字の場合
+  //三文字の場合
   for (let key in data) {
     if (data[key] === text) {
+      arr.push(key);
+    }
+  }
+  //二文字の場合
+  for (let key in data) {
+    if (data[key] === text.substring(0, 2)) {
       arr.push(key);
     }
   }
@@ -391,6 +514,14 @@ export const getRomaji2 = (text) => {
   for (let key in data) {
     if (data[key] === text) {
       arr.push(key);
+      arr.push(3);
+      return arr;
+    }
+  }
+  //二文字の場合
+  for (let key in data) {
+    if (data[key] === text.substring(0, 2)) {
+      arr.push(key);
       arr.push(2);
       return arr;
     }
@@ -414,13 +545,17 @@ export const getInputCandidate = (input, arr) => {
   return newArr;
 };
 
-export const changeColor = (id, count) => {
+export const changeColor = (id, count, colorMode) => {
   const arr = document.getElementById(id).querySelectorAll("span");
   arr.forEach((spans, index) => {
     if (index < count) {
       spans.style.color = "red";
     } else {
-      spans.style.color = "black";
+      if (colorMode === "light") {
+        spans.style.color = "#000000";
+      } else {
+        spans.style.color = "#ffffff";
+      }
     }
   });
   //残りの文字数
@@ -431,7 +566,7 @@ export const changeColor = (id, count) => {
 export const getRomajiForecast = (text) => {
   const str = "";
   while (text.length !== 0) {
-    const hiragana_ = text.substring(0, 2);
+    const hiragana_ = text.substring(0, 3);
     const getRomaji_ = getRomaji2(hiragana_);
 
     str = str + getRomaji_[0];

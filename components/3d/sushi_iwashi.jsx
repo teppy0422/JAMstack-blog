@@ -7,29 +7,29 @@ import { useGLTF } from "@react-three/drei";
 
 export default function Model(props) {
   const group = useRef();
-  const { nodes, materials } = useGLTF("/images/3d/sushi_ebi.glb");
+  const { nodes, materials } = useGLTF("/images/3d/sushi_iwashi.glb");
   return (
     <group ref={group} {...props} dispose={null}>
-      <group position={[0, -1.3, 0]} scale={1.4}>
+      <group name="Scene" position={[0, -1.3, 0]} scale={7}>
         <mesh
           castShadow
           receiveShadow
           geometry={nodes.getavox.geometry}
           material={materials["palette.003"]}
-          position={[0.05, 0.33, 0]}
+          position={[0, 0.07, 0]}
           rotation={[Math.PI / 2, 0, 0]}
+          scale={0.22}
         />
         <mesh
           castShadow
           receiveShadow
-          geometry={nodes.sushi_ebivox003.geometry}
-          material={materials["palette.004"]}
-          position={[0, 0.1, 0]}
-          rotation={[Math.PI / 2, 0, 0]}
+          geometry={nodes.iwashi_1.geometry}
+          material={materials.iwashi}
+          position={[0, 0.18, 0]}
+          rotation={[Math.PI / 2, 0, 2.03]}
+          scale={0.08}
         />
       </group>
     </group>
   );
 }
-
-useGLTF.preload("/images/3d/sushi_ebi.glb");
