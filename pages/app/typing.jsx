@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
+
 import { DefaultSeo } from "next-seo";
 import styles from "../../styles/home.module.scss";
 import {
@@ -8,34 +11,18 @@ import {
   Button,
   Grid,
   GridItem,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
   Text,
-  StatGroup,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
-  StatArrow,
-  Progress,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
   Tooltip,
+  useColorMode,
+  Divider,
+  Flex,
+  Spacer,
+  Progress,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 import Content from "../../components/content";
 import ResponseCache from "next/dist/server/response-cache";
-import { type } from "os";
-import { now } from "lodash";
 
 import {
   getRomaji,
@@ -47,64 +34,82 @@ import {
   makeSpan,
 } from "../../libs/romaji.js";
 
+import Voucher from "../../components/typing/voucher";
+import Menu from "../../components/typing/menu";
+
 import { getQuiz } from "../../libs/romaji_quiz.js";
-
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
+import Sushi_menu from "../../components/typing/sushi_menu";
 
-const typing = () => {
-  const OverlayTwo = () => (
-    <ModalOverlay
-      bg="none"
-      backdropFilter="auto"
-      backdropInvert="80%"
-      backdropBlur="2px"
-    />
-  );
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen2, onOpen2, onClose2 } = useDisclosure();
-  const [overlay, setOverlay] = React.useState(<OverlayTwo />);
+import Keyboard from "../../components/typing/kyeboard";
+import GraphTemp from "../../components/typing/graphTemp";
+import { useContext } from "react";
+
+import { myContext } from "../../pages/_app";
+
+export const typing = () => {
+  const { data: session } = useSession();
 
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const inputText = useRef(""); //入力文字
   const Q_Texts = useRef(""); //問題文
   const Q_cost = useRef(0); //問題文の値段
   const correctCount = useRef(0); //ひらがなの正解文字数
-  const correctCountRomaji = useRef(0); //ローマ字の正解文字数
-  const correctCountRomajiTemp = useRef(0); //ローマ字の正解文字数の端数
   const [typeDisplayRomaji_0, setTypeDisplayRomaji_0] = useState("");
   const [typeDisplayRomaji_1, setTypeDisplayRomaji_1] = useState("");
   const [typeDisplayRomaji_2, setTypeDisplayRomaji_2] = useState("");
   const renderFlgRef = useRef(false); //useEffectを初回走らせないフラグ
   const timerIDref = useRef(""); //タイマーリセット用のID
   const totalTimerIDref = useRef(""); //トータルタイマーリセット用のID
-  const [totalTime, setTotalTime] = useState(100); //トータルタイムの値
+  const [totalTime, setTotalTime] = useState(50); //トータルタイムの値
   const totalTimeRef = useRef(null); //トータルタイム
   const [missedCount, setMissedCount] = useState(0); //タイプミス回数
   const totalCost = useRef(0); //トータル金額
   const [cost, setCost] = useState(0); //金額
   const inputTextRef = useRef(null); //入力欄
-  const voucherOpenRef = useRef(null); //伝票を開くボタン
-  const voucherCloseRef = useRef(null); //伝票を閉じるボタン
-  const startMenuRef = useRef(null); //スタートメニュー
+  const menuRef = useRef(null); //menu
+  const voucherRef = useRef(null); //伝票
+  const graphTempRef = useRef(null); //履歴グラフ
 
-  const totalTime_origin = useRef(3000); //トータルタイムの値
+  const totalTime_origin = useRef(50); //トータルタイムの値
   const typeCountRef = useRef(0); //タイプ数
-  const [typePerSocund, setTypePerSocund] = useState("0"); //タイプ速度の値
+  const [typePerSocund, setTypePerSocund] = useState(0); //タイプ速度の値
   const sound_BGM = useRef(null); //BGM
-  const mode = useRef("play"); //モードの状態
+  const gameMode = useRef("menu"); //モードの状態
   const Q_used = useRef(""); //出題済みの問題の番号
+  const suggestKeyRef = useRef(""); //入力候補の着色用
 
+  const myState = useContext(myContext);
+  const keyboardRef = useRef(null);
   //マウント時に一回だけ実行
   useEffect(() => {
     //レンダー初回時だけ実行
     console.log("初回だけ");
     // renderFlgRef.current = true;
-    //入力イベント
+    //入力イベントをオン
     document.addEventListener("keypress", keypress_ivent);
-    // document.addEventListener("keyup", keyup_ivent);
-    //全てのロードが終わったら
-    window.addEventListener("load", loadEnd);
+    document.addEventListener("keyup", keyup_ivent);
   }, []);
+
+  //ページ遷移時にイベントとかをオフ
+  const router = useRouter();
+  const pageChangeHandler = () => {
+    document.removeEventListener("keypress", keypress_ivent);
+    document.removeEventListener("keyup", keyup_ivent);
+    clearInterval(timerIDref.current);
+    clearInterval(totalTimerIDref.current);
+    sound_BGM.current.pause();
+    sound("finish");
+    gameMode.current = "menu";
+  };
+  useEffect(() => {
+    router.events.on("routeChangeStart", pageChangeHandler);
+    return () => {
+      router.events.off("routeChangeStart", pageChangeHandler);
+    };
+  }, []);
+
+  const { colorMode, toggleColorMode } = useColorMode();
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -122,27 +127,81 @@ const typing = () => {
   // レンダー時に実行
   useEffect(() => {
     if (totalTime <= 15) {
-      sound_BGM.current.playbackRate = 1.25;
+      sound_BGM.current.playbackRate = 1.1;
     }
     if (totalTime <= 10) {
-      sound_BGM.current.playbackRate = 1.5;
+      sound_BGM.current.playbackRate = 1.2;
     }
   }, [totalTime]);
 
-  // 入力イベント
+  // キーアップイベント
+  function keyup_ivent(e) {
+    clearSuggest();
+    let nextType = document.getElementById(suggestKeyRef.current);
+    if (nextType !== null) {
+      nextType.style.background = "red";
+    }
+    return false;
+  }
+  function clearSuggest() {
+    const id = [
+      "q",
+      "w",
+      "e",
+      "r",
+      "t",
+      "y",
+      "u",
+      "i",
+      "o",
+      "p",
+      "a",
+      "s",
+      "d",
+      "f",
+      "g",
+      "h",
+      "j",
+      "k",
+      "l",
+      ";",
+      "z",
+      "x",
+      "c",
+      "v",
+      "b",
+      "n",
+      "m",
+      ",",
+      ".",
+      "/",
+    ];
+    {
+      id.map((item, index) => {
+        document.getElementById(item).style.background = null;
+      });
+    }
+  }
+  // キーダウンイベント
   function keypress_ivent(e) {
+    e.preventDefault();
+    let eKey = e.key.toLowerCase();
     const typeDisplayRomaji = document.getElementById("type-display-romaji");
-    console.log("keypress: " + e.key);
-    switch (mode.current) {
+    //入力したキーを着色
+    const inputKeyID = document.getElementById(eKey);
+    if (inputKeyID !== null) {
+      document.getElementById(eKey).style.background = "pink";
+    }
+    switch (gameMode.current) {
       case "menu":
         if (e.code === "Space") {
           gameReplay();
+          menuRef.current.style.display = "none";
         }
         break;
       case "play":
-        const temp = getRomaji(Q_Texts.current.substring(0, 2));
-
-        inputText.current = inputText.current + e.key;
+        const temp = getRomaji(Q_Texts.current.substring(0, 3));
+        inputText.current = inputText.current + eKey;
         const inputTextTempA = inputText.current;
         const matchCount = 0;
         const complete = false;
@@ -155,14 +214,19 @@ const typing = () => {
             //文章を一文字ずつ分解してspanタグを生成_ローマ字_1
             makeSpan(newTemp[0], typeDisplayRomaji);
             //色を変更
-            changeColor("type-display-romaji", inputTextTempA.length);
-            //入力文字オーバーの更新
+            changeColor(
+              "type-display-romaji",
+              inputTextTempA.length,
+              myState.colorMode
+            );
+            //入力文字オーバーの更新_ひらがな
             const inputSuggestHiragana = getHiragana(newTemp[0]);
             const inputSuggestOver = Q_Texts.current.substring(
               inputSuggestHiragana.length
             );
             setTypeDisplayRomaji_2(getRomajiForecast(inputSuggestOver));
 
+            suggestKeyRef.current = newTemp[0].charAt(inputTextTempA.length);
             //KPMを求めるカウント
             typeCountRef.current = typeCountRef.current + 1;
             matchCount = matchCount + 1;
@@ -178,7 +242,8 @@ const typing = () => {
             //文字色を変える_ひらがな
             const last = changeColor(
               "type-display-hiragana",
-              correctCount.current
+              correctCount.current,
+              myState.colorMode
             );
             if (last === 0) {
               complete = true;
@@ -193,18 +258,17 @@ const typing = () => {
 
             //一つの文章が終了
             if (complete === true) {
-              // setTotalCost((totalCost) => totalCost + Q_cost.current);
-              // setTotalCost((totalCost) => {
-              //   return totalCost;
-              // });
               totalCost.current = totalCost.current + Q_cost.current;
               sound("success");
               TimeUp();
             } else {
               // 次の文字の正解を表示
-              const nextWord = getRomaji(Q_Texts.current.substring(0, 2));
+              const nextWord = getRomaji(Q_Texts.current.substring(0, 3));
               makeSpan(nextWord[0], typeDisplayRomaji);
               setTypeDisplayRomaji_2(getRomajiForecast(Q_Texts.current));
+
+              // 入力アシストの表示
+              suggestKeyRef.current = nextWord[0].charAt(0);
 
               //入力文字オーバーの更新
               const inputSuggestHiragana = getHiragana(nextWord[0]);
@@ -225,20 +289,13 @@ const typing = () => {
           setMissedCount((missedCount) => {
             return missedCount;
           });
-          changeColor("type-display-romaji", 0);
+          changeColor("type-display-romaji", 0, myState.colorMode);
+          // 入力アシストの表示
+          suggestKeyRef.current = temp[0].charAt(0);
         }
         break;
     }
     return false;
-  }
-
-  function keyup_ivent(e) {
-    console.log("keyup: " + e.key);
-    return false;
-  }
-
-  function loadEnd() {
-    startMenuRef.current.style.display = "block";
   }
 
   // 問題文を作成
@@ -261,7 +318,7 @@ const typing = () => {
     // 入力候補
     setTypeDisplayRomaji_0("");
 
-    const inputSuggest = getRomaji(Q_Texts.current.substring(0, 2));
+    const inputSuggest = getRomaji(Q_Texts.current.substring(0, 3));
     makeSpan(inputSuggest[0], typeDisplayRomaji);
 
     //ひらがなから入力候補を除いた入力候補
@@ -273,11 +330,13 @@ const typing = () => {
     // コストのセット
     Q_cost.current = Number(quiz[0][2]);
     correctCount.current = 0;
+    // 入力アシストの表示
+    suggestKeyRef.current = inputSuggest[0].charAt(0);
   }
 
   // タイマー_ワード毎
   let startTime;
-  let itemTime = 1000;
+  let itemTime = 10;
   function StartTimer() {
     const timer = document.getElementById("timer");
     timer.innerText = itemTime;
@@ -290,57 +349,65 @@ const typing = () => {
     timerIDref.current = timerID_;
   }
   function TimeUp() {
+    clearSuggest();
     RenderNextSentence();
     StartTimer();
   }
+
   function getTimerTime(t) {
     return Math.floor((new Date() - t) / 1000);
   }
 
   //タイマー_トータル
   function StartTotalTimer() {
+    keyboardRef.current.Close();
     let totalStartTime;
     sound_BGM.current.pause();
     sound_BGM.current.currentTime = 0;
     sound_BGM.current.playbackRate = 1;
-    sound_BGM.current.volume = 0;
+    sound_BGM.current.volume = 0.08;
     sound_BGM.current.play();
 
     setTotalTime(totalTime_origin.current);
     totalStartTime = new Date();
     clearInterval(totalTimerIDref.current);
+
     const totalTimerID_ = setInterval(() => {
       setTotalTime(totalTime_origin.current - getTimerTime(totalStartTime));
       if (totalTimeRef.current.innerText <= 0) {
         clearInterval(totalTimerIDref.current);
         gameOver();
       }
-    }, 500);
+    }, 200);
     totalTimerIDref.current = totalTimerID_;
   }
   //ゲームオーバー
   function gameOver() {
+    keyboardRef.current.Open();
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
-    setTypePerSocund((typeCountRef.current / totalTime_origin.current) * 60);
-    voucherOpenRef.current.click();
+    setTypePerSocund(
+      Math.floor((typeCountRef.current / totalTime_origin.current) * 60)
+    );
     sound_BGM.current.pause();
     sound("finish");
-    mode.current = "play";
+    gameMode.current = "menu";
+    const rnd = Math.floor(Math.random() * 3); //0-3をランダムで取得
+    console.log(rnd);
+    voucherRef.current.clickChildOpen(rnd);
   }
   //リプレイ
   function gameReplay() {
-    inputText.current = "";
     setTypePerSocund(0);
-    typeCountRef.current = 0;
     setMissedCount(0);
-    totalCost.current = 0;
     StartTotalTimer();
     TimeUp();
-    startMenuRef.current.style.display = "none";
-    mode.current = "play";
+    inputText.current = "";
+    typeCountRef.current = 0;
+    totalCost.current = 0;
+    gameMode.current = "play";
+    Q_used.current = "";
   }
-
   return (
     <>
       <DefaultSeo
@@ -368,190 +435,197 @@ const typing = () => {
           cardType: "summary_large_image",
         }}
       />
-      <Content isCustomHeader={false} style={{ position: "relative" }}>
-        <VStack className={styles.typing}>
-          <Grid
-            templateAreas={`"nav main"
-                  "nav footer"
-                  "header header"`}
-            gridTemplateRows={"64px 1fr 40px"}
+      {/* todo */}
+      <Box ref={menuRef} style={{ display: "none" }}>
+        <Menu
+          gameReplay={() => {
+            gameReplay();
+          }}
+        />
+      </Box>
+      <Content style={{ position: "relative" }}>
+        <VStack className={styles.typing} h="620px">
+          <Box
+            className={
+              colorMode === "light" ? styles.backLight : styles.backDark
+            }
             w="100%"
-            h="80px"
-            gap="1"
-            color="blackAlpha.700"
-            fontWeight="bold"
           >
-            <GridItem pl="2" bg="pink.200" area={"nav"}>
-              <StatGroup>
-                <Stat>
-                  <StatLabel>残り時間</StatLabel>
-                  <StatNumber ref={totalTimeRef}>{totalTime}</StatNumber>
-                  <StatHelpText>
-                    <StatArrow type="increase" />
-                    23.36%
-                  </StatHelpText>
-                </Stat>
-
-                <Stat>
-                  <StatLabel>タイプミス</StatLabel>
-                  <StatNumber>{missedCount}</StatNumber>
-                  <StatHelpText>
-                    <StatArrow type="decrease" />
-                    9.05%
-                  </StatHelpText>
-                </Stat>
-              </StatGroup>
-            </GridItem>
-            <GridItem pl="2" bg="green.200" area={"main"}>
-              <StatGroup>
-                <Stat>
-                  <StatLabel>トータル金額</StatLabel>
-                  <StatNumber
-                    mr={1.5}
-                    style={{ textAlign: "right", fontSize: "24px" }}
+            <Center mt={2}>
+              <Grid
+                templateColumns="repeat(3, 1fr)"
+                gap={[1, 2, 4, 6]}
+                w={["100%", "90%", "80%", "70%"]}
+                h="14"
+                mt={10}
+                className={styles.navi}
+              >
+                <GridItem w="100%" h="14" colSpan={1}>
+                  <Text fontSize="13px" pl="10px">
+                    残り時間
+                  </Text>
+                  <Center>
+                    <Divider
+                      w="90%"
+                      style={
+                        colorMode === "light"
+                          ? { borderColor: "black" }
+                          : { borderColor: "white" }
+                      }
+                    />
+                  </Center>
+                  <Box h="33px" position="relative">
+                    <Progress
+                      hasStripe
+                      value={totalTime}
+                      h="100%"
+                      colorScheme="green"
+                      backgroundColor="transparent"
+                      style={{ opacity: "0.7" }}
+                      mx="10px"
+                      max={totalTime_origin.current}
+                    />
+                    <Text
+                      position="absolute"
+                      top="0"
+                      right="4px"
+                      fontSize="18px"
+                      fontWeight="bold"
+                      textAlign="right"
+                      mr="12px"
+                      mt="4px"
+                      ref={totalTimeRef}
+                    >
+                      {totalTime}
+                    </Text>
+                  </Box>
+                </GridItem>
+                <GridItem w="100%" h="14" colSpan={1}>
+                  <Text fontSize="13px" pl="10px">
+                    タイプミス
+                  </Text>
+                  <Center>
+                    <Divider
+                      w="90%"
+                      style={
+                        colorMode === "light"
+                          ? { borderColor: "black" }
+                          : { borderColor: "white" }
+                      }
+                    />
+                  </Center>
+                  <Text
+                    fontSize="18px"
+                    fontWeight="bold"
+                    textAlign="right"
+                    mr="12px"
+                    mt="4px"
                   >
-                    {totalCost.current}円
-                  </StatNumber>
-                </Stat>
-              </StatGroup>
-            </GridItem>
-            <GridItem area={"footer"} style={{ position: "relative" }}>
-              <Progress colorScheme="green" hasStripe value={64} h="24px" />
-              <Text
-                style={{ position: "absolute", top: "0", left: "8px" }}
-                color="white.800"
-                fontSize="14px"
-              >
-                特別なナニカ
-              </Text>
-            </GridItem>
-            <GridItem
-              pl="2"
-              area={"header"}
-              id="timer"
-              className={styles.timer}
-            >
-              <Center>timer</Center>
-            </GridItem>
-          </Grid>
-
-          <Sushi_tamago_wrap />
-
-          <Center className={styles.cost}>{Q_cost.current}</Center>
-
-          <Box className={styles.container} w="100%">
-            <Center className={styles.typeDisplay} id="type-display"></Center>
-            <Center
-              className={styles.typeDisplayHiragana}
-              id="type-display-hiragana"
-            ></Center>
-            <Center>
-              <p className={styles.typeDisplayRomaji}>
-                <span style={{ color: "red" }}>{typeDisplayRomaji_0}</span>
-              </p>
-              <Text
-                className={styles.typeDisplayRomaji}
-                id="type-display-romaji"
-              ></Text>
-              <p className={styles.typeDisplayRomaji}>{typeDisplayRomaji_2}</p>
+                    {missedCount}
+                  </Text>
+                </GridItem>
+                <GridItem w="100%" h="14" colSpan={1}>
+                  <Text fontSize="13px" pl="10px">
+                    金額
+                  </Text>
+                  <Center>
+                    <Divider
+                      w="90%"
+                      style={
+                        colorMode === "light"
+                          ? { borderColor: "black" }
+                          : { borderColor: "white" }
+                      }
+                    />
+                  </Center>
+                  <Text
+                    fontSize="18px"
+                    fontWeight="bold"
+                    textAlign="right"
+                    mr="12px"
+                    mt="4px"
+                  >
+                    {totalCost.current}円{" "}
+                  </Text>
+                </GridItem>
+              </Grid>
             </Center>
-          </Box>
-        </VStack>
-        <Button
-          ml="4"
-          onClick={() => {
-            setOverlay(<OverlayTwo />);
-            onOpen();
-          }}
-          ref={voucherOpenRef}
-        >
-          伝票を見る
-        </Button>
-        <Modal isCentered isOpen={isOpen} onClose={onClose}>
-          {overlay}
-          <ModalContent>
-            <ModalHeader>終了</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody fontSize="22px">
-              <Center>{totalCost.current}円</Center>
-              <Center>ミス:{missedCount}回</Center>
-              <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
-                <Center>タイプ速度:{typePerSocund}/KPM</Center>
-              </Tooltip>
-            </ModalBody>
-            <ModalFooter py={4}>
-              <Button
-                mr={2}
-                onClick={(e) => {
-                  voucherCloseRef.current.click();
-                  setTimeout(gameReplay, 500);
-                }}
-              >
-                もう一度プレイ[SPACE]
-              </Button>
-              <Button mr={2} onClick={onClose}>
-                ランキング登録
-              </Button>
-              <Button mr={2} onClick={onClose} ref={voucherCloseRef}>
-                閉じる
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
-        <Tabs
-          defaultIndex={2}
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%,-50%)",
-            display: "none",
-            minHeight: "320px",
-          }}
-          colorScheme="white"
-          bgColor="white"
-          borderRadius={6}
-          p={8}
-          ref={startMenuRef}
-        >
-          <TabList>
-            <Tab _focus={{ _focus: "none" }}>自宅</Tab>
-            <Tab _focus={{ _focus: "none" }}>村の寿司屋</Tab>
-            <Tab _focus={{ _focus: "none" }}>高級店</Tab>
-          </TabList>
-
-          <TabPanels>
-            <TabPanel>
-              <Center>制限時間:60秒</Center>
-              <Center> ランキング登録不可能</Center>
-              <Center>まだ作ってないよ</Center>
-            </TabPanel>
-            <TabPanel>
-              <Center>制限時間:80秒</Center>
-              <Center> ランキング登録不可能</Center>
-              <Center>まだ作ってないよ</Center>
-            </TabPanel>
-            <TabPanel>
-              <Center>制限時間:100秒</Center>
-              <Center> ランキング登録可能</Center>
-              <Center>
-                <Button
-                  mt={10}
-                  p={7}
-                  onClick={(e) => {
-                    gameReplay();
+            <Center>
+              <Flex w={["100%", "90%", "80%", "70%"]} h="40px">
+                <GraphTemp
+                  ref={graphTempRef}
+                  totalCost={totalCost.current}
+                  missedCount={missedCount}
+                  typePerSocund={typePerSocund}
+                  times={totalTime_origin.current}
+                />
+                <Spacer />
+                <Text mt="4px" id="timer">
+                  作成中...
+                </Text>
+                <Spacer />
+                <Box
+                  className={styles.graphTemp}
+                  w="56px"
+                  onClick={() => {
+                    keyboardRef.current.Open();
+                    const rnd = Math.floor(Math.random() * 12); //0-3をランダムで取得
+                    console.log(rnd);
+                    voucherRef.current.clickChildOpen(rnd);
                   }}
                 >
-                  START
-                  <br />
-                  [SPACE]]
-                </Button>
+                  TEST
+                </Box>
+              </Flex>
+            </Center>
+
+            <Sushi_menu />
+            <Center className={styles.cost}>{Q_cost.current}</Center>
+
+            <Box className={styles.question} w="100%">
+              <Center className={styles.typeDisplay} id="type-display">
+                　
               </Center>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-        <>
+              <Center
+                className={styles.typeDisplayHiragana}
+                id="type-display-hiragana"
+              >
+                　
+              </Center>
+              <Center mb="4px">
+                <p className={styles.typeDisplayRomaji}>
+                  <span style={{ color: "red" }}>{typeDisplayRomaji_0}</span>
+                </p>
+                <Text
+                  className={styles.typeDisplayRomaji}
+                  style={{ border: "solid 1px", borderRadius: "3px" }}
+                  borderColor={
+                    colorMode === "light" ? styles.backLight : styles.backDark
+                  }
+                  px="1.5"
+                  id="type-display-romaji"
+                >
+                  　
+                </Text>
+                <p className={styles.typeDisplayRomaji}>
+                  {typeDisplayRomaji_2}
+                </p>
+              </Center>
+              <Keyboard ref={keyboardRef} />
+            </Box>
+          </Box>
+        </VStack>
+        <Voucher
+          ref={voucherRef}
+          totalCost={totalCost.current}
+          missedCount={missedCount}
+          typePerSocund={typePerSocund}
+          time={totalTime_origin.current}
+          gameReplay={() => {
+            gameReplay();
+          }}
+        />
+        <Flex display="none">
           <audio
             controls
             id="missed"
@@ -595,23 +669,7 @@ const typing = () => {
               type="audio/mp3"
             />
           </audio>
-        </>
-        <div className={styles.cardContainer}>
-          <div className={styles.card}>
-            <h1>
-              <i className={styles.fa}></i>結果
-            </h1>
-
-            <h3>{totalCost.current}円</h3>
-            <h3>ミス:{missedCount}回</h3>
-            <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
-              <h3>タイプ速度:{typePerSocund}/KPM</h3>
-            </Tooltip>
-
-            <div className={styles.circle}></div>
-            <div className={styles.circle}></div>
-          </div>
-        </div>
+        </Flex>
       </Content>
     </>
   );

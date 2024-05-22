@@ -16,8 +16,8 @@ const Rig = ({ v = new Vector3() }) => {
 
 const Hippo_001_wrap = () => (
   <Box
-    w={["260px", "260px", "260px", "260px"]}
-    h={["320px", "320px", "320px", "320px"]}
+    w={["240px", "260px", "290px", "320px"]}
+    h={["300px", "320px", "350px", "380px"]}
     display="inline-block"
   >
     <Canvas>

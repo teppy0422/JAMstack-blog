@@ -67,7 +67,7 @@
   backdrop-filter: blur(10px);
   margin-top: 2em;
   margin-bottom: 20px;
-  padding: 16px;
+  padding: 16px 0 16px 0;
 }
 .title {
   font-family: "Yusei Magic", sans-serif;
@@ -474,34 +474,55 @@ element.style {
 
 .typing {
   font-family: "M PLUS Rounded 1c", sans-serif;
-  margin-top: 16px;
+  margin-top: 0rem;
   height: 70vh;
   display: flex;
   justify-content: top;
   overflow: hidden;
-  background: linear-gradient(to left top, #ffaa33, #33aaff);
+  .backLight {
+    background: linear-gradient(to left top, #ffaa33, #33aaff);
+    transition: all 0.6s;
+    color: black;
+  }
+  .backDark {
+    background: linear-gradient(-215deg, #3a297f 10%, #f57762 70%, #b32717);
+    transition: all 0.6s;
+    color: white;
+  }
+  .navi {
+    border: 1px solid;
+    border-radius: 3px;
+    margin: 3px;
+  }
   .cost {
     font-size: 20px;
     &::after {
       content: "円";
     }
+    text-align: center;
+    left: 48%;
+    transform: translateY(0px);
   }
   .timer {
     margin: auto;
     text-align: center;
     font-size: 24px;
   }
-  .container {
-    background-color: rgb(93, 183, 235);
-    font-size: 2.4rem;
+  .question {
+    text-align: center;
+    // background-color: rgb(93, 183, 235);
+    // font-size: 2.4rem;
     font-weight: 600;
-    padding: 1rem;
+    padding: 0 0 1rem 0;
     border-radius: 0.5rem;
-    min-height: 280px;
-    max-width: 90%;
+    // min-height: 280px;
+    max-width: 100%;
+
     box-shadow: 1px 5px 6px #555;
     .typeDisplay {
-      margin-bottom: 1rem;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      margin-bottom: -0.2rem;
       margin-left: 0rem;
     }
     .typeDisplayHiragana {
@@ -509,6 +530,7 @@ element.style {
     }
     .typeDisplayRomaji {
       font-size: 18px;
+      letter-spacing: 0.03em;
     }
     .typeInput {
       margin-top: 1rem;
@@ -527,9 +549,26 @@ element.style {
         border-color: #1c1b19;
       }
     }
-  }
+  } /* This was made with GlassGenerator.netlify.app */
 }
 
+.graphTemp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: "56px";
+  border: 1px solid;
+  border-radius: 3px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: transparent;
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 3px;
+  &:hover {
+    cursor: pointer;
+  }
+}
 // クレジットカード風デザイン
 // @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
 
