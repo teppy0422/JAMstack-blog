@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 import Content from "../../components/content";
 import SkillGraph from "../../components/sillGraph";
 import SkillCircle from "../../components/skillCircle";
@@ -31,8 +32,34 @@ import {
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";
 import { theme } from "highcharts";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export default function About() {
+  //AOS用_ページ遷移時に表示されないからだけど変化しない
+  const router = useRouter();
+  useEffect(() => {
+    router.events.on("routeChangeComplete", handleChangeRoute);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleChangeRoute);
+    };
+  }, []);
+  function handleChangeRoute(path) {
+    AOS.init({
+      once: false,
+      easing: "ease-out-sine",
+      duration: 600,
+    });
+  }
+
+  // React.useEffect(() => {
+  //   AOS.init({
+  //     once: false,
+  //     easing: "ease-out-sine",
+  //     duration: 600,
+  //   });
+  // }, []);
   const skillCircles = [
     {
       value: 90,

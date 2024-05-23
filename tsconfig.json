@@ -23,7 +23,9 @@
     ".trash/_app copy.tsx",
     "components/3d/Hippo_001.jsx",
     "**/*.mp3", //わからん
-    "**/*.d.ts"
+    "**/*.d.ts",
+    "pages/api/typing_.js",
+    "pages/api/typing.ts"
   ],
   "exclude": ["node_modules"]
 }
