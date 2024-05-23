@@ -1,4 +1,3 @@
-import NextAuth from "next-auth";
 import { useSession, signIn, signOut } from "next-auth/react";
 import NextLink from "next/link";
 
@@ -38,7 +37,11 @@ import React, { useEffect } from "react";
 import LoginBtn from "./loginBtn";
 import AwesomIcon from "./awesomIcon";
 
+import { useContext } from "react";
+import { myContext } from "../pages/_app";
+
 export default function Header() {
+  const myState = useContext(myContext);
   const { data: session } = useSession();
 
   const { colorMode, toggleColorMode } = useColorMode();
@@ -47,13 +50,6 @@ export default function Header() {
 
   const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
-
-  // temp
-  // useEffect(() => {
-  // document.addEventListener("mouseover", function (event) {
-  //   console.log("aajdaskfla");
-  // });
-  // });
 
   // loginボタンを隠す
   let keyFlag: boolean = false;
@@ -70,9 +66,9 @@ export default function Header() {
     }
     console.log(event.key);
   };
-  // useEffect(() => {
-  //   document.addEventListener("keydown", handleKeyDown, false);
-  // }, []);
+  useEffect(() => {
+    myState.colorMode = colorMode;
+  }, [colorMode]);
   return (
     <>
       <header id="navTop">
@@ -87,9 +83,15 @@ export default function Header() {
                 />
               </Box>
             </Center>
-            <Text fontSize={["0px", "16px", "16px", "16px"]}>
-              {session?.user?.name}
-            </Text>
+            {session ? (
+              <Text fontSize={["0px", "16px", "16px", "16px"]}>
+                {session.user.name}
+              </Text>
+            ) : (
+              <Text fontSize={["0px", "12px", "12px", "12px"]}>
+                ログインしていません
+              </Text>
+            )}
             <Center
               flex="1"
               style={{ gap: "4px" }}
@@ -177,7 +179,7 @@ export default function Header() {
                           />
                         }
                       >
-                        タイピング
+                        タイピング練習
                       </MenuItem>
                     </Link>
                   </NextLink>
@@ -191,7 +193,7 @@ export default function Header() {
                 aria-label="DarkMode Switch"
                 icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />} //自分の好みでSunアイコンはreact-iconsを使用しています
                 colorScheme={colorMode === "light" ? "purple" : "yellow"}
-                onClick={function (event) {
+                onClick={() => {
                   toggleColorMode();
                 }}
               />
@@ -202,4 +204,3 @@ export default function Header() {
     </>
   );
 }
-function changeIcon() {}
