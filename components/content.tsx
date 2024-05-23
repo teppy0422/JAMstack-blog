@@ -14,11 +14,12 @@ export default function Content({ children, isCustomHeader = false }) {
         maxWidth="960px"
         className={`container`}
         style={{ background: "rgba(255,255,255,0.1)" }}
+        px={0}
       >
         {children}
       </Container>
       <hr />
-      <Center my="16px" color="gray">
+      <Center my="14px" color="gray">
         <NextLink href="/privacy">
           <a>プライバシーポリシー</a>
         </NextLink>
@@ -27,7 +28,7 @@ export default function Content({ children, isCustomHeader = false }) {
           <a>利用規約</a>
         </NextLink>
       </Center>
-      <Center mb="20px" color="gray">
+      <Center mb="18px" color="gray">
         ©︎ 2022-2024 Teppei Kataoka. All rights Reserved.
       </Center>
     </>

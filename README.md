@@ -151,7 +151,7 @@ nextauth.js を変更
 .js > .ts
 
 <SessionProvider session={session}>
-↓
+↓　
 <SessionProvider session={pageProps.session}>
 
 signin を co
@@ -175,12 +175,20 @@ package.json に追加
 nextauth.js に追加
 "session:{strategy:"database",maxage:30*24*60\*60}
 
+############nextauth に接続できない##############
+以下で静的サイトを削除
+
+out を削除
+
 package.json を編集  
  "build": "next build && next export && next-sitemap --config sitemap.config.js",
 
 > "build": "next build && next-sitemap --config sitemap.config.js",
 
-out を削除 ok
+npm run build
+
+> ok
+> ############################################
 
 node のバージョンを変更  
 v17.9.1 > v16.15.1
@@ -191,3 +199,140 @@ Vercel node のバージョンを変更
 --ここで保存--
 
 ## ログイン情報の取得
+
+typing の一部を component にまとめる  
+モーダルを移動  
+親コンポーネントから子コンポーネントを実行する処理を追加
+
+っしゅ。に対応 ok
+
+## キーボードコンポーネントの作成
+
+# ゲーム中に別ページに遷移したらイベントが残る
+
+/ページ遷移時の処理  
+/イベントリスナーを解除
+
+## 本番環境で実行したら反映されない時がある フィールドの追加など
+
+times がないってエラー <-type が問題?  
+本番で登録ができない > times や missed を追加してそれが型エラーになってる？
+
+main-shadow を作り直して push から deploy まで実行
+
+#############vercel にデプロイでエラー###############
+
+デプロイしたらこういうエラーがでる
+Type error: Type '{ userId: string; result: number; course: string; name: string; image: string; times: number; missed: number; }' is not assignable to type '(Without<TypingResultCreateInput, TypingResultUncheckedCreateInput> & TypingResultUncheckedCreateInput) | (Without<...> & TypingResultCreateInput)'.
+
+エラー箇所はこんな感じ
+name: String(req.body.name),
+31 | image: String(req.body.image),
+
+> 32 | times: Number(req.body.times),
+
+     |           ^
+
+33 | missed: Number(req.body.missed),
+
+prisma/client が vercel にない?
+
+次のいずれかによってデプロイができた
+
+1.上記のオプションをつけて実行してみた
+npx prisma format && npx prisma db push 　--force-reset
+
+> なぜかデプロイできた..
+
+Vercel がキャッシュの型を参照してエラーにしてる？
+
+> キャッシュなしでデプロイを実行
+> とりあえず Vercel の Deployments の画面から実行できる
+
+##########そのうち必要になりそう###########
+
+prisma でテーブルのリレーション
+https://zenn.dev/kanasugi/articles/e11ba9cdea9911
+
+ESLint の導入
+
+############ nextauth に接続できない##############
+
+schema.prisma の url を本番に変更 ng
+npm run build
+
+scheme.prisma の acount,user,session がない？
+
+> main-shadow をリセット
+> npx prisma db push --accept-data-loss --schema=./prisma/reset.prisma
+>
+> main-shadow に強制プッシュ
+> npx prisma format && npx prisma db push --accept-data-loss
+>
+> github からログインできていた頃に戻した?けどログインできない -> 戻せてない prisma が原因?
+>
+> schema.prisma に shadow-database を追加 -> co しても接続できるから関係ないっぽい
+>
+> リセットとプッシュを再度実行
+> 接続できていた頃の schema.prisma で上書き
+>
+> 繋がった
+
+#################################################
+
+################ HighCharts with Nextjs #####################
+
+1.annotation 等が表示されない場合は以下のようにする
+
+module 名は公式サイトの js インポートの名前から推測
+
+import Highcharts from "highcharts";
+import AnnotationsFactory from "highcharts/modules/annotations";
+import highchartsAccessibility from "highcharts/modules/accessibility";
+
+if (typeof window !== `undefined`) {
+AnnotationsFactory(Highcharts);
+highchartsAccessibility(Highcharts);
+}
+
+https://yubais.net/doc/highcharts/configure.html
+
+###############################################################
+
+素材検索に video とか vector を追加
+https://pixabay.com/api/docs/#api_search_videos
+
+オーディオビジュアライザー
+https://notes.sharesl.net/articles/1846/
+https://qiita.com/su3aki/items/24b21e9337732a64bf3e
+
+############## ページ遷移時にイベントを実行 #################
+
+const router = useRouter();
+const pageChangeHandler = () => {
+//この中身が遷移前に実行される
+document.removeEventListener("keypress", keypress_ivent);
+document.removeEventListener("keyup", keyup_ivent);
+};
+useEffect(() => {
+router.events.on("routeChangeStart", pageChangeHandler);
+return () => {
+router.events.off("routeChangeStart", pageChangeHandler);
+};
+}, []);
+
+###########################################################
+
+############## 上下中央揃え ##############
+
+display: flex;
+justify-content: center;
+align-items: center;
+
+########################################
+
+############## 予定 ###################
+
+softEther vpn
+
+固定 IP にする

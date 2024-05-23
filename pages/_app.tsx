@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import theme from "../libs/theme";
+import { theme } from "../libs/theme";
 //プログレスバー
 import NextNprogress from "nextjs-progressbar";
 //リセット用
