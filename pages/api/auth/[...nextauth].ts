@@ -108,6 +108,6 @@ export default (req: NextApiRequest, res: NextApiResponse): void =>
     //   },
     // },
     // ここに NEXTAUTH_SECRET を入れる?
-    secret: NEXT_PUBLIC_SECRET,
+    secret: process.env.NEXT_PUBLIC_SECRET,
     debug: true,
   });
