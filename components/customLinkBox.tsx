@@ -31,7 +31,6 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
   render() {
     const versionMatch = this.props.linkHref.match(/Sjp([\d.]+)_/);
     const ver = versionMatch ? versionMatch[1] : "N/A";
-
     const elapsedHours =
       (new Date().getTime() - new Date(this.props.dateTime).getTime()) /
       (1000 * 60 * 60);
@@ -46,10 +45,18 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
       }
     );
     const downloadFileName = this.props.linkHref.replace(/^\/files\//, "");
-    let inChargeColor = "gray";
-    if (this.props.inCharge === "不具合") {
-      inChargeColor = "red";
-    }
+    const inChargeList = this.props.inCharge
+      .split(",")
+      .map((item) => item.trim());
+    const inChargeColors = inChargeList.map((inCharge) => {
+      if (inCharge === "不具合") {
+        return { color: "red", variant: "solid" };
+      } else if (inCharge.includes("徳島") || inCharge.includes("高知")) {
+        return { color: "green", variant: "outline" };
+      } else {
+        return { color: "gray", variant: "solid" };
+      }
+    });
     let agoText = "";
     let timeDiff = elapsedHours / 24;
     let badgeColor = "gray";
@@ -95,7 +102,17 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
             <Divider />
             <TimeIcon boxSize={4} paddingRight={1} />
             {formattedDateTime}
-            <Badge colorScheme={inChargeColor}>{this.props.inCharge}</Badge>
+            <br />
+            {inChargeList.map((inCharge, index) => (
+              <Badge
+                key={index}
+                colorScheme={inChargeColors[index].color}
+                variant={inChargeColors[index].variant}
+                marginRight={1}
+              >
+                {inCharge}
+              </Badge>
+            ))}
             <Text mb="3">{this.props.description}</Text>
           </LinkBox>
         </PopoverTrigger>
@@ -108,7 +125,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
           <PopoverHeader>{ver}</PopoverHeader>
           <PopoverBody style={{ border: "none" }}>
             {this.props.isLatest ? (
-              <Badge colorScheme="teal" padding={2}>
+              <Badge colorScheme="blackAlpha" padding={2}>
                 最新のバージョンです
               </Badge>
             ) : (

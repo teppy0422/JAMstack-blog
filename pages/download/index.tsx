@@ -29,28 +29,36 @@ export default function About() {
             <br />
             ダウンロードしたらファイルを開いてMenuのVerupからアップロードを実行
             <br />
-            この時
+            その後
             <span>
               <Kbd>Shift</Kbd>
             </span>
             を押しながら[このVerのアップロード]をクリックします
             <br />
-            その後は全ての生産準備+からそのバージョンへの更新が可能になります
+            全ての生産準備+から更新が可能になります
           </Text>
         </Box>
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
+
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={5}>
+          <CustomLinkBox
+            dateTime="2024-05-24T19:12:00+0900"
+            description="WEBサイトに登録済みコネクタ数の表示を追加"
+            linkHref="/files/Sjp3.004.66_.zip"
+            inCharge="web"
+            isLatest={true}
+          />
           <CustomLinkBox
             dateTime="2024-05-21T14:21:00+0900"
             description="プロシージャ:参照設定の確認をコメントアウト"
             linkHref="/files/Sjp3.004.65_.zip"
-            inCharge="不具合"
-            isLatest={true}
+            inCharge="高知,不具合"
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-05-20T15:55:00+0900"
             description="空表示を先ハメ表示のみを別途選択できるように変更"
             linkHref="/files/Sjp3.004.63_.zip"
-            inCharge="秋山さん"
+            inCharge="徳島,秋山さん"
             isLatest={false}
           />
           <CustomLinkBox
