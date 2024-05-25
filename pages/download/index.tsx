@@ -41,11 +41,18 @@ export default function About() {
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={5}>
           <CustomLinkBox
+            dateTime="2024-05-26T00:32:00+0900"
+            description="登録済みのコネクタ数を西暦別にカウントに変更"
+            linkHref="/files/Sjp3.004.67_.zip"
+            inCharge="web"
+            isLatest={true}
+          />
+          <CustomLinkBox
             dateTime="2024-05-24T19:12:00+0900"
             description="WEBサイトに登録済みコネクタ数の表示を追加"
             linkHref="/files/Sjp3.004.66_.zip"
             inCharge="web"
-            isLatest={true}
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-05-21T14:21:00+0900"
