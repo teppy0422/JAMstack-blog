@@ -41,11 +41,19 @@ export default function About() {
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={5}>
           <CustomLinkBox
+            dateTime="2024-05-26T10:02:00+0900"
+            description="1.収縮チューブの情報が無い場合Color:Wとする処理を追加<br/>
+            2.Menuのハメ図の画像を再作成."
+            linkHref="/files/Sjp3.004.68_.zip"
+            inCharge="不具合"
+            isLatest={true}
+          />
+          <CustomLinkBox
             dateTime="2024-05-26T00:32:00+0900"
             description="登録済みのコネクタ数を西暦別にカウントに変更"
             linkHref="/files/Sjp3.004.67_.zip"
             inCharge="web"
-            isLatest={true}
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-05-24T19:12:00+0900"

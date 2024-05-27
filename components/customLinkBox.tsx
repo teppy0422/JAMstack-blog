@@ -45,6 +45,14 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
       }
     );
     const downloadFileName = this.props.linkHref.replace(/^\/files\//, "");
+    const descriptionWithBreaks = this.props.description
+      .split("<br/>")
+      .map((line, index) => (
+        <React.Fragment key={index}>
+          {line}
+          <br />
+        </React.Fragment>
+      ));
     const inChargeList = this.props.inCharge
       .split(",")
       .map((item) => item.trim());
@@ -113,7 +121,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                 {inCharge}
               </Badge>
             ))}
-            <Text mb="3">{this.props.description}</Text>
+            <Text mb="3">{descriptionWithBreaks}</Text>
           </LinkBox>
         </PopoverTrigger>
         <PopoverContent
