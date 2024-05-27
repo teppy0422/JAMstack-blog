@@ -35,25 +35,18 @@ export default function About() {
             </span>
             を押しながら[このVerのアップロード]をクリックします
             <br />
-            以上で全ての生産準備+から更新が可能になります
+            全ての生産準備+から更新が可能になります
           </Text>
         </Box>
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={5}>
-          <CustomLinkBox
-            dateTime="2024-05-27T11:45:00+0900"
-            description="このダウンロードページへのアクセスを追加"
-            linkHref="/files/Sjp3.004.69_.zip"
-            inCharge="Verup"
-            isLatest={true}
-          />
           <CustomLinkBox
             dateTime="2024-05-26T10:02:00+0900"
             description="1.収縮チューブの情報が無い場合Color:Wとする処理を追加<br/>
             2.Menuのハメ図の画像を再作成."
             linkHref="/files/Sjp3.004.68_.zip"
             inCharge="不具合"
-            isLatest={false}
+            isLatest={true}
           />
           <CustomLinkBox
             dateTime="2024-05-26T00:32:00+0900"
