@@ -9,9 +9,10 @@ import styles from "../../styles/home.module.scss";
 import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 
 import CustomLinkBox from "../../components/customLinkBox";
+import getIP from "../../components/getIpAddress";
 import CustomPopver from "../../components/popver";
 
-export default function About() {
+export default function About({ ip }) {
   const illusts = [{ src: "/images/illust/hippo/hippo_001.png" }];
   return (
     <Content isCustomHeader={true}>
@@ -26,6 +27,8 @@ export default function About() {
               LATEST
             </Badge>
             を選択
+            <br />
+            クライアントのIPアドレス: {ip}
             <br />
             ダウンロードしたらファイルを開いてMenuのVerupからアップロードを実行
             <br />
