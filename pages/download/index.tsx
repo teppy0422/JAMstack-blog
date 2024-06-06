@@ -42,10 +42,11 @@ export default function About() {
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={5}>
           <CustomLinkBox
             dateTime="2024-06-06T00:25:00+0900"
-            description="1.竿レイアウトを大幅に書き直し<br/>
-            2.座標登録がない場合でもハメ図を作成出来るように修正"
-            linkHref="/files/Sjp3.004.77_.zip"
-            inCharge="高知,不具合,王さん"
+            description="1.竿レイアウトに関する処理を書き直し<br/>
+            2.座標登録がなくてもハメ図を作成出来るように修正<br/>
+            3.WEBサーバーへの接続を追加"
+            linkHref="/files/Sjp3.004.78_.zip"
+            inCharge="高知,徳島,不具合,王さん"
             isLatest={true}
           />
           <CustomLinkBox
