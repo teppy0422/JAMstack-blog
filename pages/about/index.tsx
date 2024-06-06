@@ -36,7 +36,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 export default function About() {
-  //AOS用_ページ遷移時に表示されないからだけど変化しない
+  //AOS用_ページ遷移時に表示されない��らだけど変化しない
   const router = useRouter();
   useEffect(() => {
     router.events.on("routeChangeComplete", handleChangeRoute);
@@ -45,7 +45,7 @@ export default function About() {
       router.events.off("routeChangeComplete", handleChangeRoute);
     };
   }, []);
-  function handleChangeRoute(path) {
+  function handleChangeRoute(path: string) {
     AOS.init({
       once: false,
       easing: "ease-out-sine",
@@ -227,11 +227,11 @@ export default function About() {
                 Teppei Kataoka
               </Text>
               <Text className={styles.tool}>
-                Programmer for{" "}
+                Programmer for
                 <Tooltip label="Arduino" hasArrow placement="top" bg="tomato">
                   machines
-                </Tooltip>{" "}
-                and{" "}
+                </Tooltip>
+                and
                 <Tooltip
                   label="VBA JavaScript.."
                   hasArrow
@@ -243,10 +243,10 @@ export default function About() {
                 .
               </Text>
               <Text className={styles.tool}>
-                I do{" "}
+                I do
                 <Tooltip label="InkScape" hasArrow placement="top" bg="tomato">
                   design
-                </Tooltip>{" "}
+                </Tooltip>
                 sometimes.
               </Text>
             </Box>
@@ -293,9 +293,9 @@ export default function About() {
                 data-aos="fade-up"
                 data-aos-offset={aosOffset}
                 style={{ display: "inline-block" }}
+                key={index}
               >
                 <SkillCircle
-                  key={index}
                   value={item.value}
                   cirText={item.cirText}
                   color={item.color}
@@ -318,15 +318,9 @@ export default function About() {
         <Box style={{ textAlign: "center" }} className={styles.cardList}>
           {skillCards.map((item, index) => {
             return (
-              <Box display={"inline-block"}>
-                <ModalWork
-                  key={index}
-                  title={item.title}
-                  detail={item.detail}
-                  m={0}
-                >
+              <Box display={"inline-block"} key={index}>
+                <ModalWork title={item.title} detail={item.detail} m={0}>
                   <ImageCard
-                    key={index}
                     title={item.title}
                     subTitle={item.subTitle}
                     eyeCatchPath={item.eyeCatchPath}
