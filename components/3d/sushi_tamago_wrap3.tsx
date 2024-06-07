@@ -15,7 +15,7 @@ const Rig = ({ v = new Vector3() }) => {
   });
 };
 
-const sushi_tamago_wrap = (pops) => {
+const sushi_tamago_wrap = (pops: any) => {
   const lastSushi = pops.path;
   return (
     <>
