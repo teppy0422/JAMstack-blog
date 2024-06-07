@@ -41,13 +41,20 @@ export default function About() {
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={5}>
           <CustomLinkBox
+            dateTime="2024-06-07T09:25:00+0900"
+            description="シートイベントが発生しない時があることの修正"
+            linkHref="/files/Sjp3.004.80_.zip"
+            inCharge="高知,徳島,不具合,王さん"
+            isLatest={true}
+          />
+          <CustomLinkBox
             dateTime="2024-06-06T00:25:00+0900"
             description="1.竿レイアウトに関する処理を書き直し<br/>
             2.座標登録がなくてもハメ図を作成出来るように修正<br/>
             3.WEBサーバーへの接続を追加"
             linkHref="/files/Sjp3.004.78_.zip"
             inCharge="高知,徳島,不具合,王さん"
-            isLatest={true}
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-05-26T10:02:00+0900"
