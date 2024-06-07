@@ -20,7 +20,7 @@ import { faUser, faPalette } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
 
-const icon = ({ link, awesome }) => {
+const icon = ({ link, awesome }: { link: string; awesome: any }) => {
   return (
     <NextLink href={link} passHref>
       <Link
