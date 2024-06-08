@@ -41,6 +41,13 @@ export default function About() {
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={5}>
           <CustomLinkBox
+            dateTime="2024-06-08T14:28:00+0900"
+            description="後引張支援システムで対象ファイルが大きい場合の処理を追加"
+            linkHref="/files/Sjp3.004.81_.zip"
+            inCharge="高知,王さん"
+            isLatest={false}
+          />
+          <CustomLinkBox
             dateTime="2024-06-07T09:25:00+0900"
             description="シートイベントが発生しない時があることの修正"
             linkHref="/files/Sjp3.004.80_.zip"
