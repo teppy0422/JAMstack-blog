@@ -87,42 +87,44 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
     return (
       <Popover>
         <PopoverTrigger>
-          <LinkBox
-            as="article"
-            maxW="sm"
-            p="3"
-            borderWidth="1px"
-            rounded="md"
-            borderColor="gray.500"
-            _hover={{ boxShadow: "dark-lg" }}
-          >
-            <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
-              {this.props.isLatest && (
-                <Badge colorScheme="teal" marginRight={2}>
-                  Latest
+          <Box>
+            <LinkBox
+              as="article"
+              maxW="sm"
+              p="3"
+              borderWidth="1px"
+              rounded="md"
+              borderColor="gray.500"
+              _hover={{ boxShadow: "dark-lg" }}
+            >
+              <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
+                {this.props.isLatest && (
+                  <Badge colorScheme="teal" marginRight={2}>
+                    Latest
+                  </Badge>
+                )}
+                <Badge colorScheme={badgeColor}>{agoText}</Badge>
+              </Box>
+              <Heading size="md" my="2">
+                <LinkOverlay href="#">{ver}</LinkOverlay>
+              </Heading>
+              <Divider />
+              <TimeIcon boxSize={4} paddingRight={1} />
+              {formattedDateTime}
+              <br />
+              {inChargeList.map((inCharge, index) => (
+                <Badge
+                  key={index}
+                  colorScheme={inChargeColors[index].color}
+                  variant={inChargeColors[index].variant}
+                  marginRight={1}
+                >
+                  {inCharge}
                 </Badge>
-              )}
-              <Badge colorScheme={badgeColor}>{agoText}</Badge>
-            </Box>
-            <Heading size="md" my="2">
-              <LinkOverlay href="#">{ver}</LinkOverlay>
-            </Heading>
-            <Divider />
-            <TimeIcon boxSize={4} paddingRight={1} />
-            {formattedDateTime}
-            <br />
-            {inChargeList.map((inCharge, index) => (
-              <Badge
-                key={index}
-                colorScheme={inChargeColors[index].color}
-                variant={inChargeColors[index].variant}
-                marginRight={1}
-              >
-                {inCharge}
-              </Badge>
-            ))}
-            <Text mb="3">{descriptionWithBreaks}</Text>
-          </LinkBox>
+              ))}
+              <Text mb="3">{descriptionWithBreaks}</Text>
+            </LinkBox>
+          </Box>
         </PopoverTrigger>
         <PopoverContent
           _focus={{ boxShadow: "none" }}
