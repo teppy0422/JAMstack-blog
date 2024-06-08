@@ -500,7 +500,7 @@ export const getRomaji = (text) => {
 };
 
 export const getHiragana = (text) => {
-  const str = "";
+  let str = "";
   for (let key in data) {
     if (key === text) {
       str = data[key];
@@ -564,7 +564,7 @@ export const changeColor = (id, count, colorMode) => {
 
 //ひらがなをローマ字に変換
 export const getRomajiForecast = (text) => {
-  const str = "";
+  let str = "";
   while (text.length !== 0) {
     const hiragana_ = text.substring(0, 3);
     const getRomaji_ = getRomaji2(hiragana_);

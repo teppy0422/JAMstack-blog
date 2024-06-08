@@ -203,8 +203,8 @@ export const typing = () => {
         const temp = getRomaji(Q_Texts.current.substring(0, 3));
         inputText.current = inputText.current + eKey;
         const inputTextTempA = inputText.current;
-        const matchCount = 0;
-        const complete = false;
+        let matchCount = 0;
+        let complete = false;
         //temp[key]は正解が入った配列
         for (let key in temp) {
           //部分一致

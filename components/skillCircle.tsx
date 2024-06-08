@@ -54,8 +54,8 @@ function skillCircle(pops) {
         <CircularProgressLabel fontSize={18}>
           <Image
             src={property.img}
-            width="72px"
-            height="72px"
+            width={72}
+            height={72}
             alt={property.color}
           />
         </CircularProgressLabel>

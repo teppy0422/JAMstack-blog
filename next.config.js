@@ -1,6 +1,6 @@
 module.exports = {
   experimental: {
-    optimizeFonts: true,
+    // optimizeFonts: true,
   },
   //必要なのか分からない
   webpack: (config, options) => {

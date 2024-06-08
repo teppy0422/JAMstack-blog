@@ -322,7 +322,7 @@ let LineChart = (pops, ref) => {
 
   const getId = async (getCount) => {
     if (session !== undefined && session !== null) {
-      const count = 0;
+      let count = 0;
       const email = session.user.email;
       const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
       const data = await response.json(); //await で response.json() が完了するまで待つ

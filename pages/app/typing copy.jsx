@@ -5,7 +5,7 @@ import { Center, VStack, Box } from "@chakra-ui/react";
 import Content from "../../components/content";
 import ResponseCache from "next/dist/server/response-cache";
 import { type } from "os";
-import { now } from "lodash";
+import now from "lodash.now";
 
 const typing = () => {
   const [inputText, setInputText] = useState("");
@@ -28,7 +28,7 @@ const typing = () => {
     // console.log(inputTextSp);
 
     sentenceArray.forEach((spans, index) => {
-      const inputTextTemp = inputTextSp[index];
+      let inputTextTemp = inputTextSp[index];
       const correctText = spans.innerText.toUpperCase();
       if (inputTextTemp != null) {
         if (inputTextTemp !== undefined) {
