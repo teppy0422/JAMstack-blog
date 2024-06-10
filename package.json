@@ -45,7 +45,7 @@
     "microcms-richedit-processer": "^1.0.5",
     "moment": "^2.29.3",
     "moment-timezone": "^0.5.34",
-    "next": "^14.2.3",
+    "next": "^12.0.0",
     "next-auth": "^4.7.0",
     "next-seo": "^5.4.0",
     "nextjs-progressbar": "^0.0.14",
