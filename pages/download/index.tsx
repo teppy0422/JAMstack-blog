@@ -18,16 +18,17 @@ export default function About() {
       <div className={styles.me} style={{ paddingTop: "50px" }}>
         <Box textAlign="center" mb={8}>
           <Text fontSize="lg" colorScheme="black">
-            以下からバージョンを選んでください
+            以下からバージョンを選んでクリックしてください
             <br />
             通常は
             <Badge colorScheme="teal" margin={1}>
               {" "}
               LATEST
             </Badge>
-            を選択
-            <br />
+            を選択します
+            <br /> <br />
             ダウンロードしたらファイルを開いてMenuのVerupからアップロードを実行
+            <br />
             <br />
             その後
             <span>
@@ -35,14 +36,24 @@ export default function About() {
             </span>
             を押しながら[このVerのアップロード]をクリックします
             <br />
-            以上で全ての生産準備+から更新が可能になります
+            以上で全ての生産準備+からVerupが可能になります
+            <br /> <br />
           </Text>
         </Box>
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={5}>
           <CustomLinkBox
+            dateTime="2024-06-10T11:04:00+0900"
+            description="空のフォントサイズを変更"
+            description2="空のフォントサイズを9に変更"
+            linkHref="/files/Sjp3.004.82_.zip"
+            inCharge="徳島,秋山さん"
+            isLatest={true}
+          />
+          <CustomLinkBox
             dateTime="2024-06-08T14:28:00+0900"
-            description="後引張支援システムで対象ファイルが大きい場合の処理を追加"
+            description="後引張支援システムでRLTFが大きい場合に対応"
+            description2=""
             linkHref="/files/Sjp3.004.81_.zip"
             inCharge="高知,王さん"
             isLatest={false}
@@ -50,15 +61,17 @@ export default function About() {
           <CustomLinkBox
             dateTime="2024-06-07T09:25:00+0900"
             description="シートイベントが発生しない時があることの修正"
+            description2=""
             linkHref="/files/Sjp3.004.80_.zip"
             inCharge="高知,徳島,不具合,王さん"
-            isLatest={true}
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-06-06T00:25:00+0900"
             description="1.竿レイアウトに関する処理を書き直し<br/>
             2.座標登録がなくてもハメ図を作成出来るように修正<br/>
             3.WEBサーバーへの接続を追加"
+            description2=""
             linkHref="/files/Sjp3.004.78_.zip"
             inCharge="高知,徳島,不具合,王さん"
             isLatest={false}
@@ -67,6 +80,7 @@ export default function About() {
             dateTime="2024-05-26T10:02:00+0900"
             description="1.収縮チューブの情報が無い場合Color:Wとする処理を追加<br/>
             2.Menuのハメ図の画像を再作成."
+            description2=""
             linkHref="/files/Sjp3.004.68_.zip"
             inCharge="不具合"
             isLatest={false}
@@ -74,6 +88,7 @@ export default function About() {
           <CustomLinkBox
             dateTime="2024-05-26T00:32:00+0900"
             description="登録済みのコネクタ数を西暦別にカウントに変更"
+            description2=""
             linkHref="/files/Sjp3.004.67_.zip"
             inCharge="web"
             isLatest={false}
@@ -81,6 +96,7 @@ export default function About() {
           <CustomLinkBox
             dateTime="2024-05-24T19:12:00+0900"
             description="WEBサイトに登録済みコネクタ数の表示を追加"
+            description2=""
             linkHref="/files/Sjp3.004.66_.zip"
             inCharge="web"
             isLatest={false}
@@ -88,6 +104,7 @@ export default function About() {
           <CustomLinkBox
             dateTime="2024-05-21T14:21:00+0900"
             description="プロシージャ:参照設定の確認をコメントアウト"
+            description2=""
             linkHref="/files/Sjp3.004.65_.zip"
             inCharge="高知,不具合"
             isLatest={false}
@@ -95,6 +112,7 @@ export default function About() {
           <CustomLinkBox
             dateTime="2024-05-20T15:55:00+0900"
             description="空表示を先ハメ表示のみを別途選択できるように変更"
+            description2=""
             linkHref="/files/Sjp3.004.63_.zip"
             inCharge="徳島,秋山さん"
             isLatest={false}
@@ -102,6 +120,7 @@ export default function About() {
           <CustomLinkBox
             dateTime="2024-05-16T15:16:00+0900"
             description="MenuからWEBサイトにアクセスするアドレスの修正"
+            description2=""
             linkHref="/files/Sjp3.004.62_.zip"
             inCharge="不具合"
             isLatest={false}

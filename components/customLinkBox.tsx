@@ -1,4 +1,6 @@
 import React from "react";
+import { isValidUrl } from "../utils/urlValidator"; // URLのバリデーション関数をインポート
+
 import {
   LinkBox,
   Box,
@@ -17,11 +19,13 @@ import {
   Link,
   Badge,
   Divider,
+  Image,
 } from "@chakra-ui/react";
 import { TimeIcon } from "@chakra-ui/icons";
 type CustomLinkBoxProps = {
   dateTime: string;
   description: string;
+  description2: string;
   linkHref: string;
   inCharge: string;
   isLatest: boolean;
@@ -85,7 +89,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
       badgeColor = "teal";
     }
     return (
-      <Popover>
+      <Popover placement="top-start">
         <PopoverTrigger>
           <Box>
             <LinkBox
@@ -132,27 +136,38 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
         >
           <PopoverArrow />
           <PopoverCloseButton _focus={{ _focus: "none" }} />
-          <PopoverHeader>{ver}</PopoverHeader>
-          <PopoverBody style={{ border: "none" }}>
+          <PopoverHeader>
             {this.props.isLatest ? (
-              <Badge colorScheme="blackAlpha" padding={2}>
-                最新のバージョンです
-              </Badge>
+              <>
+                <Badge colorScheme="blackAlpha" padding={2}>
+                  最新のバージョンです
+                </Badge>
+              </>
             ) : (
               <Badge colorScheme="red" padding={2}>
                 最新のバージョンではありません
               </Badge>
             )}
+          </PopoverHeader>
+          <PopoverBody style={{ border: "none" }}>
+            {this.props.description2 && (
+              <>
+                <Image src={`/files/${ver}.png`} />
+                <Text fontSize="sm">{this.props.description2}</Text>
+              </>
+            )}
           </PopoverBody>
-          <PopoverFooter>
-            <Link href={this.props.linkHref}>
-              <Button colorScheme={badgeColor}>
-                <a download={downloadFileName} href={this.props.linkHref}>
-                  Download
-                </a>
-              </Button>
-            </Link>
-          </PopoverFooter>
+          {this.props.isLatest && (
+            <PopoverFooter>
+              <Link href={this.props.linkHref}>
+                <Button colorScheme={badgeColor}>
+                  <a download={downloadFileName} href={this.props.linkHref}>
+                    Download
+                  </a>
+                </Button>
+              </Link>
+            </PopoverFooter>
+          )}
         </PopoverContent>
       </Popover>
     );
