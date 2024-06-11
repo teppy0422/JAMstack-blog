@@ -21,14 +21,23 @@ import {
   Divider,
   Image,
 } from "@chakra-ui/react";
-import { TimeIcon } from "@chakra-ui/icons";
+import {
+  CheckCircleIcon,
+  TimeIcon,
+  TriangleDownIcon,
+  TriangleUpIcon,
+  WarningTwoIcon,
+} from "@chakra-ui/icons";
+import { LineSegments } from "three";
 type CustomLinkBoxProps = {
   dateTime: string;
-  description: string;
+  description1: string;
   description2: string;
+  descriptionIN?: string;
   linkHref: string;
   inCharge: string;
   isLatest: boolean;
+  isFileExist?: boolean;
 };
 // elapsedHoursを画面に表示する処理を追加
 class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
@@ -49,14 +58,6 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
       }
     );
     const downloadFileName = this.props.linkHref.replace(/^\/files\//, "");
-    const descriptionWithBreaks = this.props.description
-      .split("<br/>")
-      .map((line, index) => (
-        <React.Fragment key={index}>
-          {line}
-          <br />
-        </React.Fragment>
-      ));
     const inChargeList = this.props.inCharge
       .split(",")
       .map((item) => item.trim());
@@ -88,72 +89,84 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
       agoText = "A moment ago";
       badgeColor = "teal";
     }
+    const baseUrl = "https://yourdomain.com"; // ここにサイトのベースURLを設定
+
     return (
-      <Popover placement="top-start">
+      <Popover placement="bottom">
         <PopoverTrigger>
-          <Box>
-            <LinkBox
-              as="article"
-              maxW="sm"
-              p="3"
-              borderWidth="1px"
-              rounded="md"
-              borderColor="gray.500"
-              _hover={{ boxShadow: "dark-lg" }}
-            >
-              <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
-                {this.props.isLatest && (
-                  <Badge colorScheme="teal" marginRight={2}>
-                    Latest
-                  </Badge>
-                )}
-                <Badge colorScheme={badgeColor}>{agoText}</Badge>
-              </Box>
-              <Heading size="md" my="2">
-                <LinkOverlay href="#">{ver}</LinkOverlay>
-              </Heading>
-              <Divider />
-              <TimeIcon boxSize={4} paddingRight={1} />
-              {formattedDateTime}
-              <br />
-              {inChargeList.map((inCharge, index) => (
-                <Badge
-                  key={index}
-                  colorScheme={inChargeColors[index].color}
-                  variant={inChargeColors[index].variant}
-                  marginRight={1}
-                >
-                  {inCharge}
+          <LinkBox
+            as="article"
+            maxW="auto"
+            p="2"
+            borderWidth="1px"
+            rounded="md"
+            borderColor="gray.500"
+            _hover={{ boxShadow: "dark-lg" }}
+          >
+            <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
+              {this.props.isLatest && (
+                <Badge colorScheme="teal" marginRight={2}>
+                  Latest
                 </Badge>
-              ))}
-              <Text mb="3">{descriptionWithBreaks}</Text>
-            </LinkBox>
-          </Box>
+              )}
+              <Badge colorScheme={badgeColor}>{agoText}</Badge>
+            </Box>
+            <Heading size="md" my="2">
+              <LinkOverlay href="#">{ver}</LinkOverlay>
+            </Heading>
+            <Divider />
+            <TimeIcon boxSize={4} paddingRight={1} mt="-0.5" />
+            {formattedDateTime}
+            <br />
+            {inChargeList.map((inCharge, index) => (
+              <Badge
+                key={index}
+                colorScheme={inChargeColors[index].color}
+                variant={inChargeColors[index].variant}
+                marginRight={1}
+              >
+                {inCharge}
+              </Badge>
+            ))}
+            {this.props.description1 && (
+              <Text mt="2">
+                <WarningTwoIcon marginRight="1" color="red.500" mt="-1" />
+                {this.props.description1}
+              </Text>
+            )}
+            {this.props.description2 && (
+              <Text mt="2">
+                <CheckCircleIcon marginRight="1" color="teal.500" mt="-1" />
+                {this.props.description2}
+              </Text>
+            )}
+          </LinkBox>
         </PopoverTrigger>
         <PopoverContent
           _focus={{ boxShadow: "none" }}
           style={{ border: "1px solid transparent" }}
         >
-          <PopoverArrow />
-          <PopoverCloseButton _focus={{ _focus: "none" }} />
-          <PopoverHeader>
+          <PopoverArrow bg={this.props.isLatest ? "teal.500" : "red.500"} />
+          <PopoverCloseButton color="white" _focus={{ _focus: "none" }} />
+          <PopoverHeader
+            bg={this.props.isLatest ? "teal.500" : "red.500"}
+            roundedTop="md"
+          >
             {this.props.isLatest ? (
-              <>
-                <Badge colorScheme="blackAlpha" padding={2}>
-                  最新のバージョンです
-                </Badge>
-              </>
+              <Text color="white" padding={2}>
+                最新のバージョンです
+              </Text>
             ) : (
-              <Badge colorScheme="red" padding={2}>
+              <Text color="white" padding={2}>
                 最新のバージョンではありません
-              </Badge>
+              </Text>
             )}
           </PopoverHeader>
           <PopoverBody style={{ border: "none" }}>
-            {this.props.description2 && (
+            {this.props.descriptionIN && (
               <>
                 <Image src={`/files/${ver}.png`} />
-                <Text fontSize="sm">{this.props.description2}</Text>
+                <Text fontSize="sm">{this.props.descriptionIN}</Text>
               </>
             )}
           </PopoverBody>
