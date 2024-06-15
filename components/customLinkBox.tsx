@@ -112,7 +112,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
               <Badge colorScheme={badgeColor}>{agoText}</Badge>
             </Box>
             <Heading size="md" my="2">
-              <LinkOverlay href="#">{ver}</LinkOverlay>
+              {/* <LinkOverlay href="#">{ver}</LinkOverlay> */}
             </Heading>
             <Divider />
             <TimeIcon boxSize={4} paddingRight={1} mt="-0.5" />
@@ -162,14 +162,14 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
               </Text>
             )}
           </PopoverHeader>
-          <PopoverBody style={{ border: "none" }}>
-            {this.props.descriptionIN && (
+          {this.props.descriptionIN && (
+            <PopoverBody style={{ border: "none" }}>
               <>
                 <Image src={`/files/${ver}.png`} />
                 <Text fontSize="sm">{this.props.descriptionIN}</Text>
               </>
-            )}
-          </PopoverBody>
+            </PopoverBody>
+          )}
           {this.props.isLatest && (
             <PopoverFooter>
               <Link href={this.props.linkHref}>
