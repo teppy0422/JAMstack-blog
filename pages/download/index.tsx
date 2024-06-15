@@ -36,6 +36,10 @@ export default function About() {
             <br />
             以上で全ての生産準備+からVerupが可能になります
             <br />
+            <br />
+            このページは現在調整中です
+            <br />
+            不具合報告にご協力をお願いします
           </Text>
         </Box>
 
@@ -74,30 +78,11 @@ export default function About() {
             isLatest={true}
             isFileExist={true}
           />
-
-          <CustomLinkBox
-            dateTime="2024-06-10T15:39:00+0900"
-            description1=""
-            description2="空のフォントサイズを9に変更"
-            descriptionIN="空のフォントサイズを9に変更"
-            linkHref="/files/Sjp3.004.82_.xlsm"
-            inCharge="徳島,秋山さん,圧縮しない"
-            isLatest={false}
-          />
-          <CustomLinkBox
-            dateTime="2024-06-10T15:27:00+0900"
-            description1=""
-            description2="空のフォントサイズを9に変更"
-            descriptionIN="空のフォントサイズを9に変更"
-            linkHref="/files/Sjp3.004.82__.zip"
-            inCharge="徳島,秋山さん,7zipでzip"
-            isLatest={false}
-          />
           <CustomLinkBox
             dateTime="2024-06-10T11:04:00+0900"
             description1=""
             description2="空のフォントサイズを9に変更"
-            descriptionIN=""
+            descriptionIN="空のフォントサイズを9に変更"
             linkHref="/files/Sjp3.004.82_.zip"
             inCharge="徳島,秋山さん,win10でzip"
             isLatest={false}
