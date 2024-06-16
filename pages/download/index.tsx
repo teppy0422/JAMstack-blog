@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Image, Text, Box, SimpleGrid, Badge, Kbd } from "@chakra-ui/react";
 import { MdSettings, MdCheckCircle } from "react-icons/md";
 import NextImage from "next/image";
+import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
+
 import styles from "../../styles/home.module.scss";
 
 import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
@@ -13,6 +15,7 @@ import CustomPopver from "../../components/popver";
 
 export default function About() {
   const illusts = [{ src: "/images/illust/hippo/hippo_001.png" }];
+
   return (
     <Content isCustomHeader={true}>
       <div className={styles.me} style={{ paddingTop: "50px" }}>

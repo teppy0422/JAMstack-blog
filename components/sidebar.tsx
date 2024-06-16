@@ -27,14 +27,8 @@ function Sidebar() {
     >
       <VStack spacing="4" align="stretch">
         <Box height="66px"></Box>
-        <NextLink href="#section1" passHref>
-          <Button {...buttonStyle("#section1")}>セクション1</Button>
-        </NextLink>
-        <NextLink href="#section2" passHref>
-          <Button {...buttonStyle("#section2")}>セクション2</Button>
-        </NextLink>
-        <NextLink href="#section3" passHref>
-          <Button {...buttonStyle("#section3")}>セクション3</Button>
+        <NextLink href="/directoryLayout" passHref>
+          <Button {...buttonStyle("/directoryLayout")}>ディレクトリ構成</Button>
         </NextLink>
         <NextLink href="/download" passHref>
           <Button {...buttonStyle("/download")}>ダウンロード</Button>
