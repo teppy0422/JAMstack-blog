@@ -42,7 +42,7 @@ const FileSystemNode: React.FC<{ item: FileSystemItem; isLast?: boolean }> = ({
   };
   if (item.type === "folder") {
     return (
-      <VStack align="start">
+      <VStack align="start" spacing={0}>
         <Box display="flex" alignItems="center">
           <IconButton
             icon={isOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
@@ -55,7 +55,9 @@ const FileSystemNode: React.FC<{ item: FileSystemItem; isLast?: boolean }> = ({
               transition: "background 0.2s ease-in-out",
             }}
           />
-          <Text fontWeight="bold">{item.name}</Text>
+          <Text fontWeight="bold" pl={0}>
+            {item.name}
+          </Text>
           {item.popOver && (
             <Popover placement="right-start">
               <PopoverTrigger>
@@ -101,7 +103,7 @@ const FileSystemNode: React.FC<{ item: FileSystemItem; isLast?: boolean }> = ({
       </VStack>
     );
   } else {
-    return <Text pl={8}>{item.name}</Text>;
+    return <Text pl={4}>{item.name}</Text>;
   }
 };
 
