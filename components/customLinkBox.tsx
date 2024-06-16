@@ -101,7 +101,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
             borderWidth="1px"
             rounded="md"
             borderColor="gray.500"
-            _hover={{ boxShadow: "dark-lg" }}
+            _hover={{ boxShadow: "dark-lg", cursor: "pointer" }}
           >
             <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
               {this.props.isLatest && (
@@ -112,7 +112,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
               <Badge colorScheme={badgeColor}>{agoText}</Badge>
             </Box>
             <Heading size="md" my="2">
-              {/* <LinkOverlay href="#">{ver}</LinkOverlay> */}
+              <LinkOverlay>{ver}</LinkOverlay>
             </Heading>
             <Divider />
             <TimeIcon boxSize={4} paddingRight={1} mt="-0.5" />
