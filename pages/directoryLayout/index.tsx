@@ -36,7 +36,8 @@ export default function About() {
           {
             name: "001_テキストデータ",
             type: "folder",
-            popOver: "分解元のデータ\nこれは開発者の確認用で通常は使用しません",
+            popOver:
+              "分解元のデータ\nこれは開発者の確認用で通常は使用しません\n※単線分析リクエストの管理No.毎に保存されます",
             children: [
               {
                 name: "N090195",
@@ -53,6 +54,8 @@ export default function About() {
           {
             name: "002_エクセルデータ",
             type: "folder",
+            popOver:
+              "分解したデータ\nこれは古い生産準備+で使用していたもので通常は使用しません",
             children: [
               {
                 name: "N090195",
@@ -67,9 +70,71 @@ export default function About() {
             ],
           },
           {
-            name: "01_PVSW_csv",
+            name: "010_部材使用量_分解_in",
             type: "folder",
-            children: [{ name: "PVSW***.csv", type: "file" }],
+            children: [
+              { name: "N90195_MRP.TXT", type: "file" },
+              { name: "RLTF*B*_.txt", type: "file" },
+            ],
+          },
+          {
+            name: "011_部材使用量_分解_out",
+            type: "folder",
+          },
+          {
+            name: "100_部材使用量_品番別",
+            type: "folder",
+          },
+        ],
+      },
+      {
+        name: "01_PVSW_csv",
+        type: "folder",
+        children: [{ name: "PVSW***.csv", type: "file" }],
+      },
+      {
+        name: "05_RLTF_A",
+        type: "folder",
+        popOver: "生準+からRLTF-Aを指定するのに使用します",
+      },
+      {
+        name: "06_RLTF_B",
+        type: "folder",
+        popOver: "生準+からRLTF-Bを指定するのに使用します",
+      },
+      {
+        name: "07_SUB",
+        type: "folder",
+        popOver:
+          "社内図のサブ形態で生産する時にSUBデータを入れます。通常は使用しません",
+        children: [
+          { name: "製品品番1-A01-SUB.csv", type: "file" },
+          { name: "製品品番2-B02-SUB.csv", type: "file" },
+          { name: "製品品番3-C03-SUB.csv", type: "file" },
+        ],
+      },
+      {
+        name: "08_hsfデータ変換",
+        type: "folder",
+        children: [
+          { name: "製品品番1_____A0011_MD_20240614200253", type: "folder" },
+        ],
+      },
+      {
+        name: "08_MD",
+        type: "folder",
+        children: [
+          {
+            name: "製品品番1_A01_MD",
+            type: "folder",
+          },
+          {
+            name: "製品品番2_B02_MD",
+            type: "folder",
+          },
+          {
+            name: "製品品番3_C03_MD",
+            type: "folder",
           },
         ],
       },
