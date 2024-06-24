@@ -52,14 +52,22 @@ export default function About() {
           mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
         >
           <CustomLinkBox
+            dateTime="2024-06-24T11:01:00+0900"
+            description1="配索誘導の画像を出力できない"
+            description2="CPUの速度に応じてsleep時間を長くするように変更"
+            descriptionIN=""
+            linkHref="/files/Sjp3.004.84_.zip"
+            inCharge="不具合,高知,王さん,win10zip"
+            isLatest={true}
+          />
+          <CustomLinkBox
             dateTime="2024-06-11T12:24:00+0900"
             description1="高知のPC設定が徳島と異なるためサーバー接続が出来ない"
             description2="サーバーへの接続タイミングを修正"
             descriptionIN=""
             linkHref="/files/Sjp3.004.83_.xlsm"
             inCharge="不具合,高知,王さん,圧縮無し"
-            isLatest={true}
-            isFileExist={true}
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-06-11T12:24:00+0900"
@@ -68,18 +76,7 @@ export default function About() {
             descriptionIN=""
             linkHref="/files/Sjp3.004.83_.zip"
             inCharge="不具合,高知,王さん,win10のzip圧縮"
-            isLatest={true}
-            isFileExist={true}
-          />
-          <CustomLinkBox
-            dateTime="2024-06-11T12:24:00+0900"
-            description1="高知のPC設定が徳島と異なるためサーバー接続が出来ない"
-            description2="サーバーへの接続タイミングを修正"
-            descriptionIN=""
-            linkHref="/files/Sjp3.004.83__.zip"
-            inCharge="不具合,高知,王さん,win10の7zip無圧縮"
-            isLatest={true}
-            isFileExist={true}
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-06-10T11:04:00+0900"

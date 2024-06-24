@@ -37,7 +37,6 @@ type CustomLinkBoxProps = {
   linkHref: string;
   inCharge: string;
   isLatest: boolean;
-  isFileExist?: boolean;
 };
 // elapsedHoursを画面に表示する処理を追加
 class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
