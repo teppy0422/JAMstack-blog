@@ -24,6 +24,7 @@ type FileSystemItem = {
   type: "folder" | "file";
   children?: FileSystemItem[];
   popOver?: string;
+  isOpen?: boolean;
 };
 
 // フォルダとファイルを表示するコンポーネント
@@ -31,7 +32,7 @@ const FileSystemNode: React.FC<{ item: FileSystemItem; isLast?: boolean }> = ({
   item,
   isLast = false,
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(item.isOpen ?? true);
   const toggleOpen = () => setIsOpen(!isOpen);
   const { colorMode } = useColorMode();
 
@@ -40,71 +41,73 @@ const FileSystemNode: React.FC<{ item: FileSystemItem; isLast?: boolean }> = ({
     marginLeft: 0,
     paddingLeft: 0,
   };
-  if (item.type === "folder") {
-    return (
-      <VStack align="start" spacing={0}>
-        <Box display="flex" alignItems="center">
-          <IconButton
-            icon={isOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
-            aria-label="Toggle Folder"
-            size="sm"
-            onClick={toggleOpen}
-            variant="ghost"
-            _hover={{
-              bg: "transparent",
-              transition: "background 0.2s ease-in-out",
-            }}
-          />
-          <Text fontWeight="bold" pl={0}>
-            {item.name}
-          </Text>
-          {item.popOver && (
-            <Popover placement="right-start">
-              <PopoverTrigger>
-                <IconButton
-                  icon={<InfoIcon style={{ fontWeight: "bold" }} />}
-                  aria-label="Info"
-                  size="sm"
-                  variant="ghost"
-                  _hover={{
-                    bg: "transparent",
-                    transition: "background 0.2s ease-in-out",
-                  }}
-                  colorScheme={colorMode === "light" ? "purple" : "yellow"}
-                />
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverArrow />
-                <Text p={4}>
-                  {" "}
-                  {item.popOver.split("\n").map((line, index) => (
-                    <Text key={index}>{line}</Text>
-                  ))}
-                </Text>
-              </PopoverContent>
-            </Popover>
-          )}
+  return (
+    <VStack align="start" spacing={0}>
+      <Box display="flex" alignItems="center">
+        {item.type === "folder" ? (
+          <>
+            <IconButton
+              icon={isOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
+              aria-label="Toggle Folder"
+              size="sm"
+              onClick={toggleOpen}
+              variant="ghost"
+              _hover={{
+                bg: "transparent",
+                transition: "background 0.2s ease-in-out",
+              }}
+            />
+            <Text fontWeight="bold" pl={0}>
+              {item.name}
+            </Text>
+          </>
+        ) : (
+          <Text pl={4}>{item.name}</Text>
+        )}
+        {item.popOver && (
+          <Popover placement="right-start">
+            <PopoverTrigger>
+              <IconButton
+                icon={<InfoIcon style={{ fontWeight: "bold" }} />}
+                aria-label="Info"
+                size="sm"
+                variant="ghost"
+                _hover={{
+                  bg: "transparent",
+                  transition: "background 0.2s ease-in-out",
+                }}
+                colorScheme={colorMode === "light" ? "purple" : "yellow"}
+              />
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverArrow />
+              <Text p={4}>
+                {" "}
+                {item.popOver.split("\n").map((line, index) => (
+                  <Text key={index}>{line}</Text>
+                ))}
+              </Text>
+            </PopoverContent>
+          </Popover>
+        )}
+      </Box>
+      <Collapse in={isOpen} animateOpacity>
+        <Box pl={4}>
+          {item.children?.map((child, index) => (
+            <Box
+              key={index}
+              {...(index < item.children.length - 1 ? lineStyle : {})}
+            >
+              <FileSystemNode
+                item={child}
+                isLast={index === item.children.length - 1}
+              />
+            </Box>
+          ))}
         </Box>
-        <Collapse in={isOpen} animateOpacity>
-          <Box pl={4}>
-            {item.children?.map((child, index) => (
-              <Box
-                key={index}
-                {...(index < item.children.length - 1 ? lineStyle : {})}
-              >
-                <FileSystemNode
-                  item={child}
-                  isLast={index === item.children.length - 1}
-                />
-              </Box>
-            ))}
-          </Box>
-        </Collapse>
-      </VStack>
-    );
-  } else {
-    return <Text pl={4}>{item.name}</Text>;
-  }
+      </Collapse>
+    </VStack>
+  );
 };
 
 // アプリケーションのメインコンポーネント
