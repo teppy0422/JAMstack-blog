@@ -33,6 +33,9 @@ function Sidebar() {
         <NextLink href="/download" passHref>
           <Button {...buttonStyle("/download")}>ダウンロード</Button>
         </NextLink>
+        <NextLink href="BBS" passHref>
+          <Button {...buttonStyle("BBS")}>不具合報告</Button>
+        </NextLink>
       </VStack>
     </Box>
   );
