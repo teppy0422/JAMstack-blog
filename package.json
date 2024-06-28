@@ -57,7 +57,7 @@
     "react-scroll": "^1.8.7",
     "recoil": "^0.7.3-alpha.2",
     "sass": "^1.51.0",
-    "three": "^0.141.0",
+    "three": "^0.165.0",
     "typescript": "^5.4.5",
     "url-loader": "^4.1.1",
     "use-sound": "^4.0.1"
