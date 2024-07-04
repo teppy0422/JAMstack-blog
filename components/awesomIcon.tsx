@@ -22,7 +22,7 @@ import styles from "../styles/home.module.scss";
 
 const icon = ({ link, awesome }: { link: string; awesome: any }) => {
   return (
-    <NextLink href={link} passHref>
+    <NextLink href={link} passHref legacyBehavior>
       <Link
         _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
       >

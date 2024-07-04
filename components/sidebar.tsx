@@ -27,13 +27,13 @@ function Sidebar() {
     >
       <VStack spacing="4" align="stretch">
         <Box height="66px"></Box>
-        <NextLink href="/directoryLayout" passHref>
+        <NextLink href="/directoryLayout" passHref legacyBehavior>
           <Button {...buttonStyle("/directoryLayout")}>ディレクトリ構成</Button>
         </NextLink>
-        <NextLink href="/download" passHref>
+        <NextLink href="/download" passHref legacyBehavior>
           <Button {...buttonStyle("/download")}>ダウンロード</Button>
         </NextLink>
-        <NextLink href="BBS" passHref>
+        <NextLink href="BBS" passHref legacyBehavior>
           <Button {...buttonStyle("BBS")}>不具合報告</Button>
         </NextLink>
       </VStack>

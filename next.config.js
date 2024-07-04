@@ -1,6 +1,7 @@
 module.exports = {
   experimental: {
     // optimizeFonts: true,
+    appDir: true,
   },
   //必要なのか分からない
   webpack: (config, options) => {
