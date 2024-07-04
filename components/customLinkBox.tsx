@@ -171,13 +171,11 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
           )}
           {this.props.isLatest && (
             <PopoverFooter>
-              <Link href={this.props.linkHref}>
-                <Button colorScheme={badgeColor}>
-                  <a download={downloadFileName} href={this.props.linkHref}>
-                    Download
-                  </a>
-                </Button>
-              </Link>
+              <Button colorScheme={badgeColor}>
+                <a download={downloadFileName} href={this.props.linkHref}>
+                  Download
+                </a>
+              </Button>
             </PopoverFooter>
           )}
         </PopoverContent>

@@ -18,7 +18,7 @@ export default function CategoryId({ blog }) {
           {blog.map((blog) => (
             <li key={blog.id}>
               <Link href={`/blog/${blog.id}`}>
-                <a>{blog.title}</a>
+                {blog.title}
               </Link>
             </li>
           ))}
