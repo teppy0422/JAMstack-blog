@@ -26,7 +26,7 @@ export default function Component() {
         <Avatar
           onClick={() => signOut()}
           boxSize="42px"
-          src={session.user.image}
+          src={session?.user?.image || ""}
           className={Styles.loginAvatar}
         />
       ) : (

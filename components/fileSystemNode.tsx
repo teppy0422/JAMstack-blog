@@ -96,11 +96,12 @@ const FileSystemNode: React.FC<{ item: FileSystemItem; isLast?: boolean }> = ({
           {item.children?.map((child, index) => (
             <Box
               key={index}
-              {...(index < item.children.length - 1 ? lineStyle : {})}
+              // 99行目の修正
+              {...(index < (item.children?.length ?? 0) - 1 ? lineStyle : {})}
             >
               <FileSystemNode
                 item={child}
-                isLast={index === item.children.length - 1}
+                isLast={index === (item.children?.length ?? 0) - 1}
               />
             </Box>
           ))}

@@ -13,10 +13,14 @@ let keyboard = (pops, ref) => {
   // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
   useImperativeHandle(ref, () => ({
     Open() {
-      keyboardRef.current.style.visibility = "visible";
+      if (keyboardRef.current) {
+        (keyboardRef.current as HTMLElement).style.visibility = "visible";
+      }
     },
     Close() {
-      keyboardRef.current.style.visibility = "hidden";
+      if (keyboardRef.current) {
+        (keyboardRef.current as HTMLElement).style.visibility = "hidden";
+      }
     },
   }));
   return (
@@ -95,5 +99,4 @@ let keyboard = (pops, ref) => {
     </Box>
   );
 };
-keyboard = forwardRef(keyboard);
-export default keyboard;
+export default forwardRef(keyboard) as React.ForwardRefExoticComponent<any>;
