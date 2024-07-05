@@ -14,8 +14,14 @@ import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 
 export default function About() {
+  const [isClient, setIsClient] = useState(false);
   const illusts = [{ src: "/images/illust/hippo/hippo_001.png" }];
-
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  if (!isClient) {
+    return null; // クライアントサイドでのみレンダリング
+  }
   type FileSystemItem = {
     name: string;
     type: "folder" | "file"; // 'folder' または 'file' のみを許可する
