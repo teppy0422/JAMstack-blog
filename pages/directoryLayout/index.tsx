@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Content from "../../components/content";
 import Link from "next/link";
 import { Image, Text, Box, SimpleGrid, Badge, Kbd } from "@chakra-ui/react";

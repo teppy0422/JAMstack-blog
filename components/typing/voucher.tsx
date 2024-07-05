@@ -53,7 +53,7 @@ let voucher = (pops, ref) => {
   };
   const graphTempRef = useRef(null); //履歴グラフ
   const voucherOpenRef = useRef(null); //伝票を開くボタン
-  const voucherCloseRef = useRef(null); //伝票を開くボタン
+  const voucherCloseRef = useRef<null | HTMLButtonElement>(null); //伝票を閉じるボタン
   const voucherPostRef = useRef(null); //登録ボタン
   const sushiRef = useRef(null); //寿司アドレス
   const sushiCommentRef = useRef(""); //寿司なまえ
@@ -89,20 +89,24 @@ let voucher = (pops, ref) => {
     clickChildOpen(rnd) {
       console.log("childrnd", rnd);
       console.log(Sushi[rnd].path);
-      sushiRef.current = Sushi[rnd].path;
+      sushiRef.current = Sushi[rnd].path.props.children;
       sushiCommentRef.current = Sushi[rnd].text;
       console.log(Sushi[rnd].text);
-      voucherOpenRef.current.click();
+      if (voucherOpenRef.current) {
+        // voucherOpenRefの型を明示的に指定して、null許容を追加する
+        const voucherOpenRef = useRef<null | HTMLDivElement>(null);
+      }
     },
   }));
 
   const handleClick = async () => {
+    if (!session) return; // セッションが存在しない場合は処理を終了
     const data = {
-      userId: session.user.email,
+      userId: session?.user?.email,
       course: "高級",
       result: Number(property.typePerSocund),
-      name: session.user.name,
-      image: session.user.image,
+      name: session?.user?.name,
+      image: session?.user?.image,
       time: Number(property.time),
       missed: Number(property.missedCount),
       cost: Number(property.totalCost),
@@ -175,7 +179,10 @@ let voucher = (pops, ref) => {
               mr={2}
               _focus={{ _focus: "none" }}
               onClick={(e) => {
-                voucherCloseRef.current.click();
+                // voucherCloseRefがHTMLButtonElementであることを確認する
+                if (voucherCloseRef.current instanceof HTMLButtonElement) {
+                  voucherCloseRef.current.click();
+                }
                 setTimeout(property.gameReplay, 500);
               }}
             >
@@ -188,9 +195,19 @@ let voucher = (pops, ref) => {
                   ref={voucherPostRef}
                   onClick={(e) => {
                     handleClick().then((value) => {
-                      graphTempRef.current.childClick();
+                      // graphTempRefがnullでないことを確認してからclick関数を呼び出す
+                      if (
+                        graphTempRef.current &&
+                        "click" in graphTempRef.current
+                      ) {
+                        (graphTempRef.current as any).click();
+                      }
                     });
-                    voucherPostRef.current.setAttribute("disabled", "");
+                    if (voucherPostRef.current) {
+                      (
+                        voucherPostRef.current as HTMLButtonElement
+                      ).setAttribute("disabled", "");
+                    }
                   }}
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
@@ -227,5 +244,4 @@ let voucher = (pops, ref) => {
     </>
   );
 };
-voucher = forwardRef(voucher);
-export default voucher;
+export default forwardRef(voucher) as React.ForwardRefRenderFunction<any, any>;

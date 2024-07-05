@@ -72,7 +72,11 @@ const menu = (pops) => {
                 p={7}
                 onClick={(e) => {
                   property.gameReplay();
-                  startMenuRef.current.style.display = "none";
+                  // startMenuRefがnullの可能性があるため、存在チェックを追加する
+                  if (startMenuRef.current) {
+                    (startMenuRef.current as HTMLElement).style.display =
+                      "none";
+                  }
                 }}
               >
                 <Text colorScheme="cyan">

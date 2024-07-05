@@ -2,16 +2,20 @@ import { Box, VStack, Link, MenuItem, Button } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
-import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 function Sidebar() {
-  const router = useRouter();
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    setCurrentPath(window.location.pathname);
+  }, []);
 
   const buttonStyle = (path) => ({
     p: "2",
     w: "full",
     _hover: { bg: "gray.300" },
-    colorScheme: router.asPath === path ? "red" : "gray", // 現在のパスと一致する場合は赤色テーマ、そうでなければ灰色テーマ
+    colorScheme: currentPath === path ? "red" : "gray", // 現在のパスと一致する場合は赤色テーマ、そうでなければ灰色テーマ
   });
 
   return (
@@ -40,4 +44,5 @@ function Sidebar() {
     </Box>
   );
 }
+
 export default Sidebar;

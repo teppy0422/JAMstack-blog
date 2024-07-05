@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -36,9 +32,8 @@
     "**/*.d.ts",
     "pages/api/typing_.js",
     "pages/api/typing.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "libs/.blog-post.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

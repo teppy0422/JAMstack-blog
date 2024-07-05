@@ -111,5 +111,7 @@ function changeImage(e) {
   // document.querySelector(".css-sim8z3").setAttribute("src", changeSrc);
   let myid = document.getElementById("mainImage");
 
-  myid.innerHTML = e.currentTarget.innerHTML;
+  if (myid) {
+    myid.innerHTML = e.currentTarget.innerHTML;
+  }
 }

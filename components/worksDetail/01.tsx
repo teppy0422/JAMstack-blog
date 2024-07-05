@@ -97,5 +97,7 @@ function changeImage(e) {
   //取得するクラス名が分からん
   let myid = document.getElementById("mainImage");
 
-  myid.innerHTML = e.currentTarget.innerHTML;
+  if (myid) {
+    myid.innerHTML = e.currentTarget.innerHTML;
+  }
 }
