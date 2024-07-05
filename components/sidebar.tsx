@@ -21,7 +21,7 @@ function Sidebar() {
   return (
     <Box
       position="fixed"
-      w={["100px", "150px", "200px", "250px"]}
+      w={["100px", "100px", "150px", "200px"]}
       h="100vh"
       bg="white.200"
       p="5"
