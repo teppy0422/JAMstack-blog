@@ -11,6 +11,7 @@ import {
   Input,
   Textarea,
   Button,
+  Spinner,
 } from "@chakra-ui/react";
 import Content from "../../components/content";
 
@@ -56,7 +57,7 @@ export default function BBSPage() {
     <Content isCustomHeader={true}>
       <Box p={5}>
         <Heading as="h1" mb={5}>
-          掲示板
+          スレッド一覧
         </Heading>{" "}
         <Text mb={5}>IpAddress: {ip}</Text>
         <VStack spacing={4} align="stretch">
@@ -68,7 +69,15 @@ export default function BBSPage() {
               </Box>
             ))
           ) : (
-            <Text>Loading...</Text>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="100px"
+            >
+              <Spinner size="lg" />
+              <Text ml={2}>Loading...</Text>
+            </Box>
           )}
         </VStack>
         <Box mt={8}>
