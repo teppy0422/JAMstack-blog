@@ -37,8 +37,8 @@ function Sidebar() {
         <NextLink href="/download" passHref legacyBehavior>
           <Button {...buttonStyle("/download")}>ダウンロード</Button>
         </NextLink>
-        <NextLink href="BBS" passHref legacyBehavior>
-          <Button {...buttonStyle("BBS")}>不具合報告</Button>
+        <NextLink href="/BBS" passHref legacyBehavior>
+          <Button {...buttonStyle("/BBS")}>不具合報告</Button>
         </NextLink>
       </VStack>
     </Box>
