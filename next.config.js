@@ -1,4 +1,5 @@
 module.exports = {
+  trailingSlash: true,
   experimental: {
     // optimizeFonts: true,
     appDir: true,

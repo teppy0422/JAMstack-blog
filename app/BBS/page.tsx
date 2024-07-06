@@ -1,113 +1,76 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  Card,
+  CardBody,
+  Stack,
   Box,
-  Text,
-  VStack,
   Heading,
-  FormControl,
-  FormLabel,
   Input,
-  Textarea,
   Button,
-  Spinner,
+  Divider,
 } from "@chakra-ui/react";
+import { supabase } from "../../utils/supabase/client";
+import Link from "next/link";
 import Content from "../../components/content";
 
-export default function BBSPage() {
-  const [data, setData] = useState<any[]>([]); // 型を明示的に指定
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [ip, setIp] = useState("");
+export default function Threads() {
+  const [threads, setThreads] = useState<any[]>([]);
+  const [newThreadTitle, setNewThreadTitle] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("/api/BBS"); // APIエンドポイントを指定
-      if (!response.ok) {
-        console.error("Failed to fetch data:", response.statusText);
-        return;
-      }
-      const jsonData = await response.json();
-      setData(jsonData);
-    };
-    fetchData();
-    // IPアドレスを取得
-    const fetchIp = async () => {
-      const response = await fetch("/api/ip");
-      const json = await response.json();
-      setIp(json.ip);
-    };
-    fetchIp();
+    fetchThreads();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const newPost = { title, content };
-    // ここで新しい投稿をAPIに送信する処理を追加
-    // 例: await fetch("/api/BBS", { method: "POST", body: JSON.stringify(newPost) });
+  const fetchThreads = async () => {
+    const { data } = await supabase.from("threads").select("*");
+    if (data) {
+      setThreads(data);
+    }
+  };
 
-    // 新しい投稿をローカルに追加
-    setData([...data, newPost]);
-    setTitle("");
-    setContent("");
+  const createThread = async () => {
+    await supabase.from("threads").insert([{ title: newThreadTitle }]);
+    setNewThreadTitle("");
+    fetchThreads();
   };
 
   return (
-    <Content isCustomHeader={true}>
-      <Box p={5}>
-        <Heading as="h1" mb={5}>
+    <>
+      <Content isCustomHeader={true}>
+        <Heading size="md" mb="4">
           スレッド一覧
-        </Heading>{" "}
-        <Text mb={5}>IpAddress: {ip}</Text>
-        <VStack spacing={4} align="stretch">
-          {data.length > 0 ? (
-            data.map((post, index) => (
-              <Box key={index} p={5} shadow="md" borderWidth="1px">
-                <Heading fontSize="xl">{post.title}</Heading>
-                <Text mt={4}>{post.content}</Text>
-              </Box>
-            ))
-          ) : (
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              height="100px"
-            >
-              <Spinner size="lg" />
-              <Text ml={2}>Loading...</Text>
-            </Box>
-          )}
-        </VStack>
-        <Box mt={8}>
-          <Heading as="h2" size="lg" mb={4}>
-            新しい投稿
-          </Heading>
-          <form onSubmit={handleSubmit}>
-            <FormControl id="title" mb={4}>
-              <FormLabel>タイトル</FormLabel>
-              <Input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-            </FormControl>
-            <FormControl id="content" mb={4}>
-              <FormLabel>内容</FormLabel>
-              <Textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                required
-              />
-            </FormControl>
-            <Button type="submit" colorScheme="teal">
-              投稿
-            </Button>
-          </form>
-        </Box>
-      </Box>
-    </Content>
+        </Heading>
+        {threads.map((thread) => (
+          <Stack spacing="6" mb="4" key={thread.id}>
+            <Card>
+              <Link href={`/thread/${thread.id}`}>
+                <CardBody>
+                  <Box>
+                    <Heading size="sm">{thread.title}</Heading>
+                  </Box>
+                </CardBody>
+              </Link>
+            </Card>
+          </Stack>
+        ))}
+        <Divider />
+        <Stack spacing="4" mt="4" direction="row" justify="flex-end">
+          <Input
+            type="text"
+            value={newThreadTitle}
+            onChange={(e) => setNewThreadTitle(e.target.value)}
+            placeholder="新規スレッドのタイトル"
+            size="md"
+            bg="white"
+            _focus={{ borderColor: "gray.400" }} // フォーカス時のボーダー色を変更
+          />
+          <Button onClick={createThread} colorScheme="teal" width="5em">
+            新規作成
+          </Button>
+        </Stack>
+      </Content>
+    </>
   );
 }
