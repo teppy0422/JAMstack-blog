@@ -175,37 +175,75 @@ export default function Thread() {
         {threadTitle}
       </Heading>
       <Box>{ipAddress}</Box>
-      <Stack spacing="6" mb="4">
+      <Stack spacing="2" mb="4" style={{ padding: "0px" }}>
         {posts.map((post) => (
-          <Card key={post.id}>
-            <CardBody>
-              <Box>{post.content}</Box>
-              {post.file_url && (
-                <>
-                  {post.file_url.match(/\.(jpeg|jpg|gif|png)$/) ? (
-                    <img
-                      src={post.file_url}
-                      alt="Uploaded image"
-                      style={{
-                        maxWidth: "100%",
-                        maxHeight: "300px",
-                        marginTop: "10px",
-                      }} // 最大サイズを指定
-                    />
-                  ) : (
-                    <a
-                      href={post.file_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ display: "block", marginTop: "10px" }} // リンクのスタイルを調整
-                    >
-                      ダウンロードファイル
-                    </a>
-                  )}
-                </>
-              )}
-            </CardBody>
-          </Card>
+          <Box
+            key={post.id}
+            alignSelf={
+              post.ip_address === ipAddress ? "flex-end" : "flex-start"
+            } // IPアドレスに基づいて位置を調整
+            maxWidth="90%" // メッセージの最大幅を設定
+          >
+            <Card
+              key={post.id}
+              style={{
+                backgroundColor:
+                  post.ip_address === ipAddress ? "#DCF8C6" : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
+                borderRadius: "10px",
+                padding: "0px",
+                position: "relative",
+                margin: "1px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // 影を追加
+              }}
+            >
+              <CardBody px="10px" py="5px">
+                <Box>{post.content}</Box>
+                {post.file_url && (
+                  <>
+                    {post.file_url.match(/\.(jpeg|jpg|gif|png)$/) ? (
+                      <img
+                        src={post.file_url}
+                        alt="Uploaded image"
+                        style={{
+                          maxWidth: "100%",
+                          maxHeight: "300px",
+                          marginTop: "1px",
+                        }} // 最大サイズを指定
+                      />
+                    ) : (
+                      <a
+                        href={post.file_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ display: "block", marginTop: "10px" }} // リンクのスタイルを調整
+                      >
+                        ダウンロードファイル
+                      </a>
+                    )}
+                  </>
+                )}
+              </CardBody>
+              <Box
+                style={{
+                  position: "absolute",
+                  top: "10px",
+                  left: post.ip_address === ipAddress ? "auto" : "-10px",
+                  right: post.ip_address === ipAddress ? "-10px" : "auto",
+                  width: 0,
+                  height: 0,
+                  borderStyle: "solid",
+                  borderWidth:
+                    post.ip_address === ipAddress
+                      ? "2px 0 10px 10px"
+                      : "2px 10px 10px 0",
+                  borderColor:
+                    post.ip_address === ipAddress
+                      ? "transparent transparent transparent #DCF8C6"
+                      : "transparent #FFFFFF transparent transparent",
+                }}
+              />
+            </Card>
+          </Box>
         ))}
       </Stack>
       <Stack spacing="4" mt="4" direction="row" justify="flex-end">
