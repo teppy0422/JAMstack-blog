@@ -10,6 +10,7 @@ import {
   Input,
   Button,
   Divider,
+  Spinner,
 } from "@chakra-ui/react";
 import { supabase } from "../../utils/supabase/client";
 import Link from "next/link";
@@ -18,22 +19,35 @@ import Content from "../../components/content";
 export default function Threads() {
   const [threads, setThreads] = useState<any[]>([]);
   const [newThreadTitle, setNewThreadTitle] = useState("");
+  const [ipAddress, setIpAddress] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchIpAddress = async () => {
+      const ipResponse = await fetch("/api/ip");
+      const ipData = await ipResponse.json();
+      setIpAddress(ipData.ip);
+    };
+
+    fetchIpAddress();
     fetchThreads();
   }, []);
 
   const fetchThreads = async () => {
+    setLoading(true); // 追加
     const { data } = await supabase.from("threads").select("*");
     if (data) {
       setThreads(data);
     }
+    setLoading(false); // 追加
   };
 
   const createThread = async () => {
+    setLoading(true);
     await supabase.from("threads").insert([{ title: newThreadTitle }]);
     setNewThreadTitle("");
-    fetchThreads();
+    await fetchThreads();
+    setLoading(false);
   };
 
   return (
@@ -42,19 +56,34 @@ export default function Threads() {
         <Heading size="md" mb="4">
           スレッド一覧
         </Heading>
-        {threads.map((thread) => (
-          <Stack spacing="6" mb="4" key={thread.id}>
-            <Card>
-              <Link href={`/thread/${thread.id}`}>
-                <CardBody>
-                  <Box>
-                    <Heading size="sm">{thread.title}</Heading>
-                  </Box>
-                </CardBody>
-              </Link>
-            </Card>
-          </Stack>
-        ))}
+        {ipAddress}
+        {loading ? (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="100vh"
+          >
+            <Heading size="md" pr={2}>
+              Loading...
+            </Heading>
+            <Spinner size="md" />
+          </Box>
+        ) : (
+          threads.map((thread) => (
+            <Stack spacing="6" mb="4" key={thread.id}>
+              <Card>
+                <Link href={`/thread/${thread.id}`}>
+                  <CardBody>
+                    <Box>
+                      <Heading size="sm">{thread.title}</Heading>
+                    </Box>
+                  </CardBody>
+                </Link>
+              </Card>
+            </Stack>
+          ))
+        )}
         <Divider />
         <Stack spacing="4" mt="4" direction="row" justify="flex-end">
           <Input

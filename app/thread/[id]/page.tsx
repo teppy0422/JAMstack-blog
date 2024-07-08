@@ -21,6 +21,7 @@ export default function Thread() {
   const [newPostContent, setNewPostContent] = useState("");
   const [isClient, setIsClient] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [ipAddress, setIpAddress] = useState("");
 
   useEffect(() => {
     setIsClient(true);
@@ -28,6 +29,12 @@ export default function Thread() {
 
   useEffect(() => {
     if (isClient && id) {
+      const fetchIpAddress = async () => {
+        const ipResponse = await fetch("/api/ip");
+        const ipData = await ipResponse.json();
+        setIpAddress(ipData.ip);
+      };
+      fetchIpAddress();
       fetchPosts();
 
       const channel = supabase
@@ -70,7 +77,6 @@ export default function Thread() {
           }
         )
         .subscribe();
-
       return () => {
         supabase.removeChannel(channel);
       };
@@ -86,10 +92,6 @@ export default function Thread() {
   };
 
   const createPost = async () => {
-    const ipResponse = await fetch("https://api.ipify.org?format=json");
-    const ipData = await ipResponse.json();
-    const ipAddress = ipData.ip;
-
     const { error } = await supabase
       .from("posts")
       .insert([
@@ -113,6 +115,7 @@ export default function Thread() {
       <Heading size="md" mb="4">
         スレッド詳細
       </Heading>
+      <Box>{ipAddress}</Box>
       <Stack spacing="6" mb="4">
         {posts.map((post) => (
           <Card key={post.id}>
