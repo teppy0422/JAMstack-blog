@@ -22,6 +22,8 @@ export default function Thread() {
   const [isClient, setIsClient] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [ipAddress, setIpAddress] = useState("");
+  const [threadTitle, setThreadTitle] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -34,7 +36,16 @@ export default function Thread() {
         const ipData = await ipResponse.json();
         setIpAddress(ipData.ip);
       };
+      const fetchThreadTitle = async () => {
+        const { data } = await supabase
+          .from("threads")
+          .select("title")
+          .eq("id", id)
+          .single();
+        setThreadTitle(data?.title || ""); // スレッドタイトルを設定
+      };
       fetchIpAddress();
+      fetchThreadTitle();
       fetchPosts();
 
       const channel = supabase
@@ -83,6 +94,7 @@ export default function Thread() {
     }
   }, [isClient, id]);
 
+  //投稿を表示
   const fetchPosts = async () => {
     const { data } = await supabase
       .from("posts")
@@ -90,20 +102,67 @@ export default function Thread() {
       .eq("thread_id", id);
     setPosts(data || []);
   };
-
+  // 投稿する
   const createPost = async () => {
-    const { error } = await supabase
-      .from("posts")
-      .insert([
-        { thread_id: id, content: newPostContent, ip_address: ipAddress },
-      ]);
+    let fileUrl: string = "";
+    if (selectedFile) {
+      const filePath = await uploadFile(selectedFile);
+      if (filePath) {
+        const { data } = supabase.storage
+          .from("uploads")
+          .getPublicUrl(filePath);
+        fileUrl = data?.publicUrl ?? "";
+        console.log("Public URL:", fileUrl); // 取得したパブリックURLをログ出力
+      }
+    }
+
+    const { error } = await supabase.from("posts").insert([
+      {
+        thread_id: id,
+        content: newPostContent,
+        ip_address: ipAddress,
+        file_url: fileUrl,
+      },
+    ]);
 
     if (error) {
       console.error("Error creating post:", error);
     } else {
       setNewPostContent("");
-      // fetchPosts() を呼び出さない
+      setSelectedFile(null);
+      scrollToBottom();
     }
+  };
+  //ボトムにスクロール
+  const scrollToBottom = () => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.shiftKey && e.key === "Enter") {
+      e.preventDefault();
+      createPost();
+      setNewPostContent("");
+      const textarea = e.target as HTMLTextAreaElement;
+      textarea.style.height = "auto"; // 高さを初期状態に戻す
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+  //ファイルをアップロードする関数
+  const uploadFile = async (file: File) => {
+    const { data, error } = await supabase.storage
+      .from("uploads")
+      .upload(`public/${file.name}`, file);
+    if (error) {
+      console.error("Error uploading file:", error);
+      return null;
+    }
+    console.log("File uploaded:", data.path); // アップロードされたファイルパスをログ出力
+    return data.path;
   };
 
   if (!isClient) {
@@ -113,7 +172,7 @@ export default function Thread() {
   return (
     <Content isCustomHeader={true}>
       <Heading size="md" mb="4">
-        スレッド詳細
+        {threadTitle}
       </Heading>
       <Box>{ipAddress}</Box>
       <Stack spacing="6" mb="4">
@@ -121,6 +180,30 @@ export default function Thread() {
           <Card key={post.id}>
             <CardBody>
               <Box>{post.content}</Box>
+              {post.file_url && (
+                <>
+                  {post.file_url.match(/\.(jpeg|jpg|gif|png)$/) ? (
+                    <img
+                      src={post.file_url}
+                      alt="Uploaded image"
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "300px",
+                        marginTop: "10px",
+                      }} // 最大サイズを指定
+                    />
+                  ) : (
+                    <a
+                      href={post.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ display: "block", marginTop: "10px" }} // リンクのスタイルを調整
+                    >
+                      ダウンロードファイル
+                    </a>
+                  )}
+                </>
+              )}
             </CardBody>
           </Card>
         ))}
@@ -132,10 +215,15 @@ export default function Thread() {
           type="text"
           value={newPostContent}
           onChange={(e) => setNewPostContent(e.target.value)}
-          placeholder="新規投稿内容"
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+            handleKeyDown(
+              e as unknown as React.KeyboardEvent<HTMLTextAreaElement>
+            )
+          } // 型を明示的に指定
+          placeholder="新規投稿内容 （Shift+Enterで投稿）"
           paddingTop={2}
           size="md"
-          rows={3}
+          color="black"
           bg="white"
           resize="none"
           onInput={(e) => {
@@ -161,6 +249,13 @@ export default function Thread() {
         </Button>
         <audio ref={audioRef} src="/sound/notification.mp3" />
       </Stack>
+      <Input
+        type="file"
+        accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt" // 画像ファイルとExcelファイルとかを許可
+        onChange={handleFileChange}
+        bg="white"
+        color="black"
+      />
     </Content>
   );
 }

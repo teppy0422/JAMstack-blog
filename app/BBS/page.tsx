@@ -24,13 +24,19 @@ export default function Threads() {
 
   useEffect(() => {
     const fetchIpAddress = async () => {
-      const ipResponse = await fetch("/api/ip");
-      const ipData = await ipResponse.json();
-      setIpAddress(ipData.ip);
+      try {
+        const response = await fetch("/api/ip");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setIpAddress(data.ip);
+      } catch (error) {
+        console.error("Error fetching IP address:", error);
+      }
     };
-
     fetchIpAddress();
-    fetchThreads();
+    fetchThreads(); // 既存のコード
   }, []);
 
   const fetchThreads = async () => {
