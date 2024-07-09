@@ -36,7 +36,7 @@ function Sidebar() {
   return (
     <>
       <Box
-        display={{ base: "none", md: "block" }}
+        display={{ base: "none", xl: "block" }}
         position="fixed"
         w={["100px", "100px", "150px", "200px"]}
         h="100vh"
@@ -45,6 +45,7 @@ function Sidebar() {
         top="0"
         left="0"
         textAlign="left"
+        zIndex="1100"
       >
         <VStack spacing="4" align="stretch">
           <Box height="66px"></Box>
@@ -63,21 +64,21 @@ function Sidebar() {
       </Box>
 
       <IconButton
-        display={{ base: "block", md: "none" }}
+        display={{ base: "block", xl: "none" }}
         icon={<HamburgerIcon />}
         aria-label="Open Menu"
         onClick={onOpen}
         position="fixed"
-        top="4em"
+        top="8px"
         left="10px"
-        zIndex="1000" // アイコンが他の要素の後ろに隠れないようにする
+        zIndex="1101" // アイコンが他の要素の後ろに隠れないようにする
         opacity="0.85"
       />
 
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay>
           <DrawerContent>
-            <DrawerHeader>メニュー</DrawerHeader>
+            <DrawerHeader>MENU</DrawerHeader>
             <DrawerBody>
               <VStack spacing="4" align="stretch">
                 <NextLink href="/directoryLayout" passHref legacyBehavior>
