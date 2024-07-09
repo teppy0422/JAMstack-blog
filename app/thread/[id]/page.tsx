@@ -4,8 +4,11 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { FaUpload, FaPaperclip, FaDownload } from "react-icons/fa";
 import { supabase } from "../../../utils/supabase/client";
+import { format } from "date-fns";
+import { ja } from "date-fns/locale";
 import {
   Box,
+  Flex,
   Heading,
   Stack,
   Card,
@@ -22,6 +25,8 @@ import {
   ModalBody,
   useDisclosure,
   Image,
+  Divider,
+  Text,
 } from "@chakra-ui/react";
 import Content from "../../../components/content";
 
@@ -124,6 +129,7 @@ export default function Thread() {
   // 投稿する
   const createPost = async () => {
     let fileUrl: string = "";
+    let originalFileName: string = "";
     if (selectedFile) {
       const filePath = await uploadFile(selectedFile);
       if (filePath) {
@@ -131,11 +137,12 @@ export default function Thread() {
           .from("uploads")
           .getPublicUrl(filePath);
         fileUrl = data?.publicUrl ?? "";
-        console.log("Public URL:", fileUrl); // 取得したパブリックURLをログ出力
+        originalFileName = selectedFile.name; // 元のファイル名を保存
+        console.log("Public URL:", fileUrl);
       }
     }
     if (!newPostContent.trim() && !fileUrl) {
-      return; // テキストが空で、添付ファイルが無い場合は投稿を許可しない
+      return;
     }
     const { error } = await supabase.from("posts").insert([
       {
@@ -143,10 +150,11 @@ export default function Thread() {
         content: newPostContent,
         ip_address: ipAddress,
         file_url: fileUrl,
+        original_file_name: originalFileName, // 元のファイル名を保存
       },
     ]);
     if (error) {
-      console.error("Error creating post:", error.message); // エラーメッセージをログ出力
+      console.error("Error creating post:", error.message);
     } else {
       setNewPostContent("");
       setSelectedFile(null);
@@ -184,10 +192,10 @@ export default function Thread() {
 
     const { data, error } = uploadResponse;
     if (error) {
-      console.error("Error uploading file:", error.message); // エラーメッセージをログ出力
+      console.error("Error uploading file:", error.message);
       return null;
     }
-    console.log("File uploaded:", data.path); // アップロードされたファイルパスをログ出力
+    console.log("File uploaded:", data.path);
     return data.path;
   };
   const encodeFileName = (fileName: string) => {
@@ -234,7 +242,7 @@ export default function Thread() {
     }
   };
   //ファイルをダウンロードする関数
-  const handleDownload = async (url: string) => {
+  const handleDownload = async (url: string, originalFileName: string) => {
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -243,13 +251,37 @@ export default function Thread() {
       const blob = await response.blob();
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
-      link.setAttribute("download", url.split("/").pop() || "download");
+      link.setAttribute("download", originalFileName || "download");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (error) {
       console.error("Error downloading the file:", error);
     }
+  };
+  //日付をフォーマットする関数
+  const formatDate = (
+    dateString: string,
+    prevDateString?: string,
+    isTimeOnly?: boolean = false
+  ) => {
+    const date = new Date(dateString);
+    const prevDate = prevDateString ? new Date(prevDateString) : null;
+
+    if (isTimeOnly) {
+      return format(date, "H:mm", { locale: ja });
+    }
+
+    if (prevDate) {
+      const isSameYear = date.getFullYear() === prevDate.getFullYear();
+      const isSameMonth = isSameYear && date.getMonth() === prevDate.getMonth();
+      const isSameDay = isSameMonth && date.getDate() === prevDate.getDate();
+
+      if (isSameMonth) {
+        return format(date, "M/d", { locale: ja }).replace(/ /g, "\n");
+      }
+    }
+    return format(date, "yyyy M/d", { locale: ja }).replace(/ /g, "\n");
   };
   if (!isClient) {
     return null;
@@ -262,85 +294,158 @@ export default function Thread() {
       </Heading>
       <Box>{ipAddress}</Box>
       <Stack spacing="2" mb="4" style={{ padding: "0px" }}>
-        {posts.map((post) => (
-          <Box
-            key={post.id}
-            alignSelf={
-              post.ip_address === ipAddress ? "flex-end" : "flex-start"
-            } // IPアドレスに基づいて位置を調整
-            maxWidth="90%" // メッセージの最大幅を設定
-          >
-            <Card
-              key={post.id}
-              style={{
-                backgroundColor:
-                  post.ip_address === ipAddress ? "#DCF8C6" : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
-                borderRadius: "10px",
-                padding: "0px",
-                position: "relative",
-                margin: "1px",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // 影を追加
-              }}
-            >
-              <CardBody px="10px" py="10px">
-                <Box>{post.content}</Box>
-                {post.file_url && (
-                  <>
-                    {post.file_url.match(/\.(jpeg|jpg|gif|png)$/) ? (
-                      <Image
-                        src={post.file_url}
-                        alt="Uploaded image"
-                        cursor="pointer"
-                        style={{
-                          maxWidth: "100%",
-                          maxHeight: "300px",
-                          marginTop: "1px",
-                        }} // 最大サイズを指定
-                        onClick={() => {
-                          setSelectedImageUrl(post.file_url);
-                          setFileModalOpen(true);
-                        }}
-                      />
-                    ) : (
-                      <Button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleDownload(post.file_url);
-                        }}
-                        variant="solid"
-                        mt="10px"
-                        leftIcon={<FaDownload />} // アイコンを追加
-                        bg="white"
-                        color="black"
-                      >
-                        ダウンロード
-                      </Button>
-                    )}
-                  </>
+        {posts
+          .sort(
+            (a, b) =>
+              new Date(a.created_at).getTime() -
+              new Date(b.created_at).getTime()
+          ) // created_atでソート
+
+          .map((post, index, sortedPosts) => {
+            const prevPost = posts[index - 1];
+            const prevDateString = prevPost ? prevPost.created_at : undefined;
+            const isNewDay =
+              index === 0 || // 一番最初の投稿の場合
+              (prevDateString &&
+                new Date(post.created_at).toDateString() !==
+                  new Date(prevDateString).toDateString());
+            return (
+              <>
+                {isNewDay && (
+                  <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    width="100%"
+                    mb="1.5"
+                  >
+                    <Divider borderColor="gray.500" />
+                    <Text
+                      fontSize="xs"
+                      color="gray.500"
+                      whiteSpace="pre-wrap"
+                      textAlign="center"
+                      mx="2"
+                      lineHeight="1.2"
+                    >
+                      {formatDate(post.created_at, prevDateString, false)}
+                    </Text>
+                    <Divider borderColor="gray.500" />
+                  </Flex>
                 )}
-              </CardBody>
-              <Box
-                style={{
-                  position: "absolute",
-                  top: "10px",
-                  left: post.ip_address === ipAddress ? "auto" : "-10px",
-                  right: post.ip_address === ipAddress ? "-10px" : "auto",
-                  width: 0,
-                  height: 0,
-                  borderStyle: "solid",
-                  borderWidth:
-                    post.ip_address === ipAddress
-                      ? "2px 0 10px 10px"
-                      : "2px 10px 10px 0",
-                  borderColor:
-                    post.ip_address === ipAddress
-                      ? "transparent transparent transparent #DCF8C6"
-                      : "transparent #FFFFFF transparent transparent",
-                }}
-              />
-            </Card>
-          </Box>
-        ))}
+
+                <Flex
+                  key={post.id}
+                  justifyContent={
+                    post.ip_address === ipAddress ? "flex-end" : "flex-start"
+                  } // IPアドレスに基づいて位置を調整
+                  maxWidth="90%" // メッセージの最大幅を設定
+                >
+                  {post.ip_address === ipAddress && (
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      fontSize="xs"
+                      color="gray.500"
+                      whiteSpace="pre-wrap" // 改行を適用するために変更
+                      textAlign="center"
+                      mr="1" // メッセージとの間にマージンを追加
+                      mb="1.5"
+                      alignSelf="flex-end" // 追加
+                      lineHeight="1" // 行間を短くするために追加
+                    >
+                      {formatDate(post.created_at, prevDateString, true)}
+                    </Box>
+                  )}
+                  <Card
+                    style={{
+                      backgroundColor:
+                        post.ip_address === ipAddress ? "#DCF8C6" : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
+                      borderRadius: "10px",
+                      padding: "0px",
+                      margin: "1px",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // 影を追加
+                    }}
+                  >
+                    <CardBody px="10px" py="10px">
+                      <Box>{post.content}</Box>
+                      {post.file_url && (
+                        <>
+                          {post.file_url.match(/\.(jpeg|jpg|gif|png)$/) ? (
+                            <Image
+                              src={post.file_url}
+                              alt="Uploaded image"
+                              cursor="pointer"
+                              style={{
+                                maxWidth: "100%",
+                                maxHeight: "300px",
+                                marginTop: "1px",
+                              }} // 最大サイズを指定
+                              onClick={() => {
+                                setSelectedImageUrl(post.file_url);
+                                setFileModalOpen(true);
+                              }}
+                            />
+                          ) : (
+                            <Button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleDownload(
+                                  post.file_url,
+                                  post.original_file_name
+                                );
+                              }}
+                              variant="solid"
+                              mt="10px"
+                              leftIcon={<FaDownload />}
+                              bg="white"
+                              color="black"
+                            >
+                              ダウンロード
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </CardBody>
+                    <Box
+                      style={{
+                        position: "absolute",
+                        top: "10px",
+                        left: post.ip_address === ipAddress ? "auto" : "-10px",
+                        right: post.ip_address === ipAddress ? "-10px" : "auto",
+                        width: 0,
+                        height: 0,
+                        borderStyle: "solid",
+                        borderWidth:
+                          post.ip_address === ipAddress
+                            ? "2px 0 10px 10px"
+                            : "2px 10px 10px 0",
+                        borderColor:
+                          post.ip_address === ipAddress
+                            ? "transparent transparent transparent #DCF8C6"
+                            : "transparent #FFFFFF transparent transparent",
+                      }}
+                    />
+                  </Card>
+                  {post.ip_address !== ipAddress && (
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      fontSize="xs"
+                      color="gray.500"
+                      whiteSpace="pre-wrap" // 改行を適用するために変更
+                      textAlign="center" // テキストを中央寄せにする
+                      ml="1" // メッセージとの間にマージンを追加
+                      mb="1.5"
+                      alignSelf="flex-end" // 追加
+                      lineHeight="1" // 行間を短くするために追加
+                    >
+                      {formatDate(post.created_at, prevDateString, true)}
+                    </Box>
+                  )}
+                </Flex>
+              </>
+            );
+          })}
       </Stack>
 
       <Stack spacing="4" mt="4" direction="row" justify="flex-end">
