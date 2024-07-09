@@ -263,7 +263,7 @@ export default function Thread() {
   const formatDate = (
     dateString: string,
     prevDateString?: string,
-    isTimeOnly?: boolean = false
+    isTimeOnly?: boolean
   ) => {
     const date = new Date(dateString);
     const prevDate = prevDateString ? new Date(prevDateString) : null;
@@ -338,7 +338,9 @@ export default function Thread() {
                   justifyContent={
                     post.ip_address === ipAddress ? "flex-end" : "flex-start"
                   } // IPアドレスに基づいて位置を調整
-                  maxWidth="90%" // メッセージの最大幅を設定
+                  mr={post.ip_address === ipAddress ? "3" : "0"}
+                  ml={post.ip_address !== ipAddress ? "3" : "0"}
+                  maxWidth="100%" // メッセージの最大幅を設定
                 >
                   {post.ip_address === ipAddress && (
                     <Box
@@ -360,6 +362,7 @@ export default function Thread() {
                     style={{
                       backgroundColor:
                         post.ip_address === ipAddress ? "#DCF8C6" : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
+
                       borderRadius: "10px",
                       padding: "0px",
                       margin: "1px",
@@ -367,7 +370,11 @@ export default function Thread() {
                     }}
                   >
                     <CardBody px="10px" py="10px">
-                      <Box>{post.content}</Box>
+                      <Box
+                        dangerouslySetInnerHTML={{
+                          __html: post.content.replace(/\n/g, "<br />"),
+                        }}
+                      />
                       {post.file_url && (
                         <>
                           {post.file_url.match(/\.(jpeg|jpg|gif|png)$/) ? (
@@ -406,6 +413,7 @@ export default function Thread() {
                         </>
                       )}
                     </CardBody>
+                    {/* 吹き出し */}
                     <Box
                       style={{
                         position: "absolute",
