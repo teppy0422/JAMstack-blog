@@ -10,11 +10,11 @@ export default function Content({ children, isCustomHeader = false }) {
     <>
       <Flex>
         {isCustomHeader ? <Sidebar /> : null}
-        <Box flex="1">
+        <Box flex="1" zIndex="1000">
           {isCustomHeader ? <Header_ /> : <Header />}
           <Box height="66px"></Box>
           <Container
-            maxWidth="960px"
+            maxWidth="900px"
             className="container"
             style={{ background: "rgba(255,255,255,0.1)" }}
             px={0}

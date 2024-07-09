@@ -19,7 +19,6 @@ export const theme = extendTheme({
   colors: {
     brand: {
       100: "#ff00ff",
-      // ...
       900: "#1a202c",
     },
     excel: "#1f9b60",

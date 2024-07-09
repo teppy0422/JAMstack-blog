@@ -362,7 +362,6 @@ export default function Thread() {
                     style={{
                       backgroundColor:
                         post.ip_address === ipAddress ? "#DCF8C6" : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
-
                       borderRadius: "10px",
                       padding: "0px",
                       margin: "1px",
@@ -371,6 +370,7 @@ export default function Thread() {
                   >
                     <CardBody px="10px" py="10px">
                       <Box
+                        color="black"
                         dangerouslySetInnerHTML={{
                           __html: post.content.replace(/\n/g, "<br />"),
                         }}
@@ -517,6 +517,7 @@ export default function Thread() {
             target.style.height = `${target.scrollHeight}px`;
             target.style.overflow = "hidden";
           }}
+          _placeholder={{ color: "gray.500" }} // placeholderの文字色を指定
         />
         <Button
           onClick={() => {
