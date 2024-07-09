@@ -2,6 +2,7 @@
 
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
+import { FaUpload, FaPaperclip, FaDownload } from "react-icons/fa";
 import { supabase } from "../../../utils/supabase/client";
 import {
   Box,
@@ -11,6 +12,16 @@ import {
   CardBody,
   Input,
   Button,
+  IconButton,
+  Tooltip,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  useDisclosure,
+  Image,
 } from "@chakra-ui/react";
 import Content from "../../../components/content";
 
@@ -24,6 +35,14 @@ export default function Thread() {
   const [ipAddress, setIpAddress] = useState("");
   const [threadTitle, setThreadTitle] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [fileModalOpen, setFileModalOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  const [isZoomed, setIsZoomed] = useState(false); // ズームインの状態を管理
+  // ... existing code ...
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     setIsClient(true);
@@ -115,7 +134,9 @@ export default function Thread() {
         console.log("Public URL:", fileUrl); // 取得したパブリックURLをログ出力
       }
     }
-
+    if (!newPostContent.trim() && !fileUrl) {
+      return; // テキストが空で、添付ファイルが無い場合は投稿を許可しない
+    }
     const { error } = await supabase.from("posts").insert([
       {
         thread_id: id,
@@ -124,14 +145,59 @@ export default function Thread() {
         file_url: fileUrl,
       },
     ]);
-
     if (error) {
-      console.error("Error creating post:", error);
+      console.error("Error creating post:", error.message); // エラーメッセージをログ出力
     } else {
       setNewPostContent("");
       setSelectedFile(null);
+      setSelectedFileName(null);
       scrollToBottom();
     }
+  };
+  //ファイルをアップロードする関数
+  const uploadFile = async (file: File) => {
+    const encodedFileName = encodeFileName(file.name);
+    console.log("encodedFileName:", encodedFileName);
+
+    // まずファイルが存在するか確認
+    const { data: existingFile, error: checkError } = await supabase.storage
+      .from("uploads")
+      .list("public", { search: encodedFileName });
+
+    if (checkError) {
+      console.error("Error checking file existence:", checkError.message);
+      return null;
+    }
+
+    let uploadResponse;
+    if (existingFile && existingFile.length > 0) {
+      // ファイルが存在する場合は更新
+      uploadResponse = await supabase.storage
+        .from("uploads")
+        .update(`public/${encodedFileName}`, file);
+    } else {
+      // ファイルが存在しない場合は新規アップロード
+      uploadResponse = await supabase.storage
+        .from("uploads")
+        .upload(`public/${encodedFileName}`, file);
+    }
+
+    const { data, error } = uploadResponse;
+    if (error) {
+      console.error("Error uploading file:", error.message); // エラーメッセージをログ出力
+      return null;
+    }
+    console.log("File uploaded:", data.path); // アップロードされたファイルパスをログ出力
+    return data.path;
+  };
+  const encodeFileName = (fileName: string) => {
+    const now = new Date();
+    const yyyymmddhhnnss = now
+      .toISOString()
+      .replace(/[-T:.Z]/g, "")
+      .slice(0, 14);
+    const extension = fileName.split(".").pop();
+    return `${yyyymmddhhnnss}.${extension}`;
   };
   //ボトムにスクロール
   const scrollToBottom = () => {
@@ -147,24 +213,44 @@ export default function Thread() {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      console.log("aaa:", file.type);
+      setSelectedFile(file); // 選択されたファイルを設定
+      setSelectedFileName(file.name); // ファイル名を設定
     }
-  };
-  //ファイルをアップロードする関数
-  const uploadFile = async (file: File) => {
-    const { data, error } = await supabase.storage
-      .from("uploads")
-      .upload(`public/${file.name}`, file);
-    if (error) {
-      console.error("Error uploading file:", error);
-      return null;
-    }
-    console.log("File uploaded:", data.path); // アップロードされたファイルパスをログ出力
-    return data.path;
   };
 
+  //添付ファイルをキャンセルする関数
+  const handleFileRemove = () => {
+    setSelectedFile(null);
+    setSelectedFileName(null);
+  };
+  //添付ファイルを選択するボタンをクリック
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+  //ファイルをダウンロードする関数
+  const handleDownload = async (url: string) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const blob = await response.blob();
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.setAttribute("download", url.split("/").pop() || "download");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading the file:", error);
+    }
+  };
   if (!isClient) {
     return null;
   }
@@ -196,29 +282,39 @@ export default function Thread() {
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // 影を追加
               }}
             >
-              <CardBody px="10px" py="5px">
+              <CardBody px="10px" py="10px">
                 <Box>{post.content}</Box>
                 {post.file_url && (
                   <>
                     {post.file_url.match(/\.(jpeg|jpg|gif|png)$/) ? (
-                      <img
+                      <Image
                         src={post.file_url}
                         alt="Uploaded image"
+                        cursor="pointer"
                         style={{
                           maxWidth: "100%",
                           maxHeight: "300px",
                           marginTop: "1px",
                         }} // 最大サイズを指定
+                        onClick={() => {
+                          setSelectedImageUrl(post.file_url);
+                          setFileModalOpen(true);
+                        }}
                       />
                     ) : (
-                      <a
-                        href={post.file_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ display: "block", marginTop: "10px" }} // リンクのスタイルを調整
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDownload(post.file_url);
+                        }}
+                        variant="solid"
+                        mt="10px"
+                        leftIcon={<FaDownload />} // アイコンを追加
+                        bg="white"
+                        color="black"
                       >
-                        ダウンロードファイル
-                      </a>
+                        ダウンロード
+                      </Button>
                     )}
                   </>
                 )}
@@ -246,7 +342,45 @@ export default function Thread() {
           </Box>
         ))}
       </Stack>
+
       <Stack spacing="4" mt="4" direction="row" justify="flex-end">
+        <Tooltip
+          label="添付ファイルを選択"
+          aria-label="添付ファイルを選択"
+          cursor="pointer"
+        >
+          <Button
+            onClick={handleButtonClick}
+            position="relative"
+            display="inline-block"
+            cursor="pointer"
+            p="0"
+          >
+            <IconButton
+              aria-label="Upload file"
+              icon={<FaUpload />}
+              colorScheme="teal"
+              zIndex="0"
+            />
+            <Input
+              type="file"
+              accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,7z" // 画像ファイルとExcelファイルとかを許可
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              position="absolute"
+              top="0"
+              left="0"
+              opacity="0"
+              width="100%"
+              height="100%"
+              zIndex="1"
+              title=""
+              aria-label="Upload file" // ここにaria-labelを追加
+              name=""
+              display="none"
+            />
+          </Button>
+        </Tooltip>
         <Input
           _focus={{ _focus: "none" }}
           as="textarea"
@@ -282,18 +416,59 @@ export default function Thread() {
           }}
           colorScheme="teal"
           width="auto"
+          isDisabled={!newPostContent.trim() && !selectedFile} // テキストが空で、添付ファイルが無い場合はボタンを無効化
         >
           投稿
         </Button>
         <audio ref={audioRef} src="/sound/notification.mp3" />
       </Stack>
-      <Input
-        type="file"
-        accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt" // 画像ファイルとExcelファイルとかを許可
-        onChange={handleFileChange}
-        bg="white"
-        color="black"
-      />
+      {selectedFileName && (
+        <Tooltip
+          label="添付をキャンセルします"
+          aria-label="添付をキャンセルします"
+        >
+          <Box
+            display="inline-flex"
+            alignItems="center"
+            mt="2"
+            p="2"
+            border="1px solid"
+            borderColor="gray.200"
+            borderRadius="md"
+            bg="gray.50"
+            width="auto"
+            cursor="pointer" // クリック可能にする
+            onClick={handleFileRemove} // クリックイベントを追加
+          >
+            <FaPaperclip style={{ marginRight: "8px" }} />
+            <Box>{selectedFileName}</Box>
+          </Box>
+        </Tooltip>
+      )}
+      <Modal isOpen={fileModalOpen} onClose={() => setFileModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          {/* <ModalCloseButton position="absolute" top="10px" right="-10px" /> */}
+          <ModalBody
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            p={0}
+            onClick={() => setIsZoomed(!isZoomed)} // クリックでズームイン/アウトを切り替え
+          >
+            {selectedImageUrl && (
+              <Image
+                src={selectedImageUrl}
+                alt="Uploaded image"
+                maxW={isZoomed ? "99vw" : "80vw"} // ズームイン時は制限なし
+                maxH={isZoomed ? "99vh" : "80vh"} // ズームイン時は制限なし
+                objectFit="contain" // 画像がモーダルの範囲内に収まるようにする
+                cursor={isZoomed ? "zoom-out" : "zoom-in"} // ズームイン/アウトのカーソルを設定
+              />
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Content>
   );
 }
