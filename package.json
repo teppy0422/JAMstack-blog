@@ -34,6 +34,7 @@
     "aos": "^3.0.0-beta.6",
     "axios": "^1.7.2",
     "cheerio": "^1.0.0-rc.10",
+    "date-fns": "^3.6.0",
     "file-loader": "^6.2.0",
     "firebase": "^9.8.2",
     "framer-motion": "^6.3.2",
