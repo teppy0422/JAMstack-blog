@@ -2,7 +2,12 @@
 
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import { FaUpload, FaPaperclip, FaDownload } from "react-icons/fa";
+import {
+  FaUpload,
+  FaPaperclip,
+  FaDownload,
+  FaPaperPlane,
+} from "react-icons/fa";
 import { supabase } from "../../../utils/supabase/client";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
@@ -27,6 +32,8 @@ import {
   Image,
   Divider,
   Text,
+  Spinner,
+  useColorMode,
 } from "@chakra-ui/react";
 import Content from "../../../components/content";
 
@@ -46,6 +53,9 @@ export default function Thread() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [isZoomed, setIsZoomed] = useState(false); // ズームインの状態を管理
+  const { colorMode, toggleColorMode } = useColorMode(); //ダークモード
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // ... existing code ...
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -289,10 +299,10 @@ export default function Thread() {
 
   return (
     <Content isCustomHeader={true}>
-      <Heading size="md" mb="4">
+      <Heading size="md" mb="1" ml="1">
         {threadTitle}
       </Heading>
-      <Box>{ipAddress}</Box>
+      <Box ml="1">{ipAddress}</Box>
       <Stack spacing="2" mb="4" style={{ padding: "0px" }}>
         {posts
           .sort(
@@ -311,6 +321,7 @@ export default function Thread() {
                   new Date(prevDateString).toDateString());
             return (
               <>
+                {/* 日付の区切り線 */}
                 {isNewDay && (
                   <Flex
                     alignItems="center"
@@ -320,7 +331,7 @@ export default function Thread() {
                   >
                     <Divider borderColor="gray.500" />
                     <Text
-                      fontSize="xs"
+                      fontSize="15px"
                       color="gray.500"
                       whiteSpace="pre-wrap"
                       textAlign="center"
@@ -346,7 +357,7 @@ export default function Thread() {
                     <Box
                       display="flex"
                       flexDirection="column"
-                      fontSize="xs"
+                      fontSize="13px"
                       color="gray.500"
                       whiteSpace="pre-wrap" // 改行を適用するために変更
                       textAlign="center"
@@ -438,7 +449,7 @@ export default function Thread() {
                     <Box
                       display="flex"
                       flexDirection="column"
-                      fontSize="xs"
+                      fontSize="13px"
                       color="gray.500"
                       whiteSpace="pre-wrap" // 改行を適用するために変更
                       textAlign="center" // テキストを中央寄せにする
@@ -456,7 +467,7 @@ export default function Thread() {
           })}
       </Stack>
 
-      <Stack spacing="4" mt="4" direction="row" justify="flex-end">
+      <Stack spacing="4" mt="4" direction="row" justify="flex-end" mb="4">
         <Tooltip
           label="添付ファイルを選択"
           aria-label="添付ファイルを選択"
@@ -472,12 +483,12 @@ export default function Thread() {
             <IconButton
               aria-label="Upload file"
               icon={<FaUpload />}
-              colorScheme="teal"
+              colorScheme={colorMode === "light" ? "purple" : "yellow"}
               zIndex="0"
             />
             <Input
               type="file"
-              accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,7z" // 画像ファイルとExcelファイルとかを許可
+              accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,.7z,.gif" // 画像ファイルとExcelファイルとかを許可
               ref={fileInputRef}
               onChange={handleFileChange}
               position="absolute"
@@ -505,12 +516,13 @@ export default function Thread() {
               e as unknown as React.KeyboardEvent<HTMLTextAreaElement>
             )
           } // 型を明示的に指定
-          placeholder="新規投稿内容 （Shift+Enterで投稿）"
+          placeholder="メッセージを入力 (Shift+Enterで送信)"
           paddingTop={2}
           size="md"
           color="black"
           bg="white"
           resize="none"
+          borderRadius="5px"
           onInput={(e) => {
             const target = e.target as HTMLTextAreaElement;
             target.style.height = "auto";
@@ -519,21 +531,37 @@ export default function Thread() {
           }}
           _placeholder={{ color: "gray.500" }} // placeholderの文字色を指定
         />
-        <Button
+        <IconButton
           onClick={() => {
+            setIsSubmitting(true); //post開始
             createPost();
-            setNewPostContent("");
+            setNewPostContent(""); //クリア
             const textarea = document.querySelector("textarea");
             if (textarea) {
-              textarea.style.height = "auto"; // 高さを初期状態に戻す
+              textarea.style.height = "41px"; // 高さを初期状態に戻す
             }
+            setIsSubmitting(false); //post終了
           }}
-          colorScheme="teal"
-          width="auto"
+          icon={
+            isSubmitting ? (
+              <Spinner
+                size="36px"
+                color={colorMode === "light" ? "purple" : "yellow"}
+              />
+            ) : (
+              <FaPaperPlane
+                color={colorMode === "light" ? "purple" : "yellow"}
+                style={{ transform: "rotate(45deg)" }}
+                size="36px"
+              />
+            )
+          }
+          bg="none"
+          top={-1}
+          left={-2}
           isDisabled={!newPostContent.trim() && !selectedFile} // テキストが空で、添付ファイルが無い場合はボタンを無効化
-        >
-          投稿
-        </Button>
+          aria-label="送信"
+        />
         <audio ref={audioRef} src="/sound/notification.mp3" />
       </Stack>
       {selectedFileName && (
@@ -551,7 +579,7 @@ export default function Thread() {
             borderRadius="md"
             bg="gray.50"
             width="auto"
-            cursor="pointer" // クリック可能にする
+            cursor="pointer"
             onClick={handleFileRemove} // クリックイベントを追加
           >
             <FaPaperclip style={{ marginRight: "8px" }} />
