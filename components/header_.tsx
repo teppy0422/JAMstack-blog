@@ -1,4 +1,5 @@
 import NextAuth from "next-auth";
+import { useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import NextLink from "next/link";
 import QRCode from "qrcode.react";
@@ -40,6 +41,7 @@ import {
   faBookOpen,
   faKeyboard,
   faMobileScreenButton,
+  faSignInAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
@@ -47,24 +49,17 @@ import React, { useEffect } from "react";
 
 import LoginBtn from "./loginBtn";
 import AwesomIcon from "./awesomIcon";
+import Auth from "./Auth"; // Authコンポーネントをインポート
 
 export default function Header() {
   const { data: session } = useSession();
-
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("red.500", "red.200");
   const bg2 = useColorModeValue("#000", "pink");
-
   const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  // temp
-  // useEffect(() => {
-  // document.addEventListener("mouseover", function (event) {
-  //   console.log("aajdaskfla");
-  // });
-  // });
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 
   // loginボタンを隠す
   let keyFlag: boolean = false;
@@ -84,9 +79,17 @@ export default function Header() {
     }
     console.log(event.key);
   };
-  // useEffect(() => {
-  //   document.addEventListener("keydown", handleKeyDown, false);
-  // }, []);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      document.addEventListener("keydown", handleKeyDown, false);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        document.removeEventListener("keydown", handleKeyDown, false);
+      }
+    };
+  }, []);
+
   return (
     <>
       <header id="navTop">
@@ -139,7 +142,9 @@ export default function Header() {
                   <ModalBody>
                     <Text>このページのQRコード</Text>
                     <Box mt="4" display="flex" justifyContent="center">
-                      <QRCode value={window.location.href} size={80} />
+                      {typeof window !== "undefined" && (
+                        <QRCode value={window.location.href} size={80} />
+                      )}
                     </Box>
                   </ModalBody>
                   <ModalFooter>
@@ -165,9 +170,26 @@ export default function Header() {
                 }}
               />
             </Center>
+            <Center w="64px">
+              <IconButton
+                icon={<FontAwesomeIcon icon={faSignInAlt} size="2xl" />}
+                aria-label="Login"
+                onClick={() => setLoginModalOpen(true)}
+              />
+            </Center>
           </Flex>
         </VStack>
       </header>
+      <Modal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Login</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Auth />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 }
