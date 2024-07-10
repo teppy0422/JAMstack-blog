@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import { useSession, signIn, signOut } from "next-auth/react";
 import NextLink from "next/link";
-
+import QRCode from "qrcode.react";
 import {
   Flex,
   Center,
@@ -17,6 +17,15 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
 } from "@chakra-ui/react";
 import {
   MoonIcon,
@@ -30,6 +39,7 @@ import {
   faBook,
   faBookOpen,
   faKeyboard,
+  faMobileScreenButton,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
@@ -47,6 +57,7 @@ export default function Header() {
 
   const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   // temp
   // useEffect(() => {
@@ -109,9 +120,38 @@ export default function Header() {
                 <Link
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
-                  <Text className={styles.logoText}>ダウンロードのテスト</Text>
+                  <Text className={styles.logoText}>テスト中</Text>
                 </Link>
               </NextLink>
+              <IconButton
+                icon={
+                  <FontAwesomeIcon icon={faMobileScreenButton} size="2xl" />
+                }
+                aria-label="Mobile Icon"
+                size="0px"
+                onClick={onOpen} // モーダルを開く関数を呼び出す
+              />
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>QRコード</ModalHeader>
+                  <ModalCloseButton _focus={{ _focus: "none" }} />
+                  <ModalBody>
+                    <Text>このページのQRコード</Text>
+                    <Box mt="4" display="flex" justifyContent="center">
+                      <QRCode value={window.location.href} size={80} />
+                    </Box>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Text fontSize="12px">
+                      スマホで撮影した写真の送信が簡単になります
+                    </Text>
+                    {/* <Button colorScheme="gray" mr={3} onClick={onClose}>
+                      閉じる
+                    </Button> */}
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
             </Center>
             <Center w="64px">
               <IconButton

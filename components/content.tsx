@@ -16,9 +16,19 @@ export default function Content({ children, isCustomHeader = false }) {
           <Container
             maxWidth="900px"
             className="container"
-            style={{ background: "rgba(255,255,255,0.1)" }}
-            px={0}
+            position="relative" // 相対位置を設定
+            px={1}
           >
+            <Box
+              position="absolute"
+              top="0"
+              left="0"
+              right="0"
+              bottom="0"
+              background="rgba(255,255,255,0.05)"
+              filter="blur(20px)" // ブラー効果を追加
+              zIndex="-1" // 背景として扱うためにzIndexを設定
+            />
             {children}
           </Container>
         </Box>
