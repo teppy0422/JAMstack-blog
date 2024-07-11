@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase/client";
 import { Flex } from "@chakra-ui/react";
+import { signIn } from "next-auth/react";
 
 export default function Auth() {
   const [email, setEmail] = useState<string>("");
@@ -91,6 +92,9 @@ export default function Auth() {
               {loading ? "Loading..." : "Sign In"}
             </button>
           </Flex>
+          <button onClick={() => signIn("google")} disabled={loading}>
+            {loading ? "Loading..." : "Sign in with Google"}
+          </button>
         </div>
       )}
     </div>
