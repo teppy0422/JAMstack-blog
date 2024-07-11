@@ -336,6 +336,32 @@ export default function Thread() {
       );
     }
   };
+  //投稿時刻の表示
+  const getTimeStamp = (
+    time_stamp: string,
+    isRight: boolean,
+    isReturn: boolean
+  ) => {
+    if (isReturn) {
+      return (
+        <Box
+          display="flex"
+          flexDirection="column"
+          fontSize="13px"
+          color="gray.500"
+          whiteSpace="pre-wrap" // 改行を適用するために変更
+          textAlign="center"
+          mr={isRight ? "-2" : "0"} // メッセージとの間にマージンを追加
+          ml={isRight ? "0" : "-2"}
+          mb="1.5"
+          alignSelf={isRight ? "flex-start" : "flex-end"} // 追加
+          lineHeight="1" // 行間を短くするために追加
+        >
+          {time_stamp}
+        </Box>
+      );
+    }
+  };
 
   if (!isClient) {
     return null;
@@ -393,25 +419,12 @@ export default function Thread() {
                   justifyContent={
                     post.user_uid === userId ? "flex-end" : "flex-start"
                   } // IPアドレスに基づいて位置を調整
-                  mr={post.user_uid === userId ? "1" : "0"}
-                  ml={post.user_uid !== userId ? "1" : "0"}
                   maxWidth="100%" // メッセージの最大幅を設定
                 >
-                  {post.user_uid === userId && (
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      fontSize="13px"
-                      color="gray.500"
-                      whiteSpace="pre-wrap" // 改行を適用するために変更
-                      textAlign="center"
-                      mr="1" // メッセージとの間にマージンを追加
-                      mb="1.5"
-                      alignSelf="flex-end" // 追加
-                      lineHeight="1" // 行間を短くするために追加
-                    >
-                      {formatDate(post.created_at, prevDateString, true)}
-                    </Box>
+                  {getTimeStamp(
+                    formatDate(post.created_at, prevDateString, true),
+                    false,
+                    post.user_uid === userId
                   )}
                   {getAvatarProps(
                     post.user_uid,
@@ -424,7 +437,8 @@ export default function Thread() {
                         post.user_uid === userId ? "#DCF8C6" : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
                       borderRadius: "10px",
                       padding: "0px",
-                      margin: "0 12px",
+                      margin:
+                        post.user_uid === userId ? "0 12px 0 4px" : "0 12px",
                       boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // 影を追加
                     }}
                   >
@@ -494,22 +508,11 @@ export default function Thread() {
                       }}
                     />
                   </Card>
-                  {post.user_uid !== userId && (
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      fontSize="13px"
-                      color="gray.500"
-                      whiteSpace="pre-wrap" // 改行を適用するために変更
-                      textAlign="center" // テキストを中央寄せにする
-                      ml="-2" // メッセージとの間にマージンを追加
-                      mb="1.5"
-                      alignSelf="flex-end" // 追加
-                      lineHeight="1" // 行間を短くするために追加
-                    >
-                      {formatDate(post.created_at, prevDateString, true)}
-                    </Box>
-                  )}{" "}
+                  {getTimeStamp(
+                    formatDate(post.created_at, prevDateString, true),
+                    false,
+                    post.user_uid !== userId
+                  )}
                   {getAvatarProps(
                     post.user_uid,
                     userId,
