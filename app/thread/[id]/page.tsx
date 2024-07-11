@@ -34,6 +34,7 @@ import {
   Text,
   Spinner,
   useColorMode,
+  Avatar,
 } from "@chakra-ui/react";
 import Content from "../../../components/content";
 
@@ -55,9 +56,32 @@ export default function Thread() {
   const [isZoomed, setIsZoomed] = useState(false); // ズームインの状態を管理
   const { colorMode, toggleColorMode } = useColorMode(); //ダークモード
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); //ログイン有無
+  const [userId, setUserId] = useState<string | null>(null);
 
   // ... existing code ...
   const { isOpen, onOpen, onClose } = useDisclosure();
+  // ユーザーIDを取得する関数
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUserId(user?.id ?? null);
+      console.log(user?.id);
+    };
+    fetchUserId();
+  }, []);
+  //ログイン状態の確認
+  useEffect(() => {
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setIsLoggedIn(!!user);
+    };
+    checkUser();
+  }, []);
 
   useEffect(() => {
     setIsClient(true);
@@ -154,13 +178,17 @@ export default function Thread() {
     if (!newPostContent.trim() && !fileUrl) {
       return;
     }
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     const { error } = await supabase.from("posts").insert([
       {
         thread_id: id,
         content: newPostContent,
         ip_address: ipAddress,
         file_url: fileUrl,
-        original_file_name: originalFileName, // 元のファイル名を保存
+        original_file_name: originalFileName,
+        user_uid: user?.id, // ログインしているユーザーのUIDを追加
       },
     ]);
     if (error) {
@@ -277,11 +305,9 @@ export default function Thread() {
   ) => {
     const date = new Date(dateString);
     const prevDate = prevDateString ? new Date(prevDateString) : null;
-
     if (isTimeOnly) {
       return format(date, "H:mm", { locale: ja });
     }
-
     if (prevDate) {
       const isSameYear = date.getFullYear() === prevDate.getFullYear();
       const isSameMonth = isSameYear && date.getMonth() === prevDate.getMonth();
@@ -293,6 +319,24 @@ export default function Thread() {
     }
     return format(date, "yyyy M/d", { locale: ja }).replace(/ /g, "\n");
   };
+
+  //アバター作成
+  const getAvatarProps = (post_userID: any, userId: any, isReturn: boolean) => {
+    if (isReturn) {
+      return (
+        <Avatar
+          size="sm"
+          {...(post_userID === "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0"
+            ? { name: "自分", src: "https://bit.ly/dan-abramov" }
+            : {
+                src: "https://bit.ly/broken-link",
+              })}
+          ml={0}
+        />
+      );
+    }
+  };
+
   if (!isClient) {
     return null;
   }
@@ -347,13 +391,13 @@ export default function Thread() {
                 <Flex
                   key={post.id}
                   justifyContent={
-                    post.ip_address === ipAddress ? "flex-end" : "flex-start"
+                    post.user_uid === userId ? "flex-end" : "flex-start"
                   } // IPアドレスに基づいて位置を調整
-                  mr={post.ip_address === ipAddress ? "3" : "0"}
-                  ml={post.ip_address !== ipAddress ? "3" : "0"}
+                  mr={post.user_uid === userId ? "1" : "0"}
+                  ml={post.user_uid !== userId ? "1" : "0"}
                   maxWidth="100%" // メッセージの最大幅を設定
                 >
-                  {post.ip_address === ipAddress && (
+                  {post.user_uid === userId && (
                     <Box
                       display="flex"
                       flexDirection="column"
@@ -369,13 +413,18 @@ export default function Thread() {
                       {formatDate(post.created_at, prevDateString, true)}
                     </Box>
                   )}
+                  {getAvatarProps(
+                    post.user_uid,
+                    userId,
+                    post.user_uid !== userId
+                  )}
                   <Card
                     style={{
                       backgroundColor:
-                        post.ip_address === ipAddress ? "#DCF8C6" : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
+                        post.user_uid === userId ? "#DCF8C6" : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
                       borderRadius: "10px",
                       padding: "0px",
-                      margin: "1px",
+                      margin: "0 12px",
                       boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // 影を追加
                     }}
                   >
@@ -428,24 +477,24 @@ export default function Thread() {
                     <Box
                       style={{
                         position: "absolute",
-                        top: "10px",
-                        left: post.ip_address === ipAddress ? "auto" : "-10px",
-                        right: post.ip_address === ipAddress ? "-10px" : "auto",
+                        top: "5px",
+                        left: post.user_uid === userId ? "auto" : "-10px",
+                        right: post.user_uid === userId ? "-10px" : "auto",
                         width: 0,
                         height: 0,
                         borderStyle: "solid",
                         borderWidth:
-                          post.ip_address === ipAddress
-                            ? "2px 0 10px 10px"
-                            : "2px 10px 10px 0",
+                          post.user_uid === userId
+                            ? "5px 0 10px 15px"
+                            : "5px 15px 10px 0",
                         borderColor:
-                          post.ip_address === ipAddress
+                          post.user_uid === userId
                             ? "transparent transparent transparent #DCF8C6"
                             : "transparent #FFFFFF transparent transparent",
                       }}
                     />
                   </Card>
-                  {post.ip_address !== ipAddress && (
+                  {post.user_uid !== userId && (
                     <Box
                       display="flex"
                       flexDirection="column"
@@ -453,13 +502,18 @@ export default function Thread() {
                       color="gray.500"
                       whiteSpace="pre-wrap" // 改行を適用するために変更
                       textAlign="center" // テキストを中央寄せにする
-                      ml="1" // メッセージとの間にマージンを追加
+                      ml="-2" // メッセージとの間にマージンを追加
                       mb="1.5"
                       alignSelf="flex-end" // 追加
                       lineHeight="1" // 行間を短くするために追加
                     >
                       {formatDate(post.created_at, prevDateString, true)}
                     </Box>
+                  )}{" "}
+                  {getAvatarProps(
+                    post.user_uid,
+                    userId,
+                    post.user_uid === userId
                   )}
                 </Flex>
               </>

@@ -180,6 +180,7 @@ export default function Header() {
           </Flex>
         </VStack>
       </header>
+      {/* ログインモーダル */}
       <Modal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
