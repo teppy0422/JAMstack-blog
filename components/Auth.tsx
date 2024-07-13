@@ -32,7 +32,6 @@ export default function Auth() {
     }
     setLoading(false);
   };
-
   // サインイン関数
   const handleSignIn = async () => {
     setLoading(true);
@@ -60,6 +59,16 @@ export default function Auth() {
       setUser(null);
     }
     setLoading(false);
+  };
+  // グーグルログイン関数
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: "http://localhost:3000/api/auth/callback", // ここでリダイレクトURIを指定
+      },
+    });
+    if (error) console.error("Error during Google login:", error.message);
   };
   return (
     <div>
@@ -92,9 +101,11 @@ export default function Auth() {
               {loading ? "Loading..." : "Sign In"}
             </button>
           </Flex>
-          <button onClick={() => signIn("google")} disabled={loading}>
+          <button onClick={handleGoogleLogin}>Googleでログイン</button>
+
+          {/* <button onClick={() => signIn("google")} disabled={loading}>
             {loading ? "Loading..." : "Sign in with Google"}
-          </button>
+          </button> */}
         </div>
       )}
     </div>

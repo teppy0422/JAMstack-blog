@@ -15,6 +15,7 @@ import {
 import { supabase } from "../../utils/supabase/client";
 import Link from "next/link";
 import Content from "../../components/content";
+import Sidebar from "../../components/sidebar";
 
 export default function Threads() {
   const [threads, setThreads] = useState<any[]>([]);
@@ -36,7 +37,7 @@ export default function Threads() {
       }
     };
     fetchIpAddress();
-    fetchThreads(); // 既存のコード
+    fetchThreads();
   }, []);
 
   const fetchThreads = async () => {
@@ -58,6 +59,7 @@ export default function Threads() {
 
   return (
     <>
+      <Sidebar />
       <Content isCustomHeader={true}>
         <Heading size="md" mb="4">
           スレッド一覧
