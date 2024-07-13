@@ -2,7 +2,7 @@ module.exports = {
   trailingSlash: true,
   experimental: {
     // optimizeFonts: true,
-    appDir: true,
+    // appDir: true,
   },
   //必要なのか分からない
   webpack: (config, options) => {
