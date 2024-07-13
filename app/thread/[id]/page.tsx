@@ -268,7 +268,6 @@ export default function Thread() {
       setSelectedFileName(file.name); // ファイル名を設定
     }
   };
-
   //添付ファイルをキャンセルする関数
   const handleFileRemove = () => {
     setSelectedFile(null);

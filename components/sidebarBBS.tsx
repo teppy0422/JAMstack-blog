@@ -15,7 +15,7 @@ import {
   Divider,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { supabase } from "../utils/supabase/client";
+import { supabase } from "../utils/supabase/client-js";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HamburgerIcon } from "@chakra-ui/icons";
@@ -30,12 +30,35 @@ function SidebarBBS() {
   const [threads, setThreads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [ipAddress, setIpAddress] = useState("");
+  const [newThreads, setNewThreads] = useState<string[]>([]);
+
   const maxTitleLength = useBreakpointValue({
     base: 10,
     xl: 9,
     "2xl": 16,
     "3xl": 40,
   });
+  //新しい投稿の監視
+  useEffect(() => {
+    const subscription = supabase
+      .channel("public:posts")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "posts" },
+        (payload) => {
+          console.log("New post payload:", payload); // デバッグ用
+          setNewThreads((prev) => {
+            const updatedThreads = [...prev, payload.new.thread_id];
+            console.log("Updated newThreads:", updatedThreads); // デバッグ用
+            return updatedThreads;
+          });
+        }
+      )
+      .subscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     setCurrentPath(window.location.pathname);
@@ -73,13 +96,15 @@ function SidebarBBS() {
     }
     setLoading(false); // 追加
   };
-  const menuItem = (path_, label, useColorMode) => {
+  const menuItem = (path_, label, useColorMode, threadId) => {
+    const isNew = newThreads.includes(threadId);
+
     return (
       <NextLink href={path_} passHref legacyBehavior>
         <Box
           {...buttonStyle(path_)}
           onClick={onClose}
-          position="relative"
+          position="relative" // 親のBoxにrelativeを設定
           _hover={{
             "& span::after": {
               width: "100%",
@@ -97,6 +122,19 @@ function SidebarBBS() {
           textOverflow="ellipsis" // 省略記号を表示する
           py={2}
         >
+          {isNew && (
+            <Box
+              as="span"
+              color="red"
+              position="absolute"
+              left="0"
+              top="0"
+              transform="translate(-7%, 10%)" // 左上に表示
+              fontSize="1.2em"
+            >
+              ●
+            </Box>
+          )}
           <Box
             as="span"
             position="relative"
@@ -140,21 +178,20 @@ function SidebarBBS() {
         h="100vh"
         bg="white.200"
         p="0"
-        top="0"
+        top="60px"
         left="0"
         textAlign="left"
         zIndex="1100"
         fontSize={15}
       >
         <VStack spacing="0" align="stretch">
-          <Box mt={20} />
           {threads.map((thread) =>
-            menuItem(`/thread/${thread.id}`, thread.title, true)
+            menuItem(`/thread/${thread.id}`, thread.title, true, thread.id)
           )}
         </VStack>
       </Box>
 
-      <IconButton
+      {/* <IconButton
         display={{ base: "block", xl: "block" }}
         icon={<HamburgerIcon />}
         bg="white.1"
@@ -193,7 +230,7 @@ function SidebarBBS() {
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>
-      </Drawer>
+      </Drawer> */}
     </>
   );
 }
