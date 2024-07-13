@@ -16,6 +16,14 @@ export const theme = extendTheme({
       },
     }),
   },
+  breakpoints: {
+    sm: "30em",
+    md: "48em",
+    lg: "62em",
+    xl: "80em",
+    "2xl": "96em",
+    "3xl": "112em", // カスタムブレークポイント
+  },
   colors: {
     brand: {
       100: "#ff00ff",
@@ -30,3 +38,5 @@ export const theme = extendTheme({
     inkscape: "#333333",
   },
 });
+
+export default theme;

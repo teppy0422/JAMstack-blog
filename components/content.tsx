@@ -3,13 +3,11 @@ import NextLink from "next/link";
 
 import Header from "../components/header";
 import Header_ from "../components/header_";
-import Sidebar from "../components/sidebar";
 
 export default function Content({ children, isCustomHeader = false }) {
   return (
     <>
       <Flex>
-        {isCustomHeader ? <Sidebar /> : null}
         <Box flex="1" zIndex="1000">
           {isCustomHeader ? <Header_ /> : <Header />}
           <Box height="66px"></Box>
