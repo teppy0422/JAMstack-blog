@@ -121,6 +121,7 @@ function SidebarBBS() {
           overflow="hidden" // 親要素を超えた部分を隠す
           textOverflow="ellipsis" // 省略記号を表示する
           py={2}
+          pl={3}
         >
           {isNew && (
             <Box
@@ -129,7 +130,7 @@ function SidebarBBS() {
               position="absolute"
               left="0"
               top="0"
-              transform="translate(-7%, 10%)" // 左上に表示
+              transform="translate(6%, 10%)" // 左上に表示
               fontSize="1.2em"
             >
               ●
