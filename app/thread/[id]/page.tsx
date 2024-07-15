@@ -453,38 +453,62 @@ export default function Thread() {
                         />
                         {post.file_url && (
                           <>
-                            {post.file_url.match(/\.(jpeg|jpg|gif|png)$/) ? (
-                              <Image
-                                src={post.file_url}
-                                alt="Uploaded image"
-                                cursor="pointer"
-                                style={{
-                                  maxWidth: "100%",
-                                  maxHeight: "300px",
-                                  marginTop: "1px",
-                                }} // 最大サイズを指定
-                                onClick={() => {
-                                  setSelectedImageUrl(post.file_url);
-                                  setFileModalOpen(true);
-                                }}
-                              />
+                            {post.file_url.match(
+                              /\.(jpeg|jpg|gif|png|mp4)$/
+                            ) ? (
+                              post.file_url.endsWith(".mp4") ? (
+                                <video
+                                  src={post.file_url}
+                                  autoPlay
+                                  loop
+                                  muted
+                                  style={{
+                                    maxWidth: "100%",
+                                    maxHeight: "300px",
+                                    marginTop: "1px",
+                                    cursor: "pointer",
+                                  }} // 最大サイズを指定
+                                  onClick={() => {
+                                    setSelectedImageUrl(post.file_url);
+                                    setFileModalOpen(true);
+                                  }}
+                                />
+                              ) : (
+                                <Image
+                                  src={post.file_url}
+                                  alt="Uploaded image"
+                                  cursor="pointer"
+                                  style={{
+                                    maxWidth: "100%",
+                                    maxHeight: "300px",
+                                    marginTop: "1px",
+                                  }} // 最大サイズを指定
+                                  onClick={() => {
+                                    setSelectedImageUrl(post.file_url);
+                                    setFileModalOpen(true);
+                                  }}
+                                />
+                              )
                             ) : (
-                              <Button
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleDownload(
-                                    post.file_url,
-                                    post.original_file_name
-                                  );
-                                }}
-                                variant="solid"
-                                mt="10px"
-                                leftIcon={<FaDownload />}
-                                bg="white"
-                                color="black"
-                              >
-                                ダウンロード
-                              </Button>
+                              <Box>
+                                <Text>{post.original_file_name}</Text>
+                                <Button
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    handleDownload(
+                                      post.file_url,
+                                      post.original_file_name
+                                    );
+                                  }}
+                                  variant="solid"
+                                  mt="10px"
+                                  leftIcon={<FaDownload />}
+                                  bg="white"
+                                  color="black"
+                                >
+                                  ダウンロード
+                                </Button>
+                              </Box>
                             )}
                           </>
                         )}
@@ -547,7 +571,7 @@ export default function Thread() {
               />
               <Input
                 type="file"
-                accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,.7z,.gif" // 画像ファイルとExcelファイルとかを許可
+                accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,.7z,.gif,.mp4" // 画像ファイルとExcelファイルとかを許可
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 position="absolute"
@@ -657,16 +681,30 @@ export default function Thread() {
               p={0}
               onClick={() => setIsZoomed(!isZoomed)} // クリックでズームイン/アウトを切り替え
             >
-              {selectedImageUrl && (
-                <Image
-                  src={selectedImageUrl}
-                  alt="Uploaded image"
-                  maxW={isZoomed ? "99vw" : "80vw"} // ズームイン時は制限なし
-                  maxH={isZoomed ? "99vh" : "80vh"} // ズームイン時は制限なし
-                  objectFit="contain" // 画像がモーダルの範囲内に収まるようにする
-                  cursor={isZoomed ? "zoom-out" : "zoom-in"} // ズームイン/アウトのカーソルを設定
-                />
-              )}
+              {selectedImageUrl &&
+                (selectedImageUrl.match(/\.mp4$/) ? (
+                  <video
+                    src={selectedImageUrl}
+                    autoPlay
+                    loop
+                    muted
+                    style={{
+                      maxWidth: isZoomed ? "99vw" : "80vw", // ズームイン時は制限なし
+                      maxHeight: isZoomed ? "99vh" : "80vh", // ズームイン時は制限なし
+                      objectFit: "contain", // 動画がモーダルの範囲内に収まるようにする
+                      cursor: isZoomed ? "zoom-out" : "zoom-in", // ズームイン/アウトのカーソルを設定
+                    }}
+                  />
+                ) : (
+                  <Image
+                    src={selectedImageUrl}
+                    alt="Uploaded image"
+                    maxW={isZoomed ? "99vw" : "80vw"} // ズームイン時は制限なし
+                    maxH={isZoomed ? "99vh" : "80vh"} // ズームイン時は制限なし
+                    objectFit="contain" // 画像がモーダルの範囲内に収まるようにする
+                    cursor={isZoomed ? "zoom-out" : "zoom-in"} // ズームイン/アウトのカーソルを設定
+                  />
+                ))}
             </ModalBody>
           </ModalContent>
         </Modal>

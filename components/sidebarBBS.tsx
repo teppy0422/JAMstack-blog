@@ -126,15 +126,14 @@ function SidebarBBS() {
           {isNew && (
             <Box
               as="span"
-              color="red"
+              backgroundColor="red"
               position="absolute"
               left="0"
               top="0"
-              transform="translate(6%, 10%)" // 左上に表示
-              fontSize="1.2em"
-            >
-              ●
-            </Box>
+              transform="translate(50%, 75%)"
+              width="6px"
+              height="1em"
+            />
           )}
           <Box
             as="span"
