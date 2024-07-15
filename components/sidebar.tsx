@@ -90,12 +90,12 @@ function Sidebar() {
         h="100vh"
         bg="white.200"
         p="5"
-        top="0"
+        top="60px"
         left="0"
         textAlign="left"
+        zIndex="1100"
       >
         <VStack spacing="2" align="stretch">
-          <Box height="66px" />
           {menuItem("/directoryLayout", "ディレクトリ構成", true)}
           {menuItem("/download", "ダウンロード", true)}
           {menuItem("/BBS", "不具合報告", true)}
@@ -103,7 +103,7 @@ function Sidebar() {
       </Box>
 
       <IconButton
-        display={{ base: "block", xl: "none" }}
+        display={{ base: "none", xl: "none" }}
         icon={<HamburgerIcon />}
         bg="white.1"
         aria-label="Open Menu"
