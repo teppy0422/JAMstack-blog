@@ -65,6 +65,8 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
         return { color: "red", variant: "solid" };
       } else if (inCharge.includes("徳島") || inCharge.includes("高知")) {
         return { color: "green", variant: "outline" };
+      } else if (inCharge.includes("更新")) {
+        return { color: "teal" };
       } else {
         return { color: "gray", variant: "solid" };
       }
