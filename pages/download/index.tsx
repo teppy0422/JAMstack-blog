@@ -52,13 +52,22 @@ export default function About() {
           mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
         >
           <CustomLinkBox
+            dateTime="2024-07-18T17:34:00+0900"
+            description1="ダブり圧着で先ハメの時に片方しか赤枠にならない"
+            description2="複数電線でも赤枠になるように修正"
+            descriptionIN=""
+            linkHref="/files/Sjp3.004.94_.zip"
+            inCharge="不具合,高知,王さん,win10zip"
+            isLatest={true}
+          />
+          <CustomLinkBox
             dateTime="2024-07-18T14:20:00+0900"
             description1="検査履歴システムで先ハメ/後ハメが分かるようにしたい"
             description2="検査履歴用の画像で共用ポイントを点滅するように修正"
             descriptionIN=""
             linkHref="/files/Sjp3.004.93_.zip"
             inCharge="更新,高知,王さん,win10zip"
-            isLatest={true}
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-06-26T10:46:00+0900"
@@ -76,15 +85,6 @@ export default function About() {
             descriptionIN=""
             linkHref="/files/Sjp3.004.84_.zip"
             inCharge="不具合,高知,王さん,win10zip"
-            isLatest={false}
-          />
-          <CustomLinkBox
-            dateTime="2024-06-11T12:24:00+0900"
-            description1="高知のPC設定が徳島と異なるためサーバー接続が出来ない"
-            description2="サーバーへの接続タイミングを修正"
-            descriptionIN=""
-            linkHref="/files/Sjp3.004.83_.xlsm"
-            inCharge="不具合,高知,王さん,圧縮無し"
             isLatest={false}
           />
           <CustomLinkBox
