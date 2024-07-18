@@ -35,7 +35,12 @@ import {
   Spinner,
   useColorMode,
   Avatar,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
+  TagRightIcon,
 } from "@chakra-ui/react";
+import { ChatIcon } from "@chakra-ui/icons";
 import Content from "../../../components/content";
 import SidebarBBS from "../../../components/sidebarBBS";
 
@@ -391,6 +396,53 @@ export default function Thread() {
                 (prevDateString &&
                   new Date(post.created_at).toDateString() !==
                     new Date(prevDateString).toDateString());
+              // :で囲んだ文字はタイトル
+              if (post.content.match(/:(.*?):/)) {
+                return (
+                  <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    width="100%"
+                    mb="1.5"
+                    color="red"
+                  >
+                    <Divider
+                      borderColor={colorMode === "light" ? "red" : "pink"}
+                    />
+                    <Tag
+                      colorScheme="red"
+                      minWidth="fit-content"
+                      maxWidth="100%"
+                      display="inline-flex"
+                      variant="outline"
+                    >
+                      <TagLeftIcon
+                        as={ChatIcon}
+                        color={colorMode === "light" ? "red" : "pink"}
+                      />
+                      <TagLabel
+                        textAlign="center"
+                        whiteSpace="nowrap"
+                        width="auto"
+                        maxWidth="none"
+                        display="inline"
+                        overflow="visible"
+                        color={colorMode === "light" ? "red" : "pink"}
+                      >
+                        {post.content.match(/:(.*?):/)[1]}
+                      </TagLabel>
+                      <TagRightIcon
+                        as={ChatIcon}
+                        color={colorMode === "light" ? "red" : "pink"}
+                      />
+                    </Tag>
+                    <Divider
+                      borderColor={colorMode === "light" ? "red" : "pink"}
+                    />
+                  </Flex>
+                );
+              }
+
               return (
                 <>
                   {/* 日付の区切り線 */}
@@ -518,7 +570,7 @@ export default function Thread() {
                           </>
                         )}
                       </CardBody>
-                      {/* 吹き出し */}
+                      {/* 吹き出しの三角 */}
                       <Box
                         style={{
                           position: "absolute",
