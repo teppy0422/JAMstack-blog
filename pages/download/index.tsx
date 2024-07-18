@@ -52,13 +52,22 @@ export default function About() {
           mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
         >
           <CustomLinkBox
+            dateTime="2024-07-18T14:20:00+0900"
+            description1="検査履歴システムで先ハメ/後ハメが分かるようにしたい"
+            description2="検査履歴用の画像で共用ポイントを点滅するように修正"
+            descriptionIN=""
+            linkHref="/files/Sjp3.004.93_.zip"
+            inCharge="更新,高知,王さん,win10zip"
+            isLatest={true}
+          />
+          <CustomLinkBox
             dateTime="2024-06-26T10:46:00+0900"
             description1="配索誘導の画像を出力できない"
             description2="sleepMax_を5倍に修正"
             descriptionIN=""
             linkHref="/files/Sjp3.004.85_.zip"
             inCharge="不具合,高知,王さん,win10zip"
-            isLatest={true}
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-06-24T11:01:00+0900"
