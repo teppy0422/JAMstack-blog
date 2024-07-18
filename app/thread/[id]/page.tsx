@@ -448,7 +448,12 @@ export default function Thread() {
                         <Box
                           color="black"
                           dangerouslySetInnerHTML={{
-                            __html: post.content.replace(/\n/g, "<br />"),
+                            __html: post.content
+                              .replace(/\n/g, "<br />")
+                              .replace(
+                                /(http[s]?:\/\/[^\s]+)/g,
+                                '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">$1</a>'
+                              ),
                           }}
                         />
                         {post.file_url && (
