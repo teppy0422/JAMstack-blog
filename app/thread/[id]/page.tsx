@@ -319,10 +319,14 @@ export default function Thread() {
       const isSameDay = isSameMonth && date.getDate() === prevDate.getDate();
 
       if (isSameMonth) {
-        return format(date, "M/d", { locale: ja }).replace(/ /g, "\n");
+        return `${format(date, "M/d", { locale: ja })} (${format(date, "E", {
+          locale: ja,
+        })})`;
       }
     }
-    return format(date, "yyyy M/d", { locale: ja }).replace(/ /g, "\n");
+    return `${format(date, "yyyy M/d", { locale: ja })} (${format(date, "E", {
+      locale: ja,
+    })})`;
   };
 
   //アバター作成
@@ -396,50 +400,76 @@ export default function Thread() {
                 (prevDateString &&
                   new Date(post.created_at).toDateString() !==
                     new Date(prevDateString).toDateString());
+
               // :で囲んだ文字はタイトル
               if (post.content.match(/:(.*?):/)) {
                 return (
-                  <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    width="100%"
-                    mb="1.5"
-                    color="red"
-                  >
-                    <Divider
-                      borderColor={colorMode === "light" ? "red" : "pink"}
-                    />
-                    <Tag
-                      colorScheme="red"
-                      minWidth="fit-content"
-                      maxWidth="100%"
-                      display="inline-flex"
-                      variant="outline"
-                    >
-                      <TagLeftIcon
-                        as={ChatIcon}
-                        color={colorMode === "light" ? "red" : "pink"}
-                      />
-                      <TagLabel
-                        textAlign="center"
-                        whiteSpace="nowrap"
-                        width="auto"
-                        maxWidth="none"
-                        display="inline"
-                        overflow="visible"
-                        color={colorMode === "light" ? "red" : "pink"}
+                  <>
+                    {isNewDay && (
+                      <Flex
+                        alignItems="center"
+                        justifyContent="center"
+                        width="100%"
+                        mb="1.5"
                       >
-                        {post.content.match(/:(.*?):/)[1]}
-                      </TagLabel>
-                      <TagRightIcon
-                        as={ChatIcon}
-                        color={colorMode === "light" ? "red" : "pink"}
+                        <Divider borderColor="gray.500" />
+                        <Text
+                          fontSize="15px"
+                          color="gray.500"
+                          whiteSpace="nowrap" // 改行を防ぐ
+                          textAlign="center"
+                          mx="2"
+                          lineHeight="1.2"
+                        >
+                          {formatDate(post.created_at, prevDateString, false)}
+                        </Text>
+                        <Divider borderColor="gray.500" />
+                      </Flex>
+                    )}
+                    <Flex
+                      alignItems="center"
+                      justifyContent="center"
+                      width="100%"
+                      mb="1.5"
+                      color="red"
+                    >
+                      <Divider
+                        borderColor={colorMode === "light" ? "red" : "pink"}
                       />
-                    </Tag>
-                    <Divider
-                      borderColor={colorMode === "light" ? "red" : "pink"}
-                    />
-                  </Flex>
+                      <Tag
+                        colorScheme="red"
+                        minWidth="fit-content"
+                        maxWidth="100%"
+                        display="inline-flex"
+                        variant="outline"
+                        mt="1em"
+                        mb="1em"
+                      >
+                        <TagLeftIcon
+                          as={ChatIcon}
+                          color={colorMode === "light" ? "red" : "pink"}
+                        />
+                        <TagLabel
+                          textAlign="center"
+                          whiteSpace="nowrap"
+                          width="auto"
+                          maxWidth="none"
+                          display="inline"
+                          overflow="visible"
+                          color={colorMode === "light" ? "red" : "pink"}
+                        >
+                          {post.content.match(/:(.*?):/)[1]}
+                        </TagLabel>
+                        <TagRightIcon
+                          as={ChatIcon}
+                          color={colorMode === "light" ? "red" : "pink"}
+                        />
+                      </Tag>
+                      <Divider
+                        borderColor={colorMode === "light" ? "red" : "pink"}
+                      />
+                    </Flex>
+                  </>
                 );
               }
 
@@ -457,7 +487,7 @@ export default function Thread() {
                       <Text
                         fontSize="15px"
                         color="gray.500"
-                        whiteSpace="pre-wrap"
+                        whiteSpace="nowrap" // 改行を防ぐ
                         textAlign="center"
                         mx="2"
                         lineHeight="1.2"
@@ -673,6 +703,7 @@ export default function Thread() {
           />
           <IconButton
             onClick={() => {
+              if (isSubmitting) return;
               setIsSubmitting(true); //post開始
               createPost();
               setNewPostContent(""); //クリア
