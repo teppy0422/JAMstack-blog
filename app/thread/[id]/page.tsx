@@ -541,7 +541,7 @@ export default function Thread() {
                         {post.file_url && (
                           <>
                             {post.file_url.match(
-                              /\.(jpeg|jpg|gif|png|mp4)$/
+                              /\.(jpeg|jpg|gif|png|mp4|bmp|webp)$/i
                             ) ? (
                               post.file_url.endsWith(".mp4") ? (
                                 <video
