@@ -25,18 +25,15 @@ export default function Auth() {
   const [confirmPassword, setConfirmPassword] = useState<string>(""); // 確認用パスワードの状態を追加
   const handleSignUp = async () => {
     setLoading(true);
-    if (password !== confirmPassword) {
-      setMessage("パスワードが一致しません。"); // パスワード不一致のメッセージを設定
-      setLoading(false);
-      return;
-    }
     const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) {
       console.error("Error signing up:", error.message);
       setMessage("新規登録に失敗しました: " + error.message); // エラーメッセージを設定
     } else {
       console.log("User signed up:", data);
-      setMessage("認証用のメールを送信しました。ログインが可能になります。"); // 成功メッセージを設定
+      setMessage(
+        "認証用のメールを送信しました。認証後にログインが可能になります。"
+      ); // 成功メッセージを設定
     }
     setLoading(false);
   };

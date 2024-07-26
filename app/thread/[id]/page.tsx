@@ -120,18 +120,47 @@ export default function Thread() {
   const [replyPostUserId, setReplyPostUserId] = useState<string | null>(null); // リプライ対象のユーザーID
   const [replyPostFileUrl, setReplyPostFileUrl] = useState<string | null>(null); // リプライ対象のファイルURL
   const [replyPostId, setReplyPostId] = useState<string | null>(null); // replyPostIdを新たに作成
-  //ユーザー名を取得
-  const [replyPostUserDisplayName, setReplyPostUserDisplayName] = useState<
-    string | null
-  >(null);
-  const [userInfo, setUserInfo] = useState<
-    {
-      id: string;
-      name: string | null;
-      company: string | null;
-      picture: string | null;
-    }[]
-  >([]);
+  //リプライ情報を取得
+  const handleReplyPost = async (postId: string) => {
+    const post = posts.find((p) => p.id === postId); // 対象の投稿を取得
+    if (post) {
+      setReplyPostContent(post.content); // 投稿内容を設定
+      setReplyPostUserId(post.user_uid); // ユーザーIDを設定
+      setReplyPostFileUrl(post.file_url); // ファイルURLを設定
+      // displayNameとuser_companyを取得
+      const userDisplayNameData = await fetchUserFromTable(post.user_uid); // post.user_uidを引数に渡す
+      const displayName = userDisplayNameData?.displayName; // nullチェックを追加
+      const userCompany = userDisplayNameData as string | null; // nullチェックを追加
+      // setReplyPostUserDisplayName(displayName as string | null); // displayNameを状態に設定
+    }
+    setReplyToPostId(postId); // リプライ対象の投稿IDを設定
+    // フォーカスを入力フィールドに当てる
+    const textarea = document.querySelector("textarea");
+    if (textarea) {
+      textarea.focus(); // フォーカスを設定
+    }
+  };
+  //ユーザー情報
+  const [userInfo, setUserInfo] = useState<any[]>([]); // ユーザー情報の配列
+  const fetchUserInfo = async (userId: string) => {
+    const existingUser = userInfo.find((user) => user.id === userId); // userInfoから既存のユーザーを検索
+    if (existingUser) {
+      return existingUser; // 既存のユーザー情報を返す
+    }
+    const fetchedUser = await fetchUserFromTable(userId); // Supabaseからユーザー情報を取得
+    if (fetchedUser) {
+      setUserInfo((prev) => [...prev, { id: userId, ...fetchedUser }]); // userInfoに追加
+    }
+    return fetchedUser; // 取得したユーザー情報を返す
+  };
+  const fetchAndSetUserInfo = async (post_userID: any) => {
+    const userInfo = await fetchUserInfo(post_userID); // ユーザー情報を取得
+    if (userInfo) {
+      setUserInfo((prev) => [...prev, userInfo]); // ここでuserInfoを状態に追加
+    } else {
+      console.error(`User with ID ${post_userID} not found`); // ユーザーが見つからない場合のエラーログ
+    }
+  };
   const fetchUserFromTable = async (userId: string) => {
     const { data, error } = await supabase
       .from("table_users") // 新しいテーブル名を指定
@@ -148,53 +177,19 @@ export default function Thread() {
       userPicture: data.picture_url || null,
     };
   };
-  useEffect(() => {
-    const fetchUserInfo = async (userId: string) => {
-      const existingUser = userInfo.find((user) => user.id === userId); // 指定されたuserIdで配列内にユーザーが存在するか確認
-      if (existingUser) {
-        // ユーザーが配列に存在する場合は、その情報を使用
-        console.log("User info found in array:", existingUser);
-        // ここでexistingUserを使用して必要な処理を行う
-      } else {
-        // IDが無い場合はfetchUserFromTableを利用
-        const userData = await fetchUserFromTable(userId);
-        if (userData) {
-          setUserInfo((prev) => [
-            ...prev,
-            {
-              id: userId,
-              name: userData.displayName as string | null,
-              company: userData.userCompany as string | null,
-              picture: userData.userPicture as string | null,
-            },
-          ]);
-        }
-      }
-    };
-    // ここで必要なuserIdを指定してfetchUserInfoを呼び出す
-    if (userId) {
-      fetchUserInfo(userId);
-    }
-  }, [userId]); // someUserIdが変更されたときに実行
-  //リプライ情報を取得
-  const handleReplyPost = async (postId: string) => {
-    const post = posts.find((p) => p.id === postId); // 対象の投稿を取得
-    if (post) {
-      setReplyPostContent(post.content); // 投稿内容を設定
-      setReplyPostUserId(post.user_uid); // ユーザーIDを設定
-      setReplyPostFileUrl(post.file_url); // ファイルURLを設定
-      // displayNameとuser_companyを取得
-      const userDisplayNameData = await fetchUserFromTable(post.user_uid); // post.user_uidを引数に渡す
-      const displayName = userDisplayNameData?.displayName; // nullチェックを追加
-      const userCompany = userDisplayNameData as string | null; // nullチェックを追加
-      setReplyPostUserDisplayName(displayName as string | null); // displayNameを状態に設定
-    }
-    setReplyToPostId(postId); // リプライ対象の投稿IDを設定
-    // フォーカスを入力フィールドに当てる
-    const textarea = document.querySelector("textarea");
-    if (textarea) {
-      textarea.focus(); // フォーカスを設定
-    }
+  // 複数のユーザー情報を取得して配列に保存する関数
+  const fetchAndStoreUsers = async (userIds: string[]) => {
+    const usersData = await Promise.all(userIds.map(fetchUserFromTable)); // 複数のユーザー情報を取得
+    const validUsers = usersData.filter((user) => user !== null); // nullでないユーザー情報をフィルタリング
+    setUserInfo((prev) => [
+      ...prev,
+      ...validUsers.map((user, index) => ({
+        id: userIds[index], // userIdsからIDを取得
+        name: user?.displayName,
+        company: user?.userCompany,
+        picture: user?.userPicture,
+      })),
+    ]); // 既存のユーザー情報に追加
   };
   //スクロール位置がボトムにあるかを管理する状態
   const [isAtBottom, setIsAtBottom] = useState(false);
@@ -307,7 +302,6 @@ export default function Thread() {
       };
     }
   }, [isClient, id]);
-
   //投稿を表示
   const fetchPosts = async () => {
     const { data } = await supabase
@@ -369,17 +363,14 @@ export default function Thread() {
   const uploadFile = async (file: File) => {
     const encodedFileName = encodeFileName(file.name);
     console.log("encodedFileName:", encodedFileName);
-
     // まずファイルが存在するか確認
     const { data: existingFile, error: checkError } = await supabase.storage
       .from("uploads")
       .list("public", { search: encodedFileName });
-
     if (checkError) {
       console.error("Error checking file existence:", checkError.message);
       return null;
     }
-
     let uploadResponse;
     if (existingFile && existingFile.length > 0) {
       // ファイルが存在する場合は更新
@@ -392,7 +383,6 @@ export default function Thread() {
         .from("uploads")
         .upload(`public/${encodedFileName}`, file);
     }
-
     const { data, error } = uploadResponse;
     if (error) {
       console.error("Error uploading file:", error.message);
@@ -488,16 +478,17 @@ export default function Thread() {
     })})`;
   };
   //アバター作成
-  const getAvatarProps = (post_userID: any, isReturn: boolean) => {
-    const user = userInfo.find((user) => user.id === post_userID); // 変数名を変更
+  const getAvatarProps = (post_userID: any, userId: any, isReturn: boolean) => {
     if (isReturn) {
+      const user = userInfo.find((user) => user.id === post_userID); // ユーザー情報を取得
+      if (!user) {
+        fetchAndSetUserInfo(post_userID); // ユーザー情報を取得して状態に保存
+      }
       return (
         <Avatar
           size="sm"
-          bg="gray.500"
-          {...(user?.picture // user?.pictureがあれば表示
-            ? { src: user.picture } // user.pictureが存在する場合
-            : { src: "https://bit.ly/broken-link" })} // デフォルトのリンク
+          // name={user ? user.displayName : "ユーザー名"} // 修正: userからdisplayNameを取得
+          src={user ? user.userPicture : undefined} // 修正: userからuserPictureを取得
           ml={0}
         />
       );
@@ -776,7 +767,11 @@ export default function Thread() {
                       false,
                       post.user_uid === userId
                     )}
-                    {getAvatarProps(post.user_uid, post.user_uid !== userId)}
+                    {getAvatarProps(
+                      post.user_uid,
+                      userId,
+                      post.user_uid !== userId
+                    )}
                     <Card
                       style={{
                         backgroundColor:
@@ -1033,7 +1028,11 @@ export default function Thread() {
                       false,
                       post.user_uid !== userId
                     )}
-                    {getAvatarProps(post.user_uid, post.user_uid === userId)}
+                    {getAvatarProps(
+                      post.user_uid,
+                      userId,
+                      post.user_uid === userId
+                    )}
                   </Flex>
                 </>
               );
@@ -1091,7 +1090,7 @@ export default function Thread() {
               <Avatar size="sm" src={replyPostUserId || undefined} />
               <Stack ml="1">
                 <Text fontWeight="bold" m="0" lineHeight="1">
-                  {replyPostUserDisplayName}
+                  ゆーざーめい
                 </Text>
                 <Text
                   m="0"
