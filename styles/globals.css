@@ -17,3 +17,44 @@ h4 {
 .chakra-ui-light {
   background: #F0E6DB;
 }
+
+/* BBSのリプライの表示アニメーション */
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* BBSのリプライ先をシェイクして知らせる */
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.shake {
+  animation: shake 0.5s ease;
+  /* アニメーションの持続時間とイージングを設定 */
+}
