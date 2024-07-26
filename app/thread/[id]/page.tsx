@@ -7,6 +7,10 @@ import {
   FaPaperclip,
   FaDownload,
   FaPaperPlane,
+  FaTimes,
+  FaTrashAlt,
+  FaReply,
+  FaArrowDown,
 } from "react-icons/fa";
 import { supabase } from "../../../utils/supabase/client";
 import { format } from "date-fns";
@@ -39,6 +43,7 @@ import {
   TagLabel,
   TagLeftIcon,
   TagRightIcon,
+  Icon,
 } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
 import Content from "../../../components/content";
@@ -64,8 +69,153 @@ export default function Thread() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); //ログイン有無
   const [userId, setUserId] = useState<string | null>(null);
-
-  // ... existing code ...
+  //PCとスマホ
+  //長押し
+  const [isLongPress, setIsLongPress] = useState(false);
+  const [longPressPostId, setLongPressPostId] = useState<string | null>(null);
+  const [hoveredButton, setHoveredButton] = useState<"delete" | "reply" | null>(
+    null
+  );
+  const [longPressTimeout, setLongPressTimeout] =
+    useState<NodeJS.Timeout | null>(null);
+  const handleLongPressStart = (postId: string) => {
+    const timeout = setTimeout(() => {
+      setIsLongPress(true);
+      setLongPressPostId(postId);
+    }, 333);
+    clearTimeout(longPressTimeout!); // 追加: タイマーをクリア
+    setLongPressTimeout(timeout);
+  };
+  const handleLongPressEnd = () => {
+    setIsLongPress(false);
+    setLongPressPostId(null);
+  };
+  const handleMouseEnter = (buttonType: "delete" | "reply") => {
+    setHoveredButton(buttonType);
+  };
+  const handleMouseUp = () => {
+    if (longPressTimeout) {
+      clearTimeout(longPressTimeout); // タイマーをクリア
+    }
+  };
+  const handleMouseLeave = () => {
+    // handleLongPressEnd(); // 長押しを終了
+    setHoveredButton(null);
+  };
+  //postの削除
+  const handleDeletePost = async (postId: string) => {
+    console.log("削除");
+    console.log(postId);
+    const { error } = await supabase.from("posts").delete().eq("id", postId);
+    if (error) {
+      console.error("Error deleting post:", error.message);
+    } else {
+      setPosts(posts.filter((post) => post.id !== postId));
+    }
+  };
+  //postのリプライ
+  const [replyContent, setReplyContent] = useState<string>(""); // リプライ内容を管理する状態
+  const [replyToPostId, setReplyToPostId] = useState<string | null>(null); // リプライ対象の投稿ID
+  const [replyPostContent, setReplyPostContent] = useState<string>(""); // リプライ対象の投稿内容
+  const [replyPostUserId, setReplyPostUserId] = useState<string | null>(null); // リプライ対象のユーザーID
+  const [replyPostFileUrl, setReplyPostFileUrl] = useState<string | null>(null); // リプライ対象のファイルURL
+  const [replyPostId, setReplyPostId] = useState<string | null>(null); // replyPostIdを新たに作成
+  //ユーザー名を取得
+  const [replyPostUserDisplayName, setReplyPostUserDisplayName] = useState<
+    string | null
+  >(null);
+  const [userInfo, setUserInfo] = useState<
+    {
+      id: string;
+      name: string | null;
+      company: string | null;
+      picture: string | null;
+    }[]
+  >([]);
+  const fetchUserFromTable = async (userId: string) => {
+    const { data, error } = await supabase
+      .from("table_users") // 新しいテーブル名を指定
+      .select("user_metadata->name, user_company,picture_url") // displayNameとuser_companyを取得
+      .eq("id", userId) // 引数のuserIdでフィルタリング
+      .single();
+    if (error) {
+      console.error("Error fetching user display name:", error.message);
+      return null;
+    }
+    return {
+      displayName: data.name || null, // user_metadataを直接参照
+      userCompany: data.user_company || null, // user_companyを返す
+      userPicture: data.picture_url || null,
+    };
+  };
+  useEffect(() => {
+    const fetchUserInfo = async (userId: string) => {
+      const existingUser = userInfo.find((user) => user.id === userId); // 指定されたuserIdで配列内にユーザーが存在するか確認
+      if (existingUser) {
+        // ユーザーが配列に存在する場合は、その情報を使用
+        console.log("User info found in array:", existingUser);
+        // ここでexistingUserを使用して必要な処理を行う
+      } else {
+        // IDが無い場合はfetchUserFromTableを利用
+        const userData = await fetchUserFromTable(userId);
+        if (userData) {
+          setUserInfo((prev) => [
+            ...prev,
+            {
+              id: userId,
+              name: userData.displayName as string | null,
+              company: userData.userCompany as string | null,
+              picture: userData.userPicture as string | null,
+            },
+          ]);
+        }
+      }
+    };
+    // ここで必要なuserIdを指定してfetchUserInfoを呼び出す
+    if (userId) {
+      fetchUserInfo(userId);
+    }
+  }, [userId]); // someUserIdが変更されたときに実行
+  //リプライ情報を取得
+  const handleReplyPost = async (postId: string) => {
+    const post = posts.find((p) => p.id === postId); // 対象の投稿を取得
+    if (post) {
+      setReplyPostContent(post.content); // 投稿内容を設定
+      setReplyPostUserId(post.user_uid); // ユーザーIDを設定
+      setReplyPostFileUrl(post.file_url); // ファイルURLを設定
+      // displayNameとuser_companyを取得
+      const userDisplayNameData = await fetchUserFromTable(post.user_uid); // post.user_uidを引数に渡す
+      const displayName = userDisplayNameData?.displayName; // nullチェックを追加
+      const userCompany = userDisplayNameData as string | null; // nullチェックを追加
+      setReplyPostUserDisplayName(displayName as string | null); // displayNameを状態に設定
+    }
+    setReplyToPostId(postId); // リプライ対象の投稿IDを設定
+    // フォーカスを入力フィールドに当てる
+    const textarea = document.querySelector("textarea");
+    if (textarea) {
+      textarea.focus(); // フォーカスを設定
+    }
+  };
+  //スクロール位置がボトムにあるかを管理する状態
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsAtBottom(
+        window.scrollY + window.innerHeight >= document.body.scrollHeight - 50
+      );
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  // 現在のユーザーIDを取得する関数
+  const getCurrentUserId = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    return user?.id;
+  };
   const { isOpen, onOpen, onClose } = useDisclosure();
   // ユーザーIDを取得する関数
   useEffect(() => {
@@ -195,6 +345,11 @@ export default function Thread() {
         file_url: fileUrl,
         original_file_name: originalFileName,
         user_uid: user?.id, // ログインしているユーザーのUIDを追加
+        //リプライの内容
+        reply_post_id: replyToPostId,
+        reply_content: replyPostContent,
+        reply_user_id: replyPostUserId,
+        reply_file_url: replyPostFileUrl,
       },
     ]);
     if (error) {
@@ -203,6 +358,10 @@ export default function Thread() {
       setNewPostContent("");
       setSelectedFile(null);
       setSelectedFileName(null);
+      setReplyToPostId(null); // 追加: リプライ対象の投稿IDをリセット
+      setReplyPostContent(""); // 追加: リプライ内容をリセット
+      setReplyPostUserId(null); // 追加: リプライ対象のユーザーIDをリセット
+      setReplyPostFileUrl(null); // 追加: リプライ対象のファイルURLをリセット
       scrollToBottom();
     }
   };
@@ -328,18 +487,17 @@ export default function Thread() {
       locale: ja,
     })})`;
   };
-
   //アバター作成
-  const getAvatarProps = (post_userID: any, userId: any, isReturn: boolean) => {
+  const getAvatarProps = (post_userID: any, isReturn: boolean) => {
+    const user = userInfo.find((user) => user.id === post_userID); // 変数名を変更
     if (isReturn) {
       return (
         <Avatar
           size="sm"
-          {...(post_userID === "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0"
-            ? { name: "自分", src: "https://bit.ly/dan-abramov" }
-            : {
-                src: "https://bit.ly/broken-link",
-              })}
+          bg="gray.500"
+          {...(user?.picture // user?.pictureがあれば表示
+            ? { src: user.picture } // user.pictureが存在する場合
+            : { src: "https://bit.ly/broken-link" })} // デフォルトのリンク
           ml={0}
         />
       );
@@ -377,21 +535,36 @@ export default function Thread() {
   }
 
   return (
-    <>
+    <div
+      style={{
+        height: "100vh",
+        scrollbarWidth: "none",
+        touchAction: "pan-y", // タッチアクションを設定
+      }}
+    >
+      <style jsx>{`
+        /* Firefox */
+        div {
+          scrollbar-width: none; /* Firefox */
+        }
+        /* Webkit */
+        div::-webkit-scrollbar {
+          display: none; /* Chrome, Safari, and Opera */
+        }
+      `}</style>
       <SidebarBBS />
       <Content isCustomHeader={true}>
         <Heading size="md" mb="1" ml="1">
           {threadTitle}
         </Heading>
         <Box ml="1">{ipAddress}</Box>
-        <Stack spacing="2" mb="4" style={{ padding: "0px" }}>
+        <Stack spacing="2" style={{ padding: "0px" }}>
           {posts
             .sort(
               (a, b) =>
                 new Date(a.created_at).getTime() -
                 new Date(b.created_at).getTime()
             ) // created_atでソート
-
             .map((post, index, sortedPosts) => {
               const prevPost = posts[index - 1];
               const prevDateString = prevPost ? prevPost.created_at : undefined;
@@ -400,7 +573,6 @@ export default function Thread() {
                 (prevDateString &&
                   new Date(post.created_at).toDateString() !==
                     new Date(prevDateString).toDateString());
-
               // :で囲んだ文字はタイトル
               if (post.content.match(/:(.*?):/)) {
                 return (
@@ -472,7 +644,6 @@ export default function Thread() {
                   </>
                 );
               }
-
               return (
                 <>
                   {/* 日付の区切り線 */}
@@ -497,24 +668,115 @@ export default function Thread() {
                       <Divider borderColor="gray.500" />
                     </Flex>
                   )}
-
+                  {/* post一覧 */}
                   <Flex
                     key={post.id}
                     justifyContent={
                       post.user_uid === userId ? "flex-end" : "flex-start"
-                    } // IPアドレスに基づいて位置を調整
-                    maxWidth="100%" // メッセージの最大幅を設定
+                    }
+                    maxWidth="99vw"
+                    onMouseDown={() => handleLongPressStart(post.id)} // 長押し開始
+                    onMouseUp={handleMouseUp} // マウスアップで長押し終了
+                    onMouseLeave={handleMouseLeave} // マウスが要素から離れたときに長押しを終了
+                    onClick={(e) => {
+                      if (isLongPress && longPressPostId === post.id) {
+                        e.stopPropagation();
+                      }
+                    }}
                   >
+                    {isLongPress && longPressPostId === post.id && (
+                      <>
+                        <Box //オーバーレイ
+                          position="fixed"
+                          top="0"
+                          left="0"
+                          width="100%"
+                          height="100%"
+                          bg="rgba(0, 0, 0, 0.5)" // 半透明の黒
+                          zIndex="9" // メニューより下に表示
+                          onClick={handleLongPressEnd} // 長押しを終了
+                        />
+                        <Box //リプライとか削除のメニュー
+                          position="absolute"
+                          zIndex="10"
+                          bg="white"
+                          borderRadius="5px"
+                          boxShadow="md"
+                          onClick={(e) => e.stopPropagation()} // クリックイベントの伝播を防ぐ
+                          width="auto"
+                          height="auto"
+                        >
+                          <Button //削除ボタン
+                            onClick={() => handleDeletePost(longPressPostId!)}
+                            onMouseEnter={() => handleMouseEnter("delete")}
+                            onMouseLeave={handleMouseLeave}
+                            borderRight="1px"
+                            borderColor="gray.500"
+                            borderRadius="0"
+                            bg="transparent"
+                            _hover={{ backgroundColor: "transparent" }}
+                            width="3rem"
+                            isDisabled={
+                              !(
+                                userId && // userIdが存在する場合のみ
+                                (post.user_uid === userId ||
+                                  userId ===
+                                    "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0")
+                              )
+                            }
+                          >
+                            <Stack
+                              alignItems="center"
+                              spacing="1"
+                              maxWidth={1.5}
+                              color="gray.900"
+                            >
+                              <Icon as={FaTrashAlt} boxSize={5} />
+                              <Text fontSize="0.5rem" lineHeight="1">
+                                削除
+                              </Text>
+                            </Stack>
+                          </Button>
+                          <Button //リプライボタン
+                            onClick={() => {
+                              handleReplyPost(longPressPostId!);
+                              handleLongPressEnd();
+                            }}
+                            onMouseEnter={() => {
+                              handleMouseEnter("reply");
+                            }}
+                            onMouseLeave={handleMouseLeave}
+                            borderRadius="1px"
+                            bg="transparent"
+                            _hover={{ backgroundColor: "transparent" }}
+                            width="3rem"
+                          >
+                            <Stack
+                              alignItems="center"
+                              spacing="1"
+                              maxWidth={1.5}
+                              color="gray.900"
+                            >
+                              <Icon as={FaReply} boxSize={5} />
+                              <Text
+                                fontSize="0.5rem"
+                                lineHeight="1"
+                                p={0}
+                                m={0}
+                              >
+                                リプライ
+                              </Text>
+                            </Stack>
+                          </Button>
+                        </Box>
+                      </>
+                    )}
                     {getTimeStamp(
                       formatDate(post.created_at, prevDateString, true),
                       false,
                       post.user_uid === userId
                     )}
-                    {getAvatarProps(
-                      post.user_uid,
-                      userId,
-                      post.user_uid !== userId
-                    )}
+                    {getAvatarProps(post.user_uid, post.user_uid !== userId)}
                     <Card
                       style={{
                         backgroundColor:
@@ -526,9 +788,153 @@ export default function Thread() {
                         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // 影を追加
                       }}
                     >
+                      {post.reply_post_id && (
+                        <CardBody //ポストにリプライを含む場合
+                          px="0"
+                          py="0"
+                          cursor="pointer"
+                          onClick={() => {
+                            const postElement = document.getElementById(
+                              post.reply_post_id
+                            ); // post.idに基づいて要素を取得
+                            if (postElement) {
+                              postElement.scrollIntoView({
+                                behavior: "smooth",
+                              });
+                              // スクロール位置をさらに調整
+                              const offset = 80; // 調整したいオフセット値
+                              const elementPosition =
+                                postElement.getBoundingClientRect().top; // 要素の位置を取得
+                              const offsetPosition =
+                                elementPosition + window.scrollY - offset; // オフセットを考慮した位置を計算
+                              window.scrollTo({
+                                top: offsetPosition,
+                                behavior: "smooth", // スムーズにスクロール
+                              });
+                              // スクロールが完了した後にアニメーションを適用
+                              setTimeout(() => {
+                                postElement.classList.add("shake"); // アニメーションを追加
+                                setTimeout(() => {
+                                  postElement.classList.remove("shake"); // アニメーションを削除
+                                }, 500); // アニメーションの持続時間と一致させる
+                              }, 500); // スクロールのアニメーションが完了するまで待つ
+                            } else {
+                              console.error(
+                                `Element with ID ${post.id} not found`
+                              ); // デバッグ用
+                            }
+                          }}
+                        >
+                          <Flex alignItems="center">
+                            <Avatar //リプライのユーザーのアバター
+                              ml="2"
+                              my="1"
+                              size="sm"
+                              src={post.replyPostUserId || undefined}
+                            />
+                            <Stack mx={2} spacing={0} maxW="90%">
+                              <Text
+                                color="black"
+                                fontSize="12px" // ユーザーネームのフォントサイズを調整
+                                fontWeight="bold" // ユーザーネームを太字に設定
+                              >
+                                {post.reply_user_display_name || "ユーザー名"}{" "}
+                              </Text>
+                              <Text
+                                color="black"
+                                fontSize="10px"
+                                noOfLines={1} // 1行まで表示
+                                isTruncated // 改行が必要な場合は...を表示
+                                whiteSpace="nowrap"
+                              >
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: post.reply_content
+                                      .replace(/\n/g, "<br />")
+                                      .replace(
+                                        /(http[s]?:\/\/[^\s]+)/g,
+                                        '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">$1</a>'
+                                      ),
+                                  }}
+                                />
+                              </Text>
+                            </Stack>
+                            {post.reply_file_url && ( // 追加: reply_file_urlが存在する場合
+                              <Box
+                                my="0.5"
+                                display="flex"
+                                alignItems="center"
+                                mr="2"
+                              >
+                                {post.reply_file_url.match(
+                                  /\.(jpeg|jpg|gif|png|bmp|webp|mp4)$/i
+                                ) ? (
+                                  <Image
+                                    src={post.reply_file_url}
+                                    alt="Reply attached file"
+                                    maxW="100%" // 最大幅を100%に設定
+                                    maxH="40px"
+                                    objectFit="contain" // 画像が枠内に収まるようにする
+                                  />
+                                ) : (
+                                  <>
+                                    <IconButton
+                                      icon={<FaPaperclip />}
+                                      aria-label="添付ファイル"
+                                      bg="transparent"
+                                      p={0}
+                                      m={0}
+                                      minWidth={0}
+                                      onMouseLeave={(e) => {
+                                        const tooltip =
+                                          e.currentTarget.dataset.tooltip; // データ属性から取得
+                                        if (tooltip) {
+                                          const tooltipElement =
+                                            document.getElementById(tooltip); // IDから要素を取得
+                                          if (tooltipElement) {
+                                            tooltipElement.remove(); // 要素を削除
+                                            delete e.currentTarget.dataset
+                                              .tooltip; // データ属性を削除
+                                          }
+                                        }
+                                      }}
+                                      onMouseOver={(e) => {
+                                        const existingTooltip =
+                                          e.currentTarget.dataset.tooltip; // 既存のツールチップIDを取得
+                                        if (!existingTooltip) {
+                                          // 既存のツールチップがない場合のみ作成
+                                          const tooltip =
+                                            document.createElement("span");
+                                          tooltip.innerText =
+                                            post.reply_file_url
+                                              .split("/")
+                                              .pop() || "ファイル名";
+                                          tooltip.id = `tooltip-${post.id}`; // 一意のIDを設定
+                                          tooltip.style.position = "absolute";
+                                          tooltip.style.backgroundColor =
+                                            "white";
+                                          tooltip.style.border =
+                                            "1px solid gray";
+                                          tooltip.style.padding = "5px";
+                                          tooltip.style.zIndex = "1000";
+                                          e.currentTarget.appendChild(tooltip);
+                                          e.currentTarget.dataset.tooltip =
+                                            tooltip.id; // データ属性にIDを保存
+                                        }
+                                      }}
+                                    />
+                                  </>
+                                )}
+                              </Box>
+                            )}
+                          </Flex>
+                          <Divider borderColor="gray.400" />
+                        </CardBody>
+                      )}
                       <CardBody px="10px" py="10px">
                         <Box
                           color="black"
+                          id={post.id}
                           dangerouslySetInnerHTML={{
                             __html: post.content
                               .replace(/\n/g, "<br />")
@@ -554,8 +960,8 @@ export default function Thread() {
                                     maxHeight: "300px",
                                     marginTop: "1px",
                                     cursor: "pointer",
-                                  }} // 最大サイズを指定
-                                  onClick={() => {
+                                  }}
+                                  onClick={(e) => {
                                     setSelectedImageUrl(post.file_url);
                                     setFileModalOpen(true);
                                   }}
@@ -569,16 +975,17 @@ export default function Thread() {
                                     maxWidth: "100%",
                                     maxHeight: "300px",
                                     marginTop: "1px",
-                                  }} // 最大サイズを指定
-                                  onClick={() => {
-                                    setSelectedImageUrl(post.file_url);
-                                    setFileModalOpen(true);
+                                  }}
+                                  onClick={(e) => {
+                                    if (!isLongPress) {
+                                      setSelectedImageUrl(post.file_url);
+                                      setFileModalOpen(true);
+                                    }
                                   }}
                                 />
                               )
                             ) : (
                               <Box>
-                                <Text>{post.original_file_name}</Text>
                                 <Button
                                   onClick={(e) => {
                                     e.preventDefault();
@@ -593,7 +1000,7 @@ export default function Thread() {
                                   bg="white"
                                   color="black"
                                 >
-                                  ダウンロード
+                                  {post.original_file_name}
                                 </Button>
                               </Box>
                             )}
@@ -626,138 +1033,254 @@ export default function Thread() {
                       false,
                       post.user_uid !== userId
                     )}
-                    {getAvatarProps(
-                      post.user_uid,
-                      userId,
-                      post.user_uid === userId
-                    )}
+                    {getAvatarProps(post.user_uid, post.user_uid === userId)}
                   </Flex>
                 </>
               );
             })}
         </Stack>
-
-        <Stack spacing="4" mt="4" direction="row" justify="flex-end" mb="4">
-          <Tooltip
-            label="添付ファイルを選択"
-            aria-label="添付ファイルを選択"
-            cursor="pointer"
-          >
-            <Button
-              onClick={handleButtonClick}
-              position="relative"
-              display="inline-block"
-              cursor="pointer"
-              p="0"
-            >
-              <IconButton
-                aria-label="Upload file"
-                icon={<FaUpload />}
-                colorScheme={colorMode === "light" ? "purple" : "yellow"}
-                zIndex="0"
-              />
-              <Input
-                type="file"
-                accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,.7z,.gif,.mp4" // 画像ファイルとExcelファイルとかを許可
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                position="absolute"
-                top="0"
-                left="0"
-                opacity="0"
-                width="100%"
-                height="100%"
-                zIndex="1"
-                title=""
-                aria-label="Upload file" // ここにaria-labelを追加
-                name=""
-                display="none"
-              />
-            </Button>
-          </Tooltip>
-          <Input
-            _focus={{ _focus: "none" }}
-            as="textarea"
-            type="text"
-            value={newPostContent}
-            onChange={(e) => setNewPostContent(e.target.value)}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
-              handleKeyDown(
-                e as unknown as React.KeyboardEvent<HTMLTextAreaElement>
-              )
-            } // 型を明示的に指定
-            placeholder="メッセージを入力 (Shift+Enterで送信)"
-            paddingTop={2}
-            size="md"
-            color="black"
-            bg="white"
-            resize="none"
-            borderRadius="5px"
-            onInput={(e) => {
-              const target = e.target as HTMLTextAreaElement;
-              target.style.height = "auto";
-              target.style.height = `${target.scrollHeight}px`;
-              target.style.overflow = "hidden";
-            }}
-            _placeholder={{ color: "gray.500" }} // placeholderの文字色を指定
-          />
-          <IconButton
-            onClick={() => {
-              if (isSubmitting) return;
-              setIsSubmitting(true); //post開始
-              createPost();
-              setNewPostContent(""); //クリア
-              const textarea = document.querySelector("textarea");
-              if (textarea) {
-                textarea.style.height = "41px"; // 高さを初期状態に戻す
-              }
-              setIsSubmitting(false); //post終了
-            }}
-            icon={
-              isSubmitting ? (
-                <Spinner
-                  size="36px"
-                  color={colorMode === "light" ? "purple" : "yellow"}
-                />
-              ) : (
-                <FaPaperPlane
-                  color={colorMode === "light" ? "purple" : "yellow"}
-                  style={{ transform: "rotate(45deg)" }}
-                  size="36px"
-                />
-              )
-            }
-            bg="none"
-            top={-1}
-            left={-2}
-            isDisabled={!newPostContent.trim() && !selectedFile} // テキストが空で、添付ファイルが無い場合はボタンを無効化
-            aria-label="送信"
-          />
-          <audio ref={audioRef} src="/sound/notification.mp3" />
-        </Stack>
-        {selectedFileName && (
-          <Tooltip
-            label="添付をキャンセルします"
-            aria-label="添付をキャンセルします"
-          >
+        <Box mb="53px" />
+        <Stack
+          position="fixed"
+          spacing={0}
+          bottom="0"
+          right="0"
+          left="0"
+          borderRadius="0px"
+          px="20px"
+          py="10px"
+          bg={colorMode === "light" ? "white" : "gray.900"}
+        >
+          {!isAtBottom ? ( // 最下部でない場合にアイコンを表示
             <Box
-              display="inline-flex"
-              alignItems="center"
-              mt="2"
-              p="2"
-              border="1px solid"
-              borderColor="gray.200"
-              borderRadius="md"
-              bg="gray.50"
-              width="auto"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToBottom();
+              }}
+              position="absolute"
+              top="-40px"
+              right="8px"
+              aria-label="Your Icon"
               cursor="pointer"
-              onClick={handleFileRemove} // クリックイベントを追加
+              bg={colorMode === "light" ? "white" : "gray.900"}
+              color={colorMode === "light" ? "gray.900" : "gray"}
+              borderRadius="10%"
+              width="32px"
+              height="32px"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
             >
-              <FaPaperclip style={{ marginRight: "8px" }} />
-              <Box>{selectedFileName}</Box>
+              <Icon
+                size="28px"
+                as={FaArrowDown} // ここにアイコンを指定
+              />
             </Box>
-          </Tooltip>
-        )}
+          ) : null}
+          {replyToPostId && (
+            <Stack
+              fontSize="sm"
+              p="0px"
+              mx="0px"
+              pb="10px"
+              direction="row"
+              alignItems="flex-start"
+              borderRadius="0px"
+              animation="slideIn 0.3s ease-out" // アニメーションを適用
+            >
+              <Avatar size="sm" src={replyPostUserId || undefined} />
+              <Stack ml="1">
+                <Text fontWeight="bold" m="0" lineHeight="1">
+                  {replyPostUserDisplayName}
+                </Text>
+                <Text
+                  m="0"
+                  lineHeight="1"
+                  whiteSpace="nowrap"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                  position="relative"
+                  maxWidth="80vw"
+                >
+                  {replyPostContent}
+                </Text>
+              </Stack>
+              <Stack>
+                {replyPostFileUrl &&
+                replyPostFileUrl.match(/\.(jpeg|jpg|gif|png|bmp|webp)$/i) ? ( // 画像ファイルの拡張子をチェック
+                  <Box
+                    display="flex"
+                    justifyContent="flex-end"
+                    alignItems="flex-start"
+                    ml="2"
+                  >
+                    <Image
+                      src={replyPostFileUrl}
+                      alt="Reply attached image"
+                      maxW="100%" // 最大幅を100%に設定
+                      maxH="40px" // 最大高さを50pxに設定
+                      objectFit="contain" // 画像が枠内に収まるようにする
+                      m="0"
+                      p="0"
+                    />
+                  </Box>
+                ) : (
+                  replyPostFileUrl && ( // nullチェックを追加
+                    <Box display="flex" alignItems="center" ml="2">
+                      <FaPaperclip />
+                      <Text ml="1">{replyPostFileUrl.split("/").pop()}</Text>
+                    </Box>
+                  )
+                )}
+              </Stack>
+              <IconButton
+                aria-label="Close reply"
+                icon={<FaTimes />} // ×アイコンを表示
+                onClick={() => {
+                  setReplyToPostId(null); // リプライを閉じる
+                  setReplyPostContent(""); // リプライ内容をリセット
+                  setReplyPostUserId(null); // リプライ対象のユーザーIDをリセット
+                  setReplyPostFileUrl(null); // リプライ対象のファイルURLをリセット
+                }}
+                position="absolute"
+                variant="ghost" // ボタンのスタイルを設定
+                size="sm" // ボタンのサイズを設定
+                ml="2" // ボタンとリプライ情報の間にマージンを追加
+                top="1"
+                right="1"
+                _hover={{ backgroundColor: "transparent" }}
+              />
+            </Stack>
+          )}
+          <Stack spacing="4" mt="0" direction="row" justify="flex-end" mb="0">
+            <Tooltip
+              label="添付ファイルを選択"
+              aria-label="添付ファイルを選択"
+              cursor="pointer"
+            >
+              <Button
+                onClick={handleButtonClick}
+                position="relative"
+                display="inline-block"
+                cursor="pointer"
+                p="0"
+              >
+                <IconButton
+                  aria-label="Upload file"
+                  icon={<FaUpload />}
+                  colorScheme={colorMode === "light" ? "purple" : "yellow"}
+                  zIndex="0"
+                />
+                <Input
+                  type="file"
+                  accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,.7z,.gif,.mp4" // 画像ファイルとExcelファイルとかを許可
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  position="absolute"
+                  top="0"
+                  left="0"
+                  opacity="0"
+                  width="100%"
+                  height="100%"
+                  zIndex="1"
+                  title=""
+                  aria-label="Upload file" // ここにaria-labelを追加
+                  name=""
+                  display="none"
+                />
+              </Button>
+            </Tooltip>
+            <Input
+              _focus={{
+                borderColor: colorMode === "light" ? "gray.900" : "gray.200",
+              }} // 追加: フォーカス時の枠線の色を指定
+              _focusVisible={{
+                borderColor: colorMode === "light" ? "gray.900" : "gray.200",
+              }} // 追加: フォーカスが可視状態の時の枠線の色を指定
+              as="textarea"
+              type="text"
+              value={newPostContent}
+              onChange={(e) => setNewPostContent(e.target.value)}
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+                handleKeyDown(
+                  e as unknown as React.KeyboardEvent<HTMLTextAreaElement>
+                )
+              } // 型を明示的に指定
+              placeholder="メッセージを入力 (Shift+Enterで送信)"
+              paddingTop={2}
+              size="md"
+              color={colorMode === "light" ? "black" : "white"}
+              bg={colorMode === "light" ? "gray.50" : "gray.800"}
+              borderColor={colorMode === "light" ? "gray.200" : "gray.800"}
+              resize="none"
+              borderRadius="5px"
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = "auto";
+                target.style.height = `${target.scrollHeight}px`;
+                target.style.overflow = "hidden";
+              }}
+              _placeholder={{ color: "gray.500" }} // placeholderの文字色を指定
+            />
+            <IconButton
+              onClick={() => {
+                if (isSubmitting) return;
+                setIsSubmitting(true); //post開始
+                createPost();
+                setNewPostContent(""); //クリア
+                const textarea = document.querySelector("textarea");
+                if (textarea) {
+                  textarea.style.height = "41px"; // 高さを初期状態に戻す
+                }
+                setIsSubmitting(false); //post終了
+              }}
+              icon={
+                isSubmitting ? (
+                  <Spinner
+                    size="36px"
+                    color={colorMode === "light" ? "purple" : "yellow"}
+                  />
+                ) : (
+                  <FaPaperPlane
+                    color={colorMode === "light" ? "purple" : "yellow"}
+                    style={{ transform: "rotate(45deg)" }}
+                    size="36px"
+                  />
+                )
+              }
+              bg="none"
+              top={-1}
+              left={-2}
+              isDisabled={!newPostContent.trim() && !selectedFile} // テキストが空で、添付ファイルが無い場合はボタンを無効化
+              aria-label="送信"
+            />
+            <audio ref={audioRef} src="/sound/notification.mp3" />
+          </Stack>
+          {selectedFileName && (
+            <Tooltip
+              label="添付をキャンセルします"
+              aria-label="添付をキャンセルします"
+            >
+              <Box
+                display="inline-flex"
+                alignItems="center"
+                mt="1"
+                px="2"
+                border="1px solid"
+                borderColor="gray.200"
+                borderRadius="md"
+                bg="gray.50"
+                cursor="pointer"
+                onClick={handleFileRemove}
+                width="fit-content"
+                color="gray.900"
+              >
+                <FaPaperclip style={{ marginRight: "6px" }} />
+                <Text>{selectedFileName}</Text>
+              </Box>
+            </Tooltip>
+          )}
+        </Stack>
         <Modal isOpen={fileModalOpen} onClose={() => setFileModalOpen(false)}>
           <ModalOverlay />
           <ModalContent>
@@ -767,7 +1290,11 @@ export default function Thread() {
               justifyContent="center"
               alignItems="center"
               p={0}
-              onClick={() => setIsZoomed(!isZoomed)} // クリックでズームイン/アウトを切り替え
+              onClick={() => {
+                if (!isLongPress) {
+                  setIsZoomed(!isZoomed); // クリックでズームイン/アウトを切り替え
+                }
+              }}
             >
               {selectedImageUrl &&
                 (selectedImageUrl.match(/\.mp4$/) ? (
@@ -797,6 +1324,6 @@ export default function Thread() {
           </ModalContent>
         </Modal>
       </Content>
-    </>
+    </div>
   );
 }

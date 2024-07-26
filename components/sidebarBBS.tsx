@@ -32,12 +32,6 @@ function SidebarBBS() {
   const [ipAddress, setIpAddress] = useState("");
   const [newThreads, setNewThreads] = useState<string[]>([]);
 
-  const maxTitleLength = useBreakpointValue({
-    base: 10,
-    xl: 9,
-    "2xl": 16,
-    "3xl": 40,
-  });
   //新しい投稿の監視
   useEffect(() => {
     const subscription = supabase
