@@ -113,6 +113,7 @@ export default function Thread() {
       setPosts(posts.filter((post) => post.id !== postId));
     }
   };
+  //ユーザー名を取得
   //postのリプライ
   const [replyContent, setReplyContent] = useState<string>(""); // リプライ内容を管理する状態
   const [replyToPostId, setReplyToPostId] = useState<string | null>(null); // リプライ対象の投稿ID
@@ -120,6 +121,9 @@ export default function Thread() {
   const [replyPostUserId, setReplyPostUserId] = useState<string | null>(null); // リプライ対象のユーザーID
   const [replyPostFileUrl, setReplyPostFileUrl] = useState<string | null>(null); // リプライ対象のファイルURL
   const [replyPostId, setReplyPostId] = useState<string | null>(null); // replyPostIdを新たに作成
+  const [replyPostUserDisplayName, setReplyPostUserDisplayName] = useState<
+    string | null
+  >(null); // 追加: リプライ対象のユーザー表示名を管理する状態
   //リプライ情報を取得
   const handleReplyPost = async (postId: string) => {
     const post = posts.find((p) => p.id === postId); // 対象の投稿を取得
@@ -131,7 +135,7 @@ export default function Thread() {
       const userDisplayNameData = await fetchUserFromTable(post.user_uid); // post.user_uidを引数に渡す
       const displayName = userDisplayNameData?.displayName; // nullチェックを追加
       const userCompany = userDisplayNameData as string | null; // nullチェックを追加
-      // setReplyPostUserDisplayName(displayName as string | null); // displayNameを状態に設定
+      setReplyPostUserDisplayName(displayName as string | null); // displayNameを状態に設定
     }
     setReplyToPostId(postId); // リプライ対象の投稿IDを設定
     // フォーカスを入力フィールドに当てる
@@ -477,8 +481,20 @@ export default function Thread() {
       locale: ja,
     })})`;
   };
+  //リプライの名前を取得
+  const getDisplayName = (id_: string) => {
+    const user = userInfo.find((user) => user.id === id_); // ユーザー情報を取得
+    if (!user) {
+      fetchAndSetUserInfo(id_); // ユーザー情報を取得して状態に保存
+    }
+    return user?.displayName || "ユー";
+  };
   //アバター作成
-  const getAvatarProps = (post_userID: any, userId: any, isReturn: boolean) => {
+  const getAvatarProps = (
+    post_userID: any,
+    isReturn: boolean,
+    size: string
+  ) => {
     if (isReturn) {
       const user = userInfo.find((user) => user.id === post_userID); // ユーザー情報を取得
       if (!user) {
@@ -486,10 +502,11 @@ export default function Thread() {
       }
       return (
         <Avatar
-          size="sm"
+          size={size}
+          ml={size === "xs" ? "1" : "0"}
+          zIndex="5"
           // name={user ? user.displayName : "ユーザー名"} // 修正: userからdisplayNameを取得
           src={user ? user.userPicture : undefined} // 修正: userからuserPictureを取得
-          ml={0}
         />
       );
     }
@@ -769,10 +786,11 @@ export default function Thread() {
                     )}
                     {getAvatarProps(
                       post.user_uid,
-                      userId,
-                      post.user_uid !== userId
+                      post.user_uid !== userId,
+                      "sm"
                     )}
                     <Card
+                      id={post.id}
                       style={{
                         backgroundColor:
                           post.user_uid === userId ? "#DCF8C6" : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
@@ -783,12 +801,13 @@ export default function Thread() {
                         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // 影を追加
                       }}
                     >
-                      {post.reply_post_id && (
-                        <CardBody //ポストにリプライを含む場合
+                      {post.reply_post_id && ( //ポストにリプライを含む場合
+                        <CardBody
                           px="0"
                           py="0"
                           cursor="pointer"
                           onClick={() => {
+                            //リプライをクリックしたらポストにスクロール
                             const postElement = document.getElementById(
                               post.reply_post_id
                             ); // post.idに基づいて要素を取得
@@ -821,19 +840,19 @@ export default function Thread() {
                           }}
                         >
                           <Flex alignItems="center">
-                            <Avatar //リプライのユーザーのアバター
-                              ml="2"
-                              my="1"
-                              size="sm"
-                              src={post.replyPostUserId || undefined}
-                            />
+                            {getAvatarProps(
+                              post.reply_user_uid,
+                              post.reply_user_uid !== userId,
+                              "xs"
+                            )}
                             <Stack mx={2} spacing={0} maxW="90%">
                               <Text
                                 color="black"
                                 fontSize="12px" // ユーザーネームのフォントサイズを調整
                                 fontWeight="bold" // ユーザーネームを太字に設定
                               >
-                                {post.reply_user_display_name || "ユーザー名"}{" "}
+                                {getDisplayName(post.reply_user_uid) ||
+                                  "ユーザー名"}
                               </Text>
                               <Text
                                 color="black"
@@ -929,7 +948,6 @@ export default function Thread() {
                       <CardBody px="10px" py="10px">
                         <Box
                           color="black"
-                          id={post.id}
                           dangerouslySetInnerHTML={{
                             __html: post.content
                               .replace(/\n/g, "<br />")
@@ -1020,6 +1038,7 @@ export default function Thread() {
                             post.user_uid === userId
                               ? "transparent transparent transparent #DCF8C6"
                               : "transparent #FFFFFF transparent transparent",
+                          zIndex: 1,
                         }}
                       />
                     </Card>
@@ -1030,8 +1049,8 @@ export default function Thread() {
                     )}
                     {getAvatarProps(
                       post.user_uid,
-                      userId,
-                      post.user_uid === userId
+                      post.user_uid === userId,
+                      "sm"
                     )}
                   </Flex>
                 </>
@@ -1087,10 +1106,10 @@ export default function Thread() {
               borderRadius="0px"
               animation="slideIn 0.3s ease-out" // アニメーションを適用
             >
-              <Avatar size="sm" src={replyPostUserId || undefined} />
+              {getAvatarProps(replyPostUserId, true, "sm")}
               <Stack ml="1">
                 <Text fontWeight="bold" m="0" lineHeight="1">
-                  ゆーざーめい
+                  {replyPostUserDisplayName}
                 </Text>
                 <Text
                   m="0"

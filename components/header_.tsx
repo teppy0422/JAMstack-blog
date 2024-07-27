@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import { useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
+
+import { supabase } from "../utils/supabase/client";
 import NextLink from "next/link";
 import QRCode from "qrcode.react";
 import {
@@ -28,6 +30,7 @@ import {
   DrawerHeader,
   DrawerBody,
   Divider,
+  Avatar,
 } from "@chakra-ui/react";
 import {
   MoonIcon,
@@ -95,6 +98,18 @@ export default function Header() {
       }
     };
   }, []);
+  // ユーザーIDを取得する関数
+  const [userId, setUserId] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUserId(user?.id ?? null);
+      console.log(user?.id);
+    };
+    fetchUserId();
+  }, []);
   const buttonStyle = (path) => ({
     p: "2",
     w: "full",
@@ -143,6 +158,62 @@ export default function Header() {
         </Box>
       </NextLink>
     );
+  };
+  const fetchUserFromTable = async (userId: string) => {
+    const { data, error } = await supabase
+      .from("table_users") // 新しいテーブル名を指定
+      .select("user_metadata->name, user_company,picture_url") // displayNameとuser_companyを取得
+      .eq("id", userId) // 引数のuserIdでフィルタリング
+      .single();
+    if (error) {
+      console.error("Error fetching user display name:", error.message);
+      return null;
+    }
+    return {
+      displayName: data.name || null, // user_metadataを直接参照
+      userCompany: data.user_company || null, // user_companyを返す
+      userPicture: data.picture_url || null,
+    };
+  };
+  const [userInfo, setUserInfo] = useState<any[]>([]); // ユーザー情報の配列
+  const fetchUserInfo = async (userId: string) => {
+    const existingUser = userInfo.find((user) => user.id === userId); // userInfoから既存のユーザーを検索
+    if (existingUser) {
+      return existingUser; // 既存のユーザー情報を返す
+    }
+    const fetchedUser = await fetchUserFromTable(userId); // Supabaseからユーザー情報を取得
+    if (fetchedUser) {
+      setUserInfo((prev) => [...prev, { id: userId, ...fetchedUser }]); // userInfoに追加
+    }
+    return fetchedUser; // 取得したユーザー情報を返す
+  };
+  const fetchAndSetUserInfo = async (post_userID: any) => {
+    const userInfo = await fetchUserInfo(post_userID); // ユーザー情報を取得
+    if (userInfo) {
+      setUserInfo((prev) => [...prev, userInfo]); // ここでuserInfoを状態に追加
+    } else {
+      console.error(`User with ID ${post_userID} not found`); // ユーザーが見つからない場合のエラーログ
+    }
+  };
+  //アバター作成
+  const getAvatarProps = (
+    post_userID: any,
+    isReturn: boolean,
+    size: string
+  ) => {
+    if (isReturn) {
+      const user = userInfo.find((user) => user.id === post_userID); // ユーザー情報を取得
+      if (!user) {
+        fetchAndSetUserInfo(post_userID); // ユーザー情報を取得して状態に保存
+      }
+      return (
+        <Avatar
+          boxSize="42px"
+          zIndex="5"
+          src={user ? user.userPicture : undefined}
+        />
+      );
+    }
   };
   return (
     <>
@@ -239,11 +310,14 @@ export default function Header() {
               />
             </Center>
             <Center w="64px">
-              <IconButton
-                icon={<FontAwesomeIcon icon={faSignInAlt} size="2xl" />}
-                aria-label="Login"
-                onClick={() => setLoginModalOpen(true)}
-              />
+              <Box
+                onClick={() =>
+                  session?.user ? signOut() : setLoginModalOpen(true)
+                }
+                cursor="pointer"
+              >
+                {getAvatarProps(userId, true, "md")}
+              </Box>
             </Center>
           </Flex>
         </VStack>
