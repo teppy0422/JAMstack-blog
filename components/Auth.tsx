@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase/client";
-import { Flex, Box, Text, Button, Input } from "@chakra-ui/react";
+import { Flex, Box, Text, Button, Input, Avatar } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 
 export default function Auth() {
@@ -32,7 +32,7 @@ export default function Auth() {
     } else {
       console.log("User signed up:", data);
       setMessage(
-        "認証用のメールを送信しました。認証後にログインが可能になります。"
+        "認証用のメールを送信しました。受信メールを確認して認証を行ってください。認証後にログインが可能になります。"
       ); // 成功メッセージを設定
     }
     setLoading(false);
@@ -113,6 +113,7 @@ export default function Auth() {
           <Text fontSize="lg" mb={4}>
             {user.email}
           </Text>
+          {/* <Avatar src={user.userPicture} size="xl" mb={4} /> */}
           <Button
             onClick={handleSignOut}
             isLoading={loading}
