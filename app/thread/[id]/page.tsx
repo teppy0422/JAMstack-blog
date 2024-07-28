@@ -104,18 +104,68 @@ export default function Thread() {
   };
   //postの削除
   const handleDeletePost = async (postId: string) => {
-    console.log("削除");
-    console.log(postId);
+    // 削除する投稿を取得
+    const postToDelete = posts.find((post) => post.id === postId);
+    if (postToDelete) {
+      const fileUrl = postToDelete.file_url; // file_urlを取得
+      // ストレージからファイルを削除
+      if (fileUrl) {
+        const filePath = fileUrl
+          .split("/storage/v1/object/public/uploads/")
+          .pop(); // public以下のパスを取得
+        // fullPathの設定を修正
+        const fullPath = filePath; // publicを含まないパスを指定
+        const { error: deleteFileError } = await supabase.storage
+          .from("uploads")
+          .remove([fullPath]); // 修正: publicを含まないパスを指定
+        if (deleteFileError) {
+          console.error(
+            "Error deleting file from storage:",
+            deleteFileError.message
+          );
+          alert(deleteFileError.message);
+        } else {
+          // alert("ファイルが正常に削除されました。" + fullPath);
+        }
+      }
+    }
+    // 投稿を削除;
     const { error } = await supabase.from("posts").delete().eq("id", postId);
     if (error) {
       console.error("Error deleting post:", error.message);
     } else {
-      setPosts(posts.filter((post) => post.id !== postId));
+      // 削除成功時に要素を非表示にする
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === postId ? { ...post, isDeleting: true } : post
+        )
+      );
+      // 1秒後に要素を完全に削除
+      setTimeout(() => {
+        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+      }, 1000);
     }
+  };
+  //ユーザー情報
+  const [users, setUsers] = useState<any[]>([]); // ユーザー情報を格納する状態
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const { data, error } = await supabase.from("table_users").select("*"); // 全ユーザーを取得
+      if (error) {
+        console.error("Error fetching users:", error.message);
+      } else {
+        setUsers(data || []); // ユーザー情報を状態にセット
+      }
+    };
+    fetchUsers();
+  }, []); // コンポーネントのマウント時に実行
+  // ユーザー情報を検索する関数
+  const getUserById = (id: string) => {
+    const user = users.find((user) => user.id === id); // IDでユーザーを検索
+    return user || null; // ユーザーが見つからない場合はnullを返す
   };
   //ユーザー名を取得
   //postのリプライ
-  const [replyContent, setReplyContent] = useState<string>(""); // リプライ内容を管理する状態
   const [replyToPostId, setReplyToPostId] = useState<string | null>(null); // リプライ対象の投稿ID
   const [replyPostContent, setReplyPostContent] = useState<string>(""); // リプライ対象の投稿内容
   const [replyPostUserId, setReplyPostUserId] = useState<string | null>(null); // リプライ対象のユーザーID
@@ -163,6 +213,8 @@ export default function Thread() {
       setUserInfo((prev) => [...prev, userInfo]); // ここでuserInfoを状態に追加
     } else {
       console.error(`User with ID ${post_userID} not found`); // ユーザーが見つからない場合のエラーログ
+      // ここでデフォルトのユーザー情報を設定することも検討できます
+      // setUserInfo((prev) => [...prev, { id: post_userID, displayName: "Unknown User" }]);
     }
   };
   const fetchUserFromTable = async (userId: string) => {
@@ -482,13 +534,17 @@ export default function Thread() {
     })})`;
   };
   //リプライの名前を取得
-  const getDisplayName = (id_: string) => {
-    const user = userInfo.find((user) => user.id === id_); // ユーザー情報を取得
-    if (!user) {
-      fetchAndSetUserInfo(id_); // ユーザー情報を取得して状態に保存
-    }
-    return user?.displayName || "ユー";
-  };
+  useEffect(() => {
+    const fetchDisplayName = async (id_) => {
+      let user = userInfo.find((user) => user.id === id_); // ユーザー情報を取得
+      if (!user) {
+        user = await fetchAndSetUserInfo(id_); // ユーザー情報を取得して状態に保存
+      }
+      setReplyPostUserDisplayName(user?.displayName || "不明"); // displayNameがundefinedの場合のデフォルト値
+    };
+    fetchDisplayName(replyPostUserId);
+  }, [replyPostUserId, userInfo]); // 依存関係に追加
+
   //アバター作成
   const getAvatarProps = (
     post_userID: any,
@@ -537,7 +593,6 @@ export default function Thread() {
       );
     }
   };
-
   if (!isClient) {
     return null;
   }
@@ -560,12 +615,300 @@ export default function Thread() {
           display: none; /* Chrome, Safari, and Opera */
         }
       `}</style>
+
+      <Stack // inputForm
+        position="fixed"
+        zIndex="2000"
+        spacing={0}
+        bottom="0"
+        right="0"
+        left="0"
+        borderRadius="0px"
+        px="20px"
+        py="10px"
+        bg={colorMode === "light" ? "white" : "gray.900"}
+      >
+        {!isAtBottom ? ( // 最下部でない場合にアイコンを表示
+          <Box
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToBottom();
+            }}
+            position="absolute"
+            top="-40px"
+            right="8px"
+            aria-label="Your Icon"
+            cursor="pointer"
+            bg={colorMode === "light" ? "white" : "gray.900"}
+            color={colorMode === "light" ? "gray.900" : "gray"}
+            borderRadius="10%"
+            width="32px"
+            height="32px"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Icon
+              size="28px"
+              as={FaArrowDown} // ここにアイコンを指定
+            />
+          </Box>
+        ) : null}
+        {replyToPostId && (
+          <Stack
+            fontSize="sm"
+            p="0px"
+            mx="0px"
+            pb="10px"
+            direction="row"
+            alignItems="flex-start"
+            borderRadius="0px"
+            animation="slideIn 0.3s ease-out" // アニメーションを適用
+          >
+            {getAvatarProps(replyPostUserId, true, "sm")}
+            <Stack ml="1">
+              <Text fontWeight="bold" m="0" lineHeight="1">
+                {replyPostUserDisplayName}
+              </Text>
+              <Text
+                m="0"
+                lineHeight="1"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+                position="relative"
+                maxWidth="80vw"
+                fontSize="xs"
+              >
+                {replyPostContent}
+              </Text>
+            </Stack>
+            <Stack>
+              {replyPostFileUrl &&
+              replyPostFileUrl.match(/\.(jpeg|jpg|gif|png|bmp|webp)$/i) ? ( // 画像ファイルの拡張子をチェック
+                <Box
+                  display="flex"
+                  justifyContent="flex-end"
+                  alignItems="flex-start"
+                  ml="2"
+                >
+                  <Image
+                    src={replyPostFileUrl}
+                    alt="Reply attached image"
+                    maxW="100%" // 最大幅を100%に設定
+                    maxH="40px" // 最大高さを50pxに設定
+                    objectFit="contain" // 画像が枠内に収まるようにする
+                    m="0"
+                    p="0"
+                  />
+                </Box>
+              ) : (
+                replyPostFileUrl && ( // nullチェックを追加
+                  <Box display="flex" alignItems="center" ml="2">
+                    <FaPaperclip />
+                    <Text ml="1">{replyPostFileUrl.split("/").pop()}</Text>
+                  </Box>
+                )
+              )}
+            </Stack>
+            <IconButton
+              aria-label="Close reply"
+              icon={<FaTimes />} // ×アイコンを表示
+              onClick={() => {
+                setReplyToPostId(null); // リプライを閉じる
+                setReplyPostContent(""); // リプライ内容をリセット
+                setReplyPostUserId(null); // リプライ対象のユーザーIDをリセット
+                setReplyPostFileUrl(null); // リプライ対象のファイルURLをリセット
+              }}
+              position="absolute"
+              variant="ghost" // ボタンのスタイルを設定
+              size="sm" // ボタンのサイズを設定
+              ml="2" // ボタンとリプライ情報の間にマージンを追加
+              top="1"
+              right="1"
+              _hover={{ backgroundColor: "transparent" }}
+            />
+          </Stack>
+        )}
+        <Stack spacing="4" mt="0" direction="row" justify="flex-end" mb="0">
+          <Tooltip
+            label="添付ファイルを選択"
+            aria-label="添付ファイルを選択"
+            cursor="pointer"
+          >
+            <Button
+              onClick={handleButtonClick}
+              position="relative"
+              display="inline-block"
+              cursor="pointer"
+              p="0"
+            >
+              <IconButton
+                aria-label="Upload file"
+                icon={<FaUpload />}
+                colorScheme={colorMode === "light" ? "purple" : "yellow"}
+                zIndex="0"
+              />
+              <Input
+                type="file"
+                accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,.7z,.gif,.mp4" // 画像ファイルとExcelファイルとかを許可
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                position="absolute"
+                top="0"
+                left="0"
+                opacity="0"
+                width="100%"
+                height="100%"
+                zIndex="1"
+                title=""
+                aria-label="Upload file" // ここにaria-labelを追加
+                name=""
+                display="none"
+              />
+            </Button>
+          </Tooltip>
+          <Input
+            _focus={{
+              borderColor: colorMode === "light" ? "gray.900" : "gray.200",
+            }} // 追加: フォーカス時の枠線の色を指定
+            _focusVisible={{
+              borderColor: colorMode === "light" ? "gray.900" : "gray.200",
+            }} // 追加: フォーカスが可視状態の時の枠線の色を指定
+            as="textarea"
+            type="text"
+            value={newPostContent}
+            onChange={(e) => setNewPostContent(e.target.value)}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+              handleKeyDown(
+                e as unknown as React.KeyboardEvent<HTMLTextAreaElement>
+              )
+            } // 型を明示的に指定
+            placeholder="メッセージを入力 (Shift+Enterで送信)"
+            paddingTop={2}
+            size="md"
+            color={colorMode === "light" ? "black" : "white"}
+            bg={colorMode === "light" ? "gray.50" : "gray.800"}
+            borderColor={colorMode === "light" ? "gray.200" : "gray.800"}
+            resize="none"
+            borderRadius="5px"
+            onInput={(e) => {
+              const target = e.target as HTMLTextAreaElement;
+              target.style.height = "auto";
+              target.style.height = `${target.scrollHeight}px`;
+              target.style.overflow = "hidden";
+            }}
+            _placeholder={{ color: "gray.500" }} // placeholderの文字色を指定
+          />
+          <IconButton
+            onClick={() => {
+              if (isSubmitting) return;
+              setIsSubmitting(true); //post開始
+              createPost();
+              setNewPostContent(""); //クリア
+              const textarea = document.querySelector("textarea");
+              if (textarea) {
+                textarea.style.height = "41px"; // 高さを初期状態に戻す
+              }
+              setIsSubmitting(false); //post終了
+            }}
+            icon={
+              isSubmitting ? (
+                <Spinner
+                  size="36px"
+                  color={colorMode === "light" ? "purple" : "yellow"}
+                />
+              ) : (
+                <FaPaperPlane
+                  color={colorMode === "light" ? "purple" : "yellow"}
+                  style={{ transform: "rotate(45deg)" }}
+                  size="36px"
+                />
+              )
+            }
+            bg="none"
+            top={-1}
+            left={-2}
+            isDisabled={!newPostContent.trim() && !selectedFile} // テキストが空で、添付ファイルが無い場合はボタンを無効化
+            aria-label="送信"
+          />
+          <audio ref={audioRef} src="/sound/notification.mp3" />
+        </Stack>
+        {selectedFileName && (
+          <Tooltip
+            label="添付をキャンセルします"
+            aria-label="添付をキャンセルします"
+          >
+            <Box
+              display="inline-flex"
+              alignItems="center"
+              mt="1"
+              px="2"
+              border="1px solid"
+              borderColor="gray.200"
+              borderRadius="md"
+              bg="gray.50"
+              cursor="pointer"
+              onClick={handleFileRemove}
+              width="fit-content"
+              color="gray.900"
+            >
+              <FaPaperclip style={{ marginRight: "6px" }} />
+              <Text>{selectedFileName}</Text>
+            </Box>
+          </Tooltip>
+        )}
+      </Stack>
+      <Modal isOpen={fileModalOpen} onClose={() => setFileModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          {/* <ModalCloseButton position="absolute" top="10px" right="-10px" /> */}
+          <ModalBody
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            p={0}
+            onClick={() => {
+              if (!isLongPress) {
+                setIsZoomed(!isZoomed); // クリックでズームイン/アウトを切り替え
+              }
+            }}
+          >
+            {selectedImageUrl &&
+              (selectedImageUrl.match(/\.mp4$/) ? (
+                <video
+                  src={selectedImageUrl}
+                  autoPlay
+                  loop
+                  muted
+                  style={{
+                    maxWidth: isZoomed ? "99vw" : "80vw", // ズームイン時は制限なし
+                    maxHeight: isZoomed ? "99vh" : "80vh", // ズームイン時は制限なし
+                    objectFit: "contain", // 動画がモーダルの範囲内に収まるようにする
+                    cursor: isZoomed ? "zoom-out" : "zoom-in", // ズームイン/アウトのカーソルを設定
+                  }}
+                />
+              ) : (
+                <Image
+                  src={selectedImageUrl}
+                  alt="Uploaded image"
+                  maxW={isZoomed ? "99vw" : "80vw"} // ズームイン時は制限なし
+                  maxH={isZoomed ? "99vh" : "80vh"} // ズームイン時は制限なし
+                  objectFit="contain" // 画像がモーダルの範囲内に収まるようにする
+                  cursor={isZoomed ? "zoom-out" : "zoom-in"} // ズームイン/アウトのカーソルを設定
+                />
+              ))}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
       <SidebarBBS />
       <Content isCustomHeader={true}>
         <Heading size="md" mb="1" ml="1">
           {threadTitle}
         </Heading>
         <Box ml="1">{ipAddress}</Box>
+
         <Stack spacing="2" style={{ padding: "0px" }}>
           {posts
             .sort(
@@ -679,6 +1022,12 @@ export default function Thread() {
                   {/* post一覧 */}
                   <Flex
                     key={post.id}
+                    style={{
+                      height: post.isDeleting ? 0 : "auto", // 高さを0にする
+                      opacity: post.isDeleting ? 0 : 1,
+                      overflow: "hidden", // 内容がはみ出さないようにする
+                      transition: "max-height 1s ease, opacity 1s ease", // 高さと不透明度のトランジション
+                    }}
                     justifyContent={
                       post.user_uid === userId ? "flex-end" : "flex-start"
                     }
@@ -840,19 +1189,15 @@ export default function Thread() {
                           }}
                         >
                           <Flex alignItems="center">
-                            {getAvatarProps(
-                              post.reply_user_uid,
-                              post.reply_user_uid !== userId,
-                              "xs"
-                            )}
+                            {getAvatarProps(post.reply_user_id, true, "xs")}
                             <Stack mx={2} spacing={0} maxW="90%">
                               <Text
                                 color="black"
                                 fontSize="12px" // ユーザーネームのフォントサイズを調整
                                 fontWeight="bold" // ユーザーネームを太字に設定
                               >
-                                {getDisplayName(post.reply_user_uid) ||
-                                  "ユーザー名"}
+                                {getUserById(post.reply_user_id)?.user_metadata
+                                  ?.name || "ユーザー名がない"}
                               </Text>
                               <Text
                                 color="black"
@@ -1058,289 +1403,6 @@ export default function Thread() {
             })}
         </Stack>
         <Box mb="53px" />
-        <Stack
-          position="fixed"
-          spacing={0}
-          bottom="0"
-          right="0"
-          left="0"
-          borderRadius="0px"
-          px="20px"
-          py="10px"
-          bg={colorMode === "light" ? "white" : "gray.900"}
-        >
-          {!isAtBottom ? ( // 最下部でない場合にアイコンを表示
-            <Box
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToBottom();
-              }}
-              position="absolute"
-              top="-40px"
-              right="8px"
-              aria-label="Your Icon"
-              cursor="pointer"
-              bg={colorMode === "light" ? "white" : "gray.900"}
-              color={colorMode === "light" ? "gray.900" : "gray"}
-              borderRadius="10%"
-              width="32px"
-              height="32px"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Icon
-                size="28px"
-                as={FaArrowDown} // ここにアイコンを指定
-              />
-            </Box>
-          ) : null}
-          {replyToPostId && (
-            <Stack
-              fontSize="sm"
-              p="0px"
-              mx="0px"
-              pb="10px"
-              direction="row"
-              alignItems="flex-start"
-              borderRadius="0px"
-              animation="slideIn 0.3s ease-out" // アニメーションを適用
-            >
-              {getAvatarProps(replyPostUserId, true, "sm")}
-              <Stack ml="1">
-                <Text fontWeight="bold" m="0" lineHeight="1">
-                  {replyPostUserDisplayName}
-                </Text>
-                <Text
-                  m="0"
-                  lineHeight="1"
-                  whiteSpace="nowrap"
-                  overflow="hidden"
-                  textOverflow="ellipsis"
-                  position="relative"
-                  maxWidth="80vw"
-                >
-                  {replyPostContent}
-                </Text>
-              </Stack>
-              <Stack>
-                {replyPostFileUrl &&
-                replyPostFileUrl.match(/\.(jpeg|jpg|gif|png|bmp|webp)$/i) ? ( // 画像ファイルの拡張子をチェック
-                  <Box
-                    display="flex"
-                    justifyContent="flex-end"
-                    alignItems="flex-start"
-                    ml="2"
-                  >
-                    <Image
-                      src={replyPostFileUrl}
-                      alt="Reply attached image"
-                      maxW="100%" // 最大幅を100%に設定
-                      maxH="40px" // 最大高さを50pxに設定
-                      objectFit="contain" // 画像が枠内に収まるようにする
-                      m="0"
-                      p="0"
-                    />
-                  </Box>
-                ) : (
-                  replyPostFileUrl && ( // nullチェックを追加
-                    <Box display="flex" alignItems="center" ml="2">
-                      <FaPaperclip />
-                      <Text ml="1">{replyPostFileUrl.split("/").pop()}</Text>
-                    </Box>
-                  )
-                )}
-              </Stack>
-              <IconButton
-                aria-label="Close reply"
-                icon={<FaTimes />} // ×アイコンを表示
-                onClick={() => {
-                  setReplyToPostId(null); // リプライを閉じる
-                  setReplyPostContent(""); // リプライ内容をリセット
-                  setReplyPostUserId(null); // リプライ対象のユーザーIDをリセット
-                  setReplyPostFileUrl(null); // リプライ対象のファイルURLをリセット
-                }}
-                position="absolute"
-                variant="ghost" // ボタンのスタイルを設定
-                size="sm" // ボタンのサイズを設定
-                ml="2" // ボタンとリプライ情報の間にマージンを追加
-                top="1"
-                right="1"
-                _hover={{ backgroundColor: "transparent" }}
-              />
-            </Stack>
-          )}
-          <Stack spacing="4" mt="0" direction="row" justify="flex-end" mb="0">
-            <Tooltip
-              label="添付ファイルを選択"
-              aria-label="添付ファイルを選択"
-              cursor="pointer"
-            >
-              <Button
-                onClick={handleButtonClick}
-                position="relative"
-                display="inline-block"
-                cursor="pointer"
-                p="0"
-              >
-                <IconButton
-                  aria-label="Upload file"
-                  icon={<FaUpload />}
-                  colorScheme={colorMode === "light" ? "purple" : "yellow"}
-                  zIndex="0"
-                />
-                <Input
-                  type="file"
-                  accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,.7z,.gif,.mp4" // 画像ファイルとExcelファイルとかを許可
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  position="absolute"
-                  top="0"
-                  left="0"
-                  opacity="0"
-                  width="100%"
-                  height="100%"
-                  zIndex="1"
-                  title=""
-                  aria-label="Upload file" // ここにaria-labelを追加
-                  name=""
-                  display="none"
-                />
-              </Button>
-            </Tooltip>
-            <Input
-              _focus={{
-                borderColor: colorMode === "light" ? "gray.900" : "gray.200",
-              }} // 追加: フォーカス時の枠線の色を指定
-              _focusVisible={{
-                borderColor: colorMode === "light" ? "gray.900" : "gray.200",
-              }} // 追加: フォーカスが可視状態の時の枠線の色を指定
-              as="textarea"
-              type="text"
-              value={newPostContent}
-              onChange={(e) => setNewPostContent(e.target.value)}
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
-                handleKeyDown(
-                  e as unknown as React.KeyboardEvent<HTMLTextAreaElement>
-                )
-              } // 型を明示的に指定
-              placeholder="メッセージを入力 (Shift+Enterで送信)"
-              paddingTop={2}
-              size="md"
-              color={colorMode === "light" ? "black" : "white"}
-              bg={colorMode === "light" ? "gray.50" : "gray.800"}
-              borderColor={colorMode === "light" ? "gray.200" : "gray.800"}
-              resize="none"
-              borderRadius="5px"
-              onInput={(e) => {
-                const target = e.target as HTMLTextAreaElement;
-                target.style.height = "auto";
-                target.style.height = `${target.scrollHeight}px`;
-                target.style.overflow = "hidden";
-              }}
-              _placeholder={{ color: "gray.500" }} // placeholderの文字色を指定
-            />
-            <IconButton
-              onClick={() => {
-                if (isSubmitting) return;
-                setIsSubmitting(true); //post開始
-                createPost();
-                setNewPostContent(""); //クリア
-                const textarea = document.querySelector("textarea");
-                if (textarea) {
-                  textarea.style.height = "41px"; // 高さを初期状態に戻す
-                }
-                setIsSubmitting(false); //post終了
-              }}
-              icon={
-                isSubmitting ? (
-                  <Spinner
-                    size="36px"
-                    color={colorMode === "light" ? "purple" : "yellow"}
-                  />
-                ) : (
-                  <FaPaperPlane
-                    color={colorMode === "light" ? "purple" : "yellow"}
-                    style={{ transform: "rotate(45deg)" }}
-                    size="36px"
-                  />
-                )
-              }
-              bg="none"
-              top={-1}
-              left={-2}
-              isDisabled={!newPostContent.trim() && !selectedFile} // テキストが空で、添付ファイルが無い場合はボタンを無効化
-              aria-label="送信"
-            />
-            <audio ref={audioRef} src="/sound/notification.mp3" />
-          </Stack>
-          {selectedFileName && (
-            <Tooltip
-              label="添付をキャンセルします"
-              aria-label="添付をキャンセルします"
-            >
-              <Box
-                display="inline-flex"
-                alignItems="center"
-                mt="1"
-                px="2"
-                border="1px solid"
-                borderColor="gray.200"
-                borderRadius="md"
-                bg="gray.50"
-                cursor="pointer"
-                onClick={handleFileRemove}
-                width="fit-content"
-                color="gray.900"
-              >
-                <FaPaperclip style={{ marginRight: "6px" }} />
-                <Text>{selectedFileName}</Text>
-              </Box>
-            </Tooltip>
-          )}
-        </Stack>
-        <Modal isOpen={fileModalOpen} onClose={() => setFileModalOpen(false)}>
-          <ModalOverlay />
-          <ModalContent>
-            {/* <ModalCloseButton position="absolute" top="10px" right="-10px" /> */}
-            <ModalBody
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              p={0}
-              onClick={() => {
-                if (!isLongPress) {
-                  setIsZoomed(!isZoomed); // クリックでズームイン/アウトを切り替え
-                }
-              }}
-            >
-              {selectedImageUrl &&
-                (selectedImageUrl.match(/\.mp4$/) ? (
-                  <video
-                    src={selectedImageUrl}
-                    autoPlay
-                    loop
-                    muted
-                    style={{
-                      maxWidth: isZoomed ? "99vw" : "80vw", // ズームイン時は制限なし
-                      maxHeight: isZoomed ? "99vh" : "80vh", // ズームイン時は制限なし
-                      objectFit: "contain", // 動画がモーダルの範囲内に収まるようにする
-                      cursor: isZoomed ? "zoom-out" : "zoom-in", // ズームイン/アウトのカーソルを設定
-                    }}
-                  />
-                ) : (
-                  <Image
-                    src={selectedImageUrl}
-                    alt="Uploaded image"
-                    maxW={isZoomed ? "99vw" : "80vw"} // ズームイン時は制限なし
-                    maxH={isZoomed ? "99vh" : "80vh"} // ズームイン時は制限なし
-                    objectFit="contain" // 画像がモーダルの範囲内に収まるようにする
-                    cursor={isZoomed ? "zoom-out" : "zoom-in"} // ズームイン/アウトのカーソルを設定
-                  />
-                ))}
-            </ModalBody>
-          </ModalContent>
-        </Modal>
       </Content>
     </div>
   );

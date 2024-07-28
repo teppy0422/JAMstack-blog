@@ -207,11 +207,13 @@ export default function Header() {
         fetchAndSetUserInfo(post_userID); // ユーザー情報を取得して状態に保存
       }
       return (
-        <Avatar
-          boxSize="42px"
-          zIndex="5"
-          src={user ? user.userPicture : undefined}
-        />
+        <Box position="relative" display="inline-block">
+          <Avatar
+            boxSize="42px"
+            zIndex="5"
+            src={user ? user.userPicture : undefined}
+          />
+        </Box>
       );
     }
   };
@@ -265,14 +267,26 @@ export default function Header() {
                   <Text className={styles.logoText}>作成中</Text>
                 </Link>
               </NextLink>
-              <IconButton
-                icon={
-                  <FontAwesomeIcon icon={faMobileScreenButton} size="2xl" />
-                }
-                aria-label="Mobile Icon"
-                size="0px"
-                onClick={onOpen} // モーダルを開く関数を呼び出す
-              />
+              <Box
+                onClick={onOpen}
+                cursor="pointer"
+                _hover={{ bg: "transparent" }}
+                bg="transparent"
+                h="32px"
+                maxH="32px" // 最大幅を設定
+              >
+                <IconButton
+                  icon={
+                    <FontAwesomeIcon icon={faMobileScreenButton} size="2xl" />
+                  }
+                  _hover={{ bg: "transparent" }}
+                  bg="transparent"
+                  p="0"
+                  height="100%"
+                  width="100%"
+                  aria-label="Mobile Icon"
+                />
+              </Box>
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>

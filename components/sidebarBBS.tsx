@@ -169,7 +169,7 @@ function SidebarBBS() {
         // maxWidth={{ base: "0px", xl: "180px", "2xl": "300px", "3xl": "400px" }}
         w={maxWidth}
         maxWidth={maxWidth}
-        h="100vh"
+        h="80vh"
         bg="white.200"
         p="0"
         top="60px"
