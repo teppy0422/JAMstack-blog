@@ -443,7 +443,7 @@ export const typing = () => {
           }}
         />
       </Box>
-      <Content style={{ position: "relative" }}>
+      <Content isCustomHeader={true}>
         <VStack className={styles.typing} h="620px">
           <Box
             className={
