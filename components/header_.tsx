@@ -341,7 +341,13 @@ export default function Header() {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Login</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton
+            _hover={{
+              _hover: "none",
+              border: "none",
+              backgroundColor: "transparent",
+            }}
+          />
           <ModalBody>
             <Auth />
           </ModalBody>

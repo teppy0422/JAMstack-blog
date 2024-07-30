@@ -1,6 +1,18 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase/client";
-import { Flex, Box, Text, Button, Input, Avatar } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Text,
+  Button,
+  Input,
+  Avatar,
+  Tabs,
+  TabList,
+  TabPanels,
+  TabPanel,
+  Tab,
+} from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 
 export default function Auth() {
@@ -9,6 +21,9 @@ export default function Auth() {
   const [loading, setLoading] = useState<boolean>(false);
   const [user, setUser] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"signup" | "signin">("signup");
+  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -24,8 +39,18 @@ export default function Auth() {
   // サインアップ関数
   const [confirmPassword, setConfirmPassword] = useState<string>(""); // 確認用パスワードの状態を追加
   const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      setError("パスワードが一致しません。");
+      return;
+    }
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({ email, password });
+    const identities = data.user?.identities;
+    if (identities?.length === 0) {
+      setError("既に登録のメールアドレスです。");
+      return;
+    }
+    console.log(identities);
     if (error) {
       console.error("Error signing up:", error.message);
       setMessage("新規登録に失敗しました: " + error.message); // エラーメッセージを設定
@@ -107,81 +132,108 @@ export default function Auth() {
   const [message, setMessage] = useState<string | null>(null); // メッセージ用の状態を追加
 
   return (
-    <>
-      {user ? (
-        <Box textAlign="center">
-          <Text fontSize="lg" mb={4}>
-            {user.email}
-          </Text>
-          {/* <Avatar src={user.userPicture} size="xl" mb={4} /> */}
-          <Button
-            onClick={handleSignOut}
-            isLoading={loading}
-            colorScheme="teal"
-            width="full"
-          >
-            ログアウト
-          </Button>
-        </Box>
-      ) : (
-        <>
-          {message && ( // メッセージがある場合に表示
-            <Text fontSize="sm" color="green.500" mb={4}>
-              {message}
-            </Text>
-          )}
-          <Text
-            fontSize="sm"
-            color={
-              isEmailFocused || isPasswordFocused ? "gray.500" : "transparent"
-            }
-            mb={2}
-          >
-            {isEmailFocused
-              ? "受信可能なメールアドレスを入力してください"
-              : "パスワードは管理者側でも分かりません。メモしておいてください"}
-          </Text>
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            mb={3}
-            onFocus={() => setIsEmailFocused(true)} // フォーカス時に状態を更新
-            onBlur={() => setIsEmailFocused(false)} // フォーカスが外れた時に状態をリセット
-          />
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            mb={4}
-            onFocus={() => setIsPasswordFocused(true)} // フォーカス時に状態を更新
-            onBlur={() => setIsPasswordFocused(false)} // フォーカスが外れた時に状態をリセット
-          />
-          <Flex justify="space-between" mb={4}>
-            <Button
-              onClick={handleSignUp}
-              isLoading={loading}
-              colorScheme="blue"
-              width="48%"
-            >
-              新規登録
-            </Button>
+    <Box>
+      {error && (
+        <Text color="red.500" mb={4}>
+          {error}
+        </Text>
+      )}
+      {message && (
+        <Text fontSize="sm" color="green.500" mb={4}>
+          {message}
+        </Text>
+      )}
+      <Tabs
+        onChange={(index) => setActiveTab(index === 0 ? "signup" : "signin")}
+      >
+        <TabList>
+          <Tab>ログイン</Tab>
+          <Tab>新規登録</Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel>
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              mb={3}
+              onFocus={() => setIsEmailFocused(true)}
+              onBlur={() => setIsEmailFocused(false)}
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              mb={4}
+              onFocus={() => setIsPasswordFocused(true)}
+              onBlur={() => setIsPasswordFocused(false)}
+            />
             <Button
               onClick={handleSignIn}
               isLoading={loading}
               colorScheme="blue"
-              width="48%"
+              width="full"
             >
               ログイン
             </Button>
-          </Flex>
-          {/* <Button onClick={handleGoogleLogin} colorScheme="red" width="full">
-              Googleでログイン
-            </Button> */}
-        </>
-      )}
-    </>
+          </TabPanel>
+          <TabPanel>
+            <Text fontSize="sm" mb={4}>
+              新規登録の流れ:
+            </Text>
+            <Text fontSize="sm" mb={2}>
+              1. メールアドレスとパスワードを入力してください。
+            </Text>
+            <Text fontSize="sm" mb={2}>
+              2. 「新規登録」ボタンをクリックします。
+            </Text>
+            <Text fontSize="sm" mb={2}>
+              3. 受信したメールを確認し、認証を行ってください。
+            </Text>
+            <Text fontSize="sm" mb={2}>
+              4. 認証後、ログインが可能になります。
+            </Text>
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              mb={3}
+              onFocus={() => setIsEmailFocused(true)}
+              onBlur={() => setIsEmailFocused(false)}
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              mb={4}
+              onFocus={() => setIsPasswordFocused(true)}
+              onBlur={() => setIsPasswordFocused(false)}
+            />
+            <Input
+              type="password"
+              placeholder="Confirm Password" // 確認用パスワードのプレースホルダー
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              mb={4}
+              onFocus={() => setIsConfirmPasswordFocused(true)}
+              onBlur={() => setIsConfirmPasswordFocused(false)}
+            />
+            <Button
+              onClick={handleSignUp}
+              isLoading={loading}
+              colorScheme="blue"
+              width="full"
+            >
+              新規登録
+            </Button>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </Box>
   );
 }

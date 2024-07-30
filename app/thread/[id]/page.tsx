@@ -1197,7 +1197,7 @@ export default function Thread() {
                                 fontWeight="bold" // ユーザーネームを太字に設定
                               >
                                 {getUserById(post.reply_user_id)?.user_metadata
-                                  ?.name || "ユーザー名がない"}
+                                  ?.name || "不明"}
                               </Text>
                               <Text
                                 color="black"
