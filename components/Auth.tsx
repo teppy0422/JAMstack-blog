@@ -146,11 +146,21 @@ export default function Auth({ userData }: AuthProps) {
     <Box>
       {user ? (
         <>
-          <Text>ここは作成中</Text>
-          <Text>Welcome {userData.userName || "Guest"}</Text>
-          <Text>{userData.userCompany || ""}</Text>
-          <Avatar src={userData.pictureUrl || undefined} />
-          <Button onClick={handleSignOut}>ログアウト</Button>
+          <Box textAlign="center" mb={4}>
+            <Text fontSize="xl" fontWeight="bold">
+              -ここは作成中-
+            </Text>
+            <Text fontSize="lg">Welcome {userData.userName || "Guest"}</Text>
+            <Text fontSize="md" color="gray.500">
+              {userData.userCompany || ""}
+            </Text>
+            <Avatar src={userData.pictureUrl || undefined} size="lg" mt={2} />{" "}
+            {/* サイズとマージンを追加 */}
+          </Box>
+          <Button onClick={handleSignOut} colorScheme="red" width="full">
+            ログアウト
+          </Button>{" "}
+          {/* ボタンの色と幅を調整 */}
         </>
       ) : (
         <>

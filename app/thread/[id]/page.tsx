@@ -76,6 +76,8 @@ export default function Thread() {
   const [hoveredButton, setHoveredButton] = useState<"delete" | "reply" | null>(
     null
   );
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+
   const [longPressTimeout, setLongPressTimeout] =
     useState<NodeJS.Timeout | null>(null);
   const handleLongPressStart = (postId: string) => {
@@ -162,7 +164,13 @@ export default function Thread() {
   // ユーザー情報を検索する関数
   const getUserById = (id: string) => {
     const user = users.find((user) => user.id === id); // IDでユーザーを検索
-    return user || null; // ユーザーが見つからない場合はnullを返す
+    if (user) {
+      return {
+        displayName: user.user_metadata?.name,
+        userCompany: user.user_company,
+      };
+    }
+    return null;
   };
   //ユーザー名を取得
   //postのリプライ
@@ -174,6 +182,9 @@ export default function Thread() {
   const [replyPostUserDisplayName, setReplyPostUserDisplayName] = useState<
     string | null
   >(null); // 追加: リプライ対象のユーザー表示名を管理する状態
+  const [replyPostUserCompany, setReplyPostUserCompany] = useState<
+    string | null
+  >(null); // 追加: リプライ対象のユーザー会社を管理する状態
   //リプライ情報を取得
   const handleReplyPost = async (postId: string) => {
     const post = posts.find((p) => p.id === postId); // 対象の投稿を取得
@@ -184,8 +195,9 @@ export default function Thread() {
       // displayNameとuser_companyを取得
       const userDisplayNameData = await fetchUserFromTable(post.user_uid); // post.user_uidを引数に渡す
       const displayName = userDisplayNameData?.displayName; // nullチェックを追加
-      const userCompany = userDisplayNameData as string | null; // nullチェックを追加
+      const userCompany = userDisplayNameData?.userCompany; // nullチェックを追加
       setReplyPostUserDisplayName(displayName as string | null); // displayNameを状態に設定
+      setReplyPostUserCompany(userCompany as string | null); // userCompanyを状態に設定
     }
     setReplyToPostId(postId); // リプライ対象の投稿IDを設定
     // フォーカスを入力フィールドに当てる
@@ -678,9 +690,19 @@ export default function Thread() {
           >
             {getAvatarProps(replyPostUserId, true, "sm")}
             <Stack ml="1">
-              <Text fontWeight="bold" m="0" lineHeight="1">
-                {replyPostUserDisplayName}
-              </Text>
+              <Flex alignItems="center" mb="0">
+                <Text fontWeight="bold" m="0" lineHeight="0.5" mr="1">
+                  {replyPostUserDisplayName}
+                </Text>
+                <Text
+                  fontSize="xs"
+                  color="gray.600"
+                  fontStyle="italic"
+                  lineHeight="0.5"
+                >
+                  -{replyPostUserCompany}-
+                </Text>
+              </Flex>
               <Text
                 m="0"
                 lineHeight="1"
@@ -1202,20 +1224,30 @@ export default function Thread() {
                           <Flex alignItems="center">
                             {getAvatarProps(post.reply_user_id, true, "xs")}
                             <Stack mx={2} spacing={0} maxW="90%">
-                              <Text
-                                color="black"
-                                fontSize="12px" // ユーザーネームのフォントサイズを調整
-                                fontWeight="bold" // ユーザーネームを太字に設定
-                              >
-                                {getUserById(post.reply_user_id)?.user_metadata
-                                  ?.name || "不明"}
-                              </Text>
+                              <Flex alignItems="center" mb="0" lineHeight="1.4">
+                                <Text
+                                  color="black"
+                                  fontSize="12px" // ユーザーネームのフォントサイズを調整
+                                  fontWeight="bold" // ユーザーネームを太字に設定
+                                  mr="1" // ユーザーネームと会社名の間にマージンを追加
+                                >
+                                  {getUserById(post.reply_user_id)
+                                    ?.displayName || "未登録"}
+                                </Text>
+                                <Text fontSize="10px" color="gray.500">
+                                  -
+                                  {getUserById(post.reply_user_id)
+                                    ?.userCompany || "未登録"}
+                                  -
+                                </Text>
+                              </Flex>
                               <Text
                                 color="black"
                                 fontSize="10px"
                                 noOfLines={1} // 1行まで表示
                                 isTruncated // 改行が必要な場合は...を表示
                                 whiteSpace="nowrap"
+                                lineHeight="1.4"
                               >
                                 <span
                                   dangerouslySetInnerHTML={{
@@ -1350,6 +1382,37 @@ export default function Thread() {
                                       setSelectedImageUrl(post.file_url);
                                       setFileModalOpen(true);
                                     }
+                                  }}
+                                  onTouchStart={(e) => {
+                                    touchStartRef.current = {
+                                      x: e.touches[0].clientX,
+                                      y: e.touches[0].clientY,
+                                    }; // タッチ開始位置を記録
+                                    setIsLongPress(false); // タッチ開始時に長押し状態をリセット
+                                  }}
+                                  onTouchMove={(e) => {
+                                    if (touchStartRef.current) {
+                                      const dx =
+                                        e.touches[0].clientX -
+                                        touchStartRef.current.x;
+                                      const dy =
+                                        e.touches[0].clientY -
+                                        touchStartRef.current.y;
+                                      const distance = Math.sqrt(
+                                        dx * dx + dy * dy
+                                      );
+                                      if (distance > 10) {
+                                        // 10px以上移動したらスクロールとみなす
+                                        setIsLongPress(true); // スクロール中は長押しとみなす
+                                      }
+                                    }
+                                  }}
+                                  onTouchEnd={() => {
+                                    if (!isLongPress) {
+                                      setSelectedImageUrl(post.file_url);
+                                      setFileModalOpen(true);
+                                    }
+                                    touchStartRef.current = null; // タッチ終了時にリセット
                                   }}
                                 />
                               )
