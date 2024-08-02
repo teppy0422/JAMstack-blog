@@ -63,6 +63,8 @@ export default function Header() {
   const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [userId, setUserId] = useState<string | null>(null); // userIdの状態を追加
+
   const {
     isOpen: isMenuOpen,
     onOpen: onMenuOpen,
@@ -99,17 +101,19 @@ export default function Header() {
     };
   }, []);
   // ユーザーIDを取得する関数
-  const [userId, setUserId] = useState<string | null>(null);
   useEffect(() => {
     const fetchUserId = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      setUserId(user?.id ?? null);
-      console.log(user?.id);
+      if (user) {
+        setUserId(user.id);
+      } else {
+        console.error("User is not logged in");
+      }
     };
     fetchUserId();
-  }, []);
+  }, []); // コンポーネントの初期レンダリング時にユーザーIDを取得
   const buttonStyle = (path) => ({
     p: "2",
     w: "full",
@@ -159,41 +163,41 @@ export default function Header() {
       </NextLink>
     );
   };
+  const [pictureUrl, setPictureUrl] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
+  const [userCompany, setUserCompany] = useState<string | null>(null);
+  // ユーザー情報を取得する関数を呼び出す例
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (userId) {
+        const userData = await fetchUserFromTable(userId); // userIdを引数に渡す
+        if (userData) {
+          console.log("取得したユーザー情報:", userData); // 取得したデータをコンソールに表示
+          // ここで必要に応じて状態を更新することができます
+          setPictureUrl(userData.picture_url);
+          setUserName(userData.user_metadata.name);
+          setUserCompany(userData.user_company);
+        } else {
+          setPictureUrl(null);
+          setUserName(null);
+          setUserCompany(null);
+        }
+      }
+    };
+    fetchUserData();
+  }, [userId]); // userIdが変更されたときに実行
+  //table_usersからユーザー情報を取得
   const fetchUserFromTable = async (userId: string) => {
     const { data, error } = await supabase
-      .from("table_users") // 新しいテーブル名を指定
-      .select("user_metadata->name, user_company,picture_url") // displayNameとuser_companyを取得
-      .eq("id", userId) // 引数のuserIdでフィルタリング
-      .single();
+      .from("table_users") // テーブル名を指定
+      .select("*") // 全ての情報を取得
+      .eq("id", userId) // userIdでフィルタリング
+      .single(); // 一つの行を取得
     if (error) {
-      console.error("Error fetching user display name:", error.message);
+      console.error("Error fetching user data:", error.message);
       return null;
     }
-    return {
-      displayName: data.name || null, // user_metadataを直接参照
-      userCompany: data.user_company || null, // user_companyを返す
-      userPicture: data.picture_url || null,
-    };
-  };
-  const [userInfo, setUserInfo] = useState<any[]>([]); // ユーザー情報の配列
-  const fetchUserInfo = async (userId: string) => {
-    const existingUser = userInfo.find((user) => user.id === userId); // userInfoから既存のユーザーを検索
-    if (existingUser) {
-      return existingUser; // 既存のユーザー情報を返す
-    }
-    const fetchedUser = await fetchUserFromTable(userId); // Supabaseからユーザー情報を取得
-    if (fetchedUser) {
-      setUserInfo((prev) => [...prev, { id: userId, ...fetchedUser }]); // userInfoに追加
-    }
-    return fetchedUser; // 取得したユーザー情報を返す
-  };
-  const fetchAndSetUserInfo = async (post_userID: any) => {
-    const userInfo = await fetchUserInfo(post_userID); // ユーザー情報を取得
-    if (userInfo) {
-      setUserInfo((prev) => [...prev, userInfo]); // ここでuserInfoを状態に追加
-    } else {
-      console.error(`User with ID ${post_userID} not found`); // ユーザーが見つからない場合のエラーログ
-    }
+    return data; // 取得したデータを返す
   };
   //アバター作成
   const getAvatarProps = (
@@ -202,16 +206,12 @@ export default function Header() {
     size: string
   ) => {
     if (isReturn) {
-      const user = userInfo.find((user) => user.id === post_userID); // ユーザー情報を取得
-      if (!user) {
-        fetchAndSetUserInfo(post_userID); // ユーザー情報を取得して状態に保存
-      }
       return (
         <Box position="relative" display="inline-block">
           <Avatar
-            boxSize="42px"
+            boxSize={size === "md" ? "40px" : size} // サイズを引数から設定
             zIndex="5"
-            src={user ? user.userPicture : undefined}
+            src={pictureUrl || undefined} // picture_urlを使用
           />
         </Box>
       );
@@ -349,7 +349,7 @@ export default function Header() {
             }}
           />
           <ModalBody>
-            <Auth />
+            <Auth userData={{ pictureUrl, userName, userCompany }} />
           </ModalBody>
         </ModalContent>
       </Modal>
