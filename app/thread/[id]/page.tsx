@@ -197,6 +197,10 @@ export default function Thread() {
   //ユーザー情報
   const [userInfo, setUserInfo] = useState<any[]>([]); // ユーザー情報の配列
   const fetchUserInfo = async (userId: string) => {
+    if (!userId) {
+      console.error("User ID is not provided;;;;;;", userId);
+      return null;
+    }
     const existingUser = userInfo.find((user) => user.id === userId); // userInfoから既存のユーザーを検索
     if (existingUser) {
       return existingUser; // 既存のユーザー情報を返す
@@ -214,7 +218,10 @@ export default function Thread() {
     } else {
       console.error(`User with ID ${post_userID} not found`); // ユーザーが見つからない場合のエラーログ
       // ここでデフォルトのユーザー情報を設定することも検討できます
-      // setUserInfo((prev) => [...prev, { id: post_userID, displayName: "Unknown User" }]);
+      setUserInfo((prev) => [
+        ...prev,
+        { id: post_userID, displayName: "Unknown User" },
+      ]);
     }
   };
   const fetchUserFromTable = async (userId: string) => {
@@ -268,14 +275,18 @@ export default function Thread() {
     return user?.id;
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // ユーザーIDを取得する関数
+  // 現在のユーザーIDを取得する関数
   useEffect(() => {
     const fetchUserId = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      setUserId(user?.id ?? null);
-      console.log(user?.id);
+      if (user) {
+        setUserId(user.id);
+      } else {
+        console.error("User is not logged in.aaaaaaaaaaaaaaaaa");
+        setUserId(null);
+      }
     };
     fetchUserId();
   }, []);
