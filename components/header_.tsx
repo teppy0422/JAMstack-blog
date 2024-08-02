@@ -219,9 +219,9 @@ export default function Header() {
   };
   return (
     <>
-      <header id="navTop">
+      <header id="navTop" style={{ maxWidth: "100vw", overflowX: "hidden" }}>
         <VStack>
-          <Flex className={`${myClass} ${styles.headerNav}`}>
+          <Flex className={`${myClass} ${styles.headerNav}`} maxWidth="100vw">
             <IconButton
               display={{ base: "block", xl: "block" }}
               icon={<HamburgerIcon />}
