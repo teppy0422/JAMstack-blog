@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { supabase } from "../utils/supabase/client";
 import {
   Flex,
@@ -12,8 +12,10 @@ import {
   TabPanels,
   TabPanel,
   Tab,
+  Icon,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
+import { ActiveUserContext } from "../pages/_app";
 interface AuthProps {
   userData: {
     pictureUrl: string | null;
@@ -30,7 +32,7 @@ export default function Auth({ userData }: AuthProps) {
   const [activeTab, setActiveTab] = useState<"signup" | "signin">("signup");
   const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] =
     useState<boolean>(false);
-
+  const activeUserInfo = useContext(ActiveUserContext);
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
@@ -141,21 +143,82 @@ export default function Auth({ userData }: AuthProps) {
   const [isEmailFocused, setIsEmailFocused] = useState<boolean>(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null); // メッセージ用の状態を追加
-
+  //ユーザーアイコンの変更
+  const fileInputRef = useRef<HTMLInputElement | null>(null); // ファイル入力の参照を作成
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click(); // クリックでファイル入力をトリガー
+  };
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Supabaseにファイルをアップロード
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("avatars") // アップロード先のバケット名
+        .upload(`public/${file.name}`, file); // ファイル名を指定してアップロード
+      if (uploadError) {
+        console.error("Error uploading file:", uploadError.message);
+        return;
+      }
+      // アップロードしたファイルのURLを取得
+      const { data: urlData } = supabase.storage
+        .from("avatars")
+        .getPublicUrl(`public/${file.name}`);
+      if (!urlData?.publicUrl) {
+        console.error("URL取得エラー"); // エラーをログに出力
+        return; // エラーが発生した場合は処理を中断
+      }
+      const oldPictureUrl = userData.pictureUrl; // 古いURLを取得
+      const publicURL = urlData.publicUrl;
+      // Supabaseのtable_usersを更新
+      const { error: updateError } = await supabase
+        .from("table_users")
+        .update({ picture_url: publicURL }) // picture_urlを更新
+        .eq("id", user.id); // ユーザーIDでフィルタリング
+      if (updateError) {
+        console.error("Error updating picture_url:", updateError.message);
+      } else {
+        // pictureUrlを更新
+        setUser({ ...user, picture_url: publicURL });
+        userData.pictureUrl = publicURL;
+        // 古いURLのファイルを削除
+        if (oldPictureUrl) {
+          const oldFileName = oldPictureUrl.split("/").pop(); // 古いファイル名を取得
+          await supabase.storage
+            .from("avatars")
+            .remove([`public/${oldFileName}`]); // 古いファイルを削除
+        }
+        console.log("プロフィール画像を更新しました");
+        window.location.reload();
+      }
+    }
+  };
   return (
     <Box>
       {user ? (
         <>
           <Box textAlign="center" mb={4}>
             <Text fontSize="xl" fontWeight="bold">
-              -ここは作成中-
+              {activeUserInfo.id}
             </Text>
-            <Text fontSize="lg">Welcome {userData.userName || "Guest"}</Text>
+            <Text fontSize="lg">{userData.userName || "Guest"}</Text>
             <Text fontSize="md" color="gray.500">
               {userData.userCompany || ""}
             </Text>
-            <Avatar src={userData.pictureUrl || undefined} size="lg" mt={2} />{" "}
-            {/* サイズとマージンを追加 */}
+            <Avatar
+              src={userData.pictureUrl || undefined}
+              size="lg"
+              mt={2}
+              cursor="pointer"
+              onClick={handleAvatarClick} // クリックで画像選択
+            />
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }} // ファイル入力を非表示
+              onChange={handleFileChange} // ファイル選択時の処理
+            />
           </Box>
           <Button onClick={handleSignOut} colorScheme="red" width="full">
             ログアウト
@@ -212,6 +275,20 @@ export default function Auth({ userData }: AuthProps) {
                 >
                   ログイン
                 </Button>
+                <Button
+                  onClick={handleGoogleLogin} // Googleログイン関数を呼び出す
+                  colorScheme="gray" // ボタンの色を設定
+                  width="full"
+                  leftIcon={
+                    <img
+                      src="/images/google_icon-icons.com_62736.png"
+                      alt="Google Icon"
+                      style={{ width: "20px", height: "20px" }}
+                    />
+                  } // グーグルアイコンを追加
+                >
+                  Googleでログイン
+                </Button>
               </TabPanel>
               <TabPanel>
                 <Text fontSize="sm" mb={4}>
@@ -263,7 +340,7 @@ export default function Auth({ userData }: AuthProps) {
                   width="full"
                 >
                   新規登録
-                </Button>
+                </Button>{" "}
               </TabPanel>
             </TabPanels>
           </Tabs>

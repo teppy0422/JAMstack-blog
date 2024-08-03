@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
-
+import { ActiveUserContext } from "../pages/_app";
 import { supabase } from "../utils/supabase/client";
 import NextLink from "next/link";
 import QRCode from "qrcode.react";
@@ -108,6 +108,7 @@ export default function Header() {
       } = await supabase.auth.getUser();
       if (user) {
         setUserId(user.id);
+        console.log("getしたよーーーーーーーーーー");
       } else {
         console.error("User is not logged in");
       }
@@ -211,7 +212,7 @@ export default function Header() {
           <Avatar
             boxSize={size === "md" ? "40px" : size} // サイズを引数から設定
             zIndex="5"
-            src={pictureUrl || undefined} // picture_urlを使用
+            src={post_userID || undefined} // picture_urlを使用
           />
         </Box>
       );
@@ -330,7 +331,7 @@ export default function Header() {
                 }
                 cursor="pointer"
               >
-                {getAvatarProps(userId, true, "md")}
+                {getAvatarProps(pictureUrl, true, "md")}
               </Box>
             </Center>
           </Flex>
@@ -349,7 +350,7 @@ export default function Header() {
             }}
           />
           <ModalBody>
-            <Auth userData={{ pictureUrl, userName, userCompany }} />
+            <Auth userData={{ userName, userCompany, pictureUrl }} />
           </ModalBody>
         </ModalContent>
       </Modal>

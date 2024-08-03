@@ -1466,11 +1466,6 @@ export default function Thread() {
                       false,
                       post.user_uid !== userId
                     )}
-                    {getAvatarProps(
-                      post.user_uid,
-                      post.user_uid === userId,
-                      "sm"
-                    )}
                   </Flex>
                 </>
               );
