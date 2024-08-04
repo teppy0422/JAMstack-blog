@@ -13,9 +13,9 @@ import {
   TabPanel,
   Tab,
   Icon,
+  Tooltip,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
-import { ActiveUserContext } from "../pages/_app";
 interface AuthProps {
   userData: {
     pictureUrl: string | null;
@@ -32,7 +32,6 @@ export default function Auth({ userData }: AuthProps) {
   const [activeTab, setActiveTab] = useState<"signup" | "signin">("signup");
   const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] =
     useState<boolean>(false);
-  const activeUserInfo = useContext(ActiveUserContext);
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
@@ -134,7 +133,7 @@ export default function Auth({ userData }: AuthProps) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "http://localhost:3000/api/auth/callback", // ここでリダイレクトURIを指定
+        redirectTo: window.location.href, // 現在のページにリダイレクト
       },
     });
     if (error) console.error("Error during Google login:", error.message);
@@ -153,10 +152,12 @@ export default function Auth({ userData }: AuthProps) {
   ) => {
     const file = event.target.files?.[0];
     if (file) {
+      // ファイルを最適化
+      const optimizedFile = await optimizeImage(file);
       // Supabaseにファイルをアップロード
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("avatars") // アップロード先のバケット名
-        .upload(`public/${file.name}`, file); // ファイル名を指定してアップロード
+        .upload(`public/${optimizedFile.name}`, optimizedFile); // ファイル名を指定してアップロード
       if (uploadError) {
         console.error("Error uploading file:", uploadError.message);
         return;
@@ -194,25 +195,67 @@ export default function Auth({ userData }: AuthProps) {
       }
     }
   };
+  // 画像最適化関数の追加
+  const optimizeImage = async (file: File): Promise<File> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        img.src = e.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          const MAX_WIDTH = 300; // 最大幅
+          const MAX_HEIGHT = 300; // 最大高さ
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          ctx?.drawImage(img, 0, 0, width, height);
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(new File([blob], file.name, { type: file.type }));
+            } else {
+              resolve(file); // 最適化できなかった場合は元のファイルを返す
+            }
+          }, file.type);
+        };
+      };
+      reader.readAsDataURL(file);
+    });
+  };
   return (
     <Box>
       {user ? (
         <>
           <Box textAlign="center" mb={4}>
-            <Text fontSize="xl" fontWeight="bold">
-              {activeUserInfo.id}
-            </Text>
             <Text fontSize="lg">{userData.userName || "Guest"}</Text>
             <Text fontSize="md" color="gray.500">
               {userData.userCompany || ""}
             </Text>
-            <Avatar
-              src={userData.pictureUrl || undefined}
-              size="lg"
-              mt={2}
-              cursor="pointer"
-              onClick={handleAvatarClick} // クリックで画像選択
-            />
+            <Tooltip
+              label="ユーザーアイコンを変更"
+              aria-label="ユーザーアイコンを変更"
+            >
+              <Avatar
+                src={userData.pictureUrl || undefined}
+                size="2xl"
+                mt={2}
+                cursor="pointer"
+                onClick={handleAvatarClick} // クリックで画像選択
+              />
+            </Tooltip>
             <input
               type="file"
               ref={fileInputRef}
@@ -243,38 +286,102 @@ export default function Auth({ userData }: AuthProps) {
             }
           >
             <TabList>
-              <Tab>ログイン</Tab>
-              <Tab>新規登録</Tab>
+              <Tab>メールアドレス</Tab>
+              <Tab>Google(テスト中)</Tab>
             </TabList>
 
-            <TabPanels>
+            <TabPanels p={0}>
+              <TabPanel p={0}>
+                <Tabs p={0}>
+                  <TabList>
+                    <Tab>ログイン</Tab>
+                    <Tab>新規登録</Tab>
+                  </TabList>
+                  <TabPanels>
+                    <TabPanel>
+                      <Input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        mb={3}
+                        onFocus={() => setIsEmailFocused(true)}
+                        onBlur={() => setIsEmailFocused(false)}
+                      />
+                      <Input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        mb={4}
+                        onFocus={() => setIsPasswordFocused(true)}
+                        onBlur={() => setIsPasswordFocused(false)}
+                      />
+                      <Button
+                        onClick={handleSignIn}
+                        isLoading={loading}
+                        colorScheme="blue"
+                        width="full"
+                      >
+                        ログイン
+                      </Button>
+                    </TabPanel>
+                    <TabPanel>
+                      <Text fontSize="sm" mb={4}>
+                        新規登録の流れ:
+                      </Text>
+                      <Text fontSize="sm" mb={2}>
+                        1. メールアドレスとパスワードを入力してください。
+                      </Text>
+                      <Text fontSize="sm" mb={2}>
+                        2. 「新規登録」ボタンをクリックします。
+                      </Text>
+                      <Text fontSize="sm" mb={2}>
+                        3. 受信したメールを確認し、認証を行ってください。
+                      </Text>
+                      <Text fontSize="sm" mb={2}>
+                        4. 認証後、ログインが可能になります。
+                      </Text>
+                      <Input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        mb={3}
+                        onFocus={() => setIsEmailFocused(true)}
+                        onBlur={() => setIsEmailFocused(false)}
+                      />
+                      <Input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        mb={4}
+                        onFocus={() => setIsPasswordFocused(true)}
+                        onBlur={() => setIsPasswordFocused(false)}
+                      />
+                      <Input
+                        type="password"
+                        placeholder="Confirm Password" // 確認用パスワードのプレースホルダー
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        mb={4}
+                        onFocus={() => setIsConfirmPasswordFocused(true)}
+                        onBlur={() => setIsConfirmPasswordFocused(false)}
+                      />
+                      <Button
+                        onClick={handleSignUp}
+                        isLoading={loading}
+                        colorScheme="blue"
+                        width="full"
+                      >
+                        新規登録
+                      </Button>
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </TabPanel>
               <TabPanel>
-                <Input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  mb={3}
-                  onFocus={() => setIsEmailFocused(true)}
-                  onBlur={() => setIsEmailFocused(false)}
-                />
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  mb={4}
-                  onFocus={() => setIsPasswordFocused(true)}
-                  onBlur={() => setIsPasswordFocused(false)}
-                />
-                <Button
-                  onClick={handleSignIn}
-                  isLoading={loading}
-                  colorScheme="blue"
-                  width="full"
-                >
-                  ログイン
-                </Button>
                 <Button
                   onClick={handleGoogleLogin} // Googleログイン関数を呼び出す
                   colorScheme="gray" // ボタンの色を設定
@@ -285,61 +392,9 @@ export default function Auth({ userData }: AuthProps) {
                       alt="Google Icon"
                       style={{ width: "20px", height: "20px" }}
                     />
-                  } // グーグルアイコンを追加
+                  }
                 >
                   Googleでログイン
-                </Button>
-              </TabPanel>
-              <TabPanel>
-                <Text fontSize="sm" mb={4}>
-                  新規登録の流れ:
-                </Text>
-                <Text fontSize="sm" mb={2}>
-                  1. メールアドレスとパスワードを入力してください。
-                </Text>
-                <Text fontSize="sm" mb={2}>
-                  2. 「新規登録」ボタンをクリックします。
-                </Text>
-                <Text fontSize="sm" mb={2}>
-                  3. 受信したメールを確認し、認証を行ってください。
-                </Text>
-                <Text fontSize="sm" mb={2}>
-                  4. 認証後、ログインが可能になります。
-                </Text>
-                <Input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  mb={3}
-                  onFocus={() => setIsEmailFocused(true)}
-                  onBlur={() => setIsEmailFocused(false)}
-                />
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  mb={4}
-                  onFocus={() => setIsPasswordFocused(true)}
-                  onBlur={() => setIsPasswordFocused(false)}
-                />
-                <Input
-                  type="password"
-                  placeholder="Confirm Password" // 確認用パスワードのプレースホルダー
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  mb={4}
-                  onFocus={() => setIsConfirmPasswordFocused(true)}
-                  onBlur={() => setIsConfirmPasswordFocused(false)}
-                />
-                <Button
-                  onClick={handleSignUp}
-                  isLoading={loading}
-                  colorScheme="blue"
-                  width="full"
-                >
-                  新規登録
                 </Button>{" "}
               </TabPanel>
             </TabPanels>

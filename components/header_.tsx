@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import { useState, useContext } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { ActiveUserContext } from "../pages/_app";
 import { supabase } from "../utils/supabase/client";
 import NextLink from "next/link";
 import QRCode from "qrcode.react";

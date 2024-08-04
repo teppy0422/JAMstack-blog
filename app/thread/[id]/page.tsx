@@ -11,6 +11,8 @@ import {
   FaTrashAlt,
   FaReply,
   FaArrowDown,
+  FaCheck,
+  FaRegCheckCircle,
 } from "react-icons/fa";
 import { supabase } from "../../../utils/supabase/client";
 import { format } from "date-fns";
@@ -77,6 +79,65 @@ export default function Thread() {
     null
   );
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  //既読チェック
+  const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0"; // 任意のユーザーID
+  useEffect(() => {
+    const handleScroll = () => {
+      const postsElements = document.querySelectorAll(".post"); // 投稿要素を取得
+      postsElements.forEach((postElement) => {
+        const postId = postElement.getAttribute("data-post-id"); // 投稿IDを取得
+        const isInViewport = isElementInViewport(postElement); // ビューポート内にあるか確認
+        if (isInViewport) {
+          const postUserId = postElement.getAttribute("data-user-id"); // 投稿のユーザーIDを取得
+          if (postUserId !== masterUserId && postUserId !== null) {
+            if (postId) {
+              markAsRead(postId, masterUserId); // 既読をマーク
+            }
+          }
+        }
+      });
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  const markAsRead = async (postId: string, userId: string) => {
+    // 現在のread_byの値を取得
+    const { data: post, error: fetchError } = await supabase
+      .from("posts")
+      .select("read_by")
+      .eq("id", postId)
+      .single();
+    if (fetchError) {
+      console.error("Error fetching post:", fetchError.message);
+      return;
+    }
+    // userIdが既に存在する場合は何もしない
+    if (post.read_by?.includes(userId)) {
+      return; // 既に登録されている場合は処理を終了
+    }
+    // read_byにuserIdを追加
+    const updatedReadBy = [...(post.read_by || []), userId];
+    // 更新を実行
+    const { error } = await supabase
+      .from("posts")
+      .update({ read_by: updatedReadBy }) // 更新する配列を指定
+      .eq("id", postId);
+    if (error) {
+      console.error("Error marking post as read:", error.message);
+    }
+  };
+  const isElementInViewport = (el: Element) => {
+    const rect = el.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <=
+        (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  };
 
   const [longPressTimeout, setLongPressTimeout] =
     useState<NodeJS.Timeout | null>(null);
@@ -594,9 +655,12 @@ export default function Thread() {
   const getTimeStamp = (
     time_stamp: string,
     isRight: boolean,
-    isReturn: boolean
+    isReturn: boolean,
+    read_by: string[]
   ) => {
     if (isReturn) {
+      const readByCount = read_by?.length || 0; // 要素の数を取得、存在しない場合は0を設定
+      const hasMasterUserId = read_by?.includes(masterUserId) || false; // masterUserIdが含まれているか確認
       return (
         <Box
           display="flex"
@@ -611,6 +675,28 @@ export default function Thread() {
           alignSelf={isRight ? "flex-start" : "flex-end"} // 追加
           lineHeight="1" // 行間を短くするために追加
         >
+          <Flex
+            alignItems="center"
+            justifyContent={isRight ? "flex-start" : "flex-end"}
+          >
+            {hasMasterUserId && <Icon as={FaCheck} color="green.500" />}
+            {readByCount > 0 && ( // readByCountが0でない場合に表示
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                minWidth="14px" // アイコンのサイズ
+                paddingX="2px"
+                height="14px" // アイコンのサイズ
+                color="gray.500" // 既読か未読かで色を変更
+                fontSize="12px"
+                fontWeight="bold"
+                ml="0"
+              >
+                {readByCount}
+              </Box>
+            )}
+          </Flex>
           {time_stamp}
         </Box>
       );
@@ -945,10 +1031,11 @@ export default function Thread() {
         <Stack spacing="2" style={{ padding: "0px" }}>
           {posts
             .sort(
+              // created_atでソート
               (a, b) =>
                 new Date(a.created_at).getTime() -
                 new Date(b.created_at).getTime()
-            ) // created_atでソート
+            )
             .map((post, index, sortedPosts) => {
               const prevPost = posts[index - 1];
               const prevDateString = prevPost ? prevPost.created_at : undefined;
@@ -1054,6 +1141,9 @@ export default function Thread() {
                   )}
                   {/* post一覧 */}
                   <Flex
+                    className="post"
+                    data-post-id={post.id}
+                    data-user-id={post.user_uid}
                     key={post.id}
                     style={{
                       height: post.isDeleting ? 0 : "auto", // 高さを0にする
@@ -1164,7 +1254,8 @@ export default function Thread() {
                     {getTimeStamp(
                       formatDate(post.created_at, prevDateString, true),
                       false,
-                      post.user_uid === userId
+                      post.user_uid === userId,
+                      post.read_by
                     )}
                     {getAvatarProps(
                       post.user_uid,
@@ -1464,7 +1555,8 @@ export default function Thread() {
                     {getTimeStamp(
                       formatDate(post.created_at, prevDateString, true),
                       false,
-                      post.user_uid !== userId
+                      post.user_uid !== userId,
+                      post.read_by
                     )}
                   </Flex>
                 </>
