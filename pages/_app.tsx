@@ -19,20 +19,8 @@ const myState = {
   colorMode: "",
 };
 export const myContext = createContext(myState);
-//ログイン情報
-const activeUserInfo = {
-  id: "aa",
-  userPicture: null,
-  userName: null,
-  userCompany: null,
-};
-const ActiveUserContext = createContext(activeUserInfo);
+
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
-  useEffect(() => {
-    if (session) {
-      activeUserInfo.id = session.user.id; // sessionからuseridを取得
-    }
-  }, [session]);
   return (
     <>
       <Head>
@@ -47,15 +35,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
         <SessionProvider session={session}>
-          <ActiveUserContext.Provider value={activeUserInfo}>
-            <myContext.Provider value={myState}>
-              <Component {...pageProps} />
-            </myContext.Provider>
-          </ActiveUserContext.Provider>
+          <myContext.Provider value={myState}>
+            <Component {...pageProps} />
+          </myContext.Provider>
         </SessionProvider>
       </ChakraProvider>
     </>
   );
 }
 export default MyApp;
-export { ActiveUserContext };
