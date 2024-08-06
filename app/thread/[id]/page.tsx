@@ -89,9 +89,9 @@ export default function Thread() {
         const isInViewport = isElementInViewport(postElement); // ビューポート内にあるか確認
         if (isInViewport) {
           const postUserId = postElement.getAttribute("data-user-id"); // 投稿のユーザーIDを取得
-          if (postUserId !== masterUserId && postUserId !== null) {
-            if (postId) {
-              markAsRead(postId, masterUserId); // 既読をマーク
+          if (postUserId !== userId) {
+            if (postId && userId) {
+              markAsRead(postId, userId); // 既読をマーク
             }
           }
         }
@@ -209,22 +209,9 @@ export default function Thread() {
       }, 1000);
     }
   };
-  //ユーザー情報
-  const [users, setUsers] = useState<any[]>([]); // ユーザー情報を格納する状態
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const { data, error } = await supabase.from("table_users").select("*"); // 全ユーザーを取得
-      if (error) {
-        console.error("Error fetching users:", error.message);
-      } else {
-        setUsers(data || []); // ユーザー情報を状態にセット
-      }
-    };
-    fetchUsers();
-  }, []); // コンポーネントのマウント時に実行
   // ユーザー情報を検索する関数
   const getUserById = (id: string) => {
-    const user = users.find((user) => user.id === id); // IDでユーザーを検索
+    const user = usersData2.find((user) => user.id === id); // IDでユーザーを検索
     if (user) {
       return {
         displayName: user.user_metadata?.name,
@@ -267,7 +254,42 @@ export default function Thread() {
       textarea.focus(); // フォーカスを設定
     }
   };
+  //newユーザー情報
+  const [usersData2, setUsersData2] = useState<any[]>([]); // ユーザー情報の状態
+  const [targetUser, setTargetUser] = useState<any | null>(null); // 特定のユーザー情報の状態
+  const [postUserIds, setPostUserIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    console.log("fetchUsers2-1"); // 追加: 実行確認用のログ
+    const fetchUsers2 = async () => {
+      // table_usersからすべてのデータを取得
+      const { data: usersData, error: usersError } = await supabase
+        .from("table_users")
+        .select("*"); // すべての情報を取得
+      if (usersError) {
+        console.log(
+          "Error fetching users from table_users:",
+          usersError.message
+        );
+        return;
+      }
+      // 取得したデータを状態にセット
+      setUsersData2(usersData || []);
+      // 取得したデータ内容をコンソールに出力
+      console.log("userData2取得したよーーー:", usersData);
+    };
+    fetchUsers2();
+  }, []);
+  // 特定のユーザーIDでユーザー情報を取得する関数
+  const [postUserId, setPostUserId] = useState("");
+  const [postAvatarUrl, setPostAvatarUrl] = useState("");
+  const getUserById2 = (userId: string) => {
+    const user = usersData2.find((user) => user.id === userId); // ユーザーIDで検索
+    // setTargetUser(user || null); // 特定のユーザー情報を状態にセット
+    // setPostAvatarUrl(user.picture_url);
+  };
   //ユーザー情報
+  let postCount = 0;
   const [userInfo, setUserInfo] = useState<any[]>([]); // ユーザー情報の配列
   const fetchUserInfo = async (userId: string) => {
     if (!userId) {
@@ -312,20 +334,6 @@ export default function Thread() {
       userCompany: data.user_company || null, // user_companyを返す
       userPicture: data.picture_url || null,
     };
-  };
-  // 複数のユーザー情報を取得して配列に保存する関数
-  const fetchAndStoreUsers = async (userIds: string[]) => {
-    const usersData = await Promise.all(userIds.map(fetchUserFromTable)); // 複数のユーザー情報を取得
-    const validUsers = usersData.filter((user) => user !== null); // nullでないユーザー情報をフィルタリング
-    setUserInfo((prev) => [
-      ...prev,
-      ...validUsers.map((user, index) => ({
-        id: userIds[index], // userIdsからIDを取得
-        name: user?.displayName,
-        company: user?.userCompany,
-        picture: user?.userPicture,
-      })),
-    ]); // 既存のユーザー情報に追加
   };
   //スクロール位置がボトムにあるかを管理する状態
   const [isAtBottom, setIsAtBottom] = useState(false);
@@ -636,21 +644,20 @@ export default function Thread() {
     size: string
   ) => {
     if (isReturn) {
-      const user = userInfo.find((user) => user.id === post_userID); // ユーザー情報を取得
-      if (!user) {
-        fetchAndSetUserInfo(post_userID); // ユーザー情報を取得して状態に保存
-      }
+      // getUserById2(post_userID);
+      const user = usersData2.find((user) => user.id === post_userID);
       return (
         <Avatar
           size={size}
           ml={size === "xs" ? "1" : "0"}
           zIndex="5"
           // name={user ? user.displayName : "ユーザー名"} // 修正: userからdisplayNameを取得
-          src={user ? user.userPicture : undefined} // 修正: userからuserPictureを取得
+          src={user?.picture_url ? user.picture_url : undefined} // 修正: userからuserPictureを取得
         />
       );
     }
   };
+
   //投稿時刻の表示
   const getTimeStamp = (
     time_stamp: string,
@@ -1027,7 +1034,6 @@ export default function Thread() {
           {threadTitle}
         </Heading>
         <Box ml="1">{ipAddress}</Box>
-
         <Stack spacing="2" style={{ padding: "0px" }}>
           {posts
             .sort(
@@ -1036,7 +1042,11 @@ export default function Thread() {
                 new Date(a.created_at).getTime() -
                 new Date(b.created_at).getTime()
             )
-            .map((post, index, sortedPosts) => {
+            .map((post, index) => {
+              // console.log(post[index]);
+              // console.log(index, post.id);
+              // console.log(targetUser?.user_uid);
+              // getUserById2(post.user_uid);
               const prevPost = posts[index - 1];
               const prevDateString = prevPost ? prevPost.created_at : undefined;
               const isNewDay =
@@ -1117,8 +1127,7 @@ export default function Thread() {
               }
               return (
                 <>
-                  {/* 日付の区切り線 */}
-                  {isNewDay && (
+                  {isNewDay && ( //日付の区切り線
                     <Flex
                       alignItems="center"
                       justifyContent="center"
@@ -1530,8 +1539,7 @@ export default function Thread() {
                           </>
                         )}
                       </CardBody>
-                      {/* 吹き出しの三角 */}
-                      <Box
+                      <Box // 吹き出しの三角
                         style={{
                           position: "absolute",
                           top: "5px",

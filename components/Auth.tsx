@@ -63,8 +63,14 @@ export default function Auth({ userData }: AuthProps) {
     }
     console.log(data);
     if (error) {
-      console.error("Error signing up:", error.message);
-      setMessage("新規登録に失敗しました: " + error.message); // エラーメッセージを設定
+      if (error.message === "Email rate limit exceeded") {
+        setMessage(
+          "メール送信の制限を超えました。しばらく待ってから再試行してください。"
+        );
+      } else {
+        console.error("Error signing up:", error.message);
+        setMessage("新規登録に失敗しました: " + error.message); // エラーメッセージを設定
+      }
     } else {
       console.log("User signed up:", data);
       setMessage(
@@ -299,6 +305,15 @@ export default function Auth({ userData }: AuthProps) {
                   </TabList>
                   <TabPanels>
                     <TabPanel>
+                      <Text
+                        fontSize="9px"
+                        color="gray.500"
+                        mb={0.3}
+                        ml={1}
+                        textAlign="left"
+                      >
+                        メールアドレス
+                      </Text>
                       <Input
                         type="email"
                         placeholder="Email"
@@ -308,6 +323,15 @@ export default function Auth({ userData }: AuthProps) {
                         onFocus={() => setIsEmailFocused(true)}
                         onBlur={() => setIsEmailFocused(false)}
                       />
+                      <Text
+                        fontSize="9px"
+                        color="gray.500"
+                        mb={0.3}
+                        ml={1}
+                        textAlign="left"
+                      >
+                        パスワード
+                      </Text>
                       <Input
                         type="password"
                         placeholder="Password"
@@ -342,30 +366,57 @@ export default function Auth({ userData }: AuthProps) {
                       <Text fontSize="sm" mb={2}>
                         4. 認証後、ログインが可能になります。
                       </Text>
+                      <Text
+                        fontSize="9px"
+                        color="gray.500"
+                        mb={0.3}
+                        ml={1}
+                        textAlign="left"
+                      >
+                        メールアドレス
+                      </Text>
                       <Input
                         type="email"
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        mb={3}
+                        mb={2}
                         onFocus={() => setIsEmailFocused(true)}
                         onBlur={() => setIsEmailFocused(false)}
                       />
+                      <Text
+                        fontSize="9px"
+                        color="gray.500"
+                        mb={0.3}
+                        ml={1}
+                        textAlign="left"
+                      >
+                        パスワード
+                      </Text>
                       <Input
                         type="password"
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        mb={4}
+                        mb={2}
                         onFocus={() => setIsPasswordFocused(true)}
                         onBlur={() => setIsPasswordFocused(false)}
                       />
+                      <Text
+                        fontSize="9px"
+                        color="gray.500"
+                        mb={0.3}
+                        ml={1}
+                        textAlign="left"
+                      >
+                        メールアドレス(確認)
+                      </Text>
                       <Input
                         type="password"
                         placeholder="Confirm Password" // 確認用パスワードのプレースホルダー
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        mb={4}
+                        mb={3}
                         onFocus={() => setIsConfirmPasswordFocused(true)}
                         onBlur={() => setIsConfirmPasswordFocused(false)}
                       />
@@ -395,7 +446,7 @@ export default function Auth({ userData }: AuthProps) {
                   }
                 >
                   Googleでログイン
-                </Button>{" "}
+                </Button>
               </TabPanel>
             </TabPanels>
           </Tabs>
