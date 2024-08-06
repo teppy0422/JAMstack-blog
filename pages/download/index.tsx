@@ -52,13 +52,22 @@ export default function About() {
           mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
         >
           <CustomLinkBox
+            dateTime="2024-08-04T10:50:00+0900"
+            description1="部品リストの防水栓に端末Noを入力するのが手間"
+            description2="部品リストに防水栓の端末No入力が全て0の場合はCAV一覧からサブNo.を取得"
+            descriptionIN=""
+            linkHref="/files/Sjp3.004.97_.zip"
+            inCharge="不具合,高知,王さん,win10zip"
+            isLatest={true}
+          />
+          <CustomLinkBox
             dateTime="2024-07-22T10:50:00+0900"
             description1="部品リストの防水栓に端末Noを入力するのが手間"
             description2="部品リストに防水栓の端末No入力が全て0の場合はCAV一覧から取得"
             descriptionIN=""
             linkHref="/files/Sjp3.004.96_.zip"
             inCharge="不具合,高知,王さん,win10zip"
-            isLatest={true}
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-07-18T17:34:00+0900"
@@ -67,7 +76,7 @@ export default function About() {
             descriptionIN=""
             linkHref="/files/Sjp3.004.94_.zip"
             inCharge="不具合,高知,王さん,win10zip"
-            isLatest={true}
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-07-18T14:20:00+0900"
