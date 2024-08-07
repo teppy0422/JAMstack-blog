@@ -569,7 +569,6 @@ export default function Thread() {
       textarea.style.height = "auto"; // 高さを初期状態に戻す
     }
   };
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -665,7 +664,6 @@ export default function Thread() {
       );
     }
   };
-
   //投稿時刻の表示
   const getTimeStamp = (
     time_stamp: string,
@@ -684,21 +682,21 @@ export default function Thread() {
           color="gray.500"
           whiteSpace="pre-wrap" // 改行を適用するために変更
           textAlign="center"
-          mr={isRight ? "-2" : "0"} // メッセージとの間にマージンを追加
+          mr={isRight ? "-2" : "0.5"} // メッセージとの間にマージンを追加
           ml={isRight ? "0" : "-2"}
-          mb="1.5"
-          alignSelf={isRight ? "flex-start" : "flex-end"} // 追加
+          mb="1"
+          alignSelf="flex-end" // 追加
           lineHeight="1" // 行間を短くするために追加
         >
           <Flex
             alignItems="center"
             justifyContent={isRight ? "flex-start" : "flex-end"}
           >
-            {hasMasterUserId && <Icon as={FaCheck} color="green.500" />}
+            {!isRight ? <Icon as={FaCheck} color="green.500" /> : null}
             {readByCount > 0 && ( // readByCountが0でない場合に表示
               <Box
                 display="flex"
-                justifyContent="center"
+                justifyContent={isRight ? "flex-start" : "flex-end"}
                 alignItems="center"
                 minWidth="14px" // アイコンのサイズ
                 paddingX="2px"
@@ -711,6 +709,7 @@ export default function Thread() {
                 {readByCount}
               </Box>
             )}
+            {isRight ? <Icon as={FaCheck} color="green.500" /> : null}
           </Flex>
           {time_stamp}
         </Box>
@@ -720,7 +719,6 @@ export default function Thread() {
   if (!isClient) {
     return null;
   }
-
   return (
     <div
       style={{
@@ -1158,8 +1156,7 @@ export default function Thread() {
                       <Divider borderColor="gray.500" />
                     </Flex>
                   )}
-                  {/* post一覧 */}
-                  <Flex
+                  <Flex //post内容
                     className="post"
                     data-post-id={post.id}
                     data-user-id={post.user_uid}
@@ -1167,13 +1164,15 @@ export default function Thread() {
                     style={{
                       height: post.isDeleting ? 0 : "auto", // 高さを0にする
                       opacity: post.isDeleting ? 0 : 1,
-                      overflow: "hidden", // 内容がはみ出さないようにする
+                      overflow: "visible", // 内容がはみ出さないようにする
                       transition: "max-height 1s ease, opacity 1s ease", // 高さと不透明度のトランジション
                     }}
                     justifyContent={
                       post.user_uid === userId ? "flex-end" : "flex-start"
                     }
-                    maxWidth="99vw"
+                    maxWidth="98vw"
+                    pr={post.user_uid === userId ? "0px" : "10px"}
+                    pl={post.user_uid === userId ? "10px" : "0px"}
                     onMouseDown={() => handleLongPressStart(post.id)} // 長押し開始
                     onMouseUp={handleMouseUp} // マウスアップで長押し終了
                     onMouseLeave={handleMouseLeave} // マウスが要素から離れたときに長押しを終了
@@ -1287,9 +1286,12 @@ export default function Thread() {
                         backgroundColor:
                           post.user_uid === userId ? "#DCF8C6" : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
                         borderRadius: "10px",
+                        maxWidth: "86vw",
                         padding: "0px",
                         margin:
-                          post.user_uid === userId ? "0 12px 0 4px" : "0 12px",
+                          post.user_uid === userId
+                            ? "0 12px 0 2px"
+                            : "0 2px 0 12px",
                         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // 影を追加
                       }}
                     >
@@ -1443,7 +1445,7 @@ export default function Thread() {
                           <Divider borderColor="gray.400" />
                         </CardBody>
                       )}
-                      <CardBody px="10px" py="10px">
+                      <CardBody px="10px" py="8px">
                         <Box
                           color="black"
                           dangerouslySetInnerHTML={{
@@ -1572,7 +1574,7 @@ export default function Thread() {
                     </Card>
                     {getTimeStamp(
                       formatDate(post.created_at, prevDateString, true),
-                      false,
+                      true,
                       post.user_uid !== userId,
                       post.read_by
                     )}
