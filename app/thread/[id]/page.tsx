@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import {
@@ -79,6 +80,23 @@ export default function Thread() {
     null
   );
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  // 現在のユーザーIDを取得する関数
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        console.log("userログインしたよ", user);
+        setUserId(user.id);
+        console.log("userId", userId);
+      } else {
+        console.error("User is not logged in.aaaaaaaaaaaaaaaaa");
+        setUserId(null);
+      }
+    };
+    fetchUserId();
+  }, []);
   //既読チェック
   const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0"; // 任意のユーザーID
   useEffect(() => {
@@ -101,7 +119,7 @@ export default function Thread() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [userId]);
   const markAsRead = async (postId: string, userId: string) => {
     // 現在のread_byの値を取得
     const { data: post, error: fetchError } = await supabase
@@ -110,12 +128,12 @@ export default function Thread() {
       .eq("id", postId)
       .single();
     if (fetchError) {
-      console.error("Error fetching post:", fetchError.message);
       return;
     }
     // userIdが既に存在する場合は何もしない
     if (post.read_by?.includes(userId)) {
       return; // 既に登録されている場合は処理を終了
+    } else {
     }
     // read_byにuserIdを追加
     const updatedReadBy = [...(post.read_by || []), userId];
@@ -126,6 +144,8 @@ export default function Thread() {
       .eq("id", postId);
     if (error) {
       console.error("Error marking post as read:", error.message);
+    } else {
+      console.log("post marked as read:", postId);
     }
   };
   const isElementInViewport = (el: Element) => {
@@ -307,6 +327,9 @@ export default function Thread() {
     return fetchedUser; // 取得したユーザー情報を返す
   };
   const fetchAndSetUserInfo = async (post_userID: any) => {
+    if (!post_userID) {
+      return;
+    }
     const userInfo = await fetchUserInfo(post_userID); // ユーザー情報を取得
     if (userInfo) {
       setUserInfo((prev) => [...prev, userInfo]); // ここでuserInfoを状態に追加
@@ -356,21 +379,6 @@ export default function Thread() {
     return user?.id;
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // 現在のユーザーIDを取得する関数
-  useEffect(() => {
-    const fetchUserId = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        setUserId(user.id);
-      } else {
-        console.error("User is not logged in.aaaaaaaaaaaaaaaaa");
-        setUserId(null);
-      }
-    };
-    fetchUserId();
-  }, []);
   //ログイン状態の確認
   useEffect(() => {
     const checkUser = async () => {
@@ -1057,9 +1065,11 @@ export default function Thread() {
               // :で囲んだ文字はタイトル
               if (post.content.match(/:(.*?):/)) {
                 return (
-                  <>
+                  <React.Fragment key={`${post.created_at}-${index}`}>
+                    {/* Fragmentにkeyを設定 */}
                     {isNewDay && (
                       <Flex
+                        key={`${post.created_at}-${index}`} // ここにkeyを設定
                         alignItems="center"
                         justifyContent="center"
                         width="100%"
@@ -1122,11 +1132,11 @@ export default function Thread() {
                         borderColor={colorMode === "light" ? "red" : "pink"}
                       />
                     </Flex>
-                  </>
+                  </React.Fragment>
                 );
               }
               return (
-                <>
+                <div className="post">
                   {isNewDay && ( //日付の区切り線
                     <Flex
                       alignItems="center"
@@ -1567,7 +1577,7 @@ export default function Thread() {
                       post.read_by
                     )}
                   </Flex>
-                </>
+                </div>
               );
             })}
         </Stack>
