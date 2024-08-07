@@ -63,7 +63,7 @@ function SidebarBBS() {
     w: "full",
     _hover: { bg: "gray.900" },
     cursor: "pointer",
-    colorScheme: currentPath === path ? "red" : "gray", // 現在のパスと一致する場合は赤色テーマ、そうでなければ灰色テーマ
+    // colorScheme: currentPath === path ? "red" : "gray", // 現在のパスと一致する場合は赤色テーマ、そうでなければ灰色テーマ
     color: colorMode === "light" ? "white" : "white",
   });
   useEffect(() => {
@@ -94,7 +94,7 @@ function SidebarBBS() {
     const isNew = newThreads.includes(threadId);
 
     return (
-      <NextLink href={path_} passHref legacyBehavior>
+      <NextLink href={path_} passHref legacyBehavior key={path_}>
         <Box
           {...buttonStyle(path_)}
           onClick={onClose}
