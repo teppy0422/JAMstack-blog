@@ -87,7 +87,7 @@ export default function Header() {
         }
       }
     }
-    console.log(event.key);
+    // console.log(event.key);
   };
   useEffect(() => {
     if (typeof window !== "undefined") {
