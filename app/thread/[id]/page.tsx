@@ -79,6 +79,15 @@ export default function Thread() {
   const [hoveredButton, setHoveredButton] = useState<"delete" | "reply" | null>(
     null
   );
+  // スマートフォンかどうかを判別
+  const isMobileDevice = () => {
+    return /Mobi|Android/i.test(navigator.userAgent);
+  };
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
+
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   // 現在のユーザーIDを取得する関数
   useEffect(() => {
@@ -1114,9 +1123,10 @@ export default function Thread() {
                           textAlign="center"
                           whiteSpace="nowrap"
                           width="auto"
-                          maxWidth="none"
+                          maxWidth="80vw"
                           display="inline"
-                          overflow="visible"
+                          overflow="hidden"
+                          textOverflow="ellipsis"
                           color={colorMode === "light" ? "red" : "pink"}
                         >
                           {post.content.match(/:(.*?):/)[1]}
@@ -1468,6 +1478,7 @@ export default function Thread() {
                                   autoPlay
                                   loop
                                   muted
+                                  playsInline // モバイルデバイスで全画面表示を防ぐ
                                   style={{
                                     maxWidth: "100%",
                                     maxHeight: "300px",
@@ -1475,8 +1486,10 @@ export default function Thread() {
                                     cursor: "pointer",
                                   }}
                                   onClick={(e) => {
-                                    setSelectedImageUrl(post.file_url);
-                                    setFileModalOpen(true);
+                                    if (!isMobile) {
+                                      setSelectedImageUrl(post.file_url);
+                                      setFileModalOpen(true);
+                                    }
                                   }}
                                 />
                               ) : (
