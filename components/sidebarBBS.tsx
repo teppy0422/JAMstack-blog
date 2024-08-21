@@ -27,7 +27,9 @@ function SidebarBBS() {
   const [currentPath, setCurrentPath] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
-  const [threads, setThreads] = useState<any[]>([]);
+  const [threads, setThreads] = useState<
+    { id: string; title: string; company: string }[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [ipAddress, setIpAddress] = useState("");
   const [newThreads, setNewThreads] = useState<string[]>([]);
@@ -179,9 +181,25 @@ function SidebarBBS() {
         fontSize={15}
       >
         <VStack spacing="0" align="stretch">
-          {threads.map((thread) =>
-            menuItem(`/thread/${thread.id}`, thread.title, true, thread.id)
-          )}
+          {Object.entries(
+            threads.reduce((acc, thread) => {
+              if (thread.company) {
+                acc[thread.company] = acc[thread.company] || [];
+                acc[thread.company].push(thread);
+              }
+              return acc;
+            }, {} as Record<string, typeof threads>)
+          ).map(([company, threads]) => (
+            <>
+              <Box fontWeight="bold" pl={3} textAlign="left">
+                <Divider borderColor="black" />
+                {company}
+              </Box>
+              {threads.map((thread: { id: string; title: string }) =>
+                menuItem(`/thread/${thread.id}`, thread.title, true, thread.id)
+              )}
+            </>
+          ))}
         </VStack>
       </Box>
 

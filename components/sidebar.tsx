@@ -98,7 +98,7 @@ function Sidebar() {
         <VStack spacing="2" align="stretch">
           {menuItem("/directoryLayout", "ディレクトリ構成", true)}
           {menuItem("/download", "ダウンロード", true)}
-          {menuItem("/BBS", "不具合報告", true)}
+          {menuItem("/BBS", "問い合わせ", true)}
         </VStack>
       </Box>
 
@@ -134,7 +134,7 @@ function Sidebar() {
                   <Divider borderColor="white" />
                   {menuItem("/download", "ダウンロード", false)}
                   <Divider borderColor="white" />
-                  {menuItem("/BBS", "不具合報告", false)}
+                  {menuItem("/BBS", "問い合わせ", false)}
                   <Divider borderColor="white" />
                 </>
               </VStack>

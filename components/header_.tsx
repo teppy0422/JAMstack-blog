@@ -264,7 +264,7 @@ export default function Header() {
                 <Link
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
-                  <Text className={styles.logoText}>作成中</Text>
+                  <Text className={styles.logoText}>chatBBS</Text>
                 </Link>
               </NextLink>
               <Box
@@ -371,7 +371,7 @@ export default function Header() {
                   <Divider borderColor="white" />
                   {menuItem("/download", "ダウンロード", false)}
                   <Divider borderColor="white" />
-                  {menuItem("/BBS", "不具合報告", false)}
+                  {menuItem("/BBS", "問い合わせ", false)}
                   <Divider borderColor="white" />
                 </>
               </VStack>
