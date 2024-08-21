@@ -1,5 +1,6 @@
 import React from "react";
 import { isValidUrl } from "../utils/urlValidator"; // URLのバリデーション関数をインポート
+import { useEffect, useState } from "react"; // 追加
 
 import {
   LinkBox,
@@ -20,6 +21,12 @@ import {
   Badge,
   Divider,
   Image,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalHeader,
+  ModalBody,
 } from "@chakra-ui/react";
 import {
   CheckCircleIcon,
@@ -38,8 +45,31 @@ type CustomLinkBoxProps = {
   inCharge: string;
   isLatest: boolean;
 };
+
 // elapsedHoursを画面に表示する処理を追加
 class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
+  state = {
+    fileExists: false, // ファイル存在フラグ
+    isModalOpen: false, // モーダルの開閉フラグ
+    modalSrc: "", // モーダルのsrc
+  };
+  handleBoxClick = (src: string) => {
+    this.setState({ modalSrc: src, isModalOpen: true });
+  };
+  handleCloseModal = () => {
+    this.setState({ isModalOpen: false });
+  };
+  componentDidMount() {
+    this.checkFileExists(); // コンポーネントマウント時にファイルの存在を確認
+  }
+  checkFileExists = async () => {
+    try {
+      const response = await fetch(this.props.linkHref, { method: "HEAD" });
+      this.setState({ fileExists: response.ok }); // ファイルの存在を設定
+    } catch {
+      this.setState({ fileExists: false });
+    }
+  };
   render() {
     const versionMatch = this.props.linkHref.match(/Sjp([\d.]+)_/);
     const ver = versionMatch ? versionMatch[1] : "N/A";
@@ -93,95 +123,234 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
     const baseUrl = "https://yourdomain.com"; // ここにサイトのベースURLを設定
 
     return (
-      <Popover placement="bottom">
-        <PopoverTrigger>
-          <LinkBox
-            as="article"
-            maxW="auto"
-            p="2"
-            borderWidth="1px"
-            rounded="md"
-            borderColor="gray.500"
-            _hover={{ boxShadow: "dark-lg", cursor: "pointer" }}
-          >
-            <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
-              {this.props.isLatest && (
-                <Badge colorScheme="teal" marginRight={2}>
-                  Latest
+      <>
+        <Popover placement="bottom">
+          <PopoverTrigger>
+            <LinkBox
+              as="article"
+              maxW="auto"
+              p="2"
+              borderWidth="1px"
+              rounded="md"
+              borderColor="gray.500"
+              _hover={{ boxShadow: "dark-lg", cursor: "pointer" }}
+            >
+              <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
+                {this.props.isLatest && (
+                  <Badge colorScheme="teal" marginRight={2}>
+                    Latest
+                  </Badge>
+                )}
+                <Badge colorScheme={badgeColor}>{agoText}</Badge>
+              </Box>
+              <Heading size="md" my="2">
+                <LinkOverlay>{ver}</LinkOverlay>
+              </Heading>
+              <Divider />
+              <TimeIcon boxSize={4} paddingRight={1} mt="-0.5" />
+              {formattedDateTime}
+              <br />
+              {inChargeList.map((inCharge, index) => (
+                <Badge
+                  key={index}
+                  colorScheme={inChargeColors[index].color}
+                  variant={inChargeColors[index].variant}
+                  marginRight={1}
+                >
+                  {inCharge}
                 </Badge>
+              ))}
+              {this.props.description1 && (
+                <Text mt="2">
+                  <WarningTwoIcon marginRight="1" color="red.500" mt="-1" />
+                  {this.props.description1}
+                </Text>
               )}
-              <Badge colorScheme={badgeColor}>{agoText}</Badge>
-            </Box>
-            <Heading size="md" my="2">
-              <LinkOverlay>{ver}</LinkOverlay>
-            </Heading>
-            <Divider />
-            <TimeIcon boxSize={4} paddingRight={1} mt="-0.5" />
-            {formattedDateTime}
-            <br />
-            {inChargeList.map((inCharge, index) => (
-              <Badge
-                key={index}
-                colorScheme={inChargeColors[index].color}
-                variant={inChargeColors[index].variant}
-                marginRight={1}
-              >
-                {inCharge}
-              </Badge>
-            ))}
-            {this.props.description1 && (
-              <Text mt="2">
-                <WarningTwoIcon marginRight="1" color="red.500" mt="-1" />
-                {this.props.description1}
-              </Text>
-            )}
-            {this.props.description2 && (
-              <Text mt="2">
-                <CheckCircleIcon marginRight="1" color="teal.500" mt="-1" />
-                {this.props.description2}
-              </Text>
-            )}
-          </LinkBox>
-        </PopoverTrigger>
-        <PopoverContent
-          _focus={{ boxShadow: "none" }}
-          style={{ border: "1px solid transparent" }}
-        >
-          <PopoverArrow bg={this.props.isLatest ? "teal.500" : "red.500"} />
-          <PopoverCloseButton color="white" _focus={{ _focus: "none" }} />
-          <PopoverHeader
-            bg={this.props.isLatest ? "teal.500" : "red.500"}
-            roundedTop="md"
+              {this.props.description2 && (
+                <Text mt="2">
+                  <CheckCircleIcon marginRight="1" color="teal.500" mt="-1" />
+                  {this.props.description2}
+                </Text>
+              )}
+            </LinkBox>
+          </PopoverTrigger>
+          <PopoverContent
+            _focus={{ boxShadow: "none" }}
+            style={{ border: "1px solid transparent" }}
+            maxW={{
+              base: "90vw",
+              sm: "90vw",
+              md: "90vw",
+              lg: "80vw",
+              xl: "90vw",
+            }}
+            width={{
+              base: "auto",
+              sm: "auto",
+              md: "720px",
+              lg: "660px",
+              xl: "760px",
+            }}
           >
-            {this.props.isLatest ? (
-              <Text color="white" padding={2}>
-                最新のバージョンです
-              </Text>
-            ) : (
-              <Text color="white" padding={2}>
-                最新のバージョンではありません
-              </Text>
-            )}
-          </PopoverHeader>
-          {this.props.descriptionIN && (
-            <PopoverBody style={{ border: "none" }}>
-              <>
-                <Image src={`/files/${ver}.png`} />
+            <PopoverArrow bg={this.props.isLatest ? "teal.500" : "red.500"} />
+            <PopoverCloseButton color="white" _focus={{ _focus: "none" }} />
+            <PopoverHeader
+              bg={this.props.isLatest ? "teal.500" : "red.500"}
+              roundedTop="md"
+            >
+              {this.props.isLatest ? (
+                <Text color="white" padding={2}>
+                  最新のバージョンです
+                </Text>
+              ) : (
+                <Text color="white" padding={2}>
+                  最新のバージョンではありません
+                </Text>
+              )}
+            </PopoverHeader>
+            {this.props.descriptionIN && (
+              <PopoverBody
+                height="auto"
+                style={{ border: "none" }}
+                p={1}
+                maxW="100%"
+              >
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Box
+                    position="relative"
+                    width={{
+                      base: "45%",
+                      sm: "45%",
+                      md: "45%",
+                      lg: "50%",
+                      xl: "50%",
+                    }} // 画面サイズに応じて変更
+                    height={{
+                      base: "100px",
+                      sm: "170px",
+                      md: "200px",
+                      lg: "190px",
+                      xl: "240px",
+                    }}
+                    border="none"
+                  >
+                    <iframe
+                      height="100%"
+                      src={`/files/${ver}_/index.html`} // フォルダ内のindex.htmlを指定
+                      style={{ width: "100%", height: "100%", border: "none" }} // iframeのサイズを100%に設定
+                      title="Embedded Content"
+                    />
+                    <Box
+                      position="absolute" // 追加
+                      top="0" // 追加
+                      left="0" // 追加
+                      width="100%" // 追加
+                      height="100%" // 追加
+                      onClick={() =>
+                        this.handleBoxClick(`/files/${ver}_/index.html`)
+                      } // クリックでモーダルを開く
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "transparent",
+                      }} // 追加
+                    />
+                  </Box>
+                  <Text mx={1} fontSize="2xl" color="gray.500">
+                    ➡️
+                  </Text>
+                  <Box
+                    position="relative"
+                    width={{
+                      base: "45%",
+                      sm: "45%",
+                      md: "45%",
+                      lg: "50%",
+                      xl: "50%",
+                    }} // 画面サイズに応じて変更
+                    height={{
+                      base: "100px",
+                      sm: "170px",
+                      md: "200px",
+                      lg: "190px",
+                      xl: "240px",
+                    }}
+                    border="none"
+                  >
+                    <iframe
+                      height="100%"
+                      src={`/files/${ver}/index.html`} // フォルダ内のindex.htmlを指定
+                      style={{ width: "100%", height: "100%", border: "none" }} // iframeのサイズを100%に設定
+                      title="Embedded Content"
+                    />
+                    <Box
+                      position="absolute" // 追加
+                      top="0" // 追加
+                      left="0" // 追加
+                      width="100%" // 追加
+                      height="100%" // 追加
+                      onClick={() =>
+                        this.handleBoxClick(`/files/${ver}/index.html`)
+                      } // クリックでモーダルを開く
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "transparent",
+                      }} // 追加
+                    />
+                  </Box>
+                </Box>
                 <Text fontSize="sm">{this.props.descriptionIN}</Text>
-              </>
-            </PopoverBody>
-          )}
-          {this.props.isLatest && (
-            <PopoverFooter>
-              <Button colorScheme={badgeColor}>
-                <a download={downloadFileName} href={this.props.linkHref}>
-                  Download
-                </a>
-              </Button>
-            </PopoverFooter>
-          )}
-        </PopoverContent>
-      </Popover>
+              </PopoverBody>
+            )}
+            {this.state.fileExists ? ( // ファイルが存在する場合のみ表示
+              <PopoverFooter>
+                <Button
+                  bg={this.props.isLatest ? "teal.500" : "red.500"}
+                  color="white"
+                  _hover={{
+                    bg: this.props.isLatest ? "teal.600" : "red.600", // マウスオーバー時の背景色
+                  }}
+                >
+                  <a download={downloadFileName} href={this.props.linkHref}>
+                    Download
+                  </a>
+                </Button>
+              </PopoverFooter>
+            ) : (
+              <PopoverFooter>
+                <Text>ダウンロード期間の終了</Text>
+              </PopoverFooter>
+            )}
+          </PopoverContent>
+        </Popover>
+        <Modal
+          isOpen={this.state.isModalOpen}
+          onClose={() => this.setState({ isModalOpen: false })}
+        >
+          <ModalOverlay />
+          <ModalContent maxW="90vw" maxH="90vh">
+            <ModalCloseButton />
+            {/* <ModalHeader></ModalHeader> */}
+            <ModalBody mx={0}>
+              <Box
+                width="99%"
+                height={{ base: "30vh", sm: "40vh", md: "50vh", lg: "70vh" }}
+                border="none"
+                maxW="90vw"
+              >
+                <iframe
+                  src={this.state.modalSrc} // モーダルのsrcを設定
+                  style={{ width: "100%", height: "100%", border: "none" }} // iframeのサイズを100%に設定
+                  title="Embedded Content"
+                />
+              </Box>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      </>
     );
   }
 }
