@@ -25,7 +25,6 @@ export default function About() {
             <br />
             通常は
             <Badge colorScheme="teal" margin={1}>
-              {" "}
               LATEST
             </Badge>
             を選択します
@@ -52,13 +51,22 @@ export default function About() {
           mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
         >
           <CustomLinkBox
+            dateTime="2024-08-21T15:49:00+0900"
+            description1="製品品番のデータ参照がRange型で扱い辛く修正に問題がある"
+            description2="製品品番をRange型からclass型に変更。検査履歴システムの作成をグループで出来るように変更"
+            descriptionIN="検査履歴システム用点滅画像の修正。作成時にグループでまとめて作成に対応"
+            linkHref="/files/Sjp3.005.13_.zip"
+            inCharge="不具合,書き直し,高知,win10zip"
+            isLatest={true}
+          />
+          <CustomLinkBox
             dateTime="2024-08-04T10:50:00+0900"
             description1="部品リストの防水栓に端末Noを入力するのが手間"
             description2="部品リストに防水栓の端末No入力が全て0の場合はCAV一覧からサブNo.を取得"
             descriptionIN=""
             linkHref="/files/Sjp3.004.97_.zip"
             inCharge="不具合,高知,王さん,win10zip"
-            isLatest={true}
+            isLatest={false}
           />
           <CustomLinkBox
             dateTime="2024-07-22T10:50:00+0900"
@@ -118,33 +126,9 @@ export default function About() {
             dateTime="2024-06-10T11:04:00+0900"
             description1=""
             description2="空のフォントサイズを9に変更"
-            descriptionIN="空のフォントサイズを9に変更"
+            descriptionIN=""
             linkHref="/files/Sjp3.004.82_.zip"
             inCharge="徳島,秋山さん,win10でzip"
-            isLatest={false}
-          />
-          <CustomLinkBox
-            dateTime="2024-06-08T14:28:00+0900"
-            description1=""
-            description2="後引張支援システムでRLTFが大きい場合に対応"
-            linkHref="/files/Sjp3.004.81_.zip"
-            inCharge="高知,王さん"
-            isLatest={false}
-          />
-          <CustomLinkBox
-            dateTime="2024-06-07T09:25:00+0900"
-            description1="シートイベントが発生しない時があることの修正"
-            description2="Menuでイベントのリセットを追加"
-            linkHref="/files/Sjp3.004.80_.zip"
-            inCharge="高知,徳島,不具合,王さん"
-            isLatest={false}
-          />
-          <CustomLinkBox
-            dateTime="2024-05-16T15:16:00+0900"
-            description1="MenuからWEBサイトにアクセス出来ない"
-            description2="アドレスの修正"
-            linkHref="/files/Sjp3.004.62_.zip"
-            inCharge="不具合"
             isLatest={false}
           />
         </SimpleGrid>
