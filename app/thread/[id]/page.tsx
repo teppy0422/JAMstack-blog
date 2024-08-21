@@ -87,7 +87,6 @@ export default function Thread() {
   useEffect(() => {
     setIsMobile(isMobileDevice());
   }, []);
-
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   // 現在のユーザーIDを取得する関数
   useEffect(() => {
@@ -701,7 +700,9 @@ export default function Thread() {
             alignItems="center"
             justifyContent={isRight ? "flex-start" : "flex-end"}
           >
-            {!isRight ? <Icon as={FaCheck} color="green.500" /> : null}
+            {!isRight && hasMasterUserId ? (
+              <Icon as={FaCheck} color="green.500" />
+            ) : null}
             {readByCount > 0 && ( // readByCountが0でない場合に表示
               <Box
                 display="flex"
@@ -718,7 +719,9 @@ export default function Thread() {
                 {readByCount}
               </Box>
             )}
-            {isRight ? <Icon as={FaCheck} color="green.500" /> : null}
+            {isRight && hasMasterUserId ? (
+              <Icon as={FaCheck} color="green.500" />
+            ) : null}
           </Flex>
           {time_stamp}
         </Box>
@@ -1552,10 +1555,17 @@ export default function Thread() {
                                     );
                                   }}
                                   variant="solid"
-                                  mt="10px"
+                                  mt="5px"
+                                  px="5px"
                                   leftIcon={<FaDownload />}
                                   bg="white"
+                                  justifyContent="flex-start"
+                                  textAlign="left"
                                   color="black"
+                                  maxWidth="100%"
+                                  overflow="hidden"
+                                  textOverflow="ellipsis"
+                                  display="block"
                                 >
                                   {post.original_file_name}
                                 </Button>

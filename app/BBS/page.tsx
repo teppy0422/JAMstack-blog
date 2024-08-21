@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { MdChat } from "react-icons/md"; // 追加
+
 import {
   Card,
   CardBody,
@@ -11,6 +13,12 @@ import {
   Button,
   Divider,
   Spinner,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Icon,
 } from "@chakra-ui/react";
 import { supabase } from "../../utils/supabase/client";
 import Link from "next/link";
@@ -48,7 +56,7 @@ export default function Threads() {
     }
     setLoading(false); // 追加
   };
-
+  //新規スレッド作成
   const createThread = async () => {
     setLoading(true);
     await supabase.from("threads").insert([{ title: newThreadTitle }]);
@@ -56,7 +64,14 @@ export default function Threads() {
     await fetchThreads();
     setLoading(false);
   };
-
+  // スレッドを会社ごとにグループ化
+  const groupedThreads = threads.reduce((acc, thread) => {
+    if (!acc[thread.company]) {
+      acc[thread.company] = []; // 会社名がまだない場合は新しい配列を作成
+    }
+    acc[thread.company].push(thread); // スレッドを会社名の配列に追加
+    return acc;
+  }, {});
   return (
     <>
       <Sidebar />
@@ -78,19 +93,50 @@ export default function Threads() {
             <Spinner size="md" />
           </Box>
         ) : (
-          threads.map((thread) => (
-            <Stack spacing="6" mb="4" key={thread.id}>
-              <Card>
-                <Link href={`/thread/${thread.id}`}>
-                  <CardBody>
-                    <Box>
-                      <Heading size="sm">{thread.title}</Heading>
-                    </Box>
-                  </CardBody>
-                </Link>
-              </Card>
-            </Stack>
-          ))
+          <Accordion
+            allowMultiple
+            defaultIndex={Object.keys(groupedThreads).map((_, index) => index)}
+          >
+            {Object.keys(groupedThreads)
+              .sort((a, b) => {
+                if (a === "開発") return -1; // "開発" を最初に
+                if (b === "開発") return 1;
+                return 0; // その他はそのまま
+              })
+              .map((company) => (
+                <AccordionItem key={company} borderTop="1px solid gray" my={2}>
+                  <h2>
+                    <AccordionButton>
+                      <Box as="span" flex="1" textAlign="left">
+                        <Heading size="md">{company}</Heading>
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    {groupedThreads[company].map(
+                      (
+                        thread // スレッドを表示
+                      ) => (
+                        <Link href={`/thread/${thread.id}`}>
+                          <Box
+                            _hover={{
+                              textDecoration: "underline",
+                              textDecorationThickness: "1px",
+                              textUnderlineOffset: "3px",
+                            }}
+                            py={1}
+                          >
+                            <Icon as={MdChat} boxSize={4} mr={1} />
+                            {thread.title}
+                          </Box>
+                        </Link>
+                      )
+                    )}
+                  </AccordionPanel>
+                </AccordionItem>
+              ))}
+          </Accordion>
         )}
         <Divider />
         <Stack spacing="4" mt="4" direction="row" justify="flex-end">
