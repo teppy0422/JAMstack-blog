@@ -12,6 +12,7 @@ import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
+import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
 
 export default function About() {
   const [isClient, setIsClient] = useState(false);
@@ -292,13 +293,16 @@ export default function About() {
     ],
   };
   return (
-    <Content isCustomHeader={true}>
-      <div className={styles.me} style={{ paddingTop: "50px" }}>
-        <Box textAlign="center" mb={8}>
-          <Text fontSize="lg" colorScheme="black"></Text>
-        </Box>
-        <FileSystemNode item={directoryData} />
-      </div>
-    </Content>
+    <>
+      <Sidebar />
+      <Content isCustomHeader={true}>
+        <div className={styles.me} style={{ paddingTop: "50px" }}>
+          <Box textAlign="center" mb={8}>
+            <Text fontSize="lg" colorScheme="black"></Text>
+          </Box>
+          <FileSystemNode item={directoryData} />
+        </div>
+      </Content>
+    </>
   );
 }

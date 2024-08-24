@@ -38,8 +38,8 @@ import {
 import { LineSegments } from "three";
 type CustomLinkBoxProps = {
   dateTime: string;
-  description1: string;
-  description2: string;
+  description1?: string;
+  description2?: string;
   descriptionIN?: string;
   linkHref: string;
   inCharge: string;
@@ -52,6 +52,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
     fileExists: false, // ファイル存在フラグ
     isModalOpen: false, // モーダルの開閉フラグ
     modalSrc: "", // モーダルのsrc
+    isClient: false, // クライアントサイドのフラグ
   };
   handleBoxClick = (src: string) => {
     this.setState({ modalSrc: src, isModalOpen: true });
@@ -61,6 +62,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
   };
   componentDidMount() {
     this.checkFileExists(); // コンポーネントマウント時にファイルの存在を確認
+    this.setState({ isClient: true }); // クライアントサイドのフラグを設定
   }
   checkFileExists = async () => {
     try {
@@ -71,6 +73,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
     }
   };
   render() {
+    const { isClient } = this.state;
     const versionMatch = this.props.linkHref.match(/Sjp([\d.]+)_/);
     const ver = versionMatch ? versionMatch[1] : "N/A";
     const elapsedHours =
@@ -133,19 +136,42 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
               borderWidth="1px"
               rounded="md"
               borderColor="gray.500"
-              _hover={{ boxShadow: "dark-lg", cursor: "pointer" }}
+              _hover={{ boxShadow: "dark-lg" }}
             >
-              <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
-                {this.props.isLatest && (
-                  <Badge colorScheme="teal" marginRight={2}>
-                    Latest
-                  </Badge>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Box as="time" dateTime={this.props.dateTime} fontSize="sm">
+                  {this.props.isLatest && (
+                    <Badge colorScheme="teal" marginRight={2}>
+                      Latest
+                    </Badge>
+                  )}
+                  <Badge colorScheme={badgeColor}>{agoText}</Badge>
+                </Box>
+                {this.state.fileExists && (
+                  <Button
+                    size="sm"
+                    colorScheme="teal"
+                    as="a"
+                    href={this.props.linkHref}
+                    download={downloadFileName}
+                    marginLeft="auto" // 右端に配置
+                    bg={this.props.isLatest ? "teal.500" : "gray.500"} // isLatestがtrueじゃない場合は灰色
+                    _hover={{
+                      bg: this.props.isLatest ? "teal.600" : "gray.600", // マウスオーバー時の背景色
+                    }}
+                  >
+                    Download
+                  </Button>
                 )}
-                <Badge colorScheme={badgeColor}>{agoText}</Badge>
               </Box>
               <Heading size="md" my="2">
                 <LinkOverlay>{ver}</LinkOverlay>
               </Heading>
+
               <Divider />
               <TimeIcon boxSize={4} paddingRight={1} mt="-0.5" />
               {formattedDateTime}
@@ -160,21 +186,128 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                   {inCharge}
                 </Badge>
               ))}
-              {this.props.description1 && (
+              {this.props.description1 !== "" && (
                 <Text mt="2">
                   <WarningTwoIcon marginRight="1" color="red.500" mt="-1" />
                   {this.props.description1}
                 </Text>
               )}
-              {this.props.description2 && (
-                <Text mt="2">
-                  <CheckCircleIcon marginRight="1" color="teal.500" mt="-1" />
-                  {this.props.description2}
-                </Text>
+              {this.props.description2 &&
+                this.props.description2.split("。").map((sentence, index) => (
+                  <Text key={index} mt="1">
+                    <CheckCircleIcon marginRight="1" color="teal.500" mt="-1" />
+                    {sentence}
+                  </Text>
+                ))}
+              {this.props.descriptionIN && (
+                <PopoverBody
+                  height="auto"
+                  style={{ border: "none" }}
+                  p={1}
+                  maxW="100%"
+                >
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Box
+                      position="relative"
+                      width={{
+                        base: "45%",
+                        sm: "45%",
+                        md: "45%",
+                        lg: "50%",
+                        xl: "50%",
+                      }} // 画面サイズに応じて変更
+                      height={{
+                        base: "100px",
+                        sm: "170px",
+                        md: "200px",
+                        lg: "190px",
+                        xl: "240px",
+                      }}
+                      border="none"
+                    >
+                      <iframe
+                        height="100%"
+                        src={`/files/${ver}_/index.html`} // フォルダ内のindex.htmlを指定
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          border: "none",
+                        }} // iframeのサイズを100%に設定
+                        title="Embedded Content"
+                      />
+                      <Box
+                        position="absolute" // 追加
+                        top="0" // 追加
+                        left="0" // 追加
+                        width="100%" // 追加
+                        height="100%" // 追加
+                        onClick={() =>
+                          this.handleBoxClick(`/files/${ver}_/index.html`)
+                        } // クリックでモーダルを開く
+                        style={{
+                          cursor: "pointer",
+                          backgroundColor: "transparent",
+                        }} // 追加
+                      />
+                    </Box>
+                    <Text mx={1} fontSize="2xl" color="gray.500">
+                      ➡️
+                    </Text>
+                    <Box
+                      position="relative"
+                      width={{
+                        base: "45%",
+                        sm: "45%",
+                        md: "45%",
+                        lg: "50%",
+                        xl: "50%",
+                      }} // 画面サイズに応じて変更
+                      height={{
+                        base: "100px",
+                        sm: "170px",
+                        md: "200px",
+                        lg: "190px",
+                        xl: "240px",
+                      }}
+                      border="none"
+                    >
+                      <iframe
+                        height="100%"
+                        src={`/files/${ver}/index.html`} // フォルダ内のindex.htmlを指定
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          border: "none",
+                        }} // iframeのサイズを100%に設定
+                        title="Embedded Content"
+                      />
+                      <Box
+                        position="absolute" // 追加
+                        top="0" // 追加
+                        left="0" // 追加
+                        width="100%" // 追加
+                        height="100%" // 追加
+                        onClick={() =>
+                          this.handleBoxClick(`/files/${ver}/index.html`)
+                        } // クリックでモーダルを開く
+                        style={{
+                          cursor: "pointer",
+                          backgroundColor: "transparent",
+                        }} // 追加
+                      />
+                    </Box>
+                  </Box>
+                  <Divider py={1} />
+                  <Text fontSize="sm">{this.props.descriptionIN}</Text>
+                </PopoverBody>
               )}
             </LinkBox>
           </PopoverTrigger>
-          <PopoverContent
+          {/* <PopoverContent
             _focus={{ boxShadow: "none" }}
             style={{ border: "1px solid transparent" }}
             maxW={{
@@ -208,103 +341,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                 </Text>
               )}
             </PopoverHeader>
-            {this.props.descriptionIN && (
-              <PopoverBody
-                height="auto"
-                style={{ border: "none" }}
-                p={1}
-                maxW="100%"
-              >
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Box
-                    position="relative"
-                    width={{
-                      base: "45%",
-                      sm: "45%",
-                      md: "45%",
-                      lg: "50%",
-                      xl: "50%",
-                    }} // 画面サイズに応じて変更
-                    height={{
-                      base: "100px",
-                      sm: "170px",
-                      md: "200px",
-                      lg: "190px",
-                      xl: "240px",
-                    }}
-                    border="none"
-                  >
-                    <iframe
-                      height="100%"
-                      src={`/files/${ver}_/index.html`} // フォルダ内のindex.htmlを指定
-                      style={{ width: "100%", height: "100%", border: "none" }} // iframeのサイズを100%に設定
-                      title="Embedded Content"
-                    />
-                    <Box
-                      position="absolute" // 追加
-                      top="0" // 追加
-                      left="0" // 追加
-                      width="100%" // 追加
-                      height="100%" // 追加
-                      onClick={() =>
-                        this.handleBoxClick(`/files/${ver}_/index.html`)
-                      } // クリックでモーダルを開く
-                      style={{
-                        cursor: "pointer",
-                        backgroundColor: "transparent",
-                      }} // 追加
-                    />
-                  </Box>
-                  <Text mx={1} fontSize="2xl" color="gray.500">
-                    ➡️
-                  </Text>
-                  <Box
-                    position="relative"
-                    width={{
-                      base: "45%",
-                      sm: "45%",
-                      md: "45%",
-                      lg: "50%",
-                      xl: "50%",
-                    }} // 画面サイズに応じて変更
-                    height={{
-                      base: "100px",
-                      sm: "170px",
-                      md: "200px",
-                      lg: "190px",
-                      xl: "240px",
-                    }}
-                    border="none"
-                  >
-                    <iframe
-                      height="100%"
-                      src={`/files/${ver}/index.html`} // フォルダ内のindex.htmlを指定
-                      style={{ width: "100%", height: "100%", border: "none" }} // iframeのサイズを100%に設定
-                      title="Embedded Content"
-                    />
-                    <Box
-                      position="absolute" // 追加
-                      top="0" // 追加
-                      left="0" // 追加
-                      width="100%" // 追加
-                      height="100%" // 追加
-                      onClick={() =>
-                        this.handleBoxClick(`/files/${ver}/index.html`)
-                      } // クリックでモーダルを開く
-                      style={{
-                        cursor: "pointer",
-                        backgroundColor: "transparent",
-                      }} // 追加
-                    />
-                  </Box>
-                </Box>
-                <Text fontSize="sm">{this.props.descriptionIN}</Text>
-              </PopoverBody>
-            )}
+            <PopoverBody></PopoverBody>
             {this.state.fileExists ? ( // ファイルが存在する場合のみ表示
               <PopoverFooter>
                 <Button
@@ -324,7 +361,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                 <Text>ダウンロード期間の終了</Text>
               </PopoverFooter>
             )}
-          </PopoverContent>
+          </PopoverContent> */}
         </Popover>
         <Modal
           isOpen={this.state.isModalOpen}

@@ -731,6 +731,7 @@ export default function Thread() {
   if (!isClient) {
     return null;
   }
+
   return (
     <div
       style={{
