@@ -369,7 +369,7 @@ export default function Header() {
                   <Divider borderColor="white" />
                   {menuItem("/directoryLayout", "ディレクトリ構成", false)}
                   <Divider borderColor="white" />
-                  {menuItem("/download", "ダウンロード", false)}
+                  {menuItem("/download", "更新履歴", false)}
                   <Divider borderColor="white" />
                   {menuItem("/BBS", "問い合わせ", false)}
                   <Divider borderColor="white" />

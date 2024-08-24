@@ -1,0 +1,84 @@
+body {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -ms-overflow-style: none;
+    background-image: 
+        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc),
+        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+}
+body::-webkit-scrollbar {
+    display: none;
+}
+@media (max-width: 600px) {
+    table, #box3 {
+        font-size: 2vw;
+    }
+}
+@media (min-width: 1200px) {
+    table, #box3 {
+        font-size: 1.5vw;
+    }
+}
+table {
+    table-layout: fixed;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    border-collapse: collapse;
+    font-family: 'メイリオ', Meiryo, sans-serif;
+}
+table td {
+    padding: 1px 0 2px;
+    margin: 0;
+    line-height: 1.2;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.box1, #box2 {
+    position: absolute;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+.box1 {
+    z-index: 0;
+}
+.box1 img, #box2 img {
+    width: auto;
+    height: auto;
+    max-width: 99%;
+    max-height: 99%;
+}
+#box2 {
+    z-index: 1;
+}
+#box2 img {
+    opacity: 0.8;
+}
+#box3 {
+	position:absolute;
+    width: 100%;
+    height: auto;
+    bottom: 0;
+    color: white;
+    background-color: #FF5050;
+    font-weight: bold;
+    padding: 4px;
+    border: 0;
+    text-align: center;
+    transition: background-color 0.7s;
+	z-index:2;
+}

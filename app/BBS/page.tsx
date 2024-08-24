@@ -77,7 +77,7 @@ export default function Threads() {
       <Sidebar />
       <Content isCustomHeader={true}>
         <Heading size="md" mb="4">
-          スレッド一覧
+          問い合わせ
         </Heading>
         {ipAddress}
         {loading ? (

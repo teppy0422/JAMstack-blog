@@ -15,7 +15,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
@@ -55,6 +55,15 @@ function Sidebar() {
             ? { color: colorMode === "light" ? "black" : "white" }
             : { color: "white" })}
         >
+          {currentPath === `${path_}/` && (
+            <ChevronRightIcon
+              position="absolute"
+              left="-10px"
+              top="50%"
+              transform="translateY(-50%)"
+              color="currentColor"
+            />
+          )}
           <Box
             as="span"
             position="relative"
@@ -97,7 +106,7 @@ function Sidebar() {
       >
         <VStack spacing="2" align="stretch">
           {menuItem("/directoryLayout", "ディレクトリ構成", true)}
-          {menuItem("/download", "ダウンロード", true)}
+          {menuItem("/download", "更新履歴", true)}
           {menuItem("/BBS", "問い合わせ", true)}
         </VStack>
       </Box>
@@ -116,32 +125,6 @@ function Sidebar() {
         borderColor={colorMode === "light" ? "black" : "white"}
         borderWidth="1px"
       />
-
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-        <DrawerOverlay>
-          <DrawerContent
-            w={["75%", "50%", "25%"]}
-            maxW="200px"
-            bg="rgba(255, 255, 255, 0.4)" // 背景の透明度を設定
-            backdropFilter="blur(10px)" // ブラー効果を設定
-          >
-            <DrawerHeader color="white">MENU</DrawerHeader>
-            <DrawerBody>
-              <VStack spacing="2" align="stretch">
-                <>
-                  <Divider borderColor="white" />
-                  {menuItem("/directoryLayout", "ディレクトリ構成", false)}
-                  <Divider borderColor="white" />
-                  {menuItem("/download", "ダウンロード", false)}
-                  <Divider borderColor="white" />
-                  {menuItem("/BBS", "問い合わせ", false)}
-                  <Divider borderColor="white" />
-                </>
-              </VStack>
-            </DrawerBody>
-          </DrawerContent>
-        </DrawerOverlay>
-      </Drawer>
     </>
   );
 }
