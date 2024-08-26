@@ -194,10 +194,10 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
               )}
               {this.props.description2 &&
                 this.props.description2.split("。").map((sentence, index) => (
-                  <Text key={index} mt="1">
+                  <Box key={index} mt="1">
                     <CheckCircleIcon marginRight="1" color="teal.500" mt="-1" />
                     {sentence}
-                  </Text>
+                  </Box>
                 ))}
               {this.props.descriptionIN && (
                 <PopoverBody

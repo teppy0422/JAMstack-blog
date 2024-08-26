@@ -51,24 +51,34 @@ function TransitionExample() {
 
         <AlertDialogContent>
           <AlertDialogHeader>アップロードの手順</AlertDialogHeader>
-          <AlertDialogCloseButton />
+          <AlertDialogCloseButton _focus={{ _focus: "none" }} />
           <AlertDialogBody p={4}>
-            1.ダウンロードしたエクセルブックを開く
-            <br />
-            2.Menuを開いてVerupを押す
-            <br />
-            3.
-            <span>
-              <Kbd>Shift</Kbd>
-            </span>
-            を押しながら[このVerのアップロード]をクリック
-            <br />
-            <br />
-            約1分後に全ての生産準備+からこのバージョンへの更新が可能になります
-            <br />
+            <Box as="p" textAlign="center" mb={4}>
+              1.ダウンロードしたエクセルブックを開く
+              <br />
+              2.Menuを開いてVerupを押す
+              <br />
+              3.
+              <span>
+                <Kbd>Shift</Kbd>
+              </span>
+              を押しながら[このVerのアップロード]をクリック
+            </Box>
+            <Box textAlign="center" mb={4}>
+              <video
+                src="/images/sjpUpload.mp4"
+                autoPlay
+                muted
+                loop
+                width="100%"
+              />
+            </Box>
+            <Box as="p" textAlign="center" mb={1}>
+              以上で全ての生産準備+からこのバージョンへの更新が可能になります
+            </Box>
           </AlertDialogBody>
           <AlertDialogFooter>
-            <Button colorScheme="red" ml={3}>
+            <Button colorScheme="red" ml={3} onClick={onClose}>
               OK
             </Button>
           </AlertDialogFooter>
@@ -86,7 +96,7 @@ export default function About() {
       <Content isCustomHeader={true}>
         <div className={styles.me} style={{ paddingTop: "50px" }}>
           <Box textAlign="center" mb={8}>
-            <Text fontSize="lg" colorScheme="black">
+            <Box fontSize="lg">
               以下からダウンロードしてください
               <br />
               通常は最新版
@@ -104,12 +114,12 @@ export default function About() {
                 width="auto"
                 mt={2}
               >
-                <Text fontSize="sm" mr={1}>
-                  アップロード手順
-                </Text>
+                <Box fontSize="sm" mr={1}>
+                  アップロードの手順
+                </Box>
                 <TransitionExample />
               </Box>
-            </Text>
+            </Box>
           </Box>
           <SimpleGrid
             columns={{ base: 1, md: 1, lg: 1, xl: 1 }}
@@ -117,13 +127,40 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-08-26T14:35:00+0900"
+              description1="pNumbersが定義されていないエラーでサブ図が作成できない"
+              description2="public.pNumbersの定義を削除"
+              descriptionIN=""
+              linkHref="/files/Sjp3.005.20_.zip"
+              inCharge="不具合,高知,王さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
+              dateTime="2024-08-25T16:57:00+0900"
+              description1=""
+              description2="配策誘導ナビ端末-のデザインとコードを最適化"
+              descriptionIN="ハメ図の数字は相手の端末ナンバー"
+              linkHref="/files/Sjp3.005.19_.zip"
+              inCharge="書き直し,開発,win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
+              dateTime="2024-08-25T14:54:00+0900"
+              description1=""
+              description2="配策誘導ナビ端末のデザインとコードを最適化"
+              descriptionIN=" "
+              linkHref="/files/Sjp3.005.18_.zip"
+              inCharge="書き直し,開発,win10zip"
+              isLatest={false}
+            />
+            <CustomLinkBox
               dateTime="2024-08-24T19:36:00+0900"
               description1=""
-              description2="配策誘導ナビ上部の情報を最適化"
+              description2="配策誘導ナビ構成上部の情報を最適化"
               descriptionIN="電線コードと端末部品名を表示"
               linkHref="/files/Sjp3.005.17_.zip"
               inCharge="書き直し,開発,win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-08-24T08:03:00+0900"
@@ -132,7 +169,7 @@ export default function About() {
               descriptionIN="構成No毎の.cssを廃止=>.htmlにstyleを記入。ファイルサイズ284->264MB。ファイル数1269->1105"
               linkHref="/files/Sjp3.005.16_.zip"
               inCharge="不具合,書き直し,開発,win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-08-24T01:03:00+0900"
@@ -141,7 +178,7 @@ export default function About() {
               descriptionIN="検査履歴システム※IE11以上のみ"
               linkHref="/files/Sjp3.005.15_.zip"
               inCharge="不具合,書き直し,開発,win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-08-21T19:49:00+0900"
