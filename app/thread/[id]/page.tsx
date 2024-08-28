@@ -52,6 +52,23 @@ import { ChatIcon } from "@chakra-ui/icons";
 import Content from "../../../components/content";
 import SidebarBBS from "../../../components/sidebarBBS";
 
+// デバウンス関数
+const useDebounce = (value: string, delay: number) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+
 export default function Thread() {
   const router = useRouter();
   const { id } = useParams() as { id: string };
@@ -275,7 +292,7 @@ export default function Thread() {
       setReplyPostUserDisplayName(displayName as string | null); // displayNameを状態に設定
       setReplyPostUserCompany(userCompany as string | null); // userCompanyを状態に設定
     }
-    setReplyToPostId(postId); // リプライ対象の投稿IDを設定
+    setReplyToPostId(postId); // リプライ対象���投稿IDを設定
     // フォーカスを入力フィールドに当てる
     const textarea = document.querySelector("textarea");
     if (textarea) {
@@ -710,7 +727,7 @@ export default function Thread() {
                 alignItems="center"
                 minWidth="14px" // アイコンのサイズ
                 paddingX="2px"
-                height="14px" // アイコンのサイズ
+                height="14px" // ��イコンのサイズ
                 color="gray.500" // 既読か未読かで色を変更
                 fontSize="12px"
                 fontWeight="bold"
