@@ -941,11 +941,11 @@ export default function Thread() {
             type="text"
             value={newPostContent}
             onChange={(e) => setNewPostContent(e.target.value)}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+            onKeyDown={(e) =>
               handleKeyDown(
                 e as unknown as React.KeyboardEvent<HTMLTextAreaElement>
               )
-            } // 型を明示的に指定
+            }
             placeholder="メッセージを入力 (Shift+Enterで送信)"
             paddingTop={2}
             size="md"
