@@ -127,13 +127,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-09-17T13:05:00+0900"
+              description1="検査履歴システム用ポイント点滅画像をIE11で.jsエラー"
+              description2="IE11で動作するように修正。.pngからdivに変更"
+              descriptionIN=""
+              linkHref="/files/Sjp3.100.02_.zip"
+              inCharge="不具合,徳島,緒方さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-09-16T5:55:00+0900"
               description1="タッチ操作に対応した配策誘導ナビの追加、MDが正しく処理されない場合にPVSW等から値を取得"
               description2=""
               descriptionIN=""
               linkHref="/files/Sjp3.100.00_.zip"
               inCharge="不具合,高知,王さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-08-26T14:35:00+0900"
