@@ -142,7 +142,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/Sjp3.100.03_.zip"
               inCharge="不具合,徳島,緒方さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-09-17T13:05:00+0900"
@@ -151,7 +151,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/Sjp3.100.02_.zip"
               inCharge="不具合,徳島,緒方さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-09-16T05:55:00+0900"

@@ -105,6 +105,7 @@ function Sidebar() {
         zIndex="1100"
       >
         <VStack spacing="2" align="stretch">
+          {menuItem("/roadMap", "ロードマップ", true)}
           {menuItem("/directoryLayout", "ディレクトリ構成", true)}
           {menuItem("/download", "更新履歴", true)}
           {menuItem("/BBS", "問い合わせ", true)}
