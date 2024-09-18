@@ -127,21 +127,48 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-09-18T10:13:00+0900"
+              description1="検査履歴システムで.jsのadd.classが動作しない"
+              description2=".className=+に修正"
+              descriptionIN=""
+              linkHref="/files/Sjp3.100.05_.zip"
+              inCharge="不具合,徳島,緒方さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
+              dateTime="2024-09-17T20:32:00+0900"
+              description1=""
+              description2="検査履歴システムポイント点滅をグループ単位での作成に対応"
+              descriptionIN=""
+              linkHref="/files/Sjp3.100.03_.zip"
+              inCharge="不具合,徳島,緒方さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-09-17T13:05:00+0900"
               description1="検査履歴システム用ポイント点滅画像をIE11で.jsエラー"
-              description2="IE11で動作するように修正。.pngからdivに変更"
+              description2="IE11で動作するように修正。ポイントの点滅を.pngからdivに変更"
               descriptionIN=""
               linkHref="/files/Sjp3.100.02_.zip"
               inCharge="不具合,徳島,緒方さん,Win10zip"
               isLatest={true}
             />
             <CustomLinkBox
-              dateTime="2024-09-16T5:55:00+0900"
-              description1="タッチ操作に対応した配策誘導ナビの追加、MDが正しく処理されない場合にPVSW等から値を取得"
-              description2=""
+              dateTime="2024-09-16T05:55:00+0900"
+              description1="MDが正しく処理されない場合に部品リストに端末No.を手入力する必要がある"
+              description2="MDが無い場合、コネクタはPVSW_RLTFから取得(その場合はオレンジ色で着色)。詰栓はCAV一覧から取得"
               descriptionIN=""
+              linkHref="/files/Sjp3.100.01_.zip"
+              inCharge="高知,王さん,Win10zip"
+              isLatest={false}
+            />
+            <CustomLinkBox
+              dateTime="2024-09-15T05:35:00+0900"
+              description1=""
+              description2="タッチ操作に対応した配策誘導ナビの追加"
+              descriptionIN="画像の重ね合わせ=>要素をオブジェクトとして作成"
               linkHref="/files/Sjp3.100.00_.zip"
-              inCharge="不具合,高知,王さん,Win10zip"
+              inCharge="開発,Win10zip"
               isLatest={false}
             />
             <CustomLinkBox
