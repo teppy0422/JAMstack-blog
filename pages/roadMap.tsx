@@ -34,7 +34,10 @@ const roadmap: RoadmapItem[] = [
     ],
     items: [
       { text: "不要なコードの削除", completed: true },
-      { text: "on error resume nextを廃止", completed: true },
+      {
+        text: "EXCELが壊れた時に動作しなくなるコードを廃止",
+        completed: true,
+      },
       { text: "オブジェクト指向に修正:80%", completed: true },
     ],
     result: "この修正で他の人でも理解しやすくなり修正が容易になりました",
