@@ -409,7 +409,7 @@ export default function Auth({ userData }: AuthProps) {
                         ml={1}
                         textAlign="left"
                       >
-                        メールアドレス(確認)
+                        パスワード(確認)
                       </Text>
                       <Input
                         type="password"
