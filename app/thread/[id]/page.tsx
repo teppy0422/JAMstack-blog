@@ -615,6 +615,13 @@ export default function Thread() {
   };
   //ファイルをダウンロードする関数
   const handleDownload = async (url: string, originalFileName: string) => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user?.user_metadata?.name) {
+      alert("ダウンロードするにはログインと管理者によるマスター登録が必要です");
+      return;
+    }
     try {
       const response = await fetch(url);
       if (!response.ok) {

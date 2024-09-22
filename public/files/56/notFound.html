@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>notFound</title>
+	<style>
+		@keyframes backgroundAnimation {
+			0% {
+				background-position: 0 0;
+			}
+			100% {
+				background-position: 100% 100%;
+			}
+		}
+		body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			margin: 0;
+			font-family: Arial, sans-serif;
+			background: linear-gradient(135deg, #111 25%, #000 25%, #000 50%, #111 50%, #111 75%, #000 75%, #000 100%);
+			background-size: 56.57px 56.57px;
+			animation: backgroundAnimation 100s linear infinite;
+			color: #333;
+		}
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+		}
+		.character {
+			margin-bottom: 20px; /* キャラクターと吹き出しの間にスペースを追加 */
+		}
+		.balloon2-left {
+			position: relative;
+			display: inline-block;
+			margin: 1.5em 0 1.5em 15px;
+			padding: 20px 10px;
+			min-width: 120px;
+			max-width: 100%;
+			color: #555;
+			font-size: 16px;
+			background: #FFF;
+			border: solid 1px #555;
+			box-sizing: border-box;
+			border-radius: 13px;
+		}
+		.balloon2-left:before {
+			content: "";
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			transform: translateX(-50%);
+			border: 12px solid transparent;
+			border-top: 12px solid #FFF;
+			z-index: 2;
+		}
+		.balloon2-left:after {
+			content: "";
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			transform: translateX(-50%);
+			border: 14px solid transparent;
+			border-top: 14px solid #555;
+			z-index: 1;
+		}
+		.balloon2-left p {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="balloon2-left">
+			<div>存在しない端末/構成ナンバーです</div>
+			<div>元のページに戻ります</div>
+		</div>
+		<div class="character">
+			<img src="../assets/hippo_png/hippo_001.png" alt="Character">
+		</div>
+	</div>
+	<script>
+		setTimeout(function() {
+			var referrer = document.referrer;
+			if (referrer) {
+				window.location.href = referrer;
+			} else {
+				window.location.href = "index.html"; // リファラーがない場合のフォールバック
+			}
+		}, 2000);
+	</script>
+</body>
+</html>

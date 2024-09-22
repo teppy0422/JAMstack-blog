@@ -1,0 +1,139 @@
+@font-face {
+	font-family: 'MPLUS1p';
+	src: url("./MPLUS1p-Medium.ttf") format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'NewAmsterdam';
+	src: url("./NewAmsterdam-Regular.ttf") format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+body{background-color: #000;
+	margin:0;
+	padding:0;
+	width:100%;
+	height:100%;
+	overflow:hidden;
+	-ms-overflow-style: none;
+}
+body::-webkit-scrollbar {
+	display: none;
+}
+@media (max-width: 600px) {
+	table, .myB {
+		font-size: 2vw;
+	}
+	.myT {
+		font-size: 1.8vw;
+		max-width: 50%;
+		top:0;
+	}
+	.myB {
+		position:relative;
+		padding:1px 3px;
+		border-width: 1px;
+		top:0px;
+		left:1px;
+	}
+}
+@media (min-width: 601px) and (max-width: 1200px) {
+	table, .myB {
+		font-size: 1.5vw;
+	}
+	.myT {
+		font-size: 1.4vw;
+		max-width: 60%;
+	}
+	.myB {
+		position:relative;
+		top:0px;
+		left:1px;
+		padding:1px 2px;
+	}
+}
+@media (min-width: 1200px) {
+	table, .myB {
+		font-size: 1.5vw;
+	}
+	.myT {
+		position: relative;
+		font-size: 1.5vw;
+		max-width: 70%;
+		top:-1px;
+	}
+}
+table {
+	position: relative;
+	z-index: 1;
+	table-layout: fixed;
+	width:100%;
+	text-align:center;
+	font-weight: bold;
+	border-collapse: collapse;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	border-bottom:0px;
+	line-height: 1;
+	background-color: var(--table-bg-color);
+	color: var(--table-text-color);
+}
+table td {cursor:pointer;
+	font-family: 'MPLUS1p', sans-serif;
+	padding: 1px;
+	letter-spacing:0px;
+	border-left:1px solid var(--table-text-color);
+	border-right:1px solid var(--table-text-color);
+}
+.boxTerminal {
+	position: absolute;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-ms-flex-align: center;
+	align-items: center;
+	max-width: 100%;
+	max-height: 100vh;
+	overflow: hidden;
+	z-index: 0;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.btn_box {
+	position: absolute;
+	z-index: 1000;
+	margin: 0;
+	right: 0;
+}
+#btn_animation .btn {
+	margin: 5px;
+	padding: 2px 6px;
+	display: block;
+	text-align: center;
+	color: #FE5151;
+	font-size: 1vw;
+	text-decoration: none;
+	background-image: -webkit-repeating-linear-gradient(0deg, #FE5151, #FE5151 10px, transparent 10px, transparent 20px, #FE5151 20px),
+		-webkit-repeating-linear-gradient(90deg, #FE5151, #FE5151 10px, transparent 10px, transparent 20px, #FE5151 20px),
+		-webkit-repeating-linear-gradient(180deg, #FE5151, #FE5151 10px, transparent 10px, transparent 20px, #FE5151 20px),
+		-webkit-repeating-linear-gradient(270deg, #FE5151, #FE5151 10px, transparent 10px, transparent 20px, #FE5151 20px),
+		repeating-linear-gradient(0deg, #FE5151, #FE5151 10px, transparent 10px, transparent 20px, #FE5151 20px),
+		repeating-linear-gradient(90deg, #FE5151, #FE5151 10px, transparent 10px, transparent 20px, #FE5151 20px),
+		repeating-linear-gradient(180deg, #FE5151, #FE5151 10px, transparent 10px, transparent 20px, #FE5151 20px),
+		repeating-linear-gradient(270deg, #FE5151, #FE5151 10px, transparent 10px, transparent 20px, #FE5151 20px);
+	background-size: 1px calc(100% + 20px), calc(100% + 20px) 1px, 1px calc(100% + 20px), calc(100% + 20px) 1px;
+	background-position: 0 0, 0 0, 100% 0, 0 100%;
+	background-repeat: no-repeat;
+	-webkit-animation: borderAnimation 0.6s infinite linear;
+	animation: borderAnimation 0.6s infinite linear;
+}
+@-webkit-keyframes borderAnimation {
+	from { background-position: 0 0, -20px 0, 100% -20px, 0 100%; }
+	to { background-position: 0 -20px, 0 0, 100% 0, -20px 100%; }
+}
+@keyframes borderAnimation {
+	from { background-position: 0 0, -20px 0, 100% -20px, 0 100%; }
+	to { background-position: 0 -20px, 0 0, 100% 0, -20px 100%; }
+}
