@@ -369,6 +369,8 @@ export default function Header() {
                   <Divider borderColor="white" />
                   {menuItem("/roadMap", "ロードマップ", false)}
                   <Divider borderColor="white" />
+                  {menuItem("/samples", "サンプル", false)}
+                  <Divider borderColor="white" />
                   {menuItem("/directoryLayout", "ディレクトリ構成", false)}
                   <Divider borderColor="white" />
                   {menuItem("/download", "更新履歴", false)}

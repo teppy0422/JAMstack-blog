@@ -12,8 +12,16 @@ import Sidebar from "../components/sidebar";
 import Content from "../components/content";
 
 const samples = [
-  { name: "サンプル1", path: "/sample1", thumbnail: "/images/sample1.png" },
-  { name: "サンプル2", path: "/sample2", thumbnail: "/images/sample2.png" },
+  {
+    name: "56_配策図_誘導",
+    path: "/56",
+    thumbnail: "/images/sample1.png",
+  },
+  {
+    name: "70_汎用検査履歴システムpoint",
+    path: "/sample2",
+    thumbnail: "/images/sample2.png",
+  },
   // 他のサンプルページをここに追加
 ];
 
@@ -43,13 +51,13 @@ const Samples = () => {
                   _hover={{ textDecoration: "none" }}
                 >
                   <Box display="flex" alignItems="center">
+                    <Text>{sample.name}</Text>
                     <Image
                       src={sample.thumbnail}
-                      alt={sample.name}
+                      alt={sample.thumbnail}
                       boxSize="50px"
-                      mr={4}
+                      ml="auto"
                     />
-                    <Text>{sample.name}</Text>
                   </Box>
                 </Link>
               </Box>

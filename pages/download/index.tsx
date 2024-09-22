@@ -127,6 +127,15 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-09-20T9:30:00+0900"
+              description1="配策誘導の配置とmain.jsを修正。"
+              description2=""
+              descriptionIN=""
+              linkHref="/files/Sjp3.100.10_.zip"
+              inCharge="開発,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-09-18T10:13:00+0900"
               description1="検査履歴システムで.jsのadd.classが動作しない"
               description2=".className=+に修正"
