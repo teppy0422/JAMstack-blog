@@ -127,13 +127,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-09-24T5:59:00+0900"
+              description1="部品リスト作成時にMDが無い場合にCAV一覧から取得時に存在しない端末Noに取得される"
+              description2="端末Noの存在を確認する処理を追加"
+              descriptionIN=""
+              linkHref="/files/Sjp3.100.17_.zip"
+              inCharge="開発,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-09-20T9:30:00+0900"
-              description1="配策誘導の配置とmain.jsを修正。"
+              description1="配策誘導の配置とmain.jsを修正"
               description2=""
               descriptionIN=""
               linkHref="/files/Sjp3.100.10_.zip"
               inCharge="開発,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-09-18T10:13:00+0900"
@@ -142,7 +151,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/Sjp3.100.05_.zip"
               inCharge="不具合,徳島,緒方さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-09-17T20:32:00+0900"

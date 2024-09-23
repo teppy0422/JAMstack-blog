@@ -82,7 +82,6 @@ const FileSystemNode: React.FC<{ item: FileSystemItem; isLast?: boolean }> = ({
             <PopoverContent>
               <PopoverArrow />
               <Text p={4}>
-                {" "}
                 {item.popOver.split("\n").map((line, index) => (
                   <Text key={index}>{line}</Text>
                 ))}
