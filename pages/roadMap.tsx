@@ -11,6 +11,7 @@ import {
   Stack,
   Icon,
   Progress,
+  Badge,
 } from "@chakra-ui/react";
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 interface RoadmapItem {
@@ -129,6 +130,15 @@ const Roadmap = () => {
           <Heading as="h1" mb={8} textAlign="center" color="teal.500">
             ロードマップ
           </Heading>
+          <Badge variant="solid" colorScheme="green" ml={2}>
+            使用者
+          </Badge>
+          <Badge variant="solid" colorScheme="purple" ml={2}>
+            管理者
+          </Badge>
+          <Badge variant="solid" colorScheme="red" ml={2}>
+            開発者
+          </Badge>
           <Box mb={8} p={4} borderRadius="md">
             <Text textAlign="left" color="gray.700">
               ・使い方や説明についてはページを追加/更新していきます

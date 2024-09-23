@@ -28,7 +28,6 @@ const Home = () => {
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
-
   useEffect(() => {
     const checkIframeSrc = () => {
       if (iframeRef.current) {
@@ -45,27 +44,24 @@ const Home = () => {
             );
           } else if (fileName.includes("-")) {
             setMessage(
-              fileName +
-                ".html\n端末[" +
+              "端末[" +
                 fileName.replace("-", " ") +
-                "]からの全ての行き先を表示しています\nハメ図は行き先の端末Noを表示\n\n" +
+                "]からの全ての行き先です\nハメ図は行き先の端末Noを表示\n\n" +
                 "以下の方法でアクセス可能です\n1.画面上の端末Noをタップして表示された画面の右上をタップ\n2.右上に端末-を入力\n\n" +
                 "トップページに戻るには最上部の電線情報をタップ"
             );
           } else if (fileName.length === 4) {
             setMessage(
-              fileName +
-                ".html\n構成[" +
+              "構成[" +
                 fileName +
-                "]の経路を表示中です\nこのサブの端末と後ハメ電線が表示されています\n\n以下の方法でアクセス可能です\n1.画面上の電線をタップ\n2.QRリーダーでエフを読み込む\n3.右上に構成ナンバー4桁を入力\n\n" +
+                "]のサブのハメ図/後ハメ電線が表示されています\n\n以下の方法でアクセス可能です\n1.画面上の電線をタップ\n2.QRリーダーでエフを読み込む\n3.右上に構成ナンバー4桁を入力\n\n" +
                 "トップページに戻るには最上部の電線情報をタップ"
             );
           } else {
             setMessage(
-              fileName +
-                ".html\n端末No[" +
+              "端末No[" +
                 fileName +
-                "]のページです\n電線をクリックで構成Noのページに移動します\n\n" +
+                "]のハメ図、電線をクリックすると構成Noのページに移動します\n\n" +
                 "以下の方法でアクセス可能です\n1.画面上の端末Noをタップ\n2.QRリーダーで端末Noを読み込む\n3.右上に端末ナンバーを入力\n\n" +
                 "トップページに戻るには最上部の電線情報をタップ"
             );
@@ -91,11 +87,9 @@ const Home = () => {
           56_配策誘導ナビVer3.1
         </Text>
         <Text fontFamily="Noto Serif JP">
-          iPad等のタブレットでの使用をイメージしてみました
+          要素をタップ/クリックで画面が変わります
           <br />
-          要素をタップで画面が変わります
-          <br />
-          実際にタップ/クリックして動作確認してみてください
+          実際にタップしてみてください
         </Text>
         <IconButton
           icon={<FaSyncAlt />}
@@ -117,7 +111,7 @@ const Home = () => {
       >
         <iframe
           ref={iframeRef}
-          src="/files/56/index.html"
+          src="/files/56v3.1/index.html"
           style={{ width: "100%", height: "100%", border: "none" }}
         ></iframe>
       </Box>

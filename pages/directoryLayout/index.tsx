@@ -296,9 +296,14 @@ export default function About() {
     <>
       <Sidebar />
       <Content isCustomHeader={true}>
-        <div className={styles.me} style={{ paddingTop: "50px" }}>
+        <div className={styles.me}>
           <Box textAlign="center" mb={8}>
-            <Text fontSize="lg" colorScheme="black"></Text>
+            <Text fontSize="lg" colorScheme="black">
+              生産準備+のフォルダ構造
+            </Text>
+            <Badge variant="solid" colorScheme="green" ml={2}>
+              使用者
+            </Badge>
           </Box>
           <FileSystemNode item={directoryData} />
         </div>
