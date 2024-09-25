@@ -618,7 +618,10 @@ export default function Thread() {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (!user?.user_metadata?.name) {
+    // デバッグ情報を追加
+    const userName = getUserById(user?.id ?? "");
+
+    if (userName === null) {
       alert("ダウンロードするにはログインと管理者によるマスター登録が必要です");
       return;
     }

@@ -127,13 +127,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-09-25T12:28:00+0900"
+              description1="製品品番が1点の時に検査履歴作成Menuでエラー"
+              description2="ハメ図_印刷シート作成時の配置を修正"
+              descriptionIN=""
+              linkHref="/files/Sjp3.100.21_.zip"
+              inCharge="高知,不具合,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-09-24T5:59:00+0900"
               description1="部品リスト作成時にMDが無い場合にCAV一覧から取得時に存在しない端末Noに取得される"
               description2="端末Noの存在を確認する処理を追加"
               descriptionIN=""
               linkHref="/files/Sjp3.100.17_.zip"
-              inCharge="開発,Win10zip"
-              isLatest={true}
+              inCharge="高知,王さん,Win10zip"
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-09-20T9:30:00+0900"
