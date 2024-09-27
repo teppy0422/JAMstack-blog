@@ -33,15 +33,16 @@ import AnnotationsFactory from "highcharts/modules/annotations";
 import { useSession, signIn, signOut } from "next-auth/react";
 import styles from "../../styles/home.module.scss";
 
-let LineChart = (pops, ref) => {
-  const property = {
-    totalCost: pops.totalCost,
-    missedCount: pops.missedCount,
-    typePerSocund: pops.typePerSocund,
-    gameReplay: pops.gameReplay,
-    voucherCloseRef: pops.voucherCloseRef,
-    times: pops.times,
-  };
+const GraphTemp = forwardRef((props, ref) => {
+  const {
+    totalCost,
+    missedCount,
+    typePerSocund,
+    gameReplay,
+    voucherCloseRef,
+    times,
+    user,
+  } = props;
   const { data: session } = useSession();
   const [hoverData, setHoverData] = useState(null);
   const { colorMode, toggleColorMode } = useColorMode();
@@ -64,11 +65,6 @@ let LineChart = (pops, ref) => {
   const costsRef = useRef(0);
   const getIDRef = useRef("");
 
-  useEffect(() => {
-    console.log("更新1");
-    // getResult();
-  }, [session]);
-
   function makeChart() {
     getResult().then((value) => {
       updateSeries();
@@ -85,8 +81,8 @@ let LineChart = (pops, ref) => {
     let count = 0;
     let mdBak = ""; //日付変化の確認
 
-    if (session !== undefined && session !== null) {
-      const email = session.user.email;
+    if (user !== undefined) {
+      const email = user.email;
       const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
       const data = await response.json(); //await で response.json() が完了するまで待つ
       const arr = await data.map((item, index, array) => {
@@ -321,9 +317,9 @@ let LineChart = (pops, ref) => {
   }
 
   const getId = async (getCount) => {
-    if (session !== undefined && session !== null) {
+    if (user !== undefined) {
       let count = 0;
-      const email = session.user.email;
+      const email = user.email;
       const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
       const data = await response.json(); //await で response.json() が完了するまで待つ
       const arr = await data.map((item, index, array) => {
@@ -385,12 +381,10 @@ let LineChart = (pops, ref) => {
   }
 
   const delete_one = async (delete_id) => {
-    console.log("adfa", delete_id);
     const data = {
       delete_id: Number(delete_id),
     };
-    console.log({ session });
-    if (session !== undefined) {
+    if (user !== null) {
       await fetch("/api/typing", {
         method: "DELETE",
         headers: {
@@ -418,7 +412,7 @@ let LineChart = (pops, ref) => {
   }));
   return (
     <>
-      {session ? (
+      {user !== null ? (
         <Box
           className={styles.graphTemp}
           id="openButton"
@@ -461,13 +455,13 @@ let LineChart = (pops, ref) => {
                   variant="solid"
                   style={{ cursor: "default" }}
                 >
-                  {property.typePerSocund}/KPM
+                  {typePerSocund}/KPM
                 </Badge>
               </Tooltip>
               <Badge colorScheme="red" variant="outline">
-                ミス:{property.missedCount}回
+                ミス:{missedCount}回
               </Badge>
-              <Badge colorScheme="purple">{property.totalCost}円</Badge>
+              <Badge colorScheme="purple">{totalCost}円</Badge>
             </Stack>
             <Button
               colorScheme="blue"
@@ -485,6 +479,5 @@ let LineChart = (pops, ref) => {
       <h5>{hoverData}</h5>
     </>
   );
-};
-LineChart = forwardRef(LineChart);
-export default LineChart;
+});
+export default GraphTemp;

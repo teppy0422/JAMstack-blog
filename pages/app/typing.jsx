@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { supabase } from "../../utils/supabase/client";
 
 import { DefaultSeo } from "next-seo";
 import styles from "../../styles/home.module.scss";
@@ -41,14 +41,15 @@ import { getQuiz } from "../../libs/romaji_quiz.js";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 import Sushi_menu from "../../components/typing/sushi_menu";
 
-import Keyboard from "../../components/typing/kyeboard";
+import Keyboard from "../../components/typing/keyboard.tsx";
 import GraphTemp from "../../components/typing/graphTemp";
 import { useContext } from "react";
 
 import { myContext } from "../../pages/_app";
 
 export const typing = () => {
-  const { data: session } = useSession();
+  const [session, setSession] = useState(null);
+  const graphTempRef = useRef(null); //履歴グラフ
 
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const inputText = useRef(""); //入力文字
@@ -61,7 +62,7 @@ export const typing = () => {
   const renderFlgRef = useRef(false); //useEffectを初回走らせないフラグ
   const timerIDref = useRef(""); //タイマーリセット用のID
   const totalTimerIDref = useRef(""); //トータルタイマーリセット用のID
-  const [totalTime, setTotalTime] = useState(50); //トータルタイムの値
+  const [totalTime, setTotalTime] = useState(1); //トータルタイムの値
   const totalTimeRef = useRef(null); //トータルタイム
   const [missedCount, setMissedCount] = useState(0); //タイプミス回数
   const totalCost = useRef(0); //トータル金額
@@ -69,9 +70,8 @@ export const typing = () => {
   const inputTextRef = useRef(null); //入力欄
   const menuRef = useRef(null); //menu
   const voucherRef = useRef(null); //伝票
-  const graphTempRef = useRef(null); //履歴グラフ
 
-  const totalTime_origin = useRef(50); //トータルタイムの値
+  const totalTime_origin = useRef(1); //トータルタイムの値
   const typeCountRef = useRef(0); //タイプ数
   const [typePerSocund, setTypePerSocund] = useState(0); //タイプ速度の値
   const sound_BGM = useRef(null); //BGM
@@ -81,6 +81,7 @@ export const typing = () => {
 
   const myState = useContext(myContext);
   const keyboardRef = useRef(null);
+  const voucherCloseRef = useRef(null);
   //マウント時に一回だけ実行
   useEffect(() => {
     //レンダー初回時だけ実行
@@ -89,6 +90,27 @@ export const typing = () => {
     //入力イベントをオン
     document.addEventListener("keypress", keypress_ivent);
     document.addEventListener("keyup", keyup_ivent);
+  }, []);
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        console.log("Fetching user session..."); // デバッグ用ログ
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.getUser();
+        if (error) {
+          console.error("Error fetching user:", error);
+        } else {
+          console.log("User fetched successfully:", user); // デバッグ用ログ
+          setSession(user);
+        }
+      } catch (err) {
+        console.error("Unexpected error:", err);
+      }
+    };
+    fetchSession();
   }, []);
 
   //ページ遷移時にイベントとかをオフ
@@ -233,7 +255,6 @@ export const typing = () => {
           }
           //完全に一致
           if (temp[key] === inputTextTempA) {
-            console.log("完全に一致");
             const tempHiragana = getHiragana(inputTextTempA);
             Q_Texts.current = Q_Texts.current.substring(tempHiragana.length);
 
@@ -392,9 +413,9 @@ export const typing = () => {
     sound_BGM.current.pause();
     sound("finish");
     gameMode.current = "menu";
-    const rnd = Math.floor(Math.random() * 3); //0-3をランダムで取得
+    const rnd = Math.floor(Math.random() * 11); //0-3をランダムで取得
     console.log(rnd);
-    voucherRef.current.clickChildOpen(rnd);
+    voucherRef.current.clickChildOpen(rnd, session);
   }
   //リプレイ
   function gameReplay() {
@@ -558,19 +579,30 @@ export const typing = () => {
                   missedCount={missedCount}
                   typePerSocund={typePerSocund}
                   times={totalTime_origin.current}
+                  user={session}
                 />
                 <Spacer />
                 <Text mt="4px" id="timer">
                   作成中...
                 </Text>
                 <Spacer />
+                <Voucher
+                  totalCost={totalCost.current}
+                  missedCount={missedCount}
+                  typePerSocund={typePerSocund}
+                  voucherCloseRef={voucherCloseRef}
+                  time={totalTime_origin.current}
+                  user={session}
+                  gameReplay={() => {
+                    gameReplay();
+                  }}
+                />
                 <Box
                   className={styles.graphTemp}
                   w="56px"
                   onClick={() => {
                     keyboardRef.current.Open();
-                    const rnd = Math.floor(Math.random() * 12); //0-3をランダムで取得
-                    console.log(rnd);
+                    const rnd = Math.floor(Math.random() * 12);
                     voucherRef.current.clickChildOpen(rnd);
                   }}
                 >
@@ -619,8 +651,13 @@ export const typing = () => {
           ref={voucherRef}
           totalCost={totalCost.current}
           missedCount={missedCount}
-          typePerSocund={typePerSocund}
+          typePerSecond={
+            typeof typePerSecond === "number" && !isNaN(typePerSecond)
+              ? Number(typePerSecond)
+              : 0
+          }
           time={totalTime_origin.current}
+          user={session}
           gameReplay={() => {
             gameReplay();
           }}

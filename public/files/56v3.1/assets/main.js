@@ -146,7 +146,7 @@ function setPositionFromDataAttributes() {
 		var circle = circles[k];
 		var xRatio = parseFloat(circle.getAttribute('data-x'));
 		var yRatio = parseFloat(circle.getAttribute('data-y'));
-		var backGroundColor = circle.getAttribute('data-backGroundColor');
+		var backGroundColor = circle.getAttribute('data-backgroundcolor');
 		var maxWidth = window.innerWidth;
 		var maxHeight = window.innerHeight;
 		// 指数から計算した位置に配置
