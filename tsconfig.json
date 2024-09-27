@@ -35,5 +35,5 @@
     ".next/types/**/*.ts",
     "libs/.blog-post.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "public/files"]
 }

@@ -20,6 +20,7 @@ import {
   VStack,
   Divider,
 } from "@chakra-ui/react";
+import { supabase } from "../../utils/supabase/client";
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import GraphTemp from "../../components/typing/graphTemp";
@@ -42,22 +43,16 @@ import Ebi from "../3d/sushi_ebi";
 import Ootoro from "../3d/sushi_ootoro";
 import SanmaYaki from "../3d/sushi_sanma_yaki";
 
-let voucher = (pops, ref) => {
-  const property = {
-    totalCost: pops.totalCost,
-    missedCount: pops.missedCount,
-    typePerSocund: pops.typePerSocund,
-    gameReplay: pops.gameReplay,
-    voucherCloseRef: pops.voucherCloseRef,
-    time: pops.time,
-  };
+const Voucher = forwardRef((props, ref) => {
+  const { totalCost, missedCount, typePerSocund, gameReplay, time, user } =
+    props;
+  console.log("userVoucher", user);
   const graphTempRef = useRef(null); //履歴グラフ
   const voucherOpenRef = useRef(null); //伝票を開くボタン
-  const voucherCloseRef = useRef<null | HTMLButtonElement>(null); //伝票を閉じるボタン
+  const voucherCloseRef = useRef(null); //伝票を閉じるボタン
   const voucherPostRef = useRef(null); //登録ボタン
   const sushiRef = useRef(null); //寿司アドレス
   const sushiCommentRef = useRef(""); //寿司なまえ
-
   const OverlayTwo = () => (
     <ModalOverlay
       bg="none"
@@ -87,39 +82,29 @@ let voucher = (pops, ref) => {
   // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
   useImperativeHandle(ref, () => ({
     clickChildOpen(rnd) {
-      console.log("childrnd", rnd);
-      console.log(Sushi[rnd].path);
-      sushiRef.current = Sushi[rnd].path.props.children;
       sushiCommentRef.current = Sushi[rnd].text;
-      console.log(Sushi[rnd].text);
-      if (voucherOpenRef.current) {
-        // voucherOpenRefの型を明示的に指定して、null許容を追加する
-        const voucherOpenRef = useRef<null | HTMLDivElement>(null);
-      }
+      sushiRef.current = Sushi[rnd].path;
+      onOpen(); // モーダルを開く
     },
   }));
 
   const handleClick = async () => {
-    if (!session) return; // セッションが存在しない場合は処理を終了
+    console.log(user);
+    if (!user) return; // セッションが存在しない場合は処理を終了
     const data = {
-      userId: session?.user?.email,
+      userId: user?.id,
       course: "高級",
-      result: Number(property.typePerSocund),
-      name: session?.user?.name,
-      image: session?.user?.image,
-      time: Number(property.time),
-      missed: Number(property.missedCount),
-      cost: Number(property.totalCost),
+      result: typePerSocund,
+      missed: missedCount,
+      cost: totalCost,
     };
-
-    await fetch("/api/typing/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data), // 本文のデータ型は "Content-Type" ヘッダーと一致させる必要があります
-    });
-    // return response.json();
+    console.log(data);
+    const { error } = await supabase.from("typing_results").insert([data]);
+    if (error) {
+      console.error("Error inserting data:", error);
+    } else {
+      console.log("Data inserted successfully");
+    }
   };
 
   return (
@@ -164,11 +149,11 @@ let voucher = (pops, ref) => {
               </Box>
               <Spacer />
               <VStack textAlign="right" w={["150px"]} fontSize="16px">
-                <Text variant="solid">{property.typePerSocund}/KPM</Text>
+                <Text variant="solid">{typePerSocund}/KPM</Text>
                 <Divider style={{ marginTop: "2px" }} borderColor="#000" />
-                <Box>ミス:{property.missedCount}回</Box>
+                <Box>ミス:{missedCount}回</Box>
                 <Divider style={{ marginTop: "2px" }} borderColor="#000" />
-                <Box>{property.totalCost}円</Box>
+                <Box>{totalCost}円</Box>
                 <Divider style={{ marginTop: "2px" }} borderColor="#000" />
               </VStack>
             </Flex>
@@ -188,45 +173,43 @@ let voucher = (pops, ref) => {
             >
               もう一度プレイ[SPACE]
             </Button>
-            {session ? (
+            {user ? (
               <>
                 <Button
                   mr={2}
                   ref={voucherPostRef}
                   onClick={(e) => {
+                    console.log("登録ボタンがクリックされました");
                     handleClick().then((value) => {
-                      // graphTempRefがnullでないことを確認してからclick関数を呼び出す
                       if (
                         graphTempRef.current &&
                         "click" in graphTempRef.current
                       ) {
-                        (graphTempRef.current as any).click();
+                        graphTempRef.current.click();
                       }
                     });
                     if (voucherPostRef.current) {
-                      (
-                        voucherPostRef.current as HTMLButtonElement
-                      ).setAttribute("disabled", "");
+                      voucherPostRef.current.setAttribute("disabled", "");
                     }
                   }}
                   _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
-                  登録
+                  登録on
                 </Button>
                 <div style={{ display: "none" }}>
                   <GraphTemp
                     ref={graphTempRef}
-                    totalCost={property.totalCost}
-                    missedCount={property.missedCount}
-                    typePerSocund={property.typePerSocund}
-                    times={property.time}
+                    totalCost={totalCost}
+                    missedCount={missedCount}
+                    typePerSocund={typePerSocund}
+                    times={time}
                   />
                 </div>
               </>
             ) : (
               <>
                 <Button mr={2} disabled>
-                  登録
+                  登録off
                 </Button>
               </>
             )}
@@ -243,5 +226,5 @@ let voucher = (pops, ref) => {
       </Modal>
     </>
   );
-};
-export default forwardRef(voucher) as React.ForwardRefRenderFunction<any, any>;
+});
+export default Voucher;

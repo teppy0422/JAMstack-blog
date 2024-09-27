@@ -166,7 +166,7 @@ export default function Header() {
   const [pictureUrl, setPictureUrl] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [userCompany, setUserCompany] = useState<string | null>(null);
-  // ユーザー情報を取得する関数を呼び出す例
+  // ユーザー情報を取得する関数を呼び出す
   useEffect(() => {
     const fetchUserData = async () => {
       if (userId) {

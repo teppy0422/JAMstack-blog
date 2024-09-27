@@ -504,13 +504,7 @@ function setPositionFromDataAttributes() {
 			}
 		}
 	});
-	// 0.5秒毎にclassがmyTの要素をフォーカス
-	setInterval(function() {
-		var myTElements = document.getElementsByClassName('myT');
-		if (myTElements.length > 0) {
-			myTElements[0].focus();
-		}
-	}, 500);
+
 }
 // データ属性から位置を設定
 setPositionFromDataAttributes();

@@ -2117,9 +2117,9 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
 
     series: [
       {
-        data: elevationData,
-        lineColor: Highcharts.getOptions().colors[1],
-        color: Highcharts.getOptions().colors[2],
+        data: elevationData ?? [],
+        lineColor: Highcharts.getOptions()?.colors?.[1],
+        color: Highcharts.getOptions()?.colors?.[2],
         fillOpacity: 0.5,
         name: "Elevation",
         marker: {
