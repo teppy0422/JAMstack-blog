@@ -23,6 +23,7 @@ import {
   Badge,
   Box,
 } from "@chakra-ui/react";
+import { supabase } from "../../utils/supabase/client";
 
 import Highcharts from "highcharts/highcharts";
 // import Highcharts from "highcharts/highstock"; //上記との違いわからん
@@ -64,7 +65,7 @@ const GraphTemp = forwardRef((props, ref) => {
   const idRef = useRef(0);
   const costsRef = useRef(0);
   const getIDRef = useRef("");
-
+  const createdAtsRef = useRef("");
   function makeChart() {
     getResult().then((value) => {
       updateSeries();
@@ -80,41 +81,44 @@ const GraphTemp = forwardRef((props, ref) => {
     let costs = [];
     let count = 0;
     let mdBak = ""; //日付変化の確認
+    let createdAts = []; // created_atを保存
 
     if (user !== undefined) {
       const email = user.email;
-      const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
-      const data = await response.json(); //await で response.json() が完了するまで待つ
-      const arr = await data.map((item, index, array) => {
-        if (item.userId !== null) {
-          if (item.userId === email) {
-            count++;
-            values.push(item.result);
-            times.push(count);
-            ids.push(item.id);
-            costs.push(item.cost);
-            if (item.missed === 0) {
-              misseds.push(null);
-            } else {
-              misseds.push(item.missed);
-            }
-            const dd = new Date(item.date);
-            let md = dd.getMonth() + 1 + "/" + dd.getDate();
-            if (md !== mdBak) {
-              let obj = {
-                point: {
-                  xAxis: 0,
-                  yAxis: 0,
-                  x: count - 1,
-                  y: item.result,
-                },
-                // x: 10,
-                text: md,
-              };
-              dates.push(obj);
-              mdBak = md;
-            }
-          }
+      const { data, error } = await supabase
+        .from("typing_results")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: true });
+      if (error) {
+        console.error("Error fetching data:", error.message);
+        return;
+      }
+      data.forEach((item) => {
+        count++;
+        values.push(item.result);
+        times.push(count);
+        ids.push(item.id);
+        costs.push(item.cost);
+        if (item.missed === 0) {
+          misseds.push(null);
+        } else {
+          misseds.push(item.missed);
+        }
+        const dd = new Date(item.created_at);
+        let md = dd.getMonth() + 1 + "/" + dd.getDate();
+        if (md !== mdBak) {
+          let obj = {
+            point: {
+              xAxis: 0,
+              yAxis: 0,
+              x: count - 1,
+              y: item.result,
+            },
+            text: md,
+          };
+          dates.push(obj);
+          mdBak = md;
         }
       });
       valueRef.current = values;
@@ -123,6 +127,7 @@ const GraphTemp = forwardRef((props, ref) => {
       missedRef.current = misseds;
       costsRef.current = costs;
       datesRef.current = dates;
+      createdAtsRef.current = createdAts;
     } else {
       console.log("ログインしていません");
     }
@@ -276,7 +281,10 @@ const GraphTemp = forwardRef((props, ref) => {
           yAxis: 1,
           legendIndex: 2,
           type: "column",
-          data: getCosts(),
+          data: getCosts().map((cost, index) => ({
+            y: cost,
+            id: idRef.current[index],
+          })),
           tooltip: { valueSuffix: " 円" },
           color: "#dBc6f1",
         },
@@ -284,7 +292,10 @@ const GraphTemp = forwardRef((props, ref) => {
           name: "ミス",
           legendIndex: 1,
           type: "spline",
-          data: getMisseds(),
+          data: getMisseds().map((missed, index) => ({
+            y: missed,
+            id: idRef.current[index],
+          })),
           tooltip: { valueSuffix: " 回" },
           color: "red",
         },
@@ -292,7 +303,10 @@ const GraphTemp = forwardRef((props, ref) => {
           name: "KPM",
           legendIndex: 0,
           type: "spline",
-          data: getValue(),
+          data: getValue().map((value, index) => ({
+            y: value,
+            id: idRef.current[index],
+          })),
           tooltip: { valueSuffix: " " },
           color: getColor("text"),
           marker: { symbol: "ball" },
@@ -316,25 +330,6 @@ const GraphTemp = forwardRef((props, ref) => {
     });
   }
 
-  const getId = async (getCount) => {
-    if (user !== undefined) {
-      let count = 0;
-      const email = user.email;
-      const response = await fetch("/api/typing", { method: "GET" }); //await で fetch() が完了するまで待つ
-      const data = await response.json(); //await で response.json() が完了するまで待つ
-      const arr = await data.map((item, index, array) => {
-        if (item.userId !== null) {
-          if (item.userId === email) {
-            count++;
-            if (getCount === count) {
-              getIDRef.current = item.id;
-              return false;
-            }
-          }
-        }
-      });
-    }
-  };
   function getValue() {
     return valueRef.current;
   }
@@ -351,7 +346,6 @@ const GraphTemp = forwardRef((props, ref) => {
     return costsRef.current;
   }
   function getDates() {
-    console.log(datesRef.current);
     return datesRef.current;
   }
   function getColor(type) {
@@ -371,27 +365,27 @@ const GraphTemp = forwardRef((props, ref) => {
     }
   }
   function deleteQuestion(obj) {
-    getId(obj.point.category).then((value) => {
-      delete_one(getIDRef.current).then((value) => {
+    const id = obj.point.id;
+    if (id) {
+      delete_one(id).then((value) => {
         getResult().then((value) => {
           updateSeries();
         });
       });
-    });
+    } else {
+      console.log("idがありません");
+    }
   }
 
-  const delete_one = async (delete_id) => {
-    const data = {
-      delete_id: Number(delete_id),
-    };
-    if (user !== null) {
-      await fetch("/api/typing", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data), // 本文のデータ型は "Content-Type" ヘッダーと一致させる必要があります
-      }); //await で fetch() が完了するまで待つ
+  const delete_one = async (id) => {
+    const { data, error } = await supabase
+      .from("typing_results")
+      .delete()
+      .eq("id", id);
+    if (error) {
+      console.error("Error deleting data:", error.message);
+    } else {
+      console.log("Data deleted successfully:", data);
     }
   };
   const OverlayTwo = () => (
@@ -463,20 +457,10 @@ const GraphTemp = forwardRef((props, ref) => {
               </Badge>
               <Badge colorScheme="purple">{totalCost}円</Badge>
             </Stack>
-            <Button
-              colorScheme="blue"
-              mr={3}
-              ref={closeRef}
-              onClick={onClose}
-              _focus={{ _focus: "none" }}
-              position="absolute"
-            >
-              Close
-            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <h5>{hoverData}</h5>
+      {/* <h5>{hoverData}</h5> */}
     </>
   );
 });

@@ -46,7 +46,6 @@ import SanmaYaki from "../3d/sushi_sanma_yaki";
 const Voucher = forwardRef((props, ref) => {
   const { totalCost, missedCount, typePerSocund, gameReplay, time, user } =
     props;
-  console.log("userVoucher", user);
   const graphTempRef = useRef(null); //履歴グラフ
   const voucherOpenRef = useRef(null); //伝票を開くボタン
   const voucherCloseRef = useRef(null); //伝票を閉じるボタン
@@ -87,14 +86,16 @@ const Voucher = forwardRef((props, ref) => {
       onOpen(); // モーダルを開く
     },
   }));
-
+  //DBに登録
   const handleClick = async () => {
-    console.log(user);
+    console.log("user", user);
+    console.log("user.id", user.id);
     if (!user) return; // セッションが存在しない場合は処理を終了
     const data = {
-      userId: user?.id,
+      user_id: user.id,
       course: "高級",
       result: typePerSocund,
+      name: "",
       missed: missedCount,
       cost: totalCost,
     };
@@ -118,7 +119,7 @@ const Voucher = forwardRef((props, ref) => {
         }}
         ref={voucherOpenRef}
       >
-        伝票を見る
+        {/* 伝票を見る */}
       </Text>
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         {overlay}
@@ -178,9 +179,11 @@ const Voucher = forwardRef((props, ref) => {
                 <Button
                   mr={2}
                   ref={voucherPostRef}
+                  _focus={{ _focus: "none" }}
                   onClick={(e) => {
-                    console.log("登録ボタンがクリックされました");
+                    console.log("登録ボタンがクリック!");
                     handleClick().then((value) => {
+                      onClose();
                       if (
                         graphTempRef.current &&
                         "click" in graphTempRef.current
@@ -192,9 +195,8 @@ const Voucher = forwardRef((props, ref) => {
                       voucherPostRef.current.setAttribute("disabled", "");
                     }
                   }}
-                  _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 >
-                  登録on
+                  登録
                 </Button>
                 <div style={{ display: "none" }}>
                   <GraphTemp
@@ -209,7 +211,7 @@ const Voucher = forwardRef((props, ref) => {
             ) : (
               <>
                 <Button mr={2} disabled>
-                  登録off
+                  登録
                 </Button>
               </>
             )}
