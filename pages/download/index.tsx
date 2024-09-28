@@ -128,7 +128,7 @@ export default function About() {
           >
             <CustomLinkBox
               dateTime="2024-09-27T12:12:00+0900"
-              description1="NextJsのpublic/filesで構文エラーになる箇所がある"
+              description1="NextJsのpublic/filesで構文エラーが10kくらい出て見辛い"
               description2="main.jsと端末.htmlを修正"
               descriptionIN=""
               linkHref="/files/Sjp3.100.25_.zip"

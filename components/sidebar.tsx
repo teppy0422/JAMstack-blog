@@ -108,12 +108,12 @@ function Sidebar() {
           {menuItem("/roadMap", "ロードマップ", true)}
           {menuItem("/samples", "サンプル", true)}
           {menuItem("/directoryLayout", "ディレクトリ構成", true)}
-          {menuItem("/objectLayout", "プログラム構造", true)}
+          {menuItem("/objectLayout", "プログラム解説", true)}
+          {menuItem("/app/typing", "タイピング練習", true)}
           {menuItem("/download", "更新履歴", true)}
           {menuItem("/BBS", "問い合わせ", true)}
         </VStack>
       </Box>
-
       <IconButton
         display={{ base: "none", xl: "none" }}
         icon={<HamburgerIcon />}

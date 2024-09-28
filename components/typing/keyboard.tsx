@@ -49,7 +49,9 @@ let keyboard = (pops, ref) => {
         {keyValues2.map((k, index) => {
           return (
             <Box
-              className={styles.key2}
+              className={`${styles.key2} ${
+                k === "f" || k === "j" ? styles.underline : ""
+              }`}
               w={8}
               h={8}
               m={1}

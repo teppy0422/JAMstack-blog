@@ -1494,7 +1494,7 @@ export default function Thread() {
                               .replace(/\n/g, "<br />")
                               .replace(
                                 /(http[s]?:\/\/[^\s]+)/g,
-                                '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">$1</a>'
+                                '<a href="$1" target="_blank" style="text-decoration: underline;">$1</a>'
                               ),
                           }}
                         />

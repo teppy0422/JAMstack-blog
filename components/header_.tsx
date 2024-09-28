@@ -373,7 +373,9 @@ export default function Header() {
                   <Divider borderColor="white" />
                   {menuItem("/directoryLayout", "ディレクトリ構成", false)}
                   <Divider borderColor="white" />
-                  {menuItem("/objectLayout", "プログラム構造", false)}
+                  {menuItem("/objectLayout", "プログラム解説", false)}
+                  <Divider borderColor="white" />
+                  {menuItem("/app/typing", "タイピング練習", false)}
                   <Divider borderColor="white" />
                   {menuItem("/download", "更新履歴", false)}
                   <Divider borderColor="white" />

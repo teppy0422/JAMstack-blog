@@ -21,9 +21,11 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
+import Snowfall from "react-snowfall";
+
 import Content from "../../components/content";
 import ResponseCache from "next/dist/server/response-cache";
-
+import { isMobileDevice, isIOSDevice } from "../../utils/device";
 import {
   getRomaji,
   getHiragana,
@@ -49,6 +51,9 @@ import { myContext } from "../../pages/_app";
 
 export const typing = () => {
   const [session, setSession] = useState(null);
+  // デバイスの種類を検出
+  const [isMobile, setIsMobile] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
   const graphTempRef = useRef(null); //履歴グラフ
 
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
@@ -62,7 +67,7 @@ export const typing = () => {
   const renderFlgRef = useRef(false); //useEffectを初回走らせないフラグ
   const timerIDref = useRef(""); //タイマーリセット用のID
   const totalTimerIDref = useRef(""); //トータルタイマーリセット用のID
-  const [totalTime, setTotalTime] = useState(1); //トータルタイムの値
+  const [totalTime, setTotalTime] = useState(50); //トータルタイムの値
   const totalTimeRef = useRef(null); //トータルタイム
   const [missedCount, setMissedCount] = useState(0); //タイプミス回数
   const totalCost = useRef(0); //トータル金額
@@ -71,7 +76,7 @@ export const typing = () => {
   const menuRef = useRef(null); //menu
   const voucherRef = useRef(null); //伝票
 
-  const totalTime_origin = useRef(1); //トータルタイムの値
+  const totalTime_origin = useRef(50); //トータルタイムの値
   const typeCountRef = useRef(0); //タイプ数
   const [typePerSocund, setTypePerSocund] = useState(0); //タイプ速度の値
   const sound_BGM = useRef(null); //BGM
@@ -82,7 +87,13 @@ export const typing = () => {
   const myState = useContext(myContext);
   const keyboardRef = useRef(null);
   const voucherCloseRef = useRef(null);
-  //マウント時に一回だけ実行
+
+  // タイプ数を監視して雪のエフェクトを制御
+  const [snowflakeCount, setSnowflakeCount] = useState(0);
+  const [snowSpeed, setSnowSpeed] = useState([0.5, 2]);
+  const [snowWind, setSnowWind] = useState([0.4, 0.5]);
+  const intervalRef = useRef(null); // intervalを保持するためのref
+
   useEffect(() => {
     //レンダー初回時だけ実行
     console.log("初回だけ");
@@ -90,6 +101,9 @@ export const typing = () => {
     //入力イベントをオン
     document.addEventListener("keypress", keypress_ivent);
     document.addEventListener("keyup", keyup_ivent);
+    // デバイス確認
+    setIsMobile(isMobileDevice());
+    setIsIOS(isIOSDevice());
   }, []);
 
   useEffect(() => {
@@ -222,6 +236,10 @@ export const typing = () => {
         }
         break;
       case "play":
+        //スペースキーはカウントしない
+        if (eKey === " ") {
+          return false;
+        }
         const temp = getRomaji(Q_Texts.current.substring(0, 3));
         inputText.current = inputText.current + eKey;
         const inputTextTempA = inputText.current;
@@ -251,6 +269,15 @@ export const typing = () => {
             suggestKeyRef.current = newTemp[0].charAt(inputTextTempA.length);
             //KPMを求めるカウント
             typeCountRef.current = typeCountRef.current + 1;
+            setSnowflakeCount(typeCountRef.current * 20);
+            setSnowSpeed([
+              typeCountRef.current * 0.01,
+              typeCountRef.current * 0.02,
+            ]);
+            setSnowWind([
+              typeCountRef.current * 0.005,
+              typeCountRef.current * 0.01,
+            ]);
             matchCount = matchCount + 1;
           }
           //完全に一致
@@ -412,9 +439,11 @@ export const typing = () => {
     );
     sound_BGM.current.pause();
     sound("finish");
+    setSnowWind([0, 0.1]);
+    setSnowSpeed([0.1, 0.2]);
+    stopSnowfall(typeCountRef.current);
     gameMode.current = "menu";
     const rnd = Math.floor(Math.random() * 11); //0-3をランダムで取得
-    console.log(rnd);
     voucherRef.current.clickChildOpen(rnd, session);
   }
   //リプレイ
@@ -423,12 +452,30 @@ export const typing = () => {
     setMissedCount(0);
     StartTotalTimer();
     TimeUp();
+    setSnowflakeCount(0);
     inputText.current = "";
     typeCountRef.current = 0;
     totalCost.current = 0;
     gameMode.current = "play";
     Q_used.current = "";
   }
+  const stopSnowfall = (count) => {
+    typeCountRef.current = count;
+    setSnowflakeCount(count);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    intervalRef.current = setInterval(() => {
+      if (typeCountRef.current <= 0) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        setSnowflakeCount(0);
+      } else {
+        typeCountRef.current -= 1;
+        setSnowflakeCount(typeCountRef.current);
+      }
+    }, 200); // 100ミリ秒ごとに雪の量を1減少させる
+  };
   return (
     <>
       <DefaultSeo
@@ -456,7 +503,23 @@ export const typing = () => {
           cardType: "summary_large_image",
         }}
       />
-      {/* todo */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 9999,
+          pointerEvents: "none",
+        }}
+      >
+        <Snowfall
+          snowflakeCount={snowflakeCount}
+          wind={snowWind}
+          speed={snowSpeed}
+        />
+      </div>
       <Box ref={menuRef} style={{ display: "none" }}>
         <Menu
           gameReplay={() => {
@@ -465,203 +528,193 @@ export const typing = () => {
         />
       </Box>
       <Content isCustomHeader={true}>
-        <VStack className={styles.typing} h="620px">
-          <Box
-            className={
-              colorMode === "light" ? styles.backLight : styles.backDark
-            }
-            w="100%"
-          >
-            <Center mt={2}>
-              <Grid
-                templateColumns="repeat(3, 1fr)"
-                gap={[1, 2, 4, 6]}
-                w={["100%", "90%", "80%", "70%"]}
-                h="14"
-                mt={10}
-                className={styles.navi}
-              >
-                <GridItem w="100%" h="14" colSpan={1}>
-                  <Text fontSize="13px" pl="10px">
-                    残り時間
-                  </Text>
-                  <Center>
-                    <Divider
-                      w="90%"
-                      style={
-                        colorMode === "light"
-                          ? { borderColor: "black" }
-                          : { borderColor: "white" }
-                      }
-                    />
-                  </Center>
-                  <Box h="33px" position="relative">
-                    <Progress
-                      hasStripe
-                      value={totalTime}
-                      h="100%"
-                      colorScheme="green"
-                      backgroundColor="transparent"
-                      style={{ opacity: "0.7" }}
-                      mx="10px"
-                      max={totalTime_origin.current}
-                    />
-                    <Text
-                      position="absolute"
-                      top="0"
-                      right="4px"
-                      fontSize="18px"
-                      fontWeight="bold"
-                      textAlign="right"
-                      mr="12px"
-                      mt="4px"
-                      ref={totalTimeRef}
-                    >
-                      {totalTime}
-                    </Text>
-                  </Box>
-                </GridItem>
-                <GridItem w="100%" h="14" colSpan={1}>
-                  <Text fontSize="13px" pl="10px">
-                    タイプミス
-                  </Text>
-                  <Center>
-                    <Divider
-                      w="90%"
-                      style={
-                        colorMode === "light"
-                          ? { borderColor: "black" }
-                          : { borderColor: "white" }
-                      }
-                    />
-                  </Center>
-                  <Text
-                    fontSize="18px"
-                    fontWeight="bold"
-                    textAlign="right"
-                    mr="12px"
-                    mt="4px"
-                  >
-                    {missedCount}
-                  </Text>
-                </GridItem>
-                <GridItem w="100%" h="14" colSpan={1}>
-                  <Text fontSize="13px" pl="10px">
-                    金額
-                  </Text>
-                  <Center>
-                    <Divider
-                      w="90%"
-                      style={
-                        colorMode === "light"
-                          ? { borderColor: "black" }
-                          : { borderColor: "white" }
-                      }
-                    />
-                  </Center>
-                  <Text
-                    fontSize="18px"
-                    fontWeight="bold"
-                    textAlign="right"
-                    mr="12px"
-                    mt="4px"
-                  >
-                    {totalCost.current}円{" "}
-                  </Text>
-                </GridItem>
-              </Grid>
-            </Center>
-            <Center>
-              <Flex w={["100%", "90%", "80%", "70%"]} h="40px">
-                <GraphTemp
-                  ref={graphTempRef}
-                  totalCost={totalCost.current}
-                  missedCount={missedCount}
-                  typePerSocund={typePerSocund}
-                  times={totalTime_origin.current}
-                  user={session}
-                />
-                <Spacer />
-                <Text mt="4px" id="timer">
-                  作成中...
-                </Text>
-                <Spacer />
-                <Voucher
-                  totalCost={totalCost.current}
-                  missedCount={missedCount}
-                  typePerSocund={typePerSocund}
-                  voucherCloseRef={voucherCloseRef}
-                  time={totalTime_origin.current}
-                  user={session}
-                  gameReplay={() => {
-                    gameReplay();
-                  }}
-                />
-                <Box
-                  className={styles.graphTemp}
-                  w="56px"
-                  onClick={() => {
-                    keyboardRef.current.Open();
-                    const rnd = Math.floor(Math.random() * 12);
-                    voucherRef.current.clickChildOpen(rnd);
-                  }}
-                >
-                  TEST
-                </Box>
-              </Flex>
-            </Center>
-
-            <Sushi_menu />
-            <Center className={styles.cost}>{Q_cost.current}</Center>
-
-            <Box className={styles.question} w="100%">
-              <Center className={styles.typeDisplay} id="type-display">
-                　
-              </Center>
-              <Center
-                className={styles.typeDisplayHiragana}
-                id="type-display-hiragana"
-              >
-                　
-              </Center>
-              <Center mb="4px">
-                <p className={styles.typeDisplayRomaji}>
-                  <span style={{ color: "red" }}>{typeDisplayRomaji_0}</span>
-                </p>
-                <Text
-                  className={styles.typeDisplayRomaji}
-                  style={{ border: "solid 1px", borderRadius: "3px" }}
-                  borderColor={
-                    colorMode === "light" ? styles.backLight : styles.backDark
-                  }
-                  px="1.5"
-                  id="type-display-romaji"
-                >
-                  　
-                </Text>
-                <p className={styles.typeDisplayRomaji}>
-                  {typeDisplayRomaji_2}
-                </p>
-              </Center>
-              <Keyboard ref={keyboardRef} />
-            </Box>
+        {isMobile || isIOS ? (
+          <Box>
+            <Text fontSize="xl" color="red">
+              このページはキーボードが必要です
+              <br />
+              キーボードのあるデバイスでアクセスしてください
+            </Text>
           </Box>
-        </VStack>
-        <Voucher
-          ref={voucherRef}
-          totalCost={totalCost.current}
-          missedCount={missedCount}
-          typePerSecond={
-            typeof typePerSecond === "number" && !isNaN(typePerSecond)
-              ? Number(typePerSecond)
-              : 0
-          }
-          time={totalTime_origin.current}
-          user={session}
-          gameReplay={() => {
-            gameReplay();
-          }}
-        />
+        ) : (
+          <>
+            <VStack className={styles.typing} h="620px">
+              <Box
+                className={
+                  colorMode === "light" ? styles.backLight : styles.backDark
+                }
+                w="100%"
+              >
+                <Center mt={2}>
+                  <Grid
+                    templateColumns="repeat(3, 1fr)"
+                    gap={[1, 2, 4, 6]}
+                    w={["100%", "90%", "80%", "70%"]}
+                    h="14"
+                    mt={10}
+                    className={styles.navi}
+                  >
+                    <GridItem w="100%" h="14" colSpan={1}>
+                      <Text fontSize="13px" pl="10px">
+                        残り時間
+                      </Text>
+                      <Center>
+                        <Divider
+                          w="90%"
+                          style={
+                            colorMode === "light"
+                              ? { borderColor: "black" }
+                              : { borderColor: "white" }
+                          }
+                        />
+                      </Center>
+                      <Box h="33px" position="relative">
+                        <Progress
+                          hasStripe
+                          value={totalTime}
+                          h="100%"
+                          colorScheme="green"
+                          backgroundColor="transparent"
+                          style={{ opacity: "0.7" }}
+                          mx="10px"
+                          max={totalTime_origin.current}
+                        />
+                        <Text
+                          position="absolute"
+                          top="0"
+                          right="4px"
+                          fontSize="18px"
+                          fontWeight="bold"
+                          textAlign="right"
+                          mr="12px"
+                          mt="4px"
+                          ref={totalTimeRef}
+                        >
+                          {totalTime}
+                        </Text>
+                      </Box>
+                    </GridItem>
+                    <GridItem w="100%" h="14" colSpan={1}>
+                      <Text fontSize="13px" pl="10px">
+                        タイプミス
+                      </Text>
+                      <Center>
+                        <Divider
+                          w="90%"
+                          style={
+                            colorMode === "light"
+                              ? { borderColor: "black" }
+                              : { borderColor: "white" }
+                          }
+                        />
+                      </Center>
+                      <Text
+                        fontSize="18px"
+                        fontWeight="bold"
+                        textAlign="right"
+                        mr="12px"
+                        mt="4px"
+                      >
+                        {missedCount}
+                      </Text>
+                    </GridItem>
+                    <GridItem w="100%" h="14" colSpan={1}>
+                      <Text fontSize="13px" pl="10px">
+                        金額
+                      </Text>
+                      <Center>
+                        <Divider
+                          w="90%"
+                          style={
+                            colorMode === "light"
+                              ? { borderColor: "black" }
+                              : { borderColor: "white" }
+                          }
+                        />
+                      </Center>
+                      <Text
+                        fontSize="18px"
+                        fontWeight="bold"
+                        textAlign="right"
+                        mr="12px"
+                        mt="4px"
+                      >
+                        {totalCost.current}円{" "}
+                      </Text>
+                    </GridItem>
+                  </Grid>
+                </Center>
+                <Center>
+                  <Flex w={["100%", "90%", "80%", "70%"]} h="40px">
+                    <GraphTemp
+                      ref={graphTempRef}
+                      totalCost={totalCost.current}
+                      missedCount={missedCount}
+                      typePerSocund={typePerSocund}
+                      times={totalTime_origin.current}
+                      user={session}
+                    />
+                    <Spacer />
+                    <Text mt="4px" id="timer">
+                      作成中...
+                    </Text>
+                    <Spacer />
+                  </Flex>
+                </Center>
+
+                <Sushi_menu />
+                <Center className={styles.cost}>{Q_cost.current}</Center>
+
+                <Box className={styles.question} w="100%">
+                  <Center className={styles.typeDisplay} id="type-display">
+                    　
+                  </Center>
+                  <Center
+                    className={styles.typeDisplayHiragana}
+                    id="type-display-hiragana"
+                  >
+                    　
+                  </Center>
+                  <Center mb="4px">
+                    <p className={styles.typeDisplayRomaji}>
+                      <span style={{ color: "red" }}>
+                        {typeDisplayRomaji_0}
+                      </span>
+                    </p>
+                    <Text
+                      className={styles.typeDisplayRomaji}
+                      style={{ border: "solid 1px", borderRadius: "3px" }}
+                      borderColor={
+                        colorMode === "light"
+                          ? styles.backLight
+                          : styles.backDark
+                      }
+                      px="1.5"
+                      id="type-display-romaji"
+                    >
+                      　
+                    </Text>
+                    <p className={styles.typeDisplayRomaji}>
+                      {typeDisplayRomaji_2}
+                    </p>
+                  </Center>
+                  <Keyboard ref={keyboardRef} />
+                </Box>
+              </Box>
+            </VStack>
+            <Voucher
+              ref={voucherRef}
+              totalCost={totalCost.current}
+              missedCount={missedCount}
+              typePerSocund={typePerSocund}
+              time={totalTime_origin.current}
+              user={session}
+              gameReplay={() => {
+                gameReplay();
+              }}
+            />
+          </>
+        )}
         <Flex display="none">
           <audio
             controls

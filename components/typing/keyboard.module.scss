@@ -80,3 +80,16 @@
     cursor: default;
   }
 }
+.underline {
+  position: relative;
+}
+
+.underline::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 3px; // 文字に対する下線の位置を調整
+  height: 1px; // 下線の太さ
+  background-color: black; // 下線の色
+}
