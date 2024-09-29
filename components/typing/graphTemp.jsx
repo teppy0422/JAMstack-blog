@@ -43,6 +43,8 @@ const GraphTemp = forwardRef((props, ref) => {
     voucherCloseRef,
     times,
     user,
+    userID,
+    visible,
   } = props;
   const { data: session } = useSession();
   const [hoverData, setHoverData] = useState(null);
@@ -84,11 +86,10 @@ const GraphTemp = forwardRef((props, ref) => {
     let createdAts = []; // created_atを保存
 
     if (user !== undefined) {
-      const email = user.email;
       const { data, error } = await supabase
         .from("typing_results")
         .select("*")
-        .eq("user_id", user.id)
+        .eq("user_id", userID)
         .order("created_at", { ascending: true });
       if (error) {
         console.error("Error fetching data:", error.message);
@@ -321,7 +322,11 @@ const GraphTemp = forwardRef((props, ref) => {
                 setHoverData(e.target.category);
               },
               click: function (e) {
-                deleteQuestion(e);
+                if (visible) {
+                  deleteQuestion(e);
+                } else {
+                  alert("自分のデータのみ削除できます");
+                }
               },
             },
           },
@@ -409,7 +414,7 @@ const GraphTemp = forwardRef((props, ref) => {
       {user !== null ? (
         <Box
           className={styles.graphTemp}
-          id="openButton"
+          id={`openButton-${userID}`}
           w="56px"
           _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
           onClick={() => {
@@ -419,8 +424,9 @@ const GraphTemp = forwardRef((props, ref) => {
             console.log("クリックされた");
           }}
           ref={openRef}
+          display={visible ? "" : "none"}
         >
-          履歴
+          {visible ? "履歴" : ""}
         </Box>
       ) : (
         <Tooltip hasArrow label="ログインしていると開けます" bg="gray.600">

@@ -38,7 +38,7 @@ import {
 
 import Voucher from "../../components/typing/voucher";
 import Menu from "../../components/typing/menu";
-
+import Ranking from "../../components/typing/ranking";
 import { getQuiz } from "../../libs/romaji_quiz.js";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
 import Sushi_menu from "../../components/typing/sushi_menu";
@@ -51,6 +51,7 @@ import { myContext } from "../../pages/_app";
 
 export const typing = () => {
   const [session, setSession] = useState(null);
+  const [userID, setUserID] = useState(null);
   // デバイスの種類を検出
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -94,6 +95,18 @@ export const typing = () => {
   const [snowWind, setSnowWind] = useState([0.4, 0.5]);
   const intervalRef = useRef(null); // intervalを保持するためのref
 
+  const [clearedProblemsCount, setClearedProblemsCount] = useState(0); // 初期値を0に設定
+  const clearedProblemsCountRef = useRef(clearedProblemsCount);
+  function clearProblem() {
+    setClearedProblemsCount((prevCount) => {
+      const newCount = prevCount + 1;
+      console.log("Updated clearedProblemsCount inside setState:", newCount); // デバッグ用ログ
+      return newCount;
+    });
+  }
+  useEffect(() => {
+    clearedProblemsCountRef.current = clearedProblemsCount;
+  }, [clearedProblemsCount]);
   useEffect(() => {
     //レンダー初回時だけ実行
     console.log("初回だけ");
@@ -119,6 +132,7 @@ export const typing = () => {
         } else {
           console.log("User fetched successfully:", user); // デバッグ用ログ
           setSession(user);
+          setUserID(user.id);
         }
       } catch (err) {
         console.error("Unexpected error:", err);
@@ -267,7 +281,7 @@ export const typing = () => {
             setTypeDisplayRomaji_2(getRomajiForecast(inputSuggestOver));
 
             suggestKeyRef.current = newTemp[0].charAt(inputTextTempA.length);
-            //KPMを求めるカウント
+            //正解のキータイプ数
             typeCountRef.current = typeCountRef.current + 1;
             setSnowflakeCount(typeCountRef.current * 20);
             setSnowSpeed([
@@ -306,8 +320,9 @@ export const typing = () => {
 
             //一つの文章が終了
             if (complete === true) {
-              totalCost.current = totalCost.current + Q_cost.current;
               sound("success");
+              totalCost.current = totalCost.current + Q_cost.current;
+              clearProblem();
               TimeUp();
             } else {
               // 次の文字の正解を表示
@@ -424,27 +439,30 @@ export const typing = () => {
       setTotalTime(totalTime_origin.current - getTimerTime(totalStartTime));
       if (totalTimeRef.current.innerText <= 0) {
         clearInterval(totalTimerIDref.current);
-        gameOver();
+        gameOver(clearedProblemsCount);
       }
     }, 200);
     totalTimerIDref.current = totalTimerID_;
   }
   //ゲームオーバー
-  function gameOver() {
+  function gameOver(clearedProblemsCount) {
     keyboardRef.current.Open();
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
     setTypePerSocund(
       Math.floor((typeCountRef.current / totalTime_origin.current) * 60)
     );
+    voucherRef.current.clickChildOpen(
+      clearedProblemsCountRef.current,
+      session,
+      true
+    );
     sound_BGM.current.pause();
     sound("finish");
     setSnowWind([0, 0.1]);
     setSnowSpeed([0.1, 0.2]);
-    stopSnowfall(typeCountRef.current);
+    stopSnowfall(typeCountRef.current * 20);
     gameMode.current = "menu";
-    const rnd = Math.floor(Math.random() * 11); //0-3をランダムで取得
-    voucherRef.current.clickChildOpen(rnd, session);
   }
   //リプレイ
   function gameReplay() {
@@ -456,6 +474,7 @@ export const typing = () => {
     inputText.current = "";
     typeCountRef.current = 0;
     totalCost.current = 0;
+    setClearedProblemsCount(0);
     gameMode.current = "play";
     Q_used.current = "";
   }
@@ -471,11 +490,25 @@ export const typing = () => {
         intervalRef.current = null;
         setSnowflakeCount(0);
       } else {
-        typeCountRef.current -= 1;
+        typeCountRef.current -= 15;
         setSnowflakeCount(typeCountRef.current);
       }
-    }, 200); // 100ミリ秒ごとに雪の量を1減少させる
+    }, 100);
   };
+  // ランキング更新
+  useEffect(() => {
+    const handleGameOver = () => {
+      // 新しいランキングデータを取得して設定する
+      const newRanking = getNewRankingData(); // データを取得する関数
+      setRanking(newRanking);
+    };
+    // gameoverイベントをリッスン
+    window.addEventListener("gameover", handleGameOver);
+    // クリーンアップ
+    return () => {
+      window.removeEventListener("gameover", handleGameOver);
+    };
+  }, []);
   return (
     <>
       <DefaultSeo
@@ -653,16 +686,23 @@ export const typing = () => {
                       typePerSocund={typePerSocund}
                       times={totalTime_origin.current}
                       user={session}
+                      userID={userID}
+                      visible={true}
                     />
                     <Spacer />
                     <Text mt="4px" id="timer">
-                      作成中...
+                      ランキングの追加...
                     </Text>
                     <Spacer />
+                    <Ranking user={session} />
                   </Flex>
                 </Center>
 
-                <Sushi_menu />
+                <Sushi_menu
+                  count={clearedProblemsCount}
+                  voucherRef={voucherRef}
+                  session={session}
+                />
                 <Center className={styles.cost}>{Q_cost.current}</Center>
 
                 <Box className={styles.question} w="100%">
@@ -709,9 +749,6 @@ export const typing = () => {
               typePerSocund={typePerSocund}
               time={totalTime_origin.current}
               user={session}
-              gameReplay={() => {
-                gameReplay();
-              }}
             />
           </>
         )}
