@@ -1,4 +1,9 @@
-import React, { useRef, forwardRef, useImperativeHandle } from "react";
+import React, {
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+} from "react";
 import {
   Button,
   Modal,
@@ -42,10 +47,18 @@ import Samon from "../3d/sushi_samon";
 import Ebi from "../3d/sushi_ebi";
 import Ootoro from "../3d/sushi_ootoro";
 import SanmaYaki from "../3d/sushi_sanma_yaki";
+import Ikura from "../3d/sushi_ikura";
 
 const Voucher = forwardRef((props, ref) => {
-  const { totalCost, missedCount, typePerSocund, gameReplay, time, user } =
-    props;
+  const {
+    totalCost,
+    missedCount,
+    typePerSocund,
+    gameReplay,
+    time,
+    user,
+    flag,
+  } = props;
   const graphTempRef = useRef(null); //履歴グラフ
   const voucherOpenRef = useRef(null); //伝票を開くボタン
   const voucherCloseRef = useRef(null); //伝票を閉じるボタン
@@ -63,6 +76,7 @@ const Voucher = forwardRef((props, ref) => {
   const [overlay, setOverlay] = React.useState(<OverlayTwo />);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
+  const [isFlagTrue, setIsFlagTrue] = useState(false); // flagの状態を追加
 
   const Sushi = [
     { path: <Gari />, text: "ガリ" },
@@ -73,16 +87,20 @@ const Voucher = forwardRef((props, ref) => {
     { path: <Iwashi />, text: "鰯" },
     { path: <Tekka />, text: "鉄火巻き" },
     { path: <Amaebi />, text: "甘エビ" },
-    { path: <Samon />, text: "サーモン" },
     { path: <Ebi />, text: "エビ" },
+    { path: <Samon />, text: "サーモン" },
+    { path: <Ikura />, text: "イクラ" },
     { path: <Ootoro />, text: "大トロ" },
     { path: <SanmaYaki />, text: "さんま焼き" },
   ];
   // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
   useImperativeHandle(ref, () => ({
-    clickChildOpen(rnd) {
-      sushiCommentRef.current = Sushi[rnd].text;
-      sushiRef.current = Sushi[rnd].path;
+    clickChildOpen(clearedProblemsCount, sesstion, flag) {
+      sushiCommentRef.current = Sushi[clearedProblemsCount].text;
+      sushiRef.current = Sushi[clearedProblemsCount].path;
+      setIsFlagTrue(flag); // flagの値を状態に設定
+      console.log("flag", flag);
+      console.log("isFlagTrue", isFlagTrue);
       onOpen(); // モーダルを開く
     },
   }));
@@ -99,7 +117,6 @@ const Voucher = forwardRef((props, ref) => {
       missed: missedCount,
       cost: totalCost,
     };
-    console.log(data);
     const { error } = await supabase.from("typing_results").insert([data]);
     if (error) {
       console.error("Error inserting data:", error);
@@ -174,14 +191,13 @@ const Voucher = forwardRef((props, ref) => {
             >
               もう一度プレイ[SPACE]
             </Button>
-            {user ? (
+            {user && isFlagTrue ? (
               <>
                 <Button
                   mr={2}
                   ref={voucherPostRef}
                   _focus={{ _focus: "none" }}
                   onClick={(e) => {
-                    console.log("登録ボタンがクリック!");
                     handleClick().then((value) => {
                       onClose();
                       if (
@@ -210,19 +226,16 @@ const Voucher = forwardRef((props, ref) => {
               </>
             ) : (
               <>
-                <Button mr={2} disabled>
+                <Button
+                  mr={2}
+                  disabled
+                  _focus={{ _focus: "none" }}
+                  style={{ cursor: "not-allowed", opacity: 0.5 }}
+                >
                   登録
                 </Button>
               </>
             )}
-            <Button
-              mr={2}
-              onClick={onClose}
-              ref={voucherCloseRef}
-              _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
-            >
-              閉じる
-            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
