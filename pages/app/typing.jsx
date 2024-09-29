@@ -470,7 +470,7 @@ export const typing = () => {
     setMissedCount(0);
     StartTotalTimer();
     TimeUp();
-    setSnowflakeCount(0);
+    // setSnowflakeCount(0);
     inputText.current = "";
     typeCountRef.current = 0;
     totalCost.current = 0;
@@ -538,12 +538,12 @@ export const typing = () => {
       />
       <div
         style={{
-          position: "fixed",
+          position: "absolute",
           top: 0,
           left: 0,
           width: "100%",
           height: "100%",
-          zIndex: 9999,
+          zIndex: 1299,
           pointerEvents: "none",
         }}
       >
@@ -700,8 +700,10 @@ export const typing = () => {
 
                 <Sushi_menu
                   count={clearedProblemsCount}
+                  // count={10}
                   voucherRef={voucherRef}
                   session={session}
+                  snowflakeCount={snowflakeCount}
                 />
                 <Center className={styles.cost}>{Q_cost.current}</Center>
 
@@ -742,14 +744,16 @@ export const typing = () => {
                 </Box>
               </Box>
             </VStack>
-            <Voucher
-              ref={voucherRef}
-              totalCost={totalCost.current}
-              missedCount={missedCount}
-              typePerSocund={typePerSocund}
-              time={totalTime_origin.current}
-              user={session}
-            />
+            <Box position="fixed" zIndex="10001">
+              <Voucher
+                ref={voucherRef}
+                totalCost={totalCost.current}
+                missedCount={missedCount}
+                typePerSocund={typePerSocund}
+                time={totalTime_origin.current}
+                user={session}
+              />
+            </Box>
           </>
         )}
         <Flex display="none">

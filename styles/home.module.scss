@@ -677,3 +677,8 @@ element.style {
     }
   }
 }
+
+.voucher {
+  position: fixed !important;
+  z-index: 10001 !important;
+}

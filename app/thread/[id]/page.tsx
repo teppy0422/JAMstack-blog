@@ -693,6 +693,7 @@ export default function Thread() {
           size={size}
           ml={size === "xs" ? "1" : "0"}
           zIndex="5"
+          loading="lazy"
           // name={user ? user.displayName : "ユーザー名"} // 修正: userからdisplayNameを取得
           src={user?.picture_url ? user.picture_url : undefined} // 修正: userからuserPictureを取得
         />
@@ -867,6 +868,7 @@ export default function Thread() {
                   <Image
                     src={replyPostFileUrl}
                     alt="Reply attached image"
+                    loading="lazy"
                     maxW="100%" // 最大幅を100%に設定
                     maxH="40px" // 最大高さを50pxに設定
                     objectFit="contain" // 画像が枠内に収まるようにする
@@ -1064,6 +1066,7 @@ export default function Thread() {
                 <Image
                   src={selectedImageUrl}
                   alt="Uploaded image"
+                  loading="lazy"
                   maxW={isZoomed ? "99vw" : "80vw"} // ズームイン時は制限なし
                   maxH={isZoomed ? "99vh" : "80vh"} // ズームイン時は制限なし
                   objectFit="contain" // 画像がモーダルの範囲内に収まるようにする
@@ -1427,6 +1430,7 @@ export default function Thread() {
                                   <Image
                                     src={post.reply_file_url}
                                     alt="Reply attached file"
+                                    loading="lazy"
                                     maxW="100%" // 最大幅を100%に設定
                                     maxH="40px"
                                     objectFit="contain" // 画像が枠内に収まるようにする
@@ -1528,6 +1532,7 @@ export default function Thread() {
                                   src={post.file_url}
                                   alt="Uploaded image"
                                   cursor="pointer"
+                                  loading="lazy"
                                   style={{
                                     maxWidth: "100%",
                                     maxHeight: "300px",
