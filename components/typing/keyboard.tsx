@@ -29,7 +29,7 @@ let keyboard = (pops, ref) => {
         {keyValues1.map((k, index) => {
           return (
             <Box
-              className={styles.key1}
+              className={`${styles.key1} ${styles.snowTarget}`}
               w={8}
               h={8}
               m={1}
@@ -49,7 +49,7 @@ let keyboard = (pops, ref) => {
         {keyValues2.map((k, index) => {
           return (
             <Box
-              className={`${styles.key2} ${
+              className={`${styles.key1} ${styles.snowTarget} ${
                 k === "f" || k === "j" ? styles.underline : ""
               }`}
               w={8}
@@ -68,7 +68,7 @@ let keyboard = (pops, ref) => {
         {keyValues3.map((k, index) => {
           return (
             <Box
-              className={styles.key3}
+              className={`${styles.key3} ${styles.snowTarget}`}
               w={8}
               h={8}
               m={1}

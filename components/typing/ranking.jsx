@@ -212,7 +212,7 @@ const Ranking = forwardRef((props, ref) => {
                         </Text>
                       </Box>
                     </Text>
-                    <Avatar src={user?.picture_url} />
+                    <Avatar src={user?.picture_url} loading="lazy" />
                     <Stack direction="column" fontSize="sm" lineHeight="0.8">
                       <Text fontSize="xs">{user?.user_company}</Text>
                       <Text>{user?.name}</Text>

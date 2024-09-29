@@ -60,6 +60,8 @@
   }
 }
 .board {
+  position: relative;
+  display: inline-block;
   padding: 4px 6px;
   margin: 10px 6px 8px 6px;
   line-height: 1.2;
@@ -83,7 +85,6 @@
 .underline {
   position: relative;
 }
-
 .underline::after {
   content: "";
   position: absolute;
@@ -92,4 +93,22 @@
   bottom: 3px; // 文字に対する下線の位置を調整
   height: 1px; // 下線の太さ
   background-color: black; // 下線の色
+}
+
+.sushiMenu {
+  position: relative;
+  overflow: hidden;
+}
+
+.snowText {
+  position: relative;
+  display: inline-block;
+  font-size: 2rem;
+  color: black;
+}
+.snowflake {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  z-index: 1000;
 }
