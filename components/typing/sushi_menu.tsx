@@ -65,20 +65,27 @@ const sushi_menu = ({ count, voucherRef, session, snowflakeCount }) => {
 
         if (currentIsIncreasing) {
           // 積雪を追加
-          if (currentSnowflakeCount > 1500) {
+          if (currentSnowflakeCount > 1000) {
             const snowflakes = document.querySelectorAll(
               `.${styles.snowTarget}`
             );
+            console.log("Snowflakes found:", snowflakes.length); // デバッグログ追加
+            console.log(snowflakes);
             snowflakes.forEach((snowflake) => {
-              for (let i = 0; i < currentSnowflakeCount / 3000; i++) {
+              for (let i = 0; i < currentSnowflakeCount / 2500; i++) {
                 const newSnowflake = document.createElement("div");
                 newSnowflake.className = styles.snowflake;
-                const position = Math.random() < 0.5 ? "left" : "top";
+                const position =
+                  snowflake.id === "line"
+                    ? "top"
+                    : Math.random() < 0.5
+                    ? "left"
+                    : "top";
                 if (position === "left") {
                   newSnowflake.style.left = `${Math.random() * 2 - 2}%`;
                   newSnowflake.style.top = `${Math.random() * 95}%`;
                 } else {
-                  newSnowflake.style.left = `${Math.random() * 95}%`;
+                  newSnowflake.style.left = `${Math.random() * 97}%`;
                   newSnowflake.style.top = `${Math.random() * 2 - 1}%`;
                 }
                 newSnowflake.style.width = `${Math.random() * 3 + 2}px`;
@@ -99,7 +106,7 @@ const sushi_menu = ({ count, voucherRef, session, snowflakeCount }) => {
             [snowflakes[i], snowflakes[j]] = [snowflakes[j], snowflakes[i]];
           }
           let index = 0;
-          for (let i = 0; i < 15 && index < snowflakes.length; i++) {
+          for (let i = 0; i < 40 && index < snowflakes.length; i++) {
             snowflakes[index].remove();
             index++;
           }

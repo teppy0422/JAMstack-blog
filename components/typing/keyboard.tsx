@@ -36,9 +36,6 @@ let keyboard = (pops, ref) => {
               fontSize="18px"
               key={index}
               id={k}
-              borderColor={
-                colorMode === "light" ? styles.backLight : styles.backDark
-              }
             >
               {k}
             </Box>
@@ -49,8 +46,8 @@ let keyboard = (pops, ref) => {
         {keyValues2.map((k, index) => {
           return (
             <Box
-              className={`${styles.key1} ${styles.snowTarget} ${
-                k === "f" || k === "j" ? styles.underline : ""
+              className={`${styles.key2} ${styles.snowTarget} ${
+                k === "f" || k === "j" ? styles.underline : styles.null
               }`}
               w={8}
               h={8}
@@ -87,7 +84,7 @@ let keyboard = (pops, ref) => {
         w="160px"
         h={8}
         m={1}
-        mt={3}
+        mt={2}
         fontSize="14px"
         color="#000"
       >

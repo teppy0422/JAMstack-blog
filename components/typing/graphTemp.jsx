@@ -413,7 +413,14 @@ const GraphTemp = forwardRef((props, ref) => {
     <>
       {user !== null ? (
         <Box
-          className={styles.graphTemp}
+          className={
+            visible
+              ? `${styles.graphTemp} ${styles.snowTarget}`
+              : styles.graphTemp
+          }
+          style={{
+            transform: "translateX(0rem)",
+          }}
           id={`openButton-${userID}`}
           w="56px"
           _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す

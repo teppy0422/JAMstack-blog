@@ -223,6 +223,10 @@ export default function Header() {
         <VStack>
           <Flex className={`${myClass} ${styles.headerNav}`} maxWidth="100vw">
             <IconButton
+              className={`${styles.snowTarget}`}
+              style={{
+                transform: "translateX(0rem)",
+              }}
               display={{ base: "block", xl: "block" }}
               icon={<HamburgerIcon />}
               bg="white.1"
@@ -231,7 +235,7 @@ export default function Header() {
               position="fixed"
               top="8px"
               left="10px"
-              zIndex="1101" // アイコンが他の要素の後ろに隠れないようにする
+              zIndex="1101"
               opacity="0.85"
               borderColor={colorMode === "light" ? "black" : "white"}
               borderWidth="1px"
@@ -313,7 +317,10 @@ export default function Header() {
             </Center>
             <Center w="64px">
               <IconButton
-                className={styles.modeChange}
+                className={`${styles.modeChange} ${styles.snowTarget}`}
+                style={{
+                  transform: "translateX(0rem)",
+                }}
                 _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 aria-label="DarkMode Switch"
                 icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />} //自分の好みでSunアイコンはreact-iconsを使用しています

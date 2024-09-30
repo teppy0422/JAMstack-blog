@@ -148,7 +148,10 @@ const Ranking = forwardRef((props, ref) => {
   return (
     <>
       <Box
-        className={styles.graphTemp}
+        className={`${styles.graphTemp} ${styles.snowTarget}`}
+        style={{
+          transform: "translateX(0rem)",
+        }}
         id={`openButton-${userID}`} // ユニークなIDを設定
         w="56px"
         _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
