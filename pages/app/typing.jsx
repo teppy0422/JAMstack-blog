@@ -542,7 +542,7 @@ export const typing = () => {
           top: 0,
           left: 0,
           width: "100%",
-          height: "100%",
+          height: "100vh",
           zIndex: 1299,
           pointerEvents: "none",
         }}
@@ -573,6 +573,17 @@ export const typing = () => {
           <>
             <VStack className={styles.typing} h="620px">
               <Box
+                className={`${styles.snowTarget}`}
+                id="line"
+                style={{
+                  position: "absolute",
+                  top: "618px",
+                  height: "2px",
+                  width: "100%",
+                  zIndex: 10000,
+                }}
+              />
+              <Box
                 className={
                   colorMode === "light" ? styles.backLight : styles.backDark
                 }
@@ -594,11 +605,14 @@ export const typing = () => {
                       <Center>
                         <Divider
                           w="90%"
-                          style={
-                            colorMode === "light"
+                          style={{
+                            ...(colorMode === "light"
                               ? { borderColor: "black" }
-                              : { borderColor: "white" }
-                          }
+                              : { borderColor: "white" }),
+                            transform: "translateX(0rem)",
+                          }}
+                          className={`${styles.snowTarget}`}
+                          id="line"
                         />
                       </Center>
                       <Box h="33px" position="relative">
@@ -634,11 +648,14 @@ export const typing = () => {
                       <Center>
                         <Divider
                           w="90%"
-                          style={
-                            colorMode === "light"
+                          style={{
+                            ...(colorMode === "light"
                               ? { borderColor: "black" }
-                              : { borderColor: "white" }
-                          }
+                              : { borderColor: "white" }),
+                            transform: "translateX(0rem)",
+                          }}
+                          className={`${styles.snowTarget}`}
+                          id="line"
                         />
                       </Center>
                       <Text
@@ -658,11 +675,14 @@ export const typing = () => {
                       <Center>
                         <Divider
                           w="90%"
-                          style={
-                            colorMode === "light"
+                          style={{
+                            ...(colorMode === "light"
                               ? { borderColor: "black" }
-                              : { borderColor: "white" }
-                          }
+                              : { borderColor: "white" }),
+                            transform: "translateX(0rem)",
+                          }}
+                          className={`${styles.snowTarget}`}
+                          id="line"
                         />
                       </Center>
                       <Text
@@ -691,7 +711,7 @@ export const typing = () => {
                     />
                     <Spacer />
                     <Text mt="4px" id="timer">
-                      ランキングの追加...
+                      スペースキーでスタート
                     </Text>
                     <Spacer />
                     <Ranking user={session} />
