@@ -18,7 +18,6 @@ import {
   Flex,
   Spacer,
   Progress,
-  useColorModeValue,
 } from "@chakra-ui/react";
 
 import Snowfall from "react-snowfall";
@@ -56,6 +55,8 @@ export const typing = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const graphTempRef = useRef(null); //履歴グラフ
+
+  const { colorMode } = useColorMode();
 
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const inputText = useRef(""); //入力文字
@@ -104,6 +105,10 @@ export const typing = () => {
       return newCount;
     });
   }
+  useEffect(() => {
+    // myState.colorModeにcolorModeをセット
+    myState.colorMode = colorMode;
+  }, [colorMode, myState]);
   useEffect(() => {
     clearedProblemsCountRef.current = clearedProblemsCount;
   }, [clearedProblemsCount]);
@@ -158,8 +163,6 @@ export const typing = () => {
       router.events.off("routeChangeStart", pageChangeHandler);
     };
   }, []);
-
-  const { colorMode, toggleColorMode } = useColorMode();
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -294,7 +297,7 @@ export const typing = () => {
             ]);
             matchCount = matchCount + 1;
           }
-          //完全に一致
+          //一文字が一致
           if (temp[key] === inputTextTempA) {
             const tempHiragana = getHiragana(inputTextTempA);
             Q_Texts.current = Q_Texts.current.substring(tempHiragana.length);
@@ -302,7 +305,7 @@ export const typing = () => {
             correctCount.current = correctCount.current + tempHiragana.length;
             matchCount = 1;
             //文字色を変える_ひらがな
-            const last = changeColor(
+            let last = changeColor(
               "type-display-hiragana",
               correctCount.current,
               myState.colorMode
@@ -397,13 +400,11 @@ export const typing = () => {
     suggestKeyRef.current = inputSuggest[0].charAt(0);
   }
 
-  // タイマー_ワード毎
-  let startTime;
   let itemTime = 10;
   function StartTimer() {
     const timer = document.getElementById("timer");
     timer.innerText = itemTime;
-    startTime = new Date();
+    let startTime = new Date();
     clearInterval(timerIDref.current);
     const timerID_ = setInterval(() => {
       timer.innerText = itemTime - getTimerTime(startTime);

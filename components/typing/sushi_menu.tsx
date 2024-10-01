@@ -69,8 +69,6 @@ const sushi_menu = ({ count, voucherRef, session, snowflakeCount }) => {
             const snowflakes = document.querySelectorAll(
               `.${styles.snowTarget}`
             );
-            console.log("Snowflakes found:", snowflakes.length); // デバッグログ追加
-            console.log(snowflakes);
             snowflakes.forEach((snowflake) => {
               for (let i = 0; i < currentSnowflakeCount / 2500; i++) {
                 const newSnowflake = document.createElement("div");
@@ -89,7 +87,9 @@ const sushi_menu = ({ count, voucherRef, session, snowflakeCount }) => {
                   newSnowflake.style.top = `${Math.random() * 2 - 1}%`;
                 }
                 newSnowflake.style.width = `${Math.random() * 3 + 2}px`;
-                newSnowflake.style.height = newSnowflake.style.width;
+                newSnowflake.style.height = `${
+                  parseFloat(newSnowflake.style.width) * 0.8
+                }px`; // 修正
                 newSnowflake.style.opacity = `${Math.random() * 0.5 + 0.4}`;
                 snowflake.appendChild(newSnowflake);
               }
