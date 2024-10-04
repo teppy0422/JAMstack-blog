@@ -31,21 +31,10 @@ import {
   Divider,
   Avatar,
 } from "@chakra-ui/react";
-import {
-  MoonIcon,
-  SunIcon,
-  HamburgerIcon,
-  Search2Icon,
-} from "@chakra-ui/icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPalette,
-  faBook,
-  faBookOpen,
-  faKeyboard,
-  faMobileScreenButton,
-  faSignInAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { CiSun } from "react-icons/ci";
+import { IoMoonOutline } from "react-icons/io5";
+import { ImQrcode } from "react-icons/im";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
 import React, { useEffect } from "react";
@@ -277,18 +266,16 @@ export default function Header() {
                 _hover={{ bg: "transparent" }}
                 bg="transparent"
                 h="32px"
-                maxH="32px" // 最大幅を設定
+                maxH="32px"
               >
                 <IconButton
-                  icon={
-                    <FontAwesomeIcon icon={faMobileScreenButton} size="2xl" />
-                  }
+                  icon={<ImQrcode size="xl" />} // 変更
                   _hover={{ bg: "transparent" }}
                   bg="transparent"
                   p="0"
                   height="100%"
                   width="100%"
-                  aria-label="Mobile Icon"
+                  aria-label="QR Code Icon" // 変更
                 />
               </Box>
               <Modal isOpen={isOpen} onClose={onClose}>
@@ -306,7 +293,7 @@ export default function Header() {
                   </ModalBody>
                   <ModalFooter>
                     <Text fontSize="12px">
-                      スマホで撮影した写真の送信が簡単になります
+                      スマホで読み込む事で簡単にアクセスできます
                     </Text>
                     {/* <Button colorScheme="gray" mr={3} onClick={onClose}>
                       閉じる
@@ -323,10 +310,19 @@ export default function Header() {
                 }}
                 _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
                 aria-label="DarkMode Switch"
-                icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />} //自分の好みでSunアイコンはreact-iconsを使用しています
+                icon={colorMode === "light" ? <IoMoonOutline /> : <CiSun />}
+                fontSize="28px"
                 colorScheme={colorMode === "light" ? "purple" : "yellow"}
                 onClick={function (event) {
                   toggleColorMode();
+                  const icon = event.currentTarget.querySelector("svg");
+                  if (icon) {
+                    icon.style.transition = "transform 1s !important";
+                    icon.style.transform = "rotate(360deg) !important";
+                    setTimeout(() => {
+                      icon.style.transform = "";
+                    }, 1000);
+                  }
                 }}
               />
             </Center>

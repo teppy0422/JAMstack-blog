@@ -1,38 +1,49 @@
+<!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=11" />
-<link rel="stylesheet" type="text/css" media="all" href="./css/0274.css">
-<title>0274</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=11" />
+  <link rel="stylesheet" type="text/css" media="all" href="./css/0274.css">
+  <title>0274</title>
 </head>
-<body >
-<table>
-<form name="myform" onsubmit="return checkText()">
-<tr class="top"><td>構成:0274 LG</td><td>507 to 26</td><td>SUB:A</td><td>Ver:3.005.16</td><td><input type="text" name="txtb" onfocus="this.select()"/><input type="submit" value="Enter" class="myB"></td></tr>
-</from>
-</table>
-  <div  id="box4"><img src="./img/507_1.png" ></div>
-  <div  id="box5"><img src="./img/507_1_16.png" ></div>
-  <div id="box6"><img src="./img/26_1.png" ></div>
-  <div id="box7"><img src="./img/26_1_4.png" ></div>
+
+<body>
+  <table>
+    <form name="myform" onsubmit="return checkText()">
+      <tr class="top">
+        <td>構成:0274 LG</td>
+        <td>507 to 26</td>
+        <td>SUB:A</td>
+        <td>Ver:3.005.16</td>
+        <td><input type="text" name="txtb" onfocus="this.select()" /><input type="submit" value="Enter" class="myB">
+        </td>
+      </tr>
+    </form>
+  </table>
+  <div id="box4"><img src="./img/507_1.png"></div>
+  <div id="box5"><img src="./img/507_1_16.png"></div>
+  <div id="box6"><img src="./img/26_1.png"></div>
+  <div id="box7"><img src="./img/26_1_4.png"></div>
   <div class="box1"><img src="./img/A.png" alt="" /></div>
-  <div id="box2"><img src="./img/26to507_LG.png" ></div>
-  <div id="box3"><img src="./img/A_foot.png" ></div>
+  <div id="box2"><img src="./img/26to507_LG.png"></div>
+  <div id="box3"><img src="./img/A_foot.png"></div>
 </body>
 <!-- <script type = "text/javascript" src="myBlink.js"></script>
 <script type = "text/javascript" src="myBlink2.js"></script> -->
 <script>
-function checkText(){
-  var str1=document.myform.txtb.value;
-  var seihin,kosei;
-  var myLen=str1.length;
-  if (myLen <=10){
-    kosei=str1;
-  }else{
-    seihin=str1.substr(25,10);
-    kosei=str1.substr(11,4);
+  function checkText() {
+    var str1 = document.myform.txtb.value;
+    var seihin, kosei;
+    var myLen = str1.length;
+    if (myLen <= 10) {
+      kosei = str1;
+    } else {
+      seihin = str1.substr(25, 10);
+      kosei = str1.substr(11, 4);
+    }
+    document.myform.action = "" + kosei + ".html";
   }
-  document.myform.action = ""+kosei+".html";
-}
 </script>
+
 </html>

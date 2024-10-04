@@ -71,6 +71,12 @@ const sushi_menu = ({ count, voucherRef, session, snowflakeCount }) => {
             );
             snowflakes.forEach((snowflake) => {
               for (let i = 0; i < currentSnowflakeCount / 2500; i++) {
+                if (
+                  snowflake.className.includes("keyboard") &&
+                  Math.random() < 0.3
+                ) {
+                  continue;
+                }
                 const newSnowflake = document.createElement("div");
                 newSnowflake.className = styles.snowflake;
                 const position =
@@ -81,7 +87,7 @@ const sushi_menu = ({ count, voucherRef, session, snowflakeCount }) => {
                     : "top";
                 if (position === "left") {
                   newSnowflake.style.left = `${Math.random() * 2 - 2}%`;
-                  newSnowflake.style.top = `${Math.random() * 95}%`;
+                  newSnowflake.style.top = `${Math.random() * 95 - 2}%`;
                 } else {
                   newSnowflake.style.left = `${Math.random() * 97}%`;
                   newSnowflake.style.top = `${Math.random() * 2 - 1}%`;
@@ -89,8 +95,8 @@ const sushi_menu = ({ count, voucherRef, session, snowflakeCount }) => {
                 newSnowflake.style.width = `${Math.random() * 3 + 2}px`;
                 newSnowflake.style.height = `${
                   parseFloat(newSnowflake.style.width) * 0.8
-                }px`; // 修正
-                newSnowflake.style.opacity = `${Math.random() * 0.5 + 0.4}`;
+                }px`;
+                newSnowflake.style.opacity = `${Math.random() * 0.5 + 0.3}`;
                 snowflake.appendChild(newSnowflake);
               }
             });

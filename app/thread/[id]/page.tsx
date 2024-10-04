@@ -4,7 +4,6 @@ import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import {
-  FaUpload,
   FaPaperclip,
   FaDownload,
   FaPaperPlane,
@@ -13,11 +12,13 @@ import {
   FaReply,
   FaArrowDown,
   FaCheck,
-  FaRegCheckCircle,
 } from "react-icons/fa";
+import { ImAttachment } from "react-icons/im";
+import { BsSend } from "react-icons/bs";
 import { supabase } from "../../../utils/supabase/client";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
+import "@fontsource/noto-sans-jp";
 import {
   Box,
   Flex,
@@ -51,23 +52,6 @@ import {
 import { ChatIcon } from "@chakra-ui/icons";
 import Content from "../../../components/content";
 import SidebarBBS from "../../../components/sidebarBBS";
-
-// デバウンス関数
-const useDebounce = (value: string, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-};
 
 export default function Thread() {
   const router = useRouter();
@@ -183,7 +167,7 @@ export default function Thread() {
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
   };
-
+  // 長押しイベント
   const [longPressTimeout, setLongPressTimeout] =
     useState<NodeJS.Timeout | null>(null);
   const handleLongPressStart = (postId: string) => {
@@ -679,7 +663,7 @@ export default function Thread() {
     fetchDisplayName(replyPostUserId);
   }, [replyPostUserId, userInfo]); // 依存関係に追加
 
-  //アバター作成
+  //アバター
   const getAvatarProps = (
     post_userID: any,
     isReturn: boolean,
@@ -756,10 +740,37 @@ export default function Thread() {
       );
     }
   };
+  //リンクをクリックした時にページがリロードされないようにする
+  useEffect(() => {
+    console.log("useEffect called"); // useEffectが呼ばれているか確認
+
+    const handleLinkClick = (event) => {
+      console.log("Event listener added");
+      console.log("event:", event);
+      console.log("event.target:", event.target);
+      if (event.target.classList.contains("external-link")) {
+        console.log("Link clicked:", event.target.href);
+      }
+    };
+
+    // すべての外部リンクにイベントリスナーを追加
+    const links = document.querySelectorAll(".external-link");
+    console.log("Links found:", links); // 取得したリンクをログに出力
+    links.forEach((link) => {
+      link.addEventListener("click", handleLinkClick);
+    });
+
+    return () => {
+      // クリーンアップ時にイベントリスナーを削除
+      links.forEach((link) => {
+        link.removeEventListener("click", handleLinkClick);
+      });
+    };
+  }, [posts]); // 依存配列を空にする
+
   if (!isClient) {
     return null;
   }
-
   return (
     <div
       style={{
@@ -778,7 +789,6 @@ export default function Thread() {
           display: none; /* Chrome, Safari, and Opera */
         }
       `}</style>
-
       <Stack // inputForm
         position="fixed"
         zIndex="2000"
@@ -811,10 +821,7 @@ export default function Thread() {
             justifyContent="center"
             alignItems="center"
           >
-            <Icon
-              size="28px"
-              as={FaArrowDown} // ここにアイコンを指定
-            />
+            <Icon size="28px" as={FaArrowDown} />
           </Box>
         ) : null}
         {replyToPostId && (
@@ -919,7 +926,7 @@ export default function Thread() {
             >
               <IconButton
                 aria-label="Upload file"
-                icon={<FaUpload />}
+                icon={<ImAttachment />}
                 colorScheme={colorMode === "light" ? "purple" : "yellow"}
                 zIndex="0"
               />
@@ -949,6 +956,8 @@ export default function Thread() {
             _focusVisible={{
               borderColor: colorMode === "light" ? "gray.900" : "gray.200",
             }} // 追加: フォーカスが可視状態の時の枠線の色を指定
+            fontFamily="Noto Sans JP"
+            fontWeight="200"
             as="textarea"
             type="text"
             value={newPostContent}
@@ -982,21 +991,21 @@ export default function Thread() {
               setNewPostContent(""); //クリア
               const textarea = document.querySelector("textarea");
               if (textarea) {
-                textarea.style.height = "41px"; // 高さを初期状態に戻す
+                textarea.style.height = "28px"; // 高さを初期状態に戻す
               }
               setIsSubmitting(false); //post終了
             }}
             icon={
               isSubmitting ? (
                 <Spinner
-                  size="36px"
+                  size="28px"
                   color={colorMode === "light" ? "purple" : "yellow"}
                 />
               ) : (
-                <FaPaperPlane
+                <BsSend
                   color={colorMode === "light" ? "purple" : "yellow"}
-                  style={{ transform: "rotate(45deg)" }}
-                  size="36px"
+                  style={{ transform: "rotate(0deg)" }}
+                  size="28px"
                 />
               )
             }
@@ -1411,7 +1420,7 @@ export default function Thread() {
                                       .replace(/\n/g, "<br />")
                                       .replace(
                                         /(http[s]?:\/\/[^\s]+)/g,
-                                        '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">$1</a>'
+                                        '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;" class="external-link">$1</a>'
                                       ),
                                   }}
                                 />
@@ -1492,13 +1501,15 @@ export default function Thread() {
                       )}
                       <CardBody px="10px" py="8px">
                         <Box
+                          fontFamily="Noto Sans JP"
+                          fontWeight="200"
                           color="black"
                           dangerouslySetInnerHTML={{
                             __html: post.content
                               .replace(/\n/g, "<br />")
                               .replace(
                                 /(http[s]?:\/\/[^\s]+)/g,
-                                '<a href="$1" target="_blank" style="text-decoration: underline;">$1</a>'
+                                '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;" class="external-link">$1</a>'
                               ),
                           }}
                         />

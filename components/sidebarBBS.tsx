@@ -108,9 +108,7 @@ function SidebarBBS() {
               height: "1px",
             },
           }}
-          {...(useColorMode
-            ? { color: colorMode === "light" ? "black" : "white" }
-            : { color: "white" })}
+          color={useColorMode && colorMode === "light" ? "black" : "white"}
           maxWidth={maxWidth}
           width={maxWidth}
           whiteSpace="nowrap" // 改行を防ぐ
@@ -134,6 +132,8 @@ function SidebarBBS() {
           <Box
             as="span"
             position="relative"
+            fontFamily="Noto Sans JP"
+            fontWeight="200"
             _after={{
               content: '""',
               position: "absolute",
@@ -192,12 +192,29 @@ function SidebarBBS() {
           ).map(([company, threads]) => (
             <>
               <Box fontWeight="bold" pl={3} textAlign="left">
-                <Divider borderColor="black" />
+                <Divider
+                  borderColor={colorMode === "light" ? "black" : "white"}
+                />
                 {company}
               </Box>
-              {threads.map((thread: { id: string; title: string }) =>
-                menuItem(`/thread/${thread.id}`, thread.title, true, thread.id)
-              )}
+              {threads.map((thread: { id: string; title: string }) => {
+                const isCurrentPage = currentPath === `/thread/${thread.id}`;
+                return (
+                  <Box display="flex" alignItems="center">
+                    {isCurrentPage && (
+                      <Box as="span" mr={2}>
+                        &gt;
+                      </Box>
+                    )}
+                    {menuItem(
+                      `/thread/${thread.id}`,
+                      thread.title,
+                      true,
+                      thread.id
+                    )}
+                  </Box>
+                );
+              })}
             </>
           ))}
         </VStack>
