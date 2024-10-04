@@ -19,6 +19,8 @@ import {
   Spacer,
   Progress,
 } from "@chakra-ui/react";
+import { FaVolumeUp, FaVolumeMute } from "react-icons/fa"; // 追加
+import { IoVolumeHighOutline, IoVolumeMuteOutline } from "react-icons/io5";
 
 import Snowfall from "react-snowfall";
 
@@ -96,6 +98,17 @@ export const typing = () => {
   const [snowWind, setSnowWind] = useState([0.4, 0.5]);
   const intervalRef = useRef(null); // intervalを保持するためのref
 
+  // BGMの管理
+  const [isBgmOn, setIsBgmOn] = useState(true); // BGMの状態を管理するステート
+  const toggleBgm = () => {
+    if (isBgmOn) {
+      sound_BGM.current.muted = true;
+    } else {
+      sound_BGM.current.muted = false;
+    }
+    setIsBgmOn(!isBgmOn);
+  };
+
   const [clearedProblemsCount, setClearedProblemsCount] = useState(0); // 初期値を0に設定
   const clearedProblemsCountRef = useRef(clearedProblemsCount);
   function clearProblem() {
@@ -154,7 +167,6 @@ export const typing = () => {
     clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
     sound_BGM.current.pause();
-    sound("finish");
     gameMode.current = "menu";
   };
   useEffect(() => {
@@ -400,7 +412,7 @@ export const typing = () => {
     suggestKeyRef.current = inputSuggest[0].charAt(0);
   }
 
-  let itemTime = 10;
+  let itemTime = 15;
   function StartTimer() {
     const timer = document.getElementById("timer");
     timer.innerText = itemTime;
@@ -573,14 +585,28 @@ export const typing = () => {
         ) : (
           <>
             <VStack className={styles.typing} h="620px">
+              {/* 下の降雪 */}
               <Box
                 className={`${styles.snowTarget}`}
                 id="line"
                 style={{
                   position: "absolute",
                   top: "618px",
+                  left: "0%",
                   height: "2px",
-                  width: "100%",
+                  width: "50%",
+                  zIndex: 10000,
+                }}
+              />
+              <Box
+                className={`${styles.snowTarget}`}
+                id="line"
+                style={{
+                  position: "absolute",
+                  top: "618px",
+                  left: "50%",
+                  height: "2px",
+                  width: "50%",
                   zIndex: 10000,
                 }}
               />
@@ -698,6 +724,29 @@ export const typing = () => {
                     </GridItem>
                   </Grid>
                 </Center>
+
+                <Box position="absolute" top="10px" right="10px">
+                  <Button
+                    className={`${styles.snowTarget}`}
+                    transform="translateX(0rem)"
+                    onClick={toggleBgm}
+                    _focus={{ _focus: "none" }}
+                    background="transparent"
+                    border="1px solid"
+                    _hover={{ backgroundColor: "transparent" }}
+                    p="0"
+                    m="0"
+                    w="8"
+                    h="8"
+                  >
+                    {isBgmOn ? (
+                      <IoVolumeHighOutline size="22" />
+                    ) : (
+                      <IoVolumeMuteOutline size="22" />
+                    )}
+                  </Button>
+                </Box>
+
                 <Center>
                   <Flex w={["100%", "90%", "80%", "70%"]} h="40px">
                     <GraphTemp
@@ -712,9 +761,10 @@ export const typing = () => {
                     />
                     <Spacer />
                     <Text mt="4px" id="timer">
-                      スペースキーでスタート
+                      [SPACE]でスタート
                     </Text>
                     <Spacer />
+
                     <Ranking user={session} />
                   </Flex>
                 </Center>

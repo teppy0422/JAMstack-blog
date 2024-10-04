@@ -546,7 +546,6 @@ export const getInputCandidate = (input, arr) => {
 };
 
 export const changeColor = (id, count, colorMode) => {
-  console.log(colorMode);
   const arr = document.getElementById(id).querySelectorAll("span");
   arr.forEach((spans, index) => {
     if (index < count) {

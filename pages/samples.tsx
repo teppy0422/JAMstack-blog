@@ -8,6 +8,7 @@ import {
   Image,
   Text,
   Badge,
+  useColorMode,
 } from "@chakra-ui/react";
 import Sidebar from "../components/sidebar";
 import Content from "../components/content";
@@ -16,21 +17,29 @@ const samples = [
   {
     name: "56_配策図_誘導_Ver3.1",
     path: "/56v3.1",
-    thumbnail: "/images/sample1.png",
+    thumbnail: "/images/samples/56iPad.png",
   },
   // 他のサンプルページをここに追加
 ];
 
 const Samples = () => {
+  const { colorMode } = useColorMode();
   return (
     <>
       <Sidebar />
       <Content isCustomHeader={true}>
         <Container maxW="container.lg" py={8}>
-          <Heading as="h1" mb={8} textAlign="center" color="teal.500">
-            サンプル
+          <Heading
+            as="h1"
+            mb={8}
+            textAlign="center"
+            color={colorMode === "light" ? "black" : "white"}
+            fontFamily="Noto Sans JP"
+            fontWeight="200"
+          >
+            サンプル一覧
           </Heading>
-          <Badge variant="solid" colorScheme="green" ml={2}>
+          <Badge variant="solid" colorScheme="green">
             使用者
           </Badge>
           <Badge variant="solid" colorScheme="purple" ml={2}>
@@ -43,26 +52,28 @@ const Samples = () => {
             {samples.map((sample, index) => (
               <Link
                 href={sample.path}
-                color="teal.500"
+                color={colorMode === "light" ? "black" : "white"}
                 _hover={{ textDecoration: "none" }}
                 target="_blank"
                 rel="noopener noreferrer"
+                mt={2}
               >
                 <Box
                   key={index}
-                  p={4}
+                  p={1}
                   borderWidth="1px"
                   borderRadius="md"
                   boxShadow="md"
-                  _hover={{ bg: "teal.50" }}
                   transition="background-color 0.2s"
                 >
                   <Box display="flex" alignItems="center">
-                    <Text fontFamily="Noto Serif JP">{sample.name}</Text>
+                    <Text fontFamily="Noto Serif JP" pl={2}>
+                      {sample.name}
+                    </Text>
                     <Image
                       src={sample.thumbnail}
                       alt={sample.thumbnail}
-                      boxSize="50px"
+                      maxHeight="50px"
                       ml="auto"
                     />
                   </Box>

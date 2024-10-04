@@ -82,8 +82,8 @@ const Home = () => {
       height="100vh"
       bg="gray.100"
     >
-      <Box bg="gray.100" p={4} textAlign="center">
-        <Text fontSize="2xl" fontWeight="bold" fontFamily="Noto Serif JP">
+      <Box bg="gray.100" p={4} textAlign="center" color="gray.800">
+        <Text fontSize="2xl" fontWeight="bold" fontFamily="Noto Sans JP">
           56_配策誘導ナビVer3.1
         </Text>
         <Text fontFamily="Noto Serif JP">
@@ -96,6 +96,7 @@ const Home = () => {
           onClick={toggleDimensions}
           aria-label="画面の向きを変える"
           height="1em"
+          color="purple"
         />
         画面の向きを変更
       </Box>
@@ -116,7 +117,7 @@ const Home = () => {
         ></iframe>
       </Box>
       <Box bg="gray.100" p={4} textAlign="center">
-        <Text whiteSpace="pre-line" fontFamily="Noto Serif JP">
+        <Text whiteSpace="pre-line" fontFamily="Noto Sans JP" color="gray.800">
           {message}
         </Text>
       </Box>

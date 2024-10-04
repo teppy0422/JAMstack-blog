@@ -2,8 +2,8 @@ html,
 body {
   padding: 0;
   margin: 0;
+  font-family: "Noto Sans JP", "M PLUS Rounded 1c", sans-serif;
 }
-
 
 h4 {
   font-size: 18px !important;

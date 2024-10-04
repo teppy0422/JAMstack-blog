@@ -32,7 +32,7 @@ export default function Content({ children, isCustomHeader = false }) {
         </Box>
       </Flex>
       <hr />
-      <Center my="14px" color="gray">
+      <Center my="14px" color="gray" fontFamily="Noto Sans JP" fontWeight="100">
         <NextLink href="/privacy">プライバシーポリシー</NextLink>
         <Box mr={5} />
         <NextLink href="/terms">利用規約</NextLink>
