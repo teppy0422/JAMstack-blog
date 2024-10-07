@@ -63,22 +63,11 @@
 .board {
   position: relative;
   display: inline-block;
-  padding: 4px 6px;
-  margin: 10px 6px 8px 6px;
+  padding: 4px 4px;
+  margin: 8px 4px 6px 4px;
   line-height: 1.2;
-  background: linear-gradient(
-      90deg,
-      rgba(208, 147, 82, 0.6),
-      rgba(192, 134, 70, 0.6) 60%,
-      rgba(208, 147, 82, 0.6)
-    ),
-    repeating-radial-gradient(
-      ellipse at 20% 30%,
-      #a05626,
-      #c08646 0.2%,
-      #d09352 0.6%,
-      #d09352 1%
-    );
+  background: transparent;
+  border: 1px solid;
   &:hover {
     cursor: default;
   }
