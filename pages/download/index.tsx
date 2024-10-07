@@ -94,7 +94,10 @@ export default function About() {
     <>
       <Sidebar />
       <Content isCustomHeader={true}>
-        <div className={styles.me} style={{ paddingTop: "50px" }}>
+        <div
+          className={styles.me}
+          style={{ paddingTop: "50px", fontFamily: "Noto Sans JP" }}
+        >
           <Box textAlign="center" mb={8}>
             <Box fontSize="lg">
               以下からダウンロードしてください
@@ -127,13 +130,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-10-07T16:17:00+0900"
+              description1="コネクタ性別がハメ図で分からない"
+              description2="ハメ図作成に選択肢を追加"
+              descriptionIN="コネクタ性別がMaleの場合は点線にする"
+              linkHref="/files/Sjp3.100.26_.zip"
+              inCharge="高知,王さん,徳島,山田さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-09-27T12:12:00+0900"
               description1="NextJsのpublic/filesで構文エラーが10kくらい出て見辛い"
               description2="main.jsと端末.htmlを修正"
               descriptionIN=""
               linkHref="/files/Sjp3.100.25_.zip"
               inCharge="開発,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-09-26T14:16:00+0900"

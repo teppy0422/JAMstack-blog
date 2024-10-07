@@ -237,6 +237,24 @@ const roadmap: RoadmapItem[] = [
     ],
     possibility: 100,
   },
+  {
+    year: "2025年",
+    month: "5月",
+    category: ["配策誘導ナビ.vb"],
+    titleColor: "teal",
+    main: "配策誘導ナビ.vbからのシリアル送信でディスプレイ移動の作り方を新規作成",
+    mainDetail: [
+      "配策誘導ナビ.vbとArudinoの組み合わせでディスプレイが移動しない場合の対応方法と新規作成方法をページに掲載",
+    ],
+    items: [
+      {
+        text: "電気回路とステッピングドライバーの耐久動作テスト",
+        completed: false,
+      },
+      { text: "回路図と作り方を掲載", completed: false },
+    ],
+    possibility: 90,
+  },
 ];
 
 const Roadmap = () => {
