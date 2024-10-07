@@ -1,0 +1,68 @@
+body{margin:0;}
+table {
+    table-layout: fixed;
+    width:100%;
+    background-color:#99FFCC;
+    text-align:center;
+    color: #000000;
+    font-size:14pt;
+    font-weight: bold;
+    border-collapse: collapse;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    border-bottom:0px solid #000000;
+}
+table td {
+    border: 1px solid  #000000; /* 表内側の線：1px,実線,緑色 */
+    border-left:2px solid #000000;
+    border-right:2px solid  #000000;
+    padding: 1px;            /* セル内側の余白：3ピクセル */
+}
+.box1 img{
+
+    position:absolute;
+    width:99.9%;
+    height:auto;
+    max-width:99.99%;
+    max-height:95%;
+}
+.box1 {
+}
+#box2 img{
+    filter:alpha(opacity=70); /* IE 6,7*/
+    position: absolute;
+    width:99.9%;
+    opacity:0.7;
+    zoom:1;
+    display:inline-block;-webkit-animation:blink 0.15s ease-in-out infinite alternate;-moz-animation:blink 0.15s ease-in-out infinite alternate;animation:blink 0.15s ease-in-out infinite alternate;
+}
+#box3 img{
+    position:absolute;
+    width:99.9%;animation: blink_visible 1s steps(5, start) infinite;-webkit-animation: blink_visible 1s steps(5, start) infinite;animation-delay: 1s;-webkit-animation-delay: 1s;
+}
+#box4 img{
+    position:absolute;
+    bottom:0%;
+    max-width:49%;max-height:30%;height:auto;
+}
+#box5 img{
+    position:absolute;
+    bottom:0%;
+    max-width:49%;max-height:30%;height:auto;
+    filter:alpha(opacity=70);
+    opacity:0.7;-webkit-animation:blink 0.15s ease-in-out infinite alternate;-moz-animation:blink 0.15s ease-in-out infinite alternate;animation:blink 0.15s ease-in-out infinite alternate;
+}
+#box6 img{
+    position:absolute;right:0%;
+    bottom:0%;
+    max-width:49%;max-height:30%;height:auto;
+}
+#box7 img{
+    position:absolute;right:0%;
+    bottom:0%;
+    max-width:49%;max-height:30%;height:auto;
+    filter:alpha(opacity=70);
+    opacity:0.7;-webkit-animation:blink 0.15s ease-in-out infinite alternate;-moz-animation:blink 0.15s ease-in-out infinite alternate;animation:blink 0.15s ease-in-out infinite alternate;
+}
+body{background-color:#111111;}
+.myB{color:#000000;background-color:#99FFCC;}
+.blinking{-webkit-animation:blink 1.5s ease-in-out infinite alternate;-moz-animation:blink 1.5s ease-in-out infinite alternate;animation:blink 1.5s ease-in-out infinite alternate;}@-webkit-keyframes blink{0%{opacity:0;}100% {opacity:1;}}@-moz-keyframes blink{0%{opacity:0;}100%{opacity:1;}}@keyframes blink{0%{opacity:0;}100%{opacity:1;}}@keyframes blink_visible{to {visibility: hidden;}}

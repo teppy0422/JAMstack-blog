@@ -75,7 +75,22 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
   render() {
     const { isClient } = this.state;
     const versionMatch = this.props.linkHref.match(/Sjp([\d.]+)_/);
-    const ver = versionMatch ? versionMatch[1] : "N/A";
+    const versionMatch2 = this.props.linkHref.match(/main_([\d.]+).zip/);
+    const versionMatch3 = this.props.linkHref.match(/camera([\d.]+)_\.zip/);
+    let ver = "N/A";
+    if (versionMatch) {
+      ver = versionMatch[1];
+    } else if (versionMatch2) {
+      ver = versionMatch2[1];
+    } else if (versionMatch3) {
+      ver = versionMatch3[1];
+    } else {
+      const fileNameMatch = this.props.linkHref.match(/\/([^\/]+)$/);
+      if (fileNameMatch) {
+        ver = fileNameMatch[1];
+      }
+    }
+
     const elapsedHours =
       (new Date().getTime() - new Date(this.props.dateTime).getTime()) /
       (1000 * 60 * 60);
@@ -89,7 +104,13 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
         minute: "2-digit",
       }
     );
-    const downloadFileName = this.props.linkHref.replace(/^\/files\//, "");
+    const downloadFileName = this.props.linkHref.replace(
+      /^\/files\/download\/(Sjp|Jdss|Camera)\//,
+      ""
+    );
+    const downloadPathMatch = this.props.linkHref.match(/^(.*\/)/);
+    const downloadPath = downloadPathMatch ? downloadPathMatch[1] : "";
+
     const inChargeList = this.props.inCharge
       .split(",")
       .map((item) => item.trim());
@@ -158,7 +179,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                     as="a"
                     href={this.props.linkHref}
                     download={downloadFileName}
-                    marginLeft="auto" // 右端に配置
+                    marginLeft="auto"
                     bg={this.props.isLatest ? "teal.500" : "gray.500"} // isLatestがtrueじゃない場合は灰色
                     _hover={{
                       bg: this.props.isLatest ? "teal.600" : "gray.600", // マウスオーバー時の背景色
@@ -231,7 +252,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                     >
                       <iframe
                         height="100%"
-                        src={`/files/${ver}_/index.html`} // フォルダ内のindex.htmlを指定
+                        src={`${downloadPath}${ver}_/index.html`} // フォルダ内のindex.htmlを指定
                         style={{
                           width: "100%",
                           height: "100%",
@@ -240,13 +261,15 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                         title="Embedded Content"
                       />
                       <Box
-                        position="absolute" // 追加
-                        top="0" // 追加
-                        left="0" // 追加
-                        width="100%" // 追加
-                        height="100%" // 追加
+                        position="absolute"
+                        top="0"
+                        left="0"
+                        width="100%"
+                        height="100%"
                         onClick={() =>
-                          this.handleBoxClick(`/files/${ver}_/index.html`)
+                          this.handleBoxClick(
+                            `${downloadPath}${ver}_/index.html`
+                          )
                         } // クリックでモーダルを開く
                         style={{
                           cursor: "pointer",
@@ -277,7 +300,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                     >
                       <iframe
                         height="100%"
-                        src={`/files/${ver}/index.html`} // フォルダ内のindex.htmlを指定
+                        src={`${downloadPath}${ver}/index.html`} // フォルダ内のindex.htmlを指定
                         style={{
                           width: "100%",
                           height: "100%",
@@ -286,13 +309,15 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                         title="Embedded Content"
                       />
                       <Box
-                        position="absolute" // 追加
-                        top="0" // 追加
-                        left="0" // 追加
-                        width="100%" // 追加
-                        height="100%" // 追加
+                        position="absolute"
+                        top="0"
+                        left="0"
+                        width="100%"
+                        height="100%"
                         onClick={() =>
-                          this.handleBoxClick(`/files/${ver}/index.html`)
+                          this.handleBoxClick(
+                            `${downloadPath}${ver}/index.html`
+                          )
                         } // クリックでモーダルを開く
                         style={{
                           cursor: "pointer",

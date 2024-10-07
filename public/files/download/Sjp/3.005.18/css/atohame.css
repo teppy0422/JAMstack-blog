@@ -1,0 +1,100 @@
+body {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -ms-overflow-style: none;
+    background-image: 
+        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc),
+        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+}
+@media (max-width: 600px) {
+	table, .myB, #box3 {
+		font-size: 2vw;
+	}
+	.myT {
+		font-size: 1.8vw;
+		max-width: 65%;
+		margin-bottom:3px;
+		top:0;
+	}
+	.myB {
+		position:relative;
+		padding:1px 3px;
+		border-width: 1px;
+		top:1px;
+		left:1px;
+	}
+}
+@media (min-width: 601px) and (max-width: 1200px) {
+	table, .myB {
+		font-size: 1.5vw;
+	}
+	.myT {
+		font-size: 1.4vw;
+		max-width: 65%;
+		margin-bottom:3px;
+	}
+	.myB {
+		position:relative;
+		top:1px;
+		left:3px;
+	}
+}
+@media (min-width: 1200px) {
+	table, .myB {
+		font-size: 1.5vw;
+	}
+	.myT {
+		position: relative;
+		font-size: 1.5vw;
+		max-width: 70%;
+		top:-1px;
+	}
+}
+table {
+	table-layout: fixed;
+	width:100%;
+	text-align:center;
+	font-weight: bold;
+	border-collapse: collapse;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	border-bottom:0px;
+	background-color:#eee;
+	color: #000000;
+}
+table td {
+	border: 1px solid  #000000;
+	border-left:1px solid #000000;
+	border-right:1px solid  #000000;
+	padding: 1px;
+	line-height: 1.2;
+}
+.myB{
+	color:#000000;
+	background-color:#eee;
+}
+.box1 {
+	position: absolute;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-ms-flex-align: center;
+	align-items: center;
+	width: 100%;
+	height: 80%;
+	overflow: hidden;
+}
+.box1 img {
+	width: auto;
+	height: auto;
+	max-width: 99%;
+	max-height: 99%;
+	object-fit: contain;
+	-ms-object-fit: contain;
+}

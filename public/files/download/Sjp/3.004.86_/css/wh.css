@@ -1,0 +1,78 @@
+body {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -ms-overflow-style: none;
+    background-image: 
+        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc),
+        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+}
+body::-webkit-scrollbar {
+	display: none;
+}
+@media (max-width: 600px) {
+    table {
+        font-size: 3vw; /* 小さい画面用のフォントサイズ */
+    }
+}
+@media (min-width: 1200px) {
+    table {
+        font-size: 1.5vw; /* 大きい画面用のフォントサイズ */
+    }
+}
+table {
+	table-layout: fixed;
+	width:100%;
+	text-align:center;
+	font-weight: bold;
+	border-collapse: collapse;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+table td{
+	padding:0;
+	padding-top:1px;
+	padding-bottom:2px;
+	margin:0;
+	line-height:1.2;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.box1 {
+	position:absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh; /* ウィンドウの高さに合わせる */
+    overflow: hidden; /* オーバーフローを隠す */
+	z-index:0;
+}
+.box1 img{
+	width:auto;
+	height:auto;
+	max-width:99%;
+	max-height:95%;
+}
+#box2{
+	position:absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh; /* ウィンドウの高さに合わせる */
+    overflow: hidden; /* オーバーフローを隠す */
+	z-index:1;
+}
+#box2 img{
+	width:auto;
+	height:auto;
+	max-width:99%;
+	max-height:95%;
+	opacity:0.8;
+}
