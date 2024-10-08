@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スクロールでiframe表示</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="max-width: 100vw; overflow-x: hidden;">
+    <h2>70.ポイント点滅図</h2>
+    <h4>下記はYC-Cで検査する場合の例です<br>
+        意見を頂ければ自由に対応可能です</h4>
+    <p>スクロールしてください</p>
+    <div class="container">
+        <!-- <svg class="animated-svg" width="40" height="40" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"> -->
+        <svg class="animated-svg" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M3.85355 2.14645C3.65829 1.95118 3.34171 1.95118 3.14645 2.14645C2.95118 2.34171 2.95118 2.65829 3.14645 2.85355L7.14645 6.85355C7.34171 7.04882 7.65829 7.04882 7.85355 6.85355L11.8536 2.85355C12.0488 2.65829 12.0488 2.34171 11.8536 2.14645C11.6583 1.95118 11.3417 1.95118 11.1464 2.14645L7.5 5.79289L3.85355 2.14645ZM3.85355 8.14645C3.65829 7.95118 3.34171 7.95118 3.14645 8.14645C2.95118 8.34171 2.95118 8.65829 3.14645 8.85355L7.14645 12.8536C7.34171 13.0488 7.65829 13.0488 7.85355 12.8536L11.8536 8.85355C12.0488 8.65829 12.0488 8.34171 11.8536 8.14645C11.6583 7.95118 11.3417 7.95118 11.1464 8.14645L7.5 11.7929L3.85355 8.14645Z"
+                fill="#FFF"></path>
+        </svg>
+    </div>
+    <ul class="box">
+        <li class="scroll_left">
+            <iframe src="./8211158A40/0013.html" width="600" height="400" frameborder="0" allowfullscreen></iframe>
+            <h4>任意のポイントを点滅させる画像を作成できます</h4>
+        </li>
+        <li class="scroll_right">
+            <iframe src="./8211158A40/0080.html" width="600" height="400" frameborder="0" allowfullscreen></iframe>
+            <h4>電線が無い経路の場合はこのようになります<br>
+                これは空栓(詰栓)の場合です</h4>
+        </li>
+        <li class="scroll_left">
+            <iframe src="./8211158A40/0022.html" width="600" height="400" frameborder="0" allowfullscreen></iframe>
+            <h4>コネクタの二重係止と共用ポイントの場合<br>
+                二重係止の確認を促す為にメッセージが表示されます</h4>
+        </li>
+        <li class="scroll_right">
+            <iframe src="./8211158A40/0888.html" width="600" height="400" frameborder="0" allowfullscreen></iframe>
+            <h4>リレーボックスなどの大型コネクタも表示可能</h4>
+        </li>
+        <li class="scroll_left">
+            <img src="./pointList.png" width="600" frameborder="0" allowfullscreen>
+            <h4>ポイントナンバーの入力画面<br>
+                黄色の欄に入力するだけです</h4>
+        </li>
+        <li class="scroll_right">
+            <img src="./menu70.png" width="400" frameborder="0" allowfullscreen>
+            <h4>ポイントナンバーを入力した後はMENUから作成実行</h4>
+        </li>
+        <li class="scroll_left">
+            <img src="./code.png" width="600" frameborder="0" allowfullscreen>
+            <h4>生産準備+から上記コードを作成<br>
+                WEBサーバーが無くても動作します<br>
+                なのでVB.netやJAVAで作成したローカルアプリでも簡単に使用できます</h4>
+            <h5>※但しIE11以上が必要</h5>
+        </li>
+        <li class="scroll_up">
+            <video src="./kensa.mp4" width="600" frameborder="0" allowfullscreen loop autoplay muted></video>
+            <h4>検査履歴システム(瀬戸内部品開発)での使用動画</h4>
+        </li>
+    </ul>
+    <div style="height: 100vh;background-color: #0a0a0a;">
+        <div style="height:10px;"></div>
+        <div style="text-align: left;margin-left: 5%;">
+            <h1 style="text-align: left;margin-bottom: 10px;">考察</h1>
+            <h3 style="text-align: left;">現在は検査履歴システム、配索ナビ、先ハメ誘導ナビで使用しています</h3>
+            <h3 style="text-align: left;">他にも使用するアイデアがあればご意見ください</h3>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>

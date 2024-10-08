@@ -1,0 +1,75 @@
+body{background-color: #000;
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    -ms-overflow-style: none;
+}
+body::-webkit-scrollbar {
+    display: none;
+}
+table {
+    position: relative;
+    z-index: 1;
+    table-layout: fixed;
+    width:100%;
+    text-align:center;
+    font-weight: bold;
+    border-collapse: collapse;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    border: 1px solid #000;
+    line-height: 1;
+}
+table td {
+    font-family: 'MPLUS1p', sans-serif;
+    padding: 1px;
+    letter-spacing:0px;
+}
+.boxTerminal {
+    position: absolute;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+@-ms-keyframes blinkHole {
+    0% { opacity: 0; -ms-transform: scale(1); transform: scale(1); }
+    30% { opacity: .3; -ms-transform: scale(1); transform: scale(1); }
+    50% { opacity: .8; -ms-transform: scale(1); transform: scale(1); }
+    70% { opacity: .3; -ms-transform: scale(1); transform: scale(1); }
+    100% { opacity: 0; -ms-transform: scale(1); transform: scale(1); }
+}
+@keyframes blinkHole {
+    0% { opacity: 0; -ms-transform: scale(1); transform: scale(1); }
+    30% { opacity: .3; -ms-transform: scale(1); transform: scale(1); }
+    50% { opacity: .8; -ms-transform: scale(1); transform: scale(1); }
+    70% { opacity: .3; -ms-transform: scale(1); transform: scale(1); }
+    100% { opacity: 0; -ms-transform: scale(1); transform: scale(1); }
+}
+.blinkHole {
+    animation: blinkHole .7s infinite;
+}
+#box3 {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    bottom: 0;
+    color: white;
+    background-color: #FF5050;
+    font-weight: bold;
+    padding: 4px;
+    border: 0;
+    text-align: center;
+    transition: background-color 0.7s;
+    z-index: 2;
+}

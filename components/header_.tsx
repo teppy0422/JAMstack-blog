@@ -372,15 +372,13 @@ export default function Header() {
                   <Divider borderColor="white" />
                   {menuItem("/roadMap", "ロードマップ", false)}
                   <Divider borderColor="white" />
-                  {menuItem("/samples", "サンプル", false)}
-                  <Divider borderColor="white" />
                   {menuItem("/directoryLayout", "ディレクトリ構成", false)}
                   <Divider borderColor="white" />
                   {menuItem("/objectLayout", "プログラム解説", false)}
                   <Divider borderColor="white" />
                   {menuItem("/app/typing", "タイピング練習", false)}
                   <Divider borderColor="white" />
-                  {menuItem("/download", "更新履歴", false)}
+                  {menuItem("/download", "ダウンロード", false)}
                   <Divider borderColor="white" />
                   {menuItem("/BBS", "問い合わせ", false)}
                   <Divider borderColor="white" />

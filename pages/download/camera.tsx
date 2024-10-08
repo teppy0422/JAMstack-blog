@@ -55,9 +55,9 @@ export default function About() {
               <br />
               編集が必要な場合にダウンロードしてください
               <br />
-              編集はVisual Studioでsolutionを開いてください
+              ダウンロードしたファイルは展開(解凍)してから開いてください
               <br />
-              ダウンロードしたファイルは展開(解凍)しないと使用できません
+              編集する際はVisualStudioで.solを開いてください
             </Box>
           </Box>
           <SimpleGrid

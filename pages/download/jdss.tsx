@@ -113,11 +113,7 @@ export default function About() {
             <Box fontSize="lg">
               以下からダウンロードしてください
               <br />
-              通常は最新版
-              <Badge colorScheme="teal" margin={1}>
-                LATEST
-              </Badge>
-              を選択します
+              ダウンロードした.zipは必ず展開(解凍)してください
               <br />
               ※このダウンロードとは別に初回セットアップが必要です
               <Box

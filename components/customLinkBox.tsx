@@ -270,7 +270,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                           this.handleBoxClick(
                             `${downloadPath}${ver}_/index.html`
                           )
-                        } // クリックでモーダルを開く
+                        }
                         style={{
                           cursor: "pointer",
                           backgroundColor: "transparent",

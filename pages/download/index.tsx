@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Content from "../../components/content";
 import Link from "next/link";
@@ -12,15 +12,6 @@ import {
   Box,
   SimpleGrid,
   Badge,
-  Kbd,
-  Button,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogCloseButton,
-  AlertDialogBody,
-  AlertDialogFooter,
   useDisclosure,
   HStack,
   useColorMode,
@@ -28,17 +19,21 @@ import {
   CardHeader,
   CardBody,
   Stack,
-  StackDivider,
   Heading,
   Divider,
   Flex,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
 } from "@chakra-ui/react";
 import { FocusableElement } from "@chakra-ui/utils"; // FocusableElement をインポート
 import { DownloadIcon } from "../../components/icons";
 import { MdSettings, MdCheckCircle, MdHelpOutline } from "react-icons/md";
 import NextImage from "next/image";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
-
+import DownloadButton from "../../components/DownloadButton";
 import styles from "../../styles/home.module.scss";
 
 import CustomLinkBox from "../../components/customLinkBox";
@@ -52,7 +47,6 @@ function getMaxVersionNumber(directory: string): {
 } {
   try {
     const files = fs.readdirSync(directory);
-    console.log("Files in directory:", files); // デバッグ用ログ
     let maxNumber = 0;
     let maxVersionString = "";
     let lastModified = new Date(0); // 初期値を設定
@@ -101,6 +95,32 @@ export default function About({
 }) {
   const { colorMode } = useColorMode();
   const router = useRouter();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalPath, setModalPath] = useState("");
+  const handleBoxClick = (path) => {
+    setModalPath(path);
+    onOpen();
+  };
+  const [isClicked, setIsClicked] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const CustomBadge: React.FC<{ path: string; text: string }> = ({
+    path,
+    text,
+  }) => (
+    <Badge
+      variant={path ? "solid" : "outline"} // pathが空の場合はoutline
+      colorScheme={path ? undefined : "gray"} // pathが空の場合はgrayのカラースキーム
+      backgroundColor={path ? "#444" : undefined} // pathが空でない場合は背景色を設定
+      color={path ? "white" : undefined} // pathが空でない場合は文字色を設定
+      display="inline-block"
+      cursor={path ? "pointer" : "default"}
+      _hover={path ? { boxShadow: "dark-lg" } : undefined}
+      onClick={path ? () => handleBoxClick(path) : undefined}
+    >
+      {text}
+    </Badge>
+  );
   return (
     <>
       <Sidebar />
@@ -112,7 +132,7 @@ export default function About({
           <Box textAlign="center" mb={8}>
             <HStack spacing={2} alignItems="center" justifyContent="center">
               <DownloadIcon
-                size={42}
+                size={36}
                 title="Sjp+"
                 color={colorMode === "light" ? "#000" : "#FFF"} // カラーモードに応じて色を設定
               />
@@ -121,9 +141,7 @@ export default function About({
               </Text>
             </HStack>
             <Box fontSize="lg">
-              以下から選択してください
-              <br />
-              更新都度の追加をします
+              適宜ダウンロードリンクと説明文を追加していきます
               <Box
                 display="flex"
                 alignItems="center"
@@ -147,29 +165,24 @@ export default function About({
                 <Heading size="md" mb={3}>
                   生産準備+
                 </Heading>
-                <Divider borderColor="gray.500" />
               </CardHeader>
+              <Divider borderColor="gray.500" />
               <CardBody p={0}>
                 <Box
+                  position="relative"
                   px={4}
+                  pl={8}
                   py={2}
-                  cursor="pointer"
-                  onClick={() => router.push("/download/sjp")}
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
-                  position="relative"
-                  borderColor="gray.200"
-                  _before={{
-                    content: '""',
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: colorMode === "light" ? "#888" : "#FFF",
-                  }}
+                  onMouseEnter={() => setIsHovered(true)}
                 >
+                  <DownloadButton
+                    path="/download/sjp"
+                    isHovered={isHovered}
+                    backGroundColor="green"
+                  />
                   <Flex justifyContent="space-between" alignItems="center">
                     <Heading size="sm" textTransform="uppercase">
                       Sjp+本体
@@ -196,39 +209,57 @@ export default function About({
                   <Badge variant="outline" colorScheme="gray" mr={2}>
                     MICROSOFT365
                   </Badge>
-                  <Text pt="2" fontSize="sm">
-                    最初はこれから始めるのがおすすめです
-                    <br />
-                    ハメ図を作成したりサブ形態を入力する本体
-                    <br />
-                    PVSW.csvとRLTF.txtが必須
-                  </Text>
+                  <Flex justifyContent="space-between" alignItems="center">
+                    <Text pt="2" fontSize="sm">
+                      最初はこれから始めるのがおすすめです
+                      <br />
+                      ハメ図を作成したりサブ形態を入力する本体
+                      <br />
+                      PVSW.csvとRLTF.txtが必須
+                    </Text>
+                    <Box textAlign="right">
+                      <Stack
+                        spacing={1}
+                        direction="column"
+                        alignItems="flex-start"
+                      >
+                        <CustomBadge path="" text="10.竿レイアウト" />
+                        <CustomBadge path="" text="40.サブ図" />
+                        <CustomBadge path="" text="41.先ハメ誘導" />
+                        <CustomBadge path="/56v3.1" text="56.配策経路" />
+                        <CustomBadge
+                          path="/files/download/Sjp/70/index.html"
+                          text="70.検査履歴点滅"
+                        />
+                      </Stack>
+                    </Box>
+                  </Flex>
                 </Box>
                 <Divider borderColor="gray.500" />
                 <Box
+                  position="relative"
                   px={4}
+                  pl={8}
                   py={2}
-                  cursor="pointer"
-                  onClick={() => router.push("/download/camera")}
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
-                  position="relative"
-                  borderColor="gray.200"
-                  _before={{
-                    content: '""',
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: colorMode === "light" ? "#888" : "#FFF",
-                  }}
+                  onMouseEnter={() => setIsHovered(true)}
                 >
+                  <DownloadButton
+                    path="/download/camera"
+                    isHovered={isHovered}
+                    backGroundColor="#6C277D"
+                  />
                   <Heading size="xs" textTransform="uppercase">
                     CAMERA+
                   </Heading>
-                  <Badge variant="solid" colorScheme="purple" mr={2}>
+                  <Badge
+                    variant="solid"
+                    backgroundColor="#6C277D"
+                    color="white"
+                    mr={2}
+                  >
                     VB.net
                   </Badge>
                   <Text pt="2" fontSize="sm">
@@ -242,11 +273,21 @@ export default function About({
                   </Text>
                 </Box>
                 <Divider borderColor="gray.500" />
-                <Box px={4} py={2}>
+                <Box position="relative" px={4} pl={8} py={2}>
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    bottom={0}
+                    width="1.2rem"
+                    backgroundColor="transparent"
+                    borderRight="1.5px dashed"
+                    borderColor="gray.500"
+                  />
                   <Heading size="xs" textTransform="uppercase">
                     誘導ナビ.net
                   </Heading>
-                  <Badge variant="solid" colorScheme="purple" mr={2}>
+                  <Badge variant="solid" backgroundColor="#6C277D" mr={2}>
                     VB.net
                   </Badge>
                   <Text pt="2" fontSize="sm">
@@ -256,17 +297,79 @@ export default function About({
                   </Text>
                 </Box>
                 <Divider borderColor="gray.500" />
-                <Box px={4} py={2}>
+                <Box position="relative" px={4} pl={8} py={2}>
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    bottom={0}
+                    width="1.2rem"
+                    backgroundColor="transparent"
+                    borderRight="1.5px dashed"
+                    borderColor="gray.500"
+                  />
                   <Heading size="xs" textTransform="uppercase">
                     検査履歴システム
                   </Heading>
-                  <Badge variant="solid" colorScheme="purple" mr={2}>
+                  <Badge variant="solid" backgroundColor="#6C277D" mr={2}>
                     VB.net
                   </Badge>
                   <Text pt="2" fontSize="sm">
                     YC-CのWHモードでエラーのポイントを表示する画像を生産準備+が作成
                     <br />
-                    開発は山口部品
+                    開発は山口部品でダウンロードはここで出来るようにはしません
+                  </Text>
+                </Box>
+              </CardBody>
+            </Card>
+            <Card
+              backgroundColor="transparent"
+              border="1px solid"
+              borderColor="gray.500"
+            >
+              <CardHeader p={2} pl={3} pb={0}>
+                <Heading size="md" mb={3}>
+                  部材一覧+
+                </Heading>
+              </CardHeader>
+              <Divider borderColor="gray.500" />
+              <CardBody p={0}>
+                <Box position="relative" px={4} pl={8} py={2}>
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    bottom={0}
+                    width="1.2rem"
+                    backgroundColor="transparent"
+                    borderRight="1.5px dashed"
+                    borderColor="gray.500"
+                  />
+                  <Flex justifyContent="space-between" alignItems="center">
+                    <Heading size="sm" textTransform="uppercase">
+                      Bip+
+                    </Heading>
+                    <Flex justifyContent="flex-end" alignItems="center">
+                      <Text
+                        fontSize="xs"
+                        margin="auto"
+                        textAlign="right"
+                      ></Text>
+                    </Flex>
+                  </Flex>
+                  <Badge variant="solid" colorScheme="green" mr={2}>
+                    EXCEL2010
+                  </Badge>
+                  <Badge variant="solid" colorScheme="green" mr={2}>
+                    EXCEL2013
+                  </Badge>
+                  <Badge variant="outline" colorScheme="gray" mr={2}>
+                    MICROSOFT365
+                  </Badge>
+                  <Text pt="2" fontSize="sm">
+                    製品品番毎の部品リストの一覧表を作成する
+                    <br />
+                    EXTESを自動制御して手入力の手間とミスを減らす
                   </Text>
                 </Box>
               </CardBody>
@@ -280,56 +383,46 @@ export default function About({
                 <Heading size="md" mb={3}>
                   順立生産システム
                 </Heading>
-                <Divider borderColor="gray.500" />
               </CardHeader>
+              <Divider borderColor="gray.500" />
               <CardBody p={0}>
                 <Box
+                  position="relative"
                   px={4}
+                  pl={8}
                   py={2}
-                  cursor="pointer"
-                  onClick={() => router.push("/download/jdss")}
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
-                  position="relative"
-                  borderColor="gray.200"
-                  _before={{
-                    content: '""',
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: colorMode === "light" ? "#888" : "#FFF",
-                  }}
+                  onMouseEnter={() => setIsHovered(true)}
                 >
+                  <DownloadButton
+                    path="/download/jdss"
+                    isHovered={isHovered}
+                    backGroundColor="#B02334"
+                  />
                   <Flex justifyContent="space-between" alignItems="center">
                     <Heading size="sm" textTransform="uppercase">
                       main
                     </Heading>
                     <Flex justifyContent="flex-end" alignItems="center">
-                      <Text fontSize="xs" margin="auto" textAlign="right">
-                        最終更新:
-                        {new Date(lastModified).toLocaleString("ja-JP", {
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                        })}
-                        <br />
-                        {maxVersionString}
-                      </Text>
+                      <Text
+                        fontSize="xs"
+                        margin="auto"
+                        textAlign="right"
+                      ></Text>
                     </Flex>
                   </Flex>
                   <Badge
                     variant="solid"
-                    style={{ backgroundColor: "#808" }}
+                    style={{ backgroundColor: "#B02334" }}
                     mr={2}
                   >
                     ACCESS2002
                   </Badge>
                   <Badge
                     variant="solid"
-                    style={{ backgroundColor: "#808" }}
+                    style={{ backgroundColor: "#B02334" }}
                     mr={2}
                   >
                     ACCESS2010
@@ -341,26 +434,26 @@ export default function About({
                     <br />
                     生産指示の対象は[作業者] [自動機(SA,AS)] [CB10,70]
                     [YSS]に対応
+                    <br />
+                    ※宮崎部品が委託開発した3つのシステムを統合したもの
                   </Text>
                 </Box>
                 <Divider borderColor="gray.500" />
-                <Box
-                  px={4}
-                  py={2}
-                  cursor="pointer"
-                  onClick={() => router.push("/download/camera")}
-                  _hover={{
-                    boxShadow: "dark-lg",
-                  }}
-                  position="relative"
-                  borderColor="gray.200"
-                >
+                <Box position="relative" px={4} pl={8} py={2}>
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    bottom={0}
+                    width="1.2rem"
+                    backgroundColor="transparent"
+                    borderRight="1.5px dashed"
+                    borderColor="gray.500"
+                  />
                   <Heading size="xs" textTransform="uppercase">
                     初回セットアップ
                   </Heading>
-                  <Badge variant="solid" colorScheme="purple" mr={2}>
-                    VB.net
-                  </Badge>
+                  <Badge variant="solid" colorScheme="purple" mr={2}></Badge>
                   <Text pt="2" fontSize="sm">
                     初回のPCセットアップに必要なファイル
                     <br />
@@ -370,6 +463,27 @@ export default function About({
               </CardBody>
             </Card>
           </SimpleGrid>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent maxW="90vw" maxH="90vh">
+              <ModalCloseButton right="3px" />
+              {/* <ModalHeader></ModalHeader> */}
+              <ModalBody mx={0}>
+                <Box
+                  width="99%"
+                  height={{ base: "40vh", sm: "50vh", md: "70vh", lg: "80vh" }}
+                  border="none"
+                  maxW="90vw"
+                >
+                  <iframe
+                    src={modalPath}
+                    style={{ width: "100%", height: "100%", border: "none" }} // iframeのサイズを100%に設定
+                    title="Embedded Content"
+                  />
+                </Box>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
         </div>
         <Box mb={10} />
       </Content>

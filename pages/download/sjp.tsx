@@ -146,7 +146,7 @@ export default function About() {
             <CustomLinkBox
               dateTime="2024-10-07T16:17:00+0900"
               description1="コネクタ性別がハメ図で分からない"
-              description2="ハメ図作成に選択肢を追加"
+              description2="ハメ図作成の選択肢にコネクタ性別で点線を追加"
               descriptionIN="コネクタ性別がMaleの場合は点線にする"
               linkHref="/files/download/Sjp/Sjp3.100.26_.zip"
               inCharge="高知,王さん,徳島,山田さん,Win10zip"
