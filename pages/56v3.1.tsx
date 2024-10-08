@@ -46,24 +46,21 @@ const Home = () => {
             setMessage(
               "端末[" +
                 fileName.replace("-", " ") +
-                "]からの全ての行き先です\nハメ図は行き先の端末Noを表示\n\n" +
-                "以下の方法でアクセス可能です\n1.画面上の端末Noをタップして表示された画面の右上をタップ\n2.右上に端末-を入力\n\n" +
-                "トップページに戻るには最上部の電線情報をタップ"
+                "]からの全ての行き先です\nハメ図は行き先の端末Noを表示\n" +
+                "-以下の方法でアクセス可能です-\n1.画面上の端末Noをタップして表示された画面の右上をタップ\n2.右上に端末-を入力\n"
             );
           } else if (fileName.length === 4) {
             setMessage(
               "構成[" +
                 fileName +
-                "]のサブのハメ図/後ハメ電線が表示されています\n\n以下の方法でアクセス可能です\n1.画面上の電線をタップ\n2.QRリーダーでエフを読み込む\n3.右上に構成ナンバー4桁を入力\n\n" +
-                "トップページに戻るには最上部の電線情報をタップ"
+                "]のサブのハメ図/後ハメ電線が表示されています\n-以下の方法でアクセス可能です-\n1.画面上の電線をタップ\n2.QRリーダーでエフを読み込む\n3.右上に構成ナンバー4桁を入力\n"
             );
           } else {
             setMessage(
               "端末No[" +
                 fileName +
-                "]のハメ図、電線をクリックすると構成Noのページに移動します\n\n" +
-                "以下の方法でアクセス可能です\n1.画面上の端末Noをタップ\n2.QRリーダーで端末Noを読み込む\n3.右上に端末ナンバーを入力\n\n" +
-                "トップページに戻るには最上部の電線情報をタップ"
+                "]のハメ図、電線をクリックすると構成Noのページに移動します\n" +
+                "-以下の方法でアクセス可能です-\n1.画面上の端末Noをタップ\n2.QRリーダーで端末Noを読み込む\n3.右上に端末ナンバーを入力\n"
             );
           }
         }
@@ -82,14 +79,14 @@ const Home = () => {
       height="100vh"
       bg="gray.100"
     >
-      <Box bg="gray.100" p={4} textAlign="center" color="gray.800">
+      <Box bg="gray.100" p={2} textAlign="center" color="gray.800">
         <Text fontSize="2xl" fontWeight="bold" fontFamily="Noto Sans JP">
           56_配策誘導ナビVer3.1
         </Text>
         <Text fontFamily="Noto Serif JP">
           要素をタップ/クリックで画面が変わります
           <br />
-          実際にタップしてみてください
+          実際に操作してみてください
         </Text>
         <IconButton
           icon={<FaSyncAlt />}
@@ -112,16 +109,18 @@ const Home = () => {
       >
         <iframe
           ref={iframeRef}
-          src="/files/56v3.1/index.html"
+          src="/files/download/Sjp/56v3.1/index.html"
           style={{ width: "100%", height: "100%", border: "none" }}
         ></iframe>
       </Box>
-      <Box bg="gray.100" p={4} textAlign="center">
+      <Box bg="gray.100" p={2} textAlign="center">
         <Text whiteSpace="pre-line" fontFamily="Noto Sans JP" color="gray.800">
           {message}
         </Text>
+        <Text fontSize="xs" pb={0} pt={1}>
+          トップページに戻るには最上部の電線情報をタップ
+        </Text>
       </Box>
-      <Box textAlign="center" mt={4}></Box>
     </Box>
   );
 };
