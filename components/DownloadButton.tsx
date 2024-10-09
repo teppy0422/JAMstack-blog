@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { css, keyframes } from "@emotion/react";
 import { Box, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import "../styles/globals.css";
 const shake = keyframes`
   0% { transform: translateX(0); }
   25% { transform: translateX(-0.5px); }
@@ -30,7 +31,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
         top={0}
         left={0}
         bottom={0}
-        width="1.2rem"
+        width="1.4rem"
         opacity={0.8}
         backgroundColor={backGroundColor}
         display="flex"
@@ -38,9 +39,9 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
         justifyContent="center"
         textAlign="center"
         cursor="pointer"
-        borderRight="1.5px dashed"
+        borderRight="2px dotted"
         borderColor="white"
-        transition="transform 0.5s ease, clip-path 0.5s ease"
+        transition="transform 1s ease, clip-path 1s ease"
         transform={isClicked ? "translateX(-100%)" : "translateX(0)"}
         clipPath={
           isHovered
@@ -60,8 +61,10 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
         <Text
           transform="rotate(270deg)"
           letterSpacing="0.2em"
-          marginLeft="-0.15rem"
+          marginLeft="-0.1rem"
           color="white"
+          fontFamily="'Archivo Black', 'M PLUS Rounded 1c'"
+          fontSize="16px"
         >
           DOWNLOAD
         </Text>
@@ -72,9 +75,9 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
         top={0}
         left={0}
         bottom={0}
-        width="1.2rem"
+        width="1.4rem"
         backgroundColor="transparent"
-        borderRight="1.5px dashed"
+        borderRight="2px dotted"
         borderColor="gray.500"
       />
     </>
