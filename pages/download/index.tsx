@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Content from "../../components/content";
-import Link from "next/link";
 import fs from "fs";
 import path from "path";
 import { GetServerSideProps } from "next";
 
 import {
-  Image,
   Text,
   Box,
   SimpleGrid,
@@ -28,8 +26,9 @@ import {
   ModalCloseButton,
   ModalBody,
 } from "@chakra-ui/react";
+import { IoTicketOutline } from "react-icons/io5";
+
 import { FocusableElement } from "@chakra-ui/utils"; // FocusableElement をインポート
-import { DownloadIcon } from "../../components/icons";
 import { MdSettings, MdCheckCircle, MdHelpOutline } from "react-icons/md";
 import NextImage from "next/image";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
@@ -131,17 +130,19 @@ export default function About({
         >
           <Box textAlign="center" mb={8}>
             <HStack spacing={2} alignItems="center" justifyContent="center">
-              <DownloadIcon
-                size={36}
-                title="Sjp+"
-                color={colorMode === "light" ? "#000" : "#FFF"} // カラーモードに応じて色を設定
-              />
-              <Text fontSize="lg" mb={2}>
-                ダウンロード
+              <Box transform="rotate(270deg)" position="relative" top="-3px">
+                <IoTicketOutline size={28} />
+              </Box>
+              <Text
+                fontSize="lg"
+                mb={2}
+                fontFamily="'Archivo Black', 'M PLUS Rounded 1c'"
+              >
+                DOWNLOAD
               </Text>
             </HStack>
             <Box fontSize="lg">
-              適宜ダウンロードリンクと説明文を追加していきます
+              ダウンロードリンクと説明は適宜追加します
               <Box
                 display="flex"
                 alignItems="center"
@@ -154,7 +155,7 @@ export default function About({
           <SimpleGrid
             columns={{ base: 1, md: 1, lg: 1, xl: 1 }}
             spacing={5}
-            mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
+            mx={{ base: 2, md: 20, lg: 30, xl: 30 }}
           >
             <Card
               backgroundColor="transparent"
@@ -183,11 +184,36 @@ export default function About({
                     isHovered={isHovered}
                     backGroundColor="green"
                   />
-                  <Flex justifyContent="space-between" alignItems="center">
-                    <Heading size="sm" textTransform="uppercase">
-                      Sjp+本体
-                    </Heading>
-                    <Flex justifyContent="flex-end" alignItems="center">
+
+                  <Flex justifyContent="space-between" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start">
+                      <Heading size="sm" mb={1.5}>
+                        Sjp+本体
+                      </Heading>
+                      <Flex justifyContent="flex-end" alignItems="center">
+                        <Badge variant="solid" colorScheme="green" mr={2}>
+                          EXCEL2010
+                        </Badge>
+                        <Badge variant="solid" colorScheme="green" mr={2}>
+                          EXCEL2013
+                        </Badge>
+                        <Badge variant="outline" colorScheme="gray" mr={2}>
+                          MICROSOFT365
+                        </Badge>
+                      </Flex>
+                      <Text pt="2" fontSize="sm">
+                        最初はこれから始めるのがおすすめです
+                        <br />
+                        ハメ図を作成したりサブ形態を入力する本体
+                        <br />
+                        PVSW.csvとRLTF.txtが必須
+                      </Text>
+                    </Flex>
+                    <Stack
+                      spacing={1}
+                      direction="column"
+                      alignItems="flex-start"
+                    >
                       <Text fontSize="xs" margin="auto" textAlign="right">
                         最終更新:
                         {new Date(lastModified).toLocaleString("ja-JP", {
@@ -198,43 +224,18 @@ export default function About({
                         <br />
                         {maxVersionString}
                       </Text>
-                    </Flex>
-                  </Flex>
-                  <Badge variant="solid" colorScheme="green" mr={2}>
-                    EXCEL2010
-                  </Badge>
-                  <Badge variant="solid" colorScheme="green" mr={2}>
-                    EXCEL2013
-                  </Badge>
-                  <Badge variant="outline" colorScheme="gray" mr={2}>
-                    MICROSOFT365
-                  </Badge>
-                  <Flex justifyContent="space-between" alignItems="center">
-                    <Text pt="2" fontSize="sm">
-                      最初はこれから始めるのがおすすめです
-                      <br />
-                      ハメ図を作成したりサブ形態を入力する本体
-                      <br />
-                      PVSW.csvとRLTF.txtが必須
-                    </Text>
-                    <Box textAlign="right">
-                      <Stack
-                        spacing={1}
-                        direction="column"
-                        alignItems="flex-start"
-                      >
-                        <CustomBadge path="" text="10.竿レイアウト" />
-                        <CustomBadge path="" text="40.サブ図" />
-                        <CustomBadge path="" text="41.先ハメ誘導" />
-                        <CustomBadge path="/56v3.1" text="56.配策経路" />
-                        <CustomBadge
-                          path="/files/download/Sjp/70/index.html"
-                          text="70.検査履歴点滅"
-                        />
-                      </Stack>
-                    </Box>
+                      <CustomBadge path="" text="10.竿レイアウト" />
+                      <CustomBadge path="" text="40.サブ図" />
+                      <CustomBadge path="" text="41.先ハメ誘導" />
+                      <CustomBadge path="/56v3.1" text="56.配策経路" />
+                      <CustomBadge
+                        path="/files/download/Sjp/70/index.html"
+                        text="70.検査履歴点滅"
+                      />
+                    </Stack>
                   </Flex>
                 </Box>
+
                 <Divider borderColor="gray.500" />
                 <Box
                   position="relative"
@@ -251,37 +252,56 @@ export default function About({
                     isHovered={isHovered}
                     backGroundColor="#6C277D"
                   />
-                  <Heading size="xs" textTransform="uppercase">
-                    CAMERA+
-                  </Heading>
-                  <Badge
-                    variant="solid"
-                    backgroundColor="#6C277D"
-                    color="white"
-                    mr={2}
-                  >
-                    VB.net
-                  </Badge>
-                  <Text pt="2" fontSize="sm">
-                    コネクタを撮影するアプリケーション
-                    <br />
-                    SONYのカメラのみ対応
-                    <br />
-                    生産準備+で写真撮影を実行時に自動インストールされるので使用には必要ありません
-                    <br />
-                    アプリケーションを修正したい場合のみダウンロードしてください
-                  </Text>
+                  <Flex justifyContent="space-between" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start" flex={1}>
+                      <Heading size="sm" mb={1.5}>
+                        CAMERA+
+                      </Heading>
+                      <Flex justifyContent="flex-end" alignItems="center">
+                        <Badge
+                          variant="solid"
+                          backgroundColor="#6C277D"
+                          color="white"
+                          mr={2}
+                        >
+                          VB.net
+                        </Badge>
+                      </Flex>
+                      <Text pt="2" fontSize="sm">
+                        コネクタを撮影するアプリケーション
+                        <br />
+                        SONYのカメラのみ対応
+                        <br />
+                        生産準備+で写真撮影を実行時に自動インストールされるので使用には必要ありません
+                        <br />
+                        アプリケーションを修正したい場合のみダウンロードしてください
+                      </Text>
+                    </Flex>
+                    <Stack
+                      spacing={1}
+                      direction="column"
+                      alignItems="flex-start"
+                    >
+                      <Text
+                        fontSize="xs"
+                        margin="auto"
+                        textAlign="right"
+                      ></Text>
+                      <CustomBadge path="" text="撮影方法" />
+                    </Stack>
+                  </Flex>
                 </Box>
                 <Divider borderColor="gray.500" />
+
                 <Box position="relative" px={4} pl={8} py={2}>
                   <Box
                     position="absolute"
                     top={0}
                     left={0}
                     bottom={0}
-                    width="1.2rem"
+                    width="1.4rem"
                     backgroundColor="transparent"
-                    borderRight="1.5px dashed"
+                    borderRight="2px dotted"
                     borderColor="gray.500"
                   />
                   <Heading size="xs" textTransform="uppercase">
@@ -303,9 +323,9 @@ export default function About({
                     top={0}
                     left={0}
                     bottom={0}
-                    width="1.2rem"
+                    width="1.4rem"
                     backgroundColor="transparent"
-                    borderRight="1.5px dashed"
+                    borderRight="2px dotted"
                     borderColor="gray.500"
                   />
                   <Heading size="xs" textTransform="uppercase">
@@ -340,9 +360,9 @@ export default function About({
                     top={0}
                     left={0}
                     bottom={0}
-                    width="1.2rem"
+                    width="1.4rem"
                     backgroundColor="transparent"
-                    borderRight="1.5px dashed"
+                    borderRight="2px dotted"
                     borderColor="gray.500"
                   />
                   <Flex justifyContent="space-between" alignItems="center">
@@ -367,9 +387,9 @@ export default function About({
                     MICROSOFT365
                   </Badge>
                   <Text pt="2" fontSize="sm">
-                    製品品番毎の部品リストの一覧表を作成する
+                    全製品品番の使用部品リストの一覧表を作成
                     <br />
-                    EXTESを自動制御して手入力の手間とミスを減らす
+                    EXTESを自動制御して手入力の手間とミスを無くせます
                   </Text>
                 </Box>
               </CardBody>
@@ -385,6 +405,7 @@ export default function About({
                 </Heading>
               </CardHeader>
               <Divider borderColor="gray.500" />
+
               <CardBody p={0}>
                 <Box
                   position="relative"
@@ -401,43 +422,59 @@ export default function About({
                     isHovered={isHovered}
                     backGroundColor="#B02334"
                   />
-                  <Flex justifyContent="space-between" alignItems="center">
-                    <Heading size="sm" textTransform="uppercase">
-                      main
-                    </Heading>
-                    <Flex justifyContent="flex-end" alignItems="center">
-                      <Text
-                        fontSize="xs"
-                        margin="auto"
-                        textAlign="right"
-                      ></Text>
+                  <Flex justifyContent="space-between" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start" flex={1}>
+                      <Heading size="sm" mb={1.5}>
+                        main
+                      </Heading>
+                      <Flex justifyContent="flex-end" alignItems="center">
+                        <Badge
+                          variant="solid"
+                          style={{ backgroundColor: "#B02334" }}
+                          mr={2}
+                        >
+                          ACCESS2002
+                        </Badge>
+                        <Badge
+                          variant="solid"
+                          style={{ backgroundColor: "#B02334" }}
+                          mr={2}
+                        >
+                          ACCESS2010
+                        </Badge>
+                      </Flex>
+
+                      <Text pt="2" fontSize="sm">
+                        一貫工程などの連続して生産する工程で有効
+                        <br />
+                        カンバン等のデータを読み込んでその順番で各作業場所で生産指示を行う
+                        <br />
+                        生産指示の対象は[作業者] [自動機(SA,AS)] [CB10,70]
+                        [YSS]に対応
+                        <br />
+                        ※宮崎部品が委託開発した3つのシステムを統合したもの
+                      </Text>
                     </Flex>
+                    <Stack
+                      spacing={1}
+                      direction="column"
+                      alignItems="flex-start"
+                    >
+                      <Text fontSize="xs" margin="auto" textAlign="right">
+                        最終更新:2024/10/05
+                        <br />
+                        123
+                      </Text>
+                      <CustomBadge path="" text="main1" />
+                      <CustomBadge
+                        path="/files/download/Jdss/main2/index.html"
+                        text="main2"
+                      />
+                      <CustomBadge path="" text="main3" />
+                    </Stack>
                   </Flex>
-                  <Badge
-                    variant="solid"
-                    style={{ backgroundColor: "#B02334" }}
-                    mr={2}
-                  >
-                    ACCESS2002
-                  </Badge>
-                  <Badge
-                    variant="solid"
-                    style={{ backgroundColor: "#B02334" }}
-                    mr={2}
-                  >
-                    ACCESS2010
-                  </Badge>
-                  <Text pt="2" fontSize="sm">
-                    一貫工程などの連続して生産する工程で有効
-                    <br />
-                    カンバン等のデータを読み込んでその順番で各作業場所で生産指示を行う
-                    <br />
-                    生産指示の対象は[作業者] [自動機(SA,AS)] [CB10,70]
-                    [YSS]に対応
-                    <br />
-                    ※宮崎部品が委託開発した3つのシステムを統合したもの
-                  </Text>
                 </Box>
+
                 <Divider borderColor="gray.500" />
                 <Box position="relative" px={4} pl={8} py={2}>
                   <Box
@@ -445,9 +482,9 @@ export default function About({
                     top={0}
                     left={0}
                     bottom={0}
-                    width="1.2rem"
+                    width="1.4rem"
                     backgroundColor="transparent"
-                    borderRight="1.5px dashed"
+                    borderRight="2px dotted"
                     borderColor="gray.500"
                   />
                   <Heading size="xs" textTransform="uppercase">
