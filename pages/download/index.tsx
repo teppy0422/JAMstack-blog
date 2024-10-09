@@ -171,8 +171,8 @@ export default function About({
               <CardBody p={0}>
                 <Box
                   position="relative"
-                  px={4}
-                  pl={8}
+                  px={2}
+                  pl={7}
                   py={2}
                   _hover={{
                     boxShadow: "dark-lg",
@@ -186,7 +186,7 @@ export default function About({
                   />
 
                   <Flex justifyContent="space-between" alignItems="flex-start">
-                    <Flex direction="column" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start" flex={1}>
                       <Heading size="sm" mb={1.5}>
                         Sjp+本体
                       </Heading>
@@ -195,10 +195,10 @@ export default function About({
                           EXCEL2010
                         </Badge>
                         <Badge variant="solid" colorScheme="green" mr={2}>
-                          EXCEL2013
+                          2013
                         </Badge>
                         <Badge variant="outline" colorScheme="gray" mr={2}>
-                          MICROSOFT365
+                          365
                         </Badge>
                       </Flex>
                       <Text pt="2" fontSize="sm">
@@ -214,16 +214,18 @@ export default function About({
                       direction="column"
                       alignItems="flex-start"
                     >
-                      <Text fontSize="xs" margin="auto" textAlign="right">
-                        最終更新:
-                        {new Date(lastModified).toLocaleString("ja-JP", {
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                        })}
-                        <br />
-                        {maxVersionString}
-                      </Text>
+                      <Flex justifyContent="flex-end" width="100%">
+                        <Text fontSize="xs" textAlign="right" right={0}>
+                          #
+                          {new Date(lastModified).toLocaleString("ja-JP", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          })}
+                          <br />
+                          {maxVersionString}
+                        </Text>
+                      </Flex>
                       <CustomBadge path="" text="10.竿レイアウト" />
                       <CustomBadge path="" text="40.サブ図" />
                       <CustomBadge path="" text="41.先ハメ誘導" />
@@ -239,8 +241,8 @@ export default function About({
                 <Divider borderColor="gray.500" />
                 <Box
                   position="relative"
-                  px={4}
-                  pl={8}
+                  px={2}
+                  pl={7}
                   py={2}
                   _hover={{
                     boxShadow: "dark-lg",
@@ -282,11 +284,13 @@ export default function About({
                       direction="column"
                       alignItems="flex-start"
                     >
-                      <Text
-                        fontSize="xs"
-                        margin="auto"
-                        textAlign="right"
-                      ></Text>
+                      <Flex justifyContent="flex-end" width="100%">
+                        <Text fontSize="xs" margin="auto" textAlign="right">
+                          #2019/09/02
+                          <br />
+                          1.0.0.4
+                        </Text>
+                      </Flex>
                       <CustomBadge path="" text="撮影方法" />
                     </Stack>
                   </Flex>
@@ -366,9 +370,7 @@ export default function About({
                     borderColor="gray.500"
                   />
                   <Flex justifyContent="space-between" alignItems="center">
-                    <Heading size="sm" textTransform="uppercase">
-                      Bip+
-                    </Heading>
+                    <Heading size="sm">Bip+</Heading>
                     <Flex justifyContent="flex-end" alignItems="center">
                       <Text
                         fontSize="xs"
@@ -381,10 +383,10 @@ export default function About({
                     EXCEL2010
                   </Badge>
                   <Badge variant="solid" colorScheme="green" mr={2}>
-                    EXCEL2013
+                    2013
                   </Badge>
                   <Badge variant="outline" colorScheme="gray" mr={2}>
-                    MICROSOFT365
+                    365
                   </Badge>
                   <Text pt="2" fontSize="sm">
                     全製品品番の使用部品リストの一覧表を作成
@@ -409,8 +411,8 @@ export default function About({
               <CardBody p={0}>
                 <Box
                   position="relative"
-                  px={4}
-                  pl={8}
+                  px={2}
+                  pl={7}
                   py={2}
                   _hover={{
                     boxShadow: "dark-lg",
@@ -440,7 +442,7 @@ export default function About({
                           style={{ backgroundColor: "#B02334" }}
                           mr={2}
                         >
-                          ACCESS2010
+                          2010
                         </Badge>
                       </Flex>
 
@@ -460,11 +462,13 @@ export default function About({
                       direction="column"
                       alignItems="flex-start"
                     >
-                      <Text fontSize="xs" margin="auto" textAlign="right">
-                        最終更新:2024/10/05
-                        <br />
-                        123
-                      </Text>
+                      <Flex justifyContent="flex-end" width="100%">
+                        <Text fontSize="xs" margin="auto" textAlign="right">
+                          #2024/10/05
+                          <br />
+                          123
+                        </Text>
+                      </Flex>
                       <CustomBadge path="" text="main1" />
                       <CustomBadge
                         path="/files/download/Jdss/main2/index.html"

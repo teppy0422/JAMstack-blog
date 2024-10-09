@@ -717,3 +717,14 @@ mpb {
   z-index: 10;
   pointer-events: none;
 }
+
+.fa-play-circle {
+  pointer-events: auto;
+  cursor: pointer;
+  transition: color 0.3s;
+  ;
+}
+
+.fa-play-circle:hover {
+  color: #EE1111;
+}
