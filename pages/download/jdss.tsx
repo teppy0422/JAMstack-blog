@@ -114,8 +114,6 @@ export default function About() {
               以下からダウンロードしてください
               <br />
               ダウンロードした.zipは必ず展開(解凍)してください
-              <br />
-              ※このダウンロードとは別に初回セットアップが必要です
               <Box
                 display="flex"
                 alignItems="center"
@@ -137,8 +135,8 @@ export default function About() {
           >
             <CustomLinkBox
               dateTime="2024-10-07T07:17:00+0900"
-              description1="次回QRラベルが飛ぶ時がある"
-              description2="SQLクエリ->専用関数の作成"
+              description1="main2_次回QRラベルが飛ぶ時がある"
+              description2="SQLクエリ->専用関数の作成に書き直し"
               descriptionIN="自動機を使用しない場合にラベル印刷だけできるように修正"
               linkHref="/files/download/Jdss/main_123.zip"
               inCharge="徳島,小松さん,藤原さん,Win10zip"
