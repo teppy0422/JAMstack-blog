@@ -464,9 +464,9 @@ export default function About({
                     >
                       <Flex justifyContent="flex-end" width="100%">
                         <Text fontSize="xs" margin="auto" textAlign="right">
-                          #2024/10/05
+                          #2024/10/11
                           <br />
-                          123
+                          125
                         </Text>
                       </Flex>
                       <CustomBadge path="" text="main1" />
