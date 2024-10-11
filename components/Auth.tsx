@@ -47,18 +47,18 @@ export default function Auth({ userData }: AuthProps) {
   const [confirmPassword, setConfirmPassword] = useState<string>(""); // 確認用パスワードの状態を追加
   const handleSignUp = async () => {
     if (password.length < 6) {
-      setError("パスワードは6文字以上である必要があります。");
+      setError("パスワードは6文字以上である必要があります");
       return;
     }
     if (password !== confirmPassword) {
-      setError("パスワードが一致しません。");
+      setError("パスワードが一致しません");
       return;
     }
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({ email, password });
     const identities = data.user?.identities;
     if (identities?.length === 0) {
-      setError("登録済みのメールアドレスです。");
+      setError("登録済みのメールアドレスです");
       return;
     }
     console.log(data);
@@ -276,21 +276,7 @@ export default function Auth({ userData }: AuthProps) {
         </>
       ) : (
         <>
-          {error && (
-            <Text color="red.500" mb={4}>
-              {error}
-            </Text>
-          )}
-          {message && (
-            <Text fontSize="sm" color="green.500" mb={4}>
-              {message}
-            </Text>
-          )}
-          <Tabs
-            onChange={(index) =>
-              setActiveTab(index === 0 ? "signup" : "signin")
-            }
-          >
+          <Tabs>
             <TabList>
               <Tab>メールアドレス</Tab>
               <Tab>Google(テスト中)</Tab>
@@ -450,6 +436,16 @@ export default function Auth({ userData }: AuthProps) {
               </TabPanel>
             </TabPanels>
           </Tabs>
+          {error && (
+            <Text color="red.500" mb={4}>
+              {error}
+            </Text>
+          )}
+          {message && (
+            <Text fontSize="sm" color="green.500" mb={4}>
+              {message}
+            </Text>
+          )}
         </>
       )}
     </Box>

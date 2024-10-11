@@ -7,7 +7,7 @@ import Header_ from "../components/header_";
 export default function Content({ children, isCustomHeader = false }) {
   return (
     <>
-      <Flex>
+      <Flex direction="column" minHeight="90vh">
         <Box flex="1" zIndex="1000">
           {isCustomHeader ? <Header_ /> : <Header />}
           <Box height="66px"></Box>
@@ -31,15 +31,21 @@ export default function Content({ children, isCustomHeader = false }) {
           </Container>
         </Box>
       </Flex>
-      <hr />
-      <Center my="14px" color="gray" fontFamily="Noto Sans JP" fontWeight="100">
-        <NextLink href="/privacy">プライバシーポリシー</NextLink>
-        <Box mr={5} />
-        <NextLink href="/terms">利用規約</NextLink>
-      </Center>
-      <Center mb="18px" color="gray">
-        ©︎ 2022-2024 Teppei Kataoka. All rights Reserved.
-      </Center>
+      <Box>
+        <Center
+          my="14px"
+          color="gray"
+          fontFamily="Noto Sans JP"
+          fontWeight="100"
+        >
+          <NextLink href="/privacy">プライバシーポリシー</NextLink>
+          <Box mr={5} />
+          <NextLink href="/terms">利用規約</NextLink>
+        </Center>
+        <Center mb="18px" color="gray">
+          ©︎ 2022-2024 Teppei Kataoka. All rights Reserved.
+        </Center>
+      </Box>
     </>
   );
 }
