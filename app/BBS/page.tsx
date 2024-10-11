@@ -139,7 +139,7 @@ export default function Threads() {
           </Accordion>
         )}
         <Divider />
-        <Stack spacing="4" mt="4" direction="row" justify="flex-end">
+        {/* <Stack spacing="4" mt="4" direction="row" justify="flex-end">
           <Input
             type="text"
             value={newThreadTitle}
@@ -152,7 +152,8 @@ export default function Threads() {
           <Button onClick={createThread} colorScheme="teal" width="5em">
             新規作成
           </Button>
-        </Stack>
+        </Stack> */}
+        <Box height="30vh" />
       </Content>
     </>
   );
