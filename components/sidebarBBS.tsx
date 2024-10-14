@@ -1,15 +1,8 @@
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import {
   Box,
   VStack,
-  Link,
-  MenuItem,
-  Button,
-  IconButton,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
   useDisclosure,
   useColorMode,
   Divider,
@@ -17,11 +10,10 @@ import {
 } from "@chakra-ui/react";
 import { supabase } from "../utils/supabase/client-js";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { HamburgerIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
-import { useEffect, useState } from "react";
+import { useUserData } from "../hooks/useUserData";
+import { useUserInfo } from "../hooks/useUserId";
 
 function SidebarBBS() {
   const [currentPath, setCurrentPath] = useState("");
@@ -33,6 +25,10 @@ function SidebarBBS() {
   const [loading, setLoading] = useState(true);
   const [ipAddress, setIpAddress] = useState("");
   const [newThreads, setNewThreads] = useState<string[]>([]);
+  const { data: session } = useSession();
+
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany } = useUserData(userId);
 
   //新しい投稿の監視
   useEffect(() => {
@@ -92,15 +88,26 @@ function SidebarBBS() {
     }
     setLoading(false); // 追加
   };
-  const menuItem = (path_, label, useColorMode, threadId) => {
+  const menuItem = (
+    path_,
+    label,
+    useColorMode,
+    threadId,
+    isDifferentCompany
+  ) => {
     const isNew = newThreads.includes(threadId);
 
     return (
-      <NextLink href={path_} passHref legacyBehavior key={path_}>
+      <NextLink
+        href={isDifferentCompany ? "#" : path_}
+        passHref
+        legacyBehavior
+        key={path_}
+      >
         <Box
           {...buttonStyle(path_)}
-          onClick={onClose}
-          position="relative" // 親のBoxにrelativeを設定
+          onClick={isDifferentCompany ? undefined : onClose} // 会社が異なる場合はクリックイベントを無効にする
+          position="relative"
           _hover={{
             "& span::after": {
               width: "100%",
@@ -111,11 +118,13 @@ function SidebarBBS() {
           color={useColorMode && colorMode === "light" ? "black" : "white"}
           maxWidth={maxWidth}
           width={maxWidth}
-          whiteSpace="nowrap" // 改行を防ぐ
-          overflow="hidden" // 親要素を超えた部分を隠す
-          textOverflow="ellipsis" // 省略記号を表示する
+          whiteSpace="nowrap"
+          overflow="hidden"
+          textOverflow="ellipsis"
           py={2}
           pl={3}
+          cursor={isDifferentCompany ? "not-allowed" : "pointer"}
+          opacity={isDifferentCompany ? 0.6 : 1}
         >
           {isNew && (
             <Box
@@ -197,24 +206,32 @@ function SidebarBBS() {
                 />
                 {company}
               </Box>
-              {threads.map((thread: { id: string; title: string }) => {
-                const isCurrentPage = currentPath === `/thread/${thread.id}`;
-                return (
-                  <Box display="flex" alignItems="center">
-                    {isCurrentPage && (
-                      <Box as="span" mr={2}>
-                        &gt;
-                      </Box>
-                    )}
-                    {menuItem(
-                      `/thread/${thread.id}`,
-                      thread.title,
-                      true,
-                      thread.id
-                    )}
-                  </Box>
-                );
-              })}
+              {threads.map(
+                (thread: { id: string; title: string; company: string }) => {
+                  const isCurrentPage = currentPath === `/thread/${thread.id}`;
+                  const isDifferentCompany =
+                    thread.company !== "開発" &&
+                    userCompany !== "開発" &&
+                    thread.company !== userCompany;
+
+                  return (
+                    <Box display="flex" alignItems="center">
+                      {isCurrentPage && (
+                        <Box as="span" mr={2}>
+                          &gt;
+                        </Box>
+                      )}
+                      {menuItem(
+                        `/thread/${thread.id}`,
+                        thread.title,
+                        true,
+                        thread.id,
+                        isDifferentCompany
+                      )}
+                    </Box>
+                  );
+                }
+              )}
             </>
           ))}
         </VStack>

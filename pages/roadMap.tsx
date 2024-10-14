@@ -152,6 +152,17 @@ const roadmap: RoadmapItem[] = [
     possibility: 95,
   },
   {
+    year: "2024年",
+    category: ["生産準備+", "高知"],
+    titleColor: "teal",
+    main: "共通化の提案",
+    mainDetail: [
+      "同じ経路なのに電線サイズや色が異なる箇所を調査して変更を立案",
+    ],
+    items: [{ text: "共通化分析", completed: false }],
+    possibility: 90,
+  },
+  {
     year: "2025年",
     month: "1月",
     category: ["生産準備+", "順立生産システム", "部材一覧+"],
@@ -254,6 +265,25 @@ const roadmap: RoadmapItem[] = [
       { text: "回路図と作り方を掲載", completed: false },
     ],
     possibility: 90,
+  },
+  {
+    year: "2025年",
+    month: "6月",
+    category: ["生産準備+"],
+    titleColor: "teal",
+    main: "類似コネクタ調査",
+    mainDetail: [
+      "類似コネクタをPythonを利用して画像比較",
+      "Pythonはサーバーが必要な為、無ければExcelで行う",
+    ],
+    items: [
+      {
+        text: "Python環境の構築",
+        completed: false,
+      },
+      { text: "類似コネクタ比較機能の追加", completed: false },
+    ],
+    possibility: 60,
   },
 ];
 

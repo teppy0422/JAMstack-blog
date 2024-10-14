@@ -4,13 +4,8 @@ import { useEffect, useState } from "react";
 import { MdChat } from "react-icons/md"; // 追加
 
 import {
-  Card,
-  CardBody,
-  Stack,
   Box,
   Heading,
-  Input,
-  Button,
   Divider,
   Spinner,
   Accordion,
@@ -24,12 +19,17 @@ import { supabase } from "../../utils/supabase/client";
 import Link from "next/link";
 import Content from "../../components/content";
 import Sidebar from "../../components/sidebar";
+import { useUserData } from "../../hooks/useUserData";
+import { useUserInfo } from "../../hooks/useUserId";
 
 export default function Threads() {
   const [threads, setThreads] = useState<any[]>([]);
   const [newThreadTitle, setNewThreadTitle] = useState("");
   const [ipAddress, setIpAddress] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany } = useUserData(userId);
 
   useEffect(() => {
     const fetchIpAddress = async () => {
@@ -72,6 +72,7 @@ export default function Threads() {
     acc[thread.company].push(thread); // スレッドを会社名の配列に追加
     return acc;
   }, {});
+
   return (
     <>
       <Sidebar />
@@ -103,39 +104,76 @@ export default function Threads() {
                 if (b === "開発") return 1;
                 return 0; // その他はそのまま
               })
-              .map((company) => (
-                <AccordionItem key={company} borderTop="1px solid gray" my={2}>
-                  <h2>
-                    <AccordionButton>
-                      <Box as="span" flex="1" textAlign="left">
-                        <Heading size="md">{company}</Heading>
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </h2>
-                  <AccordionPanel pb={4}>
-                    {groupedThreads[company].map(
-                      (
-                        thread // スレッドを表示
-                      ) => (
-                        <Link href={`/thread/${thread.id}`}>
-                          <Box
-                            _hover={{
-                              textDecoration: "underline",
-                              textDecorationThickness: "1px",
-                              textUnderlineOffset: "3px",
-                            }}
-                            py={1}
-                          >
-                            <Icon as={MdChat} boxSize={4} mr={1} />
-                            {thread.title}
-                          </Box>
-                        </Link>
-                      )
-                    )}
-                  </AccordionPanel>
-                </AccordionItem>
-              ))}
+              .map((company) => {
+                const isDifferentCompany =
+                  company !== "開発" &&
+                  userCompany !== "開発" &&
+                  company !== userCompany; // 会社が異なるかどうかを判定
+
+                return (
+                  <AccordionItem
+                    key={company}
+                    borderTop="1px solid gray"
+                    my={2}
+                    isDisabled={isDifferentCompany}
+                  >
+                    <h2>
+                      <AccordionButton>
+                        <Box as="span" flex="1" textAlign="left">
+                          <Heading size="md">{company}</Heading>
+                        </Box>
+                        <AccordionIcon />
+                      </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                      {groupedThreads[company].map(
+                        (thread: {
+                          id: string;
+                          title: string;
+                          company: string;
+                        }) => {
+                          const isThreadDifferentCompany =
+                            thread.company !== "開発" &&
+                            userCompany !== "開発" &&
+                            thread.company !== userCompany; // スレッドの会社が異なるかどうかを判定
+
+                          return (
+                            <Box key={thread.id} py={1}>
+                              {isThreadDifferentCompany ? (
+                                // アクセスできない場合の表示
+                                <Box
+                                  _hover={{
+                                    textDecoration: "none",
+                                  }}
+                                  color="gray.500" // アクセスできない場合の色を変更
+                                  cursor="not-allowed" // アクセスできない場合のカーソルを変更
+                                >
+                                  <Icon as={MdChat} boxSize={4} mr={1} />
+                                  {thread.title}
+                                </Box>
+                              ) : (
+                                // アクセスできる場合のリンク
+                                <Link href={`/thread/${thread.id}`}>
+                                  <Box
+                                    _hover={{
+                                      textDecoration: "underline",
+                                      textDecorationThickness: "1px",
+                                      textUnderlineOffset: "3px",
+                                    }}
+                                  >
+                                    <Icon as={MdChat} boxSize={4} mr={1} />
+                                    {thread.title}
+                                  </Box>
+                                </Link>
+                              )}
+                            </Box>
+                          );
+                        }
+                      )}
+                    </AccordionPanel>
+                  </AccordionItem>
+                );
+              })}
           </Accordion>
         )}
         <Divider />

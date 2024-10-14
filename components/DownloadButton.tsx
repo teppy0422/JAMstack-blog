@@ -55,7 +55,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           }, 500); // Wait for the animation to complete
         }}
         _hover={{
-          animation: isClicked ? "none" : `${shake} 0.7s ease-in-out infinite`,
+          animation: isClicked ? "none" : `${shake} 0.6s ease-in-out infinite`,
         }}
       >
         <Text

@@ -1092,7 +1092,7 @@ export default function Thread() {
           {threadTitle}
         </Heading>
         <Box ml="1">{ipAddress}</Box>
-        <Stack spacing="2" style={{ padding: "0px" }}>
+        <Stack spacing="2" style={{ padding: "0px", flexDirection: "column" }}>
           {posts
             .sort(
               // created_atでソート

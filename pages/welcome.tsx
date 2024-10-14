@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import {
   Box,
   Text,
@@ -8,11 +9,25 @@ import {
   CardHeader,
   CardBody,
   Divider,
+  Flex,
+  keyframes,
+  Avatar,
 } from "@chakra-ui/react";
+import { FaArrowCircleDown, FaUser } from "react-icons/fa";
 import Sidebar from "../components/sidebar"; // Sidebar コンポーネントをインポート
 import Content from "../components/content"; // Content コンポーネントをインポート
 
 export default function Welcome() {
+  const router = useRouter();
+  const { isNewCreated } = router.query;
+  const moveAnimation = keyframes`
+  from {
+    transform: translate(-4px, 4px) rotate(225deg);
+  }
+  to {
+    transform: translate(0, 0) rotate(225deg);
+  }
+`;
   return (
     <>
       <Sidebar />
@@ -26,7 +41,15 @@ export default function Welcome() {
             >
               WELCOME
             </Heading>
-            <Text fontSize="lg">アカウント作成が完了しました</Text>
+            {isNewCreated === "true" ? (
+              <Text fontSize="lg">アカウント作成が完了しました</Text>
+            ) : (
+              <Text fontSize="lg">
+                右上の
+                <Avatar size="xs" src="https://bit.ly/broken-link" mx={1} />
+                からアカウントを新規作成してください
+              </Text>
+            )}
           </Box>
           <SimpleGrid
             columns={{ base: 1, md: 1, lg: 1 }}
@@ -40,13 +63,17 @@ export default function Welcome() {
               mt={5}
               mb={10}
             >
-              <Box
-                backgroundImage="/images/hippo.gif"
-                backgroundSize="contain"
-                backgroundRepeat="no-repeat"
-                width={{ base: "80px", md: "100px", lg: "120px" }}
-                height={{ base: "160px", md: "180px", lg: "200px" }}
-              />
+              {isNewCreated === "true" ? (
+                <Box
+                  backgroundImage="/images/hippo.gif"
+                  backgroundSize="contain"
+                  backgroundRepeat="no-repeat"
+                  width={{ base: "80px", md: "100px", lg: "120px" }}
+                  height={{ base: "160px", md: "180px", lg: "200px" }}
+                />
+              ) : (
+                <Box></Box>
+              )}
             </Box>
             <Card
               backgroundColor="transparent"
@@ -73,9 +100,26 @@ export default function Welcome() {
                 </Text>
               </CardBody>
             </Card>
-            <Text fontSize="sm" mt={3} textAlign="center">
-              右上のアイコンからログインしてください
-            </Text>
+            <Flex
+              fontSize="sm"
+              mt={3}
+              textAlign="center"
+              alignItems="center"
+              justifyContent="center"
+            >
+              {isNewCreated === "true" && (
+                <>
+                  <Text mr={2}>右上のアイコンからログインしてください</Text>
+                  <Box
+                    as={FaArrowCircleDown}
+                    animation={`${moveAnimation} .5s ease-in-out infinite alternate`}
+                    style={{
+                      verticalAlign: "middle",
+                    }}
+                  />
+                </>
+              )}
+            </Flex>
           </SimpleGrid>
         </div>
       </Content>

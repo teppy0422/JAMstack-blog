@@ -4,6 +4,7 @@ import {
   CircularProgressLabel,
   Center,
   Text,
+  Flex,
 } from "@chakra-ui/react";
 import styles from "../styles/home.module.scss";
 
@@ -29,7 +30,6 @@ function skillCircle(pops) {
   };
   const onScroll = (): void => {
     const position = scrollTop();
-    // console.log(property.timing);
     if (position >= pops.timing * 32 + 400) {
       setCirValue(pops.value);
     } else {
@@ -52,12 +52,14 @@ function skillCircle(pops) {
         trackColor="gray.300"
       >
         <CircularProgressLabel fontSize={18}>
-          <Image
-            src={property.img}
-            width={72}
-            height={72}
-            alt={property.color}
-          />
+          <Flex justifyContent="center" alignItems="center" width="100%">
+            <Image
+              src={property.img}
+              width={72}
+              height={72}
+              alt={property.color}
+            />
+          </Flex>
         </CircularProgressLabel>
         <Center className={styles.cirText} bg={property.color}>
           <Text color="white">{property.cirText}</Text>
