@@ -191,13 +191,28 @@ export default function About({
                         Sjp+本体
                       </Heading>
                       <Flex justifyContent="flex-end" alignItems="center">
-                        <Badge variant="solid" colorScheme="green" mr={2}>
+                        <Badge
+                          variant="solid"
+                          backgroundColor="green"
+                          mr={2}
+                          opacity={0.8}
+                        >
                           EXCEL2010
                         </Badge>
-                        <Badge variant="solid" colorScheme="green" mr={2}>
+                        <Badge
+                          variant="solid"
+                          backgroundColor="green"
+                          mr={2}
+                          opacity={0.8}
+                        >
                           2013
                         </Badge>
-                        <Badge variant="outline" colorScheme="gray" mr={2}>
+                        <Badge
+                          variant="outline"
+                          colorScheme="gray"
+                          mr={2}
+                          opacity={0.8}
+                        >
                           365
                         </Badge>
                       </Flex>
@@ -264,6 +279,7 @@ export default function About({
                           variant="solid"
                           backgroundColor="#6C277D"
                           color="white"
+                          opacity={0.8}
                           mr={2}
                         >
                           VB.net
@@ -311,11 +327,18 @@ export default function About({
                   <Heading size="xs" textTransform="uppercase">
                     誘導ナビ.net
                   </Heading>
-                  <Badge variant="solid" backgroundColor="#6C277D" mr={2}>
+                  <Badge
+                    variant="solid"
+                    backgroundColor="#6C277D"
+                    mr={2}
+                    opacity={0.8}
+                  >
                     VB.net
                   </Badge>
                   <Text pt="2" fontSize="sm">
                     配策誘導のディスプレイを移動させる
+                    <br />
+                    ブラウザではCOMポートへのアクセスがページ毎に許可される必要がある為に作成しました
                     <br />
                     .NetFrameWork4.8はインストーラーに含まれます
                   </Text>
@@ -335,7 +358,12 @@ export default function About({
                   <Heading size="xs" textTransform="uppercase">
                     検査履歴システム
                   </Heading>
-                  <Badge variant="solid" backgroundColor="#6C277D" mr={2}>
+                  <Badge
+                    variant="solid"
+                    backgroundColor="#6C277D"
+                    mr={2}
+                    opacity={0.8}
+                  >
                     VB.net
                   </Badge>
                   <Text pt="2" fontSize="sm">
@@ -379,10 +407,20 @@ export default function About({
                       ></Text>
                     </Flex>
                   </Flex>
-                  <Badge variant="solid" colorScheme="green" mr={2}>
+                  <Badge
+                    variant="solid"
+                    backgroundColor="green"
+                    mr={2}
+                    opacity={0.8}
+                  >
                     EXCEL2010
                   </Badge>
-                  <Badge variant="solid" colorScheme="green" mr={2}>
+                  <Badge
+                    variant="solid"
+                    backgroundColor="green"
+                    mr={2}
+                    opacity={0.8}
+                  >
                     2013
                   </Badge>
                   <Badge variant="outline" colorScheme="gray" mr={2}>
@@ -420,7 +458,7 @@ export default function About({
                   onMouseEnter={() => setIsHovered(true)}
                 >
                   <DownloadButton
-                    path="/download/jdss"
+                    path="/download/main"
                     isHovered={isHovered}
                     backGroundColor="#B02334"
                   />
@@ -434,6 +472,7 @@ export default function About({
                           variant="solid"
                           style={{ backgroundColor: "#B02334" }}
                           mr={2}
+                          opacity={0.8}
                         >
                           ACCESS2002
                         </Badge>
@@ -441,11 +480,11 @@ export default function About({
                           variant="solid"
                           style={{ backgroundColor: "#B02334" }}
                           mr={2}
+                          opacity={0.8}
                         >
                           2010
                         </Badge>
                       </Flex>
-
                       <Text pt="2" fontSize="sm">
                         一貫工程などの連続して生産する工程で有効
                         <br />
@@ -463,18 +502,81 @@ export default function About({
                       alignItems="flex-start"
                     >
                       <Flex justifyContent="flex-end" width="100%">
-                        <Text fontSize="xs" margin="auto" textAlign="right">
+                        <Text fontSize="xs" textAlign="right">
                           #2024/10/11
                           <br />
-                          125
+                          126
                         </Text>
                       </Flex>
-                      <CustomBadge path="" text="main1" />
+                      <CustomBadge path="" text="main1.計画指示" />
                       <CustomBadge
                         path="/files/download/Jdss/main2/index.html"
-                        text="main2"
+                        text="main2.SSC"
                       />
-                      <CustomBadge path="" text="main3" />
+                      <CustomBadge path="" text="main3.CB/PLC" />
+                    </Stack>
+                  </Flex>
+                </Box>
+                <Divider borderColor="gray.500" />
+                <Box
+                  position="relative"
+                  px={2}
+                  pl={7}
+                  py={2}
+                  _hover={{
+                    boxShadow: "dark-lg",
+                  }}
+                  onMouseEnter={() => setIsHovered(true)}
+                >
+                  <DownloadButton
+                    path="/download/main3"
+                    isHovered={isHovered}
+                    backGroundColor="#005cb3"
+                  />
+                  <Flex justifyContent="space-between" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start" flex={1}>
+                      <Heading size="sm" mb={1.5}>
+                        main3用PLC
+                      </Heading>
+                      <Flex justifyContent="flex-end" alignItems="center">
+                        <Badge
+                          variant="solid"
+                          style={{ backgroundColor: "#005cb3" }}
+                          mr={2}
+                          opacity={0.8}
+                        >
+                          OMRON CP**
+                        </Badge>
+                      </Flex>
+
+                      <Text pt="2" fontSize="sm">
+                        main3からPLCへデータを送信して部品セットを行う
+                        <br />
+                        main3からシリアル送信するデータは2進数でPLC受信で対応した内部リレーをON/OFFする
+                        <br />
+                        このラダー図そのままでは使用できるケースは少ないですが部品セットの参考になる筈です
+                        <br />
+                        CX-Programmerが必要です
+                      </Text>
+                    </Flex>
+                    <Stack
+                      spacing={1}
+                      direction="column"
+                      alignItems="flex-start"
+                    >
+                      <Flex justifyContent="flex-end" width="100%">
+                        <Text fontSize="xs" textAlign="right">
+                          #2024/03/13
+                          <br />
+                          17
+                        </Text>
+                      </Flex>
+                      <Flex>
+                        <Flex direction="column" mr={2}></Flex>
+                        <Flex direction="column">
+                          <CustomBadge path="" text="参考動画" />
+                        </Flex>
+                      </Flex>
                     </Stack>
                   </Flex>
                 </Box>
@@ -504,6 +606,7 @@ export default function About({
               </CardBody>
             </Card>
           </SimpleGrid>
+
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent maxW="90vw" maxH="90vh">

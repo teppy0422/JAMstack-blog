@@ -40,7 +40,6 @@ export default function About() {
   const router = useRouter();
   useEffect(() => {
     router.events.on("routeChangeComplete", handleChangeRoute);
-
     return () => {
       router.events.off("routeChangeComplete", handleChangeRoute);
     };
@@ -52,14 +51,9 @@ export default function About() {
       duration: 600,
     });
   }
-
-  // React.useEffect(() => {
-  //   AOS.init({
-  //     once: false,
-  //     easing: "ease-out-sine",
-  //     duration: 600,
-  //   });
-  // }, []);
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
   const skillCircles = [
     {
       value: 90,
@@ -219,7 +213,6 @@ export default function About() {
   return (
     <Content isCustomHeader={false}>
       <div className={styles.me}>
-        <Text>-作成中-</Text>
         <VStack>
           <Flex>
             <Box>
@@ -240,7 +233,6 @@ export default function About() {
                 >
                   software
                 </Tooltip>
-                .
               </Text>
               <Text className={styles.tool}>
                 I do
@@ -270,8 +262,8 @@ export default function About() {
           </div>
         </Box>
         <Center>
-          <Text w={["100%", "95%", "85%", "75%"]}>
-            高知県出身のエンジニア。11
+          <Text w={["100%", "95%", "85%", "75%"]} fontFamily="Noto Sans JP">
+            高知県出身のエンジニア。
             自動車のワイヤーハーネス製造/機械保全/生産計画/生産分析に従事。現場の問題改善を繰り返す内にITや電子工学技術に興味を持つ。
             EXCEL/ACCESSのソフトウェアからPLC/Arduinoなどのハードウェアを経験。それらをHTML/JavaScript/PHPで連携させる仕組みを構築。
             現場の利用者と相談して更に発展させていくのが得意です。カバが好き。
@@ -289,11 +281,11 @@ export default function About() {
           {skillCircles.map((item, index) => {
             const aosOffset: number = (index % 5) * 70;
             return (
-              <div
+              <Flex
+                key={index}
                 data-aos="fade-up"
                 data-aos-offset={aosOffset}
                 style={{ display: "inline-block" }}
-                key={index}
               >
                 <SkillCircle
                   value={item.value}
@@ -302,7 +294,7 @@ export default function About() {
                   timing={index}
                   img={item.img}
                 />
-              </div>
+              </Flex>
             );
           })}
         </Box>
@@ -310,7 +302,6 @@ export default function About() {
         <Box ml={[0, 0, "8%", "16%"]}>
           <div data-aos="fade-right" style={{ display: "inline-block" }}>
             <Text className={styles.subTitle}>Works</Text>
-            <Text>ここ最近の実績です。</Text>
           </div>
         </Box>
         <div style={{ height: "24px" }}></div>
@@ -338,17 +329,6 @@ export default function About() {
             );
           })}
         </Box>
-
-        <div style={{ height: "66px" }}></div>
-        <Box boxShadow="xl" rounded="md" w="100%">
-          <Image
-            src="/images/hippo.gif"
-            alt="hippoWalking"
-            width={100}
-            height={178}
-          />
-        </Box>
-        <Text className={styles.subTitle}>経験した構成</Text>
       </div>
     </Content>
   );
