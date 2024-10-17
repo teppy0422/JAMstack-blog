@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-10-17T15:23:00+0900"
+              description1="単線分析+にあった電線仕分け表がほしい"
+              description2="作成機能の追加"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.27_.zip"
+              inCharge="高知,王さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-10-07T16:17:00+0900"
               description1="コネクタ性別がハメ図で分からない"
               description2="ハメ図作成の選択肢にコネクタ性別で点線を追加"
               descriptionIN="コネクタ性別がMaleの場合は点線にする"
               linkHref="/files/download/Sjp/Sjp3.100.26_.zip"
               inCharge="高知,王さん,徳島,山田さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-09-27T12:12:00+0900"
