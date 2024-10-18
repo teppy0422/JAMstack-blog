@@ -144,13 +144,31 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-10-18T14:11:00+0900"
+              description1="部品リストIEで略図ダウンロード時にエラー"
+              description2="多分登録されてないからWEBページの構成が違う->IDで取得に変更"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.31_.zip"
+              inCharge="高知,王さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
+              dateTime="2024-10-18T12:03:00+0900"
+              description1="部品リスト作成で新規部品がある場合にエラー"
+              description2="略図ボタンの有無確認方法の修正"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.30_.zip"
+              inCharge="高知,王さん,Win10zip"
+              isLatest={false}
+            />
+            <CustomLinkBox
               dateTime="2024-10-18T01:33:00+0900"
               description1="部品リスト作成時に新規部品がある場合Edgeエラー"
               description2="EdgeまたはIEの選択式に変更"
               descriptionIN=" "
               linkHref="/files/download/Sjp/Sjp3.100.29_.zip"
               inCharge="高知,王さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-10-17T15:23:00+0900"
