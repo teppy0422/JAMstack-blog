@@ -513,7 +513,11 @@ export default function About({
                         path="/files/download/Jdss/main2/index.html"
                         text="main2.SSC"
                       />
-                      <CustomBadge path="" text="main3.CB/PLC" />
+                      <CustomBadge path="" text="main3.CB" />
+                      <CustomBadge
+                        path="/files/download/Jdss/main3_plc/index.html"
+                        text="main3.PLC"
+                      />
                     </Stack>
                   </Flex>
                 </Box>
@@ -573,9 +577,7 @@ export default function About({
                       </Flex>
                       <Flex>
                         <Flex direction="column" mr={2}></Flex>
-                        <Flex direction="column">
-                          <CustomBadge path="" text="参考動画" />
-                        </Flex>
+                        <Flex direction="column"></Flex>
                       </Flex>
                     </Stack>
                   </Flex>

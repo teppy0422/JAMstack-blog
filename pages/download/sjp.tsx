@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
-              dateTime="2024-10-18T14:11:00+0900"
+              dateTime="2024-10-18T16:11:00+0900"
               description1="部品リストIEで略図ダウンロード時にエラー"
-              description2="多分登録されてないからWEBページの構成が違う->IDで取得に変更"
+              description2="略図保存pathをVer3系に修正"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.31_.zip"
               inCharge="高知,王さん,Win10zip"
               isLatest={true}
+            />
+            <CustomLinkBox
+              dateTime="2024-10-18T14:11:00+0900"
+              description1="部品リストIEで略図ダウンロード時にエラー"
+              description2="PTMかJAIRSどちらかが登録されてないからWEBページ構成が違う?->IDで取得に変更"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.32_.zip"
+              inCharge="高知,王さん,Win10zip"
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-10-18T12:03:00+0900"
