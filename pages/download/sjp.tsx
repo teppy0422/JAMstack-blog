@@ -148,7 +148,7 @@ export default function About() {
               description1="部品リストIEで略図ダウンロード時にエラー"
               description2="略図保存pathをVer3系に修正"
               descriptionIN=""
-              linkHref="/files/download/Sjp/Sjp3.100.31_.zip"
+              linkHref="/files/download/Sjp/Sjp3.100.32_.zip"
               inCharge="高知,王さん,Win10zip"
               isLatest={true}
             />
@@ -157,7 +157,7 @@ export default function About() {
               description1="部品リストIEで略図ダウンロード時にエラー"
               description2="PTMかJAIRSどちらかが登録されてないからWEBページ構成が違う?->IDで取得に変更"
               descriptionIN=""
-              linkHref="/files/download/Sjp/Sjp3.100.32_.zip"
+              linkHref="/files/download/Sjp/Sjp3.100.31_.zip"
               inCharge="高知,王さん,Win10zip"
               isLatest={false}
             />

@@ -222,6 +222,11 @@ export default function About({
                         ハメ図を作成したりサブ形態を入力する本体
                         <br />
                         PVSW.csvとRLTF.txtが必須
+                        <br />
+                        <Badge backgroundColor="#444" color="white">
+                          41.先ハメ誘導
+                        </Badge>
+                        は生産準備+が自動立案したサブ形態のみ対応
                       </Text>
                     </Flex>
                     <Stack
@@ -243,7 +248,10 @@ export default function About({
                       </Flex>
                       <CustomBadge path="" text="10.竿レイアウト" />
                       <CustomBadge path="" text="40.サブ図" />
-                      <CustomBadge path="" text="41.先ハメ誘導" />
+                      <CustomBadge
+                        path="/files/download/Sjp/41/index.html"
+                        text="41.先ハメ誘導"
+                      />
                       <CustomBadge path="/56v3.1" text="56.配策経路" />
                       <CustomBadge
                         path="/files/download/Sjp/70/index.html"
@@ -313,7 +321,16 @@ export default function About({
                 </Box>
                 <Divider borderColor="gray.500" />
 
-                <Box position="relative" px={4} pl={8} py={2}>
+                <Box
+                  position="relative"
+                  px={2}
+                  pl={7}
+                  py={2}
+                  _hover={{
+                    boxShadow: "dark-lg",
+                  }}
+                  onMouseEnter={() => setIsHovered(true)}
+                >
                   <Box
                     position="absolute"
                     top={0}
@@ -324,24 +341,48 @@ export default function About({
                     borderRight="2px dotted"
                     borderColor="gray.500"
                   />
-                  <Heading size="xs" textTransform="uppercase">
-                    誘導ナビ.net
-                  </Heading>
-                  <Badge
-                    variant="solid"
-                    backgroundColor="#6C277D"
-                    mr={2}
-                    opacity={0.8}
-                  >
-                    VB.net
-                  </Badge>
-                  <Text pt="2" fontSize="sm">
-                    配策誘導のディスプレイを移動させる
-                    <br />
-                    ブラウザではCOMポートへのアクセスがページ毎に許可される必要がある為に作成しました
-                    <br />
-                    .NetFrameWork4.8はインストーラーに含まれます
-                  </Text>
+                  <Flex justifyContent="space-between" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start" flex={1}>
+                      <Heading size="sm" mb={1.5}>
+                        誘導ナビ.net
+                      </Heading>
+                      <Flex justifyContent="flex-end" alignItems="center">
+                        <Badge
+                          variant="solid"
+                          backgroundColor="#6C277D"
+                          color="white"
+                          opacity={0.8}
+                          mr={2}
+                        >
+                          VB.net
+                        </Badge>
+                      </Flex>
+                      <Text pt="2" fontSize="sm">
+                        配策誘導のディスプレイを移動させる
+                        <br />
+                        ブラウザではCOMポートへのアクセスがページ毎に許可される必要がある為に作成しました
+                        <br />
+                        .NetFrameWork4.8はインストーラーに含まれます
+                      </Text>
+                    </Flex>
+                    <Stack
+                      spacing={1}
+                      direction="column"
+                      alignItems="flex-start"
+                    >
+                      <Flex justifyContent="flex-end" width="100%">
+                        <Text fontSize="xs" textAlign="right" right={0}>
+                          #2018/11/26
+                          <br />
+                          1.0.0.10
+                        </Text>
+                      </Flex>
+                      <CustomBadge
+                        path="/files/download/Sjp/56.net/index.html"
+                        text="ディスプレイ移動"
+                      />
+                    </Stack>
+                  </Flex>
                 </Box>
                 <Divider borderColor="gray.500" />
                 <Box position="relative" px={4} pl={8} py={2}>

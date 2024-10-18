@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
+	<link rel="stylesheet" type="text/css" media="all" href="./wh.css">
+	<title>変更前</title>
+</head>
+
+<body>
+	<table>
+	</table>
+	<div>
+	<video class="box1" src="./sjp41.mp4" alt="sjp41.mp4" autoplay loop muted ></video>
+	<!-- プログレスバーの追加 -->
+	<div id="progress-container" style="position: absolute; bottom: 20px; left: 0; width: 100%; background-color: #333; height: 10px; cursor: pointer;">
+		<div id="progress-bar" style="width: 0%; height: 100%; background-color: #f00;"></div>
+		</div>
+	</div>
+	<script>
+		const video = document.querySelector('.box1');
+		const progressBar = document.getElementById('progress-bar');
+		const progressContainer = document.getElementById('progress-container');
+
+		// 動画の更新に応じてプログレスバーを更新
+		video.addEventListener('timeupdate', () => {
+			const percentage = (video.currentTime / video.duration) * 100;
+			progressBar.style.width = percentage + '%';
+		});
+
+		// プログレスバーをクリックで再生位置を移動
+		progressContainer.addEventListener('click', (e) => {
+			const rect = progressContainer.getBoundingClientRect();
+			const offsetX = e.clientX - rect.left;
+			const newTime = (offsetX / progressContainer.offsetWidth) * video.duration;
+			video.currentTime = newTime;
+			video.play();
+		});
+
+		// キーボード操作
+		document.addEventListener('keydown', (e) => {
+			switch (e.code) {
+				case 'ArrowLeft':
+					video.currentTime = Math.max(0, video.currentTime - 5);
+					break;
+				case 'ArrowRight':
+					video.currentTime = Math.min(video.duration, video.currentTime + 5);
+					break;
+				case 'Space':
+					if (video.paused) {
+						video.play();
+					} else {
+						video.pause();
+					}
+					break;
+			}
+		});
+	</script>
+
+	<style>
+		table {
+			background-color: #F00000;
+			color: #FFFFFF;
+		}
+
+		table td {
+			border-left: 1px solid #FFFFFF;
+			border-right: 1px solid #FFFFFF;
+		}
+
+		body {
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+</body>
+
+</html>
