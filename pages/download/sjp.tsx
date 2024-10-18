@@ -146,8 +146,8 @@ export default function About() {
             <CustomLinkBox
               dateTime="2024-10-18T01:33:00+0900"
               description1="部品リスト作成時に新規部品がある場合Edgeエラー"
-              description2="EdgeまたはIEの選択式に修正"
-              descriptionIN=""
+              description2="EdgeまたはIEの選択式に変更"
+              descriptionIN=" "
               linkHref="/files/download/Sjp/Sjp3.100.29_.zip"
               inCharge="高知,王さん,Win10zip"
               isLatest={true}
