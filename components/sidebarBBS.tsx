@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { MdBusiness, MdChat } from "react-icons/md"; // 追加
+
 import {
   Box,
   VStack,
@@ -7,6 +9,7 @@ import {
   useColorMode,
   Divider,
   useBreakpointValue,
+  Icon,
 } from "@chakra-ui/react";
 import { supabase } from "../utils/supabase/client-js";
 
@@ -20,7 +23,7 @@ function SidebarBBS() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
   const [threads, setThreads] = useState<
-    { id: string; title: string; company: string }[]
+    { id: string; title: string; company: string; mainCompany: string }[] // 修正: mainCompanyを追加
   >([]);
   const [loading, setLoading] = useState(true);
   const [ipAddress, setIpAddress] = useState("");
@@ -28,7 +31,8 @@ function SidebarBBS() {
   const { data: session } = useSession();
 
   const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany } = useUserData(userId);
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
 
   //新しい投稿の監視
   useEffect(() => {
@@ -121,8 +125,8 @@ function SidebarBBS() {
           whiteSpace="nowrap"
           overflow="hidden"
           textOverflow="ellipsis"
-          py={2}
-          pl={3}
+          py={0}
+          pl={0}
           cursor={isDifferentCompany ? "not-allowed" : "pointer"}
           opacity={isDifferentCompany ? 0.6 : 1}
         >
@@ -171,6 +175,8 @@ function SidebarBBS() {
     "2xl": "300px",
     "3xl": "400px",
   });
+  let previousMainCompany = ""; // ここで変数を定義
+
   return (
     <>
       <Box
@@ -200,22 +206,35 @@ function SidebarBBS() {
             }, {} as Record<string, typeof threads>)
           ).map(([company, threads]) => (
             <>
-              <Box fontWeight="bold" pl={3} textAlign="left">
-                <Divider
-                  borderColor={colorMode === "light" ? "black" : "white"}
-                />
-                {company}
-              </Box>
+              {threads[0].mainCompany !== previousMainCompany && (
+                <Box fontWeight="bold" pl={3} textAlign="left">
+                  {threads[0].mainCompany}
+                  <Divider
+                    borderColor={colorMode === "light" ? "black" : "white"}
+                  />
+                </Box>
+              )}
+              {company !== "開発" && ( // "開発" でない場合のみ表示
+                <Box fontWeight="bold" pl={3} textAlign="left">
+                  <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={2} />
+                  {company}
+                </Box>
+              )}
               {threads.map(
-                (thread: { id: string; title: string; company: string }) => {
+                (thread: {
+                  id: string;
+                  title: string;
+                  company: string;
+                  mainCompany: string;
+                }) => {
                   const isCurrentPage = currentPath === `/thread/${thread.id}`;
                   const isDifferentCompany =
-                    thread.company !== "開発" &&
-                    userCompany !== "開発" &&
-                    thread.company !== userCompany;
-
+                    thread.mainCompany !== "開発" &&
+                    userMainCompany !== "開発" &&
+                    thread.mainCompany !== userMainCompany;
+                  previousMainCompany = thread.mainCompany; // 追加: 前回のmainCompanyを更新
                   return (
-                    <Box display="flex" alignItems="center">
+                    <Box display="flex" alignItems="center" ml={7}>
                       {isCurrentPage && (
                         <Box as="span" mr={2}>
                           &gt;
