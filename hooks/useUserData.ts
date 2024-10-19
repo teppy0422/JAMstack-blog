@@ -5,6 +5,7 @@ export const useUserData = (userId: string | null) => {
   const [pictureUrl, setPictureUrl] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [userCompany, setUserCompany] = useState<string | null>(null);
+  const [userMainCompany, setUserMainCompany] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -15,10 +16,12 @@ export const useUserData = (userId: string | null) => {
           setPictureUrl(userData.picture_url);
           setUserName(userData.user_metadata.name);
           setUserCompany(userData.user_company);
+          setUserMainCompany(userData.user_mainCompany);
         } else {
           setPictureUrl(null);
           setUserName(null);
           setUserCompany(null);
+          setUserMainCompany(null);
         }
       }
     };
@@ -38,5 +41,5 @@ export const useUserData = (userId: string | null) => {
     return data;
   };
 
-  return { pictureUrl, userName, userCompany };
+  return { pictureUrl, userName, userCompany, userMainCompany };
 };
