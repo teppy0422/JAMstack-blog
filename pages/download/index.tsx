@@ -223,7 +223,12 @@ export default function About({
                         <br />
                         PVSW.csvとRLTF.txtが必須
                         <br />
-                        <Badge backgroundColor="#444" color="white">
+                        <Badge
+                          backgroundColor="#444"
+                          color="white"
+                          mt={-0.5}
+                          mr={0.5}
+                        >
                           41.先ハメ誘導
                         </Badge>
                         は生産準備+が自動立案したサブ形態のみ対応
@@ -247,7 +252,10 @@ export default function About({
                         </Text>
                       </Flex>
                       <CustomBadge path="" text="10.竿レイアウト" />
-                      <CustomBadge path="" text="40.サブ図" />
+                      <CustomBadge
+                        path="/files/download/Sjp/40/index.html"
+                        text="40.サブ図"
+                      />
                       <CustomBadge
                         path="/files/download/Sjp/41/index.html"
                         text="41.先ハメ誘導"
@@ -355,6 +363,15 @@ export default function About({
                           mr={2}
                         >
                           VB.net
+                        </Badge>
+                        <Badge
+                          variant="solid"
+                          backgroundColor="#007582"
+                          color="white"
+                          opacity={0.8}
+                          mr={2}
+                        >
+                          Arduino
                         </Badge>
                       </Flex>
                       <Text pt="2" fontSize="sm">
@@ -652,13 +669,13 @@ export default function About({
 
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent maxW="90vw" maxH="90vh">
+            <ModalContent maxW="90vw" maxH="90%">
               <ModalCloseButton right="3px" />
               {/* <ModalHeader></ModalHeader> */}
               <ModalBody mx={0}>
                 <Box
                   width="99%"
-                  height={{ base: "40vh", sm: "50vh", md: "70vh", lg: "80vh" }}
+                  height={{ base: "80vh", sm: "70vh", md: "70vh", lg: "80vh" }}
                   border="none"
                   maxW="90vw"
                 >

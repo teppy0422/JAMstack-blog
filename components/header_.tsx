@@ -32,8 +32,16 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
-import { CiSun } from "react-icons/ci";
+import {
+  WiMoonAltWaxingCrescent4,
+  WiMoonAltFirstQuarter,
+  WiMoonAltWaxingGibbous4,
+  WiMoonAltFull,
+  WiMoonAltWaningGibbous4,
+  WiMoonAltWaningCrescent4,
+} from "react-icons/wi";
 import { IoMoonOutline } from "react-icons/io5";
+import { FaSun } from "react-icons/fa";
 import { ImQrcode } from "react-icons/im";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
@@ -53,7 +61,8 @@ export default function Header() {
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [userId, setUserId] = useState<string | null>(null); // userIdの状態を追加
-  const { pictureUrl, userName, userCompany } = useUserData(userId);
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
 
   const {
     isOpen: isMenuOpen,
@@ -287,20 +296,20 @@ export default function Header() {
                 style={{
                   transform: "translateX(0rem)",
                 }}
-                _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
+                _focus={{ _focus: "none" }}
                 aria-label="DarkMode Switch"
-                icon={colorMode === "light" ? <IoMoonOutline /> : <CiSun />}
+                icon={colorMode === "light" ? <IoMoonOutline /> : <FaSun />}
                 fontSize="28px"
                 colorScheme={colorMode === "light" ? "purple" : "yellow"}
                 onClick={function (event) {
-                  toggleColorMode();
                   const icon = event.currentTarget.querySelector("svg");
                   if (icon) {
-                    icon.style.transition = "transform 1s !important";
-                    icon.style.transform = "rotate(360deg) !important";
+                    icon.style.transition = "transform 0.8s"; // 回転アニメーションの設定
+                    icon.style.transform = "rotate(360deg)"; // 回転させる
                     setTimeout(() => {
-                      icon.style.transform = "";
-                    }, 1000);
+                      toggleColorMode(); // 1秒後にカラーモードを切り替える
+                      icon.style.transform = ""; // 回転をリセット
+                    }, 800);
                   }
                 }}
               />
@@ -331,7 +340,9 @@ export default function Header() {
             }}
           />
           <ModalBody>
-            <Auth userData={{ userName, userCompany, pictureUrl }} />
+            <Auth
+              userData={{ userName, userCompany, pictureUrl, userMainCompany }}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>

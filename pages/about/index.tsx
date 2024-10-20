@@ -249,8 +249,8 @@ export default function About() {
                 src="/images/me.jpeg"
                 alt="me.jpeg"
                 objectFit="cover"
-                width={126}
-                height={126}
+                width={64}
+                height={64}
               />
             </Box>
           </Flex>
