@@ -21,6 +21,7 @@ interface AuthProps {
     pictureUrl: string | null;
     userName: string | null;
     userCompany: string | null;
+    userMainCompany: string | null;
   };
 }
 export default function Auth({ userData }: AuthProps) {
@@ -247,6 +248,9 @@ export default function Auth({ userData }: AuthProps) {
         <>
           <Box textAlign="center" mb={4}>
             <Text fontSize="lg">{userData.userName || "Guest"}</Text>
+            <Text fontSize="md" color="gray.500">
+              {userData.userMainCompany || ""}
+            </Text>
             <Text fontSize="md" color="gray.500">
               {userData.userCompany || ""}
             </Text>
