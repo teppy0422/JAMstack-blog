@@ -142,7 +142,13 @@ export default function About({
               </Text>
             </HStack>
             <Box fontSize="lg">
-              ダウンロードリンクと説明は適宜追加します
+              ダウンロードと説明は適宜追加します
+              <br />
+              右側にある
+              <Badge backgroundColor="#444" color="white" mt={-0.5} mr={0.5}>
+                バッジ
+              </Badge>
+              をクリックすると説明ページが表示されます
               <Box
                 display="flex"
                 alignItems="center"
