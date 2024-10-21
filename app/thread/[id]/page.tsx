@@ -445,10 +445,10 @@ export default function Thread() {
                   ? originalTitle
                   : "新しい投稿があります！";
             }, 1000);
-            setTimeout(() => {
-              clearInterval(blinkInterval);
-              document.title = originalTitle;
-            }, 5000); // 5秒後に点滅を停止
+            // setTimeout(() => {
+            //   clearInterval(blinkInterval);
+            //   document.title = originalTitle;
+            // }, 5000); // 5秒後に点滅を停止
             // デスクトップ通知を表示
             if (Notification.permission === "granted") {
               new Notification("新しい投稿があります！");

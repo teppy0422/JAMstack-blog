@@ -130,18 +130,6 @@ function SidebarBBS() {
           cursor={isDifferentCompany ? "not-allowed" : "pointer"}
           opacity={isDifferentCompany ? 0.6 : 1}
         >
-          {isNew && (
-            <Box
-              as="span"
-              backgroundColor="red"
-              position="absolute"
-              left="0"
-              top="0"
-              transform="translate(50%, 75%)"
-              width="6px"
-              height="1em"
-            />
-          )}
           <Box
             as="span"
             position="relative"
@@ -165,6 +153,18 @@ function SidebarBBS() {
           >
             {label}
           </Box>
+          {isNew && (
+            <Box
+              as="span"
+              backgroundColor="red"
+              position="absolute"
+              right="0px"
+              top="0"
+              // transform="translate(0%, 20%)"
+              width="6px"
+              height="1em"
+            />
+          )}
         </Box>
       </NextLink>
     );
@@ -227,18 +227,27 @@ function SidebarBBS() {
                   company: string;
                   mainCompany: string;
                 }) => {
-                  const isCurrentPage = currentPath === `/thread/${thread.id}`;
+                  const isCurrentPage = currentPath === `/thread/${thread.id}/`;
+                  console.log(thread.id);
+                  console.log(currentPath);
                   const isDifferentCompany =
                     thread.mainCompany !== "開発" &&
                     userMainCompany !== "開発" &&
                     thread.mainCompany !== userMainCompany;
                   previousMainCompany = thread.mainCompany; // 追加: 前回のmainCompanyを更新
                   return (
-                    <Box display="flex" alignItems="center" ml={7}>
-                      {isCurrentPage && (
-                        <Box as="span" mr={2}>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      ml={5}
+                      key={thread.id}
+                    >
+                      {isCurrentPage ? (
+                        <Box as="span" mr={-0.5}>
                           &gt;
                         </Box>
+                      ) : (
+                        <Box as="span" mr={2}></Box>
                       )}
                       {menuItem(
                         `/thread/${thread.id}`,
