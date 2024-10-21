@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-10-22T01:19:00+0900"
+              description1=""
+              description2="部品リスト作成の標準をIEに変更"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.35_.zip"
+              inCharge="高知,王さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-10-21T12:27:00+0900"
               description1="myAddressエラー"
               description2="ver1の変数をver3に修正"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.34_.zip"
               inCharge="高知,王さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-10-21T03:48:00+0900"

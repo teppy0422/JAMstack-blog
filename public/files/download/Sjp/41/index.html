@@ -31,7 +31,13 @@
 			const percentage = (video.currentTime / video.duration) * 100;
 			progressBar.style.width = percentage + '%';
 		});
-
+		video.addEventListener('click', () => {
+			if (video.paused) {
+				video.play();
+			} else {
+				video.pause();
+			}
+		});
 		// プログレスバーをクリックで再生位置を移動
 		progressContainer.addEventListener('click', (e) => {
 			const rect = progressContainer.getBoundingClientRect();
