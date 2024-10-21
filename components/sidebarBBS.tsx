@@ -42,10 +42,8 @@ function SidebarBBS() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "posts" },
         (payload) => {
-          console.log("New post payload:", payload); // デバッグ用
           setNewThreads((prev) => {
             const updatedThreads = [...prev, payload.new.thread_id];
-            console.log("Updated newThreads:", updatedThreads); // デバッグ用
             return updatedThreads;
           });
         }
@@ -162,7 +160,8 @@ function SidebarBBS() {
               top="0"
               // transform="translate(0%, 20%)"
               width="6px"
-              height="1em"
+              height="1.2em"
+              opacity="0.8"
             />
           )}
         </Box>
@@ -228,8 +227,6 @@ function SidebarBBS() {
                   mainCompany: string;
                 }) => {
                   const isCurrentPage = currentPath === `/thread/${thread.id}/`;
-                  console.log(thread.id);
-                  console.log(currentPath);
                   const isDifferentCompany =
                     thread.mainCompany !== "開発" &&
                     userMainCompany !== "開発" &&

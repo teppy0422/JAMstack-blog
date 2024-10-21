@@ -80,6 +80,8 @@ export default function Thread() {
   const [hoveredButton, setHoveredButton] = useState<"delete" | "reply" | null>(
     null
   );
+  const blinkIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
   // スマートフォンかどうかを判別
   const isMobileDevice = () => {
     return /Mobi|Android/i.test(navigator.userAgent);
@@ -276,7 +278,7 @@ export default function Thread() {
       setReplyPostUserDisplayName(displayName as string | null); // displayNameを状態に設定
       setReplyPostUserCompany(userCompany as string | null); // userCompanyを状態に設定
     }
-    setReplyToPostId(postId); // リプライ対象���投稿IDを設定
+    setReplyToPostId(postId); // リプライ対象投稿IDを設定
     // フォーカスを入力フィールドに当てる
     const textarea = document.querySelector("textarea");
     if (textarea) {
@@ -402,7 +404,13 @@ export default function Thread() {
   useEffect(() => {
     setIsClient(true);
   }, []);
-
+  useEffect(() => {
+    if (isAtBottom && blinkIntervalRef.current) {
+      clearInterval(blinkIntervalRef.current);
+      blinkIntervalRef.current = null; // クリア後にnullに設定
+      console.log("Interval cleared because isAtBottom is true");
+    }
+  }, [isAtBottom]);
   useEffect(() => {
     if (isClient && id) {
       const fetchIpAddress = async () => {
@@ -438,17 +446,17 @@ export default function Thread() {
               audioRef.current.play();
             }
             // タブのタイトルを点滅させる
-            let originalTitle = document.title;
-            let blinkInterval = setInterval(() => {
+            const originalTitle = document.title;
+            const blinkInterval = setInterval(() => {
               document.title =
                 document.title === "新しい投稿があります！"
                   ? originalTitle
                   : "新しい投稿があります！";
             }, 1000);
-            // setTimeout(() => {
-            //   clearInterval(blinkInterval);
-            //   document.title = originalTitle;
-            // }, 5000); // 5秒後に点滅を停止
+            setTimeout(() => {
+              clearInterval(blinkInterval);
+              document.title = originalTitle;
+            }, 10000); // 5秒後に点滅を停止
             // デスクトップ通知を表示
             if (Notification.permission === "granted") {
               new Notification("新しい投稿があります！");
@@ -722,7 +730,7 @@ export default function Thread() {
                 alignItems="center"
                 minWidth="14px" // アイコンのサイズ
                 paddingX="2px"
-                height="14px" // ��イコンのサイズ
+                height="14px" // イコンのサイズ
                 color="gray.500" // 既読か未読かで色を変更
                 fontSize="12px"
                 fontWeight="bold"

@@ -40,7 +40,13 @@
 			video.currentTime = newTime;
 			video.play();
 		});
-
+		video.addEventListener('click', () => {
+			if (video.paused) {
+				video.play();
+			} else {
+				video.pause();
+			}
+		});
 		// キーボード操作
 		document.addEventListener('keydown', (e) => {
 			switch (e.code) {
