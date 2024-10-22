@@ -262,10 +262,7 @@ export default function About({
                         path="/files/download/Sjp/40/index.html"
                         text="40.サブ図"
                       />
-                      <CustomBadge
-                        path="/files/download/Sjp/41/index.html"
-                        text="41.先ハメ誘導"
-                      />
+                      <CustomBadge path="/41" text="41.先ハメ誘導" />
                       <CustomBadge path="/56v3.1" text="56.配策経路" />
                       <CustomBadge
                         path="/files/download/Sjp/70/index.html"
@@ -400,10 +397,7 @@ export default function About({
                           1.0.0.10
                         </Text>
                       </Flex>
-                      <CustomBadge
-                        path="/files/download/Sjp/56.net/index.html"
-                        text="ディスプレイ移動"
-                      />
+                      <CustomBadge path="/56.net" text="ディスプレイ移動" />
                     </Stack>
                   </Flex>
                 </Box>
@@ -573,15 +567,9 @@ export default function About({
                         </Text>
                       </Flex>
                       <CustomBadge path="" text="main1.計画指示" />
-                      <CustomBadge
-                        path="/files/download/Jdss/main2/index.html"
-                        text="main2.SSC"
-                      />
+                      <CustomBadge path="/main2" text="main2.SSC" />
                       <CustomBadge path="" text="main3.CB" />
-                      <CustomBadge
-                        path="/files/download/Jdss/main3_plc/index.html"
-                        text="main3.PLC"
-                      />
+                      <CustomBadge path="/main3.plc" text="main3.PLC" />
                     </Stack>
                   </Flex>
                 </Box>

@@ -1,169 +1,92 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 
 <head>
-  <meta http-equiv="content-type" charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>ANA141_配索05_左</title>
-  <!-- <link rel="shortcut icon" href="../../images/hippo_001.ico" type="image/vnd.microsoft.icon"> -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="js/awesome5/font-awesome-animation.min.css" type="text/css" media="all" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<link rel="stylesheet" type="text/css" media="all" href="./wh.css">
+	<title>変更前</title>
 </head>
 
-<body onload="getTimeArray();">
-  <img src="images/hippo.gif" id="insert_gif">
-  <div id="menu" class="drag-and-drop" style="width:22.8em;">
-    <form id="dialog_container" method="post" action="">
-      <input id="dialog_user_name" type="hidden" name="user_name" value="<?php echo $_SESSION['name'] ?>">
-      <div class="neu_hole" style="width:20em;height:20em">
-        <div class="neu" style="width:10em;height:3em;margin:1em 2em;"
-          onclick="javascript:window.history.back(-1);return false;">リストにもどる</div>
-        <div class="neu" style="width:10em;height:3em;margin:1em 2em;" onclick="myClose('menu')">閉じる</div>
-      </div>
-    </form>
-  </div>
-  <div id="dialog" class="drag-and-drop">
-    <form id="dialog_container2" method="post" action="">
-      <input id="myTitle" name="myTitle" type="hidden" value="ANA141_配索05_左">
-      <input id="dialog_result" name="result" type="hidden" value="dialog_result_default">
-      <input id="dialog_SG_selectbox" name="dialog_SG_selectbox" type="hidden" value="dialog_SG_selectbox_default">
-      <input id="dialog_target_value" name="dialog_target_value" type="hidden" value="dialog_target_value_dafault">
-      <input id="dialog_total_time" name="total_time" type="hidden" value="">
-      <div class="neu_hole" style="width:30em;height:20em">
-        <p><ruby>
-            <rb>Do you want to register?</rb>
-            <rt>登録しますか？</rt>
-          </ruby><br><br>
-          <span id="dialog_myTitle">ANA141_配索05_左</span><br>
-          <span id="dialog_resultStr">0</span>s
-        </p>
+<body>
+	<table>
+	</table>
+	<div>
+		<video class="box1"
+			src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018151459.mp4"
+			alt="sjp56.net.mp4">
+		</video>
+		<!-- プログレスバーの追加 -->
+		<div id="progress-container"
+			style="position: absolute; bottom: 20px; left: 0; width: 100%; background-color: #333; height: 10px; cursor: pointer;">
+			<div id="progress-bar" style="width: 0%; height: 100%; background-color: #f00;"></div>
+		</div>
+		<div id="pause-overlay" onclick="video.play()"
+			style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); color: white; display: flex; justify-content: center; align-items: center;cursor: pointer;">
+			<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewbox="0 0 512 512" height="64px" width="64px"
+				xmlns="http://www.w3.org/2000/svg">
+				<path
+					d="M256 48C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48zm83.8 211.9l-137.2 83c-2.9 1.8-6.7-.4-6.7-3.9V173c0-3.5 3.7-5.7 6.7-3.9l137.2 83c2.9 1.7 2.9 6.1 0 7.8z">
+				</path>
+			</svg>
 
-        <div class="neu" id="yes" style="width:10em;height:5em;margin:1em 2em;" onclick="result_insert();">
-          <i class="fa fa-thumbs-up fa-fw"></i> YES
-        </div>
-        <div class="neu" id="no" style="width:10em;height:3em;margin:1em 2em;" onclick="myClose('dialog')">oh NO</div>
-      </div>
-    </form>
-  </div>
-  <div class="split-box left-box">
-    <div id="timerLabel"></div>
-    <div class="video-container" style="position: relative; width: 100%; max-width: 1040px; margin: auto;">
-      <div id="video-placeholder" class="video-placeholder">
-        <h1>順立生産システム</h1>
-        <h2>main2(SSC)</h2>
-        <i class="fas fa-play-circle fa-4x" onclick="playVideo()"></i>
-      </div>
-      <video id="video" width="100%" onclick="videoTouch()">
-        <source
-          src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018151459.mp4">
-      </video>
-    </div>
-    <div id="progressBar"></div>
-    <div class="video-control">
-      <div class="video-control" style="display: flex; justify-content: flex-start;">
-        <div id="play" class="neu" onclick="playVideo()"><i class="fa fa-play "></i></div>
-        <div id="pause" class="neu" onclick="pauseVideo()" style="display:none"><i class="fa fa-pause "></i></div>
-      </div>
-      <span id="kanryou"></span>
+		</div>
+	</div>
+	<script>
+		const video = document.querySelector('.box1');
+		const progressBar = document.getElementById('progress-bar');
+		const progressContainer = document.getElementById('progress-container');
+		const pauseOverlay = document.getElementById('pause-overlay');
 
+		// 動画の更新に応じてプログレスバーを更新
+		video.addEventListener('timeupdate', () => {
+			const percentage = (video.currentTime / video.duration) * 100;
+			progressBar.style.width = percentage + '%';
+		});
+		video.addEventListener('click', () => {
+			if (video.paused) {
+				video.play();
+			} else {
+				video.pause();
+			}
+		});
+		// プログレスバーをクリックで再生位置を移動
+		progressContainer.addEventListener('click', (e) => {
+			const rect = progressContainer.getBoundingClientRect();
+			const offsetX = e.clientX - rect.left;
+			const newTime = (offsetX / progressContainer.offsetWidth) * video.duration;
+			video.currentTime = newTime;
+			video.play();
+		});
 
-      <div style="display:none">
-        <div class="neu" onclick="clickMicrophone()"><i id="microphone" class="fas fa-volume-up"
-            style="color:#aaaaaa"></i></div>
-        <div class="neu2" style="width:8em;"><span id="ichi">0</span>/<span id="nagasa"></span>s</div>
-        <div class="neu2" style="width:5em;"><span id="rate">100</span>%</div>
-        <div class="neu" id="arrow-down" onclick="rateDown()"><i class="fas fa-arrow-down "></i></div>
-        <div class="neu" id="arrow-up" onclick="rateUp()"><i class="fas fa-arrow-up"></i></div>
-        <div class="neu" onclick="rateSet(0.3)"><i class="fas fa-frog fa faa-bounce animated-hover "></i></div>
-        <div class="neu" onclick="rateSet(0.5)"><i class="fas fa-cat fa faa-vertical animated-hover "></i></div>
-        <div class="neu" onclick="rateSet(1.0)"><i class="fas fa-crow fa faa-wrench animated-hover "></i></div>
-        <div class="neu" onclick="fullscreen();"><i id="mode_full" class="fas fa-expand-arrows-alt "></i></div>
-        <div class="neu" style="width:5em" onclick="myOpen('menu');"><i
-            class="fas fa-heart fa faa-wrench animated-hover fa-fw" style="color:#FF4491"></i>Tips
-        </div>
-      </div>
-    </div>
-    <div class="caption_line" style="position: relative">
-      <div style="position: absolute;top:10px;">
-        <span id="nowText" style="padding:10px;">
-          最新のバージョンではYSSにシリアル送信する事にも対応しています<br>
-        </span>
-      </div>
-    </div>
-  </div>
-  <div class="split-box right-box">
-    <table id="targetTable">
-      <thead>
-        <tr>
-          <div class="graph" style="position:fixed;top:0px;z-index: 1;max-width: 33.57%;left:66.43%;;">
-            <span style="top:0;left:0;width:0%" id="progressBar2"></span>
-          </div>
-        </tr>
-      </thead>
+		// キーボード操作
+		document.addEventListener('keydown', (e) => {
+			switch (e.code) {
+				case 'ArrowLeft':
+					video.currentTime = Math.max(0, video.currentTime - 5);
+					break;
+				case 'ArrowRight':
+					video.currentTime = Math.min(video.duration, video.currentTime + 5);
+					break;
+				case 'Space':
+					if (video.paused) {
+						video.play();
+					} else {
+						video.pause();
+					}
+					break;
+			}
+		});
 
-      <tr>
-        <td rowspan="6" class="SG0">1</td>
-        <td rowspan="12" class="BG0"></td>
-        <td>
-          <div class="graph">
-            <span class="bar" style="width: 5%;margin-left: 0%;"></span>
-          </div>
-        </td>
-      </tr>
-      <tr onclick="skip(0)" class="words" id="1">
-        <td>
-          <p class="comment">最初から</p>
-        </td>
-      </tr>
+		// 動画の一時停止と再生に応じてオーバーレイを表示/非表示
+		video.addEventListener('pause', () => {
+			pauseOverlay.style.display = 'flex';
+		});
+		video.addEventListener('play', () => {
+			pauseOverlay.style.display = 'none';
+		});
+	</script>
 
-      <tr>
-        <td>
-          <div class="graph">
-            <span class="bar" style="width: 15%;margin-left: 5%;"></span>
-          </div>
-        </td>
-      </tr>
-      <tr onclick="skip(4)" class="words">
-        <td>
-          <p class="comment">画面の見方</p>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <div class="graph">
-            <span class="bar" style="width: 45%;margin-left: 19%;"></span>
-          </div>
-        </td>
-      </tr>
-      <tr onclick="skip(18)" class="words">
-        <td>
-          <p class="comment">照合する方法</p>
-        </td>
-      </tr>
-
-      <tr>
-        <td rowspan="18" class="SG1">2</td>
-        <td>
-          <div class="graph">
-            <span class="bar" style="width: 30%;margin-left: 65%;"></span>
-          </div>
-        </td>
-      </tr>
-      <tr onclick="skip(59)" class="words">
-        <td>
-          <p class="comment">注意点</p>
-        </td>
-      </tr>
-    </table>
-    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-  </div>
 </body>
-<script src="js/main.js" charset="UTF-8"></script>
-<script src="js/awesome5/all.min.js"></script>
-<script>
-  total_time_get();
-</script>
 
 </html>

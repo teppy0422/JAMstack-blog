@@ -6,32 +6,41 @@ body {
     height: 100%;
     overflow: hidden;
     -ms-overflow-style: none;
-    background-image: 
-        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc),
-        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc);
+    background-color: #0a0a0a;
+    background-image:
+        linear-gradient(45deg, #111 25%, transparent 25%, transparent 75%, #111 75%, #111),
+        linear-gradient(45deg, #111 25%, transparent 25%, transparent 75%, #111 75%, #111);
     background-size: 20px 20px;
     background-position: 0 0, 10px 10px;
 }
+
 body::-webkit-scrollbar {
-	display: none;
+    display: none;
 }
+
 @media (max-width: 600px) {
     table {
-        font-size: 3vw; /* 小さい画面用のフォントサイズ */
+        font-size: 3vw;
+        /* 小さい画面用のフォントサイズ */
     }
 }
+
 @media (min-width: 1200px) {
     table {
-        font-size: 1.5vw; /* 大きい画面用のフォントサイズ */
+        font-size: 1.5vw;
+        /* 大きい画面用のフォントサイズ */
     }
 }
+
 .box1 {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100vh; /* ウィンドウの高さに合わせる */
-    overflow: hidden; /* オーバーフローを隠す */
+    height: 100vh;
+    /* ウィンドウの高さに合わせる */
+    overflow: hidden;
+    /* オーバーフローを隠す */
 }
 
 .box1 img {
@@ -39,4 +48,8 @@ body::-webkit-scrollbar {
     max-height: 100%;
     width: auto;
     height: auto;
+}
+
+svg:hover {
+    fill: red;
 }
