@@ -345,7 +345,8 @@ export default function Auth({ userData }: AuthProps) {
                         新規登録の流れ:
                       </Text>
                       <Text fontSize="sm" mb={2}>
-                        1. メールアドレスとパスワードを入力してください。
+                        1.
+                        メールアドレスとパスワード(6文字以上)を入力してください。
                       </Text>
                       <Text fontSize="sm" mb={2}>
                         2. 「新規登録」ボタンをクリックします。

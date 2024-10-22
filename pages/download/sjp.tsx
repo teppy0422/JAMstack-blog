@@ -339,7 +339,7 @@ export default function About() {
               descriptionIN="ハメ図の数字は相手の端末ナンバー"
               linkHref="/files/download/Sjp/Sjp3.005.19_.zip"
               inCharge="書き直し,開発,win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-08-25T14:54:00+0900"
