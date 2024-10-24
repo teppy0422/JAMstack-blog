@@ -27,14 +27,40 @@ export default function About() {
     isOpen: false,
     children: [
       {
-        name: "基本的なコード",
+        name: "1次元配列の並び替え",
         type: "folder",
         isOpen: false,
         children: [
           {
-            name: "<code>コード</code>",
+            name: "Function sort1ary(arr_) As Variant",
             type: "file",
-            popOver: "コード",
+            popOver: "arr_は1次元配列,1,2,3,10,11,A,Bのような昇順で並び替える",
+          },
+        ],
+      },
+      {
+        name: "部品品番の変換",
+        type: "folder",
+        isOpen: false,
+        children: [
+          {
+            name: "Function convertYazakiNumber(str_ As String) As String",
+            type: "file",
+            popOver:
+              "str_が7119-5555-30なら7119555530に変換.7119555530なら7119-5555-30に変換",
+          },
+        ],
+      },
+      {
+        name: "1次元配列をUTF8でテキスト出力",
+        type: "folder",
+        isOpen: false,
+        children: [
+          {
+            name: "Sub exportText_UTF8(ary_ As Variant,path_ As String)",
+            type: "file",
+            popOver:
+              "EXCEL-VBAの標準だとShift_JISでテキスト出力されて文字化けの原因になるからUTF8で出力.htmlとか.cssとかで使う",
           },
         ],
       },
@@ -207,9 +233,25 @@ export default function About() {
             <Text fontSize="xl" colorScheme="black">
               プログラムの構造
             </Text>
+            <Text fontSize="sm" colorScheme="black">
+              プログラムを誰でも編集出来るようにする事を目指して以下に編集のポイントを記載していきます
+              <br />
+              変数の名付け方や引数の渡し方などの参考になれば幸いです
+            </Text>
             <Badge variant="solid" colorScheme="red" mr={2}>
               開発者
             </Badge>
+            <Text>
+              前提
+              <br />
+              ・on error resume nextは使わない(EXCELの軽い破損で動作しない)
+              <br />
+              ・SQL文は使わない(編集の難易度が上がる.EXCELのバージョンによって動作が異なる)
+              <br />
+              ・go to は使わない(予想外のエラーが発生)
+              <br />
+              ・アップロードの前にコンパイルを実行する
+            </Text>
           </Box>
           <FileSystemNode item={directoryData1} />
           <FileSystemNode item={directoryData2} />
