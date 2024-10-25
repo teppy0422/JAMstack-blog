@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-10-26T17:50:00+0900"
+              description1="部品リスト作成でIEエラー"
+              description2="レンダリング完了の待機時間を1=>500msに修正"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.40_.zip"
+              inCharge="高知,王さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-10-25T00:48:00+0900"
               description1="サブ図のタグで部品リストの工程aが40にしても表示される,IEでDSW取得時にIDが無かったらエラー,防水栓が表示されない不安定"
               description2="工程aが40のみ表示するように修正,空文字を返すように修正,ハメ図作成をオプションに追加"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.39_.zip"
               inCharge="高知,徳島,王さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-10-22T23:35:00+0900"
