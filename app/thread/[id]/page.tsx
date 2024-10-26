@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import {
@@ -52,6 +52,7 @@ import {
 import { ChatIcon } from "@chakra-ui/icons";
 import Content from "../../../components/content";
 import SidebarBBS from "../../../components/sidebarBBS";
+import { useCustomToast } from "../../../components/customToast";
 
 export default function Thread() {
   const router = useRouter();
@@ -81,7 +82,13 @@ export default function Thread() {
     null
   );
   const blinkIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
+  const showToast = useCustomToast();
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setNewPostContent(e.target.value);
+    },
+    []
+  );
   // スマートフォンかどうかを判別
   const isMobileDevice = () => {
     return /Mobi|Android/i.test(navigator.userAgent);
@@ -91,6 +98,11 @@ export default function Thread() {
     setIsMobile(isMobileDevice());
   }, []);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const [hasMore, setHasMore] = useState(true); // 追加: さらに読み込む投稿があるかどうかを管理
+  const [loading, setLoading] = useState(false); // 追加: ローディング状態を管理
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false); // 初回ロード完了フラグ
+  const postsPerPage = 20; // 1回の取得で読み込む投稿数
+
   // 現在のユーザーIDを取得する関数
   useEffect(() => {
     const fetchUserId = async () => {
@@ -306,8 +318,6 @@ export default function Thread() {
       }
       // 取得したデータを状態にセット
       setUsersData2(usersData || []);
-      // 取得したデータ内容をコンソールに出力
-      console.log("userData2取得したよーーー:", usersData);
     };
     fetchUsers2();
   }, []);
@@ -404,6 +414,13 @@ export default function Thread() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (isClient && id) {
+      fetchPosts(); // 初回ロード時に投稿を取得
+    }
+  }, [isClient, id]);
+
   useEffect(() => {
     if (isAtBottom && blinkIntervalRef.current) {
       clearInterval(blinkIntervalRef.current);
@@ -476,15 +493,50 @@ export default function Thread() {
     }
   }, [isClient, id]);
   //投稿を表示
-  const fetchPosts = async () => {
-    const { data } = await supabase
+  const fetchPosts = async (offset = 0) => {
+    setLoading(true);
+
+    const { data, error } = await supabase
       .from("posts")
       .select("*")
-      .eq("thread_id", id);
-    setPosts(data || []);
+      .eq("thread_id", id)
+      .order("created_at", { ascending: false }) // 最新の投稿から取得
+      .range(offset, offset + postsPerPage - 1); // オフセットから20件取得
+
+    if (error) {
+      console.error("Error fetching posts:", error.message);
+    } else {
+      const newPosts = data.reverse(); // 取得した投稿を古い順に並べ替え
+      setPosts((prevPosts) => {
+        const existingPostIds = new Set(prevPosts.map((post) => post.id));
+        const uniqueNewPosts = newPosts.filter(
+          (post) => !existingPostIds.has(post.id)
+        );
+        return [...uniqueNewPosts, ...prevPosts];
+      });
+      setHasMore(newPosts.length === postsPerPage); // 20件取得できた場合はさらに読み込む可能性がある
+    }
+    setLoading(false);
+    window.scrollBy(0, 200);
+    // 初回ロードが完了したら下までスクロール
+    if (!initialLoadComplete) {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      setInitialLoadComplete(true);
+    }
   };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY === 0 && hasMore && !loading) {
+        fetchPosts(posts.length); // 現在の投稿数をオフセットとして使用
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [posts, hasMore, loading]);
   // 投稿する
-  const createPost = async () => {
+  const createPost = async (inputValue: string) => {
     let fileUrl: string = "";
     let originalFileName: string = "";
     if (selectedFile) {
@@ -498,16 +550,13 @@ export default function Thread() {
         console.log("Public URL:", fileUrl);
       }
     }
-    if (!newPostContent.trim() && !fileUrl) {
-      return;
-    }
     const {
       data: { user },
     } = await supabase.auth.getUser();
     const { error } = await supabase.from("posts").insert([
       {
         thread_id: id,
-        content: newPostContent,
+        content: inputValue,
         ip_address: ipAddress,
         file_url: fileUrl,
         original_file_name: originalFileName,
@@ -577,15 +626,6 @@ export default function Thread() {
   const scrollToBottom = () => {
     window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   };
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.shiftKey && e.key === "Enter") {
-      e.preventDefault();
-      createPost();
-      setNewPostContent("");
-      const textarea = e.target as HTMLTextAreaElement;
-      textarea.style.height = "auto"; // 高さを初期状態に戻す
-    }
-  };
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -614,7 +654,12 @@ export default function Thread() {
     const userName = getUserById(user?.id ?? "");
 
     if (userName === null) {
-      alert("ダウンロードするにはログインと管理者によるマスター登録が必要です");
+      showToast(
+        "ダウンロードできません",
+        "ダウンロードするにはログインと管理者によるマスター登録が必要です",
+        "error"
+      );
+      // alert("ダウンロードするにはログインと管理者によるマスター登録が必要です");
       return;
     }
     try {
@@ -763,7 +808,6 @@ export default function Thread() {
 
     // すべての外部リンクにイベントリスナーを追加
     const links = document.querySelectorAll(".external-link");
-    console.log("Links found:", links); // 取得したリンクをログに出力
     links.forEach((link) => {
       link.addEventListener("click", handleLinkClick);
     });
@@ -809,6 +853,17 @@ export default function Thread() {
         py="10px"
         bg={colorMode === "light" ? "white" : "gray.900"}
       >
+        {loading && (
+          <Flex
+            justifyContent="center"
+            alignItems="center"
+            position="fixed"
+            top="48px"
+            left="50%"
+          >
+            <Spinner size="sm" />
+          </Flex>
+        )}
         {!isAtBottom ? ( // 最下部でない場合にアイコンを表示
           <Box
             onClick={(e) => {
@@ -958,6 +1013,29 @@ export default function Thread() {
             </Button>
           </Tooltip>
           <Input
+            as="textarea"
+            id="inputValue"
+            onInput={(e) => {
+              const target = e.target as HTMLTextAreaElement;
+              target.style.height = "auto"; // 高さをリセット
+              target.style.height = `${target.scrollHeight + 10}px`; // 内容に応じて高さを設定
+            }}
+            onKeyDown={(e) => {
+              if (e.shiftKey && e.key === "Enter") {
+                e.preventDefault();
+                const sendButton = document.getElementById("sendButton");
+                if (sendButton) {
+                  sendButton.click(); // ボタンをプログラム的にクリック
+                }
+              }
+            }}
+            // value={newPostContent}
+            // onChange={(e) => setNewPostContent(e.target.value)}
+            // onInput={(e) => {
+            //   const target = e.target as HTMLTextAreaElement;
+            //   target.style.height = "auto"; // 高さをリセット
+            //   target.style.height = `${target.scrollHeight}px`; // 内容に応じて高さを設定
+            // }}
             _focus={{
               borderColor: colorMode === "light" ? "gray.900" : "gray.200",
             }} // 追加: フォーカス時の枠線の色を指定
@@ -966,61 +1044,60 @@ export default function Thread() {
             }} // 追加: フォーカスが可視状態の時の枠線の色を指定
             fontFamily="Noto Sans JP"
             fontWeight="200"
-            as="textarea"
-            type="text"
-            value={newPostContent}
-            onChange={(e) => setNewPostContent(e.target.value)}
-            onKeyDown={(e) =>
-              handleKeyDown(
-                e as unknown as React.KeyboardEvent<HTMLTextAreaElement>
-              )
-            }
             placeholder="メッセージを入力 (Shift+Enterで送信)"
             paddingTop={2}
             size="md"
             color={colorMode === "light" ? "black" : "white"}
             bg={colorMode === "light" ? "gray.50" : "gray.800"}
             borderColor={colorMode === "light" ? "gray.200" : "gray.800"}
-            resize="none"
             borderRadius="5px"
-            onInput={(e) => {
-              const target = e.target as HTMLTextAreaElement;
-              target.style.height = "auto";
-              target.style.height = `${target.scrollHeight}px`;
-              target.style.overflow = "hidden";
-            }}
             _placeholder={{ color: "gray.500" }} // placeholderの文字色を指定
+            resize="none"
           />
           <IconButton
+            id="sendButton"
             onClick={() => {
               if (isSubmitting) return;
+              const inputValue = document.getElementById("inputValue");
+              if (inputValue === null) return;
+              const inputValueElement = inputValue as HTMLTextAreaElement;
+              if (!inputValueElement.value.trim() && !selectedFile) {
+                showToast(
+                  "送信できません",
+                  "メッセージを入力またはファイル添付が必要です",
+                  "error"
+                );
+                return;
+              }
+              console.log(inputValueElement.value);
+              // setNewPostContent(inputValueElement.value);
               setIsSubmitting(true); //post開始
-              createPost();
-              setNewPostContent(""); //クリア
-              const textarea = document.querySelector("textarea");
-              if (textarea) {
-                textarea.style.height = "28px"; // 高さを初期状態に戻す
+              createPost(inputValueElement.value);
+              // setNewPostContent(""); //クリア
+              if (inputValueElement) {
+                inputValueElement.value = "";
+                inputValue.style.height = "38px"; // 高さを初期状態に戻す
               }
               setIsSubmitting(false); //post終了
             }}
             icon={
               isSubmitting ? (
                 <Spinner
-                  size="28px"
+                  size="38px"
                   color={colorMode === "light" ? "purple" : "yellow"}
                 />
               ) : (
                 <BsSend
                   color={colorMode === "light" ? "purple" : "yellow"}
                   style={{ transform: "rotate(0deg)" }}
-                  size="28px"
+                  size="38px"
                 />
               )
             }
             bg="none"
             top={-1}
             left={-2}
-            isDisabled={!newPostContent.trim() && !selectedFile} // テキストが空で、添付ファイルが無い場合はボタンを無効化
+            // isDisabled={!newPostContent.trim() && !selectedFile} // テキストが空で、添付ファイルが無い場合はボタンを無効化
             aria-label="送信"
           />
           <audio ref={audioRef} src="/sound/notification.mp3" />

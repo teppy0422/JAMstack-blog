@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MdBusiness, MdChat } from "react-icons/md"; // 追加
+import { MdBusiness, MdChat } from "react-icons/md";
+import { useCustomToast } from "../../components/customToast";
 
 import {
   Box,
@@ -55,12 +56,12 @@ export default function Threads() {
   }, []);
 
   const fetchThreads = async () => {
-    setLoading(true); // 追加
+    setLoading(true);
     const { data } = await supabase.from("threads").select("*");
     if (data) {
       setThreads(data);
     }
-    setLoading(false); // 追加
+    setLoading(false);
   };
   //新規スレッド作成
   const createThread = async () => {
@@ -84,6 +85,7 @@ export default function Threads() {
     acc[thread.mainCompany].push(thread); // スレッドを会社名の配列に追加
     return acc;
   }, {});
+  const showToast = useCustomToast();
 
   return (
     <>
@@ -182,12 +184,18 @@ export default function Threads() {
                                   // アクセスできない場合の表示
                                   <Box
                                     _hover={{
-                                      textDecoration: "none",
+                                      cursor: "default",
                                     }}
                                     color="gray.500" // アクセスできない場合の色を変更
-                                    cursor="not-allowed" // アクセスできない場合のカーソルを変更
                                     ml={5}
                                     fontFamily="Noto Sans JP"
+                                    onClick={() => {
+                                      showToast(
+                                        "閲覧できません",
+                                        "閲覧できるのは同じ会社のみです",
+                                        "error"
+                                      );
+                                    }}
                                   >
                                     {thread.title}
                                   </Box>

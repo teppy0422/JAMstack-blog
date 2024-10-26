@@ -34,11 +34,12 @@ import NextImage from "next/image";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import DownloadButton from "../../components/DownloadButton";
 import styles from "../../styles/home.module.scss";
+import { useUserData } from "../../hooks/useUserData";
+import { useUserInfo } from "../../hooks/useUserId";
 
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
-
 // ファイル名から最大の数字を取得する関数
 function getMaxVersionNumber(directory: string): {
   maxVersionString: string;
@@ -94,7 +95,9 @@ export default function About({
 }) {
   const { colorMode } = useColorMode();
   const router = useRouter();
-
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalPath, setModalPath] = useState("");
   const handleBoxClick = (path) => {
@@ -189,6 +192,7 @@ export default function About({
                     path="/download/sjp"
                     isHovered={isHovered}
                     backGroundColor="green"
+                    userName={userName}
                   />
 
                   <Flex justifyContent="space-between" alignItems="flex-start">
@@ -287,6 +291,7 @@ export default function About({
                     path="/download/camera"
                     isHovered={isHovered}
                     backGroundColor="#6C277D"
+                    userName={userName}
                   />
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
@@ -402,7 +407,17 @@ export default function About({
                   </Flex>
                 </Box>
                 <Divider borderColor="gray.500" />
-                <Box position="relative" px={4} pl={8} py={2}>
+
+                <Box
+                  position="relative"
+                  px={2}
+                  pl={7}
+                  py={2}
+                  _hover={{
+                    boxShadow: "dark-lg",
+                  }}
+                  onMouseEnter={() => setIsHovered(true)}
+                >
                   <Box
                     position="absolute"
                     top={0}
@@ -413,22 +428,39 @@ export default function About({
                     borderRight="2px dotted"
                     borderColor="gray.500"
                   />
-                  <Heading size="xs" textTransform="uppercase">
-                    検査履歴システム
-                  </Heading>
-                  <Badge
-                    variant="solid"
-                    backgroundColor="#6C277D"
-                    mr={2}
-                    opacity={0.8}
-                  >
-                    VB.net
-                  </Badge>
-                  <Text pt="2" fontSize="sm">
-                    YC-CのWHモードでエラーのポイントを表示する画像を生産準備+が作成
-                    <br />
-                    開発は山口部品でダウンロードはここで出来るようにはしません
-                  </Text>
+                  <Flex justifyContent="space-between" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start" flex={1}>
+                      <Heading size="sm" mb={1.5}>
+                        検査履歴システム
+                      </Heading>
+
+                      <Flex justifyContent="flex-end" alignItems="center">
+                        <Badge
+                          variant="solid"
+                          backgroundColor="#6C277D"
+                          mr={2}
+                          opacity={0.8}
+                        >
+                          VB.net
+                        </Badge>
+                      </Flex>
+                      <Text pt="2" fontSize="sm">
+                        YC-CのWHモードでエラーのポイントを表示する画像を生産準備+が作成
+                        <br />
+                        開発は山口部品でダウンロードはここで出来るようにはしません
+                      </Text>
+                    </Flex>
+                    <Stack
+                      spacing={1}
+                      direction="column"
+                      alignItems="flex-start"
+                    >
+                      <Flex justifyContent="flex-end" width="100%">
+                        <Text fontSize="xs" textAlign="right" right={0}></Text>
+                      </Flex>
+                      <CustomBadge path="" text="ポイント点滅設置" />
+                    </Stack>
+                  </Flex>
                 </Box>
               </CardBody>
             </Card>
@@ -519,6 +551,7 @@ export default function About({
                     path="/download/main"
                     isHovered={isHovered}
                     backGroundColor="#B02334"
+                    userName={userName}
                   />
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
@@ -588,6 +621,7 @@ export default function About({
                     path="/download/main3"
                     isHovered={isHovered}
                     backGroundColor="#005cb3"
+                    userName={userName}
                   />
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
