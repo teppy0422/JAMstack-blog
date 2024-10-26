@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { css, keyframes } from "@emotion/react";
 import { Box, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useCustomToast } from "../components/customToast";
 import "../styles/globals.css";
 const shake = keyframes`
   0% { transform: translateX(0); }
@@ -14,16 +15,18 @@ interface DownloadButtonProps {
   path: string;
   isHovered: boolean;
   backGroundColor: string;
+  userName?: string | null;
 }
 
 const DownloadButton: React.FC<DownloadButtonProps> = ({
   path,
   isHovered,
   backGroundColor,
+  userName,
 }) => {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
-
+  const showToast = useCustomToast();
   return (
     <>
       <Box
@@ -49,13 +52,24 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
             : "polygon(0 0, 0% 0, 0% 100%, 0 100%)"
         }
         onClick={() => {
-          setIsClicked(true);
-          setTimeout(() => {
-            router.push(path);
-          }, 500); // Wait for the animation to complete
+          if (!userName) {
+            showToast(
+              "ログインしていません",
+              "ダウンロードするにはログインが必要です",
+              "error"
+            );
+          } else {
+            setIsClicked(true);
+            setTimeout(() => {
+              router.push(path);
+            }, 500);
+          }
         }}
         _hover={{
-          animation: isClicked ? "none" : `${shake} 0.6s ease-in-out infinite`,
+          animation:
+            isClicked || !userName
+              ? "none"
+              : `${shake} 0.6s ease-in-out infinite`,
         }}
       >
         <Text
@@ -65,6 +79,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           color="white"
           fontFamily="'Archivo Black', 'M PLUS Rounded 1c'"
           fontSize="16px"
+          userSelect="none"
         >
           DOWNLOAD
         </Text>

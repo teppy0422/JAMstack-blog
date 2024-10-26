@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { MdBusiness, MdChat } from "react-icons/md"; // 追加
+import { MdBusiness, MdChat } from "react-icons/md";
+import { useCustomToast } from "../components/customToast";
 
 import {
   Box,
@@ -33,6 +34,7 @@ function SidebarBBS() {
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
+  const showToast = useCustomToast();
 
   //新しい投稿の監視
   useEffect(() => {
@@ -108,7 +110,15 @@ function SidebarBBS() {
       >
         <Box
           {...buttonStyle(path_)}
-          onClick={isDifferentCompany ? undefined : onClose} // 会社が異なる場合はクリックイベントを無効にする
+          onClick={() => {
+            if (isDifferentCompany) {
+              showToast(
+                "閲覧できません",
+                "閲覧できるのは同じ会社のみです",
+                "error"
+              );
+            }
+          }}
           position="relative"
           _hover={{
             "& span::after": {
@@ -125,7 +135,7 @@ function SidebarBBS() {
           textOverflow="ellipsis"
           py={0}
           pl={0}
-          cursor={isDifferentCompany ? "not-allowed" : "pointer"}
+          cursor={isDifferentCompany ? "default" : "pointer"}
           opacity={isDifferentCompany ? 0.6 : 1}
         >
           <Box

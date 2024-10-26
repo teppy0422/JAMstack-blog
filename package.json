@@ -48,6 +48,7 @@
     "highlight.js": "^11.5.1",
     "hljs": "^6.2.3",
     "install": "^0.13.0",
+    "lodash": "^4.17.21",
     "lodash.now": "^4.0.2",
     "magic-sdk": "^8.1.1",
     "microcms-js-sdk": "^2.0.0",
