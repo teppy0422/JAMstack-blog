@@ -12,7 +12,6 @@ export const useUserData = (userId: string | null) => {
       if (userId) {
         const userData = await fetchUserFromTable(userId);
         if (userData) {
-          console.log("取得したユーザー情報:", userData);
           setPictureUrl(userData.picture_url);
           setUserName(userData.user_metadata.name);
           setUserCompany(userData.user_company);

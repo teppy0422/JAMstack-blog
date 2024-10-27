@@ -52,7 +52,10 @@ import {
 import { ChatIcon } from "@chakra-ui/icons";
 import Content from "../../../components/content";
 import SidebarBBS from "../../../components/sidebarBBS";
+import BBSTodoList from "../../../components/BBSTodoList";
 import { useCustomToast } from "../../../components/customToast";
+import { useUserData } from "../../../hooks/useUserData";
+import { useUserInfo } from "../../../hooks/useUserId";
 
 export default function Thread() {
   const router = useRouter();
@@ -73,7 +76,6 @@ export default function Thread() {
   const { colorMode, toggleColorMode } = useColorMode(); //ダークモード
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); //ログイン有無
-  const [userId, setUserId] = useState<string | null>(null);
   //PCとスマホ
   //長押し
   const [isLongPress, setIsLongPress] = useState(false);
@@ -102,24 +104,9 @@ export default function Thread() {
   const [loading, setLoading] = useState(false); // 追加: ローディング状態を管理
   const [initialLoadComplete, setInitialLoadComplete] = useState(false); // 初回ロード完了フラグ
   const postsPerPage = 20; // 1回の取得で読み込む投稿数
-
-  // 現在のユーザーIDを取得する関数
-  useEffect(() => {
-    const fetchUserId = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        console.log("userログインしたよ", user);
-        setUserId(user.id);
-        console.log("userId", userId);
-      } else {
-        console.error("User is not logged in.aaaaaaaaaaaaaaaaa");
-        setUserId(null);
-      }
-    };
-    fetchUserId();
-  }, []);
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
   //既読チェック
   const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0"; // 任意のユーザーID
   useEffect(() => {
@@ -492,7 +479,23 @@ export default function Thread() {
       };
     }
   }, [isClient, id]);
-  //投稿を表示
+  //全投稿を取得
+  const fetchAllPosts = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .eq("thread_id", id)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching all posts:", error.message);
+    } else {
+      setPosts(data.reverse());
+    }
+    setLoading(false);
+  };
+  //投稿を20だけ表示
   const fetchPosts = async (offset = 0) => {
     setLoading(true);
 
@@ -1170,7 +1173,6 @@ export default function Thread() {
           </ModalBody>
         </ModalContent>
       </Modal>
-
       <SidebarBBS />
       <Content isCustomHeader={true}>
         <Heading size="md" mb="1" ml="1">
@@ -1438,7 +1440,7 @@ export default function Thread() {
                           px="0"
                           py="0"
                           cursor="pointer"
-                          onClick={() => {
+                          onClick={async () => {
                             //リプライをクリックしたらポストにスクロール
                             const postElement = document.getElementById(
                               post.reply_post_id
@@ -1465,9 +1467,23 @@ export default function Thread() {
                                 }, 500); // アニメーションの持続時間と一致させる
                               }, 500); // スクロールのアニメーションが完了するまで待つ
                             } else {
-                              console.error(
-                                `Element with ID ${post.id} not found`
-                              ); // デバッグ用
+                              await fetchAllPosts();
+                              const postElement = document.getElementById(
+                                post.id
+                              );
+                              console.log("id_________", post.id);
+                              console.log("postElement_________", postElement);
+                              if (postElement) {
+                                const offset = 80; // 調整したいオフセット値
+                                const elementPosition =
+                                  postElement.getBoundingClientRect().top; // 要素の位置を取得
+                                const offsetPosition =
+                                  elementPosition + window.scrollY - offset; // オフセットを考慮した位置を計算
+                                window.scrollTo({
+                                  top: offsetPosition,
+                                  behavior: "smooth", // スムーズにスクロール
+                                });
+                              }
                             }
                           }}
                         >
@@ -1737,6 +1753,7 @@ export default function Thread() {
         </Stack>
         <Box mb="53px" />
       </Content>
+      <BBSTodoList userName={userName ?? ""} userId={userId ?? ""} />
     </div>
   );
 }

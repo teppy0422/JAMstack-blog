@@ -271,47 +271,6 @@ function SidebarBBS() {
           ))}
         </VStack>
       </Box>
-
-      {/* <IconButton
-        display={{ base: "block", xl: "block" }}
-        icon={<HamburgerIcon />}
-        bg="white.1"
-        aria-label="Open Menu"
-        onClick={onOpen}
-        position="fixed"
-        top="8px"
-        left="10px"
-        zIndex="1101" // アイコンが他の要素の後ろに隠れないようにする
-        opacity="0.85"
-        borderColor={colorMode === "light" ? "black" : "white"}
-        borderWidth="1px"
-      />
-
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-        <DrawerOverlay>
-          <DrawerContent
-            w={["75%", "50%", "25%"]}
-            maxW="200px"
-            bg="rgba(255, 255, 255, 0.4)" // 背景の透明度を設定
-            backdropFilter="blur(10px)" // ブラー効果を設定
-          >
-            <DrawerHeader color="white">MENU</DrawerHeader>
-            <DrawerBody>
-              <VStack spacing="2" align="stretch">
-                <>
-                  <Divider borderColor="white" />
-                  {menuItem("/directoryLayout", "ディレクトリ構成", false)}
-                  <Divider borderColor="white" />
-                  {menuItem("/download", "ダウンロード", false)}
-                  <Divider borderColor="white" />
-                  {menuItem("/BBS", "不具合報告", false)}
-                  <Divider borderColor="white" />
-                </>
-              </VStack>
-            </DrawerBody>
-          </DrawerContent>
-        </DrawerOverlay>
-      </Drawer> */}
     </>
   );
 }
