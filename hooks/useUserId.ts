@@ -20,7 +20,6 @@ export const useUserInfo = () => {
           userId: user.id ?? null,
           email: user.email ?? null,
         });
-        console.log("ユーザー情報を取得しました:", user.id, user.email);
       } else {
         console.error("ユーザーがログインしていません");
       }
