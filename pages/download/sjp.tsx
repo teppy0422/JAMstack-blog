@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-10-29T03:24:00+0900"
+              description1="サブ図のタグが重複している"
+              description2="部品リストのセットで1品番でのセットに対応"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.45_.zip"
+              inCharge="高知,王さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-10-28T12:45:00+0900"
               description1="ハメ図無しでサブ図作成できない"
               description2="ハメ図無しでサブ図作成に対応.印刷シート作成を修正"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.44_.zip"
               inCharge="高知,王さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-10-28T04:41:00+0900"

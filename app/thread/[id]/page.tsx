@@ -48,11 +48,13 @@ import {
   TagLeftIcon,
   TagRightIcon,
   Icon,
+  Checkbox,
 } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
 import Content from "../../../components/content";
 import SidebarBBS from "../../../components/sidebarBBS";
 import BBSTodoList from "../../../components/BBSTodoList";
+import TodoListMenu from "../../../components/BBSTodoListMenu";
 import { useCustomToast } from "../../../components/customToast";
 import { useUserData } from "../../../hooks/useUserData";
 import { useUserInfo } from "../../../hooks/useUserId";
@@ -480,7 +482,7 @@ export default function Thread() {
     }
   }, [isClient, id]);
   //全投稿を取得
-  const fetchAllPosts = async () => {
+  const fetchAllPosts = async (): Promise<void> => {
     setLoading(true);
     const { data, error } = await supabase
       .from("posts")
@@ -1358,8 +1360,7 @@ export default function Thread() {
                               !(
                                 userId && // userIdが存在する場合のみ
                                 (post.user_uid === userId ||
-                                  userId ===
-                                    "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0")
+                                  userId === masterUserId)
                               )
                             }
                           >
@@ -1384,7 +1385,9 @@ export default function Thread() {
                               handleMouseEnter("reply");
                             }}
                             onMouseLeave={handleMouseLeave}
-                            borderRadius="1px"
+                            borderRight="1px"
+                            borderColor="gray.500"
+                            borderRadius="0"
                             bg="transparent"
                             _hover={{ backgroundColor: "transparent" }}
                             width="3rem"
@@ -1406,6 +1409,12 @@ export default function Thread() {
                               </Text>
                             </Stack>
                           </Button>
+                          {userId === masterUserId && ( // masterUserIdと一致する場合のみ表示
+                            <>
+                              <Divider borderColor="black" />
+                              <TodoListMenu postId={longPressPostId} id={id} />
+                            </>
+                          )}
                         </Box>
                       </>
                     )}
@@ -1467,7 +1476,11 @@ export default function Thread() {
                                 }, 500); // アニメーションの持続時間と一致させる
                               }, 500); // スクロールのアニメーションが完了するまで待つ
                             } else {
+                              // リプライ先がない場合
                               await fetchAllPosts();
+                              await new Promise((resolve) =>
+                                setTimeout(resolve, 0)
+                              ); // レンダリングが完了するのを待つ
                               const postElement = document.getElementById(
                                 post.id
                               );
