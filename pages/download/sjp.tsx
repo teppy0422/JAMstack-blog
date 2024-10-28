@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
-              dateTime="2024-10-26T04:41:00+0900"
+              dateTime="2024-10-28T12:45:00+0900"
+              description1="ハメ図無しでサブ図作成できない"
+              description2="ハメ図無しでサブ図作成に対応.印刷シート作成を修正"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.44_.zip"
+              inCharge="高知,王さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
+              dateTime="2024-10-28T04:41:00+0900"
               description1="仕分け表の印刷範囲が美しくない"
               description2="美しく修正.プリンターによる印刷範囲は未対応"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.43_.zip"
               inCharge="高知,王さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-10-25T17:50:00+0900"
