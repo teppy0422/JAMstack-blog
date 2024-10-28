@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import {
   Box,
   Input,
@@ -10,17 +9,22 @@ import {
   Checkbox,
   Avatar,
   Divider,
+  Icon,
 } from "@chakra-ui/react";
-import { Icon } from "@chakra-ui/react";
+import { MdAdd } from "react-icons/md";
 import { MdBusiness } from "react-icons/md";
 import { useColorMode } from "@chakra-ui/react";
 import { supabase } from "../utils/supabase/client";
 import useFetchUserData from "../hooks/useFetchUserData";
 import useFetchTodos from "../hooks/useFetchTodos";
-const TodoList = ({
+const TodoListMenu = ({
+  id,
+  postId,
   userName,
   userId,
 }: {
+  id?: string;
+  postId?: string | null;
   userName?: string;
   userId?: string;
 }) => {
@@ -53,8 +57,6 @@ const TodoList = ({
     user_mainCompany?: string;
     user_company?: string;
     userName?: string;
-    thread_id?: string;
-    post_id?: string;
   }
   const { todos, error: todosError }: { todos: Todo[]; error: any } =
     useFetchTodos();
@@ -84,16 +86,18 @@ const TodoList = ({
             userId: user?.id,
             user_mainCompany: user?.user_mainCompany,
             user_company: user?.user_company,
+            thread_id: id,
+            post_id: postId,
           },
         ]);
         if (error) {
           console.error("Error inserting data for user:", userName, error);
         }
       }
-    }
+    } // 入力欄をクリア
+    setNewTodo("");
   };
   const { colorMode } = useColorMode();
-  const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0"; // 任意のユーザーID
   const maxWidth = useBreakpointValue({
     base: "0px",
     xl: "190px",
@@ -101,85 +105,62 @@ const TodoList = ({
     "3xl": "500px",
   });
   return (
-    <Box
-      display={{ base: "none", xl: "block" }}
-      position="fixed"
-      maxWidth={maxWidth}
-      h="80vh"
-      bg="white.200"
-      p="0"
-      top="60px"
-      right="8px"
-      textAlign="left"
-      zIndex="1100"
-      fontSize={15}
-    >
-      <Text
-        fontSize="sm"
-        mb="0"
-        width="100%"
-        border="1px solid gray"
-        textAlign="center"
-        px={1}
-      >
-        未完了の内容
-      </Text>
-      <Stack spacing="0">
-        {todos.map((todo, index) => {
-          const user = userData.find(
-            (user: UserData) => user.id === todo.userId
-          );
-          const previousTodo = todos[index - 1];
-          const isSameAsPrevious =
-            previousTodo &&
-            previousTodo.user_mainCompany === todo.user_mainCompany;
-
-          const isSameCompanyAsPrevious =
-            previousTodo && previousTodo.user_company === todo.user_company;
-
-          return (
-            <Text
-              key={index}
-              mx={0}
-              py={1}
-              overflow="hidden"
-              whiteSpace="nowrap"
-              textOverflow="ellipsis"
-              title={todo.value}
-              cursor="pointer"
-              fontFamily="Noto Sans JP"
+    <>
+      <Box bg={colorMode === "dark" ? "white" : "white"} p={1} m={1}>
+        <Stack direction="column" spacing={0}>
+          {userData
+            .filter((user) => user.user_mainCompany !== "開発")
+            .map((user) => (
+              <Checkbox
+                value={user.user_metadata?.name}
+                my={0}
+                colorScheme="gray"
+                borderColor="black"
+              >
+                <span style={{ color: "black" }}>
+                  {user.user_metadata?.name}
+                </span>
+                <span style={{ display: "none" }}>{user.id}</span>
+                <span style={{ display: "none" }}>{user.user_mainCompany}</span>
+                <span style={{ display: "none" }}>{user.user_company}</span>
+              </Checkbox>
+            ))}
+        </Stack>
+        <Input
+          fontSize="sm"
+          value={newTodo}
+          onChange={(e) => setNewTodo(e.target.value)}
+          placeholder=""
+          my="2"
+          py={1}
+          color="black"
+          border="1px solid black"
+          focusBorderColor="gray"
+          _focus={{ borderColor: "black" }}
+        />
+        <Box display="flex" justifyContent="flex-end">
+          <Button
+            onClick={addTodo}
+            bg="transparent"
+            p={2}
+            border="1px solid black"
+          >
+            <Stack
+              alignItems="center"
+              spacing="1"
+              maxWidth={1.5}
+              color="gray.900"
             >
-              {!isSameAsPrevious && todo?.user_mainCompany && (
-                <>
-                  {todo.user_mainCompany}
-                  <Divider
-                    borderColor={colorMode === "light" ? "black" : "white"}
-                  />
-                </>
-              )}
-              {!isSameCompanyAsPrevious && todo?.user_company && (
-                <>
-                  <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={0} />
-                  {todo.user_company}
-                  <br />
-                </>
-              )}
-              <Avatar boxSize="20px" mr={1} src={user?.picture_url} ml={4} />
-              {/* {todo?.userName && <span>{todo.userName}</span>} */}
-              <Link href={`/thread/${todo.thread_id}#${todo.post_id}`}>
-                {todo.value}
-              </Link>
-              {/* {todo.thread_id}
-              data-thread-id={todo.thread_id}
-              {todo.post_id}
-              data-post-id={todo.post_id} */}
-            </Text>
-          );
-        })}
-      </Stack>
-      <Stack spacing="2"></Stack>
-    </Box>
+              <Icon as={MdAdd} boxSize={5} />
+              <Text fontSize="0.5rem" lineHeight="1" p={0} m={0}>
+                追加
+              </Text>
+            </Stack>
+          </Button>
+        </Box>
+      </Box>
+    </>
   );
 };
 
-export default TodoList;
+export default TodoListMenu;
