@@ -147,7 +147,6 @@ const TodoList = ({
               {!isSameAsPrevious && todo?.user_mainCompany && (
                 <>
                   {todo.user_mainCompany}
-
                   <Divider
                     borderColor={colorMode === "light" ? "black" : "white"}
                   />
