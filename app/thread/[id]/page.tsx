@@ -872,7 +872,7 @@ export default function Thread() {
         {!isAtBottom ? ( // 最下部でない場合にアイコンを表示
           <Box
             onClick={(e) => {
-              e.preventDefault();
+              // e.preventDefault();
               scrollToBottom();
             }}
             position="absolute"
@@ -1027,7 +1027,7 @@ export default function Thread() {
             }}
             onKeyDown={(e) => {
               if (e.shiftKey && e.key === "Enter") {
-                e.preventDefault();
+                // e.preventDefault();
                 const sendButton = document.getElementById("sendButton");
                 if (sendButton) {
                   sendButton.click(); // ボタンをプログラム的にクリック
@@ -1706,7 +1706,7 @@ export default function Thread() {
                               <Box>
                                 <Button
                                   onClick={(e) => {
-                                    e.preventDefault();
+                                    // e.preventDefault();
                                     handleDownload(
                                       post.file_url,
                                       post.original_file_name
