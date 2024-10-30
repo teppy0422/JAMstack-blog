@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-10-31T03:28:00+0900"
+              description1="部品リストIEとか仕分け表"
+              description2="修正"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.51_.zip"
+              inCharge="高知,王さん,不具合,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-10-29T21:16:00+0900"
               description1="印刷範囲が合っていない"
               description2="C811の印刷範囲を反映"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.46_.zip"
               inCharge="高知,王さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-10-29T03:24:00+0900"
