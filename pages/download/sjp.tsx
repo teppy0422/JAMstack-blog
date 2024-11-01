@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
-              dateTime="2024-10-31T03:28:00+0900"
+              dateTime="2024-11-01T02:11:00+0900"
+              description1="仮想コンパイルが行われていない"
+              description2="Option Explicitを追加"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.52_.zip"
+              inCharge="高知,王さん,不具合,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
+              dateTime="2024-11-31T03:28:00+0900"
               description1="部品リストIEとか仕分け表"
               description2="修正"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.51_.zip"
               inCharge="高知,王さん,不具合,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-10-29T21:16:00+0900"
