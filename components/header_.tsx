@@ -32,22 +32,16 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
-import {
-  WiMoonAltWaxingCrescent4,
-  WiMoonAltFirstQuarter,
-  WiMoonAltWaxingGibbous4,
-  WiMoonAltFull,
-  WiMoonAltWaningGibbous4,
-  WiMoonAltWaningCrescent4,
-} from "react-icons/wi";
+
 import { IoMoonOutline } from "react-icons/io5";
 import { FaSun } from "react-icons/fa";
 import { ImQrcode } from "react-icons/im";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
 import React, { useEffect } from "react";
+import { WiCloudy, WiRain } from "react-icons/wi";
+import { WiDaySunny, WiCloudyGusts, WiRainMix } from "react-icons/wi";
 
-import LoginBtn from "./loginBtn";
 import AwesomIcon from "./awesomIcon";
 import Auth from "./Auth"; // Authコンポーネントをインポート
 import { useUserData } from "../hooks/useUserData";
@@ -70,6 +64,16 @@ export default function Header() {
     onClose: onMenuClose,
   } = useDisclosure();
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+
+  const [weatherIcon, setWeatherIcon] = useState(<FaSun />);
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      const icon = await getWeatherIcon();
+      setWeatherIcon(icon);
+    };
+    fetchWeather();
+  }, []);
 
   // loginボタンを隠す
   let keyFlag: boolean = false;
@@ -298,7 +302,7 @@ export default function Header() {
                 }}
                 _focus={{ _focus: "none" }}
                 aria-label="DarkMode Switch"
-                icon={colorMode === "light" ? <IoMoonOutline /> : <FaSun />}
+                icon={colorMode === "light" ? weatherIcon : <IoMoonOutline />}
                 fontSize="28px"
                 colorScheme={colorMode === "light" ? "purple" : "yellow"}
                 onClick={function (event) {
@@ -382,3 +386,31 @@ export default function Header() {
   );
 }
 function changeIcon() {}
+
+// 天気情報を取得する関数
+const getWeatherIcon = async () => {
+  try {
+    const response = await fetch(
+      "https://www.jma.go.jp/bosai/forecast/data/forecast/360000.json"
+    );
+    const data = await response.json();
+
+    // 天気情報を解析して適切なアイコンを選択
+    const weather = data[0].timeSeries[0].areas[0].weathers[0];
+
+    if (weather.includes("くもり") && weather.includes("雨")) {
+      return <WiRainMix />; // 雨のちくもりのアイコン
+    } else if (weather.includes("雨")) {
+      return <WiRain />;
+    } else if (weather.includes("くもり")) {
+      return <WiCloudy />;
+    } else if (weather.includes("晴")) {
+      return <FaSun />;
+    } else {
+      return <FaSun />; // デフォルトのアイコン
+    }
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    return <FaSun />; // エラー時のデフォルトアイコン
+  }
+};

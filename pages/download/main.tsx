@@ -134,13 +134,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-01T16:33:00+0900"
+              description1="起動時にsqlエラー"
+              description2="sqlを使わないように変更。テーブルリンクが無い場合は作成"
+              descriptionIN=""
+              linkHref="/files/download/Jdss/main_127.zip"
+              inCharge="徳島,小松さん,Win10zip"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-10-11T23:44:00+0900"
               description1="サーバー接続が出来ない場合にテーブル読み込みエラー"
               description2="サーバーIP接続とファイル接続を分ける"
               descriptionIN=""
               linkHref="/files/download/Jdss/main_126.zip"
               inCharge="徳島,小松さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-10-11T02:49:00+0900"
