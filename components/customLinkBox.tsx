@@ -45,7 +45,6 @@ type CustomLinkBoxProps = {
   inCharge: string;
   isLatest: boolean;
 };
-
 // elapsedHoursを画面に表示する処理を追加
 class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
   state = {
@@ -119,8 +118,11 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
         return { color: "red", variant: "solid" };
       } else if (inCharge.includes("徳島") || inCharge.includes("高知")) {
         return { color: "green", variant: "outline" };
-      } else if (inCharge.includes("更新")) {
-        return { color: "teal" };
+      } else if (inCharge.includes("新機能")) {
+        return {
+          color: "teal",
+          variant: "solid",
+        }; // sxプロパティを使用してアニメーションを追加
       } else {
         return { color: "gray", variant: "solid" };
       }
@@ -144,7 +146,6 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
       agoText = "A moment ago";
       badgeColor = "teal";
     }
-    const baseUrl = "https://yourdomain.com"; // ここにサイトのベースURLを設定
 
     return (
       <>

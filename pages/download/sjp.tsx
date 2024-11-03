@@ -32,7 +32,7 @@ import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
-import Sidebar from "../../components/sidebar"; // Sidebar コンポーネ��トをインポート
+import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
 
 function TransitionExample() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-04T04:39:00+0900"
+              description1=""
+              description2="サブナンバーの引越しを追加。ハメ図作成のUIをWEBに変更。先ハメのみを選択した時に後ハメにマジックを表示しない。メッセージ表示をWEBに変更"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.58_.zip"
+              inCharge="高知,王さん,新機能"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-11-01T02:11:00+0900"
               description1="仮想コンパイルが行われていない"
               description2="Option Explicitを追加"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.52_.zip"
               inCharge="高知,王さん,不具合,Win10zip"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-31T03:28:00+0900"
