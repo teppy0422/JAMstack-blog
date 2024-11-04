@@ -410,7 +410,7 @@ export default function About() {
               description2="タッチ操作に対応した配策誘導ナビの追加"
               descriptionIN="画像の重ね合わせ=>要素をオブジェクトとして作成"
               linkHref="/files/download/Sjp/Sjp3.100.00_.zip"
-              inCharge="開発,Win10zip"
+              inCharge="開発,Win10zip,新機能"
               isLatest={false}
             />
             <CustomLinkBox

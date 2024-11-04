@@ -21,13 +21,6 @@ import {
   Tooltip,
   Flex,
   Spacer,
-  CircularProgress,
-  CircularProgressLabel,
-  Wrap,
-  WrapItem,
-  HStack,
-  useDisclosure,
-  Stack,
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import styles from "../../styles/home.module.scss";

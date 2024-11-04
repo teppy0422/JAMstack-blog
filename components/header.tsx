@@ -78,7 +78,7 @@ export default function Header() {
         <VStack>
           <Flex className={`${myClass} ${styles.headerNav}`}>
             <Center w="64px">
-              <LoginBtn />
+              {/* <LoginBtn /> */}
               <Box style={{ display: "none" }} id="none">
                 <AwesomIcon
                   link="https://github.com/teppy0422/JAMstack-blog"

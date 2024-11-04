@@ -400,12 +400,6 @@ element.style {
   transition: 0.3s;
 }
 
-.cardList {
-  /* 吹き出し本体 */
-  /* 三角アイコン */
-  /* beforeで本体の三角を表現 */
-}
-
 .cardList .balloon {
   position: relative;
   padding: 12px 20px;
@@ -880,5 +874,7 @@ scroll .typing .question .typeInput:focus {
     right: -70%;
   }
 }
+
+
 
 /*# sourceMappingURL=home.module.css.map */

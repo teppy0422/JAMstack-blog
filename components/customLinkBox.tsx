@@ -35,7 +35,15 @@ import {
   TriangleUpIcon,
   WarningTwoIcon,
 } from "@chakra-ui/icons";
-import { LineSegments } from "three";
+import { keyframes } from "@emotion/react";
+const shake = keyframes`
+  0% { transform: rotate(0deg); }
+  70% { transform: rotate(0deg); }
+  85% { transform: rotate(-5deg); }
+  90% { transform: rotate(5deg); }
+  95% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+`;
 type CustomLinkBoxProps = {
   dateTime: string;
   description1?: string;
@@ -120,9 +128,10 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
         return { color: "green", variant: "outline" };
       } else if (inCharge.includes("新機能")) {
         return {
-          color: "teal",
+          color: "green",
           variant: "solid",
-        }; // sxプロパティを使用してアニメーションを追加
+          sx: { animation: `${shake} 1s infinite` },
+        }; // シェイクアニメーションを追加
       } else {
         return { color: "gray", variant: "solid" };
       }
@@ -203,6 +212,7 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                   key={index}
                   colorScheme={inChargeColors[index].color}
                   variant={inChargeColors[index].variant}
+                  sx={inChargeColors[index].sx} // sxプロパティを適用
                   marginRight={1}
                 >
                   {inCharge}

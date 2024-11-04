@@ -366,8 +366,6 @@ export default function Header() {
                   <Divider borderColor="white" />
                   {menuItem("/roadMap", "ロードマップ", false)}
                   <Divider borderColor="white" />
-                  {menuItem("/directoryLayout", "ディレクトリ構成", false)}
-                  <Divider borderColor="white" />
                   {menuItem("/objectLayout", "プログラム解説", false)}
                   <Divider borderColor="white" />
                   {menuItem("/app/typing", "タイピング練習", false)}
@@ -385,7 +383,6 @@ export default function Header() {
     </>
   );
 }
-function changeIcon() {}
 
 // 天気情報を取得する関数
 const getWeatherIcon = async () => {
