@@ -73,9 +73,9 @@ export default function SjpDetail_talk() {
         <br />
         娘「・・・」
         <br />
-        娘「専門家じゃないと作業できないね」
+        娘「勉強しないと作業できないね」
         <br />
-        わい「だから誰でも作業が出来るように次のような画像を作るんやで」
+        わい「だから誰でも作業出来るように次のような画像を作るんやで」
       </Text>
       <Image
         src="/images/insert_picture_before.png"
