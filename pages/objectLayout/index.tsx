@@ -395,7 +395,7 @@ export default function About() {
     isOpen: true,
     children: [
       {
-        name: "エクセルvbaでは専用のライブラリも概念も無い為、classとcollectionを使ってオブジェクト指向を実現しています\n以下はワイヤーハーネスのオブジェクトのイメージです\n※実際はもっと要素数が多いですが分かりやすく製品品番も1点としてシンプルにしています\n配列では無くオブジェクト指向にする事で柔軟性が向上します",
+        name: "エクセルvbaでは専用のライブラリも概念も無い為、classとcollectionを使ってオブジェクト指向を実現しています\n以下はワイヤーハーネスのオブジェクトのイメージです\n※実際はもっと要素数が多いですが分かりやすく製品品番も1点としてシンプルにしています\n配列では無くオブジェクト指向にする事で柔軟性が向上します\n近年ではオブジェクト指向はデバッグがしづらい点が懸念されていますがその場合は関数型を採用しています",
         type: "file",
       },
       {
@@ -825,11 +825,15 @@ export default function About() {
             </Flex>
           </CustomAccordion>
           <CustomAccordion
-            title="業務改善の進め方"
+            title="業務改善の進め方の例"
             badges={["開発者", "使用者", "作業者"]}
           >
             <Box style={{ textAlign: "center" }} className={styles.cardList}>
-              <Text>過去の活動をまとめてみました</Text>
+              <Text>
+                過去の活動をまとめてみました
+                <br />
+                娘は居ません。実際のやりとりをデフォルメしています
+              </Text>
               {skillCards.map((item, index) => {
                 return (
                   <Box display={"inline-block"} key={index}>
@@ -869,6 +873,20 @@ export default function About() {
                 <ListItem>
                   <ListIcon as={CheckCircleIcon} color="green.500" />
                   <Text as="span" fontWeight="bold" mr={2}>
+                    命名規則:
+                  </Text>
+                  boolean型はis,他は動詞(get,paint)から始める
+                </ListItem>
+                <ListItem>
+                  <ListIcon as={CheckCircleIcon} color="green.500" />
+                  <Text as="span" fontWeight="bold" mr={2}>
+                    命名規則:
+                  </Text>
+                  JavaScriptが用意している関数名を出来るだけ真似る
+                </ListItem>
+                <ListItem>
+                  <ListIcon as={CheckCircleIcon} color="green.500" />
+                  <Text as="span" fontWeight="bold" mr={2}>
                     インデントとスペース:
                   </Text>
                   インデントは4スペース,全角スペースは使わない
@@ -892,7 +910,7 @@ export default function About() {
                   <Text as="span" fontWeight="bold" mr={2}>
                     禁止:
                   </Text>
-                  on error resume nextは使わない(EXCELの軽い破損で動作しない)
+                  on error resume nextは使わない(EXCELの軽い破損で止まる)
                 </ListItem>
                 <ListItem>
                   <ListIcon as={WarningTwoIcon} color="red.500" />
@@ -914,7 +932,7 @@ export default function About() {
           <CustomAccordion title="ディレクトリ構造" badges={["開発者"]}>
             <FileSystemNode item={directoryData0} />
           </CustomAccordion>
-          <CustomAccordion title="オブジェクト指向" badges={["開発者"]}>
+          <CustomAccordion title="オブジェクト指向について" badges={["開発者"]}>
             <FileSystemNode item={directoryData1} />
           </CustomAccordion>
           <CustomAccordion title="よく使うコード" badges={["開発者"]}>
@@ -933,14 +951,17 @@ export default function About() {
               </Link>
             </Flex>
             <Text>
-              このサイトのソースコードをGitHubに公開しています
+              このサイトのソースコードはGitHubに公開しています
               <br />
               自由に使って構いません
+              <br />
+              ※チャットやユーザー情報、一部のファイルはsupabase内にあるのでアクセスできません
               <br />
               Next.js, ChakraUIがベースで
               supabase,microCMSの外部サービスを利用しています
             </Text>
           </CustomAccordion>
+          <Box height={800}></Box>
         </div>
       </Content>
     </>

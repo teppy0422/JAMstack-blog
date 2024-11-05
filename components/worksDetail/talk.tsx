@@ -10,6 +10,7 @@ export default function talk({ say }) {
       className={styles.text}
       paddingLeft={num + "em"}
       style={{ textIndent: -num + "em" }}
+      fontFamily="Noto Sans JP"
     >
       {say}
     </Text>
