@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-06T10:53:00+0900"
+              description1="部品リスト作成IEでct101_grdEmtrCompが見つからないエラー"
+              description2="on error resume nextを使わないように修正"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.63_.zip"
+              inCharge="高知,秋山さん"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-11-05T23:31:00+0900"
               description1=""
               description2="印刷範囲の修正C811高知(サブ図のサブ毎,先ハメ)"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.62_.zip"
-              inCharge="高知,王さん,新機能"
-              isLatest={true}
+              inCharge="高知,王さん"
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-04T04:39:00+0900"
