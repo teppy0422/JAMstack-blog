@@ -872,7 +872,6 @@ export default function Thread() {
         {!isAtBottom ? ( // 最下部でない場合にアイコンを表示
           <Box
             onClick={(e) => {
-              // e.preventDefault();
               scrollToBottom();
             }}
             position="absolute"
@@ -962,7 +961,7 @@ export default function Thread() {
             </Stack>
             <IconButton
               aria-label="Close reply"
-              icon={<FaTimes />} // ×アイコンを表示
+              icon={<FaTimes />}
               onClick={() => {
                 setReplyToPostId(null); // リプライを閉じる
                 setReplyPostContent(""); // リプライ内容をリセット

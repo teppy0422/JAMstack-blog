@@ -14,6 +14,7 @@ import {
   Tab,
   Icon,
   Tooltip,
+  useColorMode,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 interface AuthProps {
@@ -31,6 +32,9 @@ export default function Auth({ userData }: AuthProps) {
   const [user, setUser] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"signup" | "signin">("signup");
+  const { colorMode } = useColorMode();
+  const spanColor = colorMode === "light" ? "red" : "orange";
+
   const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] =
     useState<boolean>(false);
   useEffect(() => {
@@ -345,8 +349,11 @@ export default function Auth({ userData }: AuthProps) {
                         新規登録の流れ:
                       </Text>
                       <Text fontSize="sm" mb={2}>
-                        1.
-                        メールアドレスとパスワード(6文字以上)を入力してください。
+                        1. メールアドレスと
+                        <span style={{ color: spanColor }}>
+                          パスワード(6文字以上)
+                        </span>
+                        を 入力してください。
                       </Text>
                       <Text fontSize="sm" mb={2}>
                         2. 「新規登録」ボタンをクリックします。
@@ -386,7 +393,7 @@ export default function Auth({ userData }: AuthProps) {
                       </Text>
                       <Input
                         type="password"
-                        placeholder="Password"
+                        placeholder="Password(6文字以上)"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         mb={2}
@@ -404,7 +411,7 @@ export default function Auth({ userData }: AuthProps) {
                       </Text>
                       <Input
                         type="password"
-                        placeholder="Confirm Password" // 確認用パスワードのプレースホルダー
+                        placeholder="Password" // 確認用パスワードのプレースホルダー
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         mb={3}
