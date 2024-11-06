@@ -35,11 +35,11 @@ import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
 
 import { IoMoonOutline } from "react-icons/io5";
 import { FaSun } from "react-icons/fa";
+import { BsCloud, BsCloudRain, BsSun } from "react-icons/bs";
 import { ImQrcode } from "react-icons/im";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
 import React, { useEffect } from "react";
-import { WiCloudy, WiRain } from "react-icons/wi";
 import { WiDaySunny, WiCloudyGusts, WiRainMix } from "react-icons/wi";
 
 import AwesomIcon from "./awesomIcon";
@@ -398,11 +398,11 @@ const getWeatherIcon = async () => {
     if (weather.includes("くもり") && weather.includes("雨")) {
       return <WiRainMix />; // 雨のちくもりのアイコン
     } else if (weather.includes("雨")) {
-      return <WiRain />;
+      return <BsCloudRain />;
     } else if (weather.includes("くもり")) {
-      return <WiCloudy />;
+      return <BsCloud />;
     } else if (weather.includes("晴")) {
-      return <FaSun />;
+      return <BsSun />;
     } else {
       return <FaSun />; // デフォルトのアイコン
     }

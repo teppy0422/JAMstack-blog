@@ -864,67 +864,85 @@ export default function About() {
             <Box p={8} maxWidth="800px" mx="auto">
               <List spacing={4}>
                 <ListItem>
-                  <ListIcon as={CheckCircleIcon} color="green.500" />
-                  <Text as="span" fontWeight="bold" mr={2}>
-                    命名規則:
-                  </Text>
-                  定数は全て大文字, 変数はキャメルケース(camelCase)
+                  <Flex alignItems="flex-start">
+                    <ListIcon as={CheckCircleIcon} color="green.500" mt={0.5} />
+                    <Text as="span" fontWeight="bold" mr={2}>
+                      命名規則:
+                    </Text>
+                    定数は全て大文字, 変数はキャメルケース(camelCase)
+                  </Flex>
                 </ListItem>
                 <ListItem>
-                  <ListIcon as={CheckCircleIcon} color="green.500" />
-                  <Text as="span" fontWeight="bold" mr={2}>
-                    命名規則:
-                  </Text>
-                  boolean型はis,他は動詞(get,paint)から始める
+                  <Flex alignItems="flex-start">
+                    <ListIcon as={CheckCircleIcon} color="green.500" mt={0.5} />
+                    <Text as="span" fontWeight="bold" mr={2}>
+                      命名規則:
+                    </Text>
+                    boolean型はis,他は動詞(get,paint)から始める
+                  </Flex>
                 </ListItem>
                 <ListItem>
-                  <ListIcon as={CheckCircleIcon} color="green.500" />
-                  <Text as="span" fontWeight="bold" mr={2}>
-                    命名規則:
-                  </Text>
-                  JavaScriptが用意している関数名を出来るだけ真似る
+                  <Flex alignItems="flex-start">
+                    <ListIcon as={CheckCircleIcon} color="green.500" mt={0.5} />
+                    <Text as="span" fontWeight="bold" mr={2}>
+                      命名規則:
+                    </Text>
+                    JavaScriptが用意している関数名を出来るだけ真似る
+                  </Flex>
                 </ListItem>
                 <ListItem>
-                  <ListIcon as={CheckCircleIcon} color="green.500" />
-                  <Text as="span" fontWeight="bold" mr={2}>
-                    インデントとスペース:
-                  </Text>
-                  インデントは4スペース,全角スペースは使わない
+                  <Flex alignItems="flex-start">
+                    <ListIcon as={CheckCircleIcon} color="green.500" mt={0.5} />{" "}
+                    <Text as="span" fontWeight="bold" mr={2}>
+                      インデントとスペース:
+                    </Text>
+                    インデントは4スペース,全角スペースは使わない
+                  </Flex>
                 </ListItem>
                 <ListItem>
-                  <ListIcon as={CheckCircleIcon} color="green.500" />
-                  <Text as="span" fontWeight="bold" mr={2}>
-                    アップロード:
-                  </Text>
-                  アップロード前にコンパイルを実行,option explicitは必須
+                  <Flex alignItems="flex-start">
+                    <ListIcon as={CheckCircleIcon} color="green.500" mt={0.5} />{" "}
+                    <Text as="span" fontWeight="bold" mr={2}>
+                      アップロード:
+                    </Text>
+                    アップロード前にコンパイルを実行,option explicitは必須
+                  </Flex>
                 </ListItem>
                 <ListItem>
-                  <ListIcon as={CheckCircleIcon} color="green.500" />
-                  <Text as="span" fontWeight="bold" mr={2}>
-                    バージョン管理:
-                  </Text>
-                  開発者が増えた場合はGitHubの使用を検討
+                  <Flex alignItems="flex-start">
+                    <ListIcon as={CheckCircleIcon} color="green.500" mt={0.5} />{" "}
+                    <Text as="span" fontWeight="bold" mr={2}>
+                      バージョン管理:
+                    </Text>
+                    開発者が増えた場合はGitHubの使用を検討
+                  </Flex>
                 </ListItem>
                 <ListItem>
-                  <ListIcon as={WarningTwoIcon} color="red.500" />
-                  <Text as="span" fontWeight="bold" mr={2}>
-                    禁止:
-                  </Text>
-                  on error resume nextは使わない(EXCELの軽い破損で止まる)
+                  <Flex alignItems="flex-start">
+                    <ListIcon as={CheckCircleIcon} color="green.500" mt={0.5} />{" "}
+                    <Text as="span" fontWeight="bold" mr={2}>
+                      禁止:
+                    </Text>
+                    on error resume nextは使わない(EXCELの軽い破損で止まる)
+                  </Flex>
                 </ListItem>
                 <ListItem>
-                  <ListIcon as={WarningTwoIcon} color="red.500" />
-                  <Text as="span" fontWeight="bold" mr={2}>
-                    禁止:
-                  </Text>
-                  SQL文は使わない(リモートでのデバッグが難しい)
+                  <Flex alignItems="flex-start">
+                    <ListIcon as={CheckCircleIcon} color="green.500" mt={0.5} />{" "}
+                    <Text as="span" fontWeight="bold" mr={2}>
+                      禁止:
+                    </Text>
+                    SQL文は使わない(リモートでのデバッグが難しい)
+                  </Flex>
                 </ListItem>
                 <ListItem>
-                  <ListIcon as={WarningTwoIcon} color="red.500" />
-                  <Text as="span" fontWeight="bold" mr={2}>
-                    禁止:
-                  </Text>
-                  go toは使わない(予想外のエラーが発生)
+                  <Flex alignItems="flex-start">
+                    <ListIcon as={CheckCircleIcon} color="green.500" mt={0.5} />{" "}
+                    <Text as="span" fontWeight="bold" mr={2}>
+                      禁止:
+                    </Text>
+                    go toは使わない(予想外のエラーが発生)
+                  </Flex>
                 </ListItem>
               </List>
             </Box>

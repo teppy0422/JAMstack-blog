@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-07T01:56:00+0900"
+              description1="サブ図でVer2と同じように作業記号を表示したい"
+              description2="Ver2と同じように作業記号を表示。サブナンバーの引越しのテスト反映"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.65_.zip"
+              inCharge="高知,王さん,徳島,秋山さん"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-11-06T10:53:00+0900"
               description1="部品リスト作成IEでct101_grdEmtrCompが見つからないエラー"
               description2="on error resume nextを使わないように修正"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.63_.zip"
               inCharge="高知,秋山さん"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-05T23:31:00+0900"
