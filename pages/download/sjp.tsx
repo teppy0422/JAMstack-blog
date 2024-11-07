@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-08T02:18:00+0900"
+              description1="印刷範囲が正しくない"
+              description2="高知C811で調整,徳島C3376で調整(但し家では実際にC3376に接続出来ない為C2276でテスト)"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.69_.zip"
+              inCharge="高知,王さん,徳島,秋山さん"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-11-08T00:47:00+0900"
               description1="MDのチェックオンでMDが中途半端に作成されているとエラー。MDのチェックオフで分類Tしか作成できない。両端先ハメで相手端末がBonまたはTerの場合は下線を表示したくない"
               description2="MDの作成完了を確認するように修正。MDのチェックオフで通常の出力に対応。該当する条件の場合は下線を表示しない"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.68_.zip"
               inCharge="高知,王さん,徳島,秋山さん"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-07T01:56:00+0900"
