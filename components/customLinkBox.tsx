@@ -218,12 +218,13 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                   {inCharge}
                 </Badge>
               ))}
-              {this.props.description1 !== "" && (
-                <Text mt="2">
-                  <WarningTwoIcon marginRight="1" color="red.500" mt="-1" />
-                  {this.props.description1}
-                </Text>
-              )}
+              {this.props.description1 &&
+                this.props.description1.split("。").map((sentence, index) => (
+                  <Box key={index} mt="1">
+                    <WarningTwoIcon marginRight="1" color="red.500" mt="-1" />
+                    {sentence}
+                  </Box>
+                ))}
               {this.props.description2 &&
                 this.props.description2.split("。").map((sentence, index) => (
                   <Box key={index} mt="1">
