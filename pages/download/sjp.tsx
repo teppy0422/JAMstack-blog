@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-08T15:45:00+0900"
+              description1="サブ図のTop表示が必要。印刷範囲が合わない"
+              description2="印刷範囲取得プログラムを高知で実行してそのサイズに合わせる"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.71_.zip"
+              inCharge="高知,王さん"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-11-08T02:18:00+0900"
               description1="印刷範囲が正しくない"
-              description2="高知C811で調整,徳島C3376で調整(但し家では実際にC3376に接続出来ない為C2276でテスト)"
+              description2="高知C811で調整。徳島C3376で調整(但し家では実際にC3376に接続出来ない為C2276でテスト)"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.69_.zip"
               inCharge="高知,王さん,徳島,秋山さん"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-08T00:47:00+0900"
