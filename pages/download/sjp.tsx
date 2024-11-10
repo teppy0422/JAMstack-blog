@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-10T21:04:00+0900"
+              description1="サブ図で同端末/異なる部品品番がある場合に正しくない"
+              description2="端末サブナンバー取得時に端末と部品品番で照合するように修正"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.72_.zip"
+              inCharge="高知,王さん"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-11-08T15:45:00+0900"
               description1="サブ図のTop表示が必要。印刷範囲が合わない"
               description2="印刷範囲取得プログラムを高知で実行してそのサイズに合わせる"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.71_.zip"
               inCharge="高知,王さん"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-08T02:18:00+0900"
