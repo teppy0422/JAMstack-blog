@@ -146,7 +146,7 @@ export default function About() {
             <CustomLinkBox
               dateTime="2024-11-11T19:50:00+0900"
               description1="後ハメのマジックが表示されない"
-              description2="3.100.56の修正を更に修正"
+              description2="3.100.56の修正を更に修正。サブ図のC811の高さを調整"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.73_.zip"
               inCharge="高知,王さん"
