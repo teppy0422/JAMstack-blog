@@ -144,13 +144,31 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-13T11:08:00+0900"
+              description1="サブ図の先嵌のサブナンバー順が辞書型ソートになっている"
+              description2="数値型ソートに変更"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.75_.zip"
+              inCharge="高知,不具合"
+              isLatest={true}
+            />
+            <CustomLinkBox
+              dateTime="2024-11-12T14:44:00+0900"
+              description1="サブ図で防水栓が表示されないことがある"
+              description2="サブ図のハメ図よりタグを後から作成するように修正"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.74_.zip"
+              inCharge="高知,王さん"
+              isLatest={false}
+            />
+            <CustomLinkBox
               dateTime="2024-11-11T19:50:00+0900"
               description1="後ハメのマジックが表示されない"
               description2="3.100.56の修正を更に修正。サブ図のC811の高さを調整"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.73_.zip"
               inCharge="高知,王さん"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-10T21:04:00+0900"
