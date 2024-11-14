@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-14T12:08:00+0900"
+              description1=""
+              description2="サブリストの作成を追加したい"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.76_.zip"
+              inCharge="高知,王さん,小崎さん,新機能"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-11-13T11:08:00+0900"
               description1="サブ図の先嵌のサブナンバー順が辞書型ソートになっている"
               description2="数値型ソートに変更"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.75_.zip"
               inCharge="高知,不具合"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-12T14:44:00+0900"
