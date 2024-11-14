@@ -2,11 +2,24 @@ import { extendTheme } from "@chakra-ui/react";
 
 // NB: Chakra gives you access to `colorMode` and `theme` in `props`
 export const theme = extendTheme({
+  fonts: {
+    heading: "'Noto Sans JP', sans-serif",
+    body: "'Noto Sans JP', sans-serif", // bodyのフォントを設定
+  },
+  fontWeights: {
+    normal: 200,
+    medium: 300,
+    bold: 400,
+    light: 300, // 追加: フォントの太さを指定
+    extraLight: 100, // 追加: より細いフォントの太さを指定
+  },
   styles: {
     global: (props) => ({
       "html, body": {
         // color: props.colorMode === "dark" ? "white" : "gray.600",
         // lineHeight: "tall",
+        fontFamily: "M PLUS Rounded 1c",
+        fontWeight: "200",
         padding: 0,
         margin: 0,
       },
