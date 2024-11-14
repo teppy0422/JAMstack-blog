@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-14T14:13:00+0900"
+              description1="付属部品品番の末尾が正しくない。先頭の製品品番のグループ化が正しくない不具合"
+              description2="修正"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.78_.zip"
+              inCharge="高知,王さん"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-11-14T13:17:00+0900"
               description1=""
               description2="サブリストの電線のみサブに対応"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.77_.zip"
               inCharge="高知,王さん"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-14T12:08:00+0900"
