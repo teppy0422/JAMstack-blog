@@ -29,13 +29,13 @@ const SectionBox: React.FC<SectionBoxProps> = ({
           sections.current.push({ id: el.id, title });
         }
       }}
+      width="100%"
     >
       <Link href={`#${id}`} style={{ textDecoration: "none" }}>
         <Heading size="md" fontWeight="600">
           {title}
         </Heading>
       </Link>
-      <Divider mt={2} borderColor={colorMode === "light" ? "black" : "white"} />
       {children}
     </Box>
   );
