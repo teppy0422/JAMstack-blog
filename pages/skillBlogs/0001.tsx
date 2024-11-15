@@ -13,6 +13,11 @@ import {
   ChakraProvider,
   extendTheme,
   IconButton,
+  Badge,
+  Avatar,
+  Code,
+  Image,
+  Kbd,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import Content from "../../components/content";
@@ -47,7 +52,7 @@ const QiitaPage: React.FC = () => {
   const showToast = useCustomToast();
   //64pxまでスクロールしないとサイドバーが表示されないから暫定
   useEffect(() => {
-    window.scrollTo(0, 100);
+    window.scrollTo(0, 150);
     setTimeout(() => {
       window.scrollTo(0, 0);
     }, 0);
@@ -140,58 +145,139 @@ const QiitaPage: React.FC = () => {
               p={4}
               borderRadius="10px"
             >
+              <Box>
+                <HStack spacing={2} align="center" mb={1} ml={1}>
+                  <Avatar
+                    size="xs"
+                    src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp"
+                  />
+                  <Text>@kataoka</Text>
+                  <Text>in</Text>
+                  <Text>開発</Text>
+                </HStack>
+                <Heading fontSize="3xl" mb={1}>
+                  コネクタの撮影から座標登録まで
+                </Heading>
+                <Badge>生準+</Badge>
+                <Text
+                  fontSize="sm"
+                  color={colorMode === "light" ? "gray.800" : "white"}
+                  mt={1}
+                >
+                  投稿日:2024-11-15
+                </Text>
+              </Box>
               <SectionBox
                 id="section1"
-                title="ぼん大学"
+                title="1.はじめに"
                 sectionRefs={sectionRefs}
                 sections={sections}
               >
+                <Divider
+                  mt={2}
+                  borderColor={colorMode === "light" ? "black" : "white"}
+                />
                 <Box>
-                  <Text fontWeight="bold">ぼん大学</Text>
+                  <Text fontWeight="bold"></Text>
                   <Text>
-                    今回は大学が無料で公開している、エンジニア向けの学びになる資料をまとめていきます。
+                    誰かが撮影したコネクタ画像はみんなで共有した方が良いよね？という考えで開発しました。
+                    登録した写真と座標データは共有して使用する事で生産効率の向上を図ります。
+                    以下はその手順です。
                   </Text>
                 </Box>
               </SectionBox>
               <SectionBox
-                id="section2_"
-                title="東京大学"
+                id="section2"
+                title="2.カメラアプリの起動"
                 sectionRefs={sectionRefs}
                 sections={sections}
               >
-                <Box>
-                  <Text fontWeight="bold">Pythonプログラミング入門</Text>
+                <Divider
+                  mt={2}
+                  borderColor={colorMode === "light" ? "black" : "white"}
+                />
+                <Text>専用のカメラアプリで撮影して保存します</Text>
+                <Box m={3}>
+                  <Text fontWeight="400" my={4}>
+                    2-1.生産準備+の[端末一覧]を選択
+                  </Text>
+                  <Text fontWeight="400" my={4}>
+                    2-2.撮影する端末/コネクタ品番を選択
+                  </Text>
+                  <Box bg="gray.300" color="black" w="100%" p={1}>
+                    下図は11行目(7283-0391-30)を選択している状態です
+                  </Box>
+                  <Image src="/images/0001/0002.png" alt="0002.png" />
+                  <Text fontWeight="400" my={4}>
+                    2-3.
+                    <Kbd border="1px solid" fontSize="16px" bg="white" mx={1}>
+                      Ctrl
+                    </Kbd>
+                    +
+                    <Kbd border="1px solid" fontSize="16px" bg="white" mx={1}>
+                      Enter
+                    </Kbd>
+                    を押す
+                  </Text>
+                  <Box bg="gray.300" color="black" w="100%" p={1}>
+                    撮影ソフト(camera+)が起動します
+                  </Box>
+                  <Image src="/images/0001/0013.png" alt="0013.png" />
                   <Text>
-                    Pythonについて環境構築から始まり、 <br />
-                    基本文法、 <br />
-                    数値解析など応用的な使い方までを分かりやすく解説している。
+                    ※インストールされていない場合はインストール画面が表示されるのでインストールを行ってください。開発の署名は片岡哲兵です。
                   </Text>
                 </Box>
-                <Box>
-                  <Text fontWeight="bold">AWS入門</Text>
+                <Text textAlign="center">---作成途中---</Text>
+              </SectionBox>
+              <SectionBox
+                id="section3"
+                title="3.コネクタ写真の加工"
+                sectionRefs={sectionRefs}
+                sections={sections}
+              >
+                <Divider
+                  mt={2}
+                  borderColor={colorMode === "light" ? "black" : "white"}
+                />
+                <Text>
+                  撮影したコネクタ写真の背景を削除して使用しやすくします
+                </Text>
+                <Box m={3}>
+                  <Text fontWeight="400" my={4}>
+                    3-1.生産準備+の[端末一覧]を選択
+                  </Text>
+                  <Text fontWeight="400" my={4}>
+                    3-2.登録/修正したい部品品番を選択
+                  </Text>
+                  <Box bg="gray.300" color="black" w="100%" p={1}>
+                    下図は11行目(7283-0391-30)を選択している状態です
+                  </Box>
+                  <Image src="/images/0001/0002.png" alt="0002.png" />
+                  <Text fontWeight="400" my={4}>
+                    3-3.
+                    <Kbd border="1px solid" fontSize="16px" bg="white" mx={1}>
+                      Shift
+                    </Kbd>
+                    +
+                    <Kbd border="1px solid" fontSize="16px" bg="white" mx={1}>
+                      Enter
+                    </Kbd>
+                    を押す
+                  </Text>
+                  <Box bg="gray.300" color="black" w="100%" p={1}>
+                    写真加工ソフト(InkScape)がインストールされていない場合はダウンロードサイトが開きます
+                  </Box>
+                  <Image src="/images/0001/0007.png" alt="0007.png" />
                   <Text>
-                    ネットワークやクラウド、 <br />
-                    インフラの仕組みの解説から始まり、 <br />
-                    AWSの構成パターンなどが <br />
-                    基礎から解説されている。
+                    ※InkScapeはオープンソースの無料ソフトです。
+                    InkScapeのダウンロードアドレスが変わっていたら開きません。
+                    その場合はブラウザ(Edgeとか)で検索してダウンロードサイトを探してください。
+                    赤枠辺りをクリックしてダウンロードページを開きます。
                   </Text>
                 </Box>
               </SectionBox>
               <SectionBox
-                id="section3__"
-                title="おにく大学"
-                sectionRefs={sectionRefs}
-                sections={sections}
-              >
-                <Box>
-                  <Text fontWeight="bold">Pythonプログラミング入門</Text>
-                  <Text>
-                    Pythonについて環境構築から始まり、基本文法、数値解析など応用的な使い方までを分かりやすく解説している。
-                  </Text>
-                </Box>
-              </SectionBox>
-              <SectionBox
-                id="section4"
+                id="section5"
                 title="python大学"
                 sectionRefs={sectionRefs}
                 sections={sections}
@@ -204,7 +290,7 @@ const QiitaPage: React.FC = () => {
                 </Box>
               </SectionBox>
               <SectionBox
-                id="section5"
+                id="section6"
                 title="aws大学"
                 sectionRefs={sectionRefs}
                 sections={sections}
@@ -214,7 +300,7 @@ const QiitaPage: React.FC = () => {
                 </Text>
               </SectionBox>
               <SectionBox
-                id="section10"
+                id="section7"
                 title="ひだり大学"
                 sectionRefs={sectionRefs}
                 sections={sections}
