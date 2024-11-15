@@ -4,12 +4,13 @@ body {
   margin: 0;
   font-family: "M PLUS Rounded 1c", "Noto Sans JP", sans-serif;
   font-weight: 100;
+  -webkit-font-smoothing: antialiased;
+  /* Chrome, Safari, Opera */
+  -moz-osx-font-smoothing: grayscale;
+  /* Firefox */
 }
 
-@font-face {
-  font-family: "Noto Sans JP";
-  src: url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap") format("truetype");
-}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 @font-face {
   font-family: "New amsterdam";
