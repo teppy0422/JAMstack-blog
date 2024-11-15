@@ -4,7 +4,11 @@ import NextLink from "next/link";
 import Header from "../components/header";
 import Header_ from "../components/header_";
 
-export default function Content({ children, isCustomHeader = false }) {
+export default function Content({
+  children,
+  isCustomHeader = false,
+  maxWidth = "900px",
+}) {
   return (
     <>
       <Flex direction="column" minHeight="90vh">
@@ -12,7 +16,7 @@ export default function Content({ children, isCustomHeader = false }) {
           {isCustomHeader ? <Header_ /> : <Header />}
           <Box height="66px"></Box>
           <Container
-            maxWidth="900px"
+            maxWidth={maxWidth}
             className="container"
             position="relative" // 相対位置を設定
             px={1}
