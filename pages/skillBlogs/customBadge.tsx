@@ -24,3 +24,4 @@ export const CustomBadge: React.FC<{ text: string }> = ({ text }) => {
       );
   }
 };
+export default CustomBadge;
