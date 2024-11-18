@@ -158,14 +158,18 @@ const Frame: React.FC<{
       setCurrentPath(window.location.pathname);
       let index: number[] = [];
       switch (true) {
-        case window.location.pathname.includes("/skillBlogs/0004"):
+        //自己紹介
+        case window.location.pathname.includes("/skillBlogs/0004"): //メンバーリスト
           index = [0];
           break;
-        case window.location.pathname.includes("/skillBlogs/0001"):
-        case window.location.pathname.includes("/skillBlogs/0002"):
+        //生産準備+の使い方
+        case window.location.pathname.includes("/skillBlogs/0001"): //プログラミング解説
+        case window.location.pathname.includes("/skillBlogs/0002"): //コネクタの撮影から座標登録まで
+        case window.location.pathname.includes("/skillBlogs/0005"): //コネクタの撮影から座標登録まで
           index = [1];
           break;
-        case window.location.pathname.includes("/skillBlogs/0003"):
+        //改善活動の進め方
+        case window.location.pathname.includes("/skillBlogs/0003"): //参考事例集
           index = [3];
           break;
         default:
@@ -177,7 +181,7 @@ const Frame: React.FC<{
 
   return (
     <>
-      <Content isCustomHeader={true} maxWidth="1200px">
+      <Content isCustomHeader={true} maxWidth="1280px">
         <ChakraProvider theme={customTheme}>
           <HStack
             align="start"
@@ -226,6 +230,7 @@ const Frame: React.FC<{
                     "/skillBlogs/0002/",
                     "コネクタの撮影から座標登録まで"
                   )}
+                  {createLinkPanel("/skillBlogs/0005/", "サブナンバーの引越し")}
                 </AccordionItem>
                 <AccordionItem>
                   <AccordionButton m={1} p={0}>
@@ -305,6 +310,7 @@ const Frame: React.FC<{
                   return (
                     <ListItem
                       w="100%"
+                      maxWidth={["0px", "0px", "200px", "240px"]}
                       key={section.id}
                       p={1}
                       borderRadius="5px"
@@ -321,8 +327,15 @@ const Frame: React.FC<{
                           : "white"
                       }
                       pl={indent}
+                      style={{
+                        whiteSpace: "nowrap", // 改行を防ぐ
+                        overflow: "hidden", // 溢れた部分を隠す
+                        textOverflow: "ellipsis", // 溢れた部分に「...」を付ける
+                      }}
                     >
-                      <Link href={`#${section.id}`}>{section.title}</Link>
+                      <Link href={`#${section.id}`} title={section.title}>
+                        {section.title}
+                      </Link>
                     </ListItem>
                   );
                 })}

@@ -800,30 +800,23 @@ export default function Thread() {
   };
   //リンクをクリックした時にページがリロードされないようにする
   useEffect(() => {
-    console.log("useEffect called"); // useEffectが呼ばれているか確認
-
-    const handleLinkClick = (event) => {
-      console.log("Event listener added");
-      console.log("event:", event);
-      console.log("event.target:", event.target);
-      if (event.target.classList.contains("external-link")) {
-        console.log("Link clicked:", event.target.href);
-      }
-    };
-
-    // すべての外部リンクにイベントリスナーを追加
     const links = document.querySelectorAll(".external-link");
     links.forEach((link) => {
-      link.addEventListener("click", handleLinkClick);
-    });
+      const handleClick = (e: MouseEvent) => {
+        e.preventDefault();
+        const url = link.getAttribute("href");
+        if (url) {
+          window.open(url, "_blank", "noopener,noreferrer");
+        }
+      };
+      link.addEventListener("click", handleClick);
 
-    return () => {
-      // クリーンアップ時にイベントリスナーを削除
-      links.forEach((link) => {
-        link.removeEventListener("click", handleLinkClick);
-      });
-    };
-  }, [posts]); // 依存配列を空にする
+      // クリーンアップ関数でイベントリスナーを削除
+      return () => {
+        link.removeEventListener("click", handleClick);
+      };
+    });
+  }, [posts]);
 
   if (!isClient) {
     return null;
@@ -1622,7 +1615,7 @@ export default function Thread() {
                               .replace(/\n/g, "<br />")
                               .replace(
                                 /(http[s]?:\/\/[^\s]+)/g,
-                                '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;" class="external-link">$1</a>'
+                                '<a href="$1" class="external-link" style="text-decoration: underline;">$1</a>'
                               ),
                           }}
                         />
