@@ -144,7 +144,7 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
-              dateTime="2024-11-18T14:59:00+0900"
+              dateTime="2024-11-18T15:00:00+0900"
               description1="サブ図で防水栓が表示されない事がある(たぶん高知PCのみ)"
               description2="CAV一覧の配列チェックをコメントアウト"
               descriptionIN=""
