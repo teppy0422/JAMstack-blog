@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-18T14:59:00+0900"
+              description1="サブ図で防水栓が表示されない事がある(たぶん高知PCのみ)"
+              description2="CAV一覧の配列チェックをコメントアウト"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.82_.zip"
+              inCharge="高知,王さん,不具合"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-11-15T23:56:00+0900"
               description1="サブ図で防水栓が表示されない事がある(たぶん高知PCのみ)"
               description2="CAV一覧の配列チェックの修正"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.81_.zip"
               inCharge="高知,王さん,不具合"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-15T10:01:00+0900"

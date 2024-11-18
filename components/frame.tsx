@@ -142,6 +142,7 @@ const Frame: React.FC<{
           : colorMode === "light"
           ? "black"
           : "white",
+      cursor: path === "#" ? "not-allowed" : "pointer", // カーソルを変更
     };
     return (
       <AccordionPanel m={0} p={0}>
