@@ -77,32 +77,31 @@ export default function Header() {
 
   // loginボタンを隠す
   let keyFlag: boolean = false;
-  const handleKeyDown = (event: KeyboardEvent) => {
-    // CMDキー(Meta)の場合処理を行う
-    if (event.key === "Meta") {
-      const element = document.getElementById("none");
-      if (element!) {
-        if (keyFlag === false) {
-          element.style.display = "block";
-          keyFlag = true;
-        } else {
-          element.style.display = "none";
-          keyFlag = false;
-        }
-      }
-    }
-    // console.log(event.key);
-  };
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      document.addEventListener("keydown", handleKeyDown, false);
-    }
-    return () => {
-      if (typeof window !== "undefined") {
-        document.removeEventListener("keydown", handleKeyDown, false);
-      }
-    };
-  }, []);
+  // const handleKeyDown = (event: KeyboardEvent) => {
+  //   // CMDキー(Meta)の場合処理を行う
+  //   if (event.key === "Meta") {
+  //     const element = document.getElementById("none");
+  //     if (element!) {
+  //       if (keyFlag === false) {
+  //         element.style.display = "block";
+  //         keyFlag = true;
+  //       } else {
+  //         element.style.display = "none";
+  //         keyFlag = false;
+  //       }
+  //     }
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     document.addEventListener("keydown", handleKeyDown, false);
+  //   }
+  //   return () => {
+  //     if (typeof window !== "undefined") {
+  //       document.removeEventListener("keydown", handleKeyDown, false);
+  //     }
+  //   };
+  // }, []);
   // ユーザーIDを取得する関数
   useEffect(() => {
     const fetchUserId = async () => {
@@ -366,7 +365,7 @@ export default function Header() {
                   <Divider borderColor="white" />
                   {menuItem("/roadMap", "ロードマップ", false)}
                   <Divider borderColor="white" />
-                  {menuItem("/objectLayout", "プログラム解説", false)}
+                  {menuItem("/skillBlogs/0000", "技術ブログ", false)}
                   <Divider borderColor="white" />
                   {menuItem("/app/typing", "タイピング練習", false)}
                   <Divider borderColor="white" />

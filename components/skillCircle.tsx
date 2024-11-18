@@ -5,6 +5,7 @@ import {
   Center,
   Text,
   Flex,
+  Box,
 } from "@chakra-ui/react";
 import styles from "../styles/home.module.scss";
 

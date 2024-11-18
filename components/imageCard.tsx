@@ -25,7 +25,7 @@ export default function imageCard(pops) {
       borderColor="gray.400"
       mx="16px"
       my="8px"
-      width="300px"
+      width="200px"
       boxShadow="md"
     >
       <NextImage
@@ -42,16 +42,15 @@ export default function imageCard(pops) {
           borderRadius: "8px 8px 0 0",
         }}
       />
-
-      <Box textAlign="left" p="3.5">
+      <Box textAlign="left" p="1">
         <Box alignItems="baseline">
           {property.skillTags.map((item, index) => {
             return (
               <Badge
                 key={index}
-                borderRadius="full"
-                px="2"
-                mx="2px"
+                borderRadius="3px"
+                px="2px"
+                mr="4px"
                 colorScheme={item.skillColor}
               >
                 {item.skillName}
@@ -59,19 +58,16 @@ export default function imageCard(pops) {
             );
           })}
         </Box>
-
         <Box
           mt="1"
-          fontWeight="semibold"
-          as="h4"
+          fontWeight="400"
+          fontSize="16px"
           lineHeight="tight"
           noOfLines={1}
         >
           {property.title}
         </Box>
-
-        <Box>{property.formattedPrice}</Box>
-
+        <Box fontSize="12px">{property.formattedPrice}</Box>
         <Box display="flex" mt="2" alignItems="center">
           {Array(5)
             .fill("")
