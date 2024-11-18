@@ -250,7 +250,7 @@ const BlogPage: React.FC = () => {
         isOpen: false,
         children: [
           {
-            name: "Sub exportText_UTF8(ary_ As Variant,path_ As String)",
+            name: "Sub exportText_UTF8(ary_() As String,path_ As String)",
             type: "file",
             popOver:
               "EXCEL-VBAの標準だとShift_JISでテキスト出力されて文字化けの原因になるからUTF8で出力.htmlとか.cssとかで使う",
