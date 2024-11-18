@@ -106,7 +106,7 @@ function Sidebar() {
       >
         <VStack spacing="2" align="stretch">
           {menuItem("/roadMap", "ロードマップ", true)}
-          {menuItem("/objectLayout", "プログラム解説", true)}
+          {menuItem("/skillBlogs/0000", "技術ブログ", true)}
           {menuItem("/app/typing", "タイピング練習", true)}
           {menuItem("/download", "ダウンロード", true)}
           {menuItem("/BBS", "問い合わせ", true)}
