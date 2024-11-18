@@ -26,10 +26,10 @@ import {
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
-import Content from "../../components/content";
+import Content from "./content";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "../../components/customToast";
-import BasicDrawer from "../../components/BasicDrawer";
+import { useCustomToast } from "./customToast";
+import BasicDrawer from "./BasicDrawer";
 import { useDisclosure } from "@chakra-ui/react";
 
 import "@fontsource/noto-sans-jp";
@@ -50,8 +50,8 @@ const customTheme = extendTheme({
 
 const Frame: React.FC<{
   children: React.ReactNode;
-  sections: any;
-  sectionRefs: any;
+  sections?: any;
+  sectionRefs?: React.RefObject<HTMLElement[]> | null;
 }> = ({ children, sections, sectionRefs }) => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const { colorMode } = useColorMode();
@@ -59,7 +59,6 @@ const Frame: React.FC<{
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
-
   const showToast = useCustomToast();
   //64pxまでスクロールしないとサイドバーが表示されないから暫定
   useEffect(() => {
@@ -83,25 +82,30 @@ const Frame: React.FC<{
   }, []);
   //#の位置にスクロールした時のアクティブなセクションを装飾
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-    );
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
-    return () => {
-      sectionRefs.current.forEach((section) => {
-        if (section) observer.unobserve(section);
+    if (typeof window !== "undefined" && sectionRefs?.current) {
+      const sectionsToObserve = sectionRefs.current;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActiveSection(entry.target.id);
+            }
+          });
+        },
+        { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
+      );
+
+      sectionsToObserve.forEach((section) => {
+        if (section) observer.observe(section);
       });
-    };
-  }, []);
+
+      return () => {
+        sectionsToObserve.forEach((section) => {
+          if (section) observer.unobserve(section);
+        });
+      };
+    }
+  }, [sectionRefs]);
   //#クリックした時のオフセット
   useEffect(() => {
     const handleHashChange = () => {
@@ -166,7 +170,6 @@ const Frame: React.FC<{
         default:
           index = [];
       }
-
       setAccordionIndex(index);
     }
   }, []);
@@ -294,7 +297,7 @@ const Frame: React.FC<{
               display={["none", "none", "none", "block"]}
             >
               <List spacing={1} fontSize="sm">
-                {sections.current.map((section) => {
+                {sections.current?.map((section) => {
                   const underscoreCount = (section.id.match(/_/g) || []).length; // アンダースコアの数をカウント
                   const indent = 2 + underscoreCount * 2; // 基本インデントにアンダースコアの数に応じたインデントを追加
 
@@ -341,7 +344,6 @@ const Frame: React.FC<{
             y:
               buttonRef.current.getBoundingClientRect().top +
               buttonRef.current.offsetHeight / 2,
-
             w: 0.1,
             h: 0.3,
           }}

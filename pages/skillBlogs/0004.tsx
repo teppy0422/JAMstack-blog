@@ -29,7 +29,7 @@ import { useColorMode } from "@chakra-ui/react";
 import { useCustomToast } from "../../components/customToast";
 import SectionBox from "../../components/SectionBox";
 import BasicDrawer from "../../components/BasicDrawer";
-import Frame from "./frame";
+import Frame from "../../components/frame";
 import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
@@ -70,7 +70,7 @@ const kbdStyle = {
 };
 const BlogPage: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+  const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
   const { colorMode } = useColorMode();
   const [showConfetti, setShowConfetti] = useState(false); // useStateをコンポーネント内に移動
