@@ -922,7 +922,51 @@ const BlogPage: React.FC = () => {
             />
             <Text>--そのうち追加--</Text>
           </SectionBox>
-          <Box height="100vh"></Box>
+          <SectionBox
+            id="section7"
+            title="7.まとめ"
+            sectionRefs={sectionRefs}
+            sections={sections}
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Box
+              height="80vh"
+              style={{
+                backgroundImage:
+                  "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                color: "#fff",
+                position: "relative",
+              }}
+            >
+              <Text
+                style={{
+                  padding: "13px",
+                  paddingTop: "20px",
+                  textAlign: "left",
+                  color: "#fff",
+                  textShadow: "none",
+                  fontFamily: "'Yomogi', sans-serif",
+                  fontWeight: "bold",
+                }}
+              ></Text>
+              <Image
+                src="/images/hippo.gif"
+                alt="Hippo"
+                style={{
+                  position: "absolute",
+                  bottom: "10px",
+                  right: "10px",
+                  width: "50px",
+                }}
+              />
+            </Box>
+          </SectionBox>
+          <Box h="0.01vh" />
         </Frame>
       )}
     </>

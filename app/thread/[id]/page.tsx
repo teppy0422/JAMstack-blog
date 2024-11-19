@@ -1138,6 +1138,18 @@ export default function Thread() {
                 setIsZoomed(!isZoomed); // クリックでズームイン/アウトを切り替え
               }
             }}
+            style={{
+              backgroundColor: "#f2e9df",
+              backgroundImage: `
+                linear-gradient(45deg, #fff 25%, transparent 25%),
+                linear-gradient(135deg, #fff 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #fff 75%),
+                linear-gradient(135deg, transparent 75%, #fff 75%)
+              `,
+              backgroundSize: "20px 20px",
+              backgroundPosition: "0 0, 10px 0, 10px -10px, 0px 10px",
+              backgroundAttachment: "fixed",
+            }}
           >
             {selectedImageUrl &&
               (selectedImageUrl.match(/\.mp4$/) ? (
@@ -1654,6 +1666,17 @@ export default function Thread() {
                                     maxWidth: "100%",
                                     maxHeight: "300px",
                                     marginTop: "1px",
+                                    backgroundColor: "#f2e9df",
+                                    backgroundImage: `
+                                      linear-gradient(45deg, #fff 25%, transparent 25%),
+                                      linear-gradient(135deg, #fff 25%, transparent 25%),
+                                      linear-gradient(45deg, transparent 75%, #fff 75%),
+                                      linear-gradient(135deg, transparent 75%, #fff 75%)
+                                    `,
+                                    backgroundSize: "20px 20px",
+                                    backgroundPosition:
+                                      "0 0, 10px 0, 10px -10px, 0px 10px",
+                                    backgroundAttachment: "fixed",
                                   }}
                                   onClick={(e) => {
                                     if (!isLongPress) {

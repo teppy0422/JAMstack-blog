@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-19T14:08:00+0900"
+              description1="端末一覧で成型方向/成型角度の項目が無い場合にエラー"
+              description2="メッセージを追加"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.83_.zip"
+              inCharge="高知"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-11-18T15:00:00+0900"
               description1="サブ図で防水栓が表示されない事がある(たぶん高知PCのみ)"
               description2="CAV一覧の配列チェックをコメントアウト"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.82_.zip"
               inCharge="高知,王さん,不具合"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-15T23:56:00+0900"
