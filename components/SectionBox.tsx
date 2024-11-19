@@ -31,7 +31,10 @@ const SectionBox: React.FC<SectionBoxProps> = ({
       }}
       width="100%"
     >
-      <Link href={`#${id}`} style={{ textDecoration: "none" }}>
+      <Link
+        href={`#${id}`}
+        style={{ textDecoration: "none", display: "inline-block" }} // displayをinline-blockに設定
+      >
         <Heading size="md" fontWeight="600">
           {title}
         </Heading>

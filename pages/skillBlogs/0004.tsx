@@ -341,7 +341,7 @@ const BlogPage: React.FC = () => {
         </SectionBox>
         <SectionBox
           id="section2"
-          title="2.その他"
+          title="2.このサイトについて"
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -349,21 +349,53 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text>
-            このWEBサイトのソースコード(JAMstack-blog)はGitHubに公開しています
-          </Text>
-          <Box m={3}>
-            <Flex alignItems="left" mb={4}>
-              <Link href="https://github.com/teppy0422" isExternal>
-                <Flex alignItems="center">
-                  <Icon as={FaGithub} w={6} h={6} />
-                  <Text ml={2}>GitHub</Text>
-                </Flex>
-              </Link>
-            </Flex>
-            <Text>
-              このサイトのソースコードはGitHubに公開しています。自由に使って構いません。
-              ※チャットやユーザー情報、一部のファイルはsupabase内にあるのでアクセス出来ない事をご了承ください。
+          <Box
+            height="80vh"
+            style={{
+              backgroundImage:
+                "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              color: "#fff",
+              position: "relative",
+            }}
+          >
+            <Text
+              style={{
+                padding: "13px",
+                paddingTop: "20px",
+                textAlign: "left",
+                color: "#fff",
+                textShadow: "none",
+                fontFamily: "'Yomogi', sans-serif",
+                fontWeight: "400",
+              }}
+            >
+              このWEBサイトは効率良く活動を進めるために作成しました。
+              <br />
+              たとえば従来のメール連絡だと下記が不都合でした。
+              <br />
+              1.送信できるファイルサイズが小さい(2MB程度)
+              <br />
+              2.過去のやりとりの確認がし辛い
+              <br />
+              <br />
+              そこで、LINEのようなリアルタイムチャットを用意しました。
+              <br />
+              1.管理者が認証したアカウントのみ閲覧可能
+              <br />
+              2.他社のやりとりは閲覧不可
+              <br />
+              <br />
+              その他、最新のプログラムのダウンロードや使い方を載せています。
+              <br />
+              <br />
+              <br />
+              このサイトのソースコードはGitHubに公開しています。
+              <br />
+              レポジトリは JAMstack-blog。 自由に使って構いません。
+              <br />
+              ※チャット/ユーザー情報/その他一部のファイルはsupabase内にあるのでアクセス出来ない事をご了承ください。
               <br />
               <br />
               Next.jsで書いています
@@ -374,9 +406,27 @@ const BlogPage: React.FC = () => {
               <br />
               ブログはmicroCMS
             </Text>
+            <Flex alignItems="left" m={4} mt={6}>
+              <Link href="https://github.com/teppy0422" isExternal>
+                <Flex alignItems="center">
+                  <Icon as={FaGithub} w={6} h={6} />
+                  <Text ml={2}>GitHub</Text>
+                </Flex>
+              </Link>
+            </Flex>
+            <Image
+              src="/images/hippo.gif"
+              alt="Hippo"
+              style={{
+                position: "absolute",
+                bottom: "10px",
+                right: "10px",
+                width: "50px",
+              }}
+            />
           </Box>
         </SectionBox>
-        <Box height="100vh"></Box>
+        <Box h="0.01vh" />
       </Frame>
     </>
   );

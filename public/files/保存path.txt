@@ -1,1 +1,2 @@
 G:\htdocs\myWeb\images\gif
+C:\Apache24\htdocs\01_web\assets\images\video

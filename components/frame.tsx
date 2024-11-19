@@ -163,6 +163,7 @@ const Frame: React.FC<{
           index = [0];
           break;
         //生産準備+の使い方
+        case window.location.pathname.includes("/skillBlogs/0006"): //生産準備+とは
         case window.location.pathname.includes("/skillBlogs/0001"): //プログラミング解説
         case window.location.pathname.includes("/skillBlogs/0002"): //コネクタの撮影から座標登録まで
         case window.location.pathname.includes("/skillBlogs/0005"): //コネクタの撮影から座標登録まで
@@ -225,6 +226,7 @@ const Frame: React.FC<{
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
+                  {createLinkPanel("/skillBlogs/0006/", "生産準備+とは")}
                   {createLinkPanel("/skillBlogs/0001/", "プログラミング解説")}
                   {createLinkPanel(
                     "/skillBlogs/0002/",

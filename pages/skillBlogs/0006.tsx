@@ -20,6 +20,7 @@ import {
   Kbd,
   AvatarGroup,
   Flex,
+  Tooltip,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
@@ -188,16 +189,16 @@ const BlogPage: React.FC = () => {
         <Box>
           <HStack spacing={2} align="center" mb={1} ml={1}>
             <AvatarGroup size="sm" spacing={-1.5}>
-              <Avatar src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/112.jpg" />
               <Avatar src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp" />
             </AvatarGroup>
-            <Text>@ou @kataoka</Text>
+            <Text>@kataoka</Text>
+            <Text>in</Text>
+            <Text>開発</Text>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            サブナンバー引越しのやり方
+            生産準備+とは
           </Heading>
           <CustomBadge text="生準+" />
-          <CustomBadge text="高知" />
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
@@ -219,14 +220,16 @@ const BlogPage: React.FC = () => {
           <Box>
             <Text fontWeight="bold"></Text>
             <Text>
-              マイナーチェンジって旧製品品番と新製品品番でサブ形態が殆ど変わらない事が多いですよね？
-              そこで「サブナンバーを引越し」させる機能を追加しました。
+              ワイヤーハーネスの品番切替には多くの時間が掛かります。
+              特に従来のハメ図から写真のハメ図に置き換えるのが大変です。
+              そこで、より効率良くハメ図を作成するシステムを作成しました。
+              その後、現場の意見を聞きながら更新を続けています。
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section2"
-          title="2.全体の流れ"
+          title="2.できること"
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -234,129 +237,143 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text>下図の流れで実行します</Text>
-          <Flex
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-            mt={2}
-          >
-            <Image src="/images/dio/0001.svg" alt="0001.png" />
-          </Flex>
+          <video width="100%" height="100%" loop autoPlay muted>
+            <source src="/images/0006/SjpPromotion.mp4" type="video/mp4" />
+            お使いのブラウザは動画タグをサポートしていません。
+          </video>
+          <Box m={3}>
+            <Text fontWeight="400" my={4}>
+              2-1.コネクタ写真と座標の共用(.xlsm)
+            </Text>
+            <Text ml={4}>
+              撮影した写真/座標を共用する事が可能。2024/11/19時点で1680点が登録済みです。
+            </Text>
+            <Text fontWeight="400" my={4}>
+              2-2.ハメ図の作成(.xlsm)
+            </Text>
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              align="center"
+              justify="center"
+              wrap="wrap"
+              maxWidth="100%"
+              gap={4}
+            >
+              <Tooltip
+                label="通常のハメ図です。詰栓や先ハメ付属部品はこのように表示されます。"
+                placement="top"
+              >
+                <Image
+                  src="/images/0006/1_150_all.png"
+                  width="55%"
+                  alt="1_150_all.png"
+                  mb={{ base: 4, md: 0 }}
+                />
+              </Tooltip>
+              <Tooltip
+                label="ボンダーは線長順で表示され各行き先の端末No.が分かるようになっています。"
+                placement="top"
+              >
+                <Image
+                  src="/images/0006/1_434_all.png"
+                  alt="1_434_all.png"
+                  maxWidth="37%"
+                  mb={{ base: 4, md: 0 }}
+                />
+              </Tooltip>
+            </Flex>
+            <Text fontWeight="400" my={4}>
+              2-3.共通ハメ図の作成(.xlsm)
+            </Text>
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              align="center"
+              justify="center"
+              wrap="wrap"
+              maxWidth="100%"
+              gap={4}
+            >
+              <Tooltip label="製品品番220のハメ図" placement="top">
+                <Image
+                  src="/images/0006/4_516_all.png"
+                  width="45%"
+                  alt="4_516_all.png"
+                  mb={{ base: 4, md: 0 }}
+                />
+              </Tooltip>
+              <Tooltip label="製品品番310/131のハメ図" placement="top">
+                <Image
+                  src="/images/0006/3_516_all.png"
+                  maxWidth="42%"
+                  alt="3_516_all.png"
+                  mb={{ base: 4, md: 0 }}
+                />
+              </Tooltip>
+            </Flex>
+            <Text fontWeight="400" my={4}>
+              2-4.サブナンバーの印刷
+            </Text>
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              align="center"
+              justify="center"
+              wrap="wrap"
+              maxWidth="100%"
+              gap={4}
+            >
+              <Tooltip label="生産準備+のサブナンバーを印刷" placement="top">
+                <Image
+                  src="/images/0006/printF1.png"
+                  maxWidth="90%"
+                  alt="printF1.png"
+                  mb={{ base: 4, md: 0 }}
+                />
+              </Tooltip>
+            </Flex>
+
+            <Text fontWeight="400" my={4}>
+              2-5.ポイントナンバー点滅(.html)
+            </Text>
+            <Box display="flex" justifyContent="center" width="100%">
+              <video width="70%" height="100%" loop autoPlay muted>
+                <source src="/images/0006/1335.mp4" type="video/mp4" />
+                お使いのブラウザは動画タグをサポートしていません。
+              </video>
+            </Box>
+            <Text fontWeight="400" my={4}>
+              2-6.配策経路ナビ(.html)
+            </Text>
+            <Box display="flex" justifyContent="center" width="100%">
+              <video width="70%" height="100%" loop autoPlay muted>
+                <source src="/images/0006/0084.mp4" type="video/mp4" />
+                お使いのブラウザは動画タグをサポートしていません。
+              </video>
+            </Box>
+            <Text fontWeight="400" my={4}>
+              2-7.MKEDへの回路符号入力
+            </Text>
+            <Box display="flex" justifyContent="center" width="100%">
+              <video width="70%" height="100%" loop autoPlay muted>
+                <source src="/images/0006/v4220.mp4" type="video/mp4" />
+                お使いのブラウザは動画タグをサポートしていません。
+              </video>
+            </Box>
+            <Text fontWeight="400" my={4}>
+              2-8.その他
+            </Text>
+            <Text>#サブ図</Text>
+            <Text>#竿レイアウト→自動機データ作成</Text>
+            <Text>#先ハメ誘導ナビ</Text>
+            <Text>#部品箱の表示作成(TEPRA)</Text>
+            <Text>#電線仕分け表</Text>
+            <Text>#サブリスト</Text>
+            <Text>#EXTESからの共通化分析リクエストの実行</Text>
+          </Box>
+          <Text textAlign="center">---作成途中---</Text>
         </SectionBox>
         <SectionBox
           id="section3"
-          title="3.サブナンバーの出力"
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <Text>旧の生産準備+から出力します</Text>
-          <Text fontWeight="400" my={4}>
-            3-1.旧の生産準備+から「MENU」をクリック
-          </Text>
-          <Flex direction="column" alignItems="center" justifyContent="center">
-            <Image src="/images/0005/old_menu.png" alt="old_menu.png" w="50%" />
-          </Flex>
-          <Text fontWeight="400" my={4}>
-            3-2.「サブナンバー引越し」をクリック
-          </Text>
-          <Flex direction="column" alignItems="center" justifyContent="center">
-            <Image
-              src="/images/0005/old_menu2.png"
-              alt="old_menu2.png"
-              w="50%"
-            />
-          </Flex>
-          <Text fontWeight="400" my={4}>
-            3-3.「メイン品番」で出力をクリック
-          </Text>
-          <Flex direction="column" alignItems="center" justifyContent="center">
-            <Image
-              src="/images/0005/old_menu3.png"
-              alt="old_menu3.png"
-              w="50%"
-            />
-          </Flex>
-          <Text fontWeight="400" my={4}>
-            3-4.一時保管場所(B01_サブナンバー引越し)に出力されました
-          </Text>
-          <Flex direction="column" alignItems="center" justifyContent="center">
-            <Image
-              src="/images/0005/old_menu4.png"
-              alt="old_menu4.png"
-              w="70%"
-            />
-          </Flex>
-        </SectionBox>
-        <SectionBox
-          id="section4"
-          title="4.サブナンバーの取得"
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <Text>新の製品品番から取得します</Text>
-          <Text fontWeight="400" my={4}>
-            4-1.旧メイン品番の項目に引き継ぎたい製品品番(旧)を入力
-          </Text>
-          <Flex direction="column" alignItems="center" justifyContent="center">
-            <Image src="/images/0005/new_menu.png" alt="new_menu.png" w="50%" />
-          </Flex>
-          <Text fontWeight="400" my={4}>
-            4-2.「旧メイン品番で取得」をクリック
-          </Text>
-          <Flex direction="column" alignItems="center" justifyContent="center">
-            <Image
-              src="/images/0005/new_menu2.png"
-              alt="new_menu2.png"
-              w="50%"
-            />
-          </Flex>
-          <Text fontWeight="400" my={4}>
-            4-3.旧のサブナンバーが取得されました
-          </Text>
-          <Flex direction="column" alignItems="center" justifyContent="center">
-            <Image
-              src="/images/0005/new_menu3.png"
-              alt="new_menu3.png"
-              w="100%"
-            />
-          </Flex>
-          <Text fontWeight="400" my={4}>
-            4-4.旧のサブナンバーが取得されました
-          </Text>
-          <Flex direction="column" alignItems="center" justifyContent="center">
-            <Box bg="gray.300" color="black" w="50%" p={1}>
-              PVSW_RLTFに電線サブナンバーを取得
-            </Box>
-            <Image
-              src="/images/0005/new_menu4.png"
-              alt="new_menu4.png"
-              w="50%"
-            />
-            <Box bg="gray.300" color="black" w="70%" p={1} mt={5}>
-              端末一覧に端末サブナンバーを取得
-            </Box>
-            <Image
-              src="/images/0005/new_menu5.png"
-              alt="new_menu5.png"
-              w="70%"
-            />
-          </Flex>
-          <Text mt={2}>
-            ※取得したサブナンバーは<strong>太字</strong>になります
-          </Text>
-        </SectionBox>
-        <SectionBox
-          id="section5"
-          title="5.まとめ"
+          title="3.まとめ"
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -385,9 +402,7 @@ const BlogPage: React.FC = () => {
                 fontFamily: "'Yomogi', sans-serif",
                 fontWeight: "bold",
               }}
-            >
-              このようにサブナンバーを任意の製品品番から取得出来る為、類似した製品形態から取得するのも良いかもしれません
-            </Text>
+            ></Text>
             <Image
               src="/images/hippo.gif"
               alt="Hippo"
