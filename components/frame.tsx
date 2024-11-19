@@ -164,6 +164,7 @@ const Frame: React.FC<{
           break;
         //生産準備+の使い方
         case window.location.pathname.includes("/skillBlogs/0006"): //生産準備+とは
+        case window.location.pathname.includes("/skillBlogs/0007"): //生産準備+の練習(初級)
         case window.location.pathname.includes("/skillBlogs/0001"): //プログラミング解説
         case window.location.pathname.includes("/skillBlogs/0002"): //コネクタの撮影から座標登録まで
         case window.location.pathname.includes("/skillBlogs/0005"): //コネクタの撮影から座標登録まで
@@ -227,6 +228,10 @@ const Frame: React.FC<{
                     <AccordionIcon />
                   </AccordionButton>
                   {createLinkPanel("/skillBlogs/0006/", "生産準備+とは")}
+                  {createLinkPanel(
+                    "/skillBlogs/0007/",
+                    "生産準備+の練習(初級)"
+                  )}
                   {createLinkPanel("/skillBlogs/0001/", "プログラミング解説")}
                   {createLinkPanel(
                     "/skillBlogs/0002/",
@@ -351,7 +356,7 @@ const Frame: React.FC<{
           width={window.innerWidth}
           height={window.innerHeight}
           numberOfPieces={20}
-          gravity={0.5} // 重力を調整して紙吹雪の動きを制御
+          gravity={1} // 重力を調整して紙吹雪の動きを制御
           recycle={false}
           confettiSource={{
             x:
@@ -361,7 +366,7 @@ const Frame: React.FC<{
               buttonRef.current.getBoundingClientRect().top +
               buttonRef.current.offsetHeight / 2,
             w: 0.1,
-            h: 0.3,
+            h: 0.1,
           }}
           style={{
             position: "absolute",

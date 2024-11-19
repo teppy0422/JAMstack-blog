@@ -19,6 +19,7 @@ import {
   Image,
   Kbd,
   AvatarGroup,
+  Flex,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
@@ -436,7 +437,7 @@ const BlogPage: React.FC = () => {
         </SectionBox>
         <SectionBox
           id="section5"
-          title="5.コネクタ座標の編集"
+          title="5.まとめ"
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -444,8 +445,41 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
+          <Box
+            height="80vh"
+            style={{
+              backgroundImage:
+                "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              color: "#fff",
+              position: "relative",
+            }}
+          >
+            <Text
+              style={{
+                padding: "13px",
+                paddingTop: "20px",
+                textAlign: "left",
+                color: "#fff",
+                textShadow: "none",
+                fontFamily: "'Yomogi', sans-serif",
+                fontWeight: "400",
+              }}
+            ></Text>
+            <Image
+              src="/images/hippo.gif"
+              alt="Hippo"
+              style={{
+                position: "absolute",
+                bottom: "10px",
+                right: "10px",
+                width: "50px",
+              }}
+            />
+          </Box>
         </SectionBox>
-        <Box height="100vh"></Box>
+        <Box h="0.01vh" />
       </Frame>
     </>
   );

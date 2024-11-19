@@ -387,7 +387,7 @@ const BlogPage: React.FC = () => {
               2.他社のやりとりは閲覧不可
               <br />
               <br />
-              その他、最新のプログラムのダウンロードや使い方を載せています。
+              その他、最新のプログラムのダウンロードや使い方を載せていきます。
               <br />
               <br />
               <br />
@@ -395,14 +395,14 @@ const BlogPage: React.FC = () => {
               <br />
               レポジトリは JAMstack-blog。 自由に使って構いません。
               <br />
-              ※チャット/ユーザー情報/その他一部のファイルはsupabase内にあるのでアクセス出来ない事をご了承ください。
+              ※チャット内容/添付ファイル/ユーザー情報/その他一部のファイルはsupabase内にあるのでアクセス出来ない事をご了承ください。
               <br />
               <br />
-              Next.jsで書いています
+              Next.js + TypeScriptで書いています
               <br />
               CSSフレームワークはChakraUI
               <br />
-              データベースはVercel,supabase
+              データベースはVercel + supabase
               <br />
               ブログはmicroCMS
             </Text>
