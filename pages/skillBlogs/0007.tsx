@@ -19,6 +19,14 @@ import {
   Image,
   Kbd,
   AvatarGroup,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
   Flex,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
@@ -181,7 +189,17 @@ const BlogPage: React.FC = () => {
     setActiveDrawer(null);
     onClose();
   };
-
+  //生産準備+着手からの経過日数の計算
+  const calculateElapsedTime = () => {
+    const startDate = new Date(2016, 6, 11); // 月は0から始まるので7月は6
+    const today = new Date();
+    const diffTime = Math.abs(today.getTime() - startDate.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const years = Math.floor(diffDays / 365);
+    const months = Math.floor((diffDays % 365) / 30); // おおよその月数
+    const days = (diffDays % 365) % 30;
+    return `${years}年${months}ヶ月${days}日`;
+  };
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs}>
@@ -195,7 +213,7 @@ const BlogPage: React.FC = () => {
             <Text>開発</Text>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            コネクタの撮影から座標登録まで
+            生産準備+の練習(初級)
           </Heading>
           <CustomBadge text="生準+" />
           <Text
@@ -203,7 +221,7 @@ const BlogPage: React.FC = () => {
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-17
+            更新日:2024-11-19
           </Text>
         </Box>
         <SectionBox
@@ -219,15 +237,15 @@ const BlogPage: React.FC = () => {
           <Box>
             <Text fontWeight="bold"></Text>
             <Text>
-              誰かが撮影したコネクタ画像はみんなで共有した方が良いよね？という考えで開発しました。
-              登録した写真と座標データは共有して使用する事で生産効率の向上を図ります。
-              以下はその手順です。
+              開発に着手してから{calculateElapsedTime()}
+              が経過しています。多くの機能を追加した結果、文章での理解が難しいものになってしまいました。
+              その為、まず最初に実際に操作して何となく理解する事を推奨しています。とりあえず以下の手順通りにやってみてください。
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section2"
-          title="2.カメラアプリの起動"
+          title="2.練習用の生産準備+の入手"
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -235,36 +253,77 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text>専用のカメラアプリで撮影して保存します</Text>
+          <Text>ダウンロードして使えるように準備をします。</Text>
           <Box m={3}>
             <Text fontWeight="400" my={4}>
-              2-1.生産準備+の[端末一覧]を選択
+              2-1.ダウンロードの実行
+              <Link
+                href="/images/0007/003_練習用.zip" // ダウンロードするファイルのパスを指定
+                download
+                color="blue.500"
+                ml={2} // テキストとリンクの間にマージンを追加
+              >
+                ダウンロード
+              </Link>
             </Text>
             <Text fontWeight="400" my={4}>
-              2-2.撮影する端末/コネクタ品番を選択
+              2-2.ダウンロードフォルダを開く
             </Text>
-            <Box bg="gray.300" color="black" w="100%" p={1}>
-              下図は11行目(7283-0391-30)を選択している状態です
-            </Box>
-            <Image src="/images/0001/0002.png" alt="0002.png" />
-            <Text fontWeight="400" my={4}>
-              2-3.
-              <Kbd {...kbdStyle}>Ctrl</Kbd>+<Kbd {...kbdStyle}>Enter</Kbd>
-              を押す
-            </Text>
-            <Box bg="gray.300" color="black" w="100%" p={1}>
-              撮影ソフト(camera+)が起動します
-            </Box>
-            <Image src="/images/0001/0013.png" alt="0013.png" />
             <Text>
-              ※インストールされていない場合はインストール画面が表示されるのでインストールを行ってください。開発の署名は片岡哲兵です。
+              ダウンロードが完了したら下図が表示されるので赤枠の辺りをクリックします
+              <br />
+              ※Edgeの場合
             </Text>
+            <Image src="/images/0007/0001.png" alt="0001.png" w="60%" />
+            <Text
+              onClick={() => handleOpen("chrome")}
+              cursor="pointer"
+              color="blue.500"
+            >
+              ※Chromeの場合
+            </Text>
+            <Modal isOpen={activeDrawer === "chrome"} onClose={handleClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Chromeの場合</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Image src="/images/0007/0004.png" alt="0004.png" />
+                </ModalBody>
+                <ModalFooter>
+                  <Button colorScheme="blue" mr={3} onClick={handleClose}>
+                    閉じる
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+
+            <Text fontWeight="400" my={4}>
+              2-3.ダウンロードしたファイル(003_練習用.zip)の展開
+            </Text>
+            <Image src="/images/0007/0002.png" alt="0002.png" w="65%" />
+            <Text my={4}>
+              ダウンロードした.zipを右クリックして「すべて展開」をクリック
+            </Text>
+            <Text fontWeight="400" my={4}>
+              2-4.展開されたフォルダのエクセルファイルを開く
+            </Text>
+
+            <Flex
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Image src="/images/0007/0003.png" alt="0003.png" w="70%" />
+              <Box bg="gray.300" color="black" w="70%" p={1}>
+                このエクエルファイルが生産準備+の本体です
+              </Box>
+            </Flex>
           </Box>
-          <Text textAlign="center">---作成途中---</Text>
         </SectionBox>
         <SectionBox
           id="section3"
-          title="3.コネクタ写真の加工(通常)"
+          title="3.必要データのインポート"
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -272,102 +331,43 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text display="inline">
-            無料の画像編集ソフト
-            <UnderlinedTextWithDrawer
-              text="InkScape"
-              onOpen={() => handleOpen("InkScape")}
-              isOpen={isOpen && activeDrawer === "InkScape"}
-              onClose={handleClose}
-              header="InkScapeとは"
-              children={
-                <Box>
-                  <Image
-                    src="/images/logo_inkscape.svg"
-                    alt="logo_inkscape.svg"
-                    w="36px"
-                    h="36px"
-                    mb={2}
-                  />
-                  <Text>
-                    <span style={{ fontWeight: "600" }}>InkScape</span>
-                    は、コンピュータで絵を描くための無料のソフトです。特に「ベクターグラフィックス」という方法で絵を描けます。
-                  </Text>
-                  <Text fontWeight="600" mt={4}>
-                    ベクターグラフィックスって何？
-                  </Text>
-                  <Text>
-                    拡大してもきれい:
-                    普通の写真や画像は、拡大するとぼやけてしまうことがあります。でも、ベクターグラフィックスは、どんなに拡大しても線がくっきりしています。これは、絵が線や形で表現されているからです。
-                  </Text>
-                  <Text fontWeight="600" mt={4}>
-                    Inkscapeのいいところ
-                  </Text>
-                  <Text>
-                    無料で使える:
-                    お金を払わなくても、誰でも自由にダウンロードして使えます。
-                  </Text>
-                  <Text>
-                    みんなで作っている:
-                    Inkscapeは、世界中の人たちが協力して作っているソフトです。だから、どんどん良くなっています。
-                  </Text>
-                  <Text
-                    fontWeight="600"
-                    mt={4}
-                    animation={`${jumpAnimation} 1s infinite`} // アニメーションを適用
-                  >
-                    注意点
-                  </Text>
-                  <Text>
-                    通常の会社ではソフトのインストール許可申請が必要です。許可が降りてからインストールを行なってください。
-                  </Text>
-                </Box>
-              }
-            />
-            で写真の背景除去を行います
-          </Text>
+          <Text>必要なファイルをインポートしていきます</Text>
           <Box m={3}>
             <Text fontWeight="400" my={4}>
-              3-1.生産準備+の[端末一覧]を選択
+              3-1.[MENU]を開く
             </Text>
+            <Image src="/images/0007/0005.png" alt="0002.png" />
             <Text fontWeight="400" my={4}>
-              3-2.登録/修正したい部品品番を選択
+              3-2.必要ファイルのインポートを行う
             </Text>
-            <Box bg="gray.300" color="black" w="100%" p={1}>
-              下図は11行目(7283-0391-30)を選択している状態です
-            </Box>
-            <Image src="/images/0001/0002.png" alt="0002.png" />
-            <Text fontWeight="400" my={4}>
-              3-3.
-              <Kbd {...kbdStyle}>Shift</Kbd>+<Kbd {...kbdStyle}>Enter</Kbd>
-              を押す
-            </Text>
-            <Box bg="gray.300" color="black" w="100%" p={1}>
-              写真加工ソフト(InkScape)がインストールされていない場合はダウンロードサイトが開きます
-            </Box>
-            <Image src="/images/0001/0007.png" alt="0007.png" />
-            <Text>
-              ※InkScapeのダウンロードアドレスがわっていたら開きません。
-              その場合はブラウザ(Edgeとか)で検索してダウンロードサイトを探してください。
-            </Text>
-            <Text my={4}>上図の赤枠辺りをクリックして進みます。</Text>
-            <Text my={4}>
-              3-4.下図の赤枠辺りをクリックしてダウンロードページを開きます。
-            </Text>
-            <Box bg="gray.300" color="black" w="100%" p={1}>
-              お使いのパソコンに最適なバージョンが自動選択されます
-            </Box>
-            <Image src="/images/0001/0008.png" alt="0008.png" />
-            <Text my={4}>3-5.click hereをクリックしてダウンロード開始</Text>
-            <Image src="/images/0001/0009.png" alt="0009.png" />
-            <Text>
-              ※ダウンロードが上手く出来ない場合はシステム管理者などにご相談ください
-            </Text>
+
+            <Flex
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <video width="90%" height="100%" loop autoPlay muted>
+                <source src="/images/0007/0006.mp4" type="video/mp4" />
+                お使いのブラウザは動画タグをサポートしていません。
+              </video>
+              <Box bg="gray.300" color="black" w="90%" p={1} mb={6}>
+                入力→01_インポート→RTTFのサブを使用にチェック→全て実行
+                <br />
+                動画と同じようにやってみてください
+              </Box>
+              <video width="60%" height="100%" loop autoPlay muted>
+                <source src="/images/0007/0007.mp4" type="video/mp4" />
+                お使いのブラウザは動画タグをサポートしていません。
+              </video>
+              <Box bg="gray.300" color="black" w="60%" p={1}>
+                画面左下に進捗状況が表示されます
+              </Box>
+            </Flex>
           </Box>
         </SectionBox>
         <SectionBox
           id="section4"
-          title="4.コネクタ写真の加工(簡単)"
+          title="4.シートの作成"
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -375,69 +375,84 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text>
-            この方法では簡単に背景除去ができます。コネクタと背景のコントラストがある一定必要です。
-            端子写真は電線部分の除去は出来ません。
-          </Text>
+          <Text>再度、MENUを開いて下図のように操作してください</Text>
           <Box m={3}>
-            <Text my={4}>4-1.下記のWEBサイトを開く</Text>
-            <Link
-              href="https://www.photoroom.com/ja/tools/background-remover"
-              target="_blank"
-              rel="noopener noreferrer"
-              ml={4}
+            <Flex
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
             >
-              photoroom.com/ja/tools/background-remover
-            </Link>
-            <Text display="inline-block" mt={4}>
-              4-2.
-              <UnderlinedTextWithDrawer
-                text="Photoroom"
-                onOpen={() => handleOpen("Photoroom")}
-                isOpen={isOpen && activeDrawer === "Photoroom"}
-                onClose={handleClose}
-                header="Photoroomの使い方"
-                children={
-                  <Box>
-                    <video width="100%" height="100%" loop autoPlay muted>
-                      <source
-                        src="/images/0001/howToPhotoroom.mp4"
-                        type="video/mp4"
-                      />
-                      お使いのブラウザは動画タグをサポートしていません。
-                    </video>
-                    <Text mt={4}>
-                      <span style={{ fontWeight: "600" }}>Photoroom</span>
-                      は、ブラウザ上で動作する画像加工WEBアプリです。2024/11/16現在は無料です。
-                    </Text>
-                    <Text fontWeight="600" mt={4}>
-                      使い方
-                    </Text>
-                    <Text>
-                      1.上の動画のように加工したい写真をドラッグすると背景が除去されます。
-                      <br />
-                      2.ダウンロード(標準解像度)してパソコンに保存します。
-                    </Text>
-                  </Box>
-                }
-              />
-              で写真の背景除去を行なってダウンロードします
+              <video width="65%" height="100%" loop autoPlay muted>
+                <source src="/images/0007/0008.mp4" type="video/mp4" />
+                お使いのブラウザは動画タグをサポートしていません。
+              </video>
+              <Box bg="gray.300" color="black" w="65%" p={1} mb={6}>
+                入力→02_手入力シート作成→すべて実行をクリック
+              </Box>
+            </Flex>
+            <Text>
+              この操作によって複数のシートが作成されます。
+              このシートは不足したデータを補う為に入力する為に使用します。※今回は初級なので入力は省きます。
             </Text>
-            <Text my={4}>4-3.ダウンロードしたファイルをリネームします。</Text>
-            <Text ml={4}>
-              例)
-              <br />
-              7283-0391-30.png
-              <br />
-              ⇩<br />
-              7283-0391-30_1_001.png
-            </Text>
-            <Text my={4}>4-4.ファイルを任意の場所に保存します。</Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section5"
-          title="5.まとめ"
+          title="5.成果物の作成"
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text>[MENU]を開いて下図のように操作してください</Text>
+          <Box m={3}>
+            <Text fontWeight="400" my={4}>
+              5-1.サブ図の作成
+            </Text>
+
+            <Flex
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <video width="70%" height="100%" loop autoPlay muted>
+                <source src="/images/0007/0009.mp4" type="video/mp4" />
+                お使いのブラウザは動画タグをサポートしていません。
+              </video>
+              <Box bg="gray.300" color="black" w="70%" p={1} mb={6}>
+                40-50_ハメ図 → サブ図 → 製品品番を選択 → 作成
+              </Box>
+              <Text>約30秒後に作成されます</Text>
+            </Flex>
+            <Text fontWeight="400" my={4}>
+              5-2.配策誘導ナビの作成
+            </Text>
+
+            <Flex
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <video width="70%" height="100%" loop autoPlay muted>
+                <source src="/images/0007/0010.mp4" type="video/mp4" />
+                お使いのブラウザは動画タグをサポートしていません。
+              </video>
+              <Box bg="gray.300" color="black" w="70%" p={1} mb={6}>
+                50_配策図 → 実行
+              </Box>
+              <Text>
+                約120秒後に配策誘導ナビが作成されます。
+                <br />
+                ※これはブラウザやブラウザコントロールで表示できます。
+              </Text>
+            </Flex>
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section6"
+          title="6.まとめ"
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -466,7 +481,15 @@ const BlogPage: React.FC = () => {
                 fontFamily: "'Yomogi', sans-serif",
                 fontWeight: "400",
               }}
-            ></Text>
+            >
+              なんとなく作成までの流れが分かったかと思います。
+              <br />
+              このように基本はクリックで進めていきます。
+              <br />
+              <br />
+              しかし実際には存在しないデータは手入力が必要です。
+              次の練習(中級)で手入力を経験してみてください。
+            </Text>
             <Image
               src="/images/hippo.gif"
               alt="Hippo"
