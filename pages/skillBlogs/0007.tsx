@@ -31,6 +31,7 @@ import {
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
+import { FaDownload } from "react-icons/fa6";
 import Content from "../../components/content";
 import { useColorMode } from "@chakra-ui/react";
 import { useCustomToast } from "../../components/customToast";
@@ -40,6 +41,8 @@ import Frame from "../../components/frame";
 import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
+import DownloadLink from "./DownloadLink";
+import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
 
 import "@fontsource/noto-sans-jp";
 
@@ -143,44 +146,7 @@ const BlogPage: React.FC = () => {
       window.removeEventListener("hashchange", handleHashChange, false);
     };
   }, []);
-  //アンダーライン付きテキスト_ドロワー
-  const UnderlinedTextWithDrawer = ({
-    text,
-    onOpen,
-    isOpen,
-    onClose,
-    header,
-    children,
-  }) => {
-    const { colorMode } = useColorMode();
-    const color = colorMode === "light" ? "blue.500" : "blue.200";
-    return (
-      <>
-        <HStack
-          as="span"
-          style={{ whiteSpace: "nowrap" }}
-          color={color}
-          cursor="pointer"
-          onClick={onOpen}
-          spacing={1}
-          borderBottom="2px solid"
-          borderColor={color}
-          display="inline"
-        >
-          <Box as="span" display="inline">
-            {text}
-          </Box>
-          <LuPanelRightOpen
-            size="20px"
-            style={{ marginBottom: "-3px", display: "inline" }}
-          />
-        </HStack>
-        <BasicDrawer isOpen={isOpen} onClose={onClose} header={header}>
-          {children}
-        </BasicDrawer>
-      </>
-    );
-  };
+
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);
     onOpen();
@@ -257,15 +223,11 @@ const BlogPage: React.FC = () => {
           <Box m={3}>
             <Text fontWeight="400" my={4}>
               2-1.ダウンロードの実行
-              <Link
-                href="/images/0007/003_練習用.zip" // ダウンロードするファイルのパスを指定
-                download
-                color="blue.500"
-                ml={2} // テキストとリンクの間にマージンを追加
-              >
-                ダウンロード
-              </Link>
             </Text>
+            <DownloadLink
+              text="ダウンロードする"
+              href="/images/0007/003_練習用.zip"
+            />
             <Text fontWeight="400" my={4}>
               2-2.ダウンロードフォルダを開く
             </Text>
@@ -435,11 +397,11 @@ const BlogPage: React.FC = () => {
               alignItems="center"
               justifyContent="center"
             >
-              <video width="70%" height="100%" loop autoPlay muted>
+              <video width="50%" height="100%" loop autoPlay muted>
                 <source src="/images/0007/0010.mp4" type="video/mp4" />
                 お使いのブラウザは動画タグをサポートしていません。
               </video>
-              <Box bg="gray.300" color="black" w="70%" p={1} mb={6}>
+              <Box bg="gray.300" color="black" w="50%" p={1} mb={6}>
                 50_配策図 → 実行
               </Box>
               <Text>
