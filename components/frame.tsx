@@ -29,7 +29,6 @@ import { LuPanelRightOpen } from "react-icons/lu";
 import Content from "./content";
 import { useColorMode } from "@chakra-ui/react";
 import { useCustomToast } from "./customToast";
-import BasicDrawer from "./BasicDrawer";
 import { useDisclosure } from "@chakra-ui/react";
 
 import "@fontsource/noto-sans-jp";
@@ -310,42 +309,47 @@ const Frame: React.FC<{
               display={["none", "none", "none", "block"]}
             >
               <List spacing={1} fontSize="sm">
-                {sections.current?.map((section) => {
-                  const underscoreCount = (section.id.match(/_/g) || []).length; // アンダースコアの数をカウント
-                  const indent = 2 + underscoreCount * 2; // 基本インデントにアンダースコアの数に応じたインデントを追加
+                {sections.current
+                  ?.sort((a, b) => {
+                    return a.id.localeCompare(b.id);
+                  })
+                  .map((section) => {
+                    const underscoreCount = (section.id.match(/_/g) || [])
+                      .length; // アンダースコアの数をカウント
+                    const indent = 2 + underscoreCount * 2; // 基本インデントにアンダースコアの数に応じたインデントを追加
 
-                  return (
-                    <ListItem
-                      w="100%"
-                      maxWidth={["0px", "0px", "200px", "240px"]}
-                      key={section.id}
-                      p={1}
-                      borderRadius="5px"
-                      bg={
-                        activeSection === section.id
-                          ? "gray.500"
-                          : "transparent"
-                      }
-                      color={
-                        activeSection === section.id
-                          ? "white"
-                          : colorMode === "light"
-                          ? "black"
-                          : "white"
-                      }
-                      pl={indent}
-                      style={{
-                        whiteSpace: "nowrap", // 改行を防ぐ
-                        overflow: "hidden", // 溢れた部分を隠す
-                        textOverflow: "ellipsis", // 溢れた部分に「...」を付ける
-                      }}
-                    >
-                      <Link href={`#${section.id}`} title={section.title}>
-                        {section.title}
-                      </Link>
-                    </ListItem>
-                  );
-                })}
+                    return (
+                      <ListItem
+                        w="100%"
+                        maxWidth={["0px", "0px", "200px", "240px"]}
+                        key={section.id}
+                        p={1}
+                        borderRadius="5px"
+                        bg={
+                          activeSection === section.id
+                            ? "gray.500"
+                            : "transparent"
+                        }
+                        color={
+                          activeSection === section.id
+                            ? "white"
+                            : colorMode === "light"
+                            ? "black"
+                            : "white"
+                        }
+                        pl={indent}
+                        style={{
+                          whiteSpace: "nowrap", // 改行を防ぐ
+                          overflow: "hidden", // 溢れた部分を隠す
+                          textOverflow: "ellipsis", // 溢れた部分に「...」を付ける
+                        }}
+                      >
+                        <Link href={`#${section.id}`} title={section.title}>
+                          {section.title}
+                        </Link>
+                      </ListItem>
+                    );
+                  })}
               </List>
             </VStack>
           </HStack>

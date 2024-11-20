@@ -140,44 +140,6 @@ const BlogPage: React.FC = () => {
       window.removeEventListener("hashchange", handleHashChange, false);
     };
   }, []);
-  //アンダーライン付きテキスト_ドロワー
-  const UnderlinedTextWithDrawer = ({
-    text,
-    onOpen,
-    isOpen,
-    onClose,
-    header,
-    children,
-  }) => {
-    const { colorMode } = useColorMode();
-    const color = colorMode === "light" ? "blue.500" : "blue.200";
-    return (
-      <>
-        <HStack
-          as="span"
-          style={{ whiteSpace: "nowrap" }}
-          color={color}
-          cursor="pointer"
-          onClick={onOpen}
-          spacing={1}
-          borderBottom="2px solid"
-          borderColor={color}
-          display="inline"
-        >
-          <Box as="span" display="inline">
-            {text}
-          </Box>
-          <LuPanelRightOpen
-            size="20px"
-            style={{ marginBottom: "-3px", display: "inline" }}
-          />
-        </HStack>
-        <BasicDrawer isOpen={isOpen} onClose={onClose} header={header}>
-          {children}
-        </BasicDrawer>
-      </>
-    );
-  };
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);
     onOpen();
@@ -191,73 +153,79 @@ const BlogPage: React.FC = () => {
       value: 90,
       cirText: "EXCEL-vba\nアプリ制御など\n15年",
       color: "#1f9b60",
-      img: "/images/logo_excel.svg",
+      img: "/images/brandIcons/logo_excel.svg",
     },
     {
       value: 65,
       cirText: "ACCESS-vba\n部品管理\n3年",
       color: "#1f9b60",
-      img: "/images/logo_access.svg",
+      img: "/images/brandIcons/logo_access.svg",
     },
     {
       value: 30,
       cirText: "vb.net\nシリアル通信\nカメラ制御\n半年",
       color: "#9A4F96",
-      img: "/images/logo_dotNet.svg",
+      img: "/images/brandIcons/logo_dotNet.svg",
     },
     {
       value: 60,
       cirText: "HTML\n基本的な使い方\n4年",
       color: "#F1652A",
-      img: "/images/logo_html5.svg",
+      img: "/images/brandIcons/logo_html5.svg",
     },
     {
       value: 65,
       cirText: "CSS\n基本的な使い方\n+SCSS\n4年",
       color: "#F1652A",
-      img: "/images/logo_css.svg",
+      img: "/images/brandIcons/logo_css.svg",
     },
     {
       value: 40,
       cirText: "JavaScript\n4年",
       color: "#F1652A",
-      img: "/images/logo_javascript.svg",
+      img: "/images/brandIcons/logo_javascript.svg",
     },
     {
-      value: 40,
-      cirText: "Next\nこのサイトで利用\n1年",
+      value: 45,
+      cirText: "Next\nこのサイトを作成\n2年",
       color: "#F1652A",
-      img: "/images/logo_next.svg",
+      img: "/images/brandIcons/logo_next.svg",
     },
     {
       value: 30,
       cirText: "PHP\n半年",
       color: "#4E5B92",
-      img: "/images/logo_php.svg",
+      img: "/images/brandIcons/logo_php.svg",
     },
     {
       value: 20,
       cirText: "Python\n少しだけ",
       color: "#4E5B92",
-      img: "/images/logo_python.svg",
+      img: "/images/brandIcons/logo_python.svg",
     },
     {
       value: 60,
       cirText: "Arduino\n2年",
       color: "#12999F",
-      img: "/images/logo_arduino.svg",
+      img: "/images/brandIcons/logo_arduino.svg",
     },
     {
       value: 30,
       cirText: "Davinci Resolve\n半年",
       color: "#888888",
-      img: "/images/logo_davinci.svg",
+      img: "/images/brandIcons/logo_davinci.svg",
     },
     {
       value: 30,
       cirText: "InkScape\n1年",
       color: "#333333",
-      img: "/images/logo_inkscape.svg",
+      img: "/images/brandIcons/logo_inkscape.svg",
+    },
+    {
+      value: 30,
+      cirText: "Premiere Pro\n半年",
+      color: "#00005c",
+      img: "/images/brandIcons/logo_Premiere.svg",
     },
   ];
   return (
@@ -307,7 +275,7 @@ const BlogPage: React.FC = () => {
               現場の問題改善を繰り返す内にITや電子工学技術に興味を持ちました。
               工作改善チームではPLC/Arduinoなどのハードウェアを経験させてもらいました。
               その後、ハードウェアとソフトウェアを組み合わせる内にHTML/JavaScript/PHPを経験してWEBアプリを作るに至りました。
-              現場の使用者と相談しながら更に発展させていくのが好きです。カバも好き。プログラミングは嫌い。
+              現場の使用者と相談しながら更に発展させていくのが好きです。プログラミングは嫌い。
             </Text>
           </Flex>
           <div data-aos="fade-right" style={{ display: "inline-block" }}>
@@ -368,7 +336,7 @@ const BlogPage: React.FC = () => {
                 color: "#fff",
                 textShadow: "none",
                 fontFamily: "'Yomogi', sans-serif",
-                fontWeight: "400",
+                fontWeight: "100",
               }}
             >
               このWEBサイトは効率良く活動を進めるために作成しました。
