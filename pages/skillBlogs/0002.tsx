@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
+import { FaExternalLinkAlt } from "react-icons/fa";
 import Content from "../../components/content";
 import { useColorMode } from "@chakra-ui/react";
 import { useCustomToast } from "../../components/customToast";
@@ -30,6 +31,8 @@ import Frame from "../../components/frame";
 import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
+import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
+import ExternalLink from "./ExternalLink";
 
 import "@fontsource/noto-sans-jp";
 
@@ -133,44 +136,7 @@ const BlogPage: React.FC = () => {
       window.removeEventListener("hashchange", handleHashChange, false);
     };
   }, []);
-  //アンダーライン付きテキスト_ドロワー
-  const UnderlinedTextWithDrawer = ({
-    text,
-    onOpen,
-    isOpen,
-    onClose,
-    header,
-    children,
-  }) => {
-    const { colorMode } = useColorMode();
-    const color = colorMode === "light" ? "blue.500" : "blue.200";
-    return (
-      <>
-        <HStack
-          as="span"
-          style={{ whiteSpace: "nowrap" }}
-          color={color}
-          cursor="pointer"
-          onClick={onOpen}
-          spacing={1}
-          borderBottom="2px solid"
-          borderColor={color}
-          display="inline"
-        >
-          <Box as="span" display="inline">
-            {text}
-          </Box>
-          <LuPanelRightOpen
-            size="20px"
-            style={{ marginBottom: "-3px", display: "inline" }}
-          />
-        </HStack>
-        <BasicDrawer isOpen={isOpen} onClose={onClose} header={header}>
-          {children}
-        </BasicDrawer>
-      </>
-    );
-  };
+
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);
     onOpen();
@@ -400,14 +366,10 @@ const BlogPage: React.FC = () => {
           </Text>
           <Box m={3}>
             <Text my={4}>4-1.下記のWEBサイトを開く</Text>
-            <Link
+            <ExternalLink
               href="https://www.photoroom.com/ja/tools/background-remover"
-              target="_blank"
-              rel="noopener noreferrer"
-              ml={4}
-            >
-              photoroom.com/ja/tools/background-remover
-            </Link>
+              text="photoroom.com/ja/tools/background-remover"
+            />
             <Text display="inline-block" mt={4}>
               4-2.
               <UnderlinedTextWithDrawer
