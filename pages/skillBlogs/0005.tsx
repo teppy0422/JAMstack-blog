@@ -167,9 +167,10 @@ const BlogPage: React.FC = () => {
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-19
+            更新日:2024-11-20
           </Text>
         </Box>
+
         <SectionBox
           id="section1"
           title="1.はじめに"
@@ -186,6 +187,24 @@ const BlogPage: React.FC = () => {
               マイナーチェンジって旧製品品番と新製品品番でサブ形態が殆ど変わらない事が多いですよね？
               そこで「サブナンバーを引越し」させる機能を追加しました。
             </Text>
+            <UnderlinedTextWithDrawer
+              text="開発の背景"
+              onOpen={() => handleOpen("開発の背景")}
+              isOpen={isOpen && activeDrawer === "開発の背景"}
+              onClose={handleClose}
+              header="開発の背景"
+              size="md"
+              children={
+                <Box>
+                  <Image src="/images/0005/0005.png" w="100%" />
+
+                  <Text mt={4}>
+                    高知工場の王さんの提案を元に作成しました。
+                    当初は電線サブナンバーしか考えていませんでしたが、途中で端末サブナンバーも必要やなと思って追加しました。
+                  </Text>
+                </Box>
+              }
+            />
           </Box>
         </SectionBox>
         <SectionBox
