@@ -35,6 +35,7 @@ import { CustomBadge } from "./customBadge";
 import DownloadLink from "./DownloadLink";
 import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
 import ExternalLink from "./ExternalLink";
+import IframeDisplay from "./IframeDisplay";
 
 import "@fontsource/noto-sans-jp";
 
