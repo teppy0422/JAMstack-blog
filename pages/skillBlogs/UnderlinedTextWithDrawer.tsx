@@ -11,6 +11,7 @@ interface UnderlinedTextWithDrawerProps {
   onClose: () => void;
   header: string;
   children: React.ReactNode;
+  size?: string;
 }
 
 const UnderlinedTextWithDrawer: React.FC<UnderlinedTextWithDrawerProps> = ({
@@ -20,6 +21,7 @@ const UnderlinedTextWithDrawer: React.FC<UnderlinedTextWithDrawerProps> = ({
   onClose,
   header,
   children,
+  size = "xs",
 }) => {
   const { colorMode } = useColorMode();
   const color = colorMode === "light" ? "blue.500" : "blue.200";
@@ -44,7 +46,12 @@ const UnderlinedTextWithDrawer: React.FC<UnderlinedTextWithDrawerProps> = ({
           style={{ marginBottom: "-3px", display: "inline" }}
         />
       </HStack>
-      <BasicDrawer isOpen={isOpen} onClose={onClose} header={header}>
+      <BasicDrawer
+        isOpen={isOpen}
+        onClose={onClose}
+        header={header}
+        size={size}
+      >
         {children}
       </BasicDrawer>
     </>

@@ -33,6 +33,8 @@ import Frame from "../../components/frame";
 import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
+import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
+import IframeDisplay from "./IframeDisplay";
 
 import "@fontsource/noto-sans-jp";
 
@@ -136,44 +138,6 @@ const BlogPage: React.FC = () => {
       window.removeEventListener("hashchange", handleHashChange, false);
     };
   }, []);
-  //アンダーライン付きテキスト_ドロワー
-  const UnderlinedTextWithDrawer = ({
-    text,
-    onOpen,
-    isOpen,
-    onClose,
-    header,
-    children,
-  }) => {
-    const { colorMode } = useColorMode();
-    const color = colorMode === "light" ? "blue.500" : "blue.200";
-    return (
-      <>
-        <HStack
-          as="span"
-          style={{ whiteSpace: "nowrap" }}
-          color={color}
-          cursor="pointer"
-          onClick={onOpen}
-          spacing={1}
-          borderBottom="2px solid"
-          borderColor={color}
-          display="inline"
-        >
-          <Box as="span" display="inline">
-            {text}
-          </Box>
-          <LuPanelRightOpen
-            size="20px"
-            style={{ marginBottom: "-3px", display: "inline" }}
-          />
-        </HStack>
-        <BasicDrawer isOpen={isOpen} onClose={onClose} header={header}>
-          {children}
-        </BasicDrawer>
-      </>
-    );
-  };
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);
     onOpen();
@@ -242,15 +206,31 @@ const BlogPage: React.FC = () => {
             お使いのブラウザは動画タグをサポートしていません。
           </video>
           <Box m={3}>
-            <Text fontWeight="400" my={4}>
+            <Text fontWeight="400" mt={4}>
               2-1.コネクタ写真と座標の共用(.xlsm)
             </Text>
-            <Text ml={4}>
-              撮影した写真/座標を共用する事が可能。2024/11/19時点で1680点が登録済みです。
-            </Text>
-            <Text fontWeight="400" my={4}>
+            <Divider
+              mb={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Flex
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Box bg="gray.300" color="black" w="80%" p={1}>
+                登録済みのコネクタデータは共用します
+              </Box>
+              <Image src="/images/0006/0001.svg" w="80%" />
+              <Text ml={4}>2024/11/19時点で1680点が登録済みです。</Text>
+            </Flex>
+            <Text fontWeight="400" mt={4}>
               2-2.ハメ図の作成(.xlsm)
             </Text>
+            <Divider
+              mb={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
             <Flex
               direction={{ base: "column", md: "row" }}
               align="center"
@@ -282,9 +262,48 @@ const BlogPage: React.FC = () => {
                 />
               </Tooltip>
             </Flex>
-            <Text fontWeight="400" my={4}>
+            <Text ml={6}>
+              <UnderlinedTextWithDrawer
+                text="選択式"
+                onOpen={() => handleOpen("ハメ図は選択式")}
+                isOpen={isOpen && activeDrawer === "ハメ図は選択式"}
+                onClose={handleClose}
+                header="ハメ図は選択式"
+                size="sm"
+                children={
+                  <Box>
+                    <video width="100%" height="100%" loop autoPlay muted>
+                      <source
+                        src="/images/0006/selectSjpMenu.mp4"
+                        type="video/mp4"
+                      />
+                      お使いのブラウザは動画タグをサポートしていません。
+                    </video>
+                    <Text mt={4}>作成メニューで選択して作成します</Text>
+                    <Text mt={4}>
+                      組み合わせは
+                      <span style={{ fontWeight: "600" }}>52920パターン</span>
+                      <br />
+                      (2024/11/20現在)
+                    </Text>
+                    <Text fontWeight="600" mt={4}>
+                      ポイント
+                    </Text>
+                    <Text>
+                      製造拠点によってニーズが異なる為、選択式にしました。
+                    </Text>
+                  </Box>
+                }
+              />
+              で色々なハメ図の作成が可能です。
+            </Text>
+            <Text fontWeight="400" mt={4}>
               2-3.共通ハメ図の作成(.xlsm)
             </Text>
+            <Divider
+              mb={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
             <Flex
               direction={{ base: "column", md: "row" }}
               align="center"
@@ -310,9 +329,37 @@ const BlogPage: React.FC = () => {
                 />
               </Tooltip>
             </Flex>
-            <Text fontWeight="400" my={4}>
+            <Text ml={6}>
+              ハメ図を
+              <UnderlinedTextWithDrawer
+                text="貼るスペースが狭い"
+                onOpen={() => handleOpen("ハメ図の共通化")}
+                isOpen={isOpen && activeDrawer === "ハメ図の共通化"}
+                onClose={handleClose}
+                header="ハメ図の共通化"
+                children={
+                  <Box>
+                    <Image
+                      src="/images/0006/commonPicture.jpeg"
+                      maxWidth="100%"
+                      alt="commonPicture.png"
+                    />
+                    <Text mt={4}>
+                      上図のように狭いスペースで使う場合には共通化が有効です。ですが
+                      手動で作成/更新するには時間が掛かりすぎる為、この機能を追加しました。
+                    </Text>
+                  </Box>
+                }
+              />
+              場合に有効です。
+            </Text>
+            <Text fontWeight="400" mt={4}>
               2-4.サブナンバーの印刷
             </Text>
+            <Divider
+              mb={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
             <Flex
               direction={{ base: "column", md: "row" }}
               align="center"
@@ -329,38 +376,168 @@ const BlogPage: React.FC = () => {
                   mb={{ base: 4, md: 0 }}
                 />
               </Tooltip>
+              <Text>※印刷システムの修正(1.0H程度)が必要です</Text>
             </Flex>
-
-            <Text fontWeight="400" my={4}>
-              2-5.ポイントナンバー点滅(.html)
+            <Text fontWeight="400" mt={4}>
+              2-5.ポイントナンバー点滅
             </Text>
-            <Box display="flex" justifyContent="center" width="100%">
-              <video width="70%" height="100%" loop autoPlay muted>
-                <source src="/images/0006/1335.mp4" type="video/mp4" />
-                お使いのブラウザは動画タグをサポートしていません。
-              </video>
-            </Box>
-            <Text fontWeight="400" my={4}>
+            <Divider
+              mb={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>
+              .htmlで点滅する画像を作成
+              <br />
+              .cssの関係で現在はIE11以上が必要。必要ならIE7にも対応可能です。
+            </Text>
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              align="center"
+              justify="center"
+              wrap="wrap"
+              maxWidth="100%"
+              gap={4}
+              mt={4}
+            >
+              <IframeDisplay
+                src="../../files/download/Sjp/70/8211158A40/0080.html"
+                width="240"
+                height="300"
+              />
+              <IframeDisplay
+                src="../../files/download/Sjp/70/8211158A40/0022.html"
+                width="240"
+                height="300"
+              />
+            </Flex>
+            <Flex
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Text mt={4}>現在は主に下記で使用しています</Text>
+              <UnderlinedTextWithDrawer
+                text="#1.検査履歴システム"
+                onOpen={() => handleOpen("検査履歴システム")}
+                isOpen={isOpen && activeDrawer === "検査履歴システム"}
+                onClose={handleClose}
+                header="検査履歴システムとは"
+                size="sm"
+                children={
+                  <Box>
+                    <video width="100%" height="100%" loop autoPlay muted>
+                      <source
+                        src="/images/0006/検査履歴システム用ポイント図.mp4"
+                        type="video/mp4"
+                      />
+                      お使いのブラウザは動画タグをサポートしていません。
+                    </video>
+                    <Text mt={4}>©︎瀬戸内部品</Text>
+                    <Text>
+                      YCCに接続して検査状況を監視/検査履歴を記録するシステム。
+                      ラベル印刷に対応。QRリーダー(シリアル通信タイプ)が必要。
+                    </Text>
+                    <Text mt={4}>
+                      上記でOPEN/SHORTが発生した場合の画面を生産準備+が作成。
+                    </Text>
+                    <Text mt={4}>
+                      検査履歴システムはこのWEBサイトでのダウンロード不可です。
+                    </Text>
+                  </Box>
+                }
+              />
+            </Flex>
+            <Text fontWeight="400" mt={4}>
               2-6.配策経路ナビ(.html)
             </Text>
-            <Box display="flex" justifyContent="center" width="100%">
+            <Divider
+              mb={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>.htmlの都合でIE11が必須です</Text>
+            <Box display="flex" justifyContent="center" width="100%" mt={4}>
               <video width="70%" height="100%" loop autoPlay muted>
                 <source src="/images/0006/0084.mp4" type="video/mp4" />
                 お使いのブラウザは動画タグをサポートしていません。
               </video>
             </Box>
-            <Text fontWeight="400" my={4}>
+            <Flex
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Text mt={4}>現在は主に下記で使用しています</Text>
+              <UnderlinedTextWithDrawer
+                text="#1.配策誘導ナビ"
+                onOpen={() => handleOpen("配策誘導ナビ")}
+                isOpen={isOpen && activeDrawer === "配策誘導ナビ"}
+                onClose={handleClose}
+                header="配策誘導ナビとは"
+                children={
+                  <Box>
+                    <Text mt={4}>配策誘導ナビ</Text>
+                    <Text>配策誘導を使用する結き工程で使用</Text>
+                    <Text mt={4}>
+                      結き治具は横幅が長い為、通常のディスプレイでは作業者は見えません。
+                      なので移動させるようにしました。
+                    </Text>
+                    <Text mt={4}>
+                      キーボード入力タイプのQRリーダーが必要
+                      <br />
+                      ディスプレイを移動させる為にVB.netのシリアルコントロールを利用。
+                    </Text>
+                  </Box>
+                }
+              />
+              <UnderlinedTextWithDrawer
+                text="#2.配策誘導ナビv3.1(モバイル)"
+                onOpen={() => handleOpen("配策誘導ナビモバイル")}
+                isOpen={isOpen && activeDrawer === "配策誘導ナビモバイル"}
+                onClose={handleClose}
+                header="配策誘導ナビv3.1(モバイル)とは"
+                size="xl"
+                children={
+                  <Box>
+                    <IframeDisplay src="/56v3.1_" width="100%" />
+                    <Text mt={4}></Text>
+                    <Text>
+                      配策誘導をタッチ操作に対応してiPadのようなモバイル端末でも操作できるようにしました。
+                      上の画面をタッチ/クリックしてみてください。
+                    </Text>
+
+                    <Text>
+                      現在は表示のみですが、サブ形態の変更などの機能拡張が見込めます。
+                    </Text>
+
+                    <Text mt={4}>
+                      モバイル端末からアクセスするには別途WEBサーバーが必要。
+                      <br />
+                      WEBサーバーの値段は1万円-500万円(20万円弱がお勧めです)
+                    </Text>
+                  </Box>
+                }
+              />
+            </Flex>
+            <Text fontWeight="400" mt={4}>
               2-7.MKEDへの回路符号入力
             </Text>
+            <Divider
+              mb={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
             <Box display="flex" justifyContent="center" width="100%">
               <video width="70%" height="100%" loop autoPlay muted>
                 <source src="/images/0006/v4220.mp4" type="video/mp4" />
                 お使いのブラウザは動画タグをサポートしていません。
               </video>
             </Box>
-            <Text fontWeight="400" my={4}>
+            <Text fontWeight="400" mt={4}>
               2-8.その他
             </Text>
+            <Divider
+              mb={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
             <Text>#サブ図</Text>
             <Text>#竿レイアウト→自動機データ作成</Text>
             <Text>#先ハメ誘導ナビ</Text>
