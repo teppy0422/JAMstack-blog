@@ -366,7 +366,7 @@ const BlogPage: React.FC = () => {
                 color: "#fff",
                 textShadow: "none",
                 fontFamily: "'Yomogi', sans-serif",
-                fontWeight: "bold",
+                fontWeight: "200",
               }}
             >
               このようにサブナンバーを任意の製品品番から取得出来る為、類似した製品形態から取得するのも良いかもしれません

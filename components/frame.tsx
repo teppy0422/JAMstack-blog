@@ -32,10 +32,11 @@ import { useCustomToast } from "./customToast";
 import { useDisclosure } from "@chakra-ui/react";
 
 import "@fontsource/noto-sans-jp";
+import "@fontsource/yomogi";
 
 const customTheme = extendTheme({
   fonts: {
-    heading: "'Noto Sans JP', sans-serif",
+    heading: ",'Noto Sans JP', sans-serif",
     body: "'Noto Sans JP', sans-serif",
   },
   fontWeights: {
