@@ -596,6 +596,7 @@ const BlogPage: React.FC = () => {
               <Text>#サブリスト</Text>
               <Text>#サブナンバー引越し</Text>
               <Text>#EXTESからの共通化分析リクエストの実行</Text>
+              <Text>#サブ自動立案</Text>
             </SectionBox>
           </Box>
           <Text textAlign="center">---作成途中---</Text>
