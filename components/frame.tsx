@@ -311,9 +311,21 @@ const Frame: React.FC<{
             >
               <List spacing={1} fontSize="sm">
                 {sections.current
-                  ?.sort((a, b) => {
-                    return a.id.localeCompare(b.id);
-                  })
+                  // ?.sort((a, b) => {
+                  //   const aParts = a.id.split('-').map(part => parseInt(part, 10));
+                  //   const bParts = b.id.split('-').map(part => parseInt(part, 10));
+
+                  //   for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+                  //     const aPart = aParts[i] !== undefined ? aParts[i] : -1;
+                  //     const bPart = bParts[i] !== undefined ? bParts[i] : -1;
+
+                  //     if (aPart !== bPart) {
+                  //       return aPart - bPart;
+                  //     }
+                  //   }
+                  //   // 長さが異なる場合、短い方を先にする
+                  //   return aParts.length - bParts.length;
+                  // })
                   .map((section) => {
                     const underscoreCount = (section.id.match(/_/g) || [])
                       .length; // アンダースコアの数をカウント
@@ -324,7 +336,7 @@ const Frame: React.FC<{
                         w="100%"
                         maxWidth={["0px", "0px", "200px", "240px"]}
                         key={section.id}
-                        p={1}
+                        p={0}
                         borderRadius="5px"
                         bg={
                           activeSection === section.id

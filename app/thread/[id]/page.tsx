@@ -417,6 +417,7 @@ export default function Thread() {
       console.log("Interval cleared because isAtBottom is true");
     }
   }, [isAtBottom]);
+  //リアルタイムにコンテンツを表示
   useEffect(() => {
     if (isClient && id) {
       const fetchIpAddress = async () => {
@@ -476,6 +477,36 @@ export default function Thread() {
           }
         )
         .subscribe();
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [isClient, id]);
+  //既読数をリアルタイム更新(動作未確認)
+  useEffect(() => {
+    if (isClient && id) {
+      const channel = supabase
+        .channel(`public:posts:thread_id=eq.${id}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "posts",
+            filter: `thread_id=eq.${id}`,
+          },
+          (payload) => {
+            setPosts((prevPosts) =>
+              prevPosts.map((post) =>
+                post.id === payload.new.id
+                  ? { ...post, read_by: payload.new.read_by }
+                  : post
+              )
+            );
+          }
+        )
+        .subscribe();
+
       return () => {
         supabase.removeChannel(channel);
       };

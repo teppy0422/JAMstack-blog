@@ -144,13 +144,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-22T14:04:00+0900"
+              description1="サブナンバー印刷でデータが多い場合にオーバーフローエラー"
+              description2="カウントの型を変更Integer=>Long"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.88_.zip"
+              inCharge="高知,王さん,不具合"
+              isLatest={true}
+            />
+            <CustomLinkBox
               dateTime="2024-11-21T23:32:00+0900"
-              description1="無駄なStopがある。サブナンバー引越しで引越し先に無い端末のサブナンバーを取得してしまう。引っ越す品番が多い時にYESボタンがはみ出る"
+              description1="無駄なStopがある。引越し先に無い端末のサブナンバーを取得してしまう。引っ越す品番が多い時にYESボタンがはみ出る"
               description2="Stopの削除。引越し先に無い端末は取得しない。ディスプレイサイズを取得してその割合に応じてサイズを変更"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.86_.zip"
               inCharge="高知,王さん,不具合"
-              isLatest={true}
+              isLatest={false}
             />
             <CustomLinkBox
               dateTime="2024-11-19T14:08:00+0900"
