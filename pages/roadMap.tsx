@@ -118,13 +118,27 @@ const roadmap: RoadmapItem[] = [
     result: "",
     duration: 50.6,
   },
+
+  {
+    year: "2024年",
+    month: "11月",
+    category: ["生産準備+"],
+    titleColor: "gray",
+    main: "サブナンバーの引越し",
+    mainDetail: ["製品切り替え時にサブナンバーを引き継ぐ機能の追加"],
+    items: [
+      { text: "hsfの分解機能の追加", completed: true },
+      { text: "現場(高知/徳島)の評価確認", completed: false },
+    ],
+    duration: 67.7,
+  },
   {
     year: "-活動中断-",
     titleColor: "gray",
   },
   {
-    year: "2024年",
-    month: "11月",
+    year: "2025年",
+    month: "1月",
     category: ["生産準備+"],
     titleColor: "teal",
     main: "hsfの分解を生産準備+で実行する",
@@ -135,8 +149,8 @@ const roadmap: RoadmapItem[] = [
     possibility: 50,
   },
   {
-    year: "2024年",
-    month: "12月",
+    year: "2025年",
+    month: "2月",
     category: ["生産準備+", "高知"],
     titleColor: "teal",
     main: "MDデータから治具座標データを作成",
@@ -148,7 +162,7 @@ const roadmap: RoadmapItem[] = [
     possibility: 70,
   },
   {
-    year: "2024年",
+    year: "2025年",
     category: ["生産準備+"],
     titleColor: "teal",
     main: "配策誘導ナビをIE11に対応",
@@ -159,8 +173,8 @@ const roadmap: RoadmapItem[] = [
     possibility: 95,
   },
   {
-    year: "2024年",
-    month: "1月",
+    year: "2025年",
+    month: "3月",
     category: ["生産準備+"],
     titleColor: "teal",
     main: "グループ単位でのサブ自動立案",
@@ -172,7 +186,7 @@ const roadmap: RoadmapItem[] = [
     possibility: 95,
   },
   {
-    year: "2024年",
+    year: "2025年",
     category: ["生産準備+", "高知"],
     titleColor: "teal",
     main: "共通化の提案",
@@ -184,7 +198,7 @@ const roadmap: RoadmapItem[] = [
   },
   {
     year: "2025年",
-    month: "2月",
+    month: "4月",
     category: ["生産準備+", "順立生産システム", "部材一覧+"],
     titleColor: "teal",
     main: "プログラムの最適化",
@@ -200,7 +214,7 @@ const roadmap: RoadmapItem[] = [
   },
   {
     year: "2025年",
-    month: "3月",
+    month: "5月",
     category: ["生産準備+", "徳島"],
     titleColor: "teal",
     main: "ハメ図で作業番号を管理する機能の追加",
@@ -223,7 +237,7 @@ const roadmap: RoadmapItem[] = [
   },
   {
     year: "2025年",
-    month: "4月",
+    month: "6月",
     category: ["生産準備+", "高知"],
     titleColor: "teal",
     main: "自動機APPLの設置順を提案する機能の追加",
@@ -239,7 +253,7 @@ const roadmap: RoadmapItem[] = [
   },
   {
     year: "2025年",
-    month: "5月",
+    month: "7月",
     category: ["生産準備+", "徳島"],
     titleColor: "teal",
     main: "Verup実行時にハメ図の色を引き継ぎたい",
@@ -270,7 +284,7 @@ const roadmap: RoadmapItem[] = [
   },
   {
     year: "2025年",
-    month: "6月",
+    month: "8月",
     category: ["配策誘導ナビ.vb"],
     titleColor: "teal",
     main: "配策誘導ナビ.vbからのシリアル送信でディスプレイ移動の作り方を新規作成",
@@ -288,7 +302,7 @@ const roadmap: RoadmapItem[] = [
   },
   {
     year: "2025年",
-    month: "7月",
+    month: "9月",
     category: ["生産準備+"],
     titleColor: "teal",
     main: "類似コネクタ調査",

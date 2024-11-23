@@ -621,11 +621,48 @@ const BlogPage: React.FC = () => {
               alt="new_menu3.png"
               mt={4}
             />
-            <Text>上図では82111V4662のみ引越しを実行した結果です。</Text>
+            <Text>上図は82111V4662のみ引越しを実行した結果です。</Text>
           </SectionBox>
           <SectionBox
             id="section2_11"
-            title="2-11.その他"
+            title="2-11.バージョンアップ"
+            sectionRefs={sectionRefs}
+            sections={sections}
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>
+              生産準備+は日に1回程度の更新をしています。
+              通常は新しいコードに手修正するのに10分くらいかかります。
+              生産準備+の数は治具台数と等しい為、手修正が現実的ではありません。
+              そこでバージョンアップ機能を追加しました。4クリックで完了します。
+            </Text>
+
+            <Flex
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Image
+                my={4}
+                src="/images/0006/0004.svg"
+                width="50%"
+                alt="0004.svg"
+              />
+              <Image
+                my={4}
+                src="/images/0006/verup_.svg"
+                width="45%"
+                alt="verup_.svg"
+              />
+            </Flex>
+            <Text></Text>
+          </SectionBox>
+          <SectionBox
+            id="section2_12"
+            title="2-12.その他"
             sectionRefs={sectionRefs}
             sections={sections}
             size="sm"
@@ -643,6 +680,7 @@ const BlogPage: React.FC = () => {
             <Text textAlign="center">---作成途中---</Text>
           </SectionBox>
         </Box>
+
         <SectionBox
           id="section3"
           title="3.まとめ"
