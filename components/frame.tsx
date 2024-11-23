@@ -235,7 +235,7 @@ const Frame: React.FC<{
                   {createLinkPanel("/skillBlogs/0001/", "プログラミング解説")}
                   {createLinkPanel(
                     "/skillBlogs/0002/",
-                    "コネクタの撮影から座標登録まで"
+                    "コネクタの撮影から座標登録"
                   )}
                   {createLinkPanel("/skillBlogs/0005/", "サブナンバーの引越し")}
                 </AccordionItem>

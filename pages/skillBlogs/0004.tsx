@@ -24,6 +24,7 @@ import {
 import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { FaGithub } from "react-icons/fa";
+import { CiBeerMugFull } from "react-icons/ci";
 import Content from "../../components/content";
 import { useColorMode } from "@chakra-ui/react";
 import { useCustomToast } from "../../components/customToast";
@@ -35,6 +36,7 @@ import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
 import SkillGraph from "../../components/sillGraph";
 import SkillCircle from "../../components/skillCircle";
+import ICT from "./ICT";
 
 import styles from "../../styles/home.module.scss";
 
@@ -306,6 +308,12 @@ const BlogPage: React.FC = () => {
               );
             })}
           </Box>
+          <Flex alignItems="left" m={4} mt={6}>
+            <Flex alignItems="center" borderBottom="1px solid">
+              <Icon as={CiBeerMugFull} w={6} h={6} />
+              <ICT />
+            </Flex>
+          </Flex>
         </SectionBox>
         <SectionBox
           id="section2"
