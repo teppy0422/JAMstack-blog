@@ -39,7 +39,11 @@ import { useUserInfo } from "../../hooks/useUserId";
 
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
-import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
+import Sidebar from "../../components/sidebar";
+import { Global } from "@emotion/react";
+
+import "@fontsource/noto-sans-jp";
+
 // ファイル名から最大の数字を取得する関数
 function getMaxVersionNumber(directory: string): {
   maxVersionString: string;
@@ -125,11 +129,47 @@ export default function About({
   );
   return (
     <>
+      <Global
+        styles={{
+          "@media print": {
+            ".page-number::after": {
+              content: "counter(page)",
+              position: "fixed",
+              top: "10px",
+              right: "10px",
+              fontSize: "12px",
+              fontFamily: "Noto Sans JP",
+            },
+            ".print-only": {
+              display: "block !important",
+            },
+            body: {
+              counterReset: "page",
+            },
+            "@page": {
+              "@top-right": {
+                content: "counter(page)",
+              },
+            },
+          },
+          ".print-only": {
+            display: "none",
+          },
+        }}
+      />
+
+      <Text ml={4} className="print-only">
+        ※別紙3
+      </Text>
       <Sidebar />
       <Content isCustomHeader={true}>
-        <div
+        <Box
           className={styles.me}
-          style={{ paddingTop: "50px", fontFamily: "Noto Sans JP" }}
+          sx={{
+            paddingTop: "30px",
+            fontFamily: "Noto Sans JP",
+            fontWeight: "200",
+          }}
         >
           <Box textAlign="center" mb={8}>
             <HStack spacing={2} alignItems="center" justifyContent="center">
@@ -144,7 +184,7 @@ export default function About({
                 DOWNLOAD
               </Text>
             </HStack>
-            <Box fontSize="lg">
+            <Box fontSize="md">
               ダウンロードと説明は適宜追加します
               <br />
               右側にある
@@ -716,7 +756,7 @@ export default function About({
               </ModalBody>
             </ModalContent>
           </Modal>
-        </div>
+        </Box>
         <Box mb={10} />
       </Content>
     </>

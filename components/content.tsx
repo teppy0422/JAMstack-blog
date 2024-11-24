@@ -3,6 +3,7 @@ import NextLink from "next/link";
 
 import Header from "../components/header";
 import Header_ from "../components/header_";
+import { Global } from "@emotion/react";
 
 export default function Content({
   children,
@@ -11,6 +12,15 @@ export default function Content({
 }) {
   return (
     <>
+      <Global
+        styles={{
+          "@media print": {
+            ".no-print-page": {
+              display: "none !important",
+            },
+          },
+        }}
+      />
       <Flex direction="column" minHeight="90vh">
         <Box flex="1" zIndex="1000">
           {isCustomHeader ? <Header_ /> : <Header />}
@@ -35,7 +45,7 @@ export default function Content({
           </Container>
         </Box>
       </Flex>
-      <Box>
+      <Box className="no-print-page">
         <Center
           my="14px"
           color="gray"
