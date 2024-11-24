@@ -15,6 +15,12 @@ import {
   MdOutlineCheckBoxOutlineBlank,
   MdOutlineCheckBox,
 } from "react-icons/md";
+import Sidebar from "../components/sidebar";
+import Content from "../components/content";
+import { Global } from "@emotion/react";
+
+import "@fontsource/noto-sans-jp";
+
 interface RoadmapItem {
   year?: string;
   month?: string;
@@ -28,8 +34,6 @@ interface RoadmapItem {
   category?: string[];
   idea?: string[];
 }
-import Sidebar from "../components/sidebar";
-import Content from "../components/content";
 
 function getBadgeForCategory(category: string): JSX.Element {
   let colorScheme: string;
@@ -107,6 +111,21 @@ const roadmap: RoadmapItem[] = [
     month: "10月",
     category: ["生産準備+"],
     titleColor: "gray",
+    main: "協力会社向けの機能追加",
+    mainDetail: ["高知協力会社(組立)の要望に対応"],
+    items: [
+      { text: "構成No.順の仕分けリストを追加", completed: true },
+      { text: "サブリストの作成を追加", completed: true },
+      { text: "現場(高知)の評価確認", completed: false },
+    ],
+    result: "",
+    duration: 90.0,
+  },
+  {
+    year: "2024年",
+    month: "11月",
+    category: ["生産準備+"],
+    titleColor: "gray",
     main: "サブナンバーの引越しを追加",
     mainDetail: [
       "引越しの際のPVSW_RLTFと端末一覧の手入力の手間と入力ミスを減らす",
@@ -116,22 +135,9 @@ const roadmap: RoadmapItem[] = [
       { text: "現場(高知)の評価確認", completed: false },
     ],
     result: "",
-    duration: 50.6,
+    duration: 117.6,
   },
 
-  {
-    year: "2024年",
-    month: "11月",
-    category: ["生産準備+"],
-    titleColor: "gray",
-    main: "サブナンバーの引越し",
-    mainDetail: ["製品切り替え時にサブナンバーを引き継ぐ機能の追加"],
-    items: [
-      { text: "hsfの分解機能の追加", completed: true },
-      { text: "現場(高知/徳島)の評価確認", completed: false },
-    ],
-    duration: 67.7,
-  },
   {
     year: "-活動中断-",
     titleColor: "gray",
@@ -341,15 +347,30 @@ const Roadmap = () => {
   }, []);
   return (
     <>
+      <Global
+        styles={{
+          "@media print": {
+            ".print-only": {
+              display: "block !important",
+            },
+          },
+          ".print-only": {
+            display: "none",
+          },
+        }}
+      />
       <Sidebar />
       <Content isCustomHeader={true}>
+        <Text ml={4} className="print-only">
+          ※別紙1
+        </Text>
         <Container
           maxW="container.lg"
           py={8}
           fontFamily="Noto Sans JP"
           fontWeight={200}
         >
-          <Heading as="h1" mb={8} textAlign="center" color="teal.500">
+          <Heading as="h3" fontSize="24px" mb={8} textAlign="center">
             ロードマップ
           </Heading>
           <Badge variant="solid" colorScheme="green" ml={2}>
@@ -363,13 +384,9 @@ const Roadmap = () => {
           </Badge>
           <Box mb={8} p={4} borderRadius="md">
             <Text textAlign="left" colorScheme="gray">
-              ・使い方や説明についてはページを追加/更新していきます
+              ・以下は契約書に基づいた活動予定内容です。
               <br />
-              ・他の人でも更新できるようにプログラムを修正し説明ページを追加していきます
-              <br />
-              ・その他、不具合や細かい機能修正は都度行います
-              <br />
-              ・各工場で担当が更新して維持/管理する事が最終目標です
+              ・実行する順番を変えたい場合はご相談ください。
             </Text>
           </Box>
           <VStack spacing={8} align="stretch" position="relative">
@@ -395,6 +412,7 @@ const Roadmap = () => {
                 {section.main && (
                   <Box
                     fontFamily="Noto Sans JP"
+                    fontWeight={400}
                     bg="white"
                     mt={2}
                     p={5}
@@ -510,8 +528,6 @@ const Roadmap = () => {
                   transform="translateX(-50%)"
                   px={1}
                   zIndex={1}
-                  fontFamily="Noto Sans JP"
-                  fontWeight="100"
                 >
                   {section.year !== previousYear ? (
                     <>

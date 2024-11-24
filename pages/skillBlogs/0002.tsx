@@ -268,7 +268,7 @@ const BlogPage: React.FC = () => {
               children={
                 <Box>
                   <Image
-                    src="/images/logo_inkscape.svg"
+                    src="/images/brandIcons/logo_inkscape.svg"
                     alt="logo_inkscape.svg"
                     w="36px"
                     h="36px"

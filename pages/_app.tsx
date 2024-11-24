@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <script src="//accaii.com/teppy/script.js" async></script>
       </Head>
       <ChakraProvider theme={theme}>
-        <NextNprogress color="#f88" showOnShallow={false} height={3} />{" "}
+        <NextNprogress color="#f88" showOnShallow={false} height={3} />
         <SessionProvider session={session}>
           <myContext.Provider value={myState}>
             <Component {...pageProps} />

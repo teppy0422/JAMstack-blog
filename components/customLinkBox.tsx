@@ -289,9 +289,9 @@ class CustomLinkBox extends React.Component<CustomLinkBoxProps> {
                         }} // 追加
                       />
                     </Box>
-                    <Text mx={1} fontSize="2xl" color="gray.500">
-                      ➡️
-                    </Text>
+                    <Box mx={1} fontSize="xl" color="gray.500" bg="transparent">
+                      →
+                    </Box>
                     <Box
                       position="relative"
                       width={{
