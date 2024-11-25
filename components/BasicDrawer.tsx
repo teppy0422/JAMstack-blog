@@ -14,6 +14,7 @@ interface BasicDrawerProps {
   header?: string;
   children?: React.ReactNode;
   size?: string;
+  placement?: "top" | "right" | "bottom" | "left";
 }
 
 const BasicDrawer: React.FC<BasicDrawerProps> = ({
@@ -22,9 +23,10 @@ const BasicDrawer: React.FC<BasicDrawerProps> = ({
   header,
   children,
   size = "xs",
+  placement = "right",
 }) => {
   return (
-    <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={size}>
+    <Drawer isOpen={isOpen} placement={placement} onClose={onClose} size={size}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton _focus={{ _focus: "none" }} />

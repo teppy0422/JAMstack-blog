@@ -10,6 +10,11 @@ import {
   Checkbox,
   Avatar,
   Divider,
+  Accordion,
+  AccordionItem,
+  AccordionIcon,
+  AccordionButton,
+  AccordionPanel,
 } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
 import { MdBusiness } from "react-icons/md";
@@ -55,9 +60,11 @@ const TodoList = ({
     userName?: string;
     thread_id?: string;
     post_id?: string;
+    complete?: boolean;
   }
-  const { todos, error: todosError }: { todos: Todo[]; error: any } =
-    useFetchTodos();
+  const { todos }: { todos: Todo[]; error: any } = useFetchTodos();
+
+  const incompleteTodos = todos.filter((todo) => !todo.complete);
 
   const addTodo = async () => {
     if (newTodo.trim()) {
@@ -121,15 +128,16 @@ const TodoList = ({
         border="1px solid gray"
         textAlign="center"
         px={1}
+        fontWeight={400}
       >
         未完了の内容
       </Text>
       <Stack spacing="0">
-        {todos.map((todo, index) => {
+        {incompleteTodos.map((todo, index) => {
           const user = userData.find(
             (user: UserData) => user.id === todo.userId
           );
-          const previousTodo = todos[index - 1];
+          const previousTodo = incompleteTodos[index - 1];
           const isSameAsPrevious =
             previousTodo &&
             previousTodo.user_mainCompany === todo.user_mainCompany;
@@ -165,19 +173,91 @@ const TodoList = ({
                 </>
               )}
               <Avatar boxSize="20px" mr={1} src={user?.picture_url} ml={4} />
-              {/* {todo?.userName && <span>{todo.userName}</span>} */}
               <Link href={`/thread/${todo.thread_id}#${todo.post_id}`}>
                 {todo.value}
               </Link>
-              {/* {todo.thread_id}
-              data-thread-id={todo.thread_id}
-              {todo.post_id}
-              data-post-id={todo.post_id} */}
             </Text>
           );
         })}
       </Stack>
-      <Stack spacing="2"></Stack>
+      <Accordion allowToggle>
+        <AccordionItem>
+          <AccordionButton _hover={{ textDecoration: "none" }} p={0} mt={2}>
+            <Text
+              fontSize="sm"
+              mb="0"
+              width="100%"
+              border="1px solid gray"
+              textAlign="center"
+              px={1}
+              fontWeight={400}
+            >
+              完了済みの内容
+            </Text>
+            <AccordionIcon />
+          </AccordionButton>
+          <AccordionPanel p={0}>
+            <Stack spacing="0">
+              {todos
+                .filter((todo) => todo.complete)
+                .map((todo, index) => {
+                  const user = userData.find(
+                    (user: UserData) => user.id === todo.userId
+                  );
+                  const previousTodo = todos[index - 1];
+                  const isSameAsPrevious =
+                    previousTodo &&
+                    previousTodo.user_mainCompany === todo.user_mainCompany;
+
+                  const isSameCompanyAsPrevious =
+                    previousTodo &&
+                    previousTodo.user_company === todo.user_company;
+
+                  return (
+                    <Text
+                      key={index}
+                      mx={0}
+                      py={1}
+                      overflow="hidden"
+                      whiteSpace="nowrap"
+                      textOverflow="ellipsis"
+                      title={todo.value}
+                      cursor="pointer"
+                      fontFamily="Noto Sans JP"
+                    >
+                      {!isSameAsPrevious && todo?.user_mainCompany && (
+                        <>
+                          {todo.user_mainCompany}
+                          <Divider
+                            borderColor={
+                              colorMode === "light" ? "black" : "white"
+                            }
+                          />
+                        </>
+                      )}
+                      {!isSameCompanyAsPrevious && todo?.user_company && (
+                        <>
+                          <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={0} />
+                          {todo.user_company}
+                          <br />
+                        </>
+                      )}
+                      <Avatar
+                        boxSize="20px"
+                        mr={1}
+                        src={user?.picture_url}
+                        ml={4}
+                      />
+                      <Link href={`/thread/${todo.thread_id}#${todo.post_id}`}>
+                        {todo.value}
+                      </Link>
+                    </Text>
+                  );
+                })}
+            </Stack>
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
     </Box>
   );
 };
