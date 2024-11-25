@@ -58,7 +58,10 @@ import TodoListMenu from "../../../components/BBSTodoListMenu";
 import { useCustomToast } from "../../../components/customToast";
 import { useUserData } from "../../../hooks/useUserData";
 import { useUserInfo } from "../../../hooks/useUserId";
+import IconWithDrawer from "./IconWithDrawer";
+
 import { Global } from "@emotion/react";
+import "@fontsource/noto-sans-jp";
 
 export default function Thread() {
   const router = useRouter();
@@ -112,6 +115,7 @@ export default function Thread() {
     useUserData(userId);
   //既読チェック
   const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0"; // 任意のユーザーID
+  const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
   useEffect(() => {
     const handleScroll = () => {
       const postsElements = document.querySelectorAll(".post"); // 投稿要素を取得
@@ -853,6 +857,15 @@ export default function Thread() {
   if (!isClient) {
     return null;
   }
+  const handleOpen = (drawerName: string) => {
+    setActiveDrawer(drawerName);
+    onOpen();
+  };
+  const handleClose = () => {
+    setActiveDrawer(null);
+    onClose();
+  };
+
   return (
     <>
       <Global
@@ -913,6 +926,58 @@ export default function Thread() {
               <Spinner size="sm" />
             </Flex>
           )}
+          <Box
+            className="no-print-page"
+            position="absolute"
+            top="-37px"
+            right="8px"
+            aria-label="Your Icon"
+            cursor="pointer"
+            bg={colorMode === "light" ? "white" : "gray.900"}
+            color={colorMode === "light" ? "gray.900" : "gray"}
+            borderRadius="10%"
+            width="32px"
+            height="32px"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <IconWithDrawer
+              text=""
+              onOpen={() => handleOpen("開発の背景")}
+              isOpen={isOpen && activeDrawer === "開発の背景"}
+              onClose={handleClose}
+              header="メッセージ送信のコツ"
+              size="md"
+              children={
+                <Box>
+                  <Text fontWeight={600}>新規開発依頼の場合</Text>
+                  <Text fontWeight={400}>・目的と機能を伝える</Text>
+                  <Box
+                    bg="gray.300"
+                    color="black"
+                    w="100%"
+                    px={2}
+                    fontWeight={400}
+                    mt={2}
+                  >
+                    参考のやりとり
+                  </Box>
+                  <Image src="/images/0005/0005.png" w="100%" />
+                  <Text mt={4} fontWeight={600}>
+                    機能紹介
+                  </Text>
+                  <Text mt={1} fontWeight={400}>
+                    クリック長押しで以下の機能が使えます
+                    <br />
+                    ・リプライ:長押しした投稿を参照
+                    <br />
+                    ・削除:自分の投稿のみ削除できます
+                  </Text>
+                </Box>
+              }
+            />
+          </Box>
           {!isAtBottom ? ( // 最下部でない場合にアイコンを表示
             <Box
               onClick={(e) => {
@@ -920,7 +985,7 @@ export default function Thread() {
               }}
               className="no-print-page"
               position="absolute"
-              top="-40px"
+              top="-74px"
               right="8px"
               aria-label="Your Icon"
               cursor="pointer"
@@ -1119,8 +1184,8 @@ export default function Thread() {
                 const inputValueElement = inputValue as HTMLTextAreaElement;
                 if (!inputValueElement.value.trim() && !selectedFile) {
                   showToast(
-                    "送信できません",
-                    "メッセージを入力またはファイル添付が必要です",
+                    "送信するものが有りません",
+                    "メッセージまたはファイル添付が必要です",
                     "error"
                   );
                   return;
@@ -1146,12 +1211,12 @@ export default function Thread() {
                   <BsSend
                     color={colorMode === "light" ? "purple" : "yellow"}
                     style={{ transform: "rotate(0deg)" }}
-                    size="38px"
+                    size="30px"
                   />
                 )
               }
               bg="none"
-              top={-1}
+              top={0}
               left={-2}
               // isDisabled={!newPostContent.trim() && !selectedFile} // テキストが空で、添付ファイルが無い場合はボタンを無効化
               aria-label="送信"
