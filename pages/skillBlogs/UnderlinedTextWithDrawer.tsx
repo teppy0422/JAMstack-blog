@@ -31,11 +31,11 @@ const UnderlinedTextWithDrawer: React.FC<UnderlinedTextWithDrawerProps> = ({
         as="span"
         style={{ whiteSpace: "nowrap" }}
         color={color}
+        borderColor={color}
         cursor="pointer"
         onClick={onOpen}
         spacing={1}
         borderBottom="2px solid"
-        borderColor={color}
         display="inline"
       >
         <Box as="span" display="inline">
