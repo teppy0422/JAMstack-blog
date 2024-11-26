@@ -31,7 +31,7 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
-import { FaFile } from "react-icons/fa";
+import { FaFile, FaRegEdit } from "react-icons/fa";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { FaDownload } from "react-icons/fa6";
 import Content from "../../components/content";
@@ -399,19 +399,50 @@ const BlogPage: React.FC = () => {
               <Text mb={4}>
                 生産準備+の[製品品番]の情報から起動までを自動入力します
               </Text>
-              <></>
               <Text>
-                自動入力の為に初回のみEXTESの設定変更が必要です。
-                <br />※<span onClick={onModalOpen}>EXTESの設定変更</span>
+                ※初回のみ
                 <ImageSliderModal
+                  title="EXTESの設定変更"
+                  text="EXTESを起動してプロパティで下記と同じように設定します"
                   images={[
                     "../../images/0008/extes2.jpg",
                     "../../images/0008/extes3.jpg",
+                    "../../images/0008/extes4.jpg",
+                    "../../images/0008/extes5.jpg",
                   ]}
                   isOpen={isModalOpen}
                   onClose={onModalClose}
+                  onModalOpen={onModalOpen}
                 />
+                が必要です。
               </Text>
+              <Box bg="gray.300" color="black" w="70%" p={1} mt={4}>
+                [製品品番]に設変の入力
+              </Box>
+              <Image
+                mb={4}
+                src="/images/0008/製品品番に設変の入力.png"
+                width="70%"
+                alt="製品品番に設変の入力.png"
+              />
+              <Box bg="gray.300" color="black" w="55%" p={1} mt={4}>
+                MENU → 入力 → 00_起動
+              </Box>
+              <Image
+                mb={4}
+                src="/images/0008/MENU_起動.png"
+                width="55%"
+                alt="製品品番に設変の入力.png"
+              />
+              <Box bg="gray.300" color="black" w="80%" p={1} mt={4}>
+                RLTFのリクエストを実行
+              </Box>
+              <Image
+                mb={4}
+                src="/images/0008/MENU_起動_RLTFのリクエスト.png"
+                width="80%"
+                alt="製品品番に設変の入力.png"
+              />
             </SectionBox>
           </Box>
           <SectionBox
