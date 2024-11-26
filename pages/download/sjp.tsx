@@ -33,10 +33,12 @@ import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
-
+import { useUserData } from "../../hooks/useUserData";
+import { useUserInfo } from "../../hooks/useUserId";
 function TransitionExample() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef<FocusableElement>(null); // 型を明示的に指定
+
   return (
     <>
       <Box onClick={onOpen} cursor="pointer">
@@ -93,6 +95,9 @@ function TransitionExample() {
 export default function About() {
   const illusts = [{ src: "/images/illust/hippo/hippo_001.png" }];
   const { colorMode } = useColorMode();
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
 
   return (
     <>
@@ -109,11 +114,11 @@ export default function About() {
                 title="Sjp+"
                 color={colorMode === "light" ? "#000" : "#FFF"} // カラーモードに応じて色を設定
               />
-              <Text fontSize="2xl" mb={2}>
+              <Text fontSize="2xl" mb={2} fontWeight={600}>
                 生産準備+
               </Text>
             </HStack>
-            <Box fontSize="lg">
+            <Box fontSize="lg" fontWeight={400}>
               以下からダウンロードしてください
               <br />
               通常は最新版
@@ -144,13 +149,24 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-26T11:02:00+0900"
+              description1="グループ単位で作成した印刷シートの配置がカオス"
+              description2="ハメ図毎に作成するように修正。説明ページへのリンクに修正"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.90_.zip"
+              inCharge="高知,王さん,不具合"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2024-11-22T14:04:00+0900"
               description1="サブナンバー印刷でデータが多い場合にオーバーフローエラー"
               description2="カウントの型を変更Integer=>Long"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.88_.zip"
               inCharge="高知,王さん,不具合"
-              isLatest={true}
+              isLatest={false}
+              userName={userName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-11-21T23:32:00+0900"

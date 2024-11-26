@@ -15,6 +15,12 @@ export const CustomBadge: React.FC<{ text: string }> = ({ text }) => {
           開発
         </Badge>
       );
+    case "作成途中":
+      return (
+        <Badge bg="red.500" color="white" mr={1}>
+          作成途中
+        </Badge>
+      );
     // 他のケースを追加
     default:
       return (

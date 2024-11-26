@@ -94,7 +94,7 @@ export default function Threads() {
         <Heading size="md" mb="4">
           問い合わせ
         </Heading>
-        <Box fontSize="sm" mb="4">
+        <Box fontSize="sm" mb="4" fontWeight={400}>
           ログイン登録した同じ会社のみ閲覧可能です
         </Box>
         {ipAddress}

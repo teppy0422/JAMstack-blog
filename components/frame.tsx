@@ -30,6 +30,8 @@ import Content from "./content";
 import { useColorMode } from "@chakra-ui/react";
 import { useCustomToast } from "./customToast";
 import { useDisclosure } from "@chakra-ui/react";
+import { useUserInfo } from "../hooks/useUserId";
+import { useUserData } from "../hooks/useUserData";
 
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";
@@ -60,6 +62,11 @@ const Frame: React.FC<{
   const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
   const showToast = useCustomToast();
+  const [ipAddress, setIpAddress] = useState("");
+
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
   //64pxまでスクロールしないとサイドバーが表示されないから暫定
   useEffect(() => {
     const hash = window.location.hash;
@@ -165,6 +172,7 @@ const Frame: React.FC<{
         //生産準備+の使い方
         case window.location.pathname.includes("/skillBlogs/0006"): //生産準備+とは
         case window.location.pathname.includes("/skillBlogs/0007"): //生産準備+の練習(初級)
+        case window.location.pathname.includes("/skillBlogs/0008"): //生産準備+の練習(中級)
         case window.location.pathname.includes("/skillBlogs/0001"): //プログラミング解説
         case window.location.pathname.includes("/skillBlogs/0002"): //コネクタの撮影から座標登録まで
         case window.location.pathname.includes("/skillBlogs/0005"): //コネクタの撮影から座標登録まで
@@ -232,6 +240,9 @@ const Frame: React.FC<{
                     "/skillBlogs/0007/",
                     "生産準備+の練習(初級)"
                   )}
+                  {createLinkPanel("#", "生産準備+の練習(中級)")}
+                  {/* "/skillBlogs/0008/", */}
+
                   {createLinkPanel("/skillBlogs/0001/", "プログラミング解説")}
                   {createLinkPanel(
                     "/skillBlogs/0002/",
@@ -275,7 +286,7 @@ const Frame: React.FC<{
                 borderRadius="50%"
                 border="1px solid"
                 borderColor={colorMode === "light" ? "black" : "white"}
-                color={colorMode === "light" ? "black" : "white"}
+                color={colorMode === "light" ? "black" : "black"}
                 aria-label="いいね"
                 onClick={() => {
                   showToast(
@@ -297,6 +308,19 @@ const Frame: React.FC<{
               p={4}
               borderRadius="10px"
             >
+              {/* {userName === null ? (
+                <Box h="60vh">
+                  <Text
+                    fontSize="lg"
+                    textAlign="center"
+                    mt={4}
+                    fontWeight="bold"
+                  >
+                    閲覧するにはログインと管理者による認証が必要です。
+                  </Text>
+                </Box>
+              ) : (
+              )} */}
               {children}
             </VStack>
 
