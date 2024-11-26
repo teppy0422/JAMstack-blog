@@ -34,8 +34,13 @@ import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
 
+import { useUserData } from "../../hooks/useUserData";
+import { useUserInfo } from "../../hooks/useUserId";
 export default function About() {
   const { colorMode } = useColorMode();
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
   return (
     <>
       <Sidebar />
@@ -51,12 +56,14 @@ export default function About() {
                 title="JDSS+"
                 color={colorMode === "light" ? "#800080" : "#FFF"} // カラーモードに応じて色を設定
               />
-              <Text fontSize="2xl">順立生産システム+</Text>
+              <Text fontSize="2xl" fontWeight={600}>
+                順立生産システム+
+              </Text>
             </HStack>
-            <Text fontSize="sm" mb={2}>
+            <Text fontSize="sm" mb={2} fontWeight={300}>
               main3.CB/PLC
             </Text>
-            <Box fontSize="lg">
+            <Box fontSize="lg" fontWeight={400}>
               以下からダウンロードしてください
               <br />
               ダウンロードした.zipは必ず展開(解凍)してください
@@ -84,6 +91,7 @@ export default function About() {
               linkHref="/files/download/Jdss/main3_17.zip"
               inCharge="徳島,Win10zip"
               isLatest={true}
+              userName={userName ?? ""}
             />
           </SimpleGrid>
         </div>

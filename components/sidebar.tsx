@@ -103,6 +103,7 @@ function Sidebar() {
         left="0"
         textAlign="left"
         zIndex="1100"
+        fontWeight={400}
       >
         <VStack spacing="2" align="stretch">
           {menuItem("/roadMap", "ロードマップ", true)}

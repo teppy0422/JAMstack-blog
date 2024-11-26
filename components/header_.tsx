@@ -372,7 +372,7 @@ export default function Header() {
           >
             <DrawerHeader color="white">MENU</DrawerHeader>
             <DrawerBody>
-              <VStack spacing="2" align="stretch">
+              <VStack spacing="2" align="stretch" fontWeight={400}>
                 <>
                   <Divider borderColor="white" />
                   {menuItem("/roadMap", "ロードマップ", false)}

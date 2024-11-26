@@ -32,9 +32,13 @@ import styles from "../../styles/home.module.scss";
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar";
-
+import { useUserData } from "../../hooks/useUserData";
+import { useUserInfo } from "../../hooks/useUserId";
 export default function About() {
   const { colorMode } = useColorMode();
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
   return (
     <>
       <Sidebar />
@@ -46,11 +50,11 @@ export default function About() {
           <Box textAlign="center" mb={8}>
             <HStack spacing={2} alignItems="center" justifyContent="center">
               <FaCameraRetro size={24} />
-              <Text fontSize="2xl" mb={2}>
+              <Text fontSize="2xl" mb={2} fontWeight={600}>
                 CAMERA+
               </Text>
             </HStack>
-            <Box fontSize="lg">
+            <Box fontSize="lg" fontWeight={400}>
               通常は生産準備+がインストールを行うので必要ありません
               <br />
               編集が必要な場合にダウンロードしてください
@@ -73,6 +77,7 @@ export default function About() {
               linkHref="/files/download/Camera/camera1.0.0.4_.zip"
               inCharge="徳島,補給品,Win10zip"
               isLatest={true}
+              userName={userName ?? ""}
             />
           </SimpleGrid>
         </div>

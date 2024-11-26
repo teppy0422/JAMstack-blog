@@ -33,6 +33,8 @@ import styles from "../../styles/home.module.scss";
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
+import { useUserData } from "../../hooks/useUserData";
+import { useUserInfo } from "../../hooks/useUserId";
 
 function TransitionExample() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -91,6 +93,9 @@ function TransitionExample() {
 }
 export default function About() {
   const { colorMode } = useColorMode();
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
   return (
     <>
       <Sidebar />
@@ -106,11 +111,11 @@ export default function About() {
                 title="JDSS+"
                 color={colorMode === "light" ? "#800080" : "#FFF"} // カラーモードに応じて色を設定
               />
-              <Text fontSize="2xl" mb={2}>
+              <Text fontSize="2xl" mb={2} fontWeight={600}>
                 順立生産システム+
               </Text>
             </HStack>
-            <Box fontSize="lg">
+            <Box fontSize="lg" fontWeight={400}>
               以下からダウンロードしてください
               <br />
               ダウンロードした.zipは必ず展開(解凍)してください
@@ -141,6 +146,7 @@ export default function About() {
               linkHref="/files/download/Jdss/main_127.zip"
               inCharge="徳島,小松さん,Win10zip"
               isLatest={true}
+              userName={userName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-10-11T23:44:00+0900"

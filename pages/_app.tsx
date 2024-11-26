@@ -19,8 +19,9 @@ const myState = {
   colorMode: "",
 };
 export const myContext = createContext(myState);
+import { AppProps } from "next/app";
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <>
       <Head>
