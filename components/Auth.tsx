@@ -287,7 +287,7 @@ export default function Auth({ userData }: AuthProps) {
           <Tabs>
             <TabList>
               <Tab>メールアドレス</Tab>
-              <Tab>Google(テスト中)</Tab>
+              {/* <Tab>Google(テスト中)</Tab> */}
             </TabList>
 
             <TabPanels p={0}>

@@ -149,13 +149,23 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-11-28T10:13:00+0900"
+              description1="A4-横の印刷範囲がずれる"
+              description2="秋山さん調査の値に修正。WEBページに説明を移動"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.91_.zip"
+              inCharge="高知,秋山さん"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2024-11-26T11:02:00+0900"
               description1="グループ単位で作成した印刷シートの配置がカオス"
               description2="ハメ図毎に作成するように修正。説明ページへのリンクに修正"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.90_.zip"
               inCharge="高知,王さん,不具合"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox

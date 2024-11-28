@@ -31,7 +31,10 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
-import { FaFile, FaRegEdit } from "react-icons/fa";
+import { FaFile, FaRegEdit, FaFolder } from "react-icons/fa";
+import { IoIosCheckboxOutline } from "react-icons/io";
+import { PiAppWindowFill } from "react-icons/pi";
+import { BsRecordCircle, BsCircle } from "react-icons/bs";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { FaDownload } from "react-icons/fa6";
 import Content from "../../components/content";
@@ -48,8 +51,10 @@ import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
 import ExternalLink from "./ExternalLink";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import ImageSliderModal from "./ImageSliderModal"; // モーダルコンポーネントをインポート
+import OptionalBox from "./OptionalBox";
 
 import "@fontsource/noto-sans-jp";
+import { BsFiletypeExe } from "react-icons/bs";
 
 const customTheme = extendTheme({
   fonts: {
@@ -184,6 +189,7 @@ const BlogPage: React.FC = () => {
     children?: FileSystemItem[];
     popOver?: string;
     isOpen?: boolean;
+    icon?;
   };
   const directoryData: FileSystemItem = {
     name: "任意のフォルダ",
@@ -218,6 +224,182 @@ const BlogPage: React.FC = () => {
       },
     ],
   };
+
+  const directoryData2: FileSystemItem = {
+    name: "生産準備+があるフォルダ",
+    type: "folder",
+    isOpen: true,
+    children: [
+      {
+        name: "00_temp",
+        type: "folder",
+        isOpen: true,
+        children: [
+          {
+            name: "RLTF*A*.txt",
+            type: "file",
+            icon: <Icon as={FaFile} color="gray.600" mr={1} />,
+          },
+          {
+            name: "RLTF*B*.txt",
+            type: "file",
+            icon: <Icon as={FaFile} color="gray.600" mr={1} />,
+          },
+        ],
+      },
+      {
+        name: "01_PVSW_csv",
+        type: "folder",
+        isOpen: false,
+      },
+      {
+        name: "05_RLTF_A",
+        type: "folder",
+        isOpen: false,
+      },
+      {
+        name: "06_RLTF_B",
+        type: "folder",
+        isOpen: false,
+      },
+      {
+        name: "07_SUB",
+        type: "folder",
+        isOpen: false,
+      },
+      {
+        name: "08_MD",
+        type: "folder",
+        isOpen: false,
+      },
+    ],
+  };
+  const directoryData3: FileSystemItem = {
+    name: "生産準備+があるフォルダ",
+    type: "folder",
+    isOpen: true,
+    children: [
+      {
+        name: "00_temp",
+        type: "folder",
+        isOpen: false,
+      },
+      {
+        name: "01_PVSW_csv",
+        type: "folder",
+        isOpen: true,
+        children: [
+          {
+            name: "PVSW-*.csv",
+            type: "file",
+            icon: <Icon as={FaFile} color="gray.600" mr={1} />,
+            popOver: "入手したPVSWを全てここに配置",
+          },
+        ],
+      },
+      {
+        name: "07_SUB",
+        type: "folder",
+        isOpen: true,
+        children: [
+          {
+            name: "*SUB.csv",
+            type: "file",
+            icon: <Icon as={FaFile} color="gray.600" mr={1} />,
+            popOver: "入手したSUBを含むファイルを全てここに配置",
+          },
+        ],
+      },
+      {
+        name: "08_hsfデータ変換",
+        type: "folder",
+        isOpen: true,
+        children: [
+          {
+            name: "*MD*",
+            type: "folder",
+            icon: <Icon as={FaFolder} color="gray.600" mr={1} />,
+            popOver: "入手したMDを含むフォルダを全てここに配置",
+          },
+        ],
+      },
+      {
+        name: "08_MD",
+        type: "folder",
+        isOpen: false,
+      },
+      {
+        name: "09_AutoSub",
+        type: "folder",
+        isOpen: false,
+      },
+    ],
+  };
+  const directoryData4: FileSystemItem = {
+    name: "生産準備+があるフォルダ",
+    type: "folder",
+    isOpen: true,
+    children: [
+      {
+        name: "00_temp",
+        type: "folder",
+        isOpen: false,
+      },
+      {
+        name: "01_PVSW_csv",
+        type: "folder",
+        isOpen: false,
+      },
+      {
+        name: "07_SUB",
+        type: "folder",
+        isOpen: false,
+      },
+      {
+        name: "08_hsfデータ変換",
+        type: "folder",
+        isOpen: true,
+        children: [
+          {
+            name: "*MD(分解前)",
+            type: "folder",
+            icon: <Icon as={FaFolder} color="gray.600" mr={1} />,
+          },
+          {
+            name: "WH-DataConvert ←1.これを実行すると...",
+            type: "file",
+            icon: (
+              <Icon
+                as={PiAppWindowFill}
+                color="gray.600"
+                mr={1}
+                fontSize={18}
+              />
+            ),
+            popOver: "",
+          },
+        ],
+      },
+      {
+        name: "08_MD",
+        type: "folder",
+        isOpen: true,
+        children: [
+          {
+            name: "*MD(分解後) ← 2.この中に展開される",
+            type: "folder",
+            isOpen: true,
+            icon: <Icon as={FaFolder} color="gray.600" mr={1} />,
+          },
+        ],
+      },
+      {
+        name: "09_AutoSub",
+        type: "folder",
+        isOpen: false,
+      },
+    ],
+  };
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -246,7 +428,7 @@ const BlogPage: React.FC = () => {
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-25
+            更新日:2024-11-26
           </Text>
         </Box>
         <SectionBox
@@ -297,7 +479,7 @@ const BlogPage: React.FC = () => {
         </SectionBox>
         <SectionBox
           id="section4"
-          title="4.必要データの入手"
+          title="4.必要データの入手と配置"
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -357,11 +539,11 @@ const BlogPage: React.FC = () => {
             </Text>
             <Text>
               <Icon as={FaFile} color="gray.600" mr={1} />
-              RLTF-A
+              RLTF*A*.txt
             </Text>
             <Text>
               <Icon as={FaFile} color="gray.600" mr={1} />
-              RLTF-B
+              RLTF*B*.txt
             </Text>
           </SectionBox>
           <Box m={0} ml={3}>
@@ -399,55 +581,160 @@ const BlogPage: React.FC = () => {
               <Text mb={4}>
                 生産準備+の[製品品番]の情報から起動までを自動入力します
               </Text>
-              <Text>
-                ※初回のみ
-                <ImageSliderModal
-                  title="EXTESの設定変更"
-                  text="EXTESを起動してプロパティで下記と同じように設定します"
-                  images={[
-                    "../../images/0008/extes2.jpg",
-                    "../../images/0008/extes3.jpg",
-                    "../../images/0008/extes4.jpg",
-                    "../../images/0008/extes5.jpg",
-                  ]}
-                  isOpen={isModalOpen}
-                  onClose={onModalClose}
-                  onModalOpen={onModalOpen}
+              <Box ml={4}>
+                <Text>
+                  ※EXTESのインストールが必要です。自動インストールには対応していません。
+                </Text>
+                <Text>
+                  ※初回のみ
+                  <ImageSliderModal
+                    title="EXTESの設定変更"
+                    text="EXTESを起動してプロパティで下記と同じように設定します"
+                    images={[
+                      "../../images/0008/extes2.jpg",
+                      "../../images/0008/extes3.jpg",
+                      "../../images/0008/extes4.jpg",
+                      "../../images/0008/extes5.jpg",
+                    ]}
+                    isOpen={isModalOpen}
+                    onClose={onModalClose}
+                    onModalOpen={onModalOpen}
+                  />
+                  が必要です。
+                </Text>
+                <Box
+                  bg="gray.300"
+                  color="black"
+                  w="70%"
+                  p={1}
+                  mt={4}
+                  fontSize="14px"
+                >
+                  [製品品番]に設変(手配符号)の入力
+                </Box>
+                <Image
+                  mb={4}
+                  src="/images/0008/製品品番に設変の入力.png"
+                  width="70%"
+                  alt="製品品番に設変の入力.png"
                 />
-                が必要です。
-              </Text>
-              <Box bg="gray.300" color="black" w="70%" p={1} mt={4}>
-                [製品品番]に設変の入力
+                <Box
+                  bg="gray.300"
+                  color="black"
+                  w="55%"
+                  p={1}
+                  mt={4}
+                  fontSize="14px"
+                >
+                  MENU → 入力 → 00_起動
+                </Box>
+                <Image
+                  mb={4}
+                  src="/images/0008/MENU_起動.png"
+                  width="55%"
+                  alt="製品品番に設変の入力.png"
+                />
+                <Box
+                  bg="gray.300"
+                  color="black"
+                  w="80%"
+                  p={1}
+                  mt={4}
+                  fontSize="14px"
+                >
+                  RLTFのリクエストを実行
+                </Box>
+                <Image
+                  mb={4}
+                  src="/images/0008/MENU_起動_RLTFのリクエスト.png"
+                  width="80%"
+                  alt="製品品番に設変の入力.png"
+                />
+                <Text>※動作中はPCを操作しないでください</Text>
+                <Text>
+                  ※途中で失敗する事が稀にあります。その場合はEXTESを終了してから再度実行してください。
+                </Text>
               </Box>
-              <Image
-                mb={4}
-                src="/images/0008/製品品番に設変の入力.png"
-                width="70%"
-                alt="製品品番に設変の入力.png"
-              />
-              <Box bg="gray.300" color="black" w="55%" p={1} mt={4}>
-                MENU → 入力 → 00_起動
-              </Box>
-              <Image
-                mb={4}
-                src="/images/0008/MENU_起動.png"
-                width="55%"
-                alt="製品品番に設変の入力.png"
-              />
-              <Box bg="gray.300" color="black" w="80%" p={1} mt={4}>
-                RLTFのリクエストを実行
-              </Box>
-              <Image
-                mb={4}
-                src="/images/0008/MENU_起動_RLTFのリクエスト.png"
-                width="80%"
-                alt="製品品番に設変の入力.png"
-              />
             </SectionBox>
           </Box>
           <SectionBox
             id="section4_2"
-            title="4-2.社内図の設計データ入手"
+            title="4-2.RLTFの配置"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider borderColor={colorMode === "light" ? "black" : "white"} />
+            <Text mb={4}>入手したファイルを下記の場所に保存します</Text>
+
+            <FileSystemNode item={directoryData2} />
+          </SectionBox>
+          <SectionBox
+            id="section4_3"
+            title="4-3.RLTFの分解"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider borderColor={colorMode === "light" ? "black" : "white"} />
+            <Text mb={4}>以下を実行します</Text>
+            <Box
+              bg="gray.300"
+              color="black"
+              w="80%"
+              p={1}
+              mt={4}
+              fontSize="14px"
+            >
+              MENU → 入力 → 00_起動 → MENU_起動_後引張支援システムでの変換
+            </Box>
+            <Image
+              mb={4}
+              src="/images/0008/MENU_起動_後引張支援システムでの変換.png"
+              width="80%"
+              alt="MENU_起動_後引張支援システムでの変換.png"
+            />
+            <Text mb={2}>実行すると下記の処理が行われます</Text>
+            <Box ml={2}>
+              <Text>・00_tempに分解データが作成される</Text>
+              <Text>・05-RTF_AにRLTF*A*.txtが移動</Text>
+              <Text>・06-RTF_BにRLTF*B*.txtが移動</Text>
+            </Box>
+            <Text>※実行中はPCを操作しないでください</Text>
+          </SectionBox>
+          <SectionBox
+            id="section4_4"
+            title="4-4.生産準備+にRLTFを関連づける"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider borderColor={colorMode === "light" ? "black" : "white"} />
+            <Text mb={4}>以下のようにRLTFのファイル名を入力</Text>
+            <Box
+              bg="gray.300"
+              color="black"
+              w="80%"
+              p={1}
+              mt={4}
+              fontSize="14px"
+            >
+              [製品品番]のRLTF-AとRLTF-Bにファイル名を入力
+            </Box>
+            <Image
+              mb={4}
+              src="/images/0008/製品品番にRLTFを入力.png"
+              width="60%"
+              alt="MENU_起動_後引張支援システムでの変換.png"
+            />
+            <Text mb={2}>
+              ※この操作によりRLTFのインポート時に参照するファイルが更新されます
+            </Text>
+            <Text>以上でRLTFの準備は完了です。</Text>
+          </SectionBox>
+          <SectionBox
+            id="section4_5"
+            title="4-5.社内図の設計データの入手"
             sectionRefs={sectionRefs}
             sections={sections}
             size="sm"
@@ -518,11 +805,363 @@ const BlogPage: React.FC = () => {
                 </>
               }
             />
+            <Text mt={4}>下記3点のデータを入手します</Text>
+            <Box ml={2}>
+              <Text>
+                <Icon as={FaFile} color="gray.600" mr={1} />
+                PSVW*.csv (必須)
+              </Text>
+              <Text>
+                <Icon as={FaFile} color="gray.600" mr={1} />
+                SUB*.csv
+              </Text>
+              <Text>
+                <Icon as={FaFolder} color="gray.600" mr={1} />
+                *MD
+              </Text>
+            </Box>
+          </SectionBox>
+          <SectionBox
+            id="section4_6"
+            title="4-6.設計データの配置"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text mb={4}>
+              入手したデータを下記のフォルダに配置してください。
+            </Text>
+            <FileSystemNode item={directoryData3} />
+          </SectionBox>
+          <SectionBox
+            id="section4_7"
+            title="4-7.MDデータの分解"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text mb={4}>
+              08_hsfデータ変換に入れた
+              <Icon as={FaFolder} color="gray.600" mx={1} />
+              MDを分解します
+            </Text>
+            <FileSystemNode item={directoryData4} />
+            <Text mt={4}>※実行完了まで時間がかかります</Text>
+            <Text>
+              ※これは自分が作成したアプリでは無いのでエラー対応はできません
+            </Text>
+            <Text>
+              ※エラーが発生した場合はMDデータを手入力する必要があります
+            </Text>
+          </SectionBox>
+          <SectionBox
+            id="section4_8"
+            title="4-8.生産準備+にSUBを関連づける"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text mb={4}>
+              社内図の標準(最初)のサブ形態を利用したい事は稀だと思いますが、
+              その場合は下記の操作が必要です
+            </Text>
+            <Box
+              bg="gray.300"
+              color="black"
+              w="60%"
+              p={1}
+              mt={4}
+              fontSize="14px"
+            >
+              [製品品番]のSUBのファイル名を製品品番毎に入力
+            </Box>
+            <Image
+              mb={4}
+              src="/images/0008/製品品番にSUBの入力.png"
+              width="60%"
+              alt="製品品番にSUBの入力.png"
+            />
+            <Text mt={4}>以上で社内図の設計データの準備は完了です。</Text>
           </SectionBox>
         </Box>
         <SectionBox
+          id="section5"
+          title="5.必要データのインポート"
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text>4.で入手したデータを生産準備+にインポートしていきます</Text>
+          <Box bg="gray.300" color="black" w="60%" p={1} mt={4} fontSize="14px">
+            MENU → 入力 → 01_インポート
+          </Box>
+          <Image
+            mb={4}
+            src="/images/0008/MENU_入力_インポート.png"
+            width="60%"
+            alt="MENU_入力_インポート.png"
+          />
+          <Image
+            mb={4}
+            src="/images/0008/MENU_入力_インポート2.png"
+            width="40%"
+            alt="MENU_入力_インポート2.png"
+          />
+        </SectionBox>
+        <SectionBox
+          id="section5_1"
+          title="5-1.PVSWのインポート"
+          sectionRefs={sectionRefs}
+          sections={sections}
+          size="sm"
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text>
+            ・[PVSW_RLTF]を作成。00_PVSWからPVSWのデータを読み込みます。
+            <br />
+            ・フィールドが<span style={{ color: "#92CCFF" }}>■</span>
+            水色の箇所が使用するデータです。
+            <br />
+            ・[PVSW_RLTF]が既にある場合は末尾に連番を付けた新しいシートを作成します。
+          </Text>
+        </SectionBox>
+        <SectionBox
+          id="section5_2"
+          title="5-2.RLTFのインポート"
+          sectionRefs={sectionRefs}
+          sections={sections}
+          size="sm"
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text>
+            ・[製品品番]で指定したRLTFから電線情報を取得します。
+            <br />
+            ・フィールドが<span style={{ color: "#FFCCFF" }}>■</span>
+            ピンク色の箇所が使用するデータです。
+            <br />
+            ・PVSWとRLTFの値が異なる場合はそのセルにコメントを追加します。
+            コメントがRLTFの値です。
+            異なる場合は社内図を正として修正を行ってください。
+          </Text>
+        </SectionBox>
+        <SectionBox
+          id="section5_3"
+          title="5-3.[PVSW_RLTF]の最適化"
+          sectionRefs={sectionRefs}
+          sections={sections}
+          size="sm"
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text>・電線条件が同じ場合は同じ行にまとめて見やすくします。</Text>
+        </SectionBox>
+        <SectionBox
           id="section6"
-          title="6.まとめ"
+          title="6.手入力シートの作成"
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text>
+            [PVSW_RLTF]のデータと用意したデータで手入力シートを作成します。
+          </Text>
+          <Box bg="gray.300" color="black" w="60%" p={1} mt={4} fontSize="14px">
+            MENU → 入力 → 02_手入力シート作成
+          </Box>
+          <Image
+            mb={4}
+            src="/images/0008/MENU_入力_手入力シート作成.png"
+            width="60%"
+            alt="MENU_入力_手入力シート作成.png"
+          />
+          <Image
+            mb={4}
+            src="/images/0008/MENU_入力_手入力シート作成2.png"
+            width="35%"
+            alt="MENU_入力_手入力シート作成2.png"
+          />
+        </SectionBox>
+        <Box ml={3}>
+          <SectionBox
+            id="section6_1"
+            title="6-1.端末一覧"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>
+              [PVSW_RLTF]を基に[端末一覧]を作成。
+              <br />
+              端末サブナンバー/成型角度/成型方向を手入力する為に使用。
+              <br />
+              同シート名がある場合はそのシートに増えた情報を追加します。
+            </Text>
+            <OptionalBox colorMode={colorMode}>
+              <Flex alignItems="center">
+                <Icon as={IoIosCheckboxOutline} boxSize={5} mt={0.5} />
+                <Text ml={1}>07_SUBからサブNo.を取得</Text>
+              </Flex>
+              <Text ml={7}>
+                チェックを入れると、初期(標準)のサブNo.を取得します。
+              </Text>
+            </OptionalBox>
+          </SectionBox>
+          <SectionBox
+            id="section6_2"
+            title="6-2.部品リスト"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>
+              RLTF-A.txtを基に[部品リスト]を作成。
+              <br />
+              端末に付属する部品品番を手入力する為に使用。
+              <br />
+            </Text>
+            <OptionalBox colorMode={colorMode}>
+              <Flex alignItems="center">
+                <Icon as={BsRecordCircle} boxSize={4} mt={0.5} />
+                <Text ml={1}>IE</Text>
+                <Icon as={BsCircle} boxSize={4} mt={0.5} ml={2} />
+                <Text ml={1}>Edge</Text>
+              </Flex>
+              <Text ml={4}>
+                どちらかを選択。
+                <br />
+                生産準備+のサーバーに部品品番の詳細情報が無い場合に情報を取得するブラウザを選択。
+                Edgeはバージョンによってはエラー停止する事があります。
+              </Text>
+              <Flex alignItems="center" mt={2}>
+                <Icon as={IoIosCheckboxOutline} boxSize={5} mt={0.5} />
+                <Text ml={1}>08_MDから端末No.を取得</Text>
+              </Flex>
+              <Text ml={4}>
+                チェックを入れると、MDから部品品番に付属する端末No.を取得します。
+                MDが正しく分解されていない場合は[PVSW_RLTF]と[CAV一覧]から端末No.を取得します。
+              </Text>
+              <Flex alignItems="center" mt={2}>
+                <Icon as={IoIosCheckboxOutline} boxSize={5} mt={0.5} />
+                <Text ml={1}>部材詳細の再取得</Text>
+              </Flex>
+              <Text ml={4}>
+                チェックを入れると、生産準備+のサーバーに部品品番の詳細情報がある場合でも取得しなおします。
+                通常は必要ありません。取得する詳細情報をあたらしく追加した場合に使用します。
+              </Text>
+            </OptionalBox>
+          </SectionBox>
+          <SectionBox
+            id="section6_3"
+            title="6-3.CAV一覧"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>
+              [PVSW_RLTF]を基に[CAV一覧]を作成。
+              <br />
+              空栓(詰栓)の情報を入力する為に使用。
+              <br />
+              ※部材詳細.txtから空栓の色を取得
+              <br />
+              MDがある場合はMDからデータを取得
+            </Text>
+          </SectionBox>
+          <SectionBox
+            id="section6_4"
+            title="6-4.ポイント一覧"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>
+              [PVSW_RLTF]を基に[ポイント一覧]を作成。
+              <br />
+              空栓(詰栓)の情報を入力する為に使用。
+              <br />
+              ※部材詳細.txtから極数(CAV数)を取得。
+            </Text>
+          </SectionBox>
+          <SectionBox
+            id="section6_5"
+            title="6-5.治具"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>
+              [製品品番]の結きの値を基に作成します。
+              <br />
+              治具の座標を手入力する為に使用します。
+            </Text>
+          </SectionBox>
+          <SectionBox
+            id="section6_6"
+            title="6-6.通知書"
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>
+              [製品品番]の結きの値で作成。
+              <br />
+              マル即/設計変更通知書/部品変更通知書や修正履歴を入力するのに使用します。
+            </Text>
+          </SectionBox>
+        </Box>
+        <SectionBox
+          id="section99"
+          title="99.まとめ"
           sectionRefs={sectionRefs}
           sections={sections}
         >
