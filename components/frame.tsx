@@ -120,7 +120,7 @@ const Frame: React.FC<{
       if (hash) {
         const element = document.querySelector(hash);
         if (element) {
-          const yOffset = -64; // 64pxのオフセット
+          const yOffset = -50;
           const y =
             element.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({ top: y, behavior: "smooth" });
@@ -171,6 +171,7 @@ const Frame: React.FC<{
           break;
         //生産準備+の使い方
         case window.location.pathname.includes("/skillBlogs/0006"): //生産準備+とは
+        case window.location.pathname.includes("/skillBlogs/0009"): //効果の確認
         case window.location.pathname.includes("/skillBlogs/0007"): //生産準備+の練習(初級)
         case window.location.pathname.includes("/skillBlogs/0008"): //生産準備+の練習(中級)
         case window.location.pathname.includes("/skillBlogs/0001"): //プログラミング解説
@@ -236,19 +237,21 @@ const Frame: React.FC<{
                     <AccordionIcon />
                   </AccordionButton>
                   {createLinkPanel("/skillBlogs/0006/", "生産準備+とは")}
+                  {createLinkPanel("/skillBlogs/0009/", "導入の効果")}
                   {createLinkPanel(
                     "/skillBlogs/0007/",
                     "生産準備+の練習(初級)"
                   )}
-                  {createLinkPanel("#", "生産準備+の練習(中級)")}
-                  {/* "/skillBlogs/0008/", */}
-
-                  {createLinkPanel("/skillBlogs/0001/", "プログラミング解説")}
+                  {createLinkPanel(
+                    "/skillBlogs/0008/",
+                    "生産準備+の練習(中級)"
+                  )}
                   {createLinkPanel(
                     "/skillBlogs/0002/",
                     "コネクタの撮影から座標登録"
                   )}
                   {createLinkPanel("/skillBlogs/0005/", "サブナンバーの引越し")}
+                  {createLinkPanel("/skillBlogs/0001/", "プログラムの解説")}
                 </AccordionItem>
                 <AccordionItem>
                   <AccordionButton m={1} p={0}>

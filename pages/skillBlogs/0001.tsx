@@ -699,7 +699,7 @@ const BlogPage: React.FC = () => {
               <Text>開発</Text>
             </HStack>
             <Heading fontSize="3xl" mb={1}>
-              プログラミング解説
+              プログラムの解説
             </Heading>
             <CustomBadge text="生準+" />
             <CustomBadge text="開発" />

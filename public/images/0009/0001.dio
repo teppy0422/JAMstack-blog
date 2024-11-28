@@ -1,0 +1,107 @@
+<mxfile host="65bd71144e">
+    <diagram id="nvRNAKMqMzsSN21wuebc" name="ページ1">
+        <mxGraphModel dx="482" dy="288" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#333333" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="11" value="" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=solid;fillColor=#333333;fontColor=#FFFFFF;container=0;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="160" width="390" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="回路マトリクス" style="rounded=0;whiteSpace=wrap;strokeColor=#333333;fillStyle=solid;fillColor=#ff99ff;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="221" y="200" width="220" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="" style="edgeStyle=none;curved=1;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#FFFFFF;" parent="1" source="2" target="3" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="240" y="330" as="targetPoint"/>
+                        <Array as="points"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="2" value="" style="rounded=0;labelBackgroundColor=none;whiteSpace=wrap;fillStyle=solid;fillColor=#333333;fontColor=#FFFFFF;strokeColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="175" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=none;fontColor=#FFFFFF;strokeColor=#FFFFFF;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="250" y="219" as="sourcePoint"/>
+                        <mxPoint x="250" y="239" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="4" value="サブ図" style="rounded=0;whiteSpace=wrap;strokeColor=#333333;fillStyle=solid;fillColor=#ff99ff;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="221" y="240" width="59" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="主管工場" style="rounded=0;labelBackgroundColor=none;whiteSpace=wrap;fillStyle=solid;fillColor=#333333;fontColor=#FFFFFF;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="90" y="165" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" value="マル即" style="rounded=0;labelBackgroundColor=none;whiteSpace=wrap;fillStyle=solid;fillColor=#333333;fontColor=#FFFFFF;strokeColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="215" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" value="" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=none;fontColor=#FFFFFF;strokeColor=#FFFFFF;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="250" y="260" as="sourcePoint"/>
+                        <mxPoint x="250" y="280" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="43" value="社内図" style="rounded=0;labelBackgroundColor=none;whiteSpace=wrap;fillStyle=solid;fillColor=#333333;fontColor=#FFFFFF;strokeColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="185" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="61" value="" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=none;fontColor=#FFFFFF;strokeColor=#FFFFFF;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="364" y="300" as="sourcePoint"/>
+                        <mxPoint x="364" y="320" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="56" value="" style="rounded=0;labelBackgroundColor=none;whiteSpace=wrap;fillStyle=solid;fillColor=#333333;fontColor=#FFFFFF;strokeColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="310" width="100" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="46" value="後ハメ図" style="rounded=0;whiteSpace=wrap;strokeColor=#333333;fillStyle=solid;fillColor=#ff99ff;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="221" y="280" width="59" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="48" value="竿レイアウト図" style="rounded=0;whiteSpace=wrap;strokeColor=#333333;fillStyle=solid;fillColor=#ff99ff;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="290" y="280" width="99" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="50" value="" style="edgeStyle=none;html=1;labelBackgroundColor=none;fontColor=#FFFFFF;strokeColor=#FFFFFF;exitX=0.355;exitY=0.967;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="374" y="219.34000000000003" as="sourcePoint"/>
+                        <mxPoint x="375" y="280" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="51" value="自動機切断データ" style="rounded=0;whiteSpace=wrap;strokeColor=#333333;fillStyle=solid;fillColor=#ff99ff;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="341" y="320" width="99" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" value="ポイント図" style="rounded=0;whiteSpace=wrap;strokeColor=#333333;fillStyle=solid;fillColor=#ff99ff;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="290" y="240" width="70" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="53" value="" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=none;fontColor=#FFFFFF;strokeColor=#FFFFFF;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="326" y="219" as="sourcePoint"/>
+                        <mxPoint x="326" y="239" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="55" value="" style="edgeStyle=none;curved=1;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#FFFFFF;" parent="1" target="51" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="211" y="329.72" as="targetPoint"/>
+                        <Array as="points"/>
+                        <mxPoint x="160" y="329.72" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="57" value="電線明細" style="rounded=0;labelBackgroundColor=none;whiteSpace=wrap;fillStyle=solid;fillColor=#333333;fontColor=#FFFFFF;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="90" y="300" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" value="電線データ" style="rounded=0;labelBackgroundColor=none;whiteSpace=wrap;fillStyle=solid;fillColor=#333333;fontColor=#FFFFFF;strokeColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="320" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="58" value="" style="edgeStyle=none;html=1;labelBackgroundColor=none;fontColor=#FFFFFF;strokeColor=#FFFFFF;exitX=0.355;exitY=0.967;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.805;entryY=0.008;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="416" y="219.34000000000003" as="sourcePoint"/>
+                        <mxPoint x="416.69500000000005" y="320.15999999999997" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="69" value="&lt;meta charset=&quot;utf-8&quot;&gt;&lt;span style=&quot;color: rgb(255, 255, 255); font-family: Helvetica; font-size: 9px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;= 手入力で作成&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;verticalAlign=middle;labelBackgroundColor=none;align=right;horizontal=1;" vertex="1" parent="1">
+                    <mxGeometry x="381" y="163" width="68" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="70" value="" style="rounded=0;whiteSpace=wrap;strokeColor=#333333;fillStyle=solid;fillColor=#ff99ff;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="372" y="164" width="10" height="10" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

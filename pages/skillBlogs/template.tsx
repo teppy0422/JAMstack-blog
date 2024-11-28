@@ -36,6 +36,7 @@ import DownloadLink from "./DownloadLink";
 import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
 import ExternalLink from "./ExternalLink";
 import IframeDisplay from "./IframeDisplay";
+import OptionalBox from "./OptionalBox";
 
 import "@fontsource/noto-sans-jp";
 

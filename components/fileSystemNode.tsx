@@ -17,6 +17,7 @@ import {
   InfoIcon,
   InfoOutlineIcon,
 } from "@chakra-ui/icons";
+import { FaFile, FaRegEdit, FaFolder } from "react-icons/fa";
 
 // ディレクトリとファイルのデータ型定義
 type FileSystemItem = {
@@ -25,6 +26,7 @@ type FileSystemItem = {
   children?: FileSystemItem[];
   popOver?: string;
   isOpen?: boolean;
+  icon?;
 };
 
 // フォルダとファイルを表示するコンポーネント
@@ -58,11 +60,17 @@ const FileSystemNode: React.FC<{ item: FileSystemItem; isLast?: boolean }> = ({
               }}
             />
             <Text fontWeight="bold" pl={0}>
+              {item.icon}
               {item.name}
             </Text>
           </>
         ) : (
-          <Text pl={4}>{item.name}</Text>
+          <Box pl={4}>
+            <Text>
+              {item.icon}
+              {item.name}
+            </Text>
+          </Box>
         )}
         {item.popOver && (
           <Popover placement="right-start">
