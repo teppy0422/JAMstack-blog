@@ -115,7 +115,7 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
     minute: "2-digit",
   });
   const downloadFileName = props.linkHref.replace(
-    /^\/files\/download\/(Sjp|Jdss|Camera)\//,
+    /^\/files\/download\/(Sjp|Jdss|Camera|Library_)\//,
     ""
   );
   const downloadPathMatch = props.linkHref.match(/^(.*\/)/);
