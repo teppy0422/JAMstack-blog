@@ -17,28 +17,28 @@ import {
   AlertDialogBody,
   AlertDialogFooter,
   useDisclosure,
-  useColorMode,
   HStack,
+  useColorMode,
 } from "@chakra-ui/react";
-
 import { FocusableElement } from "@chakra-ui/utils"; // FocusableElement をインポート
-
+import { SiSemanticuireact } from "react-icons/si";
 import { MdSettings, MdCheckCircle, MdHelpOutline } from "react-icons/md";
-import { JdssIcon } from "../../components/icons";
 import NextImage from "next/image";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
-
+import { SjpIcon } from "../../components/icons";
 import styles from "../../styles/home.module.scss";
+
+import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
 import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
-
 function TransitionExample() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef<FocusableElement>(null); // 型を明示的に指定
+
   return (
     <>
       <Box onClick={onOpen} cursor="pointer">
@@ -91,11 +91,13 @@ function TransitionExample() {
     </>
   );
 }
+
 export default function About() {
   const { colorMode } = useColorMode();
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
+
   return (
     <>
       <Sidebar />
@@ -106,31 +108,17 @@ export default function About() {
         >
           <Box textAlign="center" mb={8}>
             <HStack spacing={2} alignItems="center" justifyContent="center">
-              <JdssIcon
+              <SjpIcon
                 size={48}
-                title="JDSS+"
-                color={colorMode === "light" ? "#800080" : "#FFF"} // カラーモードに応じて色を設定
+                title="Sjp+"
+                color={colorMode === "light" ? "#000" : "#FFF"}
               />
               <Text fontSize="2xl" mb={2} fontWeight={600}>
-                順立生産システム+
+                その他のライブラリ
               </Text>
             </HStack>
             <Box fontSize="lg" fontWeight={400}>
               以下からダウンロードしてください
-              <br />
-              ダウンロードした.zipは必ず展開(解凍)してください
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                width="auto"
-                mt={2}
-              >
-                {/* <Box fontSize="sm" mr={1}>
-                  アップロードの手順
-                </Box>
-                <TransitionExample /> */}
-              </Box>
             </Box>
           </Box>
           <SimpleGrid
@@ -139,51 +127,14 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
-              dateTime="2024-11-29T20:26:00+0900"
-              description1="すべてOKになる。リンクテーブルが切れて起動時にエラー。次に読むべきレコードが画面外になる"
-              description2="判別を修正。リンクテーブルの再作成を修正。absolutePosition=>.bookmark-5"
+              dateTime="2024-12-01T17:04:00+0900"
+              description1="Officeの参照設定で参照不可になる"
+              description2="このファイルを任意の場所に保存する"
               descriptionIN=""
-              linkHref="/files/download/Jdss/main_128.zip"
-              inCharge="徳島,小松さん,不具合,Win10zip"
+              linkHref="/files/download/Library_/MSCOMM32.OCX"
+              inCharge=""
               isLatest={true}
               userName={userName ?? ""}
-            />
-            <CustomLinkBox
-              dateTime="2024-11-01T16:33:00+0900"
-              description1="起動時にsqlエラー"
-              description2="sqlを使わないように変更。テーブルリンクが無い場合は作成"
-              descriptionIN=""
-              linkHref="/files/download/Jdss/main_127.zip"
-              inCharge="徳島,小松さん,不具合,Win10zip"
-              isLatest={false}
-              userName={userName ?? ""}
-            />
-            <CustomLinkBox
-              dateTime="2024-10-11T23:44:00+0900"
-              description1="サーバー接続が出来ない場合にテーブル読み込みエラー"
-              description2="サーバーIP接続とファイル接続を分ける"
-              descriptionIN=""
-              linkHref="/files/download/Jdss/main_126.zip"
-              inCharge="徳島,小松さん,Win10zip"
-              isLatest={false}
-            />
-            <CustomLinkBox
-              dateTime="2024-10-11T02:49:00+0900"
-              description1="main2_ラベル発行データ履歴がない場合にリンクテーブルの作成エラーが発生"
-              description2="ファイル接続が可能な場合のみ作成する"
-              descriptionIN=""
-              linkHref="/files/download/Jdss/main_125.zip"
-              inCharge="徳島,小松さん,Win10zip"
-              isLatest={false}
-            />
-            <CustomLinkBox
-              dateTime="2024-10-07T07:17:00+0900"
-              description1="main2_次回QRラベルが飛ぶ時がある"
-              description2="SQLクエリ->専用関数の作成に書き直し"
-              descriptionIN="自動機を使用しない場合にラベル印刷だけできるように修正"
-              linkHref="/files/download/Jdss/main_123.zip"
-              inCharge="徳島,小松さん,藤原さん,Win10zip"
-              isLatest={false}
             />
           </SimpleGrid>
         </div>

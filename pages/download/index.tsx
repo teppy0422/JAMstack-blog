@@ -634,9 +634,9 @@ export default function About({
                     >
                       <Flex justifyContent="flex-end" width="100%">
                         <Text fontSize="xs" textAlign="right">
-                          #2024/11/01
+                          #2024/11/29
                           <br />
-                          127
+                          128
                         </Text>
                       </Flex>
                       <CustomBadge path="" text="main1.計画指示" />
@@ -729,6 +729,132 @@ export default function About({
                     初回のPCセットアップに必要なファイル
                     <br />
                     セットアップ終了後はMAINのみ更新を行う
+                  </Text>
+                </Box>
+              </CardBody>
+            </Card>
+            <Card
+              backgroundColor="transparent"
+              border="1px solid"
+              borderColor="gray.500"
+            >
+              <CardHeader p={2} pl={3} pb={0}>
+                <Heading size="md" mb={3}>
+                  誘導ポイント設定一覧表
+                </Heading>
+              </CardHeader>
+              <Divider borderColor="gray.500" />
+              <CardBody p={0}>
+                <Box position="relative" px={4} pl={8} py={2}>
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    bottom={0}
+                    width="1.4rem"
+                    backgroundColor="transparent"
+                    borderRight="2px dotted"
+                    borderColor="gray.500"
+                  />
+                  <Flex justifyContent="space-between" alignItems="center">
+                    <Heading size="sm">誘導ポイント設定一覧表</Heading>
+                    <Flex justifyContent="flex-end" alignItems="center">
+                      <Text
+                        fontSize="xs"
+                        margin="auto"
+                        textAlign="right"
+                      ></Text>
+                    </Flex>
+                  </Flex>
+                  <Badge
+                    variant="solid"
+                    backgroundColor="green"
+                    mr={2}
+                    opacity={0.8}
+                  >
+                    EXCEL2010
+                  </Badge>
+                  <Badge
+                    variant="solid"
+                    backgroundColor="green"
+                    mr={2}
+                    opacity={0.8}
+                  >
+                    2013
+                  </Badge>
+                  <Badge variant="outline" colorScheme="gray" mr={2}>
+                    365
+                  </Badge>
+                  <Text pt="2" fontSize="sm">
+                    誘導ポイント設定一覧表(作業内容とインラインNo./忘れん棒番号/製品品番の使い分けを記した作業手順書)
+                    からYICの書き込み器にデータ転送を行います。作業効率化/入力ミス削減が図れます。
+                  </Text>
+                </Box>
+              </CardBody>
+            </Card>
+            <Card
+              backgroundColor="transparent"
+              border="1px solid"
+              borderColor="gray.500"
+            >
+              <CardHeader p={2} pl={3} pb={0}>
+                <Heading size="md" mb={3}>
+                  その他ライブラリなど
+                </Heading>
+              </CardHeader>
+              <Divider borderColor="gray.500" />
+              <CardBody p={0}>
+                <Box position="relative" px={4} pl={8} py={2}>
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    bottom={0}
+                    width="1.4rem"
+                    backgroundColor="transparent"
+                    borderRight="2px dotted"
+                    borderColor="gray.500"
+                  />
+                  <DownloadButton
+                    path="/download/library"
+                    isHovered={isHovered}
+                    backGroundColor="#333"
+                    userName={userName}
+                  />
+                  <Flex justifyContent="space-between" alignItems="center">
+                    <Heading size="sm">Windowsライブラリ</Heading>
+                    <Flex justifyContent="flex-end" alignItems="center">
+                      <Text
+                        fontSize="xs"
+                        margin="auto"
+                        textAlign="right"
+                      ></Text>
+                    </Flex>
+                  </Flex>
+                  <Badge
+                    variant="solid"
+                    color="white"
+                    backgroundColor="#333"
+                    mr={2}
+                    opacity={0.8}
+                  >
+                    .OCX
+                  </Badge>
+                  <Badge
+                    variant="solid"
+                    color="white"
+                    backgroundColor="#333"
+                    mr={2}
+                    opacity={0.8}
+                  >
+                    .DLL
+                  </Badge>
+                  <Text pt="2" fontSize="sm">
+                    WindowsOSが新しくなった場合にライブラリが削除される事があります。
+                    ライブラリが不足している場合はここからダウンロードして使用してください。
+                    <br />
+                    <br />
+                    <br />
                   </Text>
                 </Box>
               </CardBody>

@@ -9,6 +9,7 @@ interface SectionBoxProps {
   sectionRefs: React.MutableRefObject<(HTMLElement | null)[]>;
   sections: React.MutableRefObject<{ id: string; title: string }[]>;
   size?: string;
+  mt?: string;
 }
 
 const SectionBox: React.FC<SectionBoxProps> = ({
@@ -18,6 +19,7 @@ const SectionBox: React.FC<SectionBoxProps> = ({
   sectionRefs,
   sections,
   size = "md",
+  mt = "5",
 }) => {
   const { colorMode } = useColorMode();
   return (
@@ -37,7 +39,7 @@ const SectionBox: React.FC<SectionBoxProps> = ({
         href={`#${id}`}
         style={{ textDecoration: "none", display: "inline-block" }} // displayをinline-blockに設定
       >
-        <Heading size={size} fontWeight="600" mt={5}>
+        <Heading size={size} fontWeight="600" mt={mt}>
           {title}
         </Heading>
       </Link>

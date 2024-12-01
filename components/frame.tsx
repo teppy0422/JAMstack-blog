@@ -179,9 +179,13 @@ const Frame: React.FC<{
         case window.location.pathname.includes("/skillBlogs/0005"): //コネクタの撮影から座標登録まで
           index = [1];
           break;
+        //誘導ポイント設定一覧表
+        case window.location.pathname.includes("/skillBlogs/0010"): //誘導ポイント設定一覧表
+          index = [3];
+          break;
         //改善活動の進め方
         case window.location.pathname.includes("/skillBlogs/0003"): //参考事例集
-          index = [3];
+          index = [4];
           break;
         default:
           index = [];
@@ -203,7 +207,7 @@ const Frame: React.FC<{
           >
             <VStack
               align="start"
-              flex="4"
+              flex="3.5"
               position="sticky"
               top="64px"
               display={["none", "none", "none", "block"]}
@@ -222,7 +226,7 @@ const Frame: React.FC<{
               >
                 <AccordionItem>
                   <AccordionButton m={1} p={0}>
-                    <Box flex="1" textAlign="left" fontSize="13px">
+                    <Box flex="4" textAlign="left" fontSize="13px">
                       1. 自己紹介
                     </Box>
                     <AccordionIcon />
@@ -255,7 +259,7 @@ const Frame: React.FC<{
                 </AccordionItem>
                 <AccordionItem>
                   <AccordionButton m={1} p={0}>
-                    <Box flex="1" textAlign="left" fontSize="13px">
+                    <Box flex="4" textAlign="left" fontSize="13px">
                       3. 順立生産システムの使い方
                     </Box>
                     <AccordionIcon />
@@ -266,7 +270,16 @@ const Frame: React.FC<{
                 <AccordionItem>
                   <AccordionButton m={1} p={0}>
                     <Box flex="1" textAlign="left" fontSize="13px">
-                      4. 改善活動の進め方
+                      4. 誘導ポイント設定一覧表
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                  {createLinkPanel("/skillBlogs/0010/", "使い方")}
+                </AccordionItem>
+                <AccordionItem>
+                  <AccordionButton m={1} p={0}>
+                    <Box flex="1" textAlign="left" fontSize="13px">
+                      5. 改善活動の進め方
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
