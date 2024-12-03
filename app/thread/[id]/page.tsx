@@ -63,6 +63,11 @@ import IconWithDrawer from "./IconWithDrawer";
 import { Global } from "@emotion/react";
 import "@fontsource/noto-sans-jp";
 
+interface BBSTodoListProps {
+  userName: string;
+  userId: string;
+}
+
 export default function Thread() {
   const router = useRouter();
   const { id } = useParams() as { id: string };
@@ -166,13 +171,14 @@ export default function Thread() {
       console.log("post marked as read:", postId);
     }
   };
-  const isElementInViewport = (el: Element) => {
+  const isElementInViewport = (el: Element, offset: number = 50) => {
     const rect = el.getBoundingClientRect();
     return (
       rect.top >= 0 &&
       rect.left >= 0 &&
       rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
+        (window.innerHeight || document.documentElement.clientHeight) -
+          offset &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
   };
@@ -1083,7 +1089,7 @@ export default function Thread() {
                 position="absolute"
                 variant="ghost" // ボタンのスタイルを設定
                 size="sm" // ボタンのサイズを設定
-                ml="2" // ボタンとリプライ情報の間にマージンを追加
+                ml="2" // ボタンとリプライ情報の間にマージン��追加
                 top="1"
                 right="1"
                 _hover={{ backgroundColor: "transparent" }}
@@ -1318,12 +1324,15 @@ export default function Thread() {
             spacing="2"
             style={{ padding: "0px", flexDirection: "column" }}
           >
-            {userName === "" && threadMainCompany !== "開発" ? (
+            {userName === "" &&
+            threadMainCompany !== "開発" &&
+            userMainCompany !== "開発" ? (
               <Text color="red" fontWeight="bold">
                 認証されていません
               </Text>
             ) : threadMainCompany !== userMainCompany &&
-              threadMainCompany !== "開発" ? (
+              threadMainCompany !== "開発" &&
+              userMainCompany !== "開発" ? (
               <Text color="red" fontWeight="bold">
                 このアカウントは{userMainCompany}のみ閲覧可能です
               </Text>
@@ -1946,9 +1955,9 @@ export default function Thread() {
                 })
             )}
           </Stack>
-          <Box mb="53px" />
+          <Box mb="10vh" />
         </Content>
-        <BBSTodoList userName={userName ?? ""} userId={userId ?? ""} />
+        <BBSTodoList />
       </div>
     </>
   );
