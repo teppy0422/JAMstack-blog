@@ -20,6 +20,7 @@ import { useUserData } from "../hooks/useUserData";
 import { useUserInfo } from "../hooks/useUserId";
 
 function SidebarBBS() {
+  const [unreadCount, setUnreadCount] = useState(0);
   const [currentPath, setCurrentPath] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
@@ -36,25 +37,84 @@ function SidebarBBS() {
     useUserData(userId);
   const showToast = useCustomToast();
 
+  const [unreadCountsByThread, setUnreadCountsByThread] = useState<
+    Record<string, number>
+  >({});
+
   //新しい投稿の監視
   useEffect(() => {
+    const fetchUnreadCount = async () => {
+      if (!userId) {
+        console.log("userId is null, waiting for it to be set...");
+        return;
+      }
+
+      console.log("Fetching unread count...");
+      console.log("Current userId:", userId);
+
+      const { data, error } = await supabase
+        .from("posts")
+        .select("id, read_by, thread_id, user_uid, created_at")
+        .gt(
+          "created_at",
+          new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+        );
+
+      if (error) {
+        console.error("Error fetching unread count:", error);
+        return;
+      }
+
+      const countsByThread = data.reduce((acc, post) => {
+        if (
+          (!post.read_by || !post.read_by.includes(userId)) &&
+          post.user_uid !== userId
+        ) {
+          acc[post.thread_id] = (acc[post.thread_id] || 0) + 1;
+        }
+        return acc;
+      }, {});
+
+      console.log("Final counts by thread:", countsByThread);
+
+      setUnreadCountsByThread(countsByThread);
+      const totalUnreadCount = Object.values(countsByThread).reduce(
+        (sum: number, count: number) => sum + count,
+        0
+      );
+
+      setUnreadCount(totalUnreadCount as number);
+      console.log("Unread counts by thread:", countsByThread);
+    };
+
+    fetchUnreadCount();
+
     const subscription = supabase
       .channel("public:posts")
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "posts" },
         (payload) => {
-          setNewThreads((prev) => {
-            const updatedThreads = [...prev, payload.new.thread_id];
-            return updatedThreads;
-          });
+          if (!userId) {
+            console.log("userId is null, waiting for it to be set...");
+            return;
+          }
+          console.log("Real-time notification received:", payload);
+          if (
+            (!payload.new.read_by || !payload.new.read_by.includes(userId)) &&
+            payload.new.user_uid !== userId
+          ) {
+            fetchUnreadCount();
+          }
         }
       )
       .subscribe();
+
     return () => {
+      console.log("Unsubscribing from channel...");
       subscription.unsubscribe();
     };
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     setCurrentPath(window.location.pathname);
@@ -65,7 +125,7 @@ function SidebarBBS() {
     w: "full",
     _hover: { bg: "gray.900" },
     cursor: "pointer",
-    // colorScheme: currentPath === path ? "red" : "gray", // 現在のパスと一致する場合は赤色テーマ、そうでなければ灰色テーマ
+    // colorScheme: currentPath === path ? "red" : "gray", // 現在のパスと一致する場合は赤色テーマ、そうでなければ灰色��ーマ
     color: colorMode === "light" ? "white" : "white",
   });
   useEffect(() => {
@@ -161,18 +221,26 @@ function SidebarBBS() {
           >
             {label}
           </Box>
-          {isNew && (
+          {unreadCountsByThread[threadId] > 0 && (
             <Box
               as="span"
               backgroundColor="red"
               position="absolute"
               right="0px"
-              top="0"
-              // transform="translate(0%, 20%)"
-              width="6px"
-              height="1.2em"
+              top="3px"
+              h="1rem"
+              w="1rem"
+              p={1}
+              borderRadius="50%"
               opacity="0.8"
-            />
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              color="white"
+              fontSize={unreadCountsByThread[threadId] > 99 ? 10 : 12} // 文字数に応じてフォントサイズを変更
+            >
+              {unreadCountsByThread[threadId] || 0}
+            </Box>
           )}
         </Box>
       </NextLink>

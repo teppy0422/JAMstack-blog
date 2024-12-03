@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import {
   Box,
   Input,
@@ -15,98 +14,166 @@ import {
   AccordionIcon,
   AccordionButton,
   AccordionPanel,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  useDisclosure,
+  Flex,
+  TableContainer,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  Badge,
+  useColorMode,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverHeader,
+  PopoverBody,
+  Tooltip,
 } from "@chakra-ui/react";
-import { Icon } from "@chakra-ui/react";
-import { MdBusiness } from "react-icons/md";
-import { useColorMode } from "@chakra-ui/react";
 import { supabase } from "../utils/supabase/client";
-import useFetchUserData from "../hooks/useFetchUserData";
-import useFetchTodos from "../hooks/useFetchTodos";
-const TodoList = ({
-  userName,
-  userId,
-}: {
-  userName?: string;
-  userId?: string;
-}) => {
-  const [newTodo, setNewTodo] = useState("");
-  const [userMainCompany, setUserMainCompany] = useState<string | null>(null);
-  const [userDetails, setUserDetails] = useState<Map<number, UserData>>(
-    new Map()
-  );
-  const [sortedUserData, setSortedUserData] = useState<UserData[]>([]);
-  const [sortedTodos, setSortedTodos] = useState<Todo[]>([]);
+import "@fontsource/noto-sans-jp";
 
-  interface UserData {
-    user_metadata?: {
-      name: string;
-    };
-    id?: string;
-    picture_url?: string;
-    user_mainCompany: string;
-    user_company?: string;
-  }
-  const {
-    userData,
-    error: userDataError,
-  }: { userData: UserData[]; error: any } = useFetchUserData();
-
-  interface Todo {
+const BBSTodoList = () => {
+  const [todos, setTodos] = useState<
+    {
+      id: number;
+      title: string;
+      value: string;
+      complete: boolean;
+      details: {
+        id: number;
+        value: string;
+        title: string;
+        user_picture: string;
+        created_at: string;
+        progress: number;
+        complete_at: string;
+        status: string;
+      }[];
+    }[]
+  >([]);
+  const [selectedTodo, setSelectedTodo] = useState<{
     id: number;
-    value: string;
-    userId?: string;
-    user_mainCompany?: string;
-    user_company?: string;
-    userName?: string;
-    thread_id?: string;
-    post_id?: string;
-    complete?: boolean;
-  }
-  const { todos }: { todos: Todo[]; error: any } = useFetchTodos();
+    title: string;
+    value: string[];
+    complete: boolean;
+    valueStatus: number[];
+    details: {
+      id: number;
+      value: string;
+      title: string;
+      user_picture: string;
+      created_at: string;
+      progress: number;
+      complete_at: string;
+      status: string;
+    }[];
+  } | null>(null);
+  const [newTodo, setNewTodo] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const { colorMode, toggleColorMode } = useColorMode();
 
-  const incompleteTodos = todos.filter((todo) => !todo.complete);
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  useEffect(() => {
+    console.log("Selected Todo:", selectedTodo);
+  }, [selectedTodo]);
+
+  useEffect(() => {
+    if (selectedTodo) {
+      console.log("Selected Todo Value:", selectedTodo.value);
+    }
+  }, [selectedTodo]);
+
+  const fetchTodos = async () => {
+    const { data: todosData, error: todosError } = await supabase
+      .from("todo_chat")
+      .select("*");
+
+    if (todosError) {
+      console.error("Error fetching todos:", todosError);
+      return;
+    }
+
+    const { data: detailsData, error: detailsError } = await supabase
+      .from("todo_chat_detail")
+      .select("*");
+
+    if (detailsError) {
+      console.error("Error fetching todo details:", detailsError);
+      return;
+    }
+
+    console.log("Details Data:", detailsData);
+
+    const todosWithDetails = todosData.map((todo) => {
+      const details = detailsData.filter(
+        (detail) => detail.chat_id === todo.id
+      );
+      return { ...todo, details };
+    });
+
+    setTodos(todosWithDetails);
+  };
+
+  const handleTodoClick = (todo) => {
+    setSelectedTodo(todo);
+    onOpen();
+  };
+
+  const updateTodo = async (todo) => {
+    const { error } = await supabase
+      .from("todo_chat")
+      .update({ value: todo.value, complete: todo.complete })
+      .eq("id", todo.id);
+    if (error) console.error("Error updating todo:", error);
+    else fetchTodos();
+  };
 
   const addTodo = async () => {
     if (newTodo.trim()) {
-      // チェックボックスがオンのユーザーを取得
-      const selectedUsers = userData
-        .filter(
-          (user) =>
-            (
-              document.querySelector(
-                `input[value="${user.user_metadata?.name}"]`
-              ) as HTMLInputElement
-            )?.checked
-        )
-        .map((user) => user.user_metadata?.name);
-      // Supabaseにデータを登録
-      for (const userName of selectedUsers) {
-        const user = userData.find(
-          (user) => user.user_metadata?.name === userName
-        );
-        const { error } = await supabase.from("todo_chat").insert([
-          {
-            userName: userName,
-            value: newTodo,
-            userId: user?.id,
-            user_mainCompany: user?.user_mainCompany,
-            user_company: user?.user_company,
-          },
-        ]);
-        if (error) {
-          console.error("Error inserting data for user:", userName, error);
-        }
+      const { error } = await supabase
+        .from("todo_chat")
+        .insert([{ value: newTodo, complete: false }]);
+      if (error) console.error("Error adding todo:", error);
+      else {
+        setNewTodo("");
+        fetchTodos();
       }
     }
   };
-  const { colorMode } = useColorMode();
-  const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0"; // 任意のユーザーID
   const maxWidth = useBreakpointValue({
     base: "0px",
     xl: "190px",
     "2xl": "300px",
     "3xl": "500px",
   });
+
+  const handleTitleClick = (todo) => {
+    setSelectedTodo(todo);
+    console.log(todo);
+    console.log(todo.value);
+    onOpen();
+  };
+
+  const handleValueClick = (value) => {
+    setSelectedValue(value);
+    onOpen();
+  };
+
   return (
     <Box
       display={{ base: "none", xl: "block" }}
@@ -121,145 +188,187 @@ const TodoList = ({
       zIndex="1100"
       fontSize={15}
     >
+      {/* <Input
+        value={newTodo}
+        onChange={(e) => setNewTodo(e.target.value)}
+        placeholder="新しいタスクを追加"
+      />
+      <Button onClick={addTodo}>追加</Button> */}
       <Text
-        fontSize="sm"
-        mb="0"
-        width="100%"
-        border="1px solid gray"
+        border="1px solid"
         textAlign="center"
-        px={1}
+        color={colorMode === "light" ? "black" : "white"}
         fontWeight={400}
+        mb={2}
       >
-        未完了の内容
+        各システムの対応状況
       </Text>
-      <Stack spacing="0">
-        {incompleteTodos.map((todo, index) => {
-          const user = userData.find(
-            (user: UserData) => user.id === todo.userId
-          );
-          const previousTodo = incompleteTodos[index - 1];
-          const isSameAsPrevious =
-            previousTodo &&
-            previousTodo.user_mainCompany === todo.user_mainCompany;
-
-          const isSameCompanyAsPrevious =
-            previousTodo && previousTodo.user_company === todo.user_company;
-
-          return (
+      <Stack spacing={1}>
+        {todos.map((todo) => (
+          <Box key={todo.id}>
             <Text
-              key={index}
-              mx={0}
-              py={1}
-              overflow="hidden"
-              whiteSpace="nowrap"
-              textOverflow="ellipsis"
-              title={todo.value}
-              cursor="pointer"
+              fontWeight={200}
               fontFamily="Noto Sans JP"
+              color={colorMode === "light" ? "black" : "white"}
+              onClick={() => handleTodoClick(todo)}
+              cursor="pointer"
             >
-              {!isSameAsPrevious && todo?.user_mainCompany && (
-                <>
-                  {todo.user_mainCompany}
-                  <Divider
-                    borderColor={colorMode === "light" ? "black" : "white"}
-                  />
-                </>
-              )}
-              {!isSameCompanyAsPrevious && todo?.user_company && (
-                <>
-                  <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={0} />
-                  {todo.user_company}
-                  <br />
-                </>
-              )}
-              <Avatar boxSize="20px" mr={1} src={user?.picture_url} ml={4} />
-              <Link href={`/thread/${todo.thread_id}#${todo.post_id}`}>
-                {todo.value}
-              </Link>
+              {todo.title}
             </Text>
-          );
-        })}
+          </Box>
+        ))}
       </Stack>
-      <Accordion allowToggle>
-        <AccordionItem>
-          <AccordionButton _hover={{ textDecoration: "none" }} p={0} mt={2}>
-            <Text
-              fontSize="sm"
-              mb="0"
-              width="100%"
-              border="1px solid gray"
-              textAlign="center"
-              px={1}
-              fontWeight={400}
-            >
-              完了済みの内容
-            </Text>
-            <AccordionIcon />
-          </AccordionButton>
-          <AccordionPanel p={0}>
-            <Stack spacing="0">
-              {todos
-                .filter((todo) => todo.complete)
-                .map((todo, index) => {
-                  const user = userData.find(
-                    (user: UserData) => user.id === todo.userId
-                  );
-                  const previousTodo = todos[index - 1];
-                  const isSameAsPrevious =
-                    previousTodo &&
-                    previousTodo.user_mainCompany === todo.user_mainCompany;
 
-                  const isSameCompanyAsPrevious =
-                    previousTodo &&
-                    previousTodo.user_company === todo.user_company;
-
-                  return (
-                    <Text
-                      key={index}
-                      mx={0}
-                      py={1}
-                      overflow="hidden"
-                      whiteSpace="nowrap"
-                      textOverflow="ellipsis"
-                      title={todo.value}
-                      cursor="pointer"
-                      fontFamily="Noto Sans JP"
-                    >
-                      {!isSameAsPrevious && todo?.user_mainCompany && (
-                        <>
-                          {todo.user_mainCompany}
-                          <Divider
-                            borderColor={
-                              colorMode === "light" ? "black" : "white"
-                            }
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent width="auto" maxWidth="80%">
+          <ModalHeader>{selectedTodo?.title}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody fontWeight={400} mb={4}>
+            <TableContainer>
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th py={0} px={1}>
+                      進捗
+                    </Th>
+                    <Th py={0} px={1}>
+                      状態
+                    </Th>
+                    <Th py={0} px={1}>
+                      担当
+                    </Th>
+                    <Th py={0} px={1}>
+                      Date
+                    </Th>
+                    <Th py={0} px={1}>
+                      Value
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {selectedTodo?.details.map((detail) => (
+                    <Tr key={detail.id}>
+                      <Td p={1}>
+                        <Box
+                          p={0}
+                          width="56px"
+                          height="18px"
+                          bg="gray.200"
+                          borderRadius="md"
+                          overflow="hidden"
+                          position="relative"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <Box
+                            position="absolute"
+                            left={0}
+                            p={0}
+                            width={`${detail.progress}%`}
+                            bg="green.400"
+                            height="100%"
                           />
-                        </>
-                      )}
-                      {!isSameCompanyAsPrevious && todo?.user_company && (
-                        <>
-                          <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={0} />
-                          {todo.user_company}
-                          <br />
-                        </>
-                      )}
-                      <Avatar
-                        boxSize="20px"
-                        mr={1}
-                        src={user?.picture_url}
-                        ml={4}
-                      />
-                      <Link href={`/thread/${todo.thread_id}#${todo.post_id}`}>
-                        {todo.value}
-                      </Link>
-                    </Text>
-                  );
-                })}
-            </Stack>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+                          <Text
+                            position="relative"
+                            zIndex={1}
+                            color="white"
+                            textShadow="0 0 2px black, 0 0 2px black" // 均等に輪郭を追加
+                          >
+                            {detail.progress}
+                          </Text>
+                        </Box>
+                      </Td>
+                      <Td p={1}>
+                        <Badge
+                          colorScheme="purple"
+                          width="4rem"
+                          textAlign="center"
+                        >
+                          {detail.status}
+                        </Badge>
+                      </Td>
+                      <Td p={1}>
+                        <Avatar src={detail.user_picture} size="xs" mr={1} />
+                      </Td>
+                      <Td p={1} fontSize={11}>
+                        <Tooltip
+                          label={
+                            <>
+                              <Text>
+                                着手:
+                                {new Date(detail.created_at).toLocaleString()}
+                              </Text>
+                              <Text>
+                                完了:
+                                {detail.complete_at
+                                  ? new Date(
+                                      detail.complete_at
+                                    ).toLocaleString()
+                                  : ""}
+                              </Text>
+                            </>
+                          }
+                          aria-label="日付情報"
+                          hasArrow
+                        >
+                          <Box as="span" cursor="pointer">
+                            {detail.progress === 100
+                              ? (() => {
+                                  const createdAt = new Date(detail.created_at);
+                                  const completedAt = new Date(
+                                    detail.complete_at
+                                  );
+                                  const diffTime = Math.abs(
+                                    completedAt.getTime() - createdAt.getTime()
+                                  );
+                                  const diffDays = Math.floor(
+                                    diffTime / (1000 * 60 * 60 * 24)
+                                  );
+                                  const diffHours = Math.floor(
+                                    (diffTime / (1000 * 60 * 60)) % 24
+                                  );
+                                  if (diffDays > 0) {
+                                    return `${diffDays}日${diffHours}時間`;
+                                  } else {
+                                    return `${diffHours}時間`;
+                                  }
+                                })()
+                              : (() => {
+                                  const createdAt = new Date(detail.created_at);
+                                  const now = new Date();
+                                  const diffTime = Math.abs(
+                                    now.getTime() - createdAt.getTime()
+                                  );
+                                  const diffDays = Math.floor(
+                                    diffTime / (1000 * 60 * 60 * 24)
+                                  );
+                                  const diffHours = Math.floor(
+                                    (diffTime / (1000 * 60 * 60)) % 24
+                                  );
+                                  if (diffDays > 0) {
+                                    return `${diffDays}日${diffHours}時間`;
+                                  } else {
+                                    return `${diffHours}時間`;
+                                  }
+                                })()}
+                          </Box>
+                        </Tooltip>
+                      </Td>
+                      <Td p={1} fontSize={13}>
+                        {detail.title}
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
 
-export default TodoList;
+export default BBSTodoList;
