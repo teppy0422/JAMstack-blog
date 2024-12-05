@@ -321,7 +321,7 @@ const BlogPage: React.FC = () => {
           />
           <Text fontWeight="bold">シリアルポートの準備を以下で行います。</Text>
 
-          <Text mt={6}></Text>
+          <Text mt={6}>作成途中です</Text>
         </SectionBox>
         <SectionBox
           id="section4"

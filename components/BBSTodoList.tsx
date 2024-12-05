@@ -59,6 +59,9 @@ const BBSTodoList = () => {
         progress: number;
         complete_at: string;
         status: string;
+        userName: string;
+        user_mainCompany: string;
+        user_company: string;
       }[];
     }[]
   >([]);
@@ -77,6 +80,9 @@ const BBSTodoList = () => {
       progress: number;
       complete_at: string;
       status: string;
+      userName: string;
+      user_mainCompany: string;
+      user_company: string;
     }[];
   } | null>(null);
   const [newTodo, setNewTodo] = useState("");
@@ -174,6 +180,44 @@ const BBSTodoList = () => {
     onOpen();
   };
 
+  const groupedDetails = selectedTodo?.details
+    .sort((a, b) => {
+      if (a.progress !== b.progress) {
+        return a.progress - b.progress;
+      }
+      return (
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      );
+    })
+    .reduce(
+      (
+        acc: {
+          id: number;
+          value: string;
+          title: string;
+          user_picture: string;
+          created_at: string;
+          progress: number;
+          complete_at: string;
+          status: string;
+          userName: string;
+          user_mainCompany: string;
+          user_company: string;
+        }[][],
+        detail
+      ) => {
+        if (detail.progress === 0) {
+          acc[0].push(detail);
+        } else if (detail.progress < 100) {
+          acc[1].push(detail);
+        } else {
+          acc[2].push(detail);
+        }
+        return acc;
+      },
+      [[], [], []]
+    );
+
   return (
     <Box
       display={{ base: "none", xl: "block" }}
@@ -212,8 +256,14 @@ const BBSTodoList = () => {
               color={colorMode === "light" ? "black" : "white"}
               onClick={() => handleTodoClick(todo)}
               cursor="pointer"
+              userSelect="none"
             >
               {todo.title}
+              {todo.details.filter((detail) => detail.progress < 100).length >
+                0 &&
+                ` (${
+                  todo.details.filter((detail) => detail.progress < 100).length
+                })`}
             </Text>
           </Box>
         ))}
@@ -227,140 +277,191 @@ const BBSTodoList = () => {
           <ModalBody fontWeight={400} mb={4}>
             <TableContainer>
               <Table variant="simple">
-                <Thead>
-                  <Tr>
-                    <Th py={0} px={1}>
-                      進捗
-                    </Th>
-                    <Th py={0} px={1}>
-                      状態
-                    </Th>
-                    <Th py={0} px={1}>
-                      担当
-                    </Th>
-                    <Th py={0} px={1}>
-                      Date
-                    </Th>
-                    <Th py={0} px={1}>
-                      Value
-                    </Th>
-                  </Tr>
-                </Thead>
                 <Tbody>
-                  {selectedTodo?.details.map((detail) => (
-                    <Tr key={detail.id}>
-                      <Td p={1}>
-                        <Box
-                          p={0}
-                          width="56px"
-                          height="18px"
-                          bg="gray.200"
-                          borderRadius="md"
-                          overflow="hidden"
-                          position="relative"
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                        >
-                          <Box
-                            position="absolute"
-                            left={0}
-                            p={0}
-                            width={`${detail.progress}%`}
-                            bg="green.400"
-                            height="100%"
-                          />
-                          <Text
-                            position="relative"
-                            zIndex={1}
-                            color="white"
-                            textShadow="0 0 2px black, 0 0 2px black" // 均等に輪郭を追加
-                          >
-                            {detail.progress}
-                          </Text>
-                        </Box>
-                      </Td>
-                      <Td p={1}>
-                        <Badge
-                          colorScheme="purple"
-                          width="4rem"
-                          textAlign="center"
-                        >
-                          {detail.status}
-                        </Badge>
-                      </Td>
-                      <Td p={1}>
-                        <Avatar src={detail.user_picture} size="xs" mr={1} />
-                      </Td>
-                      <Td p={1} fontSize={11}>
-                        <Tooltip
-                          label={
-                            <>
-                              <Text>
-                                着手:
-                                {new Date(detail.created_at).toLocaleString()}
-                              </Text>
-                              <Text>
-                                完了:
-                                {detail.complete_at
-                                  ? new Date(
-                                      detail.complete_at
-                                    ).toLocaleString()
-                                  : ""}
-                              </Text>
-                            </>
-                          }
-                          aria-label="日付情報"
-                          hasArrow
-                        >
-                          <Box as="span" cursor="pointer">
-                            {detail.progress === 100
-                              ? (() => {
-                                  const createdAt = new Date(detail.created_at);
-                                  const completedAt = new Date(
-                                    detail.complete_at
-                                  );
-                                  const diffTime = Math.abs(
-                                    completedAt.getTime() - createdAt.getTime()
-                                  );
-                                  const diffDays = Math.floor(
-                                    diffTime / (1000 * 60 * 60 * 24)
-                                  );
-                                  const diffHours = Math.floor(
-                                    (diffTime / (1000 * 60 * 60)) % 24
-                                  );
-                                  if (diffDays > 0) {
-                                    return `${diffDays}日${diffHours}時間`;
-                                  } else {
-                                    return `${diffHours}時間`;
-                                  }
-                                })()
-                              : (() => {
-                                  const createdAt = new Date(detail.created_at);
-                                  const now = new Date();
-                                  const diffTime = Math.abs(
-                                    now.getTime() - createdAt.getTime()
-                                  );
-                                  const diffDays = Math.floor(
-                                    diffTime / (1000 * 60 * 60 * 24)
-                                  );
-                                  const diffHours = Math.floor(
-                                    (diffTime / (1000 * 60 * 60)) % 24
-                                  );
-                                  if (diffDays > 0) {
-                                    return `${diffDays}日${diffHours}時間`;
-                                  } else {
-                                    return `${diffHours}時間`;
-                                  }
-                                })()}
+                  <Accordion allowMultiple defaultIndex={[1]}>
+                    {groupedDetails?.map((group, index) => (
+                      <AccordionItem key={index}>
+                        <AccordionButton>
+                          <Box flex="1" textAlign="left">
+                            {index === 0
+                              ? "未着手"
+                              : index === 1
+                              ? "取組中"
+                              : "完了済"}
                           </Box>
-                        </Tooltip>
-                      </Td>
-                      <Td p={1} fontSize={13}>
-                        {detail.title}
-                      </Td>
-                    </Tr>
-                  ))}
+                          <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel>
+                          <Table variant="simple">
+                            <Thead>
+                              <Tr>
+                                <Th py={0} px={1}>
+                                  進捗
+                                </Th>
+                                <Th py={0} px={1}>
+                                  状態
+                                </Th>
+                                <Th py={0} px={1}>
+                                  担当
+                                </Th>
+                                <Th py={0} px={1}>
+                                  Date
+                                </Th>
+                                <Th py={0} px={1}>
+                                  Value
+                                </Th>
+                              </Tr>
+                            </Thead>
+                            <Tbody>
+                              {group.map((detail) => (
+                                <Tr key={detail.id}>
+                                  <Td p={1}>
+                                    <Box
+                                      p={0}
+                                      width="56px"
+                                      height="18px"
+                                      bg="gray.200"
+                                      overflow="visible"
+                                      position="relative"
+                                      display="flex"
+                                      alignItems="center"
+                                      justifyContent="center"
+                                    >
+                                      <Box
+                                        position="absolute"
+                                        left={0}
+                                        p={0}
+                                        width={`${detail.progress}%`}
+                                        bg="green.400"
+                                        height="100%"
+                                      />
+                                      <Text
+                                        position="relative"
+                                        zIndex={1}
+                                        color="white"
+                                        textShadow="0 0 2px black, 0 0 2px black"
+                                        fontSize={12}
+                                        textAlign="left"
+                                        width="100%"
+                                        pl={1}
+                                      >
+                                        {detail.progress}
+                                      </Text>
+                                    </Box>
+                                  </Td>
+                                  <Td p={1}>
+                                    <Badge
+                                      colorScheme="red"
+                                      width="4rem"
+                                      textAlign="center"
+                                    >
+                                      {detail.status}
+                                    </Badge>
+                                  </Td>
+                                  <Td p={1}>
+                                    <Tooltip
+                                      label={
+                                        <>
+                                          <Text>{detail.user_mainCompany}</Text>
+                                          <Text>{detail.user_company}</Text>
+                                          <Text>{detail.userName}</Text>
+                                        </>
+                                      }
+                                      aria-label="ユーザー情報"
+                                      hasArrow
+                                    >
+                                      <Avatar
+                                        src={detail.user_picture}
+                                        size="xs"
+                                        mr={1}
+                                      />
+                                    </Tooltip>
+                                  </Td>
+                                  <Td p={1} fontSize={11}>
+                                    <Tooltip
+                                      label={
+                                        <>
+                                          <Text>
+                                            着手:{" "}
+                                            {new Date(
+                                              detail.created_at
+                                            ).toLocaleString()}
+                                          </Text>
+                                          <Text>
+                                            完了:{" "}
+                                            {detail.complete_at
+                                              ? new Date(
+                                                  detail.complete_at
+                                                ).toLocaleString()
+                                              : ""}
+                                          </Text>
+                                        </>
+                                      }
+                                      aria-label="日付情報"
+                                      hasArrow
+                                    >
+                                      <Box as="span" cursor="default">
+                                        {detail.progress === 100
+                                          ? (() => {
+                                              const createdAt = new Date(
+                                                detail.created_at
+                                              );
+                                              const completedAt = new Date(
+                                                detail.complete_at
+                                              );
+                                              const diffTime = Math.abs(
+                                                completedAt.getTime() -
+                                                  createdAt.getTime()
+                                              );
+                                              const diffDays = Math.floor(
+                                                diffTime / (1000 * 60 * 60 * 24)
+                                              );
+                                              const diffHours = Math.floor(
+                                                (diffTime / (1000 * 60 * 60)) %
+                                                  24
+                                              );
+                                              const totalDays =
+                                                diffDays + diffHours / 24;
+                                              return `${totalDays.toFixed(
+                                                1
+                                              )}日`;
+                                            })()
+                                          : (() => {
+                                              const createdAt = new Date(
+                                                detail.created_at
+                                              );
+                                              const now = new Date();
+                                              const diffTime = Math.abs(
+                                                now.getTime() -
+                                                  createdAt.getTime()
+                                              );
+                                              const diffDays = Math.floor(
+                                                diffTime / (1000 * 60 * 60 * 24)
+                                              );
+                                              const diffHours = Math.floor(
+                                                (diffTime / (1000 * 60 * 60)) %
+                                                  24
+                                              );
+                                              const totalDays =
+                                                diffDays + diffHours / 24;
+                                              return `${totalDays.toFixed(
+                                                1
+                                              )}日`;
+                                            })()}
+                                      </Box>
+                                    </Tooltip>
+                                  </Td>
+                                  <Td p={1} fontSize={13}>
+                                    {detail.title}
+                                  </Td>
+                                </Tr>
+                              ))}
+                            </Tbody>
+                          </Table>
+                        </AccordionPanel>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
                 </Tbody>
               </Table>
             </TableContainer>

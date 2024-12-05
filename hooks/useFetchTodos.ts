@@ -25,17 +25,16 @@ const useFetchTodos = () => {
       } else {
         // 並び替えたtodosを設定
         const sortedData = data.sort((a: Todo, b: Todo) => {
-          const mainCompanyComparison = a.user_mainCompany.localeCompare(
-            b.user_mainCompany
-          );
-          if (mainCompanyComparison !== 0) return mainCompanyComparison;
+          const aCompany = a.user_mainCompany || "";
+          const bCompany = b.user_mainCompany || "";
+          const mainCompanyComparison = aCompany.localeCompare(bCompany);
 
-          const companyComparison = (a.user_company || "").localeCompare(
-            b.user_company || ""
-          );
-          if (companyComparison !== 0) return companyComparison;
+          if (mainCompanyComparison !== 0) {
+            return mainCompanyComparison;
+          }
 
-          return (a.userName || "").localeCompare(b.userName || "");
+          // 他の比較ロジックがある場合はここに追加
+          return 0;
         });
 
         setTodos(sortedData);
