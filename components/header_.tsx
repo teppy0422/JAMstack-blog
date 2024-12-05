@@ -34,9 +34,17 @@ import {
 import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
 
 import { IoMoonOutline } from "react-icons/io5";
-import { FaSun } from "react-icons/fa";
+import {
+  FaSun,
+  FaEnvelope,
+  FaCloudDownloadAlt,
+  FaKeyboard,
+} from "react-icons/fa";
+import { AiOutlineWechat } from "react-icons/ai";
 import { BsCloud, BsCloudRain, BsSun } from "react-icons/bs";
 import { ImQrcode } from "react-icons/im";
+import { PiGithubLogoFill } from "react-icons/pi";
+import { MdEditRoad } from "react-icons/md";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
 import React, { useEffect } from "react";
@@ -125,7 +133,7 @@ export default function Header() {
     cursor: "pointer",
     color: colorMode === "light" ? "white" : "white",
   });
-  const menuItem = (path_, label, useColorMode) => {
+  const menuItem = (path_, label, useColorMode, icons_) => {
     return (
       <NextLink href={path_} passHref legacyBehavior>
         <Box
@@ -161,7 +169,10 @@ export default function Header() {
                 : "white",
             }}
           >
-            {label}
+            <Flex alignItems="center" gap="3px">
+              {label}
+              {icons_}
+            </Flex>
           </Box>
         </Box>
       </NextLink>
@@ -286,7 +297,6 @@ export default function Header() {
                     <ModalHeader>QRコード</ModalHeader>
                     <ModalCloseButton _focus={{ _focus: "none" }} />
                     <ModalBody>
-                      <Text>このページのQRコード</Text>
                       <Box mt="4" display="flex" justifyContent="center">
                         {typeof window !== "undefined" && (
                           <QRCode value={window.location.href} size={80} />
@@ -294,8 +304,8 @@ export default function Header() {
                       </Box>
                     </ModalBody>
                     <ModalFooter>
-                      <Text fontSize="12px">
-                        スマホで読み込む事で簡単にアクセスできます
+                      <Text fontSize="12px" fontWeight={400}>
+                        スマホで読み込む事でこのページにアクセスできます
                       </Text>
                       {/* <Button colorScheme="gray" mr={3} onClick={onClose}>
                       閉じる
@@ -372,18 +382,48 @@ export default function Header() {
           >
             <DrawerHeader color="white">MENU</DrawerHeader>
             <DrawerBody>
-              <VStack spacing="2" align="stretch" fontWeight={400}>
+              <VStack
+                spacing="1"
+                align="stretch"
+                fontWeight={400}
+                fontSize={13}
+              >
                 <>
                   <Divider borderColor="white" />
-                  {menuItem("/roadMap", "ロードマップ", false)}
+                  {menuItem(
+                    "/roadMap",
+                    "ロードマップ",
+                    false,
+                    <MdEditRoad size={22} />
+                  )}
                   <Divider borderColor="white" />
-                  {menuItem("/skillBlogs/0000", "技術ブログ", false)}
+                  {menuItem(
+                    "/skillBlogs/0000",
+                    "技術ブログ",
+                    false,
+                    <PiGithubLogoFill size={22} />
+                  )}
                   <Divider borderColor="white" />
-                  {menuItem("/app/typing", "タイピング練習", false)}
+                  {menuItem(
+                    "/app/typing",
+                    "タイピング練習",
+                    false,
+                    <FaKeyboard size={22} />
+                  )}
                   <Divider borderColor="white" />
-                  {menuItem("/download", "ダウンロード", false)}
+                  {menuItem(
+                    "/download",
+                    "ダウンロード",
+                    false,
+                    <FaCloudDownloadAlt size={23} />
+                  )}
                   <Divider borderColor="white" />
-                  {menuItem("/BBS", "問い合わせ", false)}
+                  {menuItem(
+                    "/BBS",
+                    "問い合わせ",
+                    false,
+                    <AiOutlineWechat size={22} />
+                  )}
                   <Divider borderColor="white" />
                 </>
               </VStack>

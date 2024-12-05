@@ -149,13 +149,33 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-12-05T17:02:00+0900"
+              description1=""
+              description2="チューブリスト作成機能の追加"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.98_.zip"
+              inCharge="徳島,桑原さん,新機能"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
+              dateTime="2024-12-05T15:41:00+0900"
+              description1="端末No.が同じ部品品番で異なる条件でエラー"
+              description2="修正"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.96_.zip"
+              inCharge="高知,王さん,不具合"
+              isLatest={false}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2024-12-01T16:22:00+0900"
               description1="Ver3以降で出力したサブナンバーが上書き削除される"
               description2="高知のサブナンバーフォーマットに修正"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.92_.zip"
               inCharge="高知,王さん,不具合"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
