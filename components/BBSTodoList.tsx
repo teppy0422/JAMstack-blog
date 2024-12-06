@@ -254,8 +254,12 @@ const BBSTodoList = () => {
               fontWeight={200}
               fontFamily="Noto Sans JP"
               color={colorMode === "light" ? "black" : "white"}
-              onClick={() => handleTodoClick(todo)}
-              cursor="pointer"
+              onClick={() => {
+                if (todo.details.length > 0) {
+                  handleTodoClick(todo);
+                }
+              }}
+              cursor={todo.details.length > 0 ? "pointer" : "default"}
               userSelect="none"
             >
               {todo.title}
@@ -278,16 +282,33 @@ const BBSTodoList = () => {
             <TableContainer>
               <Table variant="simple">
                 <Tbody>
-                  <Accordion allowMultiple defaultIndex={[1]}>
+                  <Accordion
+                    allowMultiple
+                    defaultIndex={groupedDetails
+                      ?.map((group, index) => (group.length > 0 ? index : null))
+                      .filter((index) => index !== null)}
+                  >
                     {groupedDetails?.map((group, index) => (
                       <AccordionItem key={index}>
-                        <AccordionButton>
+                        <AccordionButton
+                          _disabled={{
+                            opacity: group.length === 0 ? 0.5 : 1,
+                            cursor:
+                              group.length === 0 ? "not-allowed" : "pointer",
+                          }}
+                          minWidth="80%"
+                          onClick={(e) => {
+                            if (group.length === 0) {
+                              e.preventDefault();
+                            }
+                          }}
+                        >
                           <Box flex="1" textAlign="left">
                             {index === 0
-                              ? "未着手"
+                              ? `未着手 (${group.length})`
                               : index === 1
-                              ? "取組中"
-                              : "完了済"}
+                              ? `取組中 (${group.length})`
+                              : `完了済 (${group.length})`}
                           </Box>
                           <AccordionIcon />
                         </AccordionButton>
@@ -305,10 +326,10 @@ const BBSTodoList = () => {
                                   担当
                                 </Th>
                                 <Th py={0} px={1}>
-                                  Date
+                                  経過
                                 </Th>
                                 <Th py={0} px={1}>
-                                  Value
+                                  内容
                                 </Th>
                               </Tr>
                             </Thead>

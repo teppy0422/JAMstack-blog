@@ -1955,7 +1955,7 @@ export default function Thread() {
                 })
             )}
           </Stack>
-          <Box mb="10vh" />
+          <Box mb="15vh" />
         </Content>
         <BBSTodoList />
       </div>

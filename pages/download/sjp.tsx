@@ -149,13 +149,23 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-12-06T14:19:00+0900"
+              description1="印刷シートでハメ図数が多い場合に型エラー"
+              description2="関係する変数をInteger=>Long"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.100.99_.zip"
+              inCharge="高知,王さん,不具合"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2024-12-05T17:02:00+0900"
               description1=""
               description2="チューブリスト作成機能の追加"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.100.98_.zip"
               inCharge="徳島,桑原さん,新機能"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox

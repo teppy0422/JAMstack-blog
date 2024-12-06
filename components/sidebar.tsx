@@ -13,12 +13,17 @@ import {
   useDisclosure,
   useColorMode,
   Divider,
+  Flex,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HamburgerIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
+import { PiGithubLogoFill } from "react-icons/pi";
+import { MdEditRoad } from "react-icons/md";
+import { FaCloudDownloadAlt, FaKeyboard } from "react-icons/fa";
+import { AiOutlineWechat } from "react-icons/ai";
 
 function Sidebar() {
   const [currentPath, setCurrentPath] = useState("");
@@ -38,7 +43,7 @@ function Sidebar() {
     color: colorMode === "light" ? "white" : "white",
   });
 
-  const menuItem = (path_, label, useColorMode) => {
+  const menuItem = (path_, label, useColorMode, icons_) => {
     return (
       <NextLink href={path_} passHref legacyBehavior>
         <Box
@@ -83,7 +88,10 @@ function Sidebar() {
                 : "white",
             }}
           >
-            {label}
+            <Flex alignItems="center" gap="3px">
+              {label}
+              {icons_}
+            </Flex>
           </Box>
         </Box>
       </NextLink>
@@ -105,12 +113,27 @@ function Sidebar() {
         zIndex="1100"
         fontWeight={400}
       >
-        <VStack spacing="2" align="stretch">
-          {menuItem("/roadMap", "ロードマップ", true)}
-          {menuItem("/skillBlogs/0000", "技術ブログ", true)}
-          {menuItem("/app/typing", "タイピング練習", true)}
-          {menuItem("/download", "ダウンロード", true)}
-          {menuItem("/BBS", "問い合わせ", true)}
+        <VStack spacing="1" align="stretch" fontSize={14}>
+          {menuItem("/roadMap", "ロードマップ", true, <MdEditRoad size={21} />)}
+          {menuItem(
+            "/skillBlogs/0000",
+            "技術ブログ",
+            true,
+            <PiGithubLogoFill size={22} />
+          )}
+          {menuItem(
+            "/app/typing",
+            "タイピング練習",
+            true,
+            <FaKeyboard size={21} />
+          )}
+          {menuItem(
+            "/download",
+            "ダウンロード",
+            true,
+            <FaCloudDownloadAlt size={22} />
+          )}
+          {menuItem("/BBS", "問い合わせ", true, <AiOutlineWechat size={22} />)}
         </VStack>
       </Box>
       <IconButton
