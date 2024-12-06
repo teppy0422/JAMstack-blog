@@ -285,8 +285,10 @@ const BBSTodoList = () => {
                   <Accordion
                     allowMultiple
                     defaultIndex={groupedDetails
-                      ?.map((group, index) => (group.length > 0 ? index : null))
-                      .filter((index) => index !== null)}
+                      ?.map((group, index) =>
+                        index !== 2 && group.length > 0 ? index : null
+                      )
+                      .filter((index) => index !== null)} // indexが2またはgroup.lengthが0の場合を除外
                   >
                     {groupedDetails?.map((group, index) => (
                       <AccordionItem key={index}>
