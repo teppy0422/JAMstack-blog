@@ -67,7 +67,52 @@ interface BBSTodoListProps {
   userName: string;
   userId: string;
 }
+let cachedUsers: any[] | null = null;
+const fetchUsers3 = async () => {
+  if (cachedUsers) {
+    return cachedUsers;
+  }
+  const { data, error } = await supabase.from("table_users").select("*");
 
+  if (error) {
+    console.error("Error fetching users:", error);
+    return null;
+  }
+  cachedUsers = data;
+  return cachedUsers;
+};
+const getUserById3 = async (userId: string) => {
+  const users = await fetchUsers3();
+  if (!users) {
+    console.error("No users found");
+    return null;
+  }
+  const user = users.find((user) => user.id === userId);
+  if (!user) {
+    console.error(`User with id ${userId} not found`);
+    return null;
+  }
+  return {
+    name: user?.user_metadata?.name || "Unknown User",
+    pictureUrl: user?.picture_url || "No Picture",
+  };
+};
+const fetchUser3 = async (userId: string) => {
+  const { data, error } = await supabase
+    .from("table_users")
+    .select("*") // 必要なフィールドを選択
+    .eq("id", userId)
+    .single();
+
+  if (error) {
+    console.error(`Error fetching user with id ${userId}:`, error);
+    return null;
+  }
+  return {
+    name: data?.user_metadata?.name || "Unknown User",
+    pictureUrl: data?.user_metadata?.picture_url || "No Picture",
+  };
+};
 export default function Thread() {
   const router = useRouter();
   const { id } = useParams() as { id: string };
@@ -115,7 +160,7 @@ export default function Thread() {
   const [hasMore, setHasMore] = useState(true); // 追加: さらに読み込む投稿があるかどうかを管理
   const [loading, setLoading] = useState(false); // 追加: ローディング状態を管理
   const [initialLoadComplete, setInitialLoadComplete] = useState(false); // 初回ロード完了フラグ
-  const postsPerPage = 20; // 1回の取得で読み込む投稿数
+  const postsPerPage = 40; // 1回の取得で読み込む投稿数
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
@@ -304,7 +349,6 @@ export default function Thread() {
   const [postUserIds, setPostUserIds] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log("fetchUsers2-1"); // 追加: 実行確認用のログ
     const fetchUsers2 = async () => {
       // table_usersからすべてのデータを取得
       const { data: usersData, error: usersError } = await supabase
@@ -566,7 +610,7 @@ export default function Thread() {
       setHasMore(newPosts.length === postsPerPage); // 20件取得できた場合はさらに読み込む可能性がある
     }
     setLoading(false);
-    window.scrollBy(0, 200);
+    window.scrollBy(0, 300);
     // 初回ロードが完了したら下までスクロール
     if (!initialLoadComplete) {
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
@@ -829,8 +873,35 @@ export default function Thread() {
                 fontSize="12px"
                 fontWeight="bold"
                 ml="0"
+                cursor="default"
               >
-                {readByCount}
+                <Tooltip
+                  label={
+                    read_by &&
+                    read_by.length > 0 && (
+                      <>
+                        {read_by.map(async (reader, index) => {
+                          const user = await getUserById3(reader);
+                          return (
+                            <Flex alignItems="center">
+                              <Avatar
+                                src={user?.pictureUrl}
+                                boxSize="12px"
+                                mr={2}
+                              />
+                              <Text key={index}>
+                                {user ? user.name : "Unknown User"}
+                              </Text>
+                            </Flex>
+                          );
+                        })}
+                      </>
+                    )
+                  }
+                  aria-label="Read by users"
+                >
+                  <span>{readByCount}</span>
+                </Tooltip>
               </Box>
             )}
             {isRight && hasMasterUserId ? (
