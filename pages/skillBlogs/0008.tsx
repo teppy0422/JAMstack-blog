@@ -108,7 +108,7 @@ const BlogPage: React.FC = () => {
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
-  const readByCount = useReadCount(userId);
+  const { readByCount } = useReadCount(userId);
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
@@ -882,7 +882,7 @@ const BlogPage: React.FC = () => {
               borderColor={colorMode === "light" ? "black" : "white"}
             />
             <Text mb={4}>
-              08_hsfデー��変換に入れた
+              08_hsfデータ変換に入れた
               <Icon as={FaFolder} color="gray.600" mx={1} />
               MDを分解します
             </Text>
@@ -1112,7 +1112,7 @@ const BlogPage: React.FC = () => {
                 <Text ml={1}>部材詳細の再取得</Text>
               </Flex>
               <Text ml={4}>
-                チェックを入れると、生産準備+のサーバーに部品品番の詳細情報が���る場合でも取得しなおします。
+                チェックを入れると、生産準備+のサーバーに部品品番の詳細情報がある場合でも取得しなおします。
                 通常は必要ありません。取得する詳細情報をあたらしく追加した場合に使用します。
               </Text>
             </OptionalBox>

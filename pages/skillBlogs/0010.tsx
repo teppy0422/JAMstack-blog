@@ -115,7 +115,7 @@ const BlogPage: React.FC = () => {
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
-  const readByCount = useReadCount(userId);
+  const { readByCount } = useReadCount(userId);
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
@@ -388,7 +388,7 @@ const BlogPage: React.FC = () => {
             <br />
             ※200Pは動作未確認です。不具合がある場合は連絡をお願いします。
             <br />
-            ②YICと接続したシリアルポート番号���選択。背景色が白で接続完了です。
+            ②YICと接続したシリアルポート番号を選択。背景色が白になったら接続完了です。
             <br />
             ③ｲﾝﾗｲﾝ色の選択。
             <br />

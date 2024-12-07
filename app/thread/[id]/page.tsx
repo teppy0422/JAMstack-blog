@@ -1160,9 +1160,9 @@ export default function Thread() {
                   setReplyPostFileUrl(null); // リプライ対象のファイルURLをリセット
                 }}
                 position="absolute"
-                variant="ghost" // ボタンのスタイルを設定
-                size="sm" // ボタンのサイズを設定
-                ml="2" // ボタンとリプライ情報の間にマージン��追加
+                variant="ghost"
+                size="sm"
+                ml="2"
                 top="1"
                 right="1"
                 _hover={{ backgroundColor: "transparent" }}
