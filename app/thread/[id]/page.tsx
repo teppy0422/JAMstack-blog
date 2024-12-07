@@ -886,7 +886,7 @@ export default function Thread() {
                             <Flex alignItems="center">
                               <Avatar
                                 src={user?.pictureUrl}
-                                boxSize="12px"
+                                boxSize="14px"
                                 mr={2}
                               />
                               <Text key={index}>
@@ -1086,20 +1086,22 @@ export default function Thread() {
               p="0px"
               mx="0px"
               pb="10px"
+              fontFamily="Noto Sans JP"
+              fontWeight="400"
               direction="row"
               alignItems="flex-start"
               borderRadius="0px"
-              animation="slideIn 0.3s ease-out" // アニメーションを適用
+              animation="slideIn 0.3s ease-out"
             >
               {getAvatarProps(replyPostUserId, true, "sm")}
               <Stack ml="1">
                 <Flex alignItems="center" mb="0">
-                  <Text fontWeight="bold" m="0" lineHeight="0.5" mr="1">
+                  <Text fontWeight="400" m="0" lineHeight="0.5" mr="1">
                     {replyPostUserDisplayName}
                   </Text>
                   <Text
                     fontSize="xs"
-                    color="gray.600"
+                    color="gray.900"
                     fontStyle="italic"
                     lineHeight="0.5"
                   >
@@ -1113,7 +1115,7 @@ export default function Thread() {
                   overflow="hidden"
                   textOverflow="ellipsis"
                   position="relative"
-                  maxWidth="80vw"
+                  maxWidth="85vw"
                   fontSize="xs"
                 >
                   {replyPostContent}
@@ -1433,7 +1435,6 @@ export default function Thread() {
                   if (post.content.match(/:(.*?):/)) {
                     return (
                       <React.Fragment key={`${post.created_at}-${index}`}>
-                        {/* Fragmentにkeyを設定 */}
                         {isNewDay && (
                           <Flex
                             key={`${post.created_at}-${index}`} // ここにkeyを設定
@@ -1747,17 +1748,18 @@ export default function Thread() {
                                     alignItems="center"
                                     mb="0"
                                     lineHeight="1.4"
+                                    fontFamily="Noto Sans JP"
+                                    fontWeight="300"
                                   >
-                                    <Text
-                                      color="black"
-                                      fontSize="12px" // ユーザーネームのフォントサイズを調整
-                                      fontWeight="bold" // ユーザーネームを太字に設定
-                                      mr="1" // ユーザーネームと会社名の間にマージンを追加
-                                    >
+                                    <Text color="black" fontSize="12px" mr="1">
                                       {getUserById(post.reply_user_id)
                                         ?.displayName || "未登録"}
                                     </Text>
-                                    <Text fontSize="10px" color="gray.500">
+                                    <Text
+                                      fontSize="10px"
+                                      fontWeight="300"
+                                      color="gray.800"
+                                    >
                                       -
                                       {getUserById(post.reply_user_id)
                                         ?.userCompany || "未登録"}
@@ -1766,6 +1768,8 @@ export default function Thread() {
                                   </Flex>
                                   <Text
                                     color="black"
+                                    fontFamily="Noto Sans JP"
+                                    fontWeight="200"
                                     fontSize="10px"
                                     noOfLines={1} // 1行まで表示
                                     isTruncated // 改行が必要な場合は...を表示
@@ -1862,7 +1866,7 @@ export default function Thread() {
                               <Divider borderColor="gray.400" />
                             </CardBody>
                           )}
-                          <CardBody px="10px" py="8px">
+                          <CardBody px="8px" py="5px">
                             <Box
                               fontFamily="Noto Sans JP"
                               fontWeight="200"

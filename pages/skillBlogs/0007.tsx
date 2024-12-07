@@ -28,6 +28,9 @@ import {
   ModalFooter,
   Button,
   Flex,
+  Icon,
+  createIcon,
+  Spacer,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
@@ -43,6 +46,9 @@ import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
 import DownloadLink from "./DownloadLink";
 import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
+import { useUserData } from "../../hooks/useUserData";
+import { useUserInfo } from "../../hooks/useUserId";
+import { useReadCount } from "../../hooks/useReadCount";
 
 import "@fontsource/noto-sans-jp";
 
@@ -74,7 +80,26 @@ const kbdStyle = {
   borderRadius: "3px",
   color: "black",
 };
+const CustomIcon = createIcon({
+  displayName: "CustomIcon",
+  viewBox: "0 0 26 26",
+  path: (
+    <path
+      d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  ),
+});
 const BlogPage: React.FC = () => {
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
+  const readByCount = useReadCount(userId);
+
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
@@ -169,14 +194,20 @@ const BlogPage: React.FC = () => {
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs}>
-        <Box>
+        <Box w="100%">
           <HStack spacing={2} align="center" mb={1} ml={1}>
             <AvatarGroup size="sm" spacing={-1.5}>
               <Avatar src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp" />
             </AvatarGroup>
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>開発</Text>
+            <Text>開発</Text> <Spacer />
+            <Flex justifyContent="flex-end">
+              <Text>
+                <Icon as={CustomIcon} mr={0} />
+                {readByCount}
+              </Text>
+            </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
             生産準備+の練習(初級)

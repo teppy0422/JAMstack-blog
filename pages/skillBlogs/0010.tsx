@@ -29,6 +29,8 @@ import {
   Button,
   Flex,
   Icon,
+  createIcon,
+  Spacer,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import {
@@ -57,6 +59,10 @@ import ExternalLink from "./ExternalLink";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import ImageSliderModal from "./ImageSliderModal"; // モーダルコンポーネントをインポート
 import ReferenceSettingModal from "./referenceSettingModal";
+import { useUserData } from "../../hooks/useUserData";
+import { useUserInfo } from "../../hooks/useUserId";
+import { supabase } from "../../utils/supabase/client";
+import { useReadCount } from "../../hooks/useReadCount";
 
 import "@fontsource/noto-sans-jp";
 import { BsFiletypeExe } from "react-icons/bs";
@@ -91,7 +97,26 @@ const kbdStyle = {
   borderRadius: "3px",
   color: "black",
 };
+const CustomIcon = createIcon({
+  displayName: "CustomIcon",
+  viewBox: "0 0 26 26",
+  path: (
+    <path
+      d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  ),
+});
 const BlogPage: React.FC = () => {
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
+  const readByCount = useReadCount(userId);
+
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
@@ -179,58 +204,6 @@ const BlogPage: React.FC = () => {
     setActiveDrawer(null);
     onClose();
   };
-  //生産準備+着手からの経過日数の計算
-  const calculateElapsedTime = () => {
-    const startDate = new Date(2016, 6, 11); // 月は0から始まるので7月は6
-    const today = new Date();
-    const diffTime = Math.abs(today.getTime() - startDate.getTime());
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    const years = Math.floor(diffDays / 365);
-    const months = Math.floor((diffDays % 365) / 30); // おおよその月数
-    const days = (diffDays % 365) % 30;
-    return `${years}年${months}ヶ月${days}日`;
-  };
-  type FileSystemItem = {
-    name: string;
-    type: "folder" | "file"; // 'folder' または 'file' のみを許可する
-    children?: FileSystemItem[];
-    popOver?: string;
-    isOpen?: boolean;
-    icon?;
-  };
-  const directoryData: FileSystemItem = {
-    name: "任意のフォルダ",
-    type: "folder",
-    isOpen: true,
-    popOver: "※社内間でアクセスできるNASSサーバーに作成がお勧め",
-    children: [
-      {
-        name: "メーカー名Aのフォルダ",
-        type: "folder",
-        isOpen: true,
-        children: [
-          {
-            name: "車種_モデル名のフォルダ",
-            type: "folder",
-            isOpen: true,
-            children: [
-              {
-                name: "Sjp3.100.89_Gタイプ.xlsm",
-                type: "file",
-                popOver:
-                  "ダウンロードした生産準備+をここに配置。治具タイプを末尾に付ける事をお勧めします。ここではGタイプの治具の場合です。",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "メーカー名Bのフォルダ",
-        type: "folder",
-        isOpen: false,
-      },
-    ],
-  };
 
   useEffect(() => {
     setIsClient(true);
@@ -238,10 +211,11 @@ const BlogPage: React.FC = () => {
   if (!isClient) {
     return null; // クライアントサイドでのみ表示する場合はnullを返す
   }
+
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs}>
-        <Box>
+        <Box w="100%">
           <HStack spacing={2} align="center" mb={1} ml={1}>
             <AvatarGroup size="sm" spacing={-1.5}>
               <Avatar src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp" />
@@ -249,6 +223,13 @@ const BlogPage: React.FC = () => {
             <Text>@kataoka</Text>
             <Text>in</Text>
             <Text>開発</Text>
+            <Spacer />
+            <Flex justifyContent="flex-end">
+              <Text>
+                <Icon as={CustomIcon} mr={0} />
+                {readByCount}
+              </Text>
+            </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
             誘導ポイント設定一覧表の使い方
@@ -304,7 +285,7 @@ const BlogPage: React.FC = () => {
             <br />
             スクリーンショットが撮れないのではっきりしません。
             <br />
-            参照不可になってる場合はその画面を「問い合わせ」のチャットから送ってください。
+            参照不可になってる場合はその画面を「問い合わせ」チャットから送ってください。
             <br />
             その場合の手順をここに追記します。
           </Text>
@@ -407,7 +388,7 @@ const BlogPage: React.FC = () => {
             <br />
             ※200Pは動作未確認です。不具合がある場合は連絡をお願いします。
             <br />
-            ②YICと接続したシリアルポート番号の選択。背景色が白で接続完了です。
+            ②YICと接続したシリアルポート番号���選択。背景色が白で接続完了です。
             <br />
             ③ｲﾝﾗｲﾝ色の選択。
             <br />

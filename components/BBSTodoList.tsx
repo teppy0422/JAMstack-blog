@@ -288,7 +288,7 @@ const BBSTodoList = () => {
                       ?.map((group, index) =>
                         index !== 2 && group.length > 0 ? index : null
                       )
-                      .filter((index) => index !== null)} // indexが2またはgroup.lengthが0の場合を除外
+                      .filter((index): index is number => index !== null)} // nullを除外
                   >
                     {groupedDetails?.map((group, index) => (
                       <AccordionItem key={index}>
