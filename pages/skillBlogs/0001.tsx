@@ -42,20 +42,6 @@ import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
 
 import "@fontsource/noto-sans-jp";
-
-const customTheme = extendTheme({
-  fonts: {
-    heading: "'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
-  },
-  fontWeights: {
-    normal: 200,
-    medium: 300,
-    bold: 400,
-    light: 300,
-    extraLight: 100,
-  },
-});
 //テキストジャンプアニメーション
 const jumpAnimation = keyframes`
   0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
@@ -89,7 +75,7 @@ const BlogPage: React.FC = () => {
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
-  const readByCount = useReadCount(userId);
+  const { readByCount } = useReadCount(userId);
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
@@ -474,7 +460,7 @@ const BlogPage: React.FC = () => {
             type: "folder",
             isOpen: false,
             popOver:
-              "分解したデータ\nこれは古い生産準備+で使用していた���ので通常は使用しません",
+              "分解したデータ\nこれは古い生産準備+で使用していたデータで通常は使用しません",
             children: [
               {
                 name: "N090195",

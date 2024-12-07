@@ -89,7 +89,7 @@ const BlogPage: React.FC = () => {
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
-  const readByCount = useReadCount(userId);
+  const { readByCount } = useReadCount(userId);
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);

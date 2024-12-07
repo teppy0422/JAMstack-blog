@@ -6,55 +6,64 @@ body {
     height: 100%;
     overflow: hidden;
     -ms-overflow-style: none;
-    background-image: 
+    background-image:
         linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc),
         linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc);
     background-size: 20px 20px;
     background-position: 0 0, 10px 10px;
 }
+
 table {
     table-layout: fixed;
-    width:100%;
-    background-color:#FFFFFF;
-    text-align:center;
+    width: 100%;
+    background-color: #FFFFFF;
+    text-align: center;
     color: #000000;
-    font-size:14pt;
+    font-size: 14pt;
     font-weight: bold;
     border-collapse: collapse;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    border-bottom:0px solid #000000;
+    border-bottom: 0px solid #000000;
 }
-table td {
-    border: 1px solid  #000000; /* �\�����̐��F1px,����,�ΐF */
-    border-left:2px solid #000000;
-    border-right:2px solid  #000000;
-    padding: 1px;            /* �Z�������̗]���F3�s�N�Z�� */
-}
-.box1 img{
 
-    position:absolute;
-    width:auto;
-    height:auto;
-    max-width:100%;
-    max-height:95%;
+table td {
+    border: 1px solid #000000;
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+    padding: 1px;
 }
-.box1 {
-}
-#box2 img{
-    filter:alpha(opacity=60); /* IE 6,7*/
+
+.box1 img {
+
     position: absolute;
-    width:100%;
-    opacity:0.8;
-    zoom:1;
-    display:inline-block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 95%;
 }
-#box3 img{
-    position:absolute;
-    width:100%;
+
+#box2 img {
+    filter: alpha(opacity=60);
+    /* IE 6,7*/
+    position: absolute;
+    width: 100%;
+    opacity: 0.8;
+    zoom: 1;
+    display: inline-block;
 }
-#box4 img{
-    position:absolute;
-    bottom:0%;
-    width:100%;
+
+#box3 img {
+    position: absolute;
+    width: 100%;
 }
-.myB{color:#000000;background-color:#FFFFFF;}
+
+#box4 img {
+    position: absolute;
+    bottom: 0%;
+    width: 100%;
+}
+
+.myB {
+    color: #000000;
+    background-color: #FFFFFF;
+}

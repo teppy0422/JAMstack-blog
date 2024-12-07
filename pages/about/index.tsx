@@ -29,7 +29,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 export default function About() {
-  //AOS用_ページ遷移時に表示されない��らだけど変化しない
+  //AOS用_ページ遷移時に表示されないらだけど変化しない
   const router = useRouter();
   useEffect(() => {
     router.events.on("routeChangeComplete", handleChangeRoute);

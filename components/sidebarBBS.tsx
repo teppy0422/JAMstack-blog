@@ -125,7 +125,7 @@ function SidebarBBS() {
     w: "full",
     _hover: { bg: "gray.900" },
     cursor: "pointer",
-    // colorScheme: currentPath === path ? "red" : "gray", // 現在のパスと一致する場合は赤色テーマ、そうでなければ灰色��ーマ
+    // colorScheme: currentPath === path ? "red" : "gray", //
     color: colorMode === "light" ? "white" : "white",
   });
   useEffect(() => {

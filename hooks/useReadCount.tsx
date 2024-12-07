@@ -3,6 +3,25 @@ import { supabase } from "../utils/supabase/client";
 
 export const useReadCount = (userId: string | null) => {
   const [readByCount, setReadByCount] = useState(0);
+  const [skillBlogsData, setSkillBlogsData] = useState<
+    { url: string; readBy: string[] }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchSkillBlogsData = async () => {
+      const { data, error } = await supabase
+        .from("skillBlogs")
+        .select("url, readBy");
+
+      if (error) {
+        console.error("Error fetching skillBlogs data:", error);
+      } else {
+        setSkillBlogsData(data || []);
+      }
+    };
+
+    fetchSkillBlogsData();
+  }, []);
 
   useEffect(() => {
     const fetchReadCount = async () => {
@@ -24,6 +43,7 @@ export const useReadCount = (userId: string | null) => {
 
   useEffect(() => {
     let hasInserted = false;
+
     const handleScroll = async () => {
       if (userId === null) {
         console.log("userId is null");
@@ -70,5 +90,6 @@ export const useReadCount = (userId: string | null) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [userId]);
-  return readByCount;
+
+  return { readByCount, skillBlogsData };
 };

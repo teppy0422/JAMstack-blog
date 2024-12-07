@@ -1,41 +1,52 @@
-h1,h2,h4,h5,h6{
-  color:#FFFFFF;
+h1,
+h2,
+h4,
+h5,
+h6 {
+  color: #FFFFFF;
 }
-h1{
-  font-size:100px;
-  margin:0;
+
+h1 {
+  font-size: 100px;
+  margin: 0;
 }
-h2{
-  font-size:60px;
-  margin:1em 0 0 0;
+
+h2 {
+  font-size: 60px;
+  margin: 1em 0 0 0;
 }
-h3{
-  font-size:40px;
-  color:#555;
-  margin:0;
+
+h3 {
+  font-size: 40px;
+  color: #555;
+  margin: 0;
 }
+
 table {
-    table-layout: fixed;
-    width:100%;
-    background-color:#FFFFFF;
-    text-align:center;
-    color: #000000;
-    font-size:14pt;
-    font-weight: bold;
-    border-collapse: collapse;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    border-bottom:0px solid #000000;
+  table-layout: fixed;
+  width: 100%;
+  background-color: #FFFFFF;
+  text-align: center;
+  color: #000000;
+  font-size: 14pt;
+  font-weight: bold;
+  border-collapse: collapse;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  border-bottom: 0px solid #000000;
 }
+
 table td {
-    border: 1px solid  #000000; /* �\�����̐��F1px,����,�ΐF */
-    border-left:2px solid #000000;
-    border-right:2px solid  #000000;
-    padding: 1px;            /* �Z�������̗]���F3�s�N�Z�� */
+  border: 1px solid #000000;
+  border-left: 2px solid #000000;
+  border-right: 2px solid #000000;
+  padding: 1px;
 }
+
 body {
   margin: 0;
   text-align: center;
 }
+
 .holder,
 .first,
 .second,
@@ -43,57 +54,128 @@ body {
   height: 95vh;
   width: 100vw;
 }
+
 .first,
 .second,
 .third {
   position: absolute;
 }
+
 .second,
 .third {
   opacity: 0;
 }
+
 .holder {
   height: 100vh;
   position: relative;
   z-index: 1;
 }
+
 .first {
   animation: first 10s infinite;
   background: linear-gradient(#5ff8ca, #60e08c);
   z-index: 10;
 }
-  @keyframes first {
-    0% {opacity: 1.0;}
-    10% {opacity: 0.8;}
-    20% {opacity: 0.6;}
-    30% {opacity: 0.4;}
-    40% {opacity: 0.2;}
-    50% {opacity: 0.1;}
-    60% {opacity: 0.2;}
-    70% {opacity: 0.4;}
-    80% {opacity: 0.6;}
-    90% {opacity: 0.8;}
-    100% {opacity: 1.0;}
+
+@keyframes first {
+  0% {
+    opacity: 1.0;
   }
 
+  10% {
+    opacity: 0.8;
+  }
+
+  20% {
+    opacity: 0.6;
+  }
+
+  30% {
+    opacity: 0.4;
+  }
+
+  40% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 0.1;
+  }
+
+  60% {
+    opacity: 0.2;
+  }
+
+  70% {
+    opacity: 0.4;
+  }
+
+  80% {
+    opacity: 0.6;
+  }
+
+  90% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 1.0;
+  }
+}
+
 .second {
-  animation: second 10s infinite; animation-delay: 2s;
+  animation: second 10s infinite;
+  animation-delay: 2s;
   background: linear-gradient(#19eaa6, #00a1f0);
   z-index: 20;
 }
-  @keyframes second {
-    0% {opacity: 0;}
-    10% {opacity: 0.2;}
-    20% {opacity: 0.4;}
-    30% {opacity: 0.6;}
-    40% {opacity: 0.8;}
-    50% {opacity: 1.0;}
-    60% {opacity: 0.8;}
-    70% {opacity: 0.6;}
-    80% {opacity: 0.4;}
-    90% {opacity: 0.2;}
-    100% {opacity: 0;}
+
+@keyframes second {
+  0% {
+    opacity: 0;
   }
+
+  10% {
+    opacity: 0.2;
+  }
+
+  20% {
+    opacity: 0.4;
+  }
+
+  30% {
+    opacity: 0.6;
+  }
+
+  40% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1.0;
+  }
+
+  60% {
+    opacity: 0.8;
+  }
+
+  70% {
+    opacity: 0.6;
+  }
+
+  80% {
+    opacity: 0.4;
+  }
+
+  90% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
 
 .third {
   animation: third 10s infinite;
@@ -101,19 +183,52 @@ body {
   background: linear-gradient(#aab7f8, #ff75c6);
   z-index: 30;
 }
-  @keyframes third {
-    0% {opacity: 0;}
-    10% {opacity: 0.2;}
-    20% {opacity: 0.4;}
-    30% {opacity: 0.6;}
-    40% {opacity: 0.8;}
-    50% {opacity: 1.0;}
-    60% {opacity: 0.8;}
-    70% {opacity: 0.6;}
-    80% {opacity: 0.4;}
-    90% {opacity: 0.2;}
-    100% {opacity: 0;}
+
+@keyframes third {
+  0% {
+    opacity: 0;
   }
+
+  10% {
+    opacity: 0.2;
+  }
+
+  20% {
+    opacity: 0.4;
+  }
+
+  30% {
+    opacity: 0.6;
+  }
+
+  40% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1.0;
+  }
+
+  60% {
+    opacity: 0.8;
+  }
+
+  70% {
+    opacity: 0.6;
+  }
+
+  80% {
+    opacity: 0.4;
+  }
+
+  90% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
 
 .txt {
   margin-top: 0;
@@ -121,6 +236,7 @@ body {
   width: 100%;
   z-index: 1000;
 }
+
 /* 吹き出し */
 .balloon2-left {
   position: relative;
@@ -134,8 +250,8 @@ body {
   background: #FFF;
   border: solid 3px #555;
   box-sizing: border-box;
-  top:-170px;
-  left:-10px;
+  top: -170px;
+  left: -10px;
   border-radius: 13px;
 }
 
@@ -165,31 +281,70 @@ body {
   margin: 0;
   padding: 0;
 }
-p{
-  font-size:20px;
+
+p {
+  font-size: 20px;
 }
-img{
-  margin-left:180px;
-  height:300px;
-}    
+
+img {
+  margin-left: 180px;
+  height: 300px;
+}
+
 /* CSSアニメーションの設定 */
 .purupuru {
   -webkit-animation: purupuru 0.8s linear 0s 1;
   animation: purupuru 0.8s linear 0s 1;
 }
+
 @-webkit-keyframes purupuru {
-  0%   { -webkit-transform: scale(1.0, 1.0) translate(0%, 0%); }
-  20%  { -webkit-transform: scale(1.0, 1.06) translate(-5%, -4%) skew(6deg, 0deg); }
-  50%  { -webkit-transform: scale(1.0, 0.94) translate(5%, 4%) skew(-6deg, 0deg); }
-  65%  { -webkit-transform: scale(1.0, 1.03) translate(2%, -2%) skew(-3deg, 0deg); }
-  80%  { -webkit-transform: scale(1.0, 0.97) translate(-2%, 2%) skew(3deg, 0deg); }
-  100% { -webkit-transform: scale(1.0, 1.0) translate(0%, 0%); }
+  0% {
+    -webkit-transform: scale(1.0, 1.0) translate(0%, 0%);
+  }
+
+  20% {
+    -webkit-transform: scale(1.0, 1.06) translate(-5%, -4%) skew(6deg, 0deg);
+  }
+
+  50% {
+    -webkit-transform: scale(1.0, 0.94) translate(5%, 4%) skew(-6deg, 0deg);
+  }
+
+  65% {
+    -webkit-transform: scale(1.0, 1.03) translate(2%, -2%) skew(-3deg, 0deg);
+  }
+
+  80% {
+    -webkit-transform: scale(1.0, 0.97) translate(-2%, 2%) skew(3deg, 0deg);
+  }
+
+  100% {
+    -webkit-transform: scale(1.0, 1.0) translate(0%, 0%);
+  }
 }
+
 @keyframes purupuru {
-  0%   { transform: scale(1.0, 1.0) translate(0%, 0%); }
-  20%  { transform: scale(1.0, 1.06) translate(-5%, -4%) skew(6deg, 0deg); }
-  50%  { transform: scale(1.0, 0.94) translate(5%, 4%) skew(-6deg, 0deg); }
-  65%  { transform: scale(1.0, 1.03) translate(2%, -2%) skew(-3deg, 0deg); }
-  80%  { transform: scale(1.0, 0.97) translate(-2%, 2%) skew(3deg, 0deg); }
-  100% { transform: scale(1.0, 1.0) translate(0%, 0%); }
+  0% {
+    transform: scale(1.0, 1.0) translate(0%, 0%);
+  }
+
+  20% {
+    transform: scale(1.0, 1.06) translate(-5%, -4%) skew(6deg, 0deg);
+  }
+
+  50% {
+    transform: scale(1.0, 0.94) translate(5%, 4%) skew(-6deg, 0deg);
+  }
+
+  65% {
+    transform: scale(1.0, 1.03) translate(2%, -2%) skew(-3deg, 0deg);
+  }
+
+  80% {
+    transform: scale(1.0, 0.97) translate(-2%, 2%) skew(3deg, 0deg);
+  }
+
+  100% {
+    transform: scale(1.0, 1.0) translate(0%, 0%);
+  }
 }

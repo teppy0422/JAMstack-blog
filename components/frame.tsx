@@ -23,6 +23,7 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  createIcon,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
@@ -32,6 +33,7 @@ import { useCustomToast } from "./customToast";
 import { useDisclosure } from "@chakra-ui/react";
 import { useUserInfo } from "../hooks/useUserId";
 import { useUserData } from "../hooks/useUserData";
+import { useReadCount } from "../hooks/useReadCount";
 
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";
@@ -49,7 +51,20 @@ const customTheme = extendTheme({
     extraLight: 100,
   },
 });
-
+const CustomIcon = createIcon({
+  displayName: "CustomIcon",
+  viewBox: "0 0 26 26",
+  path: (
+    <path
+      d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"
+      fill="gray"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  ),
+});
 const Frame: React.FC<{
   children: React.ReactNode;
   sections?: any;
@@ -67,6 +82,11 @@ const Frame: React.FC<{
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
+  const { readByCount, skillBlogsData } = useReadCount(userId);
+
+  useEffect(() => {
+    console.log("Skill Blogs Data:", skillBlogsData);
+  }, [skillBlogsData]);
   //64pxまでスクロールしないとサイドバーが表示されないから暫定
   useEffect(() => {
     const hash = window.location.hash;
@@ -74,7 +94,7 @@ const Frame: React.FC<{
       setTimeout(() => {
         const element = document.querySelector(hash);
         if (element) {
-          const yOffset = -64; // 64pxのオフセット
+          const yOffset = -64;
           const y =
             element.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({ top: y, behavior: "smooth" });
@@ -137,6 +157,29 @@ const Frame: React.FC<{
   const [currentPath, setCurrentPath] = useState("");
   const [accordionIndex, setAccordionIndex] = useState<number[]>([]);
   const createLinkPanel = (path: string, text: string) => {
+    const pathParts = path.split("/").filter(Boolean);
+    const secondPart = pathParts[1]; // 2番目の要素を取得
+    console.log("■■■■■■■■■■");
+    console.log(secondPart);
+    console.log(userId);
+    console.log(skillBlogsData);
+
+    let isReadByUser;
+    if (secondPart === undefined) {
+      isReadByUser = true;
+    } else {
+      const matchingData =
+        skillBlogsData.find((data) => data.url === secondPart)?.readBy || [];
+
+      console.log(matchingData);
+      if (!matchingData) {
+        console.log("No matching data found for userId:", userId);
+        console.log("Skill Blogs Data:", skillBlogsData); // skillBlogsDataの内容をログに出力
+      }
+      isReadByUser = matchingData.includes(userId ?? ""); // matchingDataにuserIdが含まれるか確認
+      console.log(`User has read: ${isReadByUser}`);
+    }
+
     const linkStyles = {
       fontSize: "13px",
       ml: 4,
@@ -155,6 +198,7 @@ const Frame: React.FC<{
       <AccordionPanel m={0} p={0}>
         <Link href={path} {...linkStyles}>
           {text}
+          {!isReadByUser && <CustomIcon />}
         </Link>
       </AccordionPanel>
     );
