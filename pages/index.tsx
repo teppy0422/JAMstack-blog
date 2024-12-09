@@ -20,6 +20,7 @@ import Moment from "react-moment";
 import { motion } from "framer-motion";
 
 import InfiniteScroll from "react-infinite-scroller";
+import "@fontsource/noto-sans-jp";
 
 export default function Home({ blog, category, tag, blog2 }) {
   const [showBlogs, setShowBlogs] = useState(blog);
@@ -28,72 +29,73 @@ export default function Home({ blog, category, tag, blog2 }) {
   const bg = useColorModeValue("gray.100", "pink.100");
   const color = useColorModeValue("#111111", "#111111");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
-  return <>
-    <Content isCustomHeader={false}>
-      <ul>
-        {/* tagにデータが無い場合 */}
-        {!tag.length && <Text>there are no posts...</Text>}
-        {tag.map((tag) => (
-          <Tag
-            key={tag.name}
-            bg={bg}
-            className={styles.tags}
-            onClick={(e) => testtttt(e, blog, tag, setShowBlogs)}
-          >
-            <Image src={tag.img.url} boxSize="30px" alt={tag.name} />
-            <Box ml="1">
-              <Text fontWeight={500} color="#111111">
-                {tag.name}
-              </Text>
-            </Box>
-          </Tag>
+  return (
+    <>
+      <Content isCustomHeader={false}>
+        <ul>
+          {/* tagにデータが無い場合 */}
+          {!tag.length && <Text>there are no posts...</Text>}
+          {tag.map((tag) => (
+            <Tag
+              key={tag.name}
+              bg={bg}
+              className={styles.tags}
+              onClick={(e) => testtttt(e, blog, tag, setShowBlogs)}
+            >
+              <Image src={tag.img.url} boxSize="30px" alt={tag.name} />
+              <Box ml="1">
+                <Text fontWeight={500} color="#111111">
+                  {tag.name}
+                </Text>
+              </Box>
+            </Tag>
+          ))}
+        </ul>
+
+        <div style={{ height: "10px" }}></div>
+
+        {showBlogs.map((blog) => (
+          <NextLink href={`/blog/${blog.id}`}>
+            <Flex className={styles.blogList}>
+              <Box ml="3" style={{ margin: "10px 10px" }}>
+                <Text
+                  className={styles.blogTitle}
+                  fontWeight={500}
+                  maxWidth={["220px", "400px"]}
+                >
+                  {blog.title}
+                </Text>
+                <Text
+                  fontSize="sm"
+                  fontWeight={300}
+                  className={styles.subTitle}
+                  maxWidth={["220px", "400px"]}
+                >
+                  {blog.subtitle}
+                </Text>
+                <Text fontSize="sm" style={{ opacity: "0.8" }} fontWeight={400}>
+                  <RepeatClockIcon style={{ marginRight: "5px" }} />
+                  <Moment format="YYYY/MM/DD">{blog.updatedAt}</Moment>
+                </Text>
+              </Box>
+              <Spacer />
+              <Box>
+                <Image
+                  className={styles.eyecatch}
+                  boxSize="80px"
+                  objectFit="cover"
+                  alt={blog.title}
+                  src={blog.eyecatch.url}
+                />
+              </Box>
+            </Flex>
+          </NextLink>
         ))}
-      </ul>
 
-      <div style={{ height: "10px" }}></div>
-
-      {showBlogs.map((blog) => (
-        (<NextLink href={`/blog/${blog.id}`}>
-
-          <Flex className={styles.blogList}>
-            <Box ml="3" style={{ margin: "10px 10px" }}>
-              <Text
-                className={styles.blogTitle}
-                fontWeight="bold"
-                maxWidth={["220px", "400px"]}
-              >
-                {blog.title}
-              </Text>
-              <Text
-                fontSize="sm"
-                className={styles.subTitle}
-                maxWidth={["220px", "400px"]}
-              >
-                {blog.subtitle}
-              </Text>
-              <Text fontSize="sm" style={{ opacity: "0.5" }}>
-                <RepeatClockIcon style={{ marginRight: "5px" }} />
-                <Moment format="YYYY/MM/DD">{blog.updatedAt}</Moment>
-              </Text>
-            </Box>
-            <Spacer />
-            <Box>
-              <Image
-                className={styles.eyecatch}
-                boxSize="80px"
-                objectFit="cover"
-                alt={blog.title}
-                src={blog.eyecatch.url}
-              />
-            </Box>
-          </Flex>
-
-        </NextLink>)
-      ))}
-
-      <div style={{ height: "100vh" }}></div>
-    </Content>
-  </>;
+        <div style={{ height: "100vh" }}></div>
+      </Content>
+    </>
+  );
 }
 // データをテンプレートに受け渡す部分の処理を記述します
 export const getStaticProps = async () => {

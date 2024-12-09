@@ -65,6 +65,20 @@ const CustomIcon = createIcon({
     />
   ),
 });
+const CustomIcon2 = createIcon({
+  displayName: "CustomIcon2",
+  viewBox: "0 0 26 26",
+  path: (
+    <path
+      d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  ),
+});
 const Frame: React.FC<{
   children: React.ReactNode;
   sections?: any;
@@ -121,11 +135,9 @@ const Frame: React.FC<{
         },
         { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
       );
-
       sectionsToObserve.forEach((section) => {
         if (section) observer.observe(section);
       });
-
       return () => {
         sectionsToObserve.forEach((section) => {
           if (section) observer.unobserve(section);
@@ -156,28 +168,16 @@ const Frame: React.FC<{
   //現在のパスを取得
   const [currentPath, setCurrentPath] = useState("");
   const [accordionIndex, setAccordionIndex] = useState<number[]>([]);
+  // ブログリストを表示
   const createLinkPanel = (path: string, text: string) => {
-    const pathParts = path.split("/").filter(Boolean);
-    const secondPart = pathParts[1]; // 2番目の要素を取得
-    console.log("■■■■■■■■■■");
-    console.log(secondPart);
-    console.log(userId);
-    console.log(skillBlogsData);
+    const pathSplit = path.split("/").filter(Boolean);
+    const pathUrl = pathSplit[1];
 
-    let isReadByUser;
-    if (secondPart === undefined) {
-      isReadByUser = true;
-    } else {
+    let isReadByUser = true;
+    if (pathUrl !== undefined) {
       const matchingData =
-        skillBlogsData.find((data) => data.url === secondPart)?.readBy || [];
-
-      console.log(matchingData);
-      if (!matchingData) {
-        console.log("No matching data found for userId:", userId);
-        console.log("Skill Blogs Data:", skillBlogsData); // skillBlogsDataの内容をログに出力
-      }
+        skillBlogsData.find((data) => data.url === pathUrl)?.readBy || [];
       isReadByUser = matchingData.includes(userId ?? ""); // matchingDataにuserIdが含まれるか確認
-      console.log(`User has read: ${isReadByUser}`);
     }
 
     const linkStyles = {
@@ -222,6 +222,10 @@ const Frame: React.FC<{
         case window.location.pathname.includes("/skillBlogs/0002"): //コネクタの撮影から座標登録まで
         case window.location.pathname.includes("/skillBlogs/0005"): //コネクタの撮影から座標登録まで
           index = [1];
+          break;
+        //順立生産システムの使い方
+        case window.location.pathname.includes("/skillBlogs/0011"): //誘導ポイント設定一覧表
+          index = [2];
           break;
         //誘導ポイント設定一覧表
         case window.location.pathname.includes("/skillBlogs/0010"): //誘導ポイント設定一覧表
@@ -308,7 +312,10 @@ const Frame: React.FC<{
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
-                  {createLinkPanel("#", "PC初回セットアップ手順")}
+                  {createLinkPanel(
+                    "/skillBlogs/0011/",
+                    "PC初回セットアップ手順"
+                  )}
                   {createLinkPanel("#", "MODE1(計画)の設定")}
                 </AccordionItem>
                 <AccordionItem>
@@ -332,7 +339,7 @@ const Frame: React.FC<{
               </Accordion>
             </VStack>
             <VStack
-              align="start"
+              align="center"
               flex=".5"
               position="sticky"
               top="64px"
@@ -341,13 +348,15 @@ const Frame: React.FC<{
               <IconButton
                 icon={<CiHeart size={24} />}
                 ref={buttonRef}
-                width="40px"
-                height="40px"
+                minWidth="33px"
+                width="33px !important"
+                height="33px !important"
                 borderRadius="50%"
                 border="1px solid"
                 borderColor={colorMode === "light" ? "black" : "white"}
                 color={colorMode === "light" ? "black" : "black"}
                 aria-label="いいね"
+                mb={3}
                 onClick={() => {
                   showToast(
                     "用意していません",
@@ -358,6 +367,21 @@ const Frame: React.FC<{
                   setTimeout(() => setShowConfetti(false), 8000);
                 }}
               />
+              <IconButton
+                icon={<CustomIcon2 viewBox="0 0 24 24" fill="red" />}
+                minWidth="33px"
+                width="33px !important"
+                height="33px !important"
+                borderRadius="50%"
+                border="1px solid"
+                borderColor={colorMode === "light" ? "black" : "white"}
+                color={colorMode === "light" ? "black" : "black"}
+                aria-label="既読数"
+                cursor="default"
+              />
+              <Text textAlign="center" cursor="default">
+                {readByCount}
+              </Text>
             </VStack>
             <VStack
               align="start"
@@ -368,22 +392,22 @@ const Frame: React.FC<{
               p={4}
               borderRadius="10px"
             >
-              {/* {userName === null ? (
+              {userName === null ? (
                 <Box h="60vh">
                   <Text
                     fontSize="lg"
                     textAlign="center"
                     mt={4}
                     fontWeight="bold"
+                    color={colorMode === "light" ? "red" : "orange"}
                   >
-                    閲覧するにはログインと管理者による認証が必要です。
+                    閲覧するにはログインと開発による認証が必要です
                   </Text>
                 </Box>
               ) : (
-              )} */}
-              {children}
+                <>{children}</>
+              )}
             </VStack>
-
             {/* サイドバー */}
             <VStack
               align="start"

@@ -18,13 +18,32 @@ import {
   Code,
   Image,
   Kbd,
+  AvatarGroup,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
   Flex,
   Icon,
   createIcon,
   Spacer,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
+import {
+  FaFile,
+  FaRegEdit,
+  FaFolder,
+  FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
+} from "react-icons/fa";
+import { PiAppWindowFill, PiArrowFatLineDownLight } from "react-icons/pi";
 import { LuPanelRightOpen } from "react-icons/lu";
+import { FaDownload } from "react-icons/fa6";
 import Content from "../../components/content";
 import { useColorMode } from "@chakra-ui/react";
 import { useCustomToast } from "../../components/customToast";
@@ -34,11 +53,21 @@ import Frame from "../../components/frame";
 import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
+import DownloadLink from "./DownloadLink";
+import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
+import ExternalLink from "./ExternalLink";
+import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
+import ImageSliderModal from "./ImageSliderModal"; // モーダルコンポーネントをインポート
+import ReferenceSettingModal from "./referenceSettingModal";
 import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
+import { supabase } from "../../utils/supabase/client";
 import { useReadCount } from "../../hooks/useReadCount";
 
 import "@fontsource/noto-sans-jp";
+import { BsFiletypeExe } from "react-icons/bs";
+import SjpChart01 from "./chart/chart_0009_01";
+import SjpChart02 from "./chart/chart_0009_02";
 
 const customTheme = extendTheme({
   fonts: {
@@ -95,7 +124,14 @@ const BlogPage: React.FC = () => {
   const [showConfetti, setShowConfetti] = useState(false); // useStateをコンポーネント内に移動
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure();
+
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
 
   const showToast = useCustomToast();
   //64pxまでスクロールしないとサイドバーが表示されないから暫定
@@ -159,44 +195,7 @@ const BlogPage: React.FC = () => {
       window.removeEventListener("hashchange", handleHashChange, false);
     };
   }, []);
-  //アンダーライン付きテキスト_ドロワー
-  const UnderlinedTextWithDrawer = ({
-    text,
-    onOpen,
-    isOpen,
-    onClose,
-    header,
-    children,
-  }) => {
-    const { colorMode } = useColorMode();
-    const color = colorMode === "light" ? "blue.500" : "blue.200";
-    return (
-      <>
-        <HStack
-          as="span"
-          style={{ whiteSpace: "nowrap" }}
-          color={color}
-          cursor="pointer"
-          onClick={onOpen}
-          spacing={1}
-          borderBottom="2px solid"
-          borderColor={color}
-          display="inline"
-        >
-          <Box as="span" display="inline">
-            {text}
-          </Box>
-          <LuPanelRightOpen
-            size="20px"
-            style={{ marginBottom: "-3px", display: "inline" }}
-          />
-        </HStack>
-        <BasicDrawer isOpen={isOpen} onClose={onClose} header={header}>
-          {children}
-        </BasicDrawer>
-      </>
-    );
-  };
+
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);
     onOpen();
@@ -206,15 +205,21 @@ const BlogPage: React.FC = () => {
     onClose();
   };
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  if (!isClient) {
+    return null;
+  }
+
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs}>
         <Box w="100%">
           <HStack spacing={2} align="center" mb={1} ml={1}>
-            <Avatar
-              size="xs"
-              src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp"
-            />
+            <AvatarGroup size="sm" spacing={-1.5}>
+              <Avatar src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp" />
+            </AvatarGroup>
             <Text>@kataoka</Text>
             <Text>in</Text>
             <Text>開発</Text>
@@ -227,14 +232,16 @@ const BlogPage: React.FC = () => {
             </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            技術ブログ
+            PC初回セットアップ手順
           </Heading>
+          <CustomBadge text="順立生産システム" />
+          <CustomBadge text="作成途中" />
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-18
+            更新日:2024-12-07
           </Text>
         </Box>
         <SectionBox
@@ -248,18 +255,81 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Box>
-            <Text fontWeight="bold"></Text>
             <Text>
-              ここに各システムの使い方や開発の経緯/進め方をまとめていきます。
-              <br />
-              左のメニューから選択してください。
-              <br />
-              <br />
-              スマホは未対応です。
+              順立生産システムでは初回だけPCのセットアップが必要です。
             </Text>
           </Box>
         </SectionBox>
-        <Box height="100vh"></Box>
+        <SectionBox
+          id="section2"
+          title="2.インストールソフトについて"
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box>
+            <Text>
+              現在のバージョンでは下記の他社製品を含んでいます。
+              <br />
+              ・RS-RecieverLight(シリアル受信)
+              <br />
+              ・さくらさくQR(QR作成)
+              <br />
+              <br />
+              これによりここでPCセットアップの全てを解決する事は出来ません。
+              <br />
+              WEBサービス開始後に上記機能を自作してセットアップ手順を記載します。
+            </Text>
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section99"
+          title="99.まとめ"
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box
+            height="80vh"
+            style={{
+              backgroundImage:
+                "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              color: "#fff",
+              position: "relative",
+            }}
+          >
+            <Text
+              style={{
+                padding: "13px",
+                paddingTop: "20px",
+                textAlign: "left",
+                color: "#fff",
+                textShadow: "none",
+                fontFamily: "'Yomogi', sans-serif",
+                fontWeight: "400",
+              }}
+            ></Text>
+            <Image
+              src="/images/hippo.gif"
+              alt="Hippo"
+              style={{
+                position: "absolute",
+                bottom: "10px",
+                right: "10px",
+                width: "50px",
+              }}
+            />
+          </Box>
+        </SectionBox>
+        <Box h="0.01vh" />
       </Frame>
     </>
   );

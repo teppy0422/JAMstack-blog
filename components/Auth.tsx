@@ -17,6 +17,8 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
+import "@fontsource/noto-sans-jp";
+
 interface AuthProps {
   userData: {
     pictureUrl: string | null;
@@ -250,12 +252,12 @@ export default function Auth({ userData }: AuthProps) {
     <Box>
       {user ? (
         <>
-          <Box textAlign="center" mb={4}>
-            <Text fontSize="lg">{userData.userName || "Guest"}</Text>
-            <Text fontSize="md" color="gray.500">
+          <Box textAlign="center" mb={4} fontFamily="Noto Sans JP">
+            <Text fontSize="lg">{userData.userName || "No Name"}</Text>
+            <Text fontSize="sm" color="gray.500">
               {userData.userMainCompany || ""}
             </Text>
-            <Text fontSize="md" color="gray.500">
+            <Text fontSize="sm" color="gray.500">
               {userData.userCompany || ""}
             </Text>
             <Tooltip
@@ -290,7 +292,7 @@ export default function Auth({ userData }: AuthProps) {
               {/* <Tab>Google(テスト中)</Tab> */}
             </TabList>
 
-            <TabPanels p={0}>
+            <TabPanels p={0} fontFamily="Noto Sans JP">
               <TabPanel p={0}>
                 <Tabs p={0}>
                   <TabList>

@@ -124,7 +124,7 @@ const roadmap: RoadmapItem[] = [
   {
     year: "2024年",
     month: "11月",
-    category: ["生産準備+"],
+    category: ["生産準備+", "高知"],
     titleColor: "gray",
     main: "サブナンバーの引越しを追加",
     mainDetail: [
@@ -137,9 +137,25 @@ const roadmap: RoadmapItem[] = [
     result: "",
     duration: 117.6,
   },
-
+  {
+    category: ["生産準備+", "徳島"],
+    titleColor: "gray",
+    main: "チューブリストの追加",
+    mainDetail: [
+      "主に一貫工程でチューブ類をオミットする為に構成No.を含む一覧を作成",
+    ],
+    items: [
+      { text: "機能の追加", completed: true },
+      { text: "現場(徳島)の評価確認", completed: false },
+    ],
+    result: "",
+  },
   {
     year: "-活動中断-",
+    titleColor: "gray",
+  },
+  {
+    month: "12月",
     titleColor: "gray",
   },
   {
