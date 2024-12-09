@@ -33,6 +33,7 @@ import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
 import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
+
 function TransitionExample() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef<FocusableElement>(null); // 型を明示的に指定
