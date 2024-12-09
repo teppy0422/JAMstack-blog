@@ -392,7 +392,19 @@ const Frame: React.FC<{
               p={4}
               borderRadius="10px"
             >
-              {userName === null ? (
+              {!userName ? (
+                <Box h="60vh">
+                  <Text
+                    fontSize="lg"
+                    textAlign="center"
+                    mt={4}
+                    fontWeight="bold"
+                    color={colorMode === "light" ? "red" : "orange"}
+                  >
+                    閲覧するには開発による認証が必要です
+                  </Text>
+                </Box>
+              ) : !userId ? (
                 <Box h="60vh">
                   <Text
                     fontSize="lg"

@@ -745,8 +745,8 @@ export default function Thread() {
     } = await supabase.auth.getUser();
     // デバッグ情報を追加
     const userName = getUserById(user?.id ?? "");
-
-    if (userName === null) {
+    console.log(userName);
+    if (!userName) {
       showToast(
         "ダウンロードできません",
         "ダウンロードするにはログインと管理者によるマスター登録が必要です",
@@ -1397,9 +1397,7 @@ export default function Thread() {
             spacing="2"
             style={{ padding: "0px", flexDirection: "column" }}
           >
-            {userName === "" &&
-            threadMainCompany !== "開発" &&
-            userMainCompany !== "開発" ? (
+            {!userName && threadMainCompany !== "開発" ? (
               <Text color="red" fontWeight="bold">
                 認証されていません
               </Text>
