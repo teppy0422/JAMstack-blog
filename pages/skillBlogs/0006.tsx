@@ -193,6 +193,7 @@ const BlogPage: React.FC = () => {
           </HStack>
           <Heading fontSize="3xl" mb={1}>
             生産準備+とは
+            {userName}
           </Heading>
           <CustomBadge text="生準+" />
           <Text

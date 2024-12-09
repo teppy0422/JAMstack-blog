@@ -815,6 +815,9 @@ export const typing = () => {
                 </Box>
               </Box>
             </VStack>
+            {/* <Text textAlign="center" mt={4}>
+              ホームポジションから学ぶモードが必要なら連絡下さい
+            </Text> */}
             <Box position="fixed" zIndex="10001">
               <Voucher
                 ref={voucherRef}

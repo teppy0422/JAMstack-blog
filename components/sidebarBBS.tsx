@@ -57,7 +57,7 @@ function SidebarBBS() {
         .select("id, read_by, thread_id, user_uid, created_at")
         .gt(
           "created_at",
-          new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+          new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
         );
 
       if (error) {
@@ -221,6 +221,7 @@ function SidebarBBS() {
           >
             {label}
           </Box>
+          {/* 未読数の表示 */}
           {unreadCountsByThread[threadId] > 0 && (
             <Box
               as="span"
@@ -228,8 +229,8 @@ function SidebarBBS() {
               position="absolute"
               right="0px"
               top="3px"
-              h="1rem"
-              w="1rem"
+              h="1.1rem"
+              w="1.1rem"
               p={1}
               borderRadius="50%"
               opacity="0.8"
@@ -237,6 +238,7 @@ function SidebarBBS() {
               alignItems="center"
               justifyContent="center"
               color="white"
+              fontWeight={400}
               fontSize={unreadCountsByThread[threadId] > 99 ? 10 : 12} // 文字数に応じてフォントサイズを変更
             >
               {unreadCountsByThread[threadId] || 0}

@@ -199,8 +199,8 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
                     if (!props.userName) {
                       e.preventDefault(); // デフォルトのリンク動作を防ぐ
                       showToast(
-                        "ログインしていません",
-                        "ダウンロードするにはログインが必要です",
+                        "ダウンロードできません",
+                        "ダウンロードするにはログインと開発による認証が必要です",
                         "error"
                       );
                     }

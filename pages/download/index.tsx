@@ -6,6 +6,7 @@ import path from "path";
 import { GetServerSideProps } from "next";
 
 import {
+  Image,
   Text,
   Box,
   SimpleGrid,
@@ -36,6 +37,7 @@ import DownloadButton from "../../components/DownloadButton";
 import styles from "../../styles/home.module.scss";
 import { useUserInfo } from "../../hooks/useUserId";
 import { useUserData } from "../../hooks/useUserData";
+import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
@@ -127,6 +129,7 @@ export default function About({
       {text}
     </Badge>
   );
+
   return (
     <>
       <Global
@@ -859,6 +862,15 @@ export default function About({
                 </Box>
               </CardBody>
             </Card>
+            <HStack spacing={2} justifyContent="center" mt={0} height="100%">
+              <Image
+                src="/images/illust/hippo/hippo_001.png"
+                alt="hippo_001.png"
+                height={200}
+                style={{ marginTop: "40px" }}
+              />
+              <Hippo_001_wrap />
+            </HStack>
           </SimpleGrid>
 
           <Modal isOpen={isOpen} onClose={onClose}>

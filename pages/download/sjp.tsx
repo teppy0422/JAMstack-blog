@@ -28,8 +28,6 @@ import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemN
 import { SjpIcon } from "../../components/icons";
 import styles from "../../styles/home.module.scss";
 
-import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
-
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
@@ -93,7 +91,6 @@ function TransitionExample() {
 }
 
 export default function About() {
-  const illusts = [{ src: "/images/illust/hippo/hippo_001.png" }];
   const { colorMode } = useColorMode();
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
@@ -786,31 +783,6 @@ export default function About() {
               isLatest={false}
             />
           </SimpleGrid>
-
-          <Box style={{ textAlign: "center" }}>
-            {illusts.map((item, index) => {
-              const aosOffset: number = (index % 2) * 150;
-              const aosDuration = (index % 4) * 700;
-              const aosDelay = (index % 4) * 300;
-              return (
-                <div
-                  data-aos="flip-left"
-                  data-aos-offset={aosOffset}
-                  data-aos-duration={aosDuration}
-                  data-aos-delay={aosDelay}
-                  style={{ display: "inline-block" }}
-                >
-                  <Image
-                    src={item.src}
-                    style={{ display: "inline-block" }}
-                    m={3}
-                    className={styles.purupuru}
-                  />
-                </div>
-              );
-            })}
-            <Hippo_001_wrap />
-          </Box>
         </div>
       </Content>
     </>

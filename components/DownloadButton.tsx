@@ -54,8 +54,8 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
         onClick={() => {
           if (!userName) {
             showToast(
-              "ログインしていません",
-              "ダウンロードするにはログインが必要です",
+              "ダウンロード出来ません",
+              "ダウンロードするにはログインと開発による認証が必要です",
               "error"
             );
           } else {
@@ -98,5 +98,4 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
     </>
   );
 };
-
 export default DownloadButton;
