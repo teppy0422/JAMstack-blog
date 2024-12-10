@@ -428,8 +428,7 @@ const BBSTodoList = () => {
                     key={todo.id}
                     allowMultiple
                     defaultIndex={hasProgressInRange ? [0] : []}
-                    border="none"
-                    boxShadow="none"
+                    p={0}
                   >
                     <AccordionItem border="none">
                       <AccordionButton p={0}>

@@ -135,16 +135,23 @@ const Frame: React.FC<{
         },
         { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
       );
-      sectionsToObserve.forEach((section) => {
-        if (section) observer.observe(section);
-      });
+
+      // ここでセクションが存在するか確認
+      if (sectionsToObserve.length > 0) {
+        sectionsToObserve.forEach((section) => {
+          if (section) observer.observe(section);
+        });
+      } else {
+        console.warn("No sections to observe."); // デバッグ用メッセージ
+      }
+
       return () => {
         sectionsToObserve.forEach((section) => {
           if (section) observer.unobserve(section);
         });
       };
     }
-  }, [sectionRefs, userName]);
+  }, [sectionRefs]);
   //#クリックした時のオフセット
   useEffect(() => {
     const handleHashChange = () => {
@@ -241,28 +248,12 @@ const Frame: React.FC<{
       setAccordionIndex(index);
     }
   }, []);
-  useEffect(() => {
-    // userNameが変わったときの処理をここに記述
-    console.log("userNameが変更されました:", userName);
-  }, [userName]); // userNameを依存配列に追加
 
   return (
     <>
       <Content isCustomHeader={true} maxWidth="1280px">
         <ChakraProvider theme={customTheme}>
-          {!userId ? (
-            <Box h="60vh">
-              <Text
-                fontSize="lg"
-                textAlign="center"
-                mt={4}
-                fontWeight="bold"
-                color={colorMode === "light" ? "red" : "orange"}
-              >
-                閲覧するにはログインと開発による認証が必要です
-              </Text>
-            </Box>
-          ) : !userName ? (
+          {!userName ? (
             <Box h="60vh">
               <Text
                 fontSize="lg"
@@ -272,6 +263,18 @@ const Frame: React.FC<{
                 color={colorMode === "light" ? "red" : "orange"}
               >
                 閲覧するには開発による認証が必要です
+              </Text>
+            </Box>
+          ) : !userId ? (
+            <Box h="60vh">
+              <Text
+                fontSize="lg"
+                textAlign="center"
+                mt={4}
+                fontWeight="bold"
+                color={colorMode === "light" ? "red" : "orange"}
+              >
+                閲覧するにはログインと開発による認証が必要です
               </Text>
             </Box>
           ) : (
@@ -436,23 +439,8 @@ const Frame: React.FC<{
                 display={["none", "none", "none", "block"]}
               >
                 <List spacing={1} fontSize="sm">
-                  {sections.current
-                    // ?.sort((a, b) => {
-                    //   const aParts = a.id.split('-').map(part => parseInt(part, 10));
-                    //   const bParts = b.id.split('-').map(part => parseInt(part, 10));
-
-                    //   for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
-                    //     const aPart = aParts[i] !== undefined ? aParts[i] : -1;
-                    //     const bPart = bParts[i] !== undefined ? bParts[i] : -1;
-
-                    //     if (aPart !== bPart) {
-                    //       return aPart - bPart;
-                    //     }
-                    //   }
-                    //   // 長さが異なる場合、短い方を先にする
-                    //   return aParts.length - bParts.length;
-                    // })
-                    .map((section) => {
+                  {sections.current && sections.current.length > 0 ? (
+                    sections.current.map((section) => {
                       const underscoreCount = (section.id.match(/_/g) || [])
                         .length; // アンダースコアの数をカウント
                       const indent = 2 + underscoreCount * 2; // 基本インデントにアンダースコアの数に応じたインデントを追加
@@ -488,7 +476,10 @@ const Frame: React.FC<{
                           </Link>
                         </ListItem>
                       );
-                    })}
+                    })
+                  ) : (
+                    <ListItem>セクションがありません</ListItem> // デバッグ用メッセージ
+                  )}
                 </List>
               </VStack>
             </HStack>
