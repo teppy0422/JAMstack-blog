@@ -703,6 +703,7 @@ const BlogPage: React.FC = () => {
               <Avatar
                 size="xs"
                 src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp"
+                borderWidth={1}
               />
               <Text>@kataoka</Text>
               <Text>in</Text>

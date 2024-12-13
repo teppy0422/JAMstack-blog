@@ -444,7 +444,10 @@ const BlogPage: React.FC = () => {
         <Box w="100%">
           <HStack spacing={2} align="center" mb={1} ml={1}>
             <AvatarGroup size="sm" spacing={-1.5}>
-              <Avatar src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp" />
+              <Avatar
+                src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp"
+                borderWidth={1}
+              />
             </AvatarGroup>
             <Text>@kataoka</Text>
             <Text>in</Text>
