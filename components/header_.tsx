@@ -45,6 +45,7 @@ import { BsCloud, BsCloudRain, BsSun } from "react-icons/bs";
 import { ImQrcode } from "react-icons/im";
 import { PiGithubLogoFill } from "react-icons/pi";
 import { MdEditRoad } from "react-icons/md";
+import { IoTicketOutline } from "react-icons/io5";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
 import React, { useEffect } from "react";
@@ -415,7 +416,9 @@ export default function Header() {
                     "/download",
                     "ダウンロード",
                     false,
-                    <FaCloudDownloadAlt size={23} />
+                    <Box transform="rotate(270deg)">
+                      <IoTicketOutline size={23} />
+                    </Box>
                   )}
                   <Divider borderColor="white" />
                   {menuItem(

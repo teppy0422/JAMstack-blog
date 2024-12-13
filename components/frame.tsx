@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Confetti from "react-confetti";
 import {
   Box,
+  Flex,
   Heading,
   Text,
   VStack,
@@ -26,6 +27,7 @@ import {
   createIcon,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
+import { PiGithubLogoFill } from "react-icons/pi";
 import { LuPanelRightOpen } from "react-icons/lu";
 import Content from "./content";
 import { useColorMode } from "@chakra-ui/react";
@@ -196,7 +198,7 @@ const Frame: React.FC<{
       ml: 4,
       p: 1,
       borderRadius: "6px",
-      bg: currentPath === path ? "gray.500" : "transparent",
+      bg: currentPath === path ? "#4a5569" : "transparent",
       color:
         currentPath === path
           ? "white"
@@ -301,9 +303,12 @@ const Frame: React.FC<{
                 display={["none", "none", "none", "block"]}
                 color={colorMode === "light" ? "black" : "white"}
               >
-                <Text fontWeight="bold" textAlign="left" m={1}>
-                  技術ブログ
-                </Text>
+                <Flex alignItems="center" gap="3px">
+                  <Text fontWeight="bold" textAlign="left" m={1}>
+                    技術ブログ
+                  </Text>
+                  <PiGithubLogoFill size={24} />
+                </Flex>
                 <Accordion
                   index={accordionIndex}
                   onChange={(index) =>
@@ -397,7 +402,7 @@ const Frame: React.FC<{
                   borderRadius="50%"
                   border="1px solid"
                   borderColor={colorMode === "light" ? "black" : "white"}
-                  color={colorMode === "light" ? "black" : "black"}
+                  color={colorMode === "light" ? "black" : "white"}
                   aria-label="いいね"
                   mb={3}
                   onClick={() => {
@@ -418,7 +423,7 @@ const Frame: React.FC<{
                   borderRadius="50%"
                   border="1px solid"
                   borderColor={colorMode === "light" ? "black" : "white"}
-                  color={colorMode === "light" ? "black" : "black"}
+                  color={colorMode === "light" ? "black" : "white"}
                   aria-label="既読数"
                   cursor="default"
                 />
@@ -430,7 +435,11 @@ const Frame: React.FC<{
                 align="start"
                 spacing={6}
                 flex="10"
-                bg="rgb(255,255,255,0.3)"
+                bg={
+                  colorMode === "light"
+                    ? "rgb(255,255,255,0.3)"
+                    : "rgb(255,255,255,0.1)"
+                }
                 w={["100%", "100%", "100%", "70%"]}
                 p={4}
                 borderRadius="10px"
@@ -477,7 +486,7 @@ const Frame: React.FC<{
                           borderRadius="5px"
                           bg={
                             activeSection === section.id
-                              ? "gray.500"
+                              ? "#4a5569"
                               : "transparent"
                           }
                           color={

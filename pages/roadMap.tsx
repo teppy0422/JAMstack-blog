@@ -10,10 +10,12 @@ import {
   Icon,
   Progress,
   Badge,
+  HStack,
 } from "@chakra-ui/react";
 import {
   MdOutlineCheckBoxOutlineBlank,
   MdOutlineCheckBox,
+  MdEditRoad,
 } from "react-icons/md";
 import Sidebar from "../components/sidebar";
 import Content from "../components/content";
@@ -387,7 +389,9 @@ const Roadmap = () => {
           fontWeight={200}
         >
           <Heading as="h3" fontSize="24px" mb={8} textAlign="center">
-            ロードマップ
+            <HStack spacing={2} alignItems="center" justifyContent="center">
+              <Text>ロードマップ</Text> <MdEditRoad size={30} />
+            </HStack>
           </Heading>
           <Badge variant="solid" colorScheme="green" ml={2}>
             使用者
