@@ -169,7 +169,7 @@ const roadmap: RoadmapItem[] = [
     ],
     items: [
       { text: "機能の追加", completed: true },
-      { text: "現場(徳島)の評価確認", completed: false },
+      { text: "現場(徳島)の評価確認", completed: true },
     ],
     result: "",
   },

@@ -206,7 +206,7 @@ export default function About({
           </Box>
           <SimpleGrid
             columns={{ base: 1, md: 1, lg: 1, xl: 1 }}
-            spacing={5}
+            spacing={0}
             mx={{ base: 2, md: 20, lg: 30, xl: 30 }}
           >
             <Card
@@ -403,7 +403,106 @@ export default function About({
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
                       <Heading size="sm" mb={1.5}>
-                        誘導ナビ.net
+                        検査履歴システム
+                      </Heading>
+
+                      <Flex justifyContent="flex-end" alignItems="center">
+                        <Badge
+                          variant="solid"
+                          backgroundColor="#6C277D"
+                          mr={2}
+                          opacity={0.8}
+                        >
+                          VB.net
+                        </Badge>
+                      </Flex>
+                      <Text pt="2" fontSize="sm">
+                        検査実績を記憶する事とラベル印刷が可能
+                        <br />
+                        開発は山口部品なのでここではダウンロードできません
+                        <br />
+                        <Badge
+                          backgroundColor="#444"
+                          color="white"
+                          mt={-0.5}
+                          mr={0.5}
+                        >
+                          70.検査履歴点滅
+                        </Badge>
+                        を導入する事でより作業効率の向上を図れます
+                        <br />
+                        ⚠️ブラウザはPCにインストールされているものに依存しているので注意
+                        <br />
+                      </Text>
+                    </Flex>
+                    <Stack
+                      spacing={1}
+                      direction="column"
+                      alignItems="flex-start"
+                    >
+                      <Flex justifyContent="flex-end" width="100%">
+                        <Text fontSize="xs" textAlign="right" right={0}></Text>
+                      </Flex>
+                      <CustomBadge path="" text="ポイント点滅設置" />
+                    </Stack>
+                  </Flex>
+                </Box>
+              </CardBody>
+            </Card>
+            <Box
+              position="relative" // 基準位置を設定
+              h="20px" // 高さを設定
+              w="100%" // 幅を設定 (必要に応じて調整)
+              m="0"
+            >
+              <Box
+                position="absolute" // 絶対位置で配置
+                left="50%" // 左から50%の位置に配置
+                top="0"
+                bottom="0"
+                borderLeft="1px solid" // 左に線を引く
+                borderColor="gray.500"
+                transform="translateX(-50%)" // 左に50%移動して中央に揃える
+              />
+            </Box>
+            <Card
+              backgroundColor="transparent"
+              border="1px solid"
+              borderColor="gray.500"
+              mx="24px"
+              mb="20px"
+            >
+              <CardHeader p={1} pl={3} pb={0}>
+                <Heading size="sm" mb={1}>
+                  誘導ナビ+
+                </Heading>
+              </CardHeader>
+              <Divider borderColor="gray.500" />
+              <CardBody p={0}>
+                <Box
+                  position="relative"
+                  px={2}
+                  pl={7}
+                  py={2}
+                  _hover={{
+                    boxShadow: "dark-lg",
+                  }}
+                  onMouseEnter={() => setIsHovered(true)}
+                >
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    bottom={0}
+                    width="1.4rem"
+                    backgroundColor="transparent"
+                    borderRight="2px dotted"
+                    borderColor="gray.500"
+                  />
+                  <Flex justifyContent="space-between" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start" flex={1}>
+                      <Heading size="sm" mb={1.5}>
+                        yudo.net
                       </Heading>
                       <Flex justifyContent="flex-end" alignItems="center">
                         <Badge
@@ -415,18 +514,11 @@ export default function About({
                         >
                           VB.net
                         </Badge>
-                        <Badge
-                          variant="solid"
-                          backgroundColor="#007582"
-                          color="white"
-                          opacity={0.8}
-                          mr={2}
-                        >
-                          Arduino
-                        </Badge>
                       </Flex>
                       <Text pt="2" fontSize="sm">
-                        配策誘導のディスプレイを移動させる
+                        ・配策を行う為のWEBブラウザのコントロール
+                        <br />
+                        ・ディスプレイ移動の為のシリアル送信
                         <br />
                         ブラウザではCOMポートへのアクセスがページ毎に許可される必要がある為に作成しました
                         <br />
@@ -445,10 +537,10 @@ export default function About({
                           1.0.0.10
                         </Text>
                       </Flex>
-                      <CustomBadge path="/56.net" text="ディスプレイ移動" />
                     </Stack>
                   </Flex>
                 </Box>
+
                 <Divider borderColor="gray.500" />
 
                 <Box
@@ -474,23 +566,24 @@ export default function About({
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
                       <Heading size="sm" mb={1.5}>
-                        検査履歴システム
+                        i_000L6470_SPI_stepMoter_sketch
                       </Heading>
 
                       <Flex justifyContent="flex-end" alignItems="center">
                         <Badge
                           variant="solid"
-                          backgroundColor="#6C277D"
-                          mr={2}
+                          backgroundColor="#007582"
+                          color="white"
                           opacity={0.8}
+                          mr={2}
                         >
-                          VB.net
+                          Arduino
                         </Badge>
                       </Flex>
                       <Text pt="2" fontSize="sm">
-                        YC-CのWHモードでエラーのポイントを表示する画像を生産準備+が作成
+                        配策誘導のディスプレイを移動させる為にyudo.netから信号を受けて動作{" "}
                         <br />
-                        開発は山口部品でダウンロードはここで出来るようにはしません
+                        ArduinoのATmega328P系にプログラムを書き込む事で動作可能
                       </Text>
                     </Flex>
                     <Stack
@@ -501,16 +594,18 @@ export default function About({
                       <Flex justifyContent="flex-end" width="100%">
                         <Text fontSize="xs" textAlign="right" right={0}></Text>
                       </Flex>
-                      <CustomBadge path="" text="ポイント点滅設置" />
+                      <CustomBadge path="/56.net" text="ディスプレイ移動" />{" "}
                     </Stack>
                   </Flex>
                 </Box>
               </CardBody>
             </Card>
+
             <Card
               backgroundColor="transparent"
               border="1px solid"
               borderColor="gray.500"
+              mb="20px"
             >
               <CardHeader p={2} pl={3} pb={0}>
                 <Heading size="md" mb={3}>
@@ -571,6 +666,7 @@ export default function About({
               backgroundColor="transparent"
               border="1px solid"
               borderColor="gray.500"
+              mb="20px"
             >
               <CardHeader p={2} pl={3} pb={0}>
                 <Heading size="md" mb={3}>
@@ -740,6 +836,7 @@ export default function About({
               backgroundColor="transparent"
               border="1px solid"
               borderColor="gray.500"
+              mb="20px"
             >
               <CardHeader p={2} pl={3} pb={0}>
                 <Heading size="md" mb={3}>
