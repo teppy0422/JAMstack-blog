@@ -22,7 +22,8 @@ import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
 import { PiGithubLogoFill } from "react-icons/pi";
 import { MdEditRoad } from "react-icons/md";
-import { FaCloudDownloadAlt, FaKeyboard } from "react-icons/fa";
+import { FaKeyboard } from "react-icons/fa";
+import { IoTicketOutline } from "react-icons/io5";
 import { AiOutlineWechat } from "react-icons/ai";
 
 function Sidebar() {
@@ -131,7 +132,9 @@ function Sidebar() {
             "/download",
             "ダウンロード",
             true,
-            <FaCloudDownloadAlt size={22} />
+            <Box transform="rotate(270deg)" position="relative">
+              <IoTicketOutline size={22} />
+            </Box>
           )}
           {menuItem("/BBS", "問い合わせ", true, <AiOutlineWechat size={22} />)}
         </VStack>
