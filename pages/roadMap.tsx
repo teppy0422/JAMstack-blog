@@ -68,6 +68,27 @@ function getBadgeForCategory(category: string): JSX.Element {
 const roadmap: RoadmapItem[] = [
   {
     year: "2023年",
+    month: "6月",
+    category: ["WEBサービス"],
+    titleColor: "gray",
+    main: "WEBサービス開発スタート",
+    mainDetail: [
+      "より効率良く業務改善を行う為にWEB上でやりとりをしてシステムを提供する事を目的に開発",
+    ],
+    items: [
+      { text: "ダウンロード機能の追加", completed: true },
+      {
+        text: "リアルタイムチャットの追加",
+        completed: true,
+      },
+      { text: "技術ブログ(取扱説明書とか)の追加", completed: true },
+      { text: "タイピングソフトの追加", completed: true },
+    ],
+    result: "半年を目安に運用テストを開始しました",
+    duration: 360,
+  },
+  {
+    year: "2023年",
     month: "10月",
     category: ["生産準備+"],
     titleColor: "gray",

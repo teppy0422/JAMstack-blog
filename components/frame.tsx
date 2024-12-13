@@ -196,8 +196,8 @@ const Frame: React.FC<{
     const linkStyles = {
       fontSize: "13px",
       ml: 4,
-      p: 1,
-      borderRadius: "6px",
+      px: 2,
+      borderRadius: "4px",
       bg: currentPath === path ? "#4a5569" : "transparent",
       color:
         currentPath === path
@@ -403,6 +403,7 @@ const Frame: React.FC<{
                   border="1px solid"
                   borderColor={colorMode === "light" ? "black" : "white"}
                   color={colorMode === "light" ? "black" : "white"}
+                  backgroundColor={colorMode === "light" ? "#eee" : "black"}
                   aria-label="いいね"
                   mb={3}
                   onClick={() => {
@@ -424,6 +425,7 @@ const Frame: React.FC<{
                   border="1px solid"
                   borderColor={colorMode === "light" ? "black" : "white"}
                   color={colorMode === "light" ? "black" : "white"}
+                  backgroundColor={colorMode === "light" ? "#eee" : "black"}
                   aria-label="既読数"
                   cursor="default"
                 />
@@ -475,7 +477,7 @@ const Frame: React.FC<{
                     .map((section) => {
                       const underscoreCount = (section.id.match(/_/g) || [])
                         .length; // アンダースコアの数をカウント
-                      const indent = 2 + underscoreCount * 2; // 基本インデントにアンダースコアの数に応じたインデントを追加
+                      const indent = 2 + underscoreCount * 3; // 基本インデントにアンダースコアの数に応じたインデントを追加
 
                       return (
                         <ListItem
