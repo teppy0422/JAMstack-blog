@@ -123,7 +123,7 @@ const JdssIcon = ({ size, title, color }) => (
     </svg>
   </div>
 );
-const TodoIcon = ({ size, title, color }) => (
+const TodoIcon = ({ size, title, color, dur }) => (
   <div style={{ padding: "0px" }}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -155,8 +155,8 @@ const TodoIcon = ({ size, title, color }) => (
         <animateTransform
           attributeName="transform"
           attributeType="XML"
-          dur="4s"
-          begin="3s"
+          dur={dur}
+          begin="2s"
           from="0 301 301"
           repeatCount="indefinite"
           to="360 301 301"

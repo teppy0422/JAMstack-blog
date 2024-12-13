@@ -97,10 +97,6 @@ const Frame: React.FC<{
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount, skillBlogsData } = useReadCount(userId);
-
-  useEffect(() => {
-    console.log("Skill Blogs Data:", skillBlogsData);
-  }, [skillBlogsData]);
   //64pxまでスクロールしないとサイドバーが表示されないから暫定
   useEffect(() => {
     const hash = window.location.hash;
@@ -164,6 +160,21 @@ const Frame: React.FC<{
       window.removeEventListener("hashchange", handleHashChange, false);
     };
   }, []);
+  // #に移動をレンダリング後に行う
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          const yOffset = -64; // オフセットを設定
+          const y =
+            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+      }, 100);
+    }
+  }, [userId, userName]); // userIdまたはuserNameが変更されたときに実行
 
   //現在のパスを取得
   const [currentPath, setCurrentPath] = useState("");
@@ -224,7 +235,7 @@ const Frame: React.FC<{
           index = [1];
           break;
         //順立生産システムの使い方
-        case window.location.pathname.includes("/skillBlogs/0011"): //誘導ポイント設定一覧表
+        case window.location.pathname.includes("/skillBlogs/0011"): //
           index = [2];
           break;
         //誘導ポイント設定一覧表
@@ -478,8 +489,8 @@ const Frame: React.FC<{
                           }
                           pl={indent}
                           style={{
-                            whiteSpace: "nowrap", // 改行を防ぐ
-                            overflow: "hidden", // 溢れた部分を隠す
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
                             textOverflow: "ellipsis", // 溢れた部分に「...」を付ける
                           }}
                         >

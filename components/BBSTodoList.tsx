@@ -204,6 +204,7 @@ const BBSTodoList = () => {
                   <TodoIcon
                     size={20}
                     title="Sjp+"
+                    dur="2s"
                     color={colorMode === "light" ? "#000" : "#FFF"}
                   />
                 ) : null}
@@ -271,7 +272,7 @@ const BBSTodoList = () => {
                         着手: {new Date(detail.created_at).toLocaleString()}
                       </Text>
                       <Text>
-                        完了:{" "}
+                        完了:
                         {detail.complete_at
                           ? new Date(detail.complete_at).toLocaleString()
                           : ""}
@@ -396,6 +397,7 @@ const BBSTodoList = () => {
         }}
         cursor="pointer"
         px={2}
+        _hover={{ bg: colorMode === "light" ? "gray.200" : "gray.700" }} // マウスオーバー時の背景色
       >
         各システムの対応状況
       </Text>
@@ -403,10 +405,23 @@ const BBSTodoList = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent width="auto" maxWidth="80%">
-          <ModalHeader>各システムの対応状況</ModalHeader>
-          <ModalCloseButton _focus={{ _focus: "none" }} />
-          <ModalBody fontWeight={400} mb={4}>
-            <Stack spacing={2}>
+          <ModalHeader fontSize={18} p={1} px={2} pr={10}>
+            各システムの対応状況
+          </ModalHeader>
+          <ModalCloseButton _focus={{ _focus: "none" }} top={0} right={0} />
+          <Flex align="center" pl={1}>
+            <TodoIcon
+              size={20}
+              title="Sjp+"
+              dur="0s"
+              color={colorMode === "light" ? "#000" : "#FFF"}
+            />
+            <Text p={1} fontSize={14} fontWeight={400}>
+              : 現在対応中
+            </Text>
+          </Flex>
+          <ModalBody fontWeight={400} px={0} py={2}>
+            <Stack spacing={0}>
               {todos.map((todo) => {
                 const sortedDetails = todo.details.sort(
                   (a, b) => a.progress - b.progress
@@ -432,22 +447,39 @@ const BBSTodoList = () => {
                   >
                     <AccordionItem border="none">
                       <AccordionButton p={0}>
-                        <Box flex="1" textAlign="left" p={1}>
+                        <Box
+                          flex="1"
+                          textAlign="left"
+                          p={0}
+                          pl={2}
+                          fontSize={13}
+                          bg={colorMode === "light" ? "#444" : "white"}
+                          color={colorMode === "light" ? "white" : "#222"}
+                        >
                           {todo.title}
                         </Box>
-                        <AccordionIcon />
+                        <AccordionIcon
+                          bg={colorMode === "light" ? "#444" : "white"}
+                          color={colorMode === "light" ? "white" : "#222"}
+                        />
                       </AccordionButton>
-                      <AccordionPanel pb={4}>
+                      <AccordionPanel p={0}>
                         {groupedDetails[0].length > 0 && (
                           <Accordion allowMultiple defaultIndex={[1]}>
                             <AccordionItem>
-                              <AccordionButton>
-                                <Box flex="1" textAlign="left">
+                              <AccordionButton p={0} pl={4}>
+                                <Box
+                                  flex="1"
+                                  textAlign="left"
+                                  p={0}
+                                  fontSize={11}
+                                  fontWeight={600}
+                                >
                                   未着手 ({groupedDetails[0].length})
                                 </Box>
                                 <AccordionIcon />
                               </AccordionButton>
-                              <AccordionPanel pb={4}>
+                              <AccordionPanel p={1}>
                                 {renderDetailsTable(groupedDetails[0])}
                               </AccordionPanel>
                             </AccordionItem>
@@ -456,13 +488,19 @@ const BBSTodoList = () => {
                         {groupedDetails[1].length > 0 && (
                           <Accordion allowMultiple defaultIndex={[0]}>
                             <AccordionItem>
-                              <AccordionButton>
-                                <Box flex="1" textAlign="left">
+                              <AccordionButton p={0} pl={4}>
+                                <Box
+                                  flex="1"
+                                  textAlign="left"
+                                  p={0}
+                                  fontSize={11}
+                                  fontWeight={600}
+                                >
                                   取組中 ({groupedDetails[1].length})
                                 </Box>
                                 <AccordionIcon />
                               </AccordionButton>
-                              <AccordionPanel pb={4}>
+                              <AccordionPanel p={1}>
                                 {renderDetailsTable(groupedDetails[1])}
                               </AccordionPanel>
                             </AccordionItem>
@@ -471,13 +509,19 @@ const BBSTodoList = () => {
                         {groupedDetails[100].length > 0 && (
                           <Accordion allowMultiple defaultIndex={[1]}>
                             <AccordionItem>
-                              <AccordionButton>
-                                <Box flex="1" textAlign="left">
+                              <AccordionButton p={0} pl={4}>
+                                <Box
+                                  flex="1"
+                                  textAlign="left"
+                                  p={0}
+                                  fontSize={11}
+                                  fontWeight={600}
+                                >
                                   完了済 ({groupedDetails[100].length})
                                 </Box>
                                 <AccordionIcon />
                               </AccordionButton>
-                              <AccordionPanel pb={4}>
+                              <AccordionPanel p={1}>
                                 {renderDetailsTable(groupedDetails[100])}
                               </AccordionPanel>
                             </AccordionItem>
