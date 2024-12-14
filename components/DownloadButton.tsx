@@ -16,6 +16,7 @@ interface DownloadButtonProps {
   isHovered: boolean;
   backGroundColor: string;
   userName?: string | null;
+  borderBottomLeftRadius?: string;
 }
 
 const DownloadButton: React.FC<DownloadButtonProps> = ({
@@ -23,6 +24,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
   isHovered,
   backGroundColor,
   userName,
+  borderBottomLeftRadius,
 }) => {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
@@ -44,6 +46,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
         cursor="pointer"
         borderRight="2px dotted"
         borderColor="white"
+        borderBottomLeftRadius={borderBottomLeftRadius}
         transition="transform 1s ease, clip-path 1s ease"
         transform={isClicked ? "translateX(-100%)" : "translateX(0)"}
         clipPath={

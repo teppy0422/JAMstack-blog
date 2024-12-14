@@ -318,7 +318,6 @@ export default function About({
                     </Stack>
                   </Flex>
                 </Box>
-
                 <Divider borderColor="gray.500" />
                 <Box
                   position="relative"
@@ -335,6 +334,7 @@ export default function About({
                     isHovered={isHovered}
                     backGroundColor="#6C277D"
                     userName={userName}
+                    borderBottomLeftRadius="5px"
                   />
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
@@ -379,74 +379,6 @@ export default function About({
                   </Flex>
                 </Box>
                 <Divider borderColor="gray.500" />
-
-                <Box
-                  position="relative"
-                  px={2}
-                  pl={7}
-                  py={2}
-                  _hover={{
-                    boxShadow: "dark-lg",
-                  }}
-                  onMouseEnter={() => setIsHovered(true)}
-                >
-                  <Box
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    bottom={0}
-                    width="1.4rem"
-                    backgroundColor="transparent"
-                    borderRight="2px dotted"
-                    borderColor="gray.500"
-                  />
-                  <Flex justifyContent="space-between" alignItems="flex-start">
-                    <Flex direction="column" alignItems="flex-start" flex={1}>
-                      <Heading size="sm" mb={1.5}>
-                        検査履歴システム
-                      </Heading>
-
-                      <Flex justifyContent="flex-end" alignItems="center">
-                        <Badge
-                          variant="solid"
-                          backgroundColor="#6C277D"
-                          mr={2}
-                          opacity={0.8}
-                        >
-                          VB.net
-                        </Badge>
-                      </Flex>
-                      <Text pt="2" fontSize="sm">
-                        検査実績を記憶する事とラベル印刷が可能
-                        <br />
-                        開発は山口部品なのでここではダウンロードできません
-                        <br />
-                        <Badge
-                          backgroundColor="#444"
-                          color="white"
-                          mt={-0.5}
-                          mr={0.5}
-                        >
-                          70.検査履歴点滅
-                        </Badge>
-                        を導入する事でより作業効率の向上を図れます
-                        <br />
-                        ⚠️ブラウザはPCにインストールされているものに依存しているので注意
-                        <br />
-                      </Text>
-                    </Flex>
-                    <Stack
-                      spacing={1}
-                      direction="column"
-                      alignItems="flex-start"
-                    >
-                      <Flex justifyContent="flex-end" width="100%">
-                        <Text fontSize="xs" textAlign="right" right={0}></Text>
-                      </Flex>
-                      <CustomBadge path="" text="ポイント点滅設置" />
-                    </Stack>
-                  </Flex>
-                </Box>
               </CardBody>
             </Card>
             <Box
@@ -470,7 +402,6 @@ export default function About({
               border="1px solid"
               borderColor="gray.500"
               mx="24px"
-              mb="20px"
             >
               <CardHeader p={1} pl={3} pb={0}>
                 <Heading size="sm" mb={1}>
@@ -516,7 +447,16 @@ export default function About({
                         </Badge>
                       </Flex>
                       <Text pt="2" fontSize="sm">
-                        ・配策を行う為のWEBブラウザのコントロール
+                        ・
+                        <Badge
+                          backgroundColor="#444"
+                          color="white"
+                          mt={-0.5}
+                          mr={0.5}
+                        >
+                          56.配策経路
+                        </Badge>
+                        を表示する為のブラウザコントロール
                         <br />
                         ・ディスプレイ移動の為のシリアル送信
                         <br />
@@ -595,6 +535,104 @@ export default function About({
                         <Text fontSize="xs" textAlign="right" right={0}></Text>
                       </Flex>
                       <CustomBadge path="/56.net" text="ディスプレイ移動" />{" "}
+                    </Stack>
+                  </Flex>
+                </Box>
+              </CardBody>
+            </Card>
+            <Box
+              position="relative" // 基準位置を設定
+              h="20px" // 高さを設定
+              w="100%" // 幅を設定 (必要に応じて調整)
+              m="0"
+            >
+              <Box
+                position="absolute" // 絶対位置で配置
+                left="50%" // 左から50%の位置に配置
+                top="0"
+                bottom="0"
+                borderLeft="1px solid" // 左に線を引く
+                borderColor="gray.500"
+                transform="translateX(-50%)" // 左に50%移動して中央に揃える
+              />
+            </Box>
+
+            <Card
+              backgroundColor="transparent"
+              border="1px solid"
+              borderColor="gray.500"
+              mx="24px"
+              mb="20px"
+            >
+              <Divider borderColor="gray.500" />
+              <CardBody p={0}>
+                <Box
+                  position="relative"
+                  px={2}
+                  pl={7}
+                  py={2}
+                  _hover={{
+                    boxShadow: "dark-lg",
+                  }}
+                  onMouseEnter={() => setIsHovered(true)}
+                >
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    bottom={0}
+                    width="1.4rem"
+                    backgroundColor="transparent"
+                    borderRight="2px dotted"
+                    borderColor="gray.500"
+                  />
+                  <Flex justifyContent="space-between" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start" flex={1}>
+                      <Heading size="sm" mb={1.5}>
+                        検査履歴システム
+                      </Heading>
+                      <Flex justifyContent="flex-end" alignItems="center">
+                        <Badge
+                          variant="solid"
+                          backgroundColor="#6C277D"
+                          color="white"
+                          opacity={0.8}
+                          mr={2}
+                        >
+                          VB.net
+                        </Badge>
+                      </Flex>
+                      <Text pt="2" fontSize="sm">
+                        検査実績を記憶する事とラベル印刷が可能
+                        <br />
+                        開発は瀬戸内部品なのでここではダウンロードできません
+                        <br />
+                        <Badge
+                          backgroundColor="#444"
+                          color="white"
+                          mt={-0.5}
+                          mr={0.5}
+                        >
+                          70.検査履歴点滅
+                        </Badge>
+                        を導入する事でより作業効率の向上を図れます
+                        <br />
+                        ⚠️ブラウザのバージョンはPCに依存しているので注意
+                        ※最新Verは不明です <br />
+                      </Text>
+                    </Flex>
+                    <Stack
+                      spacing={1}
+                      direction="column"
+                      alignItems="flex-start"
+                    >
+                      <Flex justifyContent="flex-end" width="100%">
+                        <Text fontSize="xs" textAlign="right" right={0}>
+                          #2019/12/05
+                          <br />
+                          2.0.5.4
+                        </Text>
+                      </Flex>
                     </Stack>
                   </Flex>
                 </Box>
@@ -920,6 +958,7 @@ export default function About({
                     isHovered={isHovered}
                     backGroundColor="#333"
                     userName={userName}
+                    borderBottomLeftRadius="5px"
                   />
                   <Flex justifyContent="space-between" alignItems="center">
                     <Heading size="sm">Windowsライブラリ</Heading>
