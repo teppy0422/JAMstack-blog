@@ -147,13 +147,23 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-12-18T14:56:00+0900"
+              description1=""
+              description2="MAX共通の書き直し"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.101.10_.zip"
+              inCharge="高知,王さん"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2024-12-13T15:53:00+0900"
               description1="共通化のハメ図作成時に極端に端末数が小さい時に進捗計算でエラー"
               description2="terminalの呼び出しの最大値を先頭の製品品番端末数と同じにする。説明WEBサイトへのリンクを追加"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.101.01_.zip"
               inCharge="高知,王さん,不具合"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
