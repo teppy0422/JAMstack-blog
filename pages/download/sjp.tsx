@@ -147,13 +147,23 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2024-12-19T04:42:00+0900"
+              description1=""
+              description2="主に共通する目的でボンダーの簡易機能を追加"
+              descriptionIN=""
+              linkHref="/files/download/Sjp/Sjp3.101.12_.zip"
+              inCharge="高知,王さん,新機能"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2024-12-18T14:56:00+0900"
               description1=""
-              description2="MAX共通の書き直し"
+              description2="MAX共通の書き直し_途中"
               descriptionIN=""
               linkHref="/files/download/Sjp/Sjp3.101.10_.zip"
               inCharge="高知,王さん"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
