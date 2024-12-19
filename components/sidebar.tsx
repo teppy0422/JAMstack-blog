@@ -22,8 +22,8 @@ import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
 import { PiGithubLogoFill } from "react-icons/pi";
 import { MdEditRoad } from "react-icons/md";
-import { FaKeyboard } from "react-icons/fa";
-import { IoTicketOutline } from "react-icons/io5";
+import { FaKeyboard, FaRoad } from "react-icons/fa";
+import { IoTicketOutline, IoTicketSharp } from "react-icons/io5";
 import { AiOutlineWechat } from "react-icons/ai";
 
 function Sidebar() {
@@ -115,7 +115,7 @@ function Sidebar() {
         fontWeight={400}
       >
         <VStack spacing="1" align="stretch" fontSize={14}>
-          {menuItem("/roadMap", "ロードマップ", true, <MdEditRoad size={21} />)}
+          {menuItem("/roadMap", "ロードマップ", true, <FaRoad size={21} />)}
           {menuItem(
             "/skillBlogs/0000",
             "技術ブログ",
@@ -133,7 +133,7 @@ function Sidebar() {
             "ダウンロード",
             true,
             <Box transform="rotate(270deg)" position="relative">
-              <IoTicketOutline size={22} />
+              <IoTicketSharp size={22} />
             </Box>
           )}
           {menuItem("/BBS", "問い合わせ", true, <AiOutlineWechat size={22} />)}

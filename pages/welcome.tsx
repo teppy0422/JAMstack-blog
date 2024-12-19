@@ -15,11 +15,27 @@ import {
   Center,
   Stack,
   StackDivider,
+  HStack,
+  Icon,
+  Image,
+  CardFooter,
+  Button,
 } from "@chakra-ui/react";
-import { FaArrowCircleDown, FaUser } from "react-icons/fa";
+import {
+  FaArrowCircleDown,
+  FaUser,
+  FaLaptopCode,
+  FaRegThumbsUp,
+} from "react-icons/fa";
+import { BsChatLeftText, BsChatRightText } from "react-icons/bs";
 import { MdEditRoad } from "react-icons/md";
 import { IoTicketOutline } from "react-icons/io5";
-import { PiGithubLogoFill } from "react-icons/pi";
+import { VscChecklist } from "react-icons/vsc";
+import {
+  PiGithubLogoFill,
+  PiGithubLogoLight,
+  PiArrowFatLineDownLight,
+} from "react-icons/pi";
 import { AiOutlineWechat } from "react-icons/ai";
 import { FaEarthAsia } from "react-icons/fa6";
 import Sidebar from "../components/sidebar"; // Sidebar コンポーネントをインポート
@@ -30,13 +46,23 @@ import { useColorMode } from "@chakra-ui/react";
 
 import "@fontsource/noto-sans-jp";
 import "@fontsource/dela-gothic-one";
+import "@fontsource/rampart-one";
+import "@fontsource/rocknroll-one";
 
-export default function Welcome() {
+export const getServerSideProps = async (context) => {
+  const { query } = context;
+  return {
+    props: {
+      isNewCreated: query.isNewCreated || null, // クエリパラメータを取得
+    },
+  };
+};
+
+const Welcome = ({ isNewCreated }) => {
   const router = useRouter();
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
-  const { isNewCreated } = router.query;
   const { colorMode } = useColorMode();
   const colors = {
     light: {
@@ -52,8 +78,11 @@ export default function Welcome() {
   }
   to {
     transform: translate(0, 0) rotate(225deg);
-  }
-`;
+  }`;
+  const jumpAnimation = keyframes`
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }`;
   //生産準備+着手からの経過日数の計算
 
   const calculateElapsedTime = () => {
@@ -79,7 +108,8 @@ export default function Welcome() {
   const renderCard = (title, icon, text) => (
     <Card
       width={{ base: "100%", sm: "40%", md: "30%", lg: "30%", xl: "30%" }}
-      p={4}
+      maxW="280px"
+      p={2}
       backgroundColor="transparent"
       border="1px solid"
       borderColor="gray.500"
@@ -103,9 +133,7 @@ export default function Welcome() {
         {title}
       </Text>
       <CardBody p={1} lineHeight="1.2">
-        <Text fontFamily="Noto Sans Jp" fontSize="13px">
-          {text}
-        </Text>
+        {text}
       </CardBody>
     </Card>
   );
@@ -113,23 +141,36 @@ export default function Welcome() {
     <>
       <Sidebar />
       <Content isCustomHeader={true} maxWidth="1200px">
-        <div style={{ paddingTop: "50px", fontFamily: "Noto Sans JP" }}>
-          <Box textAlign="center" mb={8}>
+        <Box style={{ paddingTop: "30px", fontFamily: "Noto Sans JP" }}>
+          <Box textAlign="center" mb={4}>
             <Heading
               size="lg"
-              mb={2}
-              fontFamily="'Archivo Black', 'M PLUS Rounded 1c'"
+              mb={8}
+              fontFamily="'Rampart One', 'M PLUS Rounded 1c'"
+              fontSize={45}
               color={
                 colorMode === "light" ? colors.light.text : colors.dark.text
               }
+              display="inline-block"
             >
-              WELCOME
+              {Array.from("WELCOME").map((char, index) => (
+                <Text
+                  as="span"
+                  key={index}
+                  display="inline-block" // 追加: インラインブロックにする
+                  animation={`${jumpAnimation} 0.5s ease-in-out ${
+                    index * 0.1
+                  }s 5`}
+                >
+                  {char}
+                </Text>
+              ))}
             </Heading>
 
             {isNewCreated === "true" ? (
               <>
                 <Text fontSize="lg">アカウント作成が完了しました</Text>
-                <Text fontSize="lg">
+                <Text fontSize="lg" alignItems="center">
                   右上の
                   <Avatar size="xs" src="https://bit.ly/broken-link" mx={1} />
                   からログインしてください
@@ -141,6 +182,8 @@ export default function Welcome() {
                   <Text
                     fontSize="lg"
                     color={colorMode === "light" ? "red" : "orange"}
+                    alignItems="center"
+                    mb={3}
                   >
                     右上の
                     <Avatar size="xs" src="https://bit.ly/broken-link" mx={1} />
@@ -204,48 +247,52 @@ export default function Welcome() {
           </SimpleGrid>
 
           <Card
-            maxWidth="540px"
+            maxWidth="550px"
             mx="auto"
             bg="transparent"
             border="1px solid"
             borderColor="gray.500"
           >
-            <CardHeader p={3}>
-              <Heading size="md" textAlign="center">
+            <CardHeader p={3} borderTopRadius={5} bg="rgba(255, 255, 255, 0.2)">
+              <Heading size="md" textAlign="center" fontWeight={600}>
                 このWEBサービスのメリット
               </Heading>
             </CardHeader>
             <Divider />
-            <CardBody>
+            <CardBody p={4}>
               <Stack
                 divider={<StackDivider borderColor="gray.500" />}
                 spacing="4"
               >
                 <Box>
-                  <Heading size="xs" textTransform="uppercase" fontWeight={600}>
-                    リアルタイムで迅速に対応
+                  <Heading size="sm" textTransform="uppercase" fontWeight={600}>
+                    迅速に対応
                   </Heading>
-                  <Text pt="2" fontSize="sm">
-                    ・疑問や問題をすぐに問い合わせが出来ます
+                  <Text pt="2" fontSize="15px">
+                    ・疑問や問題をリアルタイムで問い合わせが出来ます
                   </Text>
                 </Box>
                 <Box>
-                  <Heading size="xs" textTransform="uppercase" fontWeight={600}>
+                  <Heading size="sm" textTransform="uppercase" fontWeight={600}>
                     依頼が簡単
                   </Heading>
-                  <Text pt="2" fontSize="sm">
+                  <Text pt="2" fontSize="15px">
                     ・システム開発依頼書や仕様書を用意する必要はありません
                     <br />
                     <Box as="span" ml={3.5}>
                       リアルタイムチャットから業務の問題を教えてください
                     </Box>
+                    <br />
+                    <Box as="span" ml={3.5}>
+                      解決するアイデアを提案します
+                    </Box>
                   </Text>
                 </Box>
                 <Box>
-                  <Heading size="xs" textTransform="uppercase" fontWeight={600}>
+                  <Heading size="sm" textTransform="uppercase" fontWeight={600}>
                     安価に提供
                   </Heading>
-                  <Text pt="2" fontSize="sm">
+                  <Text pt="2" fontSize="15px">
                     ・移動時間がないので低価格を実現しています
                     <br />
                     ・フルリモートなのでエンジニア雇用に必要な高額な人件費を削減可能です
@@ -257,30 +304,40 @@ export default function Welcome() {
 
           <Box
             display="flex"
+            flexDirection="column"
             justifyContent="center"
             alignItems="center"
-            mt={5}
+            mt={12}
             mb={10}
-            fontSize={40}
           >
-            <Text fontFamily="Noto Sans Jp" fontWeight={800}>
-              特徴
+            <Text fontFamily="Rampart One" fontWeight={800} fontSize={40}>
+              主な機能
             </Text>
           </Box>
           <Center flex="1" style={{ gap: "8px" }}>
             <Flex wrap="wrap" justify="center" style={{ gap: "24px" }}>
               {renderCard(
                 "ダウンロード",
-                <Box transform="rotate(270deg)" position="relative">
-                  <IoTicketOutline size={85} />
+                <Box transform="rotate(270deg)" position="relative" my={1.5}>
+                  <IoTicketOutline size={80} />
                 </Box>,
-                "プログラムのダウンロードと使い方イメージ"
+                <Text
+                  fontFamily="Noto Sans Jp"
+                  fontSize="13px"
+                  lineHeight={1.4}
+                >
+                  プログラムのダウンロードと説明動画
+                </Text>
               )}
               {renderCard(
                 "技術ブログ",
-                <PiGithubLogoFill size={90} />,
-                <Text>
-                  プログラムの使い方や共有したい技術を紹介
+                <PiGithubLogoLight size={90} />,
+                <Text
+                  fontFamily="Noto Sans Jp"
+                  fontSize="13px"
+                  lineHeight={1.4}
+                >
+                  プログラムの使い方や技術を紹介
                   <br />
                   ※自分で更新する方法も追加予定
                 </Text>
@@ -288,39 +345,317 @@ export default function Welcome() {
               {renderCard(
                 "問い合わせ",
                 <AiOutlineWechat size={90} />,
-                <Text>
+                <Text
+                  fontFamily="Noto Sans Jp"
+                  fontSize="13px"
+                  lineHeight={1.4}
+                >
                   LINEのようなリアルタイムチャットで分からない事や不具合 /
-                  新しい機能の追加を相談
+                  新機能の追加を相談
                 </Text>
               )}
               {renderCard(
                 "ロードマップ",
                 <MdEditRoad size={90} />,
-                "依頼が無くても改良を進めていく道順の確認ができます"
+                <Text
+                  fontFamily="Noto Sans Jp"
+                  fontSize="13px"
+                  lineHeight={1.4}
+                >
+                  各プログラムの改良/連携を長期的に進めていく道順の確認
+                </Text>
               )}
               {renderCard(
                 "その他",
-                <FaEarthAsia size={85} />,
-                "練習実績が記録できるタイピング練習ソフトなど"
+                <Box my={1.5}>
+                  <FaEarthAsia size={75} />
+                </Box>,
+                <Text
+                  fontFamily="Noto Sans Jp"
+                  fontSize="13px"
+                  lineHeight={1.4}
+                >
+                  練習実績が記録できるタイピング練習ソフトなど
+                </Text>
               )}
             </Flex>
           </Center>
           <Box textAlign="center">
             <Text textAlign="center" mt={8} lineHeight={2}>
-              他に必要な機能があれば意見ください
-            </Text>
-            <Text fontSize="md" mt={2}>
-              ※ログインして認証を受けないと閲覧/ダウンロードは出来ません
-            </Text>
-            <Text textAlign="center" mt={12} lineHeight={1.6}>
-              {elapsedTime}
-            </Text>
-            <Text textAlign="center" mt={0.6} lineHeight={1.6} fontSize={12}>
-              {totalDays}
+              機能は必要都度追加していきます
             </Text>
           </Box>
-        </div>
+
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            mt={12}
+          >
+            <Text fontFamily="Rampart One" fontWeight={800} fontSize={40}>
+              ご利用の流れ
+            </Text>
+          </Box>
+          <Text textAlign="center" mb={10}>
+            〜生産準備+に機能追加の場合〜
+          </Text>
+          <Card
+            maxW={800}
+            overflow="hidden"
+            variant="outline"
+            bg="transparent"
+            border="1px solid"
+            borderColor="gray.500"
+            p={1}
+            display="flex"
+            justifyContent="center"
+            margin="0 auto"
+          >
+            <CardBody p={2}>
+              <HStack height="50px">
+                <Box
+                  flex="1"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Text fontFamily="Rampart One" fontSize="45px">
+                    1
+                  </Text>
+                </Box>
+                <Box flex="6">
+                  <Text fontSize="20px">チャットで問い合わせる</Text>
+                </Box>
+
+                <Box flex="1" justifyContent="center">
+                  <BsChatLeftText size={40} />
+                </Box>
+                <Box
+                  height="100%"
+                  width="1px"
+                  backgroundColor="gray.500"
+                  mx={0}
+                />
+                <Box flex="8">稼働日の8:00 - 17:00は即日の回答を行います</Box>
+              </HStack>
+            </CardBody>
+          </Card>
+
+          <HStack justifyContent="center" my={2}>
+            <Icon as={PiArrowFatLineDownLight} fontSize="40px" />
+          </HStack>
+
+          <Card
+            maxW={800}
+            overflow="hidden"
+            variant="outline"
+            bg="transparent"
+            border="1px solid"
+            borderColor="gray.500"
+            p={1}
+            display="flex"
+            justifyContent="center"
+            margin="0 auto"
+          >
+            <CardBody p={2}>
+              <HStack height="50px">
+                <Box
+                  flex="1"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Text fontFamily="Rampart One" fontSize="45px">
+                    2
+                  </Text>
+                </Box>
+                <Box flex="6">
+                  <Text fontSize="20px">チャットで仕様を検討する</Text>
+                </Box>
+                <Box flex="1" justifyContent="center">
+                  <BsChatRightText size={40} />
+                </Box>
+                <Box
+                  height="100%"
+                  width="1px"
+                  backgroundColor="gray.500"
+                  mx={0}
+                />
+                <Box flex="8">
+                  <Text>およそ数回のやりとりで仕様は決定します</Text>
+                  <Text fontSize="14px">※過去半年の実績</Text>
+                </Box>
+              </HStack>
+            </CardBody>
+          </Card>
+          <HStack justifyContent="center" my={2}>
+            <Icon as={PiArrowFatLineDownLight} fontSize="40px" />
+          </HStack>
+
+          <Card
+            maxW={800}
+            overflow="hidden"
+            variant="outline"
+            bg="transparent"
+            border="1px solid"
+            borderColor="gray.500"
+            p={1}
+            display="flex"
+            justifyContent="center"
+            margin="0 auto"
+          >
+            <CardBody p={2}>
+              <HStack height="50px">
+                <Box
+                  flex="1"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Text fontFamily="Rampart One" fontSize="45px">
+                    3
+                  </Text>
+                </Box>
+                <Box flex="6">
+                  <Text fontSize="20px">開発する</Text>
+                </Box>
+                <Box flex="1" justifyContent="center">
+                  <FaLaptopCode size={45} />
+                </Box>
+                <Box
+                  height="100%"
+                  width="1px"
+                  backgroundColor="gray.500"
+                  mx={0}
+                />
+                <Box flex="8">
+                  <Text>約6時間後に完成してアップロードします</Text>
+                  <Text fontSize="14px">
+                    ※過去半年の実績(1〜56時間)の平均値
+                  </Text>
+                </Box>
+              </HStack>
+            </CardBody>
+          </Card>
+          <HStack justifyContent="center" my={2}>
+            <Icon as={PiArrowFatLineDownLight} fontSize="40px" />
+          </HStack>
+
+          <Card
+            maxW={800}
+            overflow="hidden"
+            variant="outline"
+            bg="transparent"
+            border="1px solid"
+            borderColor="gray.500"
+            p={1}
+            display="flex"
+            justifyContent="center"
+            margin="0 auto"
+          >
+            <CardBody p={2}>
+              <HStack height="50px">
+                <Box
+                  flex="1"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Text fontFamily="Rampart One" fontSize="45px">
+                    4
+                  </Text>
+                </Box>
+                <Box flex="6">
+                  <Text fontSize="20px">ダウンロードして動作確認</Text>
+                </Box>
+                <Box flex="1" justifyContent="center">
+                  <VscChecklist size={40} />
+                </Box>
+                <Box
+                  height="100%"
+                  width="1px"
+                  backgroundColor="gray.500"
+                  mx={0}
+                />
+                <Box flex="8">
+                  <Text>依頼内容が意図したものだったかを確認</Text>
+                  <Text fontSize="14px">
+                    ※もし違う場合は
+                    <Box
+                      as="span"
+                      fontFamily="Rampart One"
+                      fontSize="18px"
+                      mx={1}
+                    >
+                      1
+                    </Box>
+                    に戻ります
+                  </Text>
+                </Box>
+              </HStack>
+            </CardBody>
+          </Card>
+          <HStack justifyContent="center" my={2}>
+            <Icon as={PiArrowFatLineDownLight} fontSize="40px" />
+          </HStack>
+
+          <Card
+            maxW={800}
+            overflow="hidden"
+            variant="outline"
+            bg="transparent"
+            border="1px solid"
+            borderColor="gray.500"
+            p={1}
+            display="flex"
+            justifyContent="center"
+            margin="0 auto"
+          >
+            <CardBody p={2}>
+              <HStack height="50px">
+                <Box
+                  flex="1"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Text fontFamily="Rampart One" fontSize="45px">
+                    5
+                  </Text>
+                </Box>
+                <Box flex="6">
+                  <Text fontSize="20px">結果の報告</Text>
+                </Box>
+                <Box flex="1" justifyContent="center">
+                  <FaRegThumbsUp size={40} />
+                </Box>
+                <Box
+                  height="100%"
+                  width="1px"
+                  backgroundColor="gray.500"
+                  mx={0}
+                />
+                <Box flex="8">
+                  <Text>実際に使ってみた感想や考察などを連絡</Text>
+                  <Text fontSize="14px">※結果連絡は必ずお願いします</Text>
+                </Box>
+              </HStack>
+            </CardBody>
+          </Card>
+
+          <Text textAlign="center" fontSize="md" mt={18}>
+            ※ログインして認証を受けないと閲覧/ダウンロードは出来ません
+          </Text>
+          <Text textAlign="center" mt={6} lineHeight={1.6}>
+            {elapsedTime}
+          </Text>
+          <Text textAlign="center" mt={0.6} lineHeight={1.6} fontSize={12}>
+            サービス開始から{totalDays}が経過
+          </Text>
+        </Box>
       </Content>
     </>
   );
-}
+};
+
+export default Welcome;
