@@ -15,6 +15,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@fontsource/dela-gothic-one": "^5.1.0",
     "@fontsource/noto-sans-jp": "^5.1.0",
     "@fontsource/rock-salt": "^5.1.0",
     "@fontsource/yomogi": "^5.1.0",
