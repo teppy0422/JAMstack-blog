@@ -70,8 +70,6 @@ import "@fontsource/dela-gothic-one";
 import "@fontsource/rampart-one";
 import "@fontsource/rocknroll-one";
 
-import MessageDisplay from "../components/MessageDisplay";
-
 export const getServerSideProps = async (context) => {
   const { query } = context;
   return {
@@ -80,6 +78,8 @@ export const getServerSideProps = async (context) => {
     },
   };
 };
+
+import MessageDisplay from "../components/MessageDisplay";
 
 const Welcome = ({ isNewCreated }) => {
   const router = useRouter();
@@ -359,8 +359,8 @@ const Welcome = ({ isNewCreated }) => {
               {/* 現場直送の声を、カタチにする */}
               <MessageDisplay
                 ja="システム開発は、次の時代へ"
-                en="System development is moving to the next era"
-                wf="Le développement de systèmes entre dans une nouvelle ère"
+                us="System development is moving to the next era"
+                cn="系统开发进入下一个时代"
               />
             </Text>
             {/* <Text fontSize={22} fontFamily="Noto Sans Jp" fontWeight={600}>
@@ -456,8 +456,8 @@ const Welcome = ({ isNewCreated }) => {
               <Heading size="md" textAlign="center" fontWeight={600}>
                 <MessageDisplay
                   ja="このWEBサービスの特徴"
-                  en="Features of this web service"
-                  wf="Caractéristiques de ce service web."
+                  us="Features of this web service"
+                  cn="该网络服务的特点"
                 />
               </Heading>
             </CardHeader>
@@ -475,10 +475,45 @@ const Welcome = ({ isNewCreated }) => {
                     ・疑問や問題をリアルタイムですぐに問い合わせが出来ます
                   </Text>
                   <Text pt="2" fontSize="15px">
-                    ・開発スピードがとにかく速い
-                    <Box as="span" fontSize="13px" ml="4px">
-                      ※通常なら6ヶ月が、1ヶ月未満で完成
+                    ・開発スピードが
+                    <Box
+                      as="span"
+                      onClick={() => handleOpen("hayai")}
+                      cursor="pointer"
+                      color="blue.500"
+                      display="inline-flex"
+                      borderBottom="1px solid"
+                      mr="2px"
+                    >
+                      速い
+                      <BsQuestionCircle
+                        style={{ marginTop: "4px", marginLeft: "2px" }}
+                      />
                     </Box>
+                    <CustomModal
+                      isOpen={activeDrawer === "hayai"}
+                      onClose={handleClose}
+                      title="開発が速い"
+                      modalBody=<>
+                        <Center>
+                          <Image
+                            src="images/welcome/subscription.svg"
+                            width="100px"
+                            height="100px"
+                          />
+                        </Center>
+                        <Text>
+                          ハメ図作成までは3日
+                          <br />
+                          配策経路作成まで5日
+                          <br />
+                          ・どちらも現場で使えるようになるまでの日数
+                          <br />
+                          <br />
+                          ※目安として通常の6倍程速く作成できます。
+                        </Text>
+                      </>
+                    />
                   </Text>
                   <Text pt="2" fontSize="15px">
                     ・
@@ -509,8 +544,13 @@ const Welcome = ({ isNewCreated }) => {
                           />
                         </Center>
                         <Text>
-                          定額じゃない場合、見積作成から承認まで1ヶ月程かかってフットワークが重くなりがちです。
-                          特に不具合の場合には現場が困ります。
+                          以前は依頼されてから見積書を作成し承認されてから実行していましたが、
+                          承認まで1ヶ月程かかって問題解決まで時間が掛かり過ぎていました。
+                          特に不具合の場合には現場が困っていました。
+                          <br />
+                          <br />
+                          定額にする事で連絡が来たらすぐに対応する事が可能です。
+                          プログラムが大きくなると定期的に書き直しを行います。
                           <br />
                           <br />
                           ※新しいアプリ開発や大きい機能追加の場合には別途見積を出させて頂く場合があります。(48Hを超えそうな場合)

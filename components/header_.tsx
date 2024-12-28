@@ -30,8 +30,12 @@ import {
   DrawerBody,
   Divider,
   Avatar,
-  ButtonGroup,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   Tooltip,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
 
@@ -57,10 +61,10 @@ import AwesomIcon from "./awesomIcon";
 import Auth from "./Auth"; // Authコンポーネントをインポート
 import { useUserData } from "../hooks/useUserData";
 import { Global } from "@emotion/react";
-
-import { useLanguage } from "../context/LanguageContext";
+import { AppContext } from "../pages/_app";
 
 export default function Header() {
+  const { language, setLanguage } = useContext(AppContext);
   const { data: session } = useSession();
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("red.500", "red.200");
@@ -80,6 +84,7 @@ export default function Header() {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 
   const [weatherIcon, setWeatherIcon] = useState(<FaSun />);
+
   useEffect(() => {
     const fetchWeather = async () => {
       const icon = await getWeatherIcon();
@@ -87,8 +92,6 @@ export default function Header() {
     };
     fetchWeather();
   }, []);
-
-  const { language, setLanguage } = useLanguage(); // コンテキストから言語を取得
 
   // loginボタンを隠す
   let keyFlag: boolean = false;
@@ -422,7 +425,8 @@ export default function Header() {
                     <AiOutlineWechat size={22} />
                   )}
                   <Divider borderColor="white" />
-                  <ButtonGroup mt="12px">
+
+                  <ButtonGroup my="16px">
                     <Tooltip label={<Box>日本語</Box>} aria-label="English">
                       <img
                         src="./images/land/jp.svg"
@@ -450,7 +454,7 @@ export default function Header() {
                       aria-label="English"
                     >
                       <img
-                        src="./images/land/gb.svg"
+                        src="./images/land/um.svg"
                         alt="英語"
                         style={{
                           width: "32px",
@@ -461,7 +465,7 @@ export default function Header() {
                           marginRight: "10px",
                           cursor: "pointer",
                         }}
-                        onClick={() => setLanguage("en")}
+                        onClick={() => setLanguage("us")}
                       />
                     </Tooltip>
                     <Tooltip
@@ -475,8 +479,8 @@ export default function Header() {
                       aria-label="English"
                     >
                       <img
-                        src="./images/land/wf.svg"
-                        alt="仏語"
+                        src="./images/land/cn.svg"
+                        alt="簡体字中国語"
                         style={{
                           width: "32px",
                           height: "24px",
@@ -486,10 +490,11 @@ export default function Header() {
                           marginRight: "10px",
                           cursor: "pointer",
                         }}
-                        onClick={() => setLanguage("wf")}
+                        onClick={() => setLanguage("cn")}
                       />
                     </Tooltip>
                   </ButtonGroup>
+                  <Divider borderColor="white" />
                 </>
               </VStack>
             </DrawerBody>

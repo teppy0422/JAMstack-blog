@@ -1,22 +1,22 @@
-import React from "react";
-import { useLanguage } from "../context/LanguageContext";
+import React, { useContext } from "react";
+import { AppContext } from "../pages/_app";
 
 type MessageDisplayProps = {
   ja: string;
-  en: string;
-  wf: string;
+  us: string;
+  cn: string;
 };
 
-const MessageDisplay: React.FC<MessageDisplayProps> = ({ ja, en, wf }) => {
-  const { language } = useLanguage(); // フックをコンポーネント内で使用
+const MessageDisplay: React.FC<MessageDisplayProps> = ({ ja, us, cn }) => {
+  const { language, setLanguage } = useContext(AppContext);
 
   const message =
     language === "ja"
       ? ja
-      : language === "en"
-      ? en
-      : language === "wf"
-      ? wf
+      : language === "us"
+      ? us
+      : language === "cn"
+      ? cn
       : "";
 
   return <>{message}</>;
