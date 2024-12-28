@@ -63,6 +63,8 @@ import IconWithDrawer from "./IconWithDrawer";
 import { Global } from "@emotion/react";
 import "@fontsource/noto-sans-jp";
 
+import Snowfall from "react-snowfall";
+
 interface BBSTodoListProps {
   userName: string;
   userId: string;
@@ -1508,6 +1510,11 @@ export default function Thread() {
                   }
                   return (
                     <div className="post">
+                      <Snowfall
+                        snowflakeCount={50}
+                        wind={[0.5, 0.6]}
+                        speed={[0.5, 2]}
+                      />
                       {isNewDay && ( //日付の区切り線
                         <Flex
                           alignItems="center"

@@ -20,18 +20,33 @@ const myState = {
 };
 export const myContext = createContext(myState);
 import { AppProps } from "next/app";
+import { LanguageProvider } from "../context/LanguageContext";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <>
+    <LanguageProvider>
       <Head>
-        <title>blog</title>
-        <link
+        <title>STUDIO+</title>
+        <meta
+          name="description"
+          content="企業向け生産性向上を図る総合プラットフォーム"
+        />
+        <meta property="og:title" content="STUDIO+" />
+        <meta
+          property="og:description"
+          content="企業向け生産性向上を図る総合プラットフォーム"
+        />
+        <meta
+          property="og:image"
+          content="https://www.teppy.link/images/hippo_003_cir.svg"
+        />
+        <meta property="og:url" content="https://www.teppy.link/" />
+        {/* <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Yusei+Magic&display=swap"
-        />
+        /> */}
         {/* アクセス解析 */}
-        <script src="//accaii.com/teppy/script.js" async></script>
+        {/* <script src="//accaii.com/teppy/script.js" async></script> */}
       </Head>
       <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />
@@ -41,7 +56,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           </myContext.Provider>
         </SessionProvider>
       </ChakraProvider>
-    </>
+    </LanguageProvider>
   );
 }
 export default MyApp;

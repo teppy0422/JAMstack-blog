@@ -529,7 +529,15 @@ const BlogPage: React.FC = () => {
             入手せずにすぐに試したい場合は下記から準備済みのデータをダウンロードしてご利用ください。
           </Text>
           <UnderlinedTextWithDrawer
-            text="#準備済みの必要データ"
+            text=<>
+              <Box as="span" display="inline" borderBottom="2px solid">
+                #準備済みの必要データ
+              </Box>
+              <LuPanelRightOpen
+                size="20px"
+                style={{ marginBottom: "-5px", display: "inline" }}
+              />
+            </>
             onOpen={() => handleOpen("準備済みの必要データ")}
             isOpen={isOpen && activeDrawer === "準備済みの必要データ"}
             onClose={handleClose}
@@ -778,7 +786,15 @@ const BlogPage: React.FC = () => {
             <Divider borderColor={colorMode === "light" ? "black" : "white"} />
             <Text mb={4}>主管工場の設計にメールで依頼して入手します</Text>
             <UnderlinedTextWithDrawer
-              text="#メールのサンプル"
+              text=<>
+                <Box as="span" display="inline" borderBottom="2px solid">
+                  #メールのサンプル
+                </Box>
+                <LuPanelRightOpen
+                  size="20px"
+                  style={{ marginBottom: "-5px", display: "inline" }}
+                />
+              </>
               onOpen={() => handleOpen("メールサンプル")}
               isOpen={isOpen && activeDrawer === "メールサンプル"}
               onClose={handleClose}

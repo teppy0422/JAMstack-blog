@@ -294,7 +294,15 @@ const BlogPage: React.FC = () => {
           <Text display="inline">
             無料の画像編集ソフト
             <UnderlinedTextWithDrawer
-              text="InkScape"
+              text=<>
+                <Box as="span" display="inline" borderBottom="2px solid">
+                  InkScape
+                </Box>
+                <LuPanelRightOpen
+                  size="20px"
+                  style={{ marginBottom: "-5px", display: "inline" }}
+                />
+              </>
               onOpen={() => handleOpen("InkScape")}
               isOpen={isOpen && activeDrawer === "InkScape"}
               onClose={handleClose}
@@ -407,11 +415,20 @@ const BlogPage: React.FC = () => {
             <Text display="inline-block" mt={4}>
               4-2.
               <UnderlinedTextWithDrawer
-                text="Photoroom"
+                text=<>
+                  <Box as="span" display="inline" borderBottom="2px solid">
+                    Photoroom
+                  </Box>
+                  <LuPanelRightOpen
+                    size="20px"
+                    style={{ marginBottom: "-5px", display: "inline" }}
+                  />
+                </>
                 onOpen={() => handleOpen("Photoroom")}
                 isOpen={isOpen && activeDrawer === "Photoroom"}
                 onClose={handleClose}
                 header="Photoroomの使い方"
+                size="md"
                 children={
                   <Box>
                     <video width="100%" height="100%" loop autoPlay muted>

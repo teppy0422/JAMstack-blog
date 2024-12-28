@@ -54,7 +54,6 @@ import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
 import DownloadLink from "./DownloadLink";
-import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
 import ExternalLink from "./ExternalLink";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import ImageSliderModal from "./ImageSliderModal"; // モーダルコンポーネントをインポート

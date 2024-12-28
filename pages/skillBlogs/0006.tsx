@@ -310,7 +310,15 @@ const BlogPage: React.FC = () => {
             <Text ml={6}>
               拠点によって要望が違うので
               <UnderlinedTextWithDrawer
-                text="選択式"
+                text=<>
+                  <Box as="span" display="inline" borderBottom="2px solid">
+                    選択式
+                  </Box>
+                  <LuPanelRightOpen
+                    size="20px"
+                    style={{ marginBottom: "-5px", display: "inline" }}
+                  />
+                </>
                 onOpen={() => handleOpen("ハメ図は選択式")}
                 isOpen={isOpen && activeDrawer === "ハメ図は選択式"}
                 onClose={handleClose}
@@ -410,7 +418,15 @@ const BlogPage: React.FC = () => {
             <Text ml={6} mt={4}>
               ハメ図を
               <UnderlinedTextWithDrawer
-                text="貼るスペースが狭い"
+                text=<>
+                  <Box as="span" display="inline" borderBottom="2px solid">
+                    貼るスペースが狭い
+                  </Box>
+                  <LuPanelRightOpen
+                    size="20px"
+                    style={{ marginBottom: "-5px", display: "inline" }}
+                  />
+                </>
                 onOpen={() => handleOpen("ハメ図の共通化")}
                 isOpen={isOpen && activeDrawer === "ハメ図の共通化"}
                 onClose={handleClose}
@@ -500,7 +516,15 @@ const BlogPage: React.FC = () => {
           <Flex direction="column" alignItems="center" justifyContent="center">
             <Text mt={4}>現在は主に下記で使用しています</Text>
             <UnderlinedTextWithDrawer
-              text="#1.検査履歴システム"
+              text=<>
+                <Box as="span" display="inline" borderBottom="2px solid">
+                  #1.検査履歴システム
+                </Box>
+                <LuPanelRightOpen
+                  size="20px"
+                  style={{ marginBottom: "-5px", display: "inline" }}
+                />
+              </>
               onOpen={() => handleOpen("検査履歴システム")}
               isOpen={isOpen && activeDrawer === "検査履歴システム"}
               onClose={handleClose}
@@ -555,7 +579,15 @@ const BlogPage: React.FC = () => {
             >
               <Text mt={4}>現在は主に下記で使用しています</Text>
               <UnderlinedTextWithDrawer
-                text="#1.配策誘導ナビ"
+                text=<>
+                  <Box as="span" display="inline" borderBottom="2px solid">
+                    #1.配策誘導ナビ
+                  </Box>
+                  <LuPanelRightOpen
+                    size="20px"
+                    style={{ marginBottom: "-5px", display: "inline" }}
+                  />
+                </>
                 onOpen={() => handleOpen("配策誘導ナビ")}
                 isOpen={isOpen && activeDrawer === "配策誘導ナビ"}
                 onClose={handleClose}
@@ -577,7 +609,15 @@ const BlogPage: React.FC = () => {
                 }
               />
               <UnderlinedTextWithDrawer
-                text="#2.配策誘導ナビv3.1(モバイル)"
+                text=<>
+                  <Box as="span" display="inline" borderBottom="2px solid">
+                    #2.配策誘導ナビv3.1(モバイル)
+                  </Box>
+                  <LuPanelRightOpen
+                    size="20px"
+                    style={{ marginBottom: "-5px", display: "inline" }}
+                  />
+                </>
                 onOpen={() => handleOpen("配策誘導ナビモバイル")}
                 isOpen={isOpen && activeDrawer === "配策誘導ナビモバイル"}
                 onClose={handleClose}
