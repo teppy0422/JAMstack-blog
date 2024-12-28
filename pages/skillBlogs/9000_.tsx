@@ -33,7 +33,6 @@ import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
 import DownloadLink from "./DownloadLink";
-import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
 import ExternalLink from "./ExternalLink";
 import IframeDisplay from "./IframeDisplay";
 

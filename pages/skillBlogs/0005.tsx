@@ -226,7 +226,15 @@ const BlogPage: React.FC = () => {
               そこで「サブナンバーを引越し」させる機能を追加しました。
             </Text>
             <UnderlinedTextWithDrawer
-              text="開発の背景"
+              text=<>
+                <Box as="span" display="inline" borderBottom="2px solid">
+                  開発の背景
+                </Box>
+                <LuPanelRightOpen
+                  size="20px"
+                  style={{ marginBottom: "-5px", display: "inline" }}
+                />
+              </>
               onOpen={() => handleOpen("開発の背景")}
               isOpen={isOpen && activeDrawer === "開発の背景"}
               onClose={handleClose}

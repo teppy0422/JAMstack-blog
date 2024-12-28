@@ -45,10 +45,10 @@ import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
 import DownloadLink from "./DownloadLink";
-import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
 import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
+import CustomModal from "./customModal";
 
 import "@fontsource/noto-sans-jp";
 
@@ -271,6 +271,7 @@ const BlogPage: React.FC = () => {
               ※Edgeの場合
             </Text>
             <Image src="/images/0007/0001.png" alt="0001.png" w="60%" />
+
             <Text
               onClick={() => handleOpen("chrome")}
               cursor="pointer"
@@ -278,21 +279,14 @@ const BlogPage: React.FC = () => {
             >
               ※Chromeの場合
             </Text>
-            <Modal isOpen={activeDrawer === "chrome"} onClose={handleClose}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Chromeの場合</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Image src="/images/0007/0004.png" alt="0004.png" />
-                </ModalBody>
-                <ModalFooter>
-                  <Button colorScheme="blue" mr={3} onClick={handleClose}>
-                    閉じる
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
+            <CustomModal
+              isOpen={activeDrawer === "chrome"}
+              onClose={handleClose}
+              title="Chromeの場合"
+              modalBody=<>
+                <Image src="/images/0007/0004.png" alt="0004.png" />
+              </>
+            />
 
             <Text fontWeight="400" my={4}>
               2-3.ダウンロードしたファイル(003_練習用.zip)の展開

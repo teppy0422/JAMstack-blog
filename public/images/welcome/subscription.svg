@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" width="300" height="300" version="1.1" viewBox="50 50 200 200" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-width: 8px;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill: none;
+        stroke: #333;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-2 {
+        stroke-width: 4px;
+      }
+
+      .cls-3 {
+        stroke-width: 6px;
+      }
+
+      .cls-4 {
+        fill: #333;
+      }
+
+      .cls-4, .cls-5 {
+        stroke-width: 0px;
+      }
+
+      .cls-5 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g>
+    <polyline class="cls-1" points="158.75 184.36 82.41 184.36 82.41 95.31 189.4 95.31 189.4 145"/>
+    <rect class="cls-4" x="82.01" y="96.34" width="106.63" height="16.99"/>
+    <circle class="cls-5" cx="135.32" cy="104.25" r="2.93"/>
+    <g>
+      <path class="cls-4" d="M108.42,162.18l3.48-4.69c2.22,2.17,4.94,3.83,8.32,3.83,3.78,0,6.36-1.87,6.36-5.19,0-3.68-2.17-5.95-10.29-5.95v-5.35c6.86,0,9.08-2.37,9.08-5.7,0-2.93-1.82-4.64-4.99-4.69-2.67.05-4.84,1.31-7.06,3.33l-3.78-4.54c3.23-2.82,6.81-4.59,11.2-4.59,7.21,0,12.1,3.53,12.1,9.94,0,4.03-2.27,6.96-6.25,8.52v.25c4.24,1.16,7.46,4.29,7.46,9.18,0,6.86-6,10.84-13.11,10.84-5.9,0-9.89-2.22-12.51-5.19Z"/>
+      <path class="cls-4" d="M140.95,160.66h8.02v-23.6h-6.76v-4.59c3.73-.71,6.3-1.66,8.68-3.13h5.5v31.32h7.01v6h-22.44v-6Z"/>
+    </g>
+  </g>
+  <g>
+    <g>
+      <line class="cls-2" x1="183.61" y1="168.45" x2="193.43" y2="179.82"/>
+      <line class="cls-2" x1="184.71" y1="179.82" x2="202.15" y2="179.82"/>
+      <line class="cls-2" x1="184.71" y1="185.87" x2="202.15" y2="185.87"/>
+      <polyline class="cls-2" points="193.43 193.8 193.43 179.82 203.25 168.45"/>
+    </g>
+    <circle class="cls-3" cx="193.43" cy="180.12" r="24.56"/>
+  </g>
+</svg>

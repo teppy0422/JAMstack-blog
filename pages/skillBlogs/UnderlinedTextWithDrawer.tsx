@@ -5,7 +5,7 @@ import { useColorMode } from "@chakra-ui/react";
 import BasicDrawer from "../../components/BasicDrawer";
 
 interface UnderlinedTextWithDrawerProps {
-  text: string;
+  text: React.ReactNode;
   onOpen: () => void;
   isOpen: boolean;
   onClose: () => void;
@@ -35,16 +35,11 @@ const UnderlinedTextWithDrawer: React.FC<UnderlinedTextWithDrawerProps> = ({
         cursor="pointer"
         onClick={onOpen}
         spacing={1}
-        borderBottom="2px solid"
         display="inline"
       >
         <Box as="span" display="inline">
           {text}
         </Box>
-        <LuPanelRightOpen
-          size="20px"
-          style={{ marginBottom: "-3px", display: "inline" }}
-        />
       </HStack>
       <BasicDrawer
         isOpen={isOpen}
