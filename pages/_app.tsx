@@ -1,5 +1,11 @@
 //ここでimportしたものは全てのページで読み込まれる
-import React, { useEffect, Dispatch, useState, createContext } from "react";
+import React, {
+  useEffect,
+  Dispatch,
+  useState,
+  createContext,
+  useContext,
+} from "react";
 import { DefaultSeo } from "next-seo";
 import {
   ChakraProvider,
@@ -22,7 +28,25 @@ export const myContext = createContext(myState);
 import { AppProps } from "next/app";
 import { LanguageProvider } from "../context/LanguageContext";
 
+// 言語設定の型定義
+type LanguageType = "ja" | "us" | "cn";
+
+// コンテキストの型定義
+interface AppContextType {
+  language: LanguageType;
+  setLanguage: Dispatch<React.SetStateAction<LanguageType>>;
+}
+
+// コンテキストの作成
+export const AppContext = createContext<AppContextType>({
+  language: "ja",
+  setLanguage: () => {},
+});
+
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+  // 言語設定の状態
+  const [language, setLanguage] = useState<LanguageType>("ja");
+
   return (
     <LanguageProvider>
       <Head>
@@ -51,9 +75,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />
         <SessionProvider session={session}>
-          <myContext.Provider value={myState}>
+          <AppContext.Provider value={{ language, setLanguage }}>
             <Component {...pageProps} />
-          </myContext.Provider>
+          </AppContext.Provider>
         </SessionProvider>
       </ChakraProvider>
     </LanguageProvider>
