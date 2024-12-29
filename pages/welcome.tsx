@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
 
@@ -44,6 +44,8 @@ import {
 import { MdEditRoad } from "react-icons/md";
 import { IoTicketOutline } from "react-icons/io5";
 import { FaCheckCircle, FaClipboardList, FaRegClock } from "react-icons/fa";
+import { LuPanelRightOpen } from "react-icons/lu";
+import { BsQuestionCircle } from "react-icons/bs";
 
 import { VscChecklist } from "react-icons/vsc";
 import {
@@ -59,8 +61,9 @@ import { useUserInfo } from "../hooks/useUserId";
 import { useUserData } from "../hooks/useUserData";
 import { useColorMode } from "@chakra-ui/react";
 import UnderlinedTextWithDrawer from "./skillBlogs/UnderlinedTextWithDrawer";
+import CustomModal from "./skillBlogs/customModal";
 import IframeDisplay from "./skillBlogs/IframeDisplay";
-import SjpChart00 from "./skillBlogs/chart/chart_01";
+import SjpChart01 from "./skillBlogs/chart/chart_01";
 
 import "@fontsource/noto-sans-jp";
 import "@fontsource/dela-gothic-one";
@@ -76,6 +79,9 @@ export const getServerSideProps = async (context) => {
   };
 };
 
+import getMessage from "../components/getMessage";
+import { AppContext } from "../pages/_app";
+
 const Welcome = ({ isNewCreated }) => {
   const router = useRouter();
   const { userId, email } = useUserInfo();
@@ -90,6 +96,8 @@ const Welcome = ({ isNewCreated }) => {
       text: "#FFe",
     },
   };
+  const { language, setLanguage } = useContext(AppContext);
+
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加
   const handleOpen = (drawerName: string) => {
@@ -351,7 +359,13 @@ const Welcome = ({ isNewCreated }) => {
               fontFamily="Noto Sans Jp"
               fontWeight={600}
             >
-              現場直送の声を、カタチにする
+              {/* 現場直送の声を、カタチにする */}
+              {getMessage({
+                ja: "システム開発は、次の時代へ",
+                us: "System development is moving to the next era",
+                cn: "系统开发进入下一个时代",
+                language,
+              })}
             </Text>
             {/* <Text fontSize={22} fontFamily="Noto Sans Jp" fontWeight={600}>
               開発の手間をも省く仕組みづくり
@@ -444,7 +458,12 @@ const Welcome = ({ isNewCreated }) => {
           >
             <CardHeader p={3} borderTopRadius={5} bg="rgba(255, 255, 255, 0.2)">
               <Heading size="md" textAlign="center" fontWeight={600}>
-                このWEBサービスの特徴
+                {getMessage({
+                  ja: "このWEBサービスの特徴",
+                  us: "Features of this web service",
+                  cn: "该网络服务的特点",
+                  language,
+                })}
               </Heading>
             </CardHeader>
             <Divider />
@@ -455,58 +474,315 @@ const Welcome = ({ isNewCreated }) => {
               >
                 <Box>
                   <Heading size="sm" textTransform="uppercase" fontWeight={600}>
-                    迅速に対応
+                    {getMessage({
+                      ja: "迅速に対応",
+                      us: "Quick response",
+                      cn: "快速反应。",
+                      language,
+                    })}
                   </Heading>
                   <Text pt="2" fontSize="15px">
-                    ・疑問や問題をリアルタイムですぐに問い合わせが出来ます
+                    {getMessage({
+                      ja: "・疑問や問題をリアルタイムですぐに問い合わせが出来ます",
+                      us: "・You can contact us immediately with any questions or problems in real time.",
+                      cn: "可以立即实时提出问题和困难。",
+                      language,
+                    })}
                   </Text>
                   <Text pt="2" fontSize="15px">
-                    ・開発スピードがとにかく速い
-                    <Box as="span" fontSize="13px" ml="4px">
-                      ※通常なら6ヶ月が、1ヶ月未満で完成
+                    {getMessage({
+                      ja: "・開発スピードが",
+                      us: "・Development speed is ",
+                      cn: "・......发展速度。",
+                      language,
+                    })}
+                    <Box
+                      as="span"
+                      onClick={() => handleOpen("hayai")}
+                      cursor="pointer"
+                      color="blue.500"
+                      display="inline-flex"
+                      borderBottom="1px solid"
+                      mr="2px"
+                    >
+                      {getMessage({
+                        ja: "速い",
+                        us: " Fast",
+                        cn: "(为时尚早",
+                        language,
+                      })}
+                      <BsQuestionCircle
+                        style={{ marginTop: "4px", marginLeft: "2px" }}
+                      />
                     </Box>
+                    <CustomModal
+                      isOpen={activeDrawer === "hayai"}
+                      onClose={handleClose}
+                      title={getMessage({
+                        ja: "開発が速い",
+                        us: "Fast Development",
+                        cn: "快速发展",
+                        language,
+                      })}
+                      modalBody=<>
+                        <Center>
+                          <Image
+                            src="images/welcome/subscription.svg"
+                            width="100px"
+                            height="100px"
+                          />
+                        </Center>
+                        <Text>
+                          {getMessage({
+                            ja: "ハメ図作成システム完成まで3日",
+                            us: "3 days to complete the frame drawing system.",
+                            cn: "3 天完成框架图系统。",
+                            language,
+                          })}
+                          <br />
+                          {getMessage({
+                            ja: "配策経路作成機能の追加まで5日",
+                            us: "5 days to add the ability to create a route for the allocation of measures.",
+                            cn: "5 天内增加创建配送路线的功能。",
+                            language,
+                          })}
+                          <br />
+                          {getMessage({
+                            ja: "※どちらも現場で使えるようになるまでの日数",
+                            us: "*Number of days until both are ready for use in the field.",
+                            cn: "* 两种设备均可在现场使用的天数。",
+                            language,
+                          })}
+                          <br />
+                          <br />
+                          {getMessage({
+                            ja: "※目安として通常の6倍程速く作成できます。",
+                            us: "*As a rough guide, it can be created about 6 times faster than usual.",
+                            cn: "*作为指南，它的创建速度比正常速度快六倍左右。",
+                            language,
+                          })}
+                        </Text>
+                      </>
+                    />
+                  </Text>
+                  <Text pt="2" fontSize="15px">
+                    ・
+                    <Box
+                      as="span"
+                      onClick={() => handleOpen("teigaku")}
+                      cursor="pointer"
+                      color="blue.500"
+                      display="inline-flex"
+                      borderBottom="1px solid"
+                      mr="2px"
+                    >
+                      {getMessage({
+                        ja: "定額",
+                        us: "fixed amount. ",
+                        cn: "定额。",
+                        language,
+                      })}
+                      <BsQuestionCircle
+                        style={{ marginTop: "4px", marginLeft: "2px" }}
+                      />
+                    </Box>
+                    <CustomModal
+                      isOpen={activeDrawer === "teigaku"}
+                      onClose={handleClose}
+                      title={getMessage({
+                        ja: "定額",
+                        us: "fixed amount",
+                        cn: "定额",
+                        language,
+                      })}
+                      modalBody=<>
+                        <Center>
+                          <Image
+                            src="images/welcome/subscription.svg"
+                            width="100px"
+                            height="100px"
+                          />
+                        </Center>
+                        <Text>
+                          {getMessage({
+                            ja: "以前は依頼されてから見積書が承認されてから対応していました。しかし、承認まで1ヶ月程かかって対応が遅くなっていました。特に不具合の場合には現場が困っていました。",
+                            us: "Previously, we used to respond only after a request was made and a quote was approved. However, it took about a month to get approval, which slowed down our response. The field was troubled, especially in the case of defects.",
+                            cn: "以前，我们只有在提出要求和报价获得批准后才会做出回应。然而，获得批准需要大约一个月的时间，这就拖慢了回复速度。网站很麻烦，尤其是在出现缺陷的情况下。",
+                            language,
+                          })}
+                          <br />
+                          <br />
+                          {getMessage({
+                            ja: "定額にする事で連絡が来たらすぐに対応する事が可能です。プログラムが大きくなると定期的に書き直しを行います。",
+                            us: "By making it a fixed price, we can respond as soon as we are contacted. As the program grows, we will rewrite it periodically.",
+                            cn: "通过固定价格，我们可以在接到联系后立即做出回应。随着计划的发展，我们将定期改写计划。",
+                            language,
+                          })}
+                          <br />
+                          <br />
+                          {getMessage({
+                            ja: "※新しいアプリ開発や大きい機能追加の場合には別途見積を出させて頂く場合があります。(48Hを超えそうな場合)",
+                            us: "*We may provide a separate estimate for new application development or large function additions. (If it is likely to exceed 48h)",
+                            cn: "*如需开发新的应用程序或增加大量功能，可另行估算。(如果可能超过 48 小时）",
+                            language,
+                          })}
+                        </Text>
+                      </>
+                    />
+                    {getMessage({
+                      ja: "だからすぐに対応する事が可能です",
+                      us: "So we can respond immediately.",
+                      cn: "这样我们就能立即做出反应。",
+                      language,
+                    })}
                   </Text>
                 </Box>
+
                 <Box>
                   <Heading size="sm" textTransform="uppercase" fontWeight={600}>
-                    依頼が簡単
+                    {getMessage({
+                      ja: "依頼が簡単",
+                      us: "Easy to request",
+                      cn: "易于调试",
+                      language,
+                    })}
                   </Heading>
                   <Text pt="2" fontSize="15px">
-                    ・システム開発依頼書や仕様書を用意する必要はありません
+                    {getMessage({
+                      ja: "・システム開発依頼書や仕様書を用意する必要はありません",
+                      us: "・No need to prepare a system development request or specifications.",
+                      cn: "・无需准备系统开发申请或规格说明。",
+                      language,
+                    })}
                     <br />
                     <Box as="span" ml={3.5}>
-                      リアルタイムチャットから業務の問題を教えてください
+                      {getMessage({
+                        ja: "リアルタイムチャットから業務の問題を教えてください",
+                        us: "Tell us about your business problems from real-time chat.",
+                        cn: "通过实时聊天了解您的业务问题。",
+                        language,
+                      })}
                     </Box>
                     <br />
                     <Box as="span" ml={3.5}>
-                      解決するアイデアを提案します
+                      {getMessage({
+                        ja: "解決するアイデアを提案します",
+                        us: "We propose ideas to solve the problem.",
+                        cn: "提出解决方案。",
+                        language,
+                      })}
                     </Box>
                   </Text>
                 </Box>
                 <Box>
                   <Heading size="sm" textTransform="uppercase" fontWeight={600}>
-                    安価に提供
+                    {getMessage({
+                      ja: "安価に提供",
+                      us: "Offered at a low price",
+                      cn: "以低廉的价格提供",
+                      language,
+                    })}
                   </Heading>
                   <Text pt="2" fontSize="15px">
-                    ・移動時間がないので低価格を実現しています
+                    {getMessage({
+                      ja: "・移動時間がないので低価格を実現しています",
+                      us: "・Low price due to no travel time",
+                      cn: "・由于没有旅行时间，价格低廉",
+                      language,
+                    })}
                     <br />
-                    ・エンジニアを雇用する高額な人件費が不要です
+                    {getMessage({
+                      ja: "・エンジニアを雇用する",
+                      us: "・You can hire an engineer without ",
+                      cn: "・聘用工程师。",
+                      language,
+                    })}
+                    <Box
+                      as="span"
+                      onClick={() => handleOpen("chrome")}
+                      cursor="pointer"
+                      color="blue.500"
+                      display="inline-flex"
+                      borderBottom="1px solid"
+                      mx="2px"
+                    >
+                      {getMessage({
+                        ja: "高額な人件費",
+                        us: " incurring high labor costs.",
+                        cn: "劳动力成本高",
+                        language,
+                      })}
+                      <BsQuestionCircle
+                        style={{ marginTop: "4px", marginLeft: "2px" }}
+                      />
+                    </Box>
+                    <CustomModal
+                      isOpen={activeDrawer === "chrome"}
+                      onClose={handleClose}
+                      title={getMessage({
+                        ja: "エンジニア雇用の人件費",
+                        us: "Labor costs of hiring engineers",
+                        cn: "聘用工程师的劳动力成本",
+                        language,
+                      })}
+                      modalBody=<>
+                        <Text>
+                          {getMessage({
+                            ja: "40-60万円/月が相場(日本)。通常はワイヤーハーネスの知識は無いので勉強してもらうか仲介役が必要になります。特にシステムを連携させる前提で作成するには知識が必要で、作成したシステムが他のシステムと連携できない事になりがちです。",
+                            us: "400,000-600,000 yen/month is the market price (Japan). Usually, there is no knowledge of wiring harnesses, so it is necessary to have someone study or act as an intermediary. In particular, knowledge is required to create a system on the premise that it will be linked with other systems, which tends to result in the created system not being able to be linked with other systems.",
+                            cn: "400 000-600 000 日元/月是市场价格（日本）。通常没有线束方面的知识，因此需要学习，或者需要中介。特别需要的知识是在可以连接的前提下创建系统，这往往会导致创建的系统无法与其他系统连接。",
+                            language,
+                          })}
+                        </Text>
+                      </>
+                    />
+                    {getMessage({
+                      ja: "が不要です",
+                      us: "",
+                      cn: "不需要。",
+                      language,
+                    })}
                   </Text>
                 </Box>
                 <Box>
                   <Heading size="sm" textTransform="uppercase" fontWeight={600}>
-                    プログラムの共有
+                    {getMessage({
+                      ja: "プログラムの共有",
+                      us: "Program Sharing",
+                      cn: "计划共享",
+                      language,
+                    })}
                   </Heading>
                   <Text pt="2" fontSize="15px">
-                    ・参加している全ての工場で最新のプログラムを使用できます
+                    {getMessage({
+                      ja: "・参加している全ての工場で最新のプログラムを使用できます",
+                      us: "・All factories participating in this web service can use the latest program.",
+                      cn: "・所有参与工厂均可获得最新计划。",
+                      language,
+                    })}
                   </Text>
                   <Text pt="2" fontSize="15px">
-                    ・これにより更に効果的な生産性向上が図れます
+                    {getMessage({
+                      ja: "・これにより更に効果的な生産性向上が図れます",
+                      us: "・This will further improve productivity.",
+                      cn: "・这将进一步提高生产率。",
+                      language,
+                    })}
                   </Text>
                   <Text pt="2" fontSize="15px">
-                    ※他工場での使用を許可しない事も可能です
+                    {getMessage({
+                      ja: "※他工場での使用を許可しない事も可能です",
+                      us: "*It is also possible to disallow use at other factories.",
+                      cn: "*可以禁止在其他植物中使用。",
+                      language,
+                    })}
                     <Box as="span" fontSize="13px" ml="4px">
-                      ※新規開発の場合のみ
+                      {getMessage({
+                        ja: "※新規開発の場合のみ",
+                        us: "*Only for new development",
+                        cn: "*仅适用于新开发项目。",
+                        language,
+                      })}
                     </Box>
                   </Text>
                 </Box>
@@ -514,10 +790,24 @@ const Welcome = ({ isNewCreated }) => {
             </CardBody>
           </Card>
           <Text textAlign="center" fontSize="md">
-            ※基本的にはフルリモートですが必要に応じて伺います
+            {getMessage({
+              ja: "※基本的にはフルリモートですが必要に応じて伺います",
+              us: "*Basically full remote, but we will come to you if necessary.",
+              cn: "*基本上是全职远程管理，但必要时会进行访问。",
+              language,
+            })}
           </Text>
 
-          {renderSection("提供中の主なプログラム", 14, 10)}
+          {renderSection(
+            getMessage({
+              ja: "提供中の主なプログラム",
+              us: "Main programs being offered",
+              cn: "提供的主要计划",
+              language,
+            }),
+            14,
+            10
+          )}
 
           <Card
             maxW="640px"
@@ -540,21 +830,51 @@ const Welcome = ({ isNewCreated }) => {
                 お使いのブラウザは動画タグをサポートしていません。
               </video>
               <Heading size="md" py="2">
-                生産準備+
+                {getMessage({
+                  ja: "生産準備+",
+                  us: "PROCUCTION PREPARATION+",
+                  cn: "生产准备+",
+                  language,
+                })}
               </Heading>
               <Stack mt="1" mb="2" spacing="3">
                 <Text>
-                  製品品番の切り替え時/新規立ち上げ時、
-                  生産準備で多くの工数が掛かっていませんか？
-                  それを解決する為に作成しました。 更新は約2回/週で高頻度です。
+                  {getMessage({
+                    ja: "製品品番の切り替え時/新規立ち上げ時、生産準備で多くの工数が掛かっていませんか？それを解決する為に作成しました。 約2回/週で更新しています。",
+                    us: "Do you spend a lot of man-hours preparing for production when switching product part numbers/starting a new product? We created this system to solve this problem. We update this about 2 times/week.",
+                    cn: "在转换产品零件编号/启动新产品时，您是否花费了大量的工时来准备生产？我们为此开发了一种解决方案。 大约每周更新两次。",
+                    language,
+                  })}
                 </Text>
               </Stack>
               <UnderlinedTextWithDrawer
-                text="ハメ図の作成"
+                text=<>
+                  <Box
+                    as="span"
+                    display="inline"
+                    _hover={{ textDecoration: "underline" }} // ホバー時にアンダーバーを表示
+                  >
+                    {getMessage({
+                      ja: "ハメ図の作成",
+                      us: "Creating frame diagram",
+                      cn: "创建框架图",
+                      language,
+                    })}
+                  </Box>
+                  <LuPanelRightOpen
+                    size="20px"
+                    style={{ marginBottom: "-5px", display: "inline" }}
+                  />
+                </>
                 onOpen={() => handleOpen("ハメ図の作成")}
                 isOpen={isOpen && activeDrawer === "ハメ図の作成"}
                 onClose={handleClose}
-                header="ハメ図の作成"
+                header={getMessage({
+                  ja: "ハメ図の作成",
+                  us: "Creating frame diagram",
+                  cn: "创建框架图",
+                  language,
+                })}
                 size="md"
                 children={
                   <Box>
@@ -570,53 +890,145 @@ const Welcome = ({ isNewCreated }) => {
                         src="/images/0006/selectSjpMenu.mp4"
                         type="video/mp4"
                       />
-                      お使いのブラウザは動画タグをサポートしていません。
+                      {getMessage({
+                        ja: "お使いのブラウザは動画タグをサポートしていません。",
+                        us: "Your browser does not support video tags.",
+                        cn: "您的浏览器不支持视频标记。",
+                        language,
+                      })}
                     </video>
-                    <Text mt={4}>作成メニューで選択して作成します</Text>
                     <Text mt={4}>
-                      組み合わせは
-                      <span style={{ fontWeight: "600" }}>52920パターン</span>
+                      {getMessage({
+                        ja: "作成メニューで選択して作成します",
+                        us: "Select in the Create menu to create",
+                        cn: "在创建菜单中选择创建",
+                        language,
+                      })}
+                    </Text>
+                    <Text mt={4}>
+                      {getMessage({
+                        ja: "組み合わせは",
+                        us: "The combination is ",
+                        cn: "组合是",
+                        language,
+                      })}
+                      <span style={{ fontWeight: "600" }}>
+                        {getMessage({
+                          ja: "52920パターン",
+                          us: "52920Patterns.",
+                          cn: "52920 图案。",
+                          language,
+                        })}
+                      </span>
                       <br />
-                      (2024/11/20現在)
+                      {getMessage({
+                        ja: "(2024/11/20現在)",
+                        us: "(as of 11/20/20/2024)",
+                        cn: "(截至 2024 年 11 月 20 日）。",
+                        language,
+                      })}
                     </Text>
                     <Text fontWeight="600" mt={4}>
-                      ポイント
+                      {getMessage({
+                        ja: "システムの要点",
+                        us: "System Essentials",
+                        cn: "系统要点",
+                        language,
+                      })}
                     </Text>
                     <Text>
-                      製造拠点によってニーズが異なる為、選択式にしました。
+                      {getMessage({
+                        ja: "製造拠点によってニーズが異なる為、選択式にしました。",
+                        us: "Since different manufacturing sites have different needs, we have made it a choice type.",
+                        cn: "由于不同的生产基地有不同的需求，该系统具有选择性。",
+                        language,
+                      })}
                     </Text>
                   </Box>
                 }
               />
               <br />
               <UnderlinedTextWithDrawer
-                text="配策誘導ナビv3.1(iPad対応)"
+                text=<>
+                  <Box
+                    as="span"
+                    display="inline"
+                    _hover={{ textDecoration: "underline" }} // ホバー時にアンダーバーを表示
+                  >
+                    {getMessage({
+                      ja: "配策誘導ナビv3.1(iPad対応)",
+                      us: "Guidance Navigation v3.1 (for iPad)",
+                      cn: "作业指导导航 v3.1（与 iPad 兼容）",
+                      language,
+                    })}
+                  </Box>
+                  <LuPanelRightOpen
+                    size="20px"
+                    style={{ marginBottom: "-5px", display: "inline" }}
+                  />
+                </>
                 onOpen={() => handleOpen("配策誘導ナビモバイル")}
                 isOpen={isOpen && activeDrawer === "配策誘導ナビモバイル"}
                 onClose={handleClose}
-                header="配策誘導ナビv3.1(iPad対応)"
+                header={getMessage({
+                  ja: "配策誘導ナビv3.1(iPad対応)",
+                  us: "Guidance Navigation v3.1 (for iPad)",
+                  cn: "作业指导导航 v3.1（与 iPad 兼容）",
+                  language,
+                })}
                 size="xl"
                 children={
                   <Box>
                     <IframeDisplay src="/56v3.1_" width="100%" />
                     <Text mt={4}></Text>
                     <Text>
-                      配策誘導をタッチ操作に対応してiPadのようなモバイル端末でも操作できるようにしました。
-                      上の画面をタッチ/クリックしてみてください。
+                      {getMessage({
+                        ja: "配策誘導をタッチ操作に対応してiPadのようなモバイル端末でも操作できるようにしました。上の画面で電線や端末をタッチ/クリックしてみてください。",
+                        us: "We have made the distribution guidance compatible with touch operation so that it can be operated on mobile devices such as the iPad. Try touching/clicking on the wires and terminals in the screen above.",
+                        cn: "配电指导现在可以触摸操作，因此可以在 iPad 等移动设备上操作。触摸/点击上图中的电线和端子。",
+                        language,
+                      })}
                     </Text>
                     <Text>
-                      現在は表示のみですが、サブ形態の変更などの機能拡張が見込めます。
+                      {getMessage({
+                        ja: "現在は表示のみですが、サブ形態の変更などの機能拡張が見込めます。",
+                        us: "Currently, it is only for display, but we expect to expand the functionality, such as changing the sub form.",
+                        cn: "目前，它仅用于显示，但预计会进行功能扩展，例如更改子表单。",
+                        language,
+                      })}
                     </Text>
                   </Box>
                 }
               />
               <br />
               <UnderlinedTextWithDrawer
-                text="MKEDへの回路符号入力"
+                text=<>
+                  <Box
+                    as="span"
+                    display="inline"
+                    _hover={{ textDecoration: "underline" }} // ホバー時にアンダーバーを表示
+                  >
+                    {getMessage({
+                      ja: "MKEDへの回路符号入力",
+                      us: "Circuit code input to MKED",
+                      cn: "输入 MKED 的电路代码",
+                      language,
+                    })}
+                  </Box>
+                  <LuPanelRightOpen
+                    size="20px"
+                    style={{ marginBottom: "-5px", display: "inline" }}
+                  />
+                </>
                 onOpen={() => handleOpen("MKEDへの回路符号入力")}
                 isOpen={isOpen && activeDrawer === "MKEDへの回路符号入力"}
                 onClose={handleClose}
-                header="MKEDへの回路符号入力"
+                header={getMessage({
+                  ja: "MKEDへの回路符号入力",
+                  us: "Circuit code input to MKED",
+                  cn: "输入 MKED 的电路代码",
+                  language,
+                })}
                 size="md"
                 children={
                   <Box>
@@ -629,11 +1041,30 @@ const Welcome = ({ isNewCreated }) => {
                       playsInline
                     >
                       <source src="/images/0006/v4220.mp4" type="video/mp4" />
-                      お使いのブラウザは動画タグをサポートしていません。
+                      {getMessage({
+                        ja: "お使いのブラウザは動画タグをサポートしていません。",
+                        us: "Your browser does not support video tags.",
+                        cn: "您的浏览器不支持视频标记。",
+                        language,
+                      })}
                     </video>
                     <Text mt={4}></Text>
-                    <Text>生産準備+からMKEDを制御して入力時間を省きます。</Text>
-                    <Text>※EasyCheckerも対応が可能です。</Text>
+                    <Text>
+                      {getMessage({
+                        ja: "生産準備+からMKEDを制御して入力時間を省きます。",
+                        us: "Control MKED from Production Preparation+ to save input time.",
+                        cn: "通过 Production Preparation+ 控制 MKED 节省输入时间。",
+                        language,
+                      })}
+                    </Text>
+                    <Text>
+                      {getMessage({
+                        ja: "※EasyCheckerも対応が可能です。",
+                        us: "*EasyChecker is also available.",
+                        cn: "*还可支持*EasyChecker。",
+                        language,
+                      })}
+                    </Text>
                   </Box>
                 }
               />
@@ -646,10 +1077,15 @@ const Welcome = ({ isNewCreated }) => {
                   p="1"
                   mb="3"
                 >
-                  目安効果
+                  {getMessage({
+                    ja: "目安効果",
+                    us: "Objective effect",
+                    cn: "客观效果",
+                    language,
+                  })}
                 </Badge>
               </Box>
-              <SjpChart00 />
+              <SjpChart01 language={language} />
             </CardBody>
           </Card>
 
@@ -910,7 +1346,10 @@ const Welcome = ({ isNewCreated }) => {
             月末に活動レポートをまとめてメール連絡します
           </Text>
 
-          {renderSection("成長する仕組み", 14, 10)}
+          {renderSection("成長する仕組み", 14, 1)}
+          <Text textAlign="center" mb={10}>
+            このWEBサイトを中心にシステムを更新していきます
+          </Text>
           <Center>
             <Box
               style={{ paddingTop: "30px", fontFamily: "Noto Sans JP" }}
