@@ -429,7 +429,7 @@ export default function Header() {
                   <ButtonGroup my="16px">
                     <Tooltip label={<Box>日本語</Box>} aria-label="English">
                       <img
-                        src="./images/land/jp.svg"
+                        src="/images/land/jp.svg"
                         alt="日本語"
                         style={{
                           width: "32px",
@@ -454,7 +454,7 @@ export default function Header() {
                       aria-label="English"
                     >
                       <img
-                        src="./images/land/um.svg"
+                        src="/images/land/um.svg"
                         alt="英語"
                         style={{
                           width: "32px",
@@ -479,7 +479,7 @@ export default function Header() {
                       aria-label="English"
                     >
                       <img
-                        src="./images/land/cn.svg"
+                        src="/images/land/cn.svg"
                         alt="簡体字中国語"
                         style={{
                           width: "32px",
