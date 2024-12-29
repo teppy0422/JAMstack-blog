@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import Confetti from "react-confetti";
 import {
   Box,
@@ -37,6 +37,9 @@ import { CustomBadge } from "./customBadge";
 import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
+
+import getMessage from "../../components/getMessage";
+import { AppContext } from "../../pages/_app";
 
 import "@fontsource/noto-sans-jp";
 
@@ -87,6 +90,8 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
+
+  const { language, setLanguage } = useContext(AppContext);
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
@@ -192,19 +197,35 @@ const BlogPage: React.FC = () => {
             </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            技術ブログ
+            {getMessage({
+              ja: "技術ブログ",
+              us: "Technology Blog",
+              cn: "技术博客",
+              language,
+            })}
           </Heading>
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-18
+            {getMessage({
+              ja: "更新日",
+              us: "renewal date",
+              cn: "更新日",
+              language,
+            })}
+            :2024-11-18
           </Text>
         </Box>
         <SectionBox
           id="section1"
-          title="1.はじめに"
+          title={getMessage({
+            ja: "1.はじめに",
+            us: "1.Introduction.",
+            cn: "1.介绍。",
+            language,
+          })}
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -214,14 +235,27 @@ const BlogPage: React.FC = () => {
           />
           <Box>
             <Text fontWeight="bold"></Text>
-            <Text>
-              ここに各システムの使い方や開発の経緯/進め方をまとめていきます。
-              <br />
-              左のメニューから選択してください。
-              <br />
-              <br />
-              スマホは未対応です。
-            </Text>
+            {getMessage({
+              ja: "ここに各システムの使い方や開発の経緯/進め方をまとめていきます。",
+              us: "Here is a summary of how each system is used and how it was/is developed.",
+              cn: "以下是每个系统的使用方法和开发过程的摘要。",
+              language,
+            })}
+            <br />
+            {getMessage({
+              ja: "左のメニューから選択してください。",
+              us: "Please select from the menu on the left.",
+              cn: "请从左侧菜单中选择。",
+              language,
+            })}
+            <br />
+            <br />
+            {getMessage({
+              ja: "スマホは未対応です。",
+              us: "Not supported on smartphones.",
+              cn: "不支持智能手机。",
+              language,
+            })}
           </Box>
         </SectionBox>
         <Box height="100vh"></Box>

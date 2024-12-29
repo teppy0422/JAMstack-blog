@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import Confetti from "react-confetti";
 import {
   Box,
@@ -39,6 +39,8 @@ import { useReadCount } from "../hooks/useReadCount";
 
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";
+
+import { AppContext } from "../pages/_app";
 
 const customTheme = extendTheme({
   fonts: {
@@ -99,6 +101,9 @@ const Frame: React.FC<{
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount, skillBlogsData } = useReadCount(userId);
+
+  const { language, setLanguage } = useContext(AppContext);
+
   //64pxまでスクロールしないとサイドバーが表示されないから暫定
   useEffect(() => {
     const hash = window.location.hash;
@@ -258,6 +263,12 @@ const Frame: React.FC<{
     // userNameが変わったときの処理をここに記述
     console.log("userNameが変更されました:", userName);
   }, [userName]); // userNameを依存配列に追加
+
+  useEffect(() => {
+    // 言語が変更されたときに実行する処理
+    console.log(`Language changed to: ${language}`);
+    // 必要に応じて他の処理を追加
+  }, [language]); // 言語が変わるたびに実行
 
   return (
     <>
