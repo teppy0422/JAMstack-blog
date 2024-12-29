@@ -63,7 +63,7 @@ import { useColorMode } from "@chakra-ui/react";
 import UnderlinedTextWithDrawer from "./skillBlogs/UnderlinedTextWithDrawer";
 import CustomModal from "./skillBlogs/customModal";
 import IframeDisplay from "./skillBlogs/IframeDisplay";
-import SjpChart00 from "./skillBlogs/chart/chart_01";
+import SjpChart01 from "./skillBlogs/chart/chart_01";
 
 import "@fontsource/noto-sans-jp";
 import "@fontsource/dela-gothic-one";
@@ -1050,7 +1050,6 @@ const Welcome = ({ isNewCreated }) => {
                     </video>
                     <Text mt={4}></Text>
                     <Text>
-                      header=
                       {getMessage({
                         ja: "生産準備+からMKEDを制御して入力時間を省きます。",
                         us: "Control MKED from Production Preparation+ to save input time.",
@@ -1078,10 +1077,15 @@ const Welcome = ({ isNewCreated }) => {
                   p="1"
                   mb="3"
                 >
-                  目安効果
+                  {getMessage({
+                    ja: "目安効果",
+                    us: "Objective effect",
+                    cn: "客观效果",
+                    language,
+                  })}
                 </Badge>
               </Box>
-              <SjpChart00 />
+              <SjpChart01 language={language} />
             </CardBody>
           </Card>
 
