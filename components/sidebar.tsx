@@ -19,17 +19,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HamburgerIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { PiGithubLogoFill } from "react-icons/pi";
 import { MdEditRoad } from "react-icons/md";
 import { FaKeyboard, FaRoad } from "react-icons/fa";
 import { IoTicketOutline, IoTicketSharp } from "react-icons/io5";
 import { AiOutlineWechat } from "react-icons/ai";
+import { LanguageProvider } from "../context/LanguageContext";
+import { AppContext } from "../pages/_app";
+import getMessage from "../components/getMessage";
 
 function Sidebar() {
   const [currentPath, setCurrentPath] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
+  const { language, setLanguage } = useContext(AppContext);
 
   useEffect(() => {
     setCurrentPath(window.location.pathname);
@@ -115,28 +119,64 @@ function Sidebar() {
         fontWeight={400}
       >
         <VStack spacing="1" align="stretch" fontSize={14}>
-          {menuItem("/roadMap", "ロードマップ", true, <FaRoad size={21} />)}
+          {menuItem(
+            "/roadMap",
+            getMessage({
+              ja: "ロードマップ",
+              us: "Road Map",
+              cn: "路线图",
+              language,
+            }),
+
+            true,
+            <FaRoad size={21} />
+          )}
           {menuItem(
             "/skillBlogs/0000",
-            "技術ブログ",
+            getMessage({
+              ja: "技術ブログ",
+              us: "Skills Blog",
+              cn: "技术博客",
+              language,
+            }),
             true,
             <PiGithubLogoFill size={22} />
           )}
           {menuItem(
             "/app/typing",
-            "タイピング練習",
+            getMessage({
+              ja: "タイピング練習",
+              us: "Typing Practice",
+              cn: "打字练习",
+              language,
+            }),
             true,
             <FaKeyboard size={21} />
           )}
           {menuItem(
             "/download",
-            "ダウンロード",
+            getMessage({
+              ja: "ダウンロード",
+              us: "Download",
+              cn: "下载",
+              language,
+            }),
             true,
             <Box transform="rotate(270deg)" position="relative">
               <IoTicketSharp size={22} />
             </Box>
           )}
-          {menuItem("/BBS", "問い合わせ", true, <AiOutlineWechat size={22} />)}
+          {menuItem(
+            "/BBS",
+            getMessage({
+              ja: "問い合わせ",
+              us: "Inquiry",
+              cn: "询问",
+              language,
+            }),
+            true,
+            <AiOutlineWechat size={22} />
+          )}
         </VStack>
       </Box>
       <IconButton

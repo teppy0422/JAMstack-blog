@@ -62,6 +62,7 @@ import Auth from "./Auth"; // Authコンポーネントをインポート
 import { useUserData } from "../hooks/useUserData";
 import { Global } from "@emotion/react";
 import { AppContext } from "../pages/_app";
+import getMessage from "../components/getMessage";
 
 export default function Header() {
   const { language, setLanguage } = useContext(AppContext);
@@ -75,7 +76,6 @@ export default function Header() {
   const [userId, setUserId] = useState<string | null>(null); // userIdの状態を追加
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
-
   const {
     isOpen: isMenuOpen,
     onOpen: onMenuOpen,
@@ -292,7 +292,14 @@ export default function Header() {
                 <Modal isOpen={isOpen} onClose={onClose}>
                   <ModalOverlay />
                   <ModalContent>
-                    <ModalHeader>QRコード</ModalHeader>
+                    <ModalHeader>
+                      {getMessage({
+                        ja: "QRコード",
+                        us: "QR Code",
+                        cn: "QR 码",
+                        language,
+                      })}
+                    </ModalHeader>
                     <ModalCloseButton _focus={{ _focus: "none" }} />
                     <ModalBody>
                       <Box mt="4" display="flex" justifyContent="center">
@@ -303,7 +310,12 @@ export default function Header() {
                     </ModalBody>
                     <ModalFooter>
                       <Text fontSize="12px" fontWeight={400}>
-                        スマホで読み込む事でこのページにアクセスできます
+                        {getMessage({
+                          ja: "スマホで読み込む事でこのページにアクセスできます",
+                          us: "You can access this page by loading it with your phone",
+                          cn: "您可以通过手机阅读本页面",
+                          language,
+                        })}
                       </Text>
                       {/* <Button colorScheme="gray" mr={3} onClick={onClose}>
                       閉じる
@@ -354,7 +366,7 @@ export default function Header() {
       <Modal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Login</ModalHeader>
+          <ModalHeader></ModalHeader>
           <ModalCloseButton
             _hover={{
               _hover: "none",
@@ -390,28 +402,48 @@ export default function Header() {
                   <Divider borderColor="white" />
                   {menuItem(
                     "/roadMap",
-                    "ロードマップ",
+                    getMessage({
+                      ja: "ロードマップ",
+                      us: "Road Map",
+                      cn: "路线图",
+                      language,
+                    }),
                     false,
                     <MdEditRoad size={22} />
                   )}
                   <Divider borderColor="white" />
                   {menuItem(
                     "/skillBlogs/0000",
-                    "技術ブログ",
+                    getMessage({
+                      ja: "技術ブログ",
+                      us: "Skills Blog",
+                      cn: "技术博客",
+                      language,
+                    }),
                     false,
                     <PiGithubLogoFill size={22} />
                   )}
                   <Divider borderColor="white" />
                   {menuItem(
                     "/app/typing",
-                    "タイピング練習",
+                    getMessage({
+                      ja: "タイピング練習",
+                      us: "Typing Practice",
+                      cn: "打字练习",
+                      language,
+                    }),
                     false,
                     <FaKeyboard size={22} />
                   )}
                   <Divider borderColor="white" />
                   {menuItem(
                     "/download",
-                    "ダウンロード",
+                    getMessage({
+                      ja: "ダウンロード",
+                      us: "Download",
+                      cn: "下载",
+                      language,
+                    }),
                     false,
                     <Box transform="rotate(270deg)">
                       <IoTicketOutline size={23} />
@@ -420,7 +452,12 @@ export default function Header() {
                   <Divider borderColor="white" />
                   {menuItem(
                     "/BBS",
-                    "問い合わせ",
+                    getMessage({
+                      ja: "問い合わせ",
+                      us: "Inquiry",
+                      cn: "询问",
+                      language,
+                    }),
                     false,
                     <AiOutlineWechat size={22} />
                   )}

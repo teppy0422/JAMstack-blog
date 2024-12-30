@@ -18,6 +18,8 @@ import {
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import "@fontsource/noto-sans-jp";
+import getMessage from "./getMessage";
+import { AppContext } from "../pages/_app";
 
 interface AuthProps {
   userData: {
@@ -50,38 +52,79 @@ export default function Auth({ userData }: AuthProps) {
       authListener?.subscription?.unsubscribe();
     };
   }, []);
+
+  const { language, setLanguage } = useContext(AppContext);
+
   // サインアップ関数
   const [confirmPassword, setConfirmPassword] = useState<string>(""); // 確認用パスワードの状態を追加
   const handleSignUp = async () => {
     if (password.length < 6) {
-      setError("パスワードは6文字以上である必要があります");
+      setError(
+        getMessage({
+          ja: "パスワードは6文字以上である必要があります",
+          us: "Password must be at least 6 characters",
+          cn: "密码长度至少为 6 个字符",
+          language,
+        })
+      );
       return;
     }
     if (password !== confirmPassword) {
-      setError("パスワードが一致しません");
+      setError(
+        getMessage({
+          ja: "パスワードが一致しません",
+          us: "Password does not match",
+          cn: "密码不匹配",
+          language,
+        })
+      );
       return;
     }
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({ email, password });
     const identities = data.user?.identities;
     if (identities?.length === 0) {
-      setError("登録済みのメールアドレスです");
+      setError(
+        getMessage({
+          ja: "登録済みのメールアドレスです",
+          us: "Registered email address.",
+          cn: "注册电子邮件地址",
+          language,
+        })
+      );
       return;
     }
     console.log(data);
     if (error) {
       if (error.message === "Email rate limit exceeded") {
         setMessage(
-          "メール送信の制限を超えました。しばらく待ってから再試行してください。"
+          getMessage({
+            ja: "メール送信の制限を超えました。しばらく待ってから再試行してください。",
+            us: "You have exceeded the limit for sending e-mail. Please wait a moment and try again.",
+            cn: "已超过发送电子邮件的限制。请稍候再试",
+            language,
+          })
         );
       } else {
         console.error("Error signing up:", error.message);
-        setMessage("新規登録に失敗しました: " + error.message); // エラーメッセージを設定
+        setMessage(
+          getMessage({
+            ja: "新規登録に失敗しました: ",
+            us: "New registration failed: ",
+            cn: "新注册失败: ",
+            language,
+          }) + error.message
+        ); // エラーメッセージを設定
       }
     } else {
       console.log("User signed up:", data);
       setMessage(
-        "認証用のメールを送信しました。受信メールを確認して認証を行ってください。認証後にログインが可能になります。"
+        getMessage({
+          ja: "認証用のメールを送信しました。受信したメールで認証を行ってください。認証後にログインが可能になります。",
+          us: "An email for authentication has been sent. Please use the email you received to authenticate. You will be able to log in after authentication.",
+          cn: "已发送验证电子邮件。请使用收到的电子邮件进行验证。验证后，您就可以登录了",
+          language,
+        })
       ); // 成功メッセージを設定
       setActiveTab("signin");
     }
@@ -97,7 +140,14 @@ export default function Auth({ userData }: AuthProps) {
     });
     if (error) {
       console.error("Error signing in:", error.message);
-      setMessage("パスワードが違います:D"); // エラーメッセージを設定
+      setMessage(
+        getMessage({
+          ja: "パスワードが違います:D",
+          us: "Wrong password:D",
+          cn: "密码错误:D",
+          language,
+        })
+      ); // エラーメッセージを設定
     } else {
       console.log("User signed in:", data);
       setMessage(null); // 成功時にはメッセージをリセット
@@ -261,7 +311,12 @@ export default function Auth({ userData }: AuthProps) {
               {userData.userCompany || ""}
             </Text>
             <Tooltip
-              label="ユーザーアイコンを変更"
+              label={getMessage({
+                ja: "ユーザーアイコンを変更",
+                us: "Change user icon",
+                cn: "更改用户图标",
+                language,
+              })}
               aria-label="ユーザーアイコンを変更"
             >
               <Avatar
@@ -280,24 +335,43 @@ export default function Auth({ userData }: AuthProps) {
             />
           </Box>
           <Button onClick={handleSignOut} colorScheme="red" width="full">
-            ログアウト
-          </Button>{" "}
+            {getMessage({
+              ja: "ログアウト",
+              us: "Logout",
+              cn: "注销",
+              language,
+            })}
+          </Button>
           {/* ボタンの色と幅を調整 */}
         </>
       ) : (
         <>
           <Tabs>
-            <TabList>
-              <Tab>メールアドレス</Tab>
-              {/* <Tab>Google(テスト中)</Tab> */}
-            </TabList>
+            {/* <TabList> */}
+            {/* <Tab>メールアドレス</Tab> */}
+            {/* <Tab>Google(テスト中)</Tab> */}
+            {/* </TabList> */}
 
             <TabPanels p={0} fontFamily="Noto Sans JP">
               <TabPanel p={0}>
                 <Tabs p={0}>
                   <TabList>
-                    <Tab>ログイン</Tab>
-                    <Tab>新規登録</Tab>
+                    <Tab>
+                      {getMessage({
+                        ja: "ログイン",
+                        us: "Login",
+                        cn: "登录",
+                        language,
+                      })}
+                    </Tab>
+                    <Tab>
+                      {getMessage({
+                        ja: "新規登録",
+                        us: "Sign Up",
+                        cn: "新注册",
+                        language,
+                      })}
+                    </Tab>
                   </TabList>
                   <TabPanels>
                     <TabPanel>
@@ -308,11 +382,21 @@ export default function Auth({ userData }: AuthProps) {
                         ml={1}
                         textAlign="left"
                       >
-                        メールアドレス
+                        {getMessage({
+                          ja: "メールアドレス",
+                          us: "Email Address",
+                          cn: "电子邮件地址",
+                          language,
+                        })}
                       </Text>
                       <Input
                         type="email"
-                        placeholder="Email"
+                        placeholder={getMessage({
+                          ja: "Email",
+                          us: "Email address",
+                          cn: "电子邮件地址",
+                          language,
+                        })}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         mb={3}
@@ -326,11 +410,21 @@ export default function Auth({ userData }: AuthProps) {
                         ml={1}
                         textAlign="left"
                       >
-                        パスワード
+                        {getMessage({
+                          ja: "パスワード",
+                          us: "Password",
+                          cn: "密码",
+                          language,
+                        })}
                       </Text>
                       <Input
                         type="password"
-                        placeholder="Password"
+                        placeholder={getMessage({
+                          ja: "パスワード",
+                          us: "Password",
+                          cn: "密码",
+                          language,
+                        })}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         mb={4}
@@ -343,28 +437,72 @@ export default function Auth({ userData }: AuthProps) {
                         colorScheme="blue"
                         width="full"
                       >
-                        ログイン
+                        {getMessage({
+                          ja: "ログイン",
+                          us: "Login",
+                          cn: "登录",
+                          language,
+                        })}
                       </Button>
                     </TabPanel>
                     <TabPanel>
                       <Text fontSize="sm" mb={4}>
-                        新規登録の流れ:
+                        {getMessage({
+                          ja: "新規登録の流れ:",
+                          us: "New Registration Process",
+                          cn: "新的注册程序",
+                          language,
+                        })}
                       </Text>
                       <Text fontSize="sm" mb={2}>
-                        1. メールアドレスと
+                        1.
+                        {getMessage({
+                          ja: " メールアドレスと",
+                          us: " Please enter Email address and",
+                          cn: " 电子邮件地址和",
+                          language,
+                        })}
                         <span style={{ color: spanColor }}>
-                          パスワード(6文字以上)
+                          {getMessage({
+                            ja: "パスワード(6文字以上)",
+                            us: " Password (at least 6 characters).",
+                            cn: "密码（至少 6 个字符）",
+                            language,
+                          })}
                         </span>
-                        を 入力してください。
+                        {getMessage({
+                          ja: "を 入力してください。",
+                          us: "",
+                          cn: "输入",
+                          language,
+                        })}
                       </Text>
                       <Text fontSize="sm" mb={2}>
-                        2. 「新規登録」ボタンをクリックします。
+                        2.
+                        {getMessage({
+                          ja: " 「新規登録」をクリックします。",
+                          us: " Click on [Sign Up].",
+                          cn: " 点击 [新注册]",
+                          language,
+                        })}
                       </Text>
                       <Text fontSize="sm" mb={2}>
-                        3. 受信したメールを確認し、認証を行ってください。
+                        3.
+                        {getMessage({
+                          ja: " 受信したメールを確認し、認証を行ってください",
+                          us: " Please check the email you received and authenticate.",
+                          cn: " 检查收到的电子邮件并进行验证",
+                          language,
+                        })}
                       </Text>
                       <Text fontSize="sm" mb={2}>
-                        4. 認証後、ログインが可能になります。
+                        4.
+                        {getMessage({
+                          ja: " 認証後、ログインが可能になります。",
+                          us: " After authentication, you will be able to log in.",
+                          cn: " 通过验证后即可登录",
+                          language,
+                        })}
                       </Text>
                       <Text
                         fontSize="9px"
@@ -373,11 +511,21 @@ export default function Auth({ userData }: AuthProps) {
                         ml={1}
                         textAlign="left"
                       >
-                        メールアドレス
+                        {getMessage({
+                          ja: " メールアドレス",
+                          us: " Email Address",
+                          cn: " 电子邮件地址",
+                          language,
+                        })}
                       </Text>
                       <Input
                         type="email"
-                        placeholder="Email"
+                        placeholder={getMessage({
+                          ja: "Email",
+                          us: "Email address",
+                          cn: "电子邮件地址",
+                          language,
+                        })}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         mb={2}
@@ -391,11 +539,21 @@ export default function Auth({ userData }: AuthProps) {
                         ml={1}
                         textAlign="left"
                       >
-                        パスワード
+                        {getMessage({
+                          ja: "パスワード",
+                          us: "Password",
+                          cn: "密码",
+                          language,
+                        })}
                       </Text>
                       <Input
                         type="password"
-                        placeholder="Password(6文字以上)"
+                        placeholder={getMessage({
+                          ja: "パスワード(6文字以上)",
+                          us: "Password (6+ words)",
+                          cn: "密码(6文字以上)",
+                          language,
+                        })}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         mb={2}
@@ -409,11 +567,21 @@ export default function Auth({ userData }: AuthProps) {
                         ml={1}
                         textAlign="left"
                       >
-                        パスワード(確認)
+                        {getMessage({
+                          ja: "パスワード(確認)",
+                          us: "Password (Confirm)",
+                          cn: "密码（确认）",
+                          language,
+                        })}
                       </Text>
                       <Input
                         type="password"
-                        placeholder="Password" // 確認用パスワードのプレースホルダー
+                        placeholder={getMessage({
+                          ja: "Password",
+                          us: "Password",
+                          cn: "密码",
+                          language,
+                        })}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         mb={3}
@@ -426,7 +594,12 @@ export default function Auth({ userData }: AuthProps) {
                         colorScheme="blue"
                         width="full"
                       >
-                        新規登録
+                        {getMessage({
+                          ja: "新規登録",
+                          us: "Sign Up",
+                          cn: "新注册",
+                          language,
+                        })}
                       </Button>
                     </TabPanel>
                   </TabPanels>
