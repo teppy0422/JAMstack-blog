@@ -1,3 +1,5 @@
+import { useContext } from "react";
+
 import { Container, Center, Box, Flex } from "@chakra-ui/react";
 import NextLink from "next/link";
 
@@ -5,11 +7,16 @@ import Header from "../components/header";
 import Header_ from "../components/header_";
 import { Global } from "@emotion/react";
 
+import getMessage from "./getMessage";
+import { AppContext } from "../pages/_app";
+
 export default function Content({
   children,
   isCustomHeader = false,
   maxWidth = "900px",
 }) {
+  const { language, setLanguage } = useContext(AppContext);
+
   return (
     <>
       <Global
@@ -52,9 +59,23 @@ export default function Content({
           fontFamily="Noto Sans JP"
           fontWeight="100"
         >
-          <NextLink href="/privacy">プライバシーポリシー</NextLink>
+          <NextLink href="/privacy">
+            {getMessage({
+              ja: "プライバシーポリシー",
+              us: "Privacy Policy",
+              cn: "隐私政策",
+              language,
+            })}
+          </NextLink>
           <Box mr={5} />
-          <NextLink href="/terms">利用規約</NextLink>
+          <NextLink href="/terms">
+            {getMessage({
+              ja: "利用規約",
+              us: "Terms of Use",
+              cn: "条款和条件",
+              language,
+            })}
+          </NextLink>
         </Center>
         <Center mb="18px" color="gray">
           ©︎ 2022-2024 Teppei Kataoka. All rights Reserved.
