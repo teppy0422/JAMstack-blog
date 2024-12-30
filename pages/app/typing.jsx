@@ -49,6 +49,8 @@ import GraphTemp from "../../components/typing/graphTemp";
 import { useContext } from "react";
 
 import { myContext } from "../../pages/_app";
+import getMessage from "../../components/getMessage";
+import { AppContext } from "../../pages/_app";
 
 export const typing = () => {
   const [session, setSession] = useState(null);
@@ -59,6 +61,7 @@ export const typing = () => {
   const graphTempRef = useRef(null); //履歴グラフ
 
   const { colorMode } = useColorMode();
+  const { language, setLanguage } = useContext(AppContext);
 
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const inputText = useRef(""); //入力文字
@@ -627,7 +630,12 @@ export const typing = () => {
                   >
                     <GridItem w="100%" h="14" colSpan={1}>
                       <Text fontSize="13px" pl="10px">
-                        残り時間
+                        {getMessage({
+                          ja: "残り時間",
+                          us: "Time Remaining",
+                          cn: "剩余时间",
+                          language,
+                        })}
                       </Text>
                       <Center>
                         <Divider
@@ -670,7 +678,12 @@ export const typing = () => {
                     </GridItem>
                     <GridItem w="100%" h="14" colSpan={1}>
                       <Text fontSize="13px" pl="10px">
-                        タイプミス
+                        {getMessage({
+                          ja: "タイプミス",
+                          us: "typo",
+                          cn: "讹字",
+                          language,
+                        })}
                       </Text>
                       <Center>
                         <Divider
@@ -697,7 +710,12 @@ export const typing = () => {
                     </GridItem>
                     <GridItem w="100%" h="14" colSpan={1}>
                       <Text fontSize="13px" pl="10px">
-                        金額
+                        {getMessage({
+                          ja: "金額",
+                          us: "Amount",
+                          cn: "金額",
+                          language,
+                        })}
                       </Text>
                       <Center>
                         <Divider
@@ -719,7 +737,13 @@ export const typing = () => {
                         mr="12px"
                         mt="4px"
                       >
-                        {totalCost.current}円{" "}
+                        {getMessage({
+                          ja: "¥ ",
+                          us: "$ ",
+                          cn: "¥ ",
+                          language,
+                        })}
+                        {totalCost.current}
                       </Text>
                     </GridItem>
                   </Grid>
@@ -761,7 +785,12 @@ export const typing = () => {
                     />
                     <Spacer />
                     <Text mt="4px" id="timer">
-                      [SPACE]でスタート
+                      {getMessage({
+                        ja: "[SPACE]でスタート",
+                        us: "Start with [SPACE].",
+                        cn: "从 [SPACE] 开始。",
+                        language,
+                      })}
                     </Text>
                     <Spacer />
 

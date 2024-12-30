@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useState,
+  useContext,
 } from "react";
 import {
   Button,
@@ -49,7 +50,12 @@ import Ootoro from "../3d/sushi_ootoro";
 import SanmaYaki from "../3d/sushi_sanma_yaki";
 import Ikura from "../3d/sushi_ikura";
 
+import getMessage from "../getMessage";
+import { AppContext } from "../../pages/_app";
+
 const Voucher = forwardRef((props, ref) => {
+  const { language, setLanguage } = useContext(AppContext);
+
   const {
     totalCost,
     missedCount,
@@ -79,12 +85,60 @@ const Voucher = forwardRef((props, ref) => {
   const [isFlagTrue, setIsFlagTrue] = useState(false); // flagの状態を追加
 
   const Sushi = [
-    { path: <Gari />, text: "ガリ" },
-    { path: <Tukemono />, text: "つけもの" },
-    { path: <Umeboshi />, text: "梅干" },
-    { path: <Tamago />, text: "たまご" },
-    { path: <Ika />, text: "いか" },
-    { path: <Iwashi />, text: "鰯" },
+    {
+      path: <Gari />,
+      text: getMessage({
+        ja: "ガリ",
+        us: "Pickled ginger",
+        cn: "腌姜",
+        language,
+      }),
+    },
+    {
+      path: <Tukemono />,
+      text: getMessage({
+        ja: "つけもの",
+        us: "Tsukemono",
+        cn: "Tsukemono",
+        language,
+      }),
+    },
+    {
+      path: <Umeboshi />,
+      text: getMessage({
+        ja: "梅干",
+        us: "Dried plum",
+        cn: "梅干",
+        language,
+      }),
+    },
+    {
+      path: <Tamago />,
+      text: getMessage({
+        ja: "たまご",
+        us: "Roasted eggs",
+        cn: "烤蛋",
+        language,
+      }),
+    },
+    {
+      path: <Ika />,
+      text: getMessage({
+        ja: "イカ",
+        us: "Squid",
+        cn: "烏賊",
+        language,
+      }),
+    },
+    {
+      path: <Iwashi />,
+      text: getMessage({
+        ja: "鰯",
+        us: "Sardine",
+        cn: "鰯",
+        language,
+      }),
+    },
     { path: <Tekka />, text: "鉄火巻き" },
     { path: <Amaebi />, text: "甘エビ" },
     { path: <Ebi />, text: "エビ" },
