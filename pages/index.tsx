@@ -243,6 +243,7 @@ const Welcome = ({ isNewCreated }) => {
                 lg: "18px",
                 xl: "18px",
               }}
+              lineHeight="1.2"
             >
               {value}
             </Box>
@@ -305,7 +306,12 @@ const Welcome = ({ isNewCreated }) => {
           {num}
         </Text>
         <Box height="100%" width="1px" backgroundColor="gray.500" mx={0} />
-        <Text flex="10" p={2} fontSize={{ base: "15px", sm: "18px" }}>
+        <Text
+          flex="10"
+          p={2}
+          fontSize={{ base: "15px", sm: "18px" }}
+          lineHeight={1.2}
+        >
           {text}
         </Text>
       </HStack>
@@ -335,7 +341,12 @@ const Welcome = ({ isNewCreated }) => {
           {num}
         </Text>
         <Box height="100%" width="1px" backgroundColor="gray.500" mx={0} />
-        <Text flex="10" p={2} fontSize={{ base: "15px", sm: "18px" }}>
+        <Text
+          flex="10"
+          p={2}
+          fontSize={{ base: "15px", sm: "18px" }}
+          lineHeight={1.2}
+        >
           {text}
         </Text>
       </HStack>

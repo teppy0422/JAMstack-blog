@@ -5,6 +5,7 @@ import React, {
   useState,
   createContext,
   useContext,
+  PropsWithChildren,
 } from "react";
 import { DefaultSeo } from "next-seo";
 import {
@@ -44,9 +45,19 @@ export const AppContext = createContext<AppContextType>({
 });
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-  // 言語設定の状態
   const [language, setLanguage] = useState<LanguageType>("ja");
-
+  // 言語設定の状態
+  useEffect(() => {
+    // クライアントサイドでのみ実行
+    const storedLanguage = localStorage.getItem("language");
+    if (storedLanguage) {
+      setLanguage(storedLanguage as LanguageType);
+    }
+  }, []);
+  const updateLanguage = (newLanguage: LanguageType) => {
+    setLanguage(newLanguage);
+    localStorage.setItem("language", newLanguage); // ローカルストレージに保存
+  };
   return (
     <LanguageProvider>
       <Head>
@@ -75,7 +86,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />
         <SessionProvider session={session}>
-          <AppContext.Provider value={{ language, setLanguage }}>
+          <AppContext.Provider
+            value={{ language, setLanguage: updateLanguage }}
+          >
             <Component {...pageProps} />
           </AppContext.Provider>
         </SessionProvider>
