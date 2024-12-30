@@ -218,6 +218,15 @@ export default function Header() {
       );
     }
   };
+  const updateLanguage = (newLanguage) => {
+    console.log("Updating language to:", newLanguage);
+    try {
+      setLanguage(newLanguage);
+      localStorage.setItem("language", newLanguage); // ローカルストレージに保存
+    } catch (error) {
+      console.error("Failed to save language to localStorage:", error);
+    }
+  };
   return (
     <>
       <Global
@@ -398,141 +407,149 @@ export default function Header() {
                 fontWeight={400}
                 fontSize={13}
               >
-                <>
-                  <Divider borderColor="white" />
-                  {menuItem(
-                    "/roadMap",
-                    getMessage({
-                      ja: "ロードマップ",
-                      us: "Road Map",
-                      cn: "路线图",
-                      language,
-                    }),
-                    false,
-                    <MdEditRoad size={22} />
-                  )}
-                  <Divider borderColor="white" />
-                  {menuItem(
-                    "/skillBlogs/0000",
-                    getMessage({
-                      ja: "技術ブログ",
-                      us: "Skills Blog",
-                      cn: "技术博客",
-                      language,
-                    }),
-                    false,
-                    <PiGithubLogoFill size={22} />
-                  )}
-                  <Divider borderColor="white" />
-                  {menuItem(
-                    "/app/typing",
-                    getMessage({
-                      ja: "タイピング練習",
-                      us: "Typing Practice",
-                      cn: "打字练习",
-                      language,
-                    }),
-                    false,
-                    <FaKeyboard size={22} />
-                  )}
-                  <Divider borderColor="white" />
-                  {menuItem(
-                    "/download",
-                    getMessage({
-                      ja: "ダウンロード",
-                      us: "Download",
-                      cn: "下载",
-                      language,
-                    }),
-                    false,
-                    <Box transform="rotate(270deg)">
-                      <IoTicketOutline size={23} />
-                    </Box>
-                  )}
-                  <Divider borderColor="white" />
-                  {menuItem(
-                    "/BBS",
-                    getMessage({
-                      ja: "問い合わせ",
-                      us: "Inquiry",
-                      cn: "询问",
-                      language,
-                    }),
-                    false,
-                    <AiOutlineWechat size={22} />
-                  )}
-                  <Divider borderColor="white" />
+                <Divider borderColor="white" />
+                {menuItem(
+                  "/roadMap",
+                  getMessage({
+                    ja: "ロードマップ",
+                    us: "Road Map",
+                    cn: "路线图",
+                    language,
+                  }),
+                  false,
+                  <MdEditRoad size={22} />
+                )}
+                <Divider borderColor="white" />
+                {menuItem(
+                  "/skillBlogs/0000",
+                  getMessage({
+                    ja: "技術ブログ",
+                    us: "Skills Blog",
+                    cn: "技术博客",
+                    language,
+                  }),
+                  false,
+                  <PiGithubLogoFill size={22} />
+                )}
+                <Divider borderColor="white" />
+                {menuItem(
+                  "/app/typing",
+                  getMessage({
+                    ja: "タイピング練習",
+                    us: "Typing Practice",
+                    cn: "打字练习",
+                    language,
+                  }),
+                  false,
+                  <FaKeyboard size={22} />
+                )}
+                <Divider borderColor="white" />
+                {menuItem(
+                  "/download",
+                  getMessage({
+                    ja: "ダウンロード",
+                    us: "Download",
+                    cn: "下载",
+                    language,
+                  }),
+                  false,
+                  <Box transform="rotate(270deg)">
+                    <IoTicketOutline size={23} />
+                  </Box>
+                )}
+                <Divider borderColor="white" />
+                {menuItem(
+                  "/BBS",
+                  getMessage({
+                    ja: "問い合わせ",
+                    us: "Inquiry",
+                    cn: "询问",
+                    language,
+                  }),
+                  false,
+                  <AiOutlineWechat size={22} />
+                )}
+                <Divider borderColor="white" />
 
-                  <ButtonGroup my="16px">
-                    <Tooltip label={<Box>日本語</Box>} aria-label="English">
-                      <img
-                        src="/images/land/jp.svg"
-                        alt="日本語"
-                        style={{
-                          width: "32px",
-                          height: "24px",
-                          margin: "0px",
-                          padding: "0px",
-                          border: "solid 1px",
-                          marginRight: "10px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => setLanguage("ja")}
-                      />
-                    </Tooltip>
-                    <Tooltip
-                      label={
-                        <Box>
-                          English
-                          <br />
-                          Not supported
-                        </Box>
-                      }
-                      aria-label="English"
-                    >
-                      <img
-                        src="/images/land/um.svg"
-                        alt="英語"
-                        style={{
-                          width: "32px",
-                          height: "24px",
-                          margin: "0px",
-                          padding: "0px",
-                          border: "solid 1px",
-                          marginRight: "10px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => setLanguage("us")}
-                      />
-                    </Tooltip>
-                    <Tooltip
-                      label={
-                        <Box>
-                          Français
-                          <br />
-                          Non pris en charge
-                        </Box>
-                      }
-                      aria-label="English"
-                    >
-                      <img
-                        src="/images/land/cn.svg"
-                        alt="簡体字中国語"
-                        style={{
-                          width: "32px",
-                          height: "24px",
-                          margin: "0px",
-                          padding: "0px",
-                          border: "solid 1px",
-                          marginRight: "10px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => setLanguage("cn")}
-                      />
-                    </Tooltip>
-                  </ButtonGroup>
-                  <Divider borderColor="white" />
-                </>
+                <ButtonGroup
+                  my="16px"
+                  position="absolute"
+                  bottom="0"
+                  left="0"
+                  width="100%" // 必要に応じて幅を設定
+                  display="flex"
+                  justifyContent="center" // 中央に配置
+                >
+                  <Tooltip label={<Box>日本語</Box>} aria-label="English">
+                    <img
+                      src="/images/land/jp.svg"
+                      alt="日本語"
+                      style={{
+                        width: "32px",
+                        height: "24px",
+                        margin: "0px",
+                        padding: "0px",
+                        border: "solid 1px",
+                        marginRight: "10px",
+                        cursor: "pointer",
+                        opacity: language !== "ja" ? 0.3 : 1,
+                      }}
+                      onClick={() => updateLanguage("ja")}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    label={
+                      <Box>
+                        English
+                        <br />
+                        Not supported
+                      </Box>
+                    }
+                    aria-label="English"
+                  >
+                    <img
+                      src="/images/land/um.svg"
+                      alt="英語"
+                      style={{
+                        width: "32px",
+                        height: "24px",
+                        margin: "0px",
+                        padding: "0px",
+                        border: "solid 1px",
+                        marginRight: "10px",
+                        cursor: "pointer",
+                        opacity: language !== "us" ? 0.3 : 1,
+                      }}
+                      onClick={() => updateLanguage("us")}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    label={
+                      <Box>
+                        Français
+                        <br />
+                        Non pris en charge
+                      </Box>
+                    }
+                    aria-label="English"
+                  >
+                    <img
+                      src="/images/land/cn.svg"
+                      alt="簡体字中国語"
+                      style={{
+                        width: "32px",
+                        height: "24px",
+                        margin: "0px",
+                        padding: "0px",
+                        border: "solid 1px",
+                        marginRight: "10px",
+                        cursor: "pointer",
+                        opacity: language !== "cn" ? 0.3 : 1,
+                      }}
+                      onClick={() => updateLanguage("cn")}
+                    />
+                  </Tooltip>
+                </ButtonGroup>
               </VStack>
             </DrawerBody>
           </DrawerContent>
