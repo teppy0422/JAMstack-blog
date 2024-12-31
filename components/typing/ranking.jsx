@@ -5,6 +5,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useReducer,
+  useContext,
 } from "react";
 import {
   useColorMode,
@@ -34,6 +35,9 @@ import styles from "../../styles/home.module.scss";
 import PropTypes from "prop-types";
 import GraphTemp from "./graphTemp";
 
+import getMessage from "../getMessage";
+import { AppContext } from "../../pages/_app";
+
 const Ranking = forwardRef((props, ref) => {
   const { user } = props;
   const [hoverData, setHoverData] = useState(null);
@@ -52,6 +56,8 @@ const Ranking = forwardRef((props, ref) => {
       created_at: null,
     },
   ]);
+  const { language, setLanguage } = useContext(AppContext);
+
   useEffect(() => {
     if (user && user.id) {
       setUserID(user.id);
@@ -169,8 +175,26 @@ const Ranking = forwardRef((props, ref) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         {overlay}
         <ModalOverlay />
-        <ModalContent top="60px" w={["260px", "300px", "350px", "400px"]}>
-          <ModalHeader fontSize="16px">ランキング</ModalHeader>
+        <ModalContent
+          top="60px"
+          w={["260px", "300px", "350px", "400px"]}
+          style={{
+            fontFamily: getMessage({
+              ja: "Noto Sans JP",
+              us: "Noto Sans JP",
+              cn: "Noto Sans SC",
+              language,
+            }),
+          }}
+        >
+          <ModalHeader fontSize="16px">
+            {getMessage({
+              ja: "ランキング",
+              us: "Ranking",
+              cn: "排名",
+              language,
+            })}
+          </ModalHeader>
 
           <ModalCloseButton _focus={{ _focus: "none" }} />
           <ModalBody>

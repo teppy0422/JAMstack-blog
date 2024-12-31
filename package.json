@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.8.1",
     "@fontsource/dela-gothic-one": "^5.1.0",
     "@fontsource/noto-sans-jp": "^5.1.0",
+    "@fontsource/noto-sans-sc": "^5.1.1",
     "@fontsource/rampart-one": "^5.1.0",
     "@fontsource/rock-salt": "^5.1.0",
     "@fontsource/rocknroll-one": "^5.1.0",
@@ -78,6 +79,7 @@
     "recoil": "^0.7.3-alpha.2",
     "sass": "^1.51.0",
     "three": "^0.165.0",
+    "typeface-noto-sans-sc": "^1.1.13",
     "typescript": "^5.4.5",
     "url-loader": "^4.1.1",
     "use-sound": "^4.0.1"

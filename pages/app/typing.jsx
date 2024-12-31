@@ -576,13 +576,42 @@ export const typing = () => {
           }}
         />
       </Box>
-      <Content isCustomHeader={true}>
+      <Content
+        isCustomHeader={true}
+        style={{
+          fontFamily: getMessage({
+            ja: "Noto Sans JP",
+            us: "Noto Sans JP",
+            cn: "Noto Sans SC",
+            language,
+          }),
+        }}
+      >
         {isMobile || isIOS ? (
-          <Box>
+          <Box
+            style={{
+              fontFamily: getMessage({
+                ja: "Noto Sans JP",
+                us: "Noto Sans JP",
+                cn: "Noto Sans SC",
+                language,
+              }),
+            }}
+          >
             <Text fontSize="xl" color="red">
-              このページはキーボードが必要です
+              {getMessage({
+                ja: "このページはキーボードが必要です",
+                us: "This page requires a keyboard",
+                cn: "此页面需要键盘。",
+                language,
+              })}
               <br />
-              キーボードのあるデバイスでアクセスしてください
+              {getMessage({
+                ja: "キーボードのあるデバイスでアクセスしてください",
+                us: "Please access with a device that has a keyboard",
+                cn: "使用带键盘的设备访问。",
+                language,
+              })}
             </Text>
           </Box>
         ) : (
@@ -618,6 +647,14 @@ export const typing = () => {
                   colorMode === "light" ? styles.backLight : styles.backDark
                 }
                 w="100%"
+                style={{
+                  fontFamily: getMessage({
+                    ja: "Noto Sans JP",
+                    us: "Noto Sans JP",
+                    cn: "Noto Sans SC",
+                    language,
+                  }),
+                }}
               >
                 <Center mt={2}>
                   <Grid

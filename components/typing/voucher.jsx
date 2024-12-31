@@ -139,13 +139,69 @@ const Voucher = forwardRef((props, ref) => {
         language,
       }),
     },
-    { path: <Tekka />, text: "鉄火巻き" },
-    { path: <Amaebi />, text: "甘エビ" },
-    { path: <Ebi />, text: "エビ" },
-    { path: <Samon />, text: "サーモン" },
-    { path: <Ikura />, text: "イクラ" },
-    { path: <Ootoro />, text: "大トロ" },
-    { path: <SanmaYaki />, text: "さんま焼き" },
+    {
+      path: <Tekka />,
+      text: getMessage({
+        ja: "鉄火巻き",
+        us: "Tuna roll",
+        cn: "铁火卷",
+        language,
+      }),
+    },
+    {
+      path: <Amaebi />,
+      text: getMessage({
+        ja: "甘エビ",
+        us: "Sweet Shrimp",
+        cn: "甜虾",
+        language,
+      }),
+    },
+    {
+      path: <Ebi />,
+      text: getMessage({
+        ja: "エビ",
+        us: "Shrimp",
+        cn: "虾",
+        language,
+      }),
+    },
+    {
+      path: <Samon />,
+      text: getMessage({
+        ja: "サーモン",
+        us: "Salmon",
+        cn: "三文鱼",
+        language,
+      }),
+    },
+    {
+      path: <Ikura />,
+      text: getMessage({
+        ja: "イクラ",
+        us: "Salmon Roe",
+        cn: "鲑鱼卵",
+        language,
+      }),
+    },
+    {
+      path: <Ootoro />,
+      text: getMessage({
+        ja: "大トロ",
+        us: "Fatty Tuna",
+        cn: "大肥金枪鱼",
+        language,
+      }),
+    },
+    {
+      path: <SanmaYaki />,
+      text: getMessage({
+        ja: "さんま焼き",
+        us: "Grilled Pacific Saury",
+        cn: "烤秋刀鱼",
+        language,
+      }),
+    },
   ];
   // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
   useImperativeHandle(ref, () => ({
@@ -205,7 +261,19 @@ const Voucher = forwardRef((props, ref) => {
           }}
         >
           <ModalHeader>
-            タイピング速度は「{sushiCommentRef.current}」でした
+            {getMessage({
+              ja: "タイピング速度は",
+              us: "Typing speed is",
+              cn: "打字速度为 ",
+              language,
+            })}
+            「{sushiCommentRef.current}」
+            {getMessage({
+              ja: "でした",
+              us: "",
+              cn: "",
+              language,
+            })}
           </ModalHeader>
           <ModalCloseButton _focus={{ _focus: "none" }} />
           <ModalBody fontSize="22px">
@@ -223,9 +291,25 @@ const Voucher = forwardRef((props, ref) => {
               <VStack textAlign="right" w={["150px"]} fontSize="16px">
                 <Text variant="solid">{typePerSocund}/KPM</Text>
                 <Divider style={{ marginTop: "2px" }} borderColor="#000" />
-                <Box>ミス:{missedCount}回</Box>
+                <Box>
+                  {getMessage({
+                    ja: "ミス",
+                    us: "missed",
+                    cn: "失去的",
+                    language,
+                  })}
+                  :{missedCount}
+                </Box>
                 <Divider style={{ marginTop: "2px" }} borderColor="#000" />
-                <Box>{totalCost}円</Box>
+                <Box>
+                  {getMessage({
+                    ja: "¥ ",
+                    us: "$ ",
+                    cn: "¥ ",
+                    language,
+                  })}
+                  {totalCost}
+                </Box>
                 <Divider style={{ marginTop: "2px" }} borderColor="#000" />
               </VStack>
             </Flex>
@@ -243,7 +327,12 @@ const Voucher = forwardRef((props, ref) => {
                 setTimeout(property.gameReplay, 500);
               }}
             >
-              もう一度プレイ[SPACE]
+              {getMessage({
+                ja: "もう一度プレイ[SPACE]",
+                us: "Play again [SPACE]",
+                cn: "再次播放 [SPACE]",
+                language,
+              })}
             </Button>
             {user && isFlagTrue ? (
               <>
@@ -266,7 +355,12 @@ const Voucher = forwardRef((props, ref) => {
                     }
                   }}
                 >
-                  登録
+                  {getMessage({
+                    ja: "登録",
+                    us: "Registration",
+                    cn: "注册",
+                    language,
+                  })}
                 </Button>
                 <div style={{ display: "none" }}>
                   <GraphTemp
@@ -286,7 +380,12 @@ const Voucher = forwardRef((props, ref) => {
                   _focus={{ _focus: "none" }}
                   style={{ cursor: "not-allowed", opacity: 0.5 }}
                 >
-                  登録
+                  {getMessage({
+                    ja: "登録",
+                    us: "Registration",
+                    cn: "注册",
+                    language,
+                  })}
                 </Button>
               </>
             )}
