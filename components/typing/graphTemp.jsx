@@ -5,6 +5,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useReducer,
+  useContext,
 } from "react";
 import {
   useColorMode,
@@ -34,6 +35,9 @@ import AnnotationsFactory from "highcharts/modules/annotations";
 import { useSession, signIn, signOut } from "next-auth/react";
 import styles from "../../styles/home.module.scss";
 
+import getMessage from "../getMessage";
+import { AppContext } from "../../pages/_app";
+
 const GraphTemp = forwardRef((props, ref) => {
   const {
     totalCost,
@@ -51,6 +55,7 @@ const GraphTemp = forwardRef((props, ref) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const [chartOptions, setChartOptions] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { language, setLanguage } = useContext(AppContext);
 
   if (typeof window !== `undefined`) {
     AnnotationsFactory(Highcharts);
@@ -209,7 +214,12 @@ const GraphTemp = forwardRef((props, ref) => {
       ],
       colors: "#ff0000",
       title: {
-        text: "クリックでデータの削除",
+        text: getMessage({
+          ja: "クリックでデータの削除",
+          us: "Delete data with a click",
+          cn: "点击删除数据",
+          language,
+        }),
         style: {
           color: getColor("text"),
           fontSize: "16px",
@@ -278,7 +288,12 @@ const GraphTemp = forwardRef((props, ref) => {
       // series: [{ name: "KPM", data: getValue(), color: getColor() }],
       series: [
         {
-          name: "金額",
+          name: getMessage({
+            ja: "金額",
+            us: "Amount",
+            cn: "金額",
+            language,
+          }),
           yAxis: 1,
           legendIndex: 2,
           type: "column",
@@ -290,14 +305,26 @@ const GraphTemp = forwardRef((props, ref) => {
           color: "#dBc6f1",
         },
         {
-          name: "ミス",
+          name: getMessage({
+            ja: "ミス",
+            us: "missed",
+            cn: "失去的",
+            language,
+          }),
           legendIndex: 1,
           type: "spline",
           data: getMisseds().map((missed, index) => ({
             y: missed,
             id: idRef.current[index],
           })),
-          tooltip: { valueSuffix: " 回" },
+          tooltip: {
+            valueSuffix: getMessage({
+              ja: " 回",
+              us: " time",
+              cn: " 回",
+              language,
+            }),
+          },
           color: "red",
         },
         {
@@ -325,7 +352,14 @@ const GraphTemp = forwardRef((props, ref) => {
                 if (visible) {
                   deleteQuestion(e);
                 } else {
-                  alert("自分のデータのみ削除できます");
+                  alert(
+                    getMessage({
+                      ja: "自分のデータのみ削除できます",
+                      us: "Only your data can be deleted.",
+                      cn: "只能删除自己的数据",
+                      language,
+                    })
+                  );
                 }
               },
             },
@@ -420,6 +454,12 @@ const GraphTemp = forwardRef((props, ref) => {
           }
           style={{
             transform: "translateX(0rem)",
+            fontFamily: getMessage({
+              ja: "Noto Sans JP",
+              us: "Noto Sans JP",
+              cn: "Noto Sans SC",
+              language,
+            }),
           }}
           id={`openButton-${userID}`}
           w="56px"
@@ -436,17 +476,61 @@ const GraphTemp = forwardRef((props, ref) => {
           {visible ? "履歴" : ""}
         </Box>
       ) : (
-        <Tooltip hasArrow label="ログインしていると開けます" bg="gray.600">
-          <Box className={styles.graphTemp} w="56px" disabled>
-            履歴
+        <Tooltip
+          hasArrow
+          label={getMessage({
+            ja: "ログインしていると開けます",
+            us: "You can open it if you are logged in.",
+            cn: "登录后打开",
+            language,
+          })}
+          bg="gray.600"
+        >
+          <Box
+            className={styles.graphTemp}
+            w="56px"
+            disabled
+            style={{
+              fontFamily: getMessage({
+                ja: "Noto Sans JP",
+                us: "Noto Sans JP",
+                cn: "Noto Sans SC",
+                language,
+              }),
+            }}
+          >
+            {getMessage({
+              ja: "履歴",
+              us: "Log",
+              cn: "历史",
+              language,
+            })}
           </Box>
         </Tooltip>
       )}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        style={{
+          fontFamily: getMessage({
+            ja: "Noto Sans JP",
+            us: "Noto Sans JP",
+            cn: "Noto Sans SC",
+            language,
+          }),
+        }}
+      >
         {overlay}
         <ModalOverlay />
         <ModalContent top="60px" w="100%" maxWidth="100%">
-          <ModalHeader fontSize="16px">タイピング履歴</ModalHeader>
+          <ModalHeader fontSize="16px">
+            {getMessage({
+              ja: "タイピング履歴",
+              us: "Typing history",
+              cn: "打字历史",
+              language,
+            })}
+          </ModalHeader>
 
           <ModalCloseButton _focus={{ _focus: "none" }} />
           <ModalBody>
@@ -456,7 +540,16 @@ const GraphTemp = forwardRef((props, ref) => {
           <ModalFooter position="relative">
             <Stack direction="row" margin="auto">
               <Badge>Default</Badge>
-              <Tooltip hasArrow label="1分間の入力キー数" bg="gray.600">
+              <Tooltip
+                hasArrow
+                label={getMessage({
+                  ja: "1分間の入力キー数",
+                  us: "Keys per minute",
+                  cn: "每分钟输入的按键数",
+                  language,
+                })}
+                bg="gray.600"
+              >
                 <Badge
                   colorScheme="green"
                   variant="solid"
@@ -466,9 +559,29 @@ const GraphTemp = forwardRef((props, ref) => {
                 </Badge>
               </Tooltip>
               <Badge colorScheme="red" variant="outline">
-                ミス:{missedCount}回
+                {getMessage({
+                  ja: "ミス",
+                  us: "missed",
+                  cn: "失去的",
+                  language,
+                })}
+                :{missedCount}
+                {getMessage({
+                  ja: "回",
+                  us: "time",
+                  cn: "回",
+                  language,
+                })}
               </Badge>
-              <Badge colorScheme="purple">{totalCost}円</Badge>
+              <Badge colorScheme="purple">
+                {getMessage({
+                  ja: "¥ ",
+                  us: "$ ",
+                  cn: "¥ ",
+                  language,
+                })}
+                {totalCost}
+              </Badge>
             </Stack>
           </ModalFooter>
         </ModalContent>

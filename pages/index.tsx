@@ -65,10 +65,8 @@ import CustomModal from "./skillBlogs/customModal";
 import IframeDisplay from "./skillBlogs/IframeDisplay";
 import SjpChart01 from "./skillBlogs/chart/chart_01";
 
-import "@fontsource/noto-sans-jp";
 import "@fontsource/dela-gothic-one";
 import "@fontsource/rampart-one";
-import "@fontsource/rocknroll-one";
 
 export const getServerSideProps = async (context) => {
   const { query } = context;
@@ -357,7 +355,17 @@ const Welcome = ({ isNewCreated }) => {
     <>
       <Sidebar />
       <Content isCustomHeader={true} maxWidth="1200px">
-        <Box style={{ paddingTop: "30px", fontFamily: "Noto Sans JP" }}>
+        <Box
+          style={{
+            paddingTop: "30px",
+            fontFamily: getMessage({
+              ja: "Noto Sans JP",
+              us: "Noto Sans JP",
+              cn: "Noto Sans SC",
+              language,
+            }),
+          }}
+        >
           <Box textAlign="center" mb={4}>
             <Heading
               size="lg"
