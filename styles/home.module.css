@@ -671,7 +671,7 @@ element.style {
 }
 
 .typing .cost::after {
-  content: "円";
+  content: "";
 }
 
 .typing .timer {

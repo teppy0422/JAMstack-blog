@@ -837,12 +837,20 @@ export const typing = () => {
 
                 <Sushi_menu
                   count={clearedProblemsCount}
-                  // count={10}
+                  // count={12}
                   voucherRef={voucherRef}
                   session={session}
                   snowflakeCount={snowflakeCount}
                 />
-                <Center className={styles.cost}>{Q_cost.current}</Center>
+                <Center className={styles.cost}>
+                  {getMessage({
+                    ja: "¥ ",
+                    us: "$ ",
+                    cn: "¥ ",
+                    language,
+                  })}
+                  {Q_cost.current}
+                </Center>
 
                 <Box className={styles.question} w="100%">
                   <Center className={styles.typeDisplay} id="type-display">
