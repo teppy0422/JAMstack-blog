@@ -503,7 +503,7 @@ element.style {
   .cost {
     font-size: 20px;
     &::after {
-      content: "円";
+      content: "";
     }
     text-align: center;
     left: 48%;

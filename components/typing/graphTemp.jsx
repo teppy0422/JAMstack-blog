@@ -301,7 +301,7 @@ const GraphTemp = forwardRef((props, ref) => {
             y: cost,
             id: idRef.current[index],
           })),
-          tooltip: { valueSuffix: " 円" },
+          tooltip: { valueSuffix: "" },
           color: "#dBc6f1",
         },
         {
@@ -473,7 +473,14 @@ const GraphTemp = forwardRef((props, ref) => {
           ref={openRef}
           display={visible ? "" : "none"}
         >
-          {visible ? "履歴" : ""}
+          {visible
+            ? getMessage({
+                ja: "履歴",
+                us: "Log",
+                cn: "历史",
+                language,
+              })
+            : ""}
         </Box>
       ) : (
         <Tooltip
