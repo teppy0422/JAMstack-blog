@@ -255,7 +255,7 @@ const BlogPage: React.FC = () => {
   ];
   return (
     <>
-      <Frame sections={sections} sectionRefs={sectionRefs}>
+      <Frame sections={sections} sectionRefs={sectionRefs} isThrough={true}>
         <Box w="100%">
           <HStack spacing={2} align="center" mb={1} ml={1}>
             <Avatar
@@ -357,7 +357,7 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Box
-            height="80vh"
+            height="auto"
             style={{
               backgroundImage:
                 "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
@@ -366,6 +366,7 @@ const BlogPage: React.FC = () => {
               color: "#fff",
               position: "relative",
             }}
+            mb="5vh"
           >
             <Text
               style={{

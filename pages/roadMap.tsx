@@ -419,7 +419,6 @@ const Roadmap = () => {
     },
     {
       year: "2024",
-
       category: [
         getMessage({
           ja: "生産準備+",
@@ -571,15 +570,37 @@ const Roadmap = () => {
           language,
         }),
       ],
-      items: [{ text: "IE11での動作確認", completed: false }],
+      items: [
+        {
+          text: getMessage({
+            ja: "IE11での動作確認",
+            us: "Confirmation of operation with IE11",
+            cn: "确认使用 IE11 操作",
+            language,
+          }),
+          completed: false,
+        },
+      ],
       possibility: 95,
     },
     {
       year: "2025",
       month: "3",
-      category: ["生産準備+"],
+      category: [
+        getMessage({
+          ja: "生産準備+",
+          us: "Production Preparation+",
+          cn: "生产准备+",
+          language,
+        }),
+      ],
       titleColor: "teal",
-      main: "グループ単位でのサブ自動立案",
+      main: getMessage({
+        ja: "グループ単位でのサブ自動立案",
+        us: "Sub-automatic planning on a group basis",
+        cn: "以小组为单位的次自动规划。",
+        language,
+      }),
       mainDetail: [
         "単体でのサブ自動立案は量産では使いづらい為、他の製品品番のサブ形態を考慮した(グループ単位)での自動立案を行えるようにする",
         "最初の試作でサブ自動立案を使用、そのサブで実際に作業しながら本番サブを考える事を想定",
@@ -589,26 +610,103 @@ const Roadmap = () => {
     },
     {
       year: "2025",
-      category: ["生産準備+", "高知"],
-      titleColor: "teal",
-      main: "共通化の提案",
-      mainDetail: [
-        "同じ経路なのに電線サイズや色が異なる箇所を調査して変更を立案",
+      category: [
+        getMessage({
+          ja: "生産準備+",
+          us: "Production Preparation+",
+          cn: "生产准备+",
+          language,
+        }),
+        getMessage({
+          ja: "高知",
+          us: "Kochi",
+          cn: "高知",
+          language,
+        }),
       ],
-      items: [{ text: "共通化分析", completed: false }],
+      titleColor: "teal",
+      main: getMessage({
+        ja: "共通化の提案",
+        us: "Commonality Proposal",
+        cn: "共同化建议",
+        language,
+      }),
+      mainDetail: [
+        getMessage({
+          ja: "同じ経路なのに電線サイズや色が異なる箇所を調査して変更を立案",
+          us: "Investigate areas where wire sizes and colors are different even though they are on the same route and draft changes.",
+          cn: "调查相同路线但使用不同尺寸和颜色的导线的地方，并规划变化。",
+          language,
+        }),
+      ],
+      items: [
+        {
+          text: getMessage({
+            ja: "共通化分析",
+            us: "Commonality analysis",
+            cn: "共通化分析",
+            language,
+          }),
+          completed: false,
+        },
+      ],
       possibility: 90,
     },
     {
       year: "2025",
       month: "4",
-      category: ["生産準備+", "順立生産システム", "部材一覧+"],
+      category: [
+        getMessage({
+          ja: "生産準備+",
+          us: "Production Preparation+",
+          cn: "生产准备+。",
+          language,
+        }),
+        getMessage({
+          ja: "順立生産システム",
+          us: "sequential production system",
+          cn: "连续生产系统",
+          language,
+        }),
+        getMessage({
+          ja: "部材一覧+",
+          us: "Parts List+",
+          cn: "组件清单+",
+          language,
+        }),
+      ],
       titleColor: "teal",
-      main: "プログラムの最適化",
-      mainDetail: ["誰でも更新できる事を目指してプログラム修正"],
+      main: getMessage({
+        ja: "プログラムの最適化",
+        us: "Program Optimization",
+        cn: "计划优化",
+        language,
+      }),
+      mainDetail: [
+        getMessage({
+          ja: "誰でも更新できる事を目指してプログラム修正",
+          us: "Modification of the program with the aim of making it possible for anyone to update it",
+          cn: "方案修改的目的是使任何人都能对其进行更新。",
+          language,
+        }),
+      ],
       items: [
-        { text: "オブジェクト指向になっていない箇所の修正", completed: false },
         {
-          text: "プログラムの更新方法についての説明ページの追加を開始",
+          text: getMessage({
+            ja: "オブジェクト指向になっていない箇所の修正",
+            us: "Fixing non-object-oriented areas",
+            cn: "修复不面向对象的领域。",
+            language,
+          }),
+          completed: false,
+        },
+        {
+          text: getMessage({
+            ja: "プログラムの更新方法についての説明ページの追加を開始",
+            us: "Began adding an instruction page on how to update the program",
+            cn: "开始添加如何更新程序的说明页面。",
+            language,
+          }),
           completed: false,
         },
       ],
@@ -617,21 +715,68 @@ const Roadmap = () => {
     {
       year: "2025",
       month: "5",
-      category: ["生産準備+", "徳島"],
+      category: [
+        getMessage({
+          ja: "生産準備+",
+          us: "Production Preparation+",
+          cn: "生产准备+",
+          language,
+        }),
+        getMessage({
+          ja: "徳島",
+          us: "Tokushima",
+          cn: "徳島",
+          language,
+        }),
+      ],
       titleColor: "teal",
-      main: "ハメ図で作業番号を管理する機能の追加",
+      main: getMessage({
+        ja: "ハメ図で作業番号を管理する機能の追加",
+        us: "Added the ability to manage work numbers in frame diagrams",
+        cn: "用于管理框架图中的工号的附加功能。",
+        language,
+      }),
       mainDetail: [
-        "PVSW_RLTFに作業番号を入力する項目を追加",
-        "主にSSCのハメ図や後ハメ図に使用を想定",
+        getMessage({
+          ja: "PVSW_RLTFに作業番号を入力する項目を追加",
+          us: "Added an item to enter the work number in PVSW_RLTF",
+          cn: "添加一个项目，在 PVSW_RLTF 中输入工号。",
+          language,
+        }),
+
+        getMessage({
+          ja: "主にSSCのハメ図や後ハメ図に使用を想定",
+          us: "Assumed to be used mainly for SSC framing and post-framing drawings",
+          cn: "主要用于 SSC 框架和后框架图。",
+          language,
+        }),
       ],
       items: [
-        { text: "PVSW_RLTFに入力欄を追加", completed: false },
         {
-          text: "入力方法の最適化",
+          text: getMessage({
+            ja: "PVSW_RLTFに入力欄を追加",
+            us: "Added an input field to PVSW_RLTF",
+            cn: "PVSW_RLTF 中新增输入字段",
+            language,
+          }),
           completed: false,
         },
         {
-          text: "現場の評価確認",
+          text: getMessage({
+            ja: "入力方法の最適化",
+            us: "Input Method Optimization",
+            cn: "优化输入法",
+            language,
+          }),
+          completed: false,
+        },
+        {
+          text: getMessage({
+            ja: "現場の評価確認",
+            us: "Confirmation of site evaluation",
+            cn: "确认现场评估",
+            language,
+          }),
           completed: false,
         },
       ],
@@ -640,45 +785,170 @@ const Roadmap = () => {
     {
       year: "2025",
       month: "6",
-      category: ["生産準備+", "高知"],
+      category: [
+        getMessage({
+          ja: "生産準備+",
+          us: "Production Preparation+",
+          cn: "生产准备+",
+          language,
+        }),
+        getMessage({
+          ja: "高知",
+          us: "Kochi",
+          cn: "高知",
+          language,
+        }),
+      ],
       titleColor: "teal",
-      main: "自動機APPLの設置順を提案する機能の追加",
+      main: getMessage({
+        ja: "自動機APPLの設置順を提案する機能の追加",
+        us: "Addition of a function to suggest the order of installation of automatic machines APPL.",
+        cn: "建议自动设备安装顺序的附加功能 APPL.",
+        language,
+      }),
       mainDetail: [
-        "APPLの設置順によって生産効率が大きく変わるけど、人間が考えるのは難しい為プログラムに提案させる",
+        getMessage({
+          ja: "APPLの設置順によって生産効率が大きく変わるけど、人間が考えるのは難しい為プログラムに提案させる",
+          us: "Production efficiency varies greatly depending on the order in which APPLs are installed, but it is difficult for humans to think about this, so the program is allowed to make suggestions.",
+          cn: "APPL的安装顺序对生产效率有很大影响.但人类很难考虑到这一点.因此只能让程序提出建议。",
+          language,
+        }),
       ],
       items: [
-        { text: "SA,ASそれぞれのステータスを生準+に追加", completed: false },
-        { text: "配置を計算する過程を出力する機能の追加", completed: false },
-        { text: "高知工場による評価", completed: false },
+        {
+          text: getMessage({
+            ja: "SA,ASそれぞれのステータスを生産準備+に追加",
+            us: "SA and AS statuses added to production readiness+ respectively.",
+            cn: "SA、AS 各自的状态已添加到生产就绪 + 中。",
+            language,
+          }),
+          completed: false,
+        },
+        {
+          text: getMessage({
+            ja: "配置を計算する過程を出力する機能の追加",
+            us: "Added the ability to output the process of calculating the placement",
+            cn: "附加功能，用于输出计算位置的过程。",
+            language,
+          }),
+          completed: false,
+        },
+        {
+          text: getMessage({
+            ja: "高知工場による評価",
+            us: "Evaluation by Kochi Factory",
+            cn: "由高知工厂进行评估。",
+            language,
+          }),
+          completed: false,
+        },
       ],
       possibility: 90,
     },
     {
       year: "2025",
       month: "7",
-      category: ["生産準備+", "徳島"],
+      category: [
+        getMessage({
+          ja: "生産準備+",
+          us: "Production Preparation+",
+          cn: "生产准备+",
+          language,
+        }),
+        getMessage({
+          ja: "徳島",
+          us: "Tokushima",
+          cn: "徳島",
+          language,
+        }),
+      ],
       titleColor: "teal",
-      main: "Verup実行時にハメ図の色を引き継ぎたい",
+      main: getMessage({
+        ja: "Verup実行時にハメ図の色を引き継ぎたい",
+        us: "I want to take over the color of the frame diagram when executing Verup.",
+        cn: "我想在执行 Verup 时接管框架图的颜色。",
+        language,
+      }),
       mainDetail: [
-        "Verupを実行するとハメ色が標準に戻る為、都度の手修正が必要になっている",
+        getMessage({
+          ja: "Verupを実行するとハメ色が標準に戻る為、都度の手修正が必要になっている",
+          us: "When the Verup is executed, the frame color reverts to the standard, so manual correction is required each time.",
+          cn: "在进行校正时，帧颜色会恢复到标准颜色，因此每次都需要手动校正。",
+          language,
+        }),
       ],
       items: [
-        { text: "設定したハメ色を保存/呼び出しを追加", completed: false },
-        { text: "徳島工場による評価", completed: false },
+        {
+          text: getMessage({
+            ja: "設定したハメ色を保存/呼び出しを追加",
+            us: "Add save/recall of set frame colors",
+            cn: "增加保存/调用设置的框架颜色。",
+            language,
+          }),
+          completed: false,
+        },
+        {
+          text: getMessage({
+            ja: "徳島工場による評価",
+            us: "Evaluation by Tokushima Plant",
+            cn: "德岛工厂的评估",
+            language,
+          }),
+          completed: false,
+        },
       ],
       possibility: 100,
     },
     {
       year: "2025",
-      category: ["生産準備+"],
+      category: [
+        getMessage({
+          ja: "生産準備+",
+          us: "Production Preparation+",
+          cn: "生产准备+",
+          language,
+        }),
+        getMessage({
+          ja: "高知",
+          us: "Kochi",
+          cn: "高知",
+          language,
+        }),
+      ],
       titleColor: "teal",
-      main: "PVSW_RLTFの変更は専用のフォームで行う",
+      main: getMessage({
+        ja: "PVSW_RLTFの変更は専用のフォームで行う",
+        us: "PVSW_RLTF changes are made using a dedicated form.",
+        cn: "对 PVSW_RLTF 的更改使用专用表格进行。",
+        language,
+      }),
       mainDetail: [
-        "PVSW_RLTFの変更を手修正で行っている為、入力ミスによりハメ図にミスが発生する可能性がある。変更履歴が残っていない",
+        getMessage({
+          ja: "PVSW_RLTFの変更を手修正で行っている為、入力ミスによりハメ図にミスが発生する可能性がある。変更履歴が残っていない",
+          us: "Because changes to PVSW_RLTF are made manually, input errors may cause mistakes in the framing diagram. No change history is kept.",
+          cn: "由于对 PVSW_RLTF 的更改是手动进行的，输入错误可能会导致框架图出错。不保存更改历史记录。",
+          language,
+        }),
       ],
       items: [
-        { text: "専用フォームの追加", completed: false },
-        { text: "履歴を通知書に出力", completed: false },
+        {
+          text: getMessage({
+            ja: "専用フォームの追加",
+            us: "Add a dedicated form",
+            cn: "其他专用表格",
+            language,
+          }),
+          completed: false,
+        },
+        {
+          text: getMessage({
+            ja: "履歴を通知書に出力",
+            us: "Output history to notification form",
+            cn: "将历史记录输出到通知单。",
+            language,
+          }),
+          completed: false,
+        },
         { text: "ログイン機能の追加", completed: false },
         { text: "現場の評価確認", completed: false },
       ],

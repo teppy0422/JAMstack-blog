@@ -87,7 +87,10 @@ const Frame: React.FC<{
   children: React.ReactNode;
   sections?: any;
   sectionRefs?: React.RefObject<HTMLElement[]> | null;
-}> = ({ children, sections, sectionRefs }) => {
+  isThrough?: boolean;
+}> = ({ children, sections, sectionRefs, isThrough }) => {
+  console.log("isThrough:", isThrough); // デバッグ用ログ
+
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const { colorMode } = useColorMode();
   const [showConfetti, setShowConfetti] = useState(false); // useStateをコンポーネント内に移動
@@ -274,7 +277,7 @@ const Frame: React.FC<{
     <>
       <Content isCustomHeader={true} maxWidth="1280px">
         <ChakraProvider theme={customTheme}>
-          {!userId ? (
+          {!isThrough && !userId ? (
             <Box h="60vh">
               <Text
                 fontSize="lg"
@@ -286,7 +289,7 @@ const Frame: React.FC<{
                 閲覧するにはログインと開発による認証が必要です
               </Text>
             </Box>
-          ) : !userName ? (
+          ) : !isThrough && !userName ? (
             <Box h="60vh">
               <Text
                 fontSize="lg"
