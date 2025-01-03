@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import Confetti from "react-confetti";
 import {
   Box,
@@ -44,7 +44,8 @@ import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
 
-import "@fontsource/noto-sans-jp";
+import getMessage from "../../components/getMessage";
+import { AppContext } from "../../pages/_app";
 
 const customTheme = extendTheme({
   fonts: {
@@ -93,6 +94,7 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
+  const { language, setLanguage } = useContext(AppContext);
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
@@ -176,7 +178,12 @@ const BlogPage: React.FC = () => {
   const skillCircles = [
     {
       value: 90,
-      cirText: "EXCEL-vba\nアプリ制御など\n15年",
+      cirText: getMessage({
+        ja: "EXCEL-vba\nアプリ制御など\n15年",
+        us: "EXCEL-vba\nApplication Control,etc.\n15 years",
+        cn: "EXCEL-vba\n应用控制等\n15年",
+        language,
+      }),
       color: "#1f9b60",
       img: "/images/brandIcons/logo_excel.svg",
     },
@@ -366,7 +373,7 @@ const BlogPage: React.FC = () => {
               color: "#fff",
               position: "relative",
             }}
-            mb="5vh"
+            pb="5vh"
           >
             <Text
               style={{
