@@ -44,8 +44,6 @@ import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
 
-import "@fontsource/noto-sans-jp";
-
 const customTheme = extendTheme({
   fonts: {
     heading: "'Noto Sans JP', sans-serif",

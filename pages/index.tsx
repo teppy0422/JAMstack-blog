@@ -118,7 +118,6 @@ const Welcome = ({ isNewCreated }) => {
   50% { transform: translateY(-15px); }
   100% { transform: translateY(0); }`;
   //生産準備+着手からの経過日数の計算
-
   const calculateElapsedTime = () => {
     const startDate = new Date(2024, 7, 10); // 月は0から始まるので7月は6
     const today = new Date();

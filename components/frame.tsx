@@ -40,6 +40,7 @@ import { useReadCount } from "../hooks/useReadCount";
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";
 
+import getMessage from "../components/getMessage";
 import { AppContext } from "../pages/_app";
 
 const customTheme = extendTheme({
@@ -286,7 +287,12 @@ const Frame: React.FC<{
                 fontWeight="bold"
                 color={colorMode === "light" ? "red" : "orange"}
               >
-                閲覧するにはログインと開発による認証が必要です
+                {getMessage({
+                  ja: "閲覧するにはログインと開発による認証が必要です",
+                  us: "Login and authentication by development is required to view",
+                  cn: "查看需要开发人员登录和验证",
+                  language,
+                })}
               </Text>
             </Box>
           ) : !isThrough && !userName ? (
@@ -298,7 +304,12 @@ const Frame: React.FC<{
                 fontWeight="bold"
                 color={colorMode === "light" ? "red" : "orange"}
               >
-                閲覧するには開発による認証が必要です
+                {getMessage({
+                  ja: "閲覧するには開発による認証が必要です",
+                  us: "Authentication by development is required to view",
+                  cn: "观看需要得到开发部门的授权",
+                  language,
+                })}
               </Text>
             </Box>
           ) : (
@@ -319,7 +330,12 @@ const Frame: React.FC<{
               >
                 <Flex alignItems="center" gap="3px">
                   <Text fontWeight="bold" textAlign="left" m={1}>
-                    技術ブログ
+                    {getMessage({
+                      ja: "技術ブログ",
+                      us: "skills blog",
+                      cn: "技术博客",
+                      language,
+                    })}
                   </Text>
                   <PiGithubLogoFill size={24} />
                 </Flex>
@@ -334,69 +350,180 @@ const Frame: React.FC<{
                   <AccordionItem>
                     <AccordionButton m={1} p={0}>
                       <Box flex="4" textAlign="left" fontSize="13px">
-                        1. 自己紹介
+                        1.
+                        {getMessage({
+                          ja: " 自己紹介",
+                          us: " self-introduction",
+                          cn: " 自我介绍",
+                          language,
+                        })}
                       </Box>
                       <AccordionIcon />
                     </AccordionButton>
-                    {createLinkPanel("/skillBlogs/0004/", "メンバーリスト")}
+                    {createLinkPanel(
+                      "/skillBlogs/0004/",
+                      getMessage({
+                        ja: "メンバーリスト",
+                        us: "Member List",
+                        cn: "成员名单",
+                        language,
+                      })
+                    )}
                   </AccordionItem>
                   <AccordionItem>
                     <AccordionButton m={1} p={0}>
                       <Box flex="1" textAlign="left" fontSize="13px">
-                        2. 生産準備+の使い方
+                        2.
+                        {getMessage({
+                          ja: " 生産準備+の使い方",
+                          us: " How to use Production Preparation+",
+                          cn: " 如何使用生产准备+",
+                          language,
+                        })}
                       </Box>
                       <AccordionIcon />
                     </AccordionButton>
-                    {createLinkPanel("/skillBlogs/0006/", "生産準備+とは")}
-                    {createLinkPanel("/skillBlogs/0009/", "導入の効果")}
+                    {createLinkPanel(
+                      "/skillBlogs/0006/",
+                      getMessage({
+                        ja: "生産準備+とは",
+                        us: "What is Production Preparation+",
+                        cn: "什么是生产准备+？",
+                        language,
+                      })
+                    )}
+                    {createLinkPanel(
+                      "/skillBlogs/0009/",
+                      getMessage({
+                        ja: "導入の効果",
+                        us: "Effects of Introduction",
+                        cn: "引进的影响",
+                        language,
+                      })
+                    )}
                     {createLinkPanel(
                       "/skillBlogs/0007/",
-                      "生産準備+の練習(初級)"
+                      getMessage({
+                        ja: "練習(初級)",
+                        us: "Practice (Elementary)",
+                        cn: "实践（初级）",
+                        language,
+                      })
                     )}
                     {createLinkPanel(
                       "/skillBlogs/0008/",
-                      "生産準備+の練習(中級)"
+                      getMessage({
+                        ja: "練習(中級)",
+                        us: "Practice (Intermediate)",
+                        cn: "实践（中级）。",
+                        language,
+                      })
                     )}
                     {createLinkPanel(
                       "/skillBlogs/0002/",
-                      "コネクタの撮影から座標登録"
+                      getMessage({
+                        ja: "コネクタの撮影から座標登録",
+                        us: "Coordinate registration from connector shooting",
+                        cn: "登记连接器拍摄的坐标",
+                        language,
+                      })
                     )}
                     {createLinkPanel(
                       "/skillBlogs/0005/",
-                      "サブナンバーの引越し"
+                      getMessage({
+                        ja: "サブナンバーの引越し",
+                        us: "Moving sub-numbers",
+                        cn: "移动子编号",
+                        language,
+                      })
                     )}
-                    {createLinkPanel("/skillBlogs/0001/", "プログラムの解説")}
+                    {createLinkPanel(
+                      "/skillBlogs/0001/",
+                      getMessage({
+                        ja: "プログラムの解説",
+                        us: "Program Description",
+                        cn: "计划说明",
+                        language,
+                      })
+                    )}
                   </AccordionItem>
                   <AccordionItem>
                     <AccordionButton m={1} p={0}>
                       <Box flex="4" textAlign="left" fontSize="13px">
-                        3. 順立生産システムの使い方
+                        3.
+                        {getMessage({
+                          ja: " 順立生産システム+の使い方",
+                          us: " How to use the Sequential Production System+",
+                          cn: " 如何使用顺序生产系统+",
+                          language,
+                        })}
                       </Box>
                       <AccordionIcon />
                     </AccordionButton>
                     {createLinkPanel(
                       "/skillBlogs/0011/",
-                      "PC初回セットアップ手順"
+                      getMessage({
+                        ja: "PC初回セットアップ手順",
+                        us: "PC First Time Setup Procedure",
+                        cn: "电脑首次设置程序",
+                        language,
+                      })
                     )}
-                    {createLinkPanel("#", "MODE1(計画)の設定")}
+                    {createLinkPanel(
+                      "#",
+                      getMessage({
+                        ja: "MODE1(計画)の設定",
+                        us: "MODE1 (planning) setting",
+                        cn: "模式1（规划）。",
+                        language,
+                      })
+                    )}
                   </AccordionItem>
                   <AccordionItem>
                     <AccordionButton m={1} p={0}>
                       <Box flex="1" textAlign="left" fontSize="13px">
-                        4. 誘導ポイント設定一覧表
+                        4.
+                        {getMessage({
+                          ja: " 誘導ポイント設定一覧表",
+                          us: " Induction point setting list",
+                          cn: " 感应点设置列表",
+                          language,
+                        })}
                       </Box>
                       <AccordionIcon />
                     </AccordionButton>
-                    {createLinkPanel("/skillBlogs/0010/", "使い方")}
+                    {createLinkPanel(
+                      "/skillBlogs/0010/",
+                      getMessage({
+                        ja: "使い方",
+                        us: "treatment",
+                        cn: "待遇",
+                        language,
+                      })
+                    )}
                   </AccordionItem>
                   <AccordionItem>
                     <AccordionButton m={1} p={0}>
                       <Box flex="1" textAlign="left" fontSize="13px">
-                        5. 改善活動の進め方
+                        5.
+                        {getMessage({
+                          ja: " 改善活動の進め方",
+                          us: " How to proceed with improvement activities",
+                          cn: " 如何开展改进活动",
+                          language,
+                        })}
                       </Box>
                       <AccordionIcon />
                     </AccordionButton>
-                    {createLinkPanel("/skillBlogs/0003/", "参考事例集")}
+                    {createLinkPanel(
+                      "/skillBlogs/0003/",
+                      getMessage({
+                        ja: "参考事例集",
+                        us: "Collection of reference examples",
+                        cn: "参考事例集",
+                        language,
+                      })
+                    )}
                   </AccordionItem>
                 </Accordion>
               </VStack>
@@ -422,8 +549,18 @@ const Frame: React.FC<{
                   mb={3}
                   onClick={() => {
                     showToast(
-                      "用意していません",
-                      "そのうち追加するかもです",
+                      getMessage({
+                        ja: "用意していません",
+                        us: "Not provided.",
+                        cn: "不详",
+                        language,
+                      }),
+                      getMessage({
+                        ja: "そのうち追加するかもです",
+                        us: "I may add it soon.",
+                        cn: "我可能很快就会加入",
+                        language,
+                      }),
                       "success"
                     );
                     setShowConfetti(true);

@@ -28,11 +28,9 @@ const myState = {
 export const myContext = createContext(myState);
 import { AppProps } from "next/app";
 import { LanguageProvider } from "../context/LanguageContext";
-
 // 言語設定の型定義
 type LanguageType = "ja" | "us" | "cn";
-import "@fontsource/noto-sans-jp";
-import "@fontsource/noto-sans-sc";
+
 // コンテキストの型定義
 interface AppContextType {
   language: LanguageType;

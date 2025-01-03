@@ -949,45 +949,126 @@ const Roadmap = () => {
           }),
           completed: false,
         },
-        { text: "ログイン機能の追加", completed: false },
-        { text: "現場の評価確認", completed: false },
+        {
+          text: getMessage({
+            ja: "ログイン機能の追加",
+            us: "Add login function",
+            cn: "附加登录功能",
+            language,
+          }),
+          completed: false,
+        },
+        {
+          text: getMessage({
+            ja: "現場の評価確認",
+            us: "Confirmation of site evaluation",
+            cn: "确认现场评估",
+            language,
+          }),
+          completed: false,
+        },
       ],
       possibility: 100,
     },
     {
       year: "2025",
       month: "8",
-      category: ["配策誘導ナビ.vb"],
+      category: [
+        getMessage({
+          ja: "配策誘導ナビ.vb",
+          us: "Guidance Navigation.vb",
+          cn: "分发指导-navi.vb",
+          language,
+        }),
+      ],
       titleColor: "teal",
-      main: "配策誘導ナビ.vbからのシリアル送信でディスプレイ移動の作り方を新規作成",
+      main: getMessage({
+        ja: "配策誘導ナビ.vbからのシリアル送信でディスプレイ移動の作り方を新規作成",
+        us: "New method of making display move with serial transmission from distribution guide navigation.vb",
+        cn: "通过分发指导导航仪的串行传输进行显示移动的新方法。",
+        language,
+      }),
       mainDetail: [
-        "配策誘導ナビ.vbとArudinoの組み合わせでディスプレイが移動しない場合の対応方法と新規作成方法をページに掲載",
+        getMessage({
+          ja: "配策誘導ナビ.vbとArudinoの組み合わせでディスプレイが移動しない場合の対応方法と新規作成方法をページに掲載",
+          us: "How to deal with the case when the display does not move with the combination of the distribution guidance navigator.vb and Arudino and how to create a new one on the page.",
+          cn: "如何处理在结合使用分发指导 navigator.vb 和 Arudino 时显示屏无法移动的情况，以及如何在页面上创建一个新的显示屏。",
+          language,
+        }),
       ],
       items: [
         {
-          text: "電気回路とステッピングドライバーの耐久動作テスト",
+          text: getMessage({
+            ja: "電気回路とステッピングドライバーの耐久動作テスト",
+            us: "Endurance operation testing of electrical circuits and stepper drivers",
+            cn: "电路和步进驱动器的耐久运行测试",
+            language,
+          }),
           completed: false,
         },
-        { text: "回路図と作り方を掲載", completed: false },
+        {
+          text: getMessage({
+            ja: "回路図と作り方を掲載",
+            us: "Includes schematics and instructions for making",
+            cn: "包含示意图和制作说明。",
+            language,
+          }),
+          completed: false,
+        },
       ],
       possibility: 90,
     },
     {
       year: "2025",
       month: "9",
-      category: ["生産準備+"],
+      category: [
+        getMessage({
+          ja: "生産準備+",
+          us: "Production Preparation+",
+          cn: "生产准备+",
+          language,
+        }),
+      ],
       titleColor: "teal",
-      main: "類似コネクタ調査",
+      main: getMessage({
+        ja: "類似コネクタ調査",
+        us: "Similar Connector Survey",
+        cn: "类似连接器调查",
+        language,
+      }),
       mainDetail: [
-        "類似コネクタをPythonを利用して画像比較",
-        "Pythonはサーバーが必要な為、無ければExcelで行う",
+        getMessage({
+          ja: "類似コネクタをPythonを利用して画像比較",
+          us: "Image comparison of similar connectors using Python",
+          cn: "使用 Python 对类似连接器进行图像对比。",
+          language,
+        }),
+        getMessage({
+          ja: "Pythonはサーバーが必要な為、無ければExcelで行う",
+          us: "Python requires a server, so if you don't have one, do it in Excel.",
+          cn: "Python 需要服务器，因此如果没有服务器，请使用 Excel。",
+          language,
+        }),
       ],
       items: [
         {
-          text: "Python環境の構築",
+          text: getMessage({
+            ja: "Python環境の構築",
+            us: "Building a Python Environment",
+            cn: "构建 Python 环境",
+            language,
+          }),
           completed: false,
         },
-        { text: "類似コネクタ比較機能の追加", completed: false },
+        {
+          text: getMessage({
+            ja: "類似コネクタ比較機能の追加",
+            us: "Added similar connector comparison function",
+            cn: "增加类似连接器比较功能。",
+            language,
+          }),
+          completed: false,
+        },
       ],
       possibility: 60,
     },

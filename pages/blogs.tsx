@@ -31,7 +31,7 @@ export default function Home({ blog, category, tag, blog2 }) {
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   return (
     <>
-      <Content isCustomHeader={false}>
+      <Content isCustomHeader={true}>
         <ul>
           {/* tagにデータが無い場合 */}
           {!tag.length && <Text>there are no posts...</Text>}

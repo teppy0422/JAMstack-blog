@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { MdBusiness, MdChat } from "react-icons/md";
 import { useCustomToast } from "../../components/customToast";
 
@@ -28,7 +28,12 @@ import Sidebar from "../../components/sidebar";
 import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
 
+import getMessage from "../../components/getMessage";
+import { AppContext } from "../../pages/_app";
+
 export default function Threads() {
+  const { language, setLanguage } = useContext(AppContext);
+
   const [threads, setThreads] = useState<any[]>([]);
   const [newThreadTitle, setNewThreadTitle] = useState("");
   const [ipAddress, setIpAddress] = useState("");
@@ -87,15 +92,27 @@ export default function Threads() {
   }, {});
   const showToast = useCustomToast();
 
+  console.log("Current language:", language); // デバッグ用ログ
+
   return (
     <>
       <Sidebar />
       <Content isCustomHeader={true}>
         <Heading size="md" mb="4">
-          問い合わせ
+          {getMessage({
+            ja: "問い合わせ",
+            us: "Inquiry",
+            cn: "询问",
+            language,
+          })}
         </Heading>
         <Box fontSize="sm" mb="4" fontWeight={400}>
-          ログイン登録した同じ会社のみ閲覧可能です
+          {getMessage({
+            ja: "ログイン登録した同じ会社のみ閲覧可能です",
+            us: "Only the same company that registered with your login can view the information.",
+            cn: "只有注册登录的公司才能查看。",
+            language,
+          })}
         </Box>
         {ipAddress}
         {loading ? (
@@ -241,7 +258,12 @@ export default function Threads() {
             type="text"
             value={newThreadTitle}
             onChange={(e) => setNewThreadTitle(e.target.value)}
-            placeholder="新規スレッドのタイトル"
+            placeholder={getMessage({
+              ja: "新規スレッドのタイトルaa",
+              us: "New thread title",
+              cn: "新主题标题。",
+              language,
+            })}
             size="md"
             bg="white"
             _focus={{ borderColor: "gray.400" }} // フォーカス時のボーダー色を変更
