@@ -585,7 +585,7 @@ const Welcome = ({ isNewCreated }) => {
                     {getMessage({
                       ja: "・疑問や問題をリアルタイムですぐに問い合わせが出来ます",
                       us: "・You can contact us immediately with any questions or problems in real time.",
-                      cn: "可以立即实时提出问题和困难。",
+                      cn: "・可以立即实时提出问题和困难。",
                       language,
                     })}
                   </Text>
@@ -593,7 +593,7 @@ const Welcome = ({ isNewCreated }) => {
                     {getMessage({
                       ja: "・開発スピードが",
                       us: "・Development speed is ",
-                      cn: "・......发展速度。",
+                      cn: "・开发速度",
                       language,
                     })}
                     <Box
@@ -608,7 +608,7 @@ const Welcome = ({ isNewCreated }) => {
                       {getMessage({
                         ja: "速い",
                         us: " Fast",
-                        cn: "(为时尚早",
+                        cn: " 快",
                         language,
                       })}
                       <BsQuestionCircle
@@ -679,7 +679,7 @@ const Welcome = ({ isNewCreated }) => {
                       {getMessage({
                         ja: "定額",
                         us: "fixed amount. ",
-                        cn: "定额。",
+                        cn: "定额",
                         language,
                       })}
                       <BsQuestionCircle
@@ -942,7 +942,7 @@ const Welcome = ({ isNewCreated }) => {
                   {getMessage({
                     ja: "製品品番の切り替え時/新規立ち上げ時、生産準備で多くの工数が掛かっていませんか？それを解決する為に作成しました。 約2回/週で更新しています。",
                     us: "Do you spend a lot of man-hours preparing for production when switching product part numbers/starting a new product? We created this system to solve this problem. We update this about 2 times/week.",
-                    cn: "在转换产品零件编号/启动新产品时，您是否花费了大量的工时来准备生产？我们为此开发了一种解决方案。 大约每周更新两次。",
+                    cn: "在转换产品零件编号/启动新产品时。您是否花费了大量的工时来准备生产？我们为此开发了一种解决方案。 大约每周更新两次。",
                     language,
                   })}
                 </Text>
