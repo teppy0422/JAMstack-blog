@@ -1500,9 +1500,17 @@ function ThreadContent() {
         <SidebarBBS />
         <Content isCustomHeader={true}>
           <Heading size="md" mb="1" ml="1">
-            {threadTitle}
+            {getMessage({
+              ja: threadTitle,
+              language,
+            })}
             <Box as="span" fontSize={14} fontWeight={400}>
-              ({threadMainCompany})
+              (
+              {getMessage({
+                ja: threadMainCompany,
+                language,
+              })}
+              )
             </Box>
           </Heading>
           <Box ml="1">{ipAddress}</Box>

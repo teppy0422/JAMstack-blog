@@ -41,8 +41,6 @@ import { useReadCount } from "../../hooks/useReadCount";
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
 
-import "@fontsource/noto-sans-jp";
-
 const customTheme = extendTheme({
   fonts: {
     heading: "'Noto Sans JP', sans-serif",
@@ -90,8 +88,14 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
-
   const { language, setLanguage } = useLanguage();
+  //右リストの読み込みをlanguage取得後にする
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
+  useEffect(() => {
+    if (language) {
+      setIsLanguageLoaded(true);
+    }
+  }, [language]);
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
@@ -103,78 +107,10 @@ const BlogPage: React.FC = () => {
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
 
   const showToast = useCustomToast();
-  //64pxまでスクロールしないとサイドバーが表示されないから暫定
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 100); // 100msの遅延を追加
-    } else {
-      window.scrollTo(0, 150);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
-  //#の位置にスクロールした時のアクティブなセクションを装飾
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-    );
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
-
-    return () => {
-      sectionRefs.current.forEach((section) => {
-        if (section) observer.unobserve(section);
-      });
-    };
-  }, []);
-  //#クリックした時のオフセット
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange, false);
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange, false);
-    };
-  }, []);
-  //アンダーライン付きテキスト_ドロワー
-
-  const handleOpen = (drawerName: string) => {
-    setActiveDrawer(drawerName);
-    onOpen();
-  };
-  const handleClose = () => {
-    setActiveDrawer(null);
-    onClose();
-  };
-
+  //右リストの読み込みをlanguage取得後にする
+  if (!isLanguageLoaded) {
+    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
+  }
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs}>
@@ -187,7 +123,12 @@ const BlogPage: React.FC = () => {
             />
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>開発</Text>
+            <Text>
+              {getMessage({
+                ja: "開発",
+                language,
+              })}
+            </Text>
             <Spacer />
             <Flex justifyContent="flex-end">
               <Text>
@@ -220,12 +161,13 @@ const BlogPage: React.FC = () => {
         </Box>
         <SectionBox
           id="section1"
-          title={getMessage({
-            ja: "1.はじめに",
-            us: "1.Introduction.",
-            cn: "1.介绍。",
-            language,
-          })}
+          title={
+            "1." +
+            getMessage({
+              ja: "はじめに",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >

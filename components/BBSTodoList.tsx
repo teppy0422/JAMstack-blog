@@ -195,7 +195,7 @@ const BBSTodoList = () => {
               {getMessage({
                 ja: "状態",
                 us: "stat",
-                cn: "国",
+                cn: "状态",
                 language,
               })}
             </Th>

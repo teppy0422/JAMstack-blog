@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { Container, Center, Box, Flex } from "@chakra-ui/react";
+import { Container, Center, Box, Flex, useColorMode } from "@chakra-ui/react";
 import NextLink from "next/link";
 
 import Header from "../components/header";
@@ -17,6 +17,7 @@ export default function Content({
   maxWidth = "900px",
 }) {
   const { language, setLanguage } = useLanguage();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <>
@@ -56,8 +57,14 @@ export default function Content({
       <Box className="no-print-page">
         <Center
           my="14px"
-          color="gray"
-          fontFamily="Noto Sans JP"
+          color={colorMode === "light" ? "black" : "white"}
+          fontSize="14px"
+          fontFamily={getMessage({
+            ja: "Noto Sans JP",
+            us: "Noto Sans JP",
+            cn: "Noto Sans SC",
+            language,
+          })}
           fontWeight="100"
         >
           <NextLink href="/privacy">
@@ -78,7 +85,7 @@ export default function Content({
             })}
           </NextLink>
         </Center>
-        <Center mb="18px" color="gray">
+        <Center mb="16px" color={colorMode === "light" ? "black" : "white"}>
           ©︎ 2022-2024 Teppei Kataoka. All rights Reserved.
         </Center>
       </Box>

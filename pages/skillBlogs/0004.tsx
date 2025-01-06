@@ -96,6 +96,14 @@ const BlogPage: React.FC = () => {
   const { readByCount } = useReadCount(userId);
   const { language, setLanguage } = useLanguage();
 
+  //右リストの読み込みをlanguage取得後にする
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
+  useEffect(() => {
+    if (language) {
+      setIsLanguageLoaded(true);
+    }
+  }, [language]);
+
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
@@ -106,67 +114,7 @@ const BlogPage: React.FC = () => {
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
 
   const showToast = useCustomToast();
-  //64pxまでスクロールしないとサイドバーが表示されないから暫定
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 100); // 100msの遅延を追加
-    } else {
-      window.scrollTo(0, 150);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
-  //#の位置にスクロールした時のアクティブなセクションを装飾
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-    );
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
 
-    return () => {
-      sectionRefs.current.forEach((section) => {
-        if (section) observer.unobserve(section);
-      });
-    };
-  }, []);
-  //#クリックした時のオフセット
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange, false);
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange, false);
-    };
-  }, []);
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);
     onOpen();
@@ -255,6 +203,10 @@ const BlogPage: React.FC = () => {
       img: "/images/brandIcons/logo_Premiere.svg",
     },
   ];
+  //右リストの読み込みをlanguage取得後にする
+  if (!isLanguageLoaded) {
+    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
+  }
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs} isThrough={true}>
@@ -546,7 +498,7 @@ const BlogPage: React.FC = () => {
             />
           </Box>
         </SectionBox>
-        <Box h="0.01vh" />
+        <Box h="10vh" />
       </Frame>
     </>
   );

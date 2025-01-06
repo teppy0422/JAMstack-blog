@@ -1167,6 +1167,7 @@ const Welcome = ({ isNewCreated }) => {
                   </Box>
                 }
               />
+
               <Divider borderColor="grya.500" my="3" />
               <Box lineHeight="1">
                 <Badge
@@ -1362,6 +1363,158 @@ const Welcome = ({ isNewCreated }) => {
 
           {renderSection(
             getMessage({
+              ja: "おすすめプログラム",
+              us: "Recommended Programs",
+              cn: "建议的计划",
+              language,
+            }),
+            14,
+            1
+          )}
+          <Text textAlign="center" mb={6}>
+            {getMessage({
+              ja: "昔に作成した事があるプログラムです",
+              us: "It's a program I've created in the past.",
+              cn: "这是我过去制作的一个节目。",
+              language,
+            })}
+            <br />
+            {getMessage({
+              ja: "依頼があれば作成します",
+              us: "Will create upon request.",
+              cn: "应要求编写。",
+              language,
+            })}
+            <br />
+            {getMessage({
+              ja: "1ヶ月以内に完成すると思います",
+              us: "I expect it to be completed within a month.",
+              cn: "应在一个月内完成。",
+              language,
+            })}
+          </Text>
+
+          <Card
+            maxWidth="550px"
+            mx="auto"
+            bg="transparent"
+            border="1px solid"
+            borderColor="gray.500"
+          >
+            <Divider />
+            <CardBody p={4}>
+              <Stack
+                divider={<StackDivider borderColor="gray.500" />}
+                spacing="4"
+              >
+                <Box>
+                  <Heading size="sm" textTransform="uppercase" fontWeight={600}>
+                    {getMessage({
+                      ja: "準完計画の自動立案",
+                      us: "Automatic planning of semi-completion plans",
+                      cn: "自动半完成规划",
+                      language,
+                    })}
+                  </Heading>
+                  <Divider
+                    mt="4"
+                    borderColor={colorMode === "light" ? "black" : "white"}
+                  />
+                  <Text pt="2" fontSize="15px">
+                    {getMessage({
+                      ja: "1.生産リードタイムと稼働日程を手入力",
+                      us: "1.Manual input of production lead time and operating schedule",
+                      cn: "1.手动输入生产准备时间和运行时间表",
+                      language,
+                    })}
+                  </Text>
+                  <Text pt="1" fontSize="15px">
+                    {getMessage({
+                      ja: "2.在庫と内示から準完計画を自動立案",
+                      us: "2.Automatic planning of semi-completion plans based on inventory and unofficial orders",
+                      cn: "2.根据库存和非正式报价自动进行半成品规划",
+                      language,
+                    })}
+                  </Text>
+                  <Text pt="1" fontSize="15px">
+                    {getMessage({
+                      ja: "3.手動で調整する",
+                      us: "3.Manual adjustment",
+                      cn: "3.手动调节",
+                      language,
+                    })}
+                  </Text>
+                  <Text pt="1" fontSize="15px">
+                    {getMessage({
+                      ja: "4.EXTESへの自動出力",
+                      us: "4.Automatic output to EXTES",
+                      cn: "4.自动输出到 EXTES",
+                      language,
+                    })}
+                  </Text>
+                  <Text pt="1" fontSize="15px">
+                    {getMessage({
+                      ja: "5.DDとの照合でアンマッチが無いかを自動チェック",
+                      us: "5.Automatic check for unmatch against DD",
+                      cn: "5.自动检查 DD 是否不匹配",
+                      language,
+                    })}
+                  </Text>
+                  <Text pt="1" fontSize="15px">
+                    {getMessage({
+                      ja: "6.組立工程向けの準完計画を自動作成",
+                      us: "6.Automatic creation of semi-complete plans for assembly processes",
+                      cn: "6.自动创建装配过程的半完整计划",
+                      language,
+                    })}
+                  </Text>
+                  <Divider
+                    mt="2"
+                    borderColor={colorMode === "light" ? "black" : "white"}
+                  />
+                  <Text pt="3" fontSize="15px">
+                    {getMessage({
+                      ja: "毎月：稼働日程の入力",
+                      us: "Monthly: Input of operating schedule",
+                      cn: "每月：输入运行日期",
+                      language,
+                    })}
+                    <br />
+                    {getMessage({
+                      ja: "毎日：準完計画の更新",
+                      us: "Daily: Update on semi-complete plan",
+                      cn: "每日：半完整计划的最新情况",
+                      language,
+                    })}
+                    <br />
+                    {getMessage({
+                      ja: "適宜：生産リードタイムの変更",
+                      us: "As appropriate: Change in production lead time",
+                      cn: "在适当情况下：更改生产周转时间",
+                      language,
+                    })}
+                  </Text>
+                </Box>
+              </Stack>
+            </CardBody>
+          </Card>
+          <Text textAlign="center">
+            {getMessage({
+              ja: "特に準完計画は手動では困難なので自動化する事をお勧めします",
+              us: "It is recommended to automate the semi-completion plan, especially since it is difficult to do it manually.",
+              cn: "半完成计划尤其难以手动完成，因此建议将其自动化",
+              language,
+            })}
+            <br />
+            {getMessage({
+              ja: "他にも思いついたら追記します",
+              us: "I'll add others as I think of them.",
+              cn: "如果我还能想到其他的，我会补充进来",
+              language,
+            })}
+          </Text>
+          {renderSection(
+            getMessage({
               ja: "WEBサービスの機能",
               us: "Web Service Features",
               cn: "网络服务的功能",
@@ -1412,11 +1565,7 @@ const Welcome = ({ isNewCreated }) => {
                   language,
                 }),
                 <PiGithubLogoLight size={90} />,
-                <Text
-                  fontFamily="Noto Sans Jp"
-                  fontSize="13px"
-                  lineHeight={1.4}
-                >
+                <Text fontSize="13px" lineHeight={1.4}>
                   {getMessage({
                     ja: "プログラムの使い方や技術を紹介",
                     us: "Introduction to program usage and technology.",

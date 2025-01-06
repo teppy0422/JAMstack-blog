@@ -15,6 +15,7 @@ import {
   Icon,
   Tooltip,
   useColorMode,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import "@fontsource/noto-sans-jp";
@@ -298,6 +299,10 @@ export default function Auth({ userData }: AuthProps) {
       reader.readAsDataURL(file);
     });
   };
+  const updateLanguage = (newLanguage) => {
+    console.log("Updating language to:", newLanguage);
+    setLanguage(newLanguage);
+  };
   return (
     <Box>
       {user ? (
@@ -348,6 +353,7 @@ export default function Auth({ userData }: AuthProps) {
               language,
             })}
           </Button>
+
           {/* ボタンの色と幅を調整 */}
         </>
       ) : (
@@ -641,6 +647,84 @@ export default function Auth({ userData }: AuthProps) {
           )}
         </>
       )}
+      <ButtonGroup
+        my="16px"
+        bottom="0"
+        left="0"
+        width="100%" // 必要に応じて幅を設定
+        display="flex"
+        justifyContent="center" // 中央に配置
+      >
+        <Tooltip label={<Box>日本語</Box>} aria-label="English">
+          <img
+            src="/images/land/jp.svg"
+            alt="日本語"
+            style={{
+              width: "32px",
+              height: "24px",
+              margin: "0px",
+              padding: "0px",
+              border: "solid 1px",
+              marginRight: "10px",
+              cursor: "pointer",
+              opacity: language !== "ja" ? 0.3 : 1,
+            }}
+            onClick={() => updateLanguage("ja")}
+          />
+        </Tooltip>
+        <Tooltip
+          label={
+            <Box>
+              English
+              <br />
+              Not supported
+            </Box>
+          }
+          aria-label="English"
+        >
+          <img
+            src="/images/land/um.svg"
+            alt="英語"
+            style={{
+              width: "32px",
+              height: "24px",
+              margin: "0px",
+              padding: "0px",
+              border: "solid 1px",
+              marginRight: "10px",
+              cursor: "pointer",
+              opacity: language !== "us" ? 0.3 : 1,
+            }}
+            onClick={() => updateLanguage("us")}
+          />
+        </Tooltip>
+        <Tooltip
+          label={
+            <Box>
+              Français
+              <br />
+              Non pris en charge
+            </Box>
+          }
+          aria-label="English"
+        >
+          <img
+            src="/images/land/cn.svg"
+            alt="簡体字中国語"
+            style={{
+              width: "32px",
+              height: "24px",
+              margin: "0px",
+              padding: "0px",
+              border: "solid 1px",
+              marginRight: "10px",
+              cursor: "pointer",
+              opacity: language !== "cn" ? 0.3 : 1,
+            }}
+            onClick={() => updateLanguage("cn")}
+          />
+        </Tooltip>
+      </ButtonGroup>
     </Box>
   );
 }

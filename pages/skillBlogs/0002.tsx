@@ -41,21 +41,8 @@ import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
 
-import "@fontsource/noto-sans-jp";
-
-const customTheme = extendTheme({
-  fonts: {
-    heading: "'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
-  },
-  fontWeights: {
-    normal: 200,
-    medium: 300,
-    bold: 400,
-    light: 300,
-    extraLight: 100,
-  },
-});
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 //テキストジャンプアニメーション
 const jumpAnimation = keyframes`
   0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
@@ -90,6 +77,14 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
+  const { language, setLanguage } = useLanguage();
+  //右リストの読み込みをlanguage取得後にする
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
+  useEffect(() => {
+    if (language) {
+      setIsLanguageLoaded(true);
+    }
+  }, [language]);
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
@@ -101,67 +96,6 @@ const BlogPage: React.FC = () => {
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
 
   const showToast = useCustomToast();
-  //64pxまでスクロールしないとサイドバーが表示されないから暫定
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 100); // 100msの遅延を追加
-    } else {
-      window.scrollTo(0, 150);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
-  //#の位置にスクロールした時のアクティブなセクションを装飾
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-    );
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
-
-    return () => {
-      sectionRefs.current.forEach((section) => {
-        if (section) observer.unobserve(section);
-      });
-    };
-  }, []);
-  //#クリックした時のオフセット
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange, false);
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange, false);
-    };
-  }, []);
 
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);
@@ -171,27 +105,10 @@ const BlogPage: React.FC = () => {
     setActiveDrawer(null);
     onClose();
   };
-  //現在のパスを取得
-  const [currentPath, setCurrentPath] = useState("");
-  const [accordionIndex, setAccordionIndex] = useState<number[]>([]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setCurrentPath(window.location.pathname);
-      // 現在のパスに基づいて開くべきアコーディオンのインデックスを設定
-      if (
-        window.location.pathname.includes("/skillBlogs/0001") ||
-        window.location.pathname.includes("/skillBlogs/0002")
-      ) {
-        setAccordionIndex([0]);
-      } else if (window.location.pathname.includes("/skillBlogs/0003")) {
-        setAccordionIndex([1]);
-      } else {
-        setAccordionIndex([]);
-      }
-    }
-  }, []);
-
+  //右リストの読み込みをlanguage取得後にする
+  if (!isLanguageLoaded) {
+    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
+  }
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs}>
@@ -204,7 +121,12 @@ const BlogPage: React.FC = () => {
             />
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>開発</Text>
+            <Text>
+              {getMessage({
+                ja: "開発",
+                language,
+              })}
+            </Text>
             <Spacer />
             <Flex justifyContent="flex-end">
               <Text>
@@ -214,20 +136,42 @@ const BlogPage: React.FC = () => {
             </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            コネクタの撮影から座標登録まで
+            {getMessage({
+              ja: "コネクタの撮影から座標登録まで",
+              us: "From connector shooting to coordinate registration",
+              cn: "从拍摄连接器到登记坐标",
+              language,
+            })}
           </Heading>
-          <CustomBadge text="生準+" />
+          <CustomBadge
+            text={getMessage({
+              ja: "生準+",
+              language,
+            })}
+          />
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-17
+            {getMessage({
+              ja: "更新日",
+              us: "renewal date",
+              cn: "更新日",
+              language,
+            })}
+            :2024-11-17
           </Text>
         </Box>
         <SectionBox
           id="section1"
-          title="1.はじめに"
+          title={
+            "1." +
+            getMessage({
+              ja: "はじめに",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -238,15 +182,26 @@ const BlogPage: React.FC = () => {
           <Box>
             <Text fontWeight="bold"></Text>
             <Text>
-              誰かが撮影したコネクタ画像はみんなで共有した方が良いよね？という考えで開発しました。
-              登録した写真と座標データは共有して使用する事で生産効率の向上を図ります。
-              以下はその手順です。
+              {getMessage({
+                ja: "誰かが撮影したコネクタ画像はみんなで共有した方が良いよね？という考えで開発しました。登録した写真と座標データは共有して使用する事で生産効率の向上を図ります。以下はその手順です。",
+                us: "It is better to share connector images taken by someone else with everyone, right? This is the idea behind the development of this system. The registered photos and coordinate data will be shared and used to improve production efficiency. The following is the procedure.",
+                cn: "别人拍摄的连接器图像应该由大家共享，对吗？这就是开发该系统的初衷。通过共享已登记的照片和坐标数据，可以提高生产效率。具体流程如下。",
+                language,
+              })}
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section2"
-          title="2.カメラアプリの起動"
+          title={
+            "2." +
+            getMessage({
+              ja: "カメラアプリの起動",
+              us: "Launching the camera application",
+              cn: "启动相机应用程序",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -254,36 +209,96 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text>専用のカメラアプリで撮影して保存します</Text>
+          <Text>
+            {getMessage({
+              ja: "専用のカメラアプリで撮影して保存します",
+              us: "Take a picture with the dedicated camera app and save it.",
+              cn: "使用专用相机应用程序拍摄并保存照片",
+              language,
+            })}
+          </Text>
           <Box m={3}>
             <Text fontWeight="400" my={4}>
-              2-1.生産準備+の[端末一覧]を選択
+              2-1.
+              {getMessage({
+                ja: "生産準備+の[端末一覧]を選択",
+                us: "Select [端末一覧] under Production Preparation+",
+                cn: "在生产准备+ 中选择 [端末一覧]",
+                language,
+              })}
             </Text>
             <Text fontWeight="400" my={4}>
-              2-2.撮影する端末/コネクタ品番を選択
+              2-2.
+              {getMessage({
+                ja: "撮影する端末/コネクタ品番を選択",
+                us: "Select the device/connector part number to be photographed",
+                cn: "选择要拍摄的设备/连接器部件号。",
+                language,
+              })}
             </Text>
             <Box bg="gray.300" color="black" w="100%" p={1}>
-              下図は11行目(7283-0391-30)を選択している状態です
+              {getMessage({
+                ja: "下図は11行目(7283-0391-30)を選択している状態です",
+                us: "The figure below shows line 11 (7283-0391-30) selected",
+                cn: "下图显示选择了第 11 行（7283-0391-30）。",
+                language,
+              })}
             </Box>
             <Image src="/images/0001/0002.png" alt="0002.png" />
             <Text fontWeight="400" my={4}>
               2-3.
+              {getMessage({
+                ja: "",
+                us: "press ",
+                cn: "",
+                language,
+              })}
               <Kbd {...kbdStyle}>Ctrl</Kbd>+<Kbd {...kbdStyle}>Enter</Kbd>
-              を押す
+              {getMessage({
+                ja: " を押す",
+                us: "",
+                cn: " 压机",
+                language,
+              })}
             </Text>
             <Box bg="gray.300" color="black" w="100%" p={1}>
-              撮影ソフト(camera+)が起動します
+              {getMessage({
+                ja: "撮影ソフト(camera+)が起動します",
+                us: "The camera+ software will start.",
+                cn: "相机软件 (camera+) 启动。",
+                language,
+              })}
             </Box>
             <Image src="/images/0001/0013.png" alt="0013.png" />
             <Text>
-              ※インストールされていない場合はインストール画面が表示されるのでインストールを行ってください。開発の署名は片岡哲兵です。
+              {getMessage({
+                ja: "※インストールされていない場合はインストール画面が表示されるのでインストールを行ってください。",
+                us: "If it is not installed, the installation screen will be displayed, so please install it.",
+                cn: "*如果未安装，将显示安装屏幕，请安装。",
+                language,
+              })}
             </Text>
           </Box>
-          <Text textAlign="center">---作成途中---</Text>
+          <Text textAlign="center">
+            {getMessage({
+              ja: "--そのうち追加--",
+              us: "--Sooner or later, add--",
+              cn: "--迟早要加--",
+              language,
+            })}
+          </Text>
         </SectionBox>
         <SectionBox
           id="section3"
-          title="3.コネクタ写真の加工(通常)"
+          title={
+            "3." +
+            getMessage({
+              ja: "コネクタ写真の加工(通常)",
+              us: "Processing of connector photos (normal)",
+              cn: "处理连接器照片（正常）",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -292,7 +307,12 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Text display="inline">
-            無料の画像編集ソフト
+            {getMessage({
+              ja: "無料の画像編集ソフト",
+              us: "Free image editing software",
+              cn: "免费图像编辑软件",
+              language,
+            })}
             <UnderlinedTextWithDrawer
               text=<>
                 <Box as="span" display="inline" borderBottom="2px solid">
@@ -306,7 +326,12 @@ const BlogPage: React.FC = () => {
               onOpen={() => handleOpen("InkScape")}
               isOpen={isOpen && activeDrawer === "InkScape"}
               onClose={handleClose}
-              header="InkScapeとは"
+              header={getMessage({
+                ja: "InkScapeとは",
+                us: "What is InkScape?",
+                cn: "什么是 InkScape？",
+                language,
+              })}
               children={
                 <Box>
                   <Image
@@ -318,83 +343,207 @@ const BlogPage: React.FC = () => {
                   />
                   <Text>
                     <span style={{ fontWeight: "600" }}>InkScape</span>
-                    は、コンピュータで絵を描くための無料のソフトです。特に「ベクターグラフィックス」という方法で絵を描けます。
+                    {getMessage({
+                      ja: "は、コンピュータで絵を描くための無料のソフトです。特に「ベクターグラフィックス」という方法で絵を描けます。",
+                      us: "is a free software for drawing pictures on your computer. In particular, you can draw pictures using the [vector graphics] method.",
+                      cn: "是一款在电脑上绘制图片的免费软件。特别是，它允许您使用一种称为 [vector graphics]的方法来绘制图片。",
+                      language,
+                    })}
                   </Text>
                   <Text fontWeight="600" mt={4}>
-                    ベクターグラフィックスって何？
+                    {getMessage({
+                      ja: "ベクターグラフィックスって何？",
+                      us: "What is vector graphics?",
+                      cn: "vector graphics 是什么？",
+                      language,
+                    })}
                   </Text>
                   <Text>
-                    拡大してもきれい:
-                    普通の写真や画像は、拡大するとぼやけてしまうことがあります。でも、ベクターグラフィックスは、どんなに拡大しても線がくっきりしています。これは、絵が線や形で表現されているからです。
+                    {getMessage({
+                      ja: "拡大してもきれい",
+                      us: "Beautiful even when enlarged",
+                      cn: "放大后非常漂亮",
+                      language,
+                    })}
+                    :
+                    {getMessage({
+                      ja: "普通の写真や画像は、拡大するとぼやけてしまいます。でも、ベクターグラフィックスは、どんなに拡大しても線がくっきりしています。これは、絵が線や形で表現されているからです。",
+                      us: "Ordinary photos and images become blurred when enlarged. However, in vector graphics, lines are clear no matter how much they are enlarged. This is because the picture is represented by lines and shapes.",
+                      cn: "普通照片和图像放大后会变得模糊不清。但对于矢量图形，无论放大多少，线条都很清晰。这是因为图片是用线条和形状来表示的。",
+                      language,
+                    })}
                   </Text>
                   <Text fontWeight="600" mt={4}>
-                    Inkscapeのいいところ
+                    {getMessage({
+                      ja: "Inkscapeのいいところ",
+                      us: "What I like about Inkscape",
+                      cn: "Inkscape 的优点",
+                      language,
+                    })}
                   </Text>
                   <Text>
-                    無料で使える:
-                    お金を払わなくても、誰でも自由にダウンロードして使えます。
-                  </Text>
-                  <Text>
-                    みんなで作っている:
-                    Inkscapeは、世界中の人たちが協力して作っているソフトです。だから、どんどん良くなっています。
+                    {getMessage({
+                      ja: "無料で使える",
+                      us: "Free of charge",
+                      cn: "免费。",
+                      language,
+                    })}
+                    :
+                    {getMessage({
+                      ja: "お金を払わなくても、誰でも自由にダウンロードして使えます。",
+                      us: "Anyone is free to download and use it without paying.",
+                      cn: "任何人都可以免费下载和使用，无需付费。",
+                      language,
+                    })}
                   </Text>
                   <Text
                     fontWeight="600"
                     mt={4}
                     animation={`${jumpAnimation} 1s infinite`} // アニメーションを適用
                   >
-                    注意点
+                    {getMessage({
+                      ja: "注意点",
+                      us: "point of attention",
+                      cn: "注意点",
+                      language,
+                    })}
                   </Text>
                   <Text>
-                    通常の会社ではソフトのインストール許可申請が必要です。許可が降りてからインストールを行なってください。
+                    {getMessage({
+                      ja: "通常の会社ではソフトのインストール許可申請が必要です。許可が降りてからインストールを行なってください。",
+                      us: "Normal companies require an application for permission to install the software. Please install the software only after permission is granted.",
+                      cn: "在普通公司，安装软件需要申请许可。只有在获得许可后才能进行安装。",
+                      language,
+                    })}
                   </Text>
                 </Box>
               }
             />
-            で写真の背景除去を行います
+            {getMessage({
+              ja: "で写真の背景除去を行います",
+              us: "to remove the background of a photo",
+              cn: "移除照片背景。",
+              language,
+            })}
           </Text>
           <Box m={3}>
             <Text fontWeight="400" my={4}>
-              3-1.生産準備+の[端末一覧]を選択
+              3-1.
+              {getMessage({
+                ja: "生産準備+の[端末一覧]を選択",
+                us: "Select [Terminal List] under Production Preparation+.",
+                cn: "在生产准备+ 中选择 [终端列表]。",
+                language,
+              })}
             </Text>
             <Text fontWeight="400" my={4}>
-              3-2.登録/修正したい部品品番を選択
+              3-2.
+              {getMessage({
+                ja: "登録/修正したい部品品番を選択",
+                us: "Select the part number you wish to register/modify",
+                cn: "选择要注册/修改的零件编号。",
+                language,
+              })}
             </Text>
             <Box bg="gray.300" color="black" w="100%" p={1}>
-              下図は11行目(7283-0391-30)を選択している状態です
+              {getMessage({
+                ja: "下図は11行目(7283-0391-30)を選択している状態です",
+                us: "The figure below shows line 11 (7283-0391-30) selected",
+                cn: "下图显示选择了第 11 行（7283-0391-30）。",
+                language,
+              })}
             </Box>
             <Image src="/images/0001/0002.png" alt="0002.png" />
             <Text fontWeight="400" my={4}>
               3-3.
+              {getMessage({
+                ja: "",
+                us: "press ",
+                cn: "",
+                language,
+              })}
               <Kbd {...kbdStyle}>Shift</Kbd>+<Kbd {...kbdStyle}>Enter</Kbd>
-              を押す
+              {getMessage({
+                ja: "を押す",
+                us: "",
+                cn: "按下",
+                language,
+              })}
             </Text>
             <Box bg="gray.300" color="black" w="100%" p={1}>
-              写真加工ソフト(InkScape)がインストールされていない場合はダウンロードサイトが開きます
+              {getMessage({
+                ja: "写真加工ソフト(InkScape)がインストールされていない場合はダウンロードサイトが開きます",
+                us: "If the photo processing software (InkScape) is not installed, the download site will open.",
+                cn: "如果未安装照片处理软件 (InkScape)，将打开下载网站。",
+                language,
+              })}
             </Box>
             <Image src="/images/0001/0007.png" alt="0007.png" />
             <Text>
-              ※InkScapeのダウンロードアドレスがわっていたら開きません。
-              その場合はブラウザ(Edgeとか)で検索してダウンロードサイトを探してください。
+              {getMessage({
+                ja: "※InkScapeのダウンロードアドレスが変わっていたら開きません。その場合はブラウザ(Edgeとか)で検索してダウンロードサイトを探してください。",
+                us: "*If the InkScape download address has changed, it will not open. In that case, please search with your browser (like Edge) to find the download site.",
+                cn: "*如果 InkScape 下载地址已更改，则无法打开。在这种情况下，请使用浏览器（Edge 或类似浏览器）搜索下载网站。",
+                language,
+              })}
             </Text>
-            <Text my={4}>上図の赤枠辺りをクリックして進みます。</Text>
             <Text my={4}>
-              3-4.下図の赤枠辺りをクリックしてダウンロードページを開きます。
+              {getMessage({
+                ja: "上図の赤枠辺りをクリックして進みます。",
+                us: "Click around the red frame in the figure above to proceed.",
+                cn: "点击上图中红色方框的周围，继续操作。",
+                language,
+              })}
+            </Text>
+            <Text my={4}>
+              3-4.
+              {getMessage({
+                ja: "下図の赤枠辺りをクリックしてダウンロードページを開きます。",
+                us: "Click around the red frame in the figure below to open the download page.",
+                cn: "点击下图中红色方框的周围，打开下载页面。",
+                language,
+              })}
             </Text>
             <Box bg="gray.300" color="black" w="100%" p={1}>
-              お使いのパソコンに最適なバージョンが自動選択されます
+              {getMessage({
+                ja: "お使いのパソコンに最適なバージョンが自動選択されます",
+                us: "The version most suitable for your computer is automatically selected.",
+                cn: "系统会自动选择最适合您电脑的版本。",
+                language,
+              })}
             </Box>
             <Image src="/images/0001/0008.png" alt="0008.png" />
-            <Text my={4}>3-5.click hereをクリックしてダウンロード開始</Text>
+            <Text my={4}>
+              3-5.
+              {getMessage({
+                ja: "[click here]をクリックしてダウンロード開始",
+                us: "Click [click here] to start downloading",
+                cn: "点击 [click here] 开始下载",
+                language,
+              })}
+            </Text>
             <Image src="/images/0001/0009.png" alt="0009.png" />
             <Text>
-              ※ダウンロードが上手く出来ない場合はシステム管理者などにご相談ください
+              {getMessage({
+                ja: "※ダウンロードが上手く出来ない場合はシステム管理者などにご相談ください",
+                us: "*If you have trouble downloading, please consult your system administrator.",
+                cn: "*如果在下载过程中遇到问题，请咨询系统管理员或其他相关人员。",
+                language,
+              })}
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section4"
-          title="4.コネクタ写真の加工(簡単)"
+          title={
+            "4." +
+            getMessage({
+              ja: "コネクタ写真の加工(簡単)",
+              us: "Processing connector photos (easy)",
+              cn: "处理连接器照片（简单）。",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -403,11 +552,23 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Text>
-            この方法では簡単に背景除去ができます。コネクタと背景のコントラストがある一定必要です。
-            端子写真は電線部分の除去は出来ません。
+            {getMessage({
+              ja: "この方法では簡単に背景除去ができます。コネクタと背景のコントラストがある一定必要です。端子写真は電線部分の除去は出来ません。",
+              us: "This method allows for easy background removal. A certain amount of contrast between the connector and the background is required. For terminal photos, it is not possible to remove the wire portion.",
+              cn: "这种方法可以轻松去除背景。连接器与背景之间需要有一定的对比度。在端子照片中无法去除导线部分。",
+              language,
+            })}
           </Text>
           <Box m={3}>
-            <Text my={4}>4-1.下記のWEBサイトを開く</Text>
+            <Text my={4}>
+              4-1.
+              {getMessage({
+                ja: "下記のWEBサイトを開く",
+                us: "Open the following WEB site",
+                cn: "打开以下网站",
+                language,
+              })}
+            </Text>
             <ExternalLink
               href="https://www.photoroom.com/ja/tools/background-remover"
               text="photoroom.com/ja/tools/background-remover"
@@ -427,7 +588,12 @@ const BlogPage: React.FC = () => {
                 onOpen={() => handleOpen("Photoroom")}
                 isOpen={isOpen && activeDrawer === "Photoroom"}
                 onClose={handleClose}
-                header="Photoroomの使い方"
+                header={getMessage({
+                  ja: "Photoroomの使い方",
+                  us: "How to use Photoroom",
+                  cn: "如何使用 Photoroom",
+                  language,
+                })}
                 size="md"
                 children={
                   <Box>
@@ -436,40 +602,101 @@ const BlogPage: React.FC = () => {
                         src="/images/0001/howToPhotoroom.mp4"
                         type="video/mp4"
                       />
-                      お使いのブラウザは動画タグをサポートしていません。
+                      {getMessage({
+                        ja: "お使いのブラウザは動画タグをサポートしていません。",
+                        us: "Your browser does not support video tags.",
+                        cn: "您的浏览器不支持视频标记。",
+                        language,
+                      })}
                     </video>
                     <Text mt={4}>
                       <span style={{ fontWeight: "600" }}>Photoroom</span>
-                      は、ブラウザ上で動作する画像加工WEBアプリです。2024/11/16現在は無料です。
+                      {getMessage({
+                        ja: "は、ブラウザ上で動作する画像加工WEBアプリです。2024/11/16現在は無料です。",
+                        us: "is an image processing web application that runs in your browser and is free as of 2024/11/16.",
+                        cn: "是一款图像处理网络应用程序，可在浏览器中运行，自 2024 年 11 月 16 日起免费。",
+                        language,
+                      })}
                     </Text>
                     <Text fontWeight="600" mt={4}>
-                      使い方
+                      {getMessage({
+                        ja: "使い方",
+                        us: "How to use",
+                        cn: "如何使用",
+                        language,
+                      })}
                     </Text>
                     <Text>
-                      1.上の動画のように加工したい写真をドラッグすると背景が除去されます。
+                      {"1." +
+                        getMessage({
+                          ja: "上の動画のように加工したい写真をドラッグすると背景が除去されます。",
+                          us: "Drag the photo you want to process as shown in the video above to remove the background.",
+                          cn: "拖动要处理的照片，移除背景，如上视频所示。",
+                          language,
+                        })}
                       <br />
-                      2.ダウンロード(標準解像度)してパソコンに保存します。
+                      {"2." +
+                        getMessage({
+                          ja: "ダウンロード(標準解像度)してパソコンに保存します。",
+                          us: "Download (standard resolution) and save to your computer.",
+                          cn: "下载（标准分辨率）并保存在电脑上。",
+                          language,
+                        })}
                     </Text>
                   </Box>
                 }
               />
-              で写真の背景除去を行なってダウンロードします
+              {getMessage({
+                ja: "で写真の背景除去を行なってダウンロードします",
+                us: "to remove the background of the photo and download it",
+                cn: "移除照片背景并下载。",
+                language,
+              })}
             </Text>
-            <Text my={4}>4-3.ダウンロードしたファイルをリネームします。</Text>
+            <Text my={4}>
+              4-3.
+              {getMessage({
+                ja: "ダウンロードしたファイルをリネームします。",
+                us: "Rename the downloaded file.",
+                cn: "重命名下载的文件。",
+                language,
+              })}
+            </Text>
             <Text ml={4}>
-              例)
+              {getMessage({
+                ja: "例)",
+                us: "Example:",
+                cn: "例)",
+                language,
+              })}
               <br />
               7283-0391-30.png
               <br />
               ⇩<br />
               7283-0391-30_1_001.png
             </Text>
-            <Text my={4}>4-4.ファイルを任意の場所に保存します。</Text>
+            <Text my={4}>
+              4-4.
+              {getMessage({
+                ja: "ファイルを任意の場所に保存します。",
+                us: "Save the file to any location.",
+                cn: "将文件保存到所需位置。",
+                language,
+              })}
+            </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section5"
-          title="5.コネクタ座標の編集"
+          title={
+            "5." +
+            getMessage({
+              ja: "コネクタ座標の編集",
+              us: "Editing Connector Coordinates",
+              cn: "编辑连接器坐标",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -480,7 +707,13 @@ const BlogPage: React.FC = () => {
         </SectionBox>
         <SectionBox
           id="section6"
-          title="6.まとめ"
+          title={
+            "6." +
+            getMessage({
+              ja: "まとめ",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -522,7 +755,7 @@ const BlogPage: React.FC = () => {
             />
           </Box>
         </SectionBox>
-        <Box h="0.01vh" />
+        <Box h="5vh" />
       </Frame>
     </>
   );
