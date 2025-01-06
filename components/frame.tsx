@@ -40,8 +40,8 @@ import { useReadCount } from "../hooks/useReadCount";
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";
 
+import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
-import { AppContext } from "../pages/_app";
 
 const customTheme = extendTheme({
   fonts: {
@@ -90,7 +90,7 @@ const Frame: React.FC<{
   sectionRefs?: React.RefObject<HTMLElement[]> | null;
   isThrough?: boolean;
 }> = ({ children, sections, sectionRefs, isThrough }) => {
-  console.log("isThrough:", isThrough); // デバッグ用ログ
+  const { language, setLanguage } = useLanguage();
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const { colorMode } = useColorMode();
@@ -105,8 +105,6 @@ const Frame: React.FC<{
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount, skillBlogsData } = useReadCount(userId);
-
-  const { language, setLanguage } = useContext(AppContext);
 
   //64pxまでスクロールしないとサイドバーが表示されないから暫定
   useEffect(() => {

@@ -1,3 +1,5 @@
+"use client";
+
 //ここでimportしたものは全てのページで読み込まれる
 import React, {
   useEffect,
@@ -26,37 +28,11 @@ const myState = {
   colorMode: "",
 };
 export const myContext = createContext(myState);
+export { myContext as AppContext };
 import { AppProps } from "next/app";
 import { LanguageProvider } from "../context/LanguageContext";
-// 言語設定の型定義
-type LanguageType = "ja" | "us" | "cn";
-
-// コンテキストの型定義
-interface AppContextType {
-  language: LanguageType;
-  setLanguage: Dispatch<React.SetStateAction<LanguageType>>;
-}
-
-// コンテキストの作成
-export const AppContext = createContext<AppContextType>({
-  language: "ja",
-  setLanguage: () => {},
-});
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-  const [language, setLanguage] = useState<LanguageType>("ja");
-  // 言語設定の状態
-  useEffect(() => {
-    // クライアントサイドでのみ実行
-    const storedLanguage = localStorage.getItem("language");
-    if (storedLanguage) {
-      setLanguage(storedLanguage as LanguageType);
-    }
-  }, []);
-  const updateLanguage = (newLanguage: LanguageType) => {
-    setLanguage(newLanguage);
-    localStorage.setItem("language", newLanguage); // ローカルストレージに保存
-  };
   return (
     <LanguageProvider>
       <Head>
@@ -85,11 +61,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <ChakraProvider theme={theme}>
         <NextNprogress color="#f88" showOnShallow={false} height={3} />
         <SessionProvider session={session}>
-          <AppContext.Provider
-            value={{ language, setLanguage: updateLanguage }}
-          >
-            <Component {...pageProps} />
-          </AppContext.Provider>
+          <Component {...pageProps} />
         </SessionProvider>
       </ChakraProvider>
     </LanguageProvider>

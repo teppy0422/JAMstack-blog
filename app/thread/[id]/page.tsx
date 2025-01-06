@@ -1,8 +1,13 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  useContext,
+} from "react";
 import { useRouter, useParams } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
 import {
   FaPaperclip,
   FaDownload,
@@ -60,10 +65,15 @@ import { useUserData } from "../../../hooks/useUserData";
 import { useUserInfo } from "../../../hooks/useUserId";
 import IconWithDrawer from "./IconWithDrawer";
 
+// import { AppContext } from "../../../pages/_app";
+import {
+  useLanguage,
+  LanguageProvider,
+} from "../../../context/LanguageContext";
+import getMessage from "../../../components/getMessage";
+
 import { Global } from "@emotion/react";
 import "@fontsource/noto-sans-jp";
-
-import Snowfall from "react-snowfall";
 
 interface BBSTodoListProps {
   userName: string;
@@ -115,7 +125,18 @@ const fetchUser3 = async (userId: string) => {
     pictureUrl: data?.user_metadata?.picture_url || "No Picture",
   };
 };
+
 export default function Thread() {
+  return (
+    <LanguageProvider>
+      <ThreadContent />
+    </LanguageProvider>
+  );
+}
+
+function ThreadContent() {
+  const { language, setLanguage } = useLanguage();
+
   const router = useRouter();
   const { id } = useParams() as { id: string };
   const [posts, setPosts] = useState<any[]>([]);
@@ -750,8 +771,18 @@ export default function Thread() {
     console.log(userName);
     if (!userName) {
       showToast(
-        "ダウンロードできません",
-        "ダウンロードするにはログインと管理者によるマスター登録が必要です",
+        getMessage({
+          ja: "ダウンロードできません",
+          us: "Cannot download",
+          cn: "无法下载",
+          language,
+        }),
+        getMessage({
+          ja: "ダウンロードするにはログインと管理者によるマスター登録が必要です",
+          us: "Login and master registration by administrator is required to download",
+          cn: "若要下载，您需要登录并由管理员注册为主用户",
+          language,
+        }),
         "error"
       );
       // alert("ダウンロードするにはログインと管理者によるマスター登録が必要です");
@@ -936,7 +967,7 @@ export default function Thread() {
   }, [posts]);
 
   if (!isClient) {
-    return null;
+    return null; // サーバーサイドレンダリング時には何も表示しない
   }
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);
@@ -1025,15 +1056,34 @@ export default function Thread() {
           >
             <IconWithDrawer
               text=""
-              onOpen={() => handleOpen("開発の背景")}
-              isOpen={isOpen && activeDrawer === "開発の背景"}
+              onOpen={() => handleOpen("メッセージ送信のコツ")}
+              isOpen={isOpen && activeDrawer === "メッセージ送信のコツ"}
               onClose={handleClose}
-              header="メッセージ送信のコツ"
+              header={getMessage({
+                ja: "メッセージ送信のコツ",
+                us: "Tips for Sending Messages",
+                cn: "发送信息的提示",
+                language,
+              })}
               size="md"
               children={
                 <Box>
-                  <Text fontWeight={600}>新規開発依頼の場合</Text>
-                  <Text fontWeight={400}>・目的と機能を伝える</Text>
+                  <Text fontWeight={600}>
+                    {getMessage({
+                      ja: "新規開発依頼の場合",
+                      us: "For new development requests",
+                      cn: "新开发申请",
+                      language,
+                    })}
+                  </Text>
+                  <Text fontWeight={400}>
+                    {getMessage({
+                      ja: "・目的と機能を伝える",
+                      us: "・Communicate purpose and function",
+                      cn: "・传达目的和功能",
+                      language,
+                    })}
+                  </Text>
                   <Box
                     bg="gray.300"
                     color="black"
@@ -1042,18 +1092,43 @@ export default function Thread() {
                     fontWeight={400}
                     mt={2}
                   >
-                    参考のやりとり
+                    {getMessage({
+                      ja: "参考のやりとり",
+                      us: "Exchange of references",
+                      cn: "交换参考资料",
+                      language,
+                    })}
                   </Box>
                   <Image src="/images/0005/0005.png" w="100%" />
                   <Text mt={4} fontWeight={600}>
-                    機能紹介
+                    {getMessage({
+                      ja: "機能紹介",
+                      us: "Functions",
+                      cn: "功能",
+                      language,
+                    })}
                   </Text>
                   <Text mt={1} fontWeight={400}>
-                    クリック長押しで以下の機能が使えます
+                    {getMessage({
+                      ja: "クリック長押しで以下の機能が使えます",
+                      us: "Click and hold to use the following functions",
+                      cn: "点击并按住可使用以下功能",
+                      language,
+                    })}
                     <br />
-                    ・リプライ:長押しした投稿を参照
+                    {getMessage({
+                      ja: "・リプライ:長押しした投稿を参照",
+                      us: "Reply: See long-pressed post",
+                      cn: "答复：见长按帖子",
+                      language,
+                    })}
                     <br />
-                    ・削除:自分の投稿のみ削除できます
+                    {getMessage({
+                      ja: "・削除:自分の投稿のみ削除できます",
+                      us: "Delete: You can delete only your own postings.",
+                      cn: "删除：您只能删除自己的帖子。",
+                      language,
+                    })}
                   </Text>
                 </Box>
               }
@@ -1180,8 +1255,12 @@ export default function Thread() {
             className="no-print-page"
           >
             <Tooltip
-              label="添付ファイルを選択"
-              aria-label="添付ファイルを選択"
+              label={getMessage({
+                ja: "添付ファイルを選択",
+                us: "Select Attachment",
+                cn: "选择附件",
+                language,
+              })}
               cursor="pointer"
             >
               <Button
@@ -1248,7 +1327,12 @@ export default function Thread() {
               }} // 追加: フォーカスが可視状態の時の枠線の色を指定
               fontFamily="Noto Sans JP"
               fontWeight="200"
-              placeholder="メッセージを入力 (Shift+Enterで送信)"
+              placeholder={getMessage({
+                ja: "メッセージを入力 (Shift+Enterで送信)",
+                us: "Type your message (Shift+Enter to send)",
+                cn: "输入信息（Shift+Enter 发送）。",
+                language,
+              })}
               paddingTop={2}
               size="md"
               color={colorMode === "light" ? "black" : "white"}
@@ -1267,8 +1351,18 @@ export default function Thread() {
                 const inputValueElement = inputValue as HTMLTextAreaElement;
                 if (!inputValueElement.value.trim() && !selectedFile) {
                   showToast(
-                    "送信するものが有りません",
-                    "メッセージまたはファイル添付が必要です",
+                    getMessage({
+                      ja: "送信するものが有りません",
+                      us: "Nothing to send",
+                      cn: "没什么可发送的。",
+                      language,
+                    }),
+                    getMessage({
+                      ja: "メッセージまたはファイル添付が必要です",
+                      us: "Message or file attachment required",
+                      cn: "需要信息或文件附件",
+                      language,
+                    }),
                     "error"
                   );
                   return;
@@ -1308,8 +1402,12 @@ export default function Thread() {
           </Stack>
           {selectedFileName && (
             <Tooltip
-              label="添付をキャンセルします"
-              aria-label="添付をキャンセルします"
+              label={getMessage({
+                ja: "添付をキャンセルします",
+                us: "Cancel attachment",
+                cn: "取消附件。",
+                language,
+              })}
             >
               <Box
                 display="inline-flex"
@@ -1401,13 +1499,31 @@ export default function Thread() {
           >
             {!userName && threadMainCompany !== "開発" ? (
               <Text color="red" fontWeight="bold">
-                認証されていません
+                {getMessage({
+                  ja: "認証されていません",
+                  us: "Not authenticated.",
+                  cn: "未经授权。",
+                  language,
+                })}
               </Text>
             ) : threadMainCompany !== userMainCompany &&
               threadMainCompany !== "開発" &&
               userMainCompany !== "開発" ? (
               <Text color="red" fontWeight="bold">
-                このアカウントは{userMainCompany}のみ閲覧可能です
+                このチャットはABCのみ閲覧可能です
+                {getMessage({
+                  ja: "このチャットは ",
+                  us: "This chat is only viewable by ",
+                  cn: "此聊天只能由 ",
+                  language,
+                })}
+                {getMessage({ ja: userMainCompany || "", language })}
+                {getMessage({
+                  ja: " のみ閲覧可能です",
+                  us: "",
+                  cn: " 查看",
+                  language,
+                })}
               </Text>
             ) : (
               posts
@@ -1510,11 +1626,6 @@ export default function Thread() {
                   }
                   return (
                     <div className="post">
-                      <Snowfall
-                        snowflakeCount={50}
-                        wind={[0.5, 0.6]}
-                        speed={[0.5, 2]}
-                      />
                       {isNewDay && ( //日付の区切り線
                         <Flex
                           alignItems="center"
@@ -1612,7 +1723,12 @@ export default function Thread() {
                                 >
                                   <Icon as={FaTrashAlt} boxSize={5} />
                                   <Text fontSize="0.5rem" lineHeight="1">
-                                    削除
+                                    {getMessage({
+                                      ja: "削除",
+                                      us: "Delete",
+                                      cn: "删减",
+                                      language,
+                                    })}
                                   </Text>
                                 </Stack>
                               </Button>
@@ -1645,7 +1761,12 @@ export default function Thread() {
                                     p={0}
                                     m={0}
                                   >
-                                    リプライ
+                                    {getMessage({
+                                      ja: "リプライ",
+                                      us: "reply",
+                                      cn: "回复",
+                                      language,
+                                    })}
                                   </Text>
                                 </Stack>
                               </Button>

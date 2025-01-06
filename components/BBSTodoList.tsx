@@ -44,6 +44,9 @@ import { supabase } from "../utils/supabase/client";
 import "@fontsource/noto-sans-jp";
 import { TodoIcon } from "../components/icons";
 
+import { useLanguage } from "../context/LanguageContext";
+import getMessage from "./getMessage";
+
 const BBSTodoList = () => {
   const [todos, setTodos] = useState<
     {
@@ -94,6 +97,7 @@ const BBSTodoList = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const { colorMode, toggleColorMode } = useColorMode();
+  const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
     fetchTodos();
@@ -180,19 +184,44 @@ const BBSTodoList = () => {
           <Tr>
             <Th py={0} px={1}></Th>
             <Th py={0} px={1}>
-              進捗
+              {getMessage({
+                ja: "進捗",
+                us: "prog",
+                cn: "进展",
+                language,
+              })}
             </Th>
             <Th py={0} px={1}>
-              状態
+              {getMessage({
+                ja: "状態",
+                us: "stat",
+                cn: "国",
+                language,
+              })}
             </Th>
             <Th py={0} px={1}>
-              担当
+              {getMessage({
+                ja: "担当",
+                us: "staff",
+                cn: "代管",
+                language,
+              })}
             </Th>
             <Th py={0} px={1}>
-              経過
+              {getMessage({
+                ja: "状況",
+                us: "situation",
+                cn: "情势",
+                language,
+              })}
             </Th>
             <Th py={0} px={1}>
-              内容
+              {getMessage({
+                ja: "内容",
+                us: "element",
+                cn: "内容",
+                language,
+              })}
             </Th>
           </Tr>
         </Thead>

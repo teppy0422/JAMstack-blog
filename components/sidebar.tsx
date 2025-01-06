@@ -25,15 +25,15 @@ import { MdEditRoad } from "react-icons/md";
 import { FaKeyboard, FaRoad } from "react-icons/fa";
 import { IoTicketOutline, IoTicketSharp } from "react-icons/io5";
 import { AiOutlineWechat } from "react-icons/ai";
-import { LanguageProvider } from "../context/LanguageContext";
-import { AppContext } from "../pages/_app";
+
+import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
 
 function Sidebar() {
   const [currentPath, setCurrentPath] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
-  const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
     setCurrentPath(window.location.pathname);

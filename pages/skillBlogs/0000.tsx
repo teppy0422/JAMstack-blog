@@ -38,8 +38,8 @@ import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
 
+import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
-import { AppContext } from "../../pages/_app";
 
 import "@fontsource/noto-sans-jp";
 
@@ -91,7 +91,7 @@ const BlogPage: React.FC = () => {
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
 
-  const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);

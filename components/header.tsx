@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import NextLink from "next/link";
 
@@ -32,7 +35,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import styles from "../styles/home.module.scss";
-import React, { useEffect } from "react";
 
 import LoginBtn from "./loginBtn";
 import AwesomIcon from "./awesomIcon";

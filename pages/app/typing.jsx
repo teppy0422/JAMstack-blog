@@ -49,8 +49,8 @@ import GraphTemp from "../../components/typing/graphTemp";
 import { useContext } from "react";
 
 import { myContext } from "../../pages/_app";
+import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
-import { AppContext } from "../../pages/_app";
 
 export const typing = () => {
   const [session, setSession] = useState(null);
@@ -61,7 +61,7 @@ export const typing = () => {
   const graphTempRef = useRef(null); //履歴グラフ
 
   const { colorMode } = useColorMode();
-  const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
 
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const inputText = useRef(""); //入力文字

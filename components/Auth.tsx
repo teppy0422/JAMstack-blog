@@ -18,8 +18,9 @@ import {
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import "@fontsource/noto-sans-jp";
+
+import { useLanguage } from "../context/LanguageContext";
 import getMessage from "./getMessage";
-import { AppContext } from "../pages/_app";
 
 interface AuthProps {
   userData: {
@@ -39,6 +40,8 @@ export default function Auth({ userData }: AuthProps) {
   const { colorMode } = useColorMode();
   const spanColor = colorMode === "light" ? "red" : "orange";
 
+  const { language, setLanguage } = useLanguage();
+
   const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] =
     useState<boolean>(false);
   useEffect(() => {
@@ -52,9 +55,6 @@ export default function Auth({ userData }: AuthProps) {
       authListener?.subscription?.unsubscribe();
     };
   }, []);
-
-  const { language, setLanguage } = useContext(AppContext);
-
   // サインアップ関数
   const [confirmPassword, setConfirmPassword] = useState<string>(""); // 確認用パスワードの状態を追加
   const handleSignUp = async () => {
@@ -305,10 +305,11 @@ export default function Auth({ userData }: AuthProps) {
           <Box textAlign="center" mb={4} fontFamily="Noto Sans JP">
             <Text fontSize="lg">{userData.userName || "No Name"}</Text>
             <Text fontSize="sm" color="gray.500">
-              {userData.userMainCompany || ""}
+              {getMessage({ ja: userData.userMainCompany || "", language }) ||
+                ""}
             </Text>
             <Text fontSize="sm" color="gray.500">
-              {userData.userCompany || ""}
+              {getMessage({ ja: userData.userCompany || "", language }) || ""}
             </Text>
             <Tooltip
               label={getMessage({
@@ -317,7 +318,12 @@ export default function Auth({ userData }: AuthProps) {
                 cn: "更改用户图标",
                 language,
               })}
-              aria-label="ユーザーアイコンを変更"
+              aria-label={getMessage({
+                ja: "ユーザーアイコンを変更",
+                us: "Change user icon",
+                cn: "更改用户图标",
+                language,
+              })}
             >
               <Avatar
                 src={userData.pictureUrl || undefined}

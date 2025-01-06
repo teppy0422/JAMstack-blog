@@ -9,8 +9,13 @@ import styles from "../styles/home.module.scss";
 
 import GetWindowSize, { getWindowSize } from "../script/GetWindowSize";
 
+import { useLanguage } from "../context/LanguageContext";
+import getMessage from "../components/getMessage";
+
 const Skillchart: React.FunctionComponent = (): JSX.Element => {
   const WindowSize = GetWindowSize();
+  const { language, setLanguage } = useLanguage();
+
   let myWidth: number = WindowSize.width;
   let myHeight: number = 0;
   if (myWidth > 500) {
@@ -55,49 +60,85 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
 
         data: [
           {
-            name: "エクセルVBA",
-            detail: "ほとんどの事が対応可能です",
+            name: "Excel-vba",
+            detail: getMessage({
+              ja: "ほとんどの事が対応可能です",
+              us: "Almost anything can be handled.",
+              cn: "大多数事情都可以处理。",
+              language,
+            }),
+
             y: 100,
             z: 95,
             color: "#48BB78",
           },
           {
             name: "VB.net",
-            detail: "一般的なアプリ作成が可能です",
+            detail: getMessage({
+              ja: "一般的なアプリ作成が可能です",
+              us: "General application creation is possible",
+              cn: "可以创建一般应用程序。",
+              language,
+            }),
             y: 100,
             z: 30,
             color: "#9A4F96",
           },
           {
-            name: "フロント",
+            name: getMessage({
+              ja: "フロント",
+              us: "front",
+              cn: "战线",
+              language,
+            }),
             detail: "HTML/CSS/JavaScript(Next)",
             y: 100,
             z: 50,
             color: "#F1652A",
           },
           {
-            name: "バック",
-            detail: "PHP/Pythonが少しだけ",
+            name: getMessage({
+              ja: "バック",
+              us: "back",
+              cn: "后",
+              language,
+            }),
+            detail: "PHP/Python",
             y: 100,
             z: 15,
             color: "#4E5B92",
           },
           {
             name: "Arduino",
-            detail: "ステッピングモーターを制御など",
+            detail: getMessage({
+              ja: "ステッピングモーターを制御など",
+              us: "Control stepping motors, etc.",
+              cn: "控制步进电机等",
+              language,
+            }),
             y: 100,
             z: 60,
             color: "#12999F",
           },
           {
-            name: "映像編集",
+            name: getMessage({
+              ja: "映像編集",
+              us: "image editing",
+              cn: "视频剪辑",
+              language,
+            }),
             detail: "Davinch Resolve",
             y: 100,
             z: 40,
             color: "#888888",
           },
           {
-            name: "イラスト",
+            name: getMessage({
+              ja: "イラスト",
+              us: "illustration",
+              cn: "图例",
+              language,
+            }),
             detail: "InkScape",
             y: 100,
             z: 30,
@@ -109,8 +150,13 @@ const Skillchart: React.FunctionComponent = (): JSX.Element => {
           distance: 15,
           style: {
             fontSize: "12px",
-            fontFamily: "M PLUS Rounded 1c",
-            color: "#888888",
+            fontFamily: getMessage({
+              ja: "Noto Sans JP",
+              us: "Noto Sans JP",
+              cn: "Noto Sans SC",
+              language,
+            }),
+            color: "#333",
             textOutline: 0,
           },
         },

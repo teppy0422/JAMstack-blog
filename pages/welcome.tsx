@@ -65,10 +65,8 @@ import CustomModal from "./skillBlogs/customModal";
 import IframeDisplay from "./skillBlogs/IframeDisplay";
 import SjpChart01 from "./skillBlogs/chart/chart_01";
 
-import "@fontsource/noto-sans-jp";
 import "@fontsource/dela-gothic-one";
 import "@fontsource/rampart-one";
-import "@fontsource/rocknroll-one";
 
 export const getServerSideProps = async (context) => {
   const { query } = context;
@@ -80,7 +78,7 @@ export const getServerSideProps = async (context) => {
 };
 
 import getMessage from "../components/getMessage";
-import { AppContext } from "../pages/_app";
+import { useLanguage } from "../context/LanguageContext";
 
 const Welcome = ({ isNewCreated }) => {
   const router = useRouter();
@@ -96,7 +94,7 @@ const Welcome = ({ isNewCreated }) => {
       text: "#FFe",
     },
   };
-  const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
 
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加
@@ -120,7 +118,6 @@ const Welcome = ({ isNewCreated }) => {
   50% { transform: translateY(-15px); }
   100% { transform: translateY(0); }`;
   //生産準備+着手からの経過日数の計算
-
   const calculateElapsedTime = () => {
     const startDate = new Date(2024, 7, 10); // 月は0から始まるので7月は6
     const today = new Date();
@@ -134,10 +131,17 @@ const Welcome = ({ isNewCreated }) => {
     const months = Math.floor((diffDays % 365) / 30); // おおよその月数
     const days = (diffDays % 365) % 30;
 
-    // 0年の場合は0年を表示しない
+    const totalDays = getMessage({
+      ja: `${years > 0 ? years + "年" : ""}${months}ヶ月${days}日`,
+      us: `${
+        years > 0 ? years + " years, " : ""
+      }${months} months, ${days} days`,
+      cn: `${years > 0 ? years + "年" : ""}${months}个月${days}天`,
+      language,
+    });
     return {
       elapsedTime: `2024/7/10 - ${formattedToday}`,
-      totalDays: `${years > 0 ? years + "年" : ""}${months}ヶ月${days}日`, // 追加の返り値
+      totalDays,
     };
   };
   const { elapsedTime, totalDays } = calculateElapsedTime();
@@ -164,9 +168,15 @@ const Welcome = ({ isNewCreated }) => {
           {icon}
         </CardHeader>
         <Text
-          fontFamily="Dela Gothic One"
+          fontFamily={getMessage({
+            ja: "Dela Gothic One",
+            us: "Dela Gothic One",
+            cn: "Noto Sans Jp",
+            language,
+          })}
           fontSize="28px"
           letterSpacing="0.1em"
+          lineHeight={0.9}
           mb={0}
           color={colorMode === "light" ? colors.light.text : colors.dark.text}
         >
@@ -230,6 +240,7 @@ const Welcome = ({ isNewCreated }) => {
                 lg: "18px",
                 xl: "18px",
               }}
+              lineHeight="1.2"
             >
               {value}
             </Box>
@@ -254,7 +265,12 @@ const Welcome = ({ isNewCreated }) => {
       mb={mb}
     >
       <Text
-        fontFamily="Rampart One"
+        fontFamily={getMessage({
+          ja: "Rampart One",
+          us: "Rampart One",
+          cn: "Noto Sans Jp",
+          language,
+        })}
         fontWeight={800}
         fontSize={{ base: 30, sm: 40 }}
       >
@@ -287,7 +303,12 @@ const Welcome = ({ isNewCreated }) => {
           {num}
         </Text>
         <Box height="100%" width="1px" backgroundColor="gray.500" mx={0} />
-        <Text flex="10" p={2} fontSize={{ base: "15px", sm: "18px" }}>
+        <Text
+          flex="10"
+          p={2}
+          fontSize={{ base: "15px", sm: "18px" }}
+          lineHeight={1.2}
+        >
           {text}
         </Text>
       </HStack>
@@ -317,7 +338,12 @@ const Welcome = ({ isNewCreated }) => {
           {num}
         </Text>
         <Box height="100%" width="1px" backgroundColor="gray.500" mx={0} />
-        <Text flex="10" p={2} fontSize={{ base: "15px", sm: "18px" }}>
+        <Text
+          flex="10"
+          p={2}
+          fontSize={{ base: "15px", sm: "18px" }}
+          lineHeight={1.2}
+        >
           {text}
         </Text>
       </HStack>
@@ -328,7 +354,17 @@ const Welcome = ({ isNewCreated }) => {
     <>
       <Sidebar />
       <Content isCustomHeader={true} maxWidth="1200px">
-        <Box style={{ paddingTop: "30px", fontFamily: "Noto Sans JP" }}>
+        <Box
+          style={{
+            paddingTop: "30px",
+            fontFamily: getMessage({
+              ja: "Noto Sans JP",
+              us: "Noto Sans JP",
+              cn: "Noto Sans SC",
+              language,
+            }),
+          }}
+        >
           <Box textAlign="center" mb={4}>
             <Heading
               size="lg"
@@ -373,11 +409,38 @@ const Welcome = ({ isNewCreated }) => {
 
             {isNewCreated === "true" ? (
               <>
-                <Text fontSize="lg">アカウント作成が完了しました</Text>
+                <Text fontSize="lg">
+                  {getMessage({
+                    ja: "アカウント作成が完了しました",
+                    us: "Your account has been created.",
+                    cn: "账户创建完成",
+                    language,
+                  })}
+                </Text>
                 <Text fontSize="lg" alignItems="center">
-                  右上の
-                  <Avatar size="xs" src="https://bit.ly/broken-link" mx={1} />
-                  からログインしてください
+                  {getMessage({
+                    ja: "右上の",
+                    us: "",
+                    cn: "右上角",
+                    language,
+                  })}
+                  {language === "ja" ||
+                    (language === "cn" && (
+                      <Avatar
+                        size="xs"
+                        src="https://bit.ly/broken-link"
+                        mx={1}
+                      />
+                    ))}
+                  {getMessage({
+                    ja: "からログインしてください",
+                    us: "Please log in from",
+                    cn: "请从",
+                    language,
+                  })}
+                  {language === "us" && (
+                    <Avatar size="xs" src="https://bit.ly/broken-link" mx={1} />
+                  )}
                 </Text>
               </>
             ) : (
@@ -389,9 +452,33 @@ const Welcome = ({ isNewCreated }) => {
                     alignItems="center"
                     mb={3}
                   >
-                    右上の
-                    <Avatar size="xs" src="https://bit.ly/broken-link" mx={1} />
-                    からアカウントを新規作成/またはログインしてください
+                    {getMessage({
+                      ja: "右上の",
+                      us: "",
+                      cn: "右上角",
+                      language,
+                    })}
+                    {language === "ja" ||
+                      (language === "cn" && (
+                        <Avatar
+                          size="xs"
+                          src="https://bit.ly/broken-link"
+                          mx={1}
+                        />
+                      ))}
+                    {getMessage({
+                      ja: "からアカウントを新規作成/またはログインしてください",
+                      us: "Please create a new account/login from ",
+                      cn: "创建新账户/或从",
+                      language,
+                    })}
+                    {language === "us" && (
+                      <Avatar
+                        size="xs"
+                        src="https://bit.ly/broken-link"
+                        mx={1}
+                      />
+                    )}
                   </Text>
                 )}
                 {userName === null && (
@@ -399,7 +486,12 @@ const Welcome = ({ isNewCreated }) => {
                     fontSize="lg"
                     color={colorMode === "light" ? "red" : "orange"}
                   >
-                    アカウントが認証されていません。管理者に連絡して認証を行なってください
+                    {getMessage({
+                      ja: "アカウントが認証されていません。管理者に連絡して認証を行なってください",
+                      us: "Your account has not been verified. Please contact your administrator to authenticate.",
+                      cn: "您的账户尚未授权。请联系您的管理员进行验证",
+                      language,
+                    })}
                   </Text>
                 )}
               </>
@@ -437,7 +529,14 @@ const Welcome = ({ isNewCreated }) => {
                 justifyContent="center"
               >
                 <>
-                  <Text mr={2}>右上のアイコンからログインしてください</Text>
+                  <Text mr={2}>
+                    {getMessage({
+                      ja: "右上のアイコンからログインしてください",
+                      us: "Please log in using the icon in the upper right corner.",
+                      cn: "请通过右上角的图标登录",
+                      language,
+                    })}
+                  </Text>
                   <Box
                     as={FaArrowCircleDown}
                     animation={`${moveAnimation} .5s ease-in-out infinite alternate`}
@@ -485,7 +584,7 @@ const Welcome = ({ isNewCreated }) => {
                     {getMessage({
                       ja: "・疑問や問題をリアルタイムですぐに問い合わせが出来ます",
                       us: "・You can contact us immediately with any questions or problems in real time.",
-                      cn: "可以立即实时提出问题和困难。",
+                      cn: "・可以立即实时提出问题和困难。",
                       language,
                     })}
                   </Text>
@@ -493,7 +592,7 @@ const Welcome = ({ isNewCreated }) => {
                     {getMessage({
                       ja: "・開発スピードが",
                       us: "・Development speed is ",
-                      cn: "・......发展速度。",
+                      cn: "・开发速度",
                       language,
                     })}
                     <Box
@@ -508,7 +607,7 @@ const Welcome = ({ isNewCreated }) => {
                       {getMessage({
                         ja: "速い",
                         us: " Fast",
-                        cn: "(为时尚早",
+                        cn: " 快",
                         language,
                       })}
                       <BsQuestionCircle
@@ -579,7 +678,7 @@ const Welcome = ({ isNewCreated }) => {
                       {getMessage({
                         ja: "定額",
                         us: "fixed amount. ",
-                        cn: "定额。",
+                        cn: "定额",
                         language,
                       })}
                       <BsQuestionCircle
@@ -842,7 +941,7 @@ const Welcome = ({ isNewCreated }) => {
                   {getMessage({
                     ja: "製品品番の切り替え時/新規立ち上げ時、生産準備で多くの工数が掛かっていませんか？それを解決する為に作成しました。 約2回/週で更新しています。",
                     us: "Do you spend a lot of man-hours preparing for production when switching product part numbers/starting a new product? We created this system to solve this problem. We update this about 2 times/week.",
-                    cn: "在转换产品零件编号/启动新产品时，您是否花费了大量的工时来准备生产？我们为此开发了一种解决方案。 大约每周更新两次。",
+                    cn: "在转换产品零件编号/启动新产品时。您是否花费了大量的工时来准备生产？我们为此开发了一种解决方案。 大约每周更新两次。",
                     language,
                   })}
                 </Text>
@@ -914,8 +1013,8 @@ const Welcome = ({ isNewCreated }) => {
                       })}
                       <span style={{ fontWeight: "600" }}>
                         {getMessage({
-                          ja: "52920パターン",
-                          us: "52920Patterns.",
+                          ja: "52920 パターン",
+                          us: "52920 Patterns.",
                           cn: "52920 图案。",
                           language,
                         })}
@@ -1053,7 +1152,7 @@ const Welcome = ({ isNewCreated }) => {
                       {getMessage({
                         ja: "生産準備+からMKEDを制御して入力時間を省きます。",
                         us: "Control MKED from Production Preparation+ to save input time.",
-                        cn: "通过 Production Preparation+ 控制 MKED 节省输入时间。",
+                        cn: "通过 生产准备+ 控制 MKED 节省输入时间。",
                         language,
                       })}
                     </Text>
@@ -1107,18 +1206,37 @@ const Welcome = ({ isNewCreated }) => {
               >
                 <Skeleton width="100%" height="100%" borderRadius="10px" />
                 <Text position="absolute" textAlign="center">
-                  作成中...
+                  {getMessage({
+                    ja: "準備中...",
+                    us: "Under Preparation...",
+                    cn: "準備中...",
+                    language,
+                  })}
                 </Text>
               </Box>
               <Heading size="md" py="2">
-                部材一覧+
+                {getMessage({
+                  ja: "部材一覧+",
+                  us: "Part List+",
+                  cn: "组件清单+",
+                  language,
+                })}
               </Heading>
               <Stack mt="1" mb="2" spacing="3">
                 <Text>
+                  {getMessage({
+                    ja: "製品品番毎の部材一覧表を作成",
+                    us: "Create a parts list by product part number.",
+                    cn: "按产品零件编号创建组件列表。",
+                    language,
+                  })}
                   <br />
-                  製品品番毎の部材一覧表を作成
-                  <br />
-                  ※製品品番と設変を入力してボタンを押すだけで更新可能。通常は年に一回だけ更新すると思いますが毎日でも更新が可能です。
+                  {getMessage({
+                    ja: "※製品品番と設変を入力してボタンを押すだけで作成/更新が可能。通常は年に一回だけ更新すると思いますが毎日でも更新が可能です。",
+                    us: "*Creation/updating can be done by simply entering the product part number and the change and pressing a button. Normally, you would update only once a year, but you can also update daily.",
+                    cn: "*只需输入产品部件号和设计变更并按下按钮，即可创建/更新。通常每年只需更新一次，但也可以每天更新。",
+                    language,
+                  })}
                 </Text>
               </Stack>
             </CardBody>
@@ -1132,9 +1250,21 @@ const Welcome = ({ isNewCreated }) => {
                   p="1"
                   mb="3"
                 >
-                  効果目安
+                  {getMessage({
+                    ja: "目安効果",
+                    us: "Objective effect",
+                    cn: "客观效果",
+                    language,
+                  })}
                 </Badge>
-                <Text fontSize="xl">特に部材手配をする部署の切替で有効</Text>
+                <Text fontSize="xl">
+                  {getMessage({
+                    ja: "特に部材手配をする部署の製品切替時に有効",
+                    us: "Particularly effective when switching products in the department that arranges parts and materials.",
+                    cn: "特别适用于排列部件的部门进行产品更换。",
+                    language,
+                  })}
+                </Text>
               </Box>
             </CardFooter>
           </Card>
@@ -1157,19 +1287,38 @@ const Welcome = ({ isNewCreated }) => {
               >
                 <Skeleton width="100%" height="100%" borderRadius="10px" />
                 <Text position="absolute" textAlign="center">
-                  作成中...
+                  {getMessage({
+                    ja: "準備中...",
+                    us: "Under Preparation...",
+                    cn: "準備中...",
+                    language,
+                  })}
                 </Text>
               </Box>
               <Heading size="md" py="2">
-                順立生産システム+
+                {getMessage({
+                  ja: "順立生産システム+",
+                  us: "Sequenced Production System+",
+                  cn: "连续生产系统+",
+                  language,
+                })}
               </Heading>
               <Stack mt="1" mb="2" spacing="3">
                 <Text>
                   <br />
-                  宮崎部品が開発した3種類の順立生産システムを1つにまとめて更に機能を追加したものです。
-                  ACCESSなので色々と問題を含んでいてVB.netで作り直しています。
+                  {getMessage({
+                    ja: "宮崎部品が開発した3種類の順立生産システムを1つにまとめて更に機能を追加したものです。現在はACCESSベースで色々と問題を含んでいてVB.netで作り直しています。",
+                    us: "This is a combination of three different sequential production systems developed by Miyazaki Parts, with further functionality added. Currently, the system is based on ACCESS and contains various problems, so it is being reworked in VB.net.",
+                    cn: "它将 宮崎部品 开发的三种不同的顺序生产系统合而为一，并增加了更多的功能。该系统目前基于 ACCESS 存在各种问题，因此正在用 VB.net 进行重建。",
+                    language,
+                  })}
                   <br />
-                  ※2月を目処に完成予定
+                  {getMessage({
+                    ja: "※2024年2月を目処に完成予定",
+                    us: "*Expected to be completed by February 2024.",
+                    cn: "*将于 2024 年 2 月完成。",
+                    language,
+                  })}
                 </Text>
               </Stack>
             </CardBody>
@@ -1183,24 +1332,61 @@ const Welcome = ({ isNewCreated }) => {
                   p="1"
                   mb="3"
                 >
-                  効果
+                  {getMessage({
+                    ja: "効果",
+                    us: "Effect",
+                    cn: "影响",
+                    language,
+                  })}
                 </Badge>
                 <Text fontSize="xl">
-                  一貫工程の生産指示をSSC/自動機/忘れん棒セット等の機械で共有
+                  {getMessage({
+                    ja: "一貫工程の生産指示をSSC/自動機/忘れん棒セット等の機械で共有",
+                    us: "Share production instructions for consistent processes with SSC/automatic machines/forgotten bar sets and other machines",
+                    cn: "由 SSC/自动机器/遗忘条组和其他机器共享一致流程的生产指令",
+                    language,
+                  })}
                 </Text>
               </Box>
             </CardFooter>
           </Card>
 
           <Text textAlign="center">
-            その他のアプリも共有できるように修正中です
+            {getMessage({
+              ja: "その他のアプリも共有できるように修正中です",
+              us: "Other apps are being modified to share as well.",
+              cn: "其他应用程序正在进行修改，以允许共享。",
+              language,
+            })}
           </Text>
 
-          {renderSection("WEBサービスの機能", 14, 10)}
+          {renderSection(
+            getMessage({
+              ja: "WEBサービスの機能",
+              us: "Web Service Features",
+              cn: "网络服务的功能",
+              language,
+            }),
+            14,
+            0
+          )}
+          <Text textAlign="center" mb={10}>
+            {getMessage({
+              ja: "それぞれ左のメニューからアクセスできます",
+              us: "Each can be accessed from the menu on the left",
+              cn: "可通过左侧的菜单访问每项内容。",
+              language,
+            })}
+          </Text>
           <Center flex="1" style={{ gap: "8px" }}>
             <Flex wrap="wrap" justify="center" style={{ gap: "24px" }}>
               {renderCard(
-                "ダウンロード",
+                getMessage({
+                  ja: "ダウンロード",
+                  us: "Download",
+                  cn: "下载",
+                  language,
+                }),
                 <Box transform="rotate(270deg)" position="relative" my={1.5}>
                   <IoTicketOutline size={80} />
                 </Box>,
@@ -1209,51 +1395,96 @@ const Welcome = ({ isNewCreated }) => {
                   fontSize="13px"
                   lineHeight={1.4}
                 >
-                  プログラムのダウンロードと説明動画
+                  {getMessage({
+                    ja: "プログラムのダウンロードと短い説明動画",
+                    us: "Download the program and short instructional videos",
+                    cn: "程序下载和教学视频短片",
+                    language,
+                  })}
                 </Text>,
                 "/download"
               )}
               {renderCard(
-                "技術ブログ",
+                getMessage({
+                  ja: "技術ブログ",
+                  us: "Skills Blog",
+                  cn: "技术博客",
+                  language,
+                }),
                 <PiGithubLogoLight size={90} />,
                 <Text
                   fontFamily="Noto Sans Jp"
                   fontSize="13px"
                   lineHeight={1.4}
                 >
-                  プログラムの使い方や技術を紹介
+                  {getMessage({
+                    ja: "プログラムの使い方や技術を紹介",
+                    us: "Introduction to program usage and technology.",
+                    cn: "介绍计划的使用和技术",
+                    language,
+                  })}
                   <br />
-                  ※自分で更新する方法も追加予定
+                  {getMessage({
+                    ja: "※自分で更新する方法も追加予定",
+                    us: "*We will add a way to update it yourself.",
+                    cn: "*我们还将添加一种自行更新的方法。",
+                    language,
+                  })}
                 </Text>,
                 "/skillBlogs/0000"
               )}
               {renderCard(
-                "問い合わせ",
+                getMessage({
+                  ja: "問い合わせ",
+                  us: "Inquiry",
+                  cn: "询问",
+                  language,
+                }),
                 <AiOutlineWechat size={90} />,
                 <Text
                   fontFamily="Noto Sans Jp"
                   fontSize="13px"
                   lineHeight={1.4}
                 >
-                  LINEのようなリアルタイムチャットで分からない事や不具合 /
-                  新機能の追加を相談
+                  {getMessage({
+                    ja: "LINEのようなリアルタイムチャットで分からない事や不具合 / 新機能の追加を相談",
+                    us: "Real-time chat like LINE for questions, problems, and new features",
+                    cn: "像 微信 一样的实时聊天功能，用于回答问题、疑难杂症或新功能",
+                    language,
+                  })}
+                  ,
                 </Text>,
                 "/BBS"
               )}
               {renderCard(
-                "ロードマップ",
+                getMessage({
+                  ja: "ロードマップ",
+                  us: "Road Map",
+                  cn: "路线图",
+                  language,
+                }),
                 <MdEditRoad size={90} />,
                 <Text
                   fontFamily="Noto Sans Jp"
                   fontSize="13px"
                   lineHeight={1.4}
                 >
-                  各プログラムの改良/連携を長期的に進めていく道順の確認
+                  {getMessage({
+                    ja: "各プログラムの改良/連携を長期的に進めていく道順の確認",
+                    us: "Identification of a long-term path for improvement/coordination of each program",
+                    cn: "确定改进/长期合作每项计划的途径。",
+                    language,
+                  })}
                 </Text>,
                 "/roadMap"
               )}
               {renderCard(
-                "その他",
+                getMessage({
+                  ja: "その他",
+                  us: "Other",
+                  cn: "其他",
+                  language,
+                }),
                 <Box my={1.5}>
                   <FaEarthAsia size={75} />
                 </Box>,
@@ -1262,7 +1493,12 @@ const Welcome = ({ isNewCreated }) => {
                   fontSize="13px"
                   lineHeight={1.4}
                 >
-                  練習実績が記録できるタイピング練習ソフトなど
+                  {getMessage({
+                    ja: "練習実績が記録できるタイピング練習ソフトなど",
+                    us: "Typing practice software that can record practice results, etc.",
+                    cn: "可记录练习结果的打字练习软件，例如",
+                    language,
+                  })}
                 </Text>,
                 "/app/typing"
               )}
@@ -1270,85 +1506,236 @@ const Welcome = ({ isNewCreated }) => {
           </Center>
           <Box textAlign="center">
             <Text textAlign="center" mt={3} lineHeight={2}>
-              必要な機能があれば追加していきます
+              {getMessage({
+                ja: "必要な機能があれば追加していきます",
+                us: "We will add any necessary features.",
+                cn: "我们将添加任何必要的功能。",
+                language,
+              })}
             </Text>
           </Box>
 
-          {renderSection("ご利用の流れ", 14, 0)}
+          {renderSection(
+            getMessage({
+              ja: "ご利用の流れ",
+              us: "Flow of Use",
+              cn: "使用流程",
+              language,
+            }),
+            14,
+            0
+          )}
           <Text textAlign="center" mb={10}>
-            〜生産準備+に機能追加の場合〜
+            {getMessage({
+              ja: "〜生産準備+に機能追加の場合〜",
+              us: "〜For additional functionality to Production PREPARATION+〜",
+              cn: "~ 生产就绪 + 的附加功能 ~",
+              language,
+            })}
           </Text>
           {ChatInquiryCard(
             "1",
-            <Text>チャットで問い合わせる</Text>,
+            <Text>
+              {getMessage({
+                ja: "チャットで問い合わせる",
+                us: "Chat with us",
+                cn: "与我们聊天",
+                language,
+              })}
+            </Text>,
             <BsChatLeftText size={40} />,
-            <Text>稼働日の8:00 - 17:00は即日の回答を行います</Text>,
+            <Text>
+              {getMessage({
+                ja: "稼働日の8:00 - 17:00は即日の回答を行います",
+                us: "We will respond on the same day from 8:00 - 17:00 on operating days.",
+                cn: "工作日 8:00 - 17:00 将在当天给予答复",
+                language,
+              })}
+            </Text>,
             true
           )}
           {ChatInquiryCard(
             "2",
-            <Text>チャットで仕様を検討する</Text>,
+            <Text>
+              {getMessage({
+                ja: "チャットで仕様を検討する",
+                us: "Chat with us to discuss specifications",
+                cn: "聊天讨论规格",
+                language,
+              })}
+            </Text>,
             <BsChatRightText size={40} />,
             <>
-              <Text>およそ数回のやりとりで仕様は決定します</Text>
+              <Text>
+                {getMessage({
+                  ja: "およそ数回のやりとりで仕様は決定します",
+                  us: "Specifications are determined in approximately a few exchanges.",
+                  cn: "规格大约在几次交换中决定",
+                  language,
+                })}
+              </Text>
               <Text fontSize={{ base: "10px", sm: "14px" }}>
-                ※過去半年の実績
+                {getMessage({
+                  ja: "※過去半年の実績",
+                  us: "*Actual results for the past six months",
+                  cn: "*过去六个月",
+                  language,
+                })}
               </Text>
             </>,
             true
           )}
           {ChatInquiryCard(
             "3",
-            <Text>待つ</Text>,
+            <Text>
+              {getMessage({
+                ja: "待つ",
+                us: "Wait",
+                cn: "等待",
+                language,
+              })}
+            </Text>,
             <FaLaptopCode size={40} />,
             <>
-              <Text>約6時間後に完成してアップロードします</Text>
+              <Text>
+                {getMessage({
+                  ja: "約6時間後に完成してアップロードします",
+                  us: "Completed and uploaded in ~6 hours.",
+                  cn: "它将在大约六小时内完成并上传",
+                  language,
+                })}
+              </Text>
               <Text fontSize={{ base: "10px", sm: "14px" }}>
-                ※過去半年の実績(1〜56時間)の平均値
+                {getMessage({
+                  ja: "※過去半年の実績(1〜56時間)の平均値",
+                  us: "*Average actual results (1-56 hrs) over past 6 months",
+                  cn: "*过去六个月实际结果（1-56 小时）的平均值。",
+                  language,
+                })}
               </Text>
             </>,
             true
           )}
           {ChatInquiryCard(
             "4",
-            <Text>ダウンロードして動作確認</Text>,
+            <Text>
+              {getMessage({
+                ja: "ダウンロードして動作確認",
+                us: "Download and check operation",
+                cn: "下载并检查操作",
+                language,
+              })}
+            </Text>,
             <VscChecklist size={40} />,
             <>
-              <Text>依頼内容が意図したものだったかを確認</Text>
+              <Text>
+                {getMessage({
+                  ja: "依頼内容が意図したものだったかを確認",
+                  us: "Confirm that the request was what was intended.",
+                  cn: "确保请求与预期相符",
+                  language,
+                })}
+              </Text>
               <Text fontSize={{ base: "10px", sm: "14px" }}>
-                ※もし違う場合は
+                {getMessage({
+                  ja: "※もし意図と異なる場合は",
+                  us: "*If it is different from your intention",
+                  cn: "*如果与意图不同",
+                  language,
+                })}
                 <Box
                   as="span"
                   fontFamily="Rampart One"
                   fontSize={{ base: "14px", sm: "18px" }}
                   mx={1}
                 >
-                  1
+                  {getMessage({
+                    ja: "1",
+                    us: "",
+                    cn: "1",
+                    language,
+                  })}
                 </Box>
-                に戻ります
+                {getMessage({
+                  ja: "に戻ります",
+                  us: "return to",
+                  cn: "返回",
+                  language,
+                })}
+                <Box
+                  as="span"
+                  fontFamily="Rampart One"
+                  fontSize={{ base: "14px", sm: "18px" }}
+                  mx={1}
+                >
+                  {getMessage({
+                    ja: "",
+                    us: "1",
+                    cn: "",
+                    language,
+                  })}
+                </Box>
               </Text>
             </>,
             true
           )}
           {ChatInquiryCard(
             "5",
-            <Text>結果の報告</Text>,
+            <Text>
+              {getMessage({
+                ja: "結果の報告",
+                us: "Reporting Results",
+                cn: "成果报告",
+                language,
+              })}
+            </Text>,
             <FaRegThumbsUp size={40} />,
             <>
-              <Text>実際に使ってみた感想や考察などを連絡</Text>
+              <Text>
+                {getMessage({
+                  ja: "実際に使ってみた感想や考察などを連絡",
+                  us: "Share your product feedback with us.",
+                  cn: "有关实际使用和注意事项的联系信息",
+                  language,
+                })}
+              </Text>
               <Text fontSize={{ base: "10px", sm: "14px" }}>
-                ※結果連絡をお願いします
+                {getMessage({
+                  ja: "※結果連絡をお願いします",
+                  us: "*Please contact me with the results.",
+                  cn: "*请将结果与我联系",
+                  language,
+                })}
               </Text>
             </>,
             false
           )}
-          <Text textAlign="center" mb={10}>
-            月末に活動レポートをまとめてメール連絡します
+          <Text textAlign="center" mb={10} mt={2}>
+            {getMessage({
+              ja: "月末に活動レポートをまとめてメール連絡します",
+              us: "An activity report will be compiled and emailed to you at the end of the month.",
+              cn: "活动报告将在月底汇编并通过电子邮件发送给您",
+              language,
+            })}
           </Text>
 
-          {renderSection("成長する仕組み", 14, 1)}
-          <Text textAlign="center" mb={10}>
-            このWEBサイトを中心にシステムを更新していきます
+          {renderSection(
+            getMessage({
+              ja: "成長する仕組み",
+              us: "Growth Mechanisms",
+              cn: "增长机制",
+              language,
+            }),
+            14,
+            3
+          )}
+          <Text textAlign="center" mb={4}>
+            {getMessage({
+              ja: "このWEBサイトを中心にシステムを更新していきます",
+              us: "We will update the system around this web site",
+              cn: "该系统将围绕本网站进行更新。",
+              language,
+            })}
           </Text>
           <Center>
             <Box
@@ -1374,14 +1761,20 @@ const Welcome = ({ isNewCreated }) => {
                   border="1px solid"
                   borderColor="gray.500"
                   textAlign="center"
-                  cursor="pointer"
                   _hover={{ boxShadow: "lg", transform: "scale(1.05)" }}
                 >
                   <CardHeader p={2}>
                     <Text fontSize="20px">STUDIO+</Text>
                   </CardHeader>
                   <CardBody p={2}>
-                    <Text>このWEBサービス</Text>
+                    <Text>
+                      {getMessage({
+                        ja: "このWEBサービス",
+                        us: "This Web Service",
+                        cn: "该网络服务",
+                        language,
+                      })}
+                    </Text>
                   </CardBody>
                 </Card>
               </Center>
@@ -1410,7 +1803,12 @@ const Welcome = ({ isNewCreated }) => {
                     transform="translate(10%, -50%)"
                     // textShadow="1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, -1px 1px 2px white"
                   >
-                    ダウンロード
+                    {getMessage({
+                      ja: "ダウンロード",
+                      us: "Download",
+                      cn: "下载",
+                      language,
+                    })}
                   </Text>
                 </HStack>
                 <HStack
@@ -1429,7 +1827,12 @@ const Welcome = ({ isNewCreated }) => {
                     transform="translate(-100%, -50%)"
                     // textShadow="1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, -1px 1px 2px white"
                   >
-                    アップロード
+                    {getMessage({
+                      ja: "アップロード",
+                      us: "upload",
+                      cn: "上传",
+                      language,
+                    })}
                   </Text>
                   <Icon
                     as={BsArrowUp}
@@ -1451,15 +1854,28 @@ const Welcome = ({ isNewCreated }) => {
                   borderColor="gray.500"
                   textAlign="center"
                   justifyContent="center"
-                  cursor="pointer"
                   _hover={{ boxShadow: "lg", transform: "scale(1.05)" }}
                   flex="4"
                 >
                   <CardHeader p={2}>
-                    <Text fontSize="20px">各工場</Text>
+                    <Text fontSize="20px">
+                      {getMessage({
+                        ja: "各工場",
+                        us: "Each Factory",
+                        cn: "各工場",
+                        language,
+                      })}
+                    </Text>
                   </CardHeader>
                   <CardBody p={0}>
-                    <Text>問題点を見つける</Text>
+                    <Text>
+                      {getMessage({
+                        ja: "問題点を見つける",
+                        us: "Finding the Problem",
+                        cn: "发现问题",
+                        language,
+                      })}
+                    </Text>
                   </CardBody>
                 </Card>
                 <VStack justifyContent="center" my={2} flex="1">
@@ -1468,7 +1884,14 @@ const Welcome = ({ isNewCreated }) => {
                     fontSize="40px"
                     transform="rotate(90deg)"
                   />
-                  <Text>相談</Text>
+                  <Text>
+                    {getMessage({
+                      ja: "相談",
+                      us: "Consult",
+                      cn: "协商",
+                      language,
+                    })}
+                  </Text>
                 </VStack>
                 <Card
                   width="100%"
@@ -1478,22 +1901,44 @@ const Welcome = ({ isNewCreated }) => {
                   border="1px solid"
                   borderColor="gray.500"
                   textAlign="center"
-                  cursor="pointer"
                   _hover={{ boxShadow: "lg", transform: "scale(1.05)" }}
                   flex="4"
                 >
                   <CardHeader p={2}>
-                    <Text fontSize="20px">開発担当</Text>
+                    <Text fontSize="20px">
+                      {getMessage({
+                        ja: "開発担当",
+                        us: "Development",
+                        cn: "发展干事",
+                        language,
+                      })}
+                    </Text>
                   </CardHeader>
                   <CardBody p={0}>
-                    <Text>総合的に開発</Text>
+                    <Text>
+                      {getMessage({
+                        ja: "総合的に開発",
+                        us: "Comprehensive development",
+                        cn: "全面发展",
+                        language,
+                      })}
+                    </Text>
                   </CardBody>
                 </Card>
               </Grid>
             </Box>
           </Center>
 
-          {renderSection("最終目標までのステップ", 14, 10)}
+          {renderSection(
+            getMessage({
+              ja: "最終目標までのステップ",
+              us: "Steps to the final goal",
+              cn: "实现最终目标的步骤",
+              language,
+            }),
+            14,
+            10
+          )}
           <Box
             display="flex"
             flexDirection="column" // 縦方向に配置
@@ -1509,19 +1954,73 @@ const Welcome = ({ isNewCreated }) => {
               width="100%"
               maxWidth="600px"
             >
-              {StepRender(1, "このサービスを安定運用する(テスト済み)")}
-              {StepRender(2, "参加してくれる工場を増やす")}
-              {StepRender(3, "色々な工場の意見を基にシステムを成長させる")}
-              {StepRender(4, "グループ全体の生産性が上がる")}
-              {StepRender(5, "開発メンバーを増やす")}
+              {StepRender(
+                1,
+                getMessage({
+                  ja: "このサービスを安定運用する(テスト済み)",
+                  us: "Stable operation of this service (tested)",
+                  cn: "确保该服务的稳定运行（已测试）",
+                  language,
+                })
+              )}
+              {StepRender(
+                2,
+                getMessage({
+                  ja: "参加してくれる工場を増やす",
+                  us: "Increase the number of participating factories.",
+                  cn: "增加参与工厂的数量",
+                  language,
+                })
+              )}
+              {StepRender(
+                3,
+                getMessage({
+                  ja: "色々な工場の意見を基にシステムを成長させる",
+                  us: "Grow the system based on the opinions of various factories.",
+                  cn: "根据不同工厂的意见发展系统",
+                  language,
+                })
+              )}
+              {StepRender(
+                4,
+                getMessage({
+                  ja: "グループ全体の生産性が上がる",
+                  us: "Increased productivity for the entire group.",
+                  cn: "提高整个团队的工作效率",
+                  language,
+                })
+              )}
+              {StepRender(
+                5,
+                getMessage({
+                  ja: "開発メンバーを増やす",
+                  us: "Increase development members.",
+                  cn: "增加发展成员的数量",
+                  language,
+                })
+              )}
               {StepRender(
                 6,
-                "発起人がこのサービスを離れても成長し続ける仕組みを作る"
+                getMessage({
+                  ja: "発起人がこのサービスを離れても成長し続ける仕組みを作る",
+                  us: "Create a system that will continue to grow even after the founder leaves this service.",
+                  cn: "创建一个即使在创始人离职后仍能继续发展的系统",
+                  language,
+                })
               )}
             </VStack>
           </Box>
 
-          {renderSection("導入までの流れ", 14, 10)}
+          {renderSection(
+            getMessage({
+              ja: "導入までの流れ",
+              us: "Flow of Introduction",
+              cn: "介绍流程",
+              language,
+            }),
+            14,
+            10
+          )}
           <Box
             display="flex"
             flexDirection="column" // 縦方向に配置
@@ -1538,28 +2037,50 @@ const Welcome = ({ isNewCreated }) => {
             >
               {IntroductionRender(
                 1,
-                "teppy@au.comにメール連絡する(または紹介)"
+                getMessage({
+                  ja: "teppy@au.comにメール連絡する(または紹介)",
+                  us: "Contact teppy@au.com by email (or referral)",
+                  cn: "通过电子邮件（或转介）与 teppy@au.com 联系。",
+                  language,
+                })
               )}
               {IntroductionRender(
                 2,
-                "契約書がメールで届くので社内で検討をお願いします"
+                getMessage({
+                  ja: "契約書がメールで届くので社内で検討をお願いします",
+                  us: "Contracts will be emailed to you for your internal review.",
+                  cn: "合同将通过电子邮件发送给您，供您内部审查",
+                  language,
+                })
               )}
               {IntroductionRender(
                 3,
-                "契約後、初回導入時は伺ってフォローを行います"
+                getMessage({
+                  ja: "契約後、初回導入時は伺ってフォローを行います",
+                  us: "After signing the contract, we will visit and follow up on the initial installation.",
+                  cn: "签订合同后，我们将上门服务并跟进初始安装。",
+                  language,
+                })
               )}
             </VStack>
           </Box>
 
           <Box height="180px"></Box>
           <Text textAlign="center" fontSize="md">
-            ※ログインして認証を受けないと閲覧/ダウンロードは出来ません
+            {getMessage({
+              ja: "※ログインして認証を受けないと閲覧/ダウンロードは出来ません",
+              us: "*You must be logged in and authenticated to view/download.",
+              cn: "*您需要登录并获得授权才能查看/下载。",
+              language,
+            })}
           </Text>
           <Text textAlign="center" mt={6} lineHeight={1.6}>
             {elapsedTime}
           </Text>
           <Text textAlign="center" mt={0.6} lineHeight={1.6} fontSize={12}>
-            サービス開始から{totalDays}が経過
+            {language === "ja" && <>サービス開始から{totalDays}が経過</>}
+            {language === "us" && <>{totalDays} since the start of service</>}
+            {language === "cn" && <>服务开始后的 {totalDays}</>}
           </Text>
         </Box>
       </Content>

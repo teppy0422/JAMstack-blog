@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
 import { MdBusiness, MdChat } from "react-icons/md";
 import { useCustomToast } from "../components/customToast";
@@ -19,7 +19,14 @@ import styles from "../styles/Home.module.css";
 import { useUserData } from "../hooks/useUserData";
 import { useUserInfo } from "../hooks/useUserId";
 
-function SidebarBBS() {
+import getMessage from "../components/getMessage";
+import { useLanguage } from "../context/LanguageContext";
+
+// import { AppContext } from "../pages/_app";
+
+const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
+  const { language, setLanguage } = useLanguage();
+
   const [unreadCount, setUnreadCount] = useState(0);
   const [currentPath, setCurrentPath] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -219,7 +226,10 @@ function SidebarBBS() {
                 : "white",
             }}
           >
-            {label}
+            {getMessage({
+              ja: label,
+              language,
+            })}
           </Box>
           {/* 未読数の表示 */}
           {unreadCountsByThread[threadId] > 0 && (
@@ -248,19 +258,21 @@ function SidebarBBS() {
       </NextLink>
     );
   };
-  const maxWidth = useBreakpointValue({
-    base: "0px",
-    xl: "180px",
-    "2xl": "300px",
-    "3xl": "400px",
-  });
+  const maxWidth = isMain
+    ? "100%"
+    : useBreakpointValue({
+        base: "0px",
+        xl: "180px",
+        "2xl": "300px",
+        "3xl": "400px",
+      });
   let previousMainCompany = ""; // ここで変数を定義
 
   return (
     <>
       <Box
-        display={{ base: "none", xl: "block" }}
-        position="fixed"
+        display={isMain ? "block" : { base: "none", xl: "block" }}
+        position={isMain ? "static" : "fixed"}
         // w={{ base: "0px", xl: "180px", "2xl": "300px", "3xl": "400px" }}
         // maxWidth={{ base: "0px", xl: "180px", "2xl": "300px", "3xl": "400px" }}
         w={maxWidth}
@@ -287,7 +299,10 @@ function SidebarBBS() {
             <>
               {threads[0].mainCompany !== previousMainCompany && (
                 <Box fontWeight="bold" pl={3} textAlign="left">
-                  {threads[0].mainCompany}
+                  {getMessage({
+                    ja: threads[0].mainCompany,
+                    language,
+                  })}
                   <Divider
                     borderColor={colorMode === "light" ? "black" : "white"}
                   />
@@ -296,7 +311,10 @@ function SidebarBBS() {
               {company !== "開発" && ( // "開発" でない場合のみ表示
                 <Box fontWeight="bold" pl={3} textAlign="left">
                   <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={2} />
-                  {company}
+                  {getMessage({
+                    ja: company,
+                    language,
+                  })}
                 </Box>
               )}
               {threads.map(
@@ -343,6 +361,6 @@ function SidebarBBS() {
       </Box>
     </>
   );
-}
+};
 
 export default SidebarBBS;

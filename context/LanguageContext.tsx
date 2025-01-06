@@ -1,16 +1,42 @@
-import React, { createContext, useState, useContext, ReactNode } from "react";
+"use client";
 
-type LanguageContextType = {
-  language: string;
-  setLanguage: (lang: string) => void;
-};
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
-const LanguageContext = createContext<LanguageContextType | undefined>(
+type LanguageType = "ja" | "us" | "cn";
+
+interface LanguageContextProps {
+  language: LanguageType;
+  setLanguage: (language: LanguageType) => void;
+}
+
+const LanguageContext = createContext<LanguageContextProps | undefined>(
   undefined
 );
 
-export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState("ja");
+export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [language, setLanguageState] = useState<LanguageType>("ja");
+
+  useEffect(() => {
+    const storedLanguage =
+      localStorage.getItem("language") || sessionStorage.getItem("language");
+    if (storedLanguage) {
+      setLanguageState(storedLanguage as LanguageType);
+    }
+  }, []);
+
+  const setLanguage = (newLanguage: LanguageType) => {
+    setLanguageState(newLanguage);
+    localStorage.setItem("language", newLanguage);
+    sessionStorage.setItem("language", newLanguage);
+  };
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage }}>
@@ -19,7 +45,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useLanguage = () => {
+export const useLanguage = (): LanguageContextProps => {
   const context = useContext(LanguageContext);
   if (!context) {
     throw new Error("useLanguage must be used within a LanguageProvider");

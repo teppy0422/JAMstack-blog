@@ -1,23 +1,51 @@
 import React, { useContext } from "react";
-import { AppContext } from "../pages/_app";
+import { useLanguage, LanguageProvider } from "../context/LanguageContext";
 
 type MessageDisplayProps = {
   ja: string;
-  us: string;
-  cn: string;
+  us?: string;
+  cn?: string;
   language: string;
 };
 
 const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
+  const translations = {
+    更新日: { us: "Renewal date", cn: "更新日" },
+    開発: { us: "Development", cn: "发展" },
+    高知: { us: "Kochi", cn: "高知" },
+    徳島: { us: "Tokushima", cn: "徳島" },
+    本社: { us: "Head office", cn: "总部" },
+    生産準備: { us: "Production Preparation", cn: "生产准备" },
+    "生産準備+": { us: "Production Preparation+", cn: "生产准备+" },
+    順立生産システム: {
+      us: "Sequential Production System",
+      cn: "顺序生产系统",
+    },
+    "順立生産システム+": {
+      us: "Sequential Production System+",
+      cn: "顺序生产系统+",
+    },
+    開発履歴: { us: "Development History", cn: "发展历程" },
+    生産効率化: { us: "Production Efficiency", cn: "生产效率" },
+    相談: { us: "Consultation", cn: "协商" },
+    SB: { us: "SB", cn: "SB" },
+    UK: { us: "UK", cn: "UK" },
+  };
+
+  const {
+    us: translatedUs = "untranslated:(" + ja + ")",
+    cn: translatedCn = "未翻译:(" + ja + ")",
+  } = translations[ja] || { us, cn };
+
   switch (language) {
     case "ja":
       return ja;
     case "us":
-      return us;
+      return translatedUs;
     case "cn":
-      return cn;
+      return translatedCn;
     default:
-      return us; // デフォルトは英語
+      return ja; // デフォルトは日本語
   }
 };
 

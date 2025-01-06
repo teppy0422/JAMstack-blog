@@ -23,8 +23,8 @@ import Sidebar from "../components/sidebar";
 import Content from "../components/content";
 import { Global } from "@emotion/react";
 
+import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
-import { AppContext } from "../pages/_app";
 
 interface RoadmapItem {
   year?: string;
@@ -73,6 +73,7 @@ function getBadgeForCategory(category: string): JSX.Element {
 const Roadmap = () => {
   const roadmapRefs = useRef<(HTMLDivElement | null)[]>([]);
   const { colorMode, toggleColorMode } = useColorMode();
+  const { language, setLanguage } = useLanguage();
 
   const [years, setYears] = useState<number[]>([]);
   let previousYear: string | undefined;
@@ -95,7 +96,6 @@ const Roadmap = () => {
     moveThisMonth;
   }, []);
 
-  const { language, setLanguage } = useContext(AppContext);
   const roadmap: RoadmapItem[] = [
     {
       year: "2023",

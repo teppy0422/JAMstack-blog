@@ -44,8 +44,8 @@ import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
 
+import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
-import { AppContext } from "../../pages/_app";
 
 const customTheme = extendTheme({
   fonts: {
@@ -94,7 +94,7 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
-  const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
@@ -178,36 +178,31 @@ const BlogPage: React.FC = () => {
   const skillCircles = [
     {
       value: 90,
-      cirText: getMessage({
-        ja: "EXCEL-vba\nアプリ制御など\n15年",
-        us: "EXCEL-vba\nApplication Control,etc.\n15 years",
-        cn: "EXCEL-vba\n应用控制等\n15年",
-        language,
-      }),
+      cirText: "EXCEL-vba\n15年",
       color: "#1f9b60",
       img: "/images/brandIcons/logo_excel.svg",
     },
     {
       value: 65,
-      cirText: "ACCESS-vba\n部品管理\n3年",
+      cirText: "ACCESS-vba\n3年",
       color: "#1f9b60",
       img: "/images/brandIcons/logo_access.svg",
     },
     {
       value: 30,
-      cirText: "vb.net\nシリアル通信\nカメラ制御\n半年",
+      cirText: "vb.net\n半年",
       color: "#9A4F96",
       img: "/images/brandIcons/logo_dotNet.svg",
     },
     {
       value: 60,
-      cirText: "HTML\n基本的な使い方\n4年",
+      cirText: "HTML\n4年",
       color: "#F1652A",
       img: "/images/brandIcons/logo_html5.svg",
     },
     {
       value: 65,
-      cirText: "CSS\n基本的な使い方\n+SCSS\n4年",
+      cirText: "CSS\n+SCSS\n4年",
       color: "#F1652A",
       img: "/images/brandIcons/logo_css.svg",
     },
@@ -219,7 +214,7 @@ const BlogPage: React.FC = () => {
     },
     {
       value: 45,
-      cirText: "Next\nこのサイトを作成\n2年",
+      cirText: "Next\n3年",
       color: "#F1652A",
       img: "/images/brandIcons/logo_next.svg",
     },
@@ -231,19 +226,19 @@ const BlogPage: React.FC = () => {
     },
     {
       value: 20,
-      cirText: "Python\n少しだけ",
+      cirText: "Python",
       color: "#4E5B92",
       img: "/images/brandIcons/logo_python.svg",
     },
     {
       value: 60,
-      cirText: "Arduino\n2年",
+      cirText: "Arduino",
       color: "#12999F",
       img: "/images/brandIcons/logo_arduino.svg",
     },
     {
       value: 30,
-      cirText: "Davinci Resolve\n半年",
+      cirText: "Davinci Resolve",
       color: "#888888",
       img: "/images/brandIcons/logo_davinci.svg",
     },
@@ -255,7 +250,7 @@ const BlogPage: React.FC = () => {
     },
     {
       value: 30,
-      cirText: "Premiere Pro\n半年",
+      cirText: "Premiere Pro",
       color: "#00005c",
       img: "/images/brandIcons/logo_Premiere.svg",
     },
@@ -272,7 +267,12 @@ const BlogPage: React.FC = () => {
             />
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>開発</Text>
+            <Text>
+              {getMessage({
+                ja: "開発",
+                language,
+              })}
+            </Text>
             <Spacer />
             <Flex justifyContent="flex-end">
               <Text>
@@ -282,19 +282,33 @@ const BlogPage: React.FC = () => {
             </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            メンバーリスト
+            {getMessage({
+              ja: "メンバーリスト",
+              us: "Member List",
+              cn: "成员名单",
+              language,
+            })}
           </Heading>
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-18
+            {getMessage({
+              ja: "更新日",
+              language,
+            })}
+            :2024-11-18
           </Text>
         </Box>
         <SectionBox
           id="section1"
-          title="1.片岡哲兵"
+          title={getMessage({
+            ja: "1.片岡哲兵",
+            us: "1.Kataoka Teppei",
+            cn: "1.Kataoka Teppei",
+            language,
+          })}
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -310,16 +324,27 @@ const BlogPage: React.FC = () => {
               mb={20}
               ml={0}
             >
-              高知出身。
-              ワイヤーハーネス製造工場で/機械保全/前工程生産分析/後工程生産分析/工務/工作改善チームを経験。
-              現場の問題改善を繰り返す内にITや電子工学技術に興味を持ちました。
-              工作改善チームではPLC/Arduinoなどのハードウェアを経験させてもらいました。
-              その後、ハードウェアとソフトウェアを組み合わせる内にHTML/JavaScript/PHPを経験してWEBアプリを作るに至りました。
-              現場の使用者と相談しながら更に発展させていくのが好きです。プログラミングは嫌い。
+              {getMessage({
+                ja:
+                  "高知出身。ワイヤーハーネス製造工場で/機械保全/前工程生産分析/後工程生産分析/工務/工作改善チームを経験。" +
+                  "工作改善チームではPLC/Arduinoなどのハードウェアを経験させてもらいました。" +
+                  "その後、ハードウェアとソフトウェアを組み合わせる内にHTML/JavaScriptを経験してWEBアプリを作るに至りました。" +
+                  "現場の人と相談しながら更に発展させていくのが得意。プログラミングは嫌い。",
+                us: "Born in Kochi. Experienced in wire harness manufacturing plant / machine maintenance / front-end production analysis / back-end production analysis / engineering work / machine improvement team. The Craft Improvement Team gave me experience with PLC/Arduino and other hardware. Later, while combining hardware and software, I experienced HTML/JavaScript and went on to create web applications. He is good at consulting with people in the field to further develop the project. I hate programming.",
+                cn: "生于高知。在一家线束制造厂担任经验丰富的/机器维护/前端生产分析/后端生产分析/工程/机器改进小组的工作。工艺改进小组为我提供了使用 PLC/Arduino 等硬件的经验。后来，在结合硬件和软件的过程中，他体验了 HTML/JavaScript 并继续创建了一个网络应用程序。他善于与当地人协商，以进一步发展项目。我不喜欢编程。",
+                language,
+              })}
             </Text>
           </Flex>
           <div data-aos="fade-right" style={{ display: "inline-block" }}>
-            <Text className={styles.subTitle}>スキル</Text>
+            <Text className={styles.subTitle}>
+              {getMessage({
+                ja: "スキル",
+                us: "skills",
+                cn: "技能",
+                language,
+              })}
+            </Text>
           </div>
           <Flex justifyContent="center">
             <SkillGraph />
@@ -355,7 +380,12 @@ const BlogPage: React.FC = () => {
         </SectionBox>
         <SectionBox
           id="section2"
-          title="2.このサイトについて"
+          title={getMessage({
+            ja: "2.このサイトについて",
+            us: "2.About this site",
+            cn: "2.关于本网站",
+            language,
+          })}
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -386,40 +416,115 @@ const BlogPage: React.FC = () => {
                 fontWeight: "100",
               }}
             >
-              このWEBサイトは効率良く活動を進めるために作成しました。
+              {getMessage({
+                ja: "このWEBサイトは効率良く活動を進めるために作成しました。",
+                us: "This web site was created to promote activities efficiently.",
+                cn: "创建该网站的目的是为了有效地宣传各项活动。",
+                language,
+              })}
               <br />
-              たとえば従来のメール連絡だと下記が不都合でした。
+              {getMessage({
+                ja: "たとえば従来のメール連絡だと下記が不都合でした。",
+                us: "For example, the following were inconvenient with conventional e-mail communication",
+                cn: "例如，传统的电子邮件通信有以下不便之处",
+                language,
+              })}
               <br />
-              1.送信できるファイルサイズが小さい(2MB程度)
+              {getMessage({
+                ja: "1.送信できるファイルサイズが小さい(2MB程度)",
+                us: "1. Small file size (about 2MB) that can be sent",
+                cn: "1. 可发送的文件大小较小（约 2 MB）",
+                language,
+              })}
               <br />
-              2.過去のやりとりの確認がし辛い
-              <br />
-              <br />
-              そこで、LINEのようなリアルタイムチャットを用意しました。
-              <br />
-              1.管理者が認証したアカウントのみ閲覧可能
-              <br />
-              2.他社のやりとりは閲覧不可
-              <br />
-              <br />
-              その他、最新のプログラムのダウンロードや使い方を載せていきます。
-              <br />
-              <br />
-              <br />
-              このサイトのソースコードはGitHubに公開しています。
-              <br />
-              レポジトリは JAMstack-blog。 自由に使って構いません。
-              <br />
-              ※チャット内容/添付ファイル/ユーザー情報/その他一部のファイルはsupabase内にあるのでアクセス出来ない事をご了承ください。
+              {getMessage({
+                ja: "2.過去のやりとりの確認がし辛い",
+                us: "2. It is hard to confirm past correspondence.",
+                cn: "2. 难以检查过去的通信",
+                language,
+              })}
               <br />
               <br />
-              Next.js + TypeScriptで書いています
+              {getMessage({
+                ja: "そこで、LINEのようなリアルタイムチャットを用意しました。",
+                us: "Therefore, we have prepared a real-time chat like LINE.",
+                cn: "因此，我们准备了一个类似 LINE 的实时聊天系统。",
+                language,
+              })}
               <br />
-              CSSフレームワークはChakraUI
+              {getMessage({
+                ja: "1.管理者が認証したアカウントのみ閲覧可能",
+                us: "1. Only accounts authenticated by the administrator can be viewed",
+                cn: "1. 只有管理员授权的账户才能查看。",
+                language,
+              })}
               <br />
-              データベースはVercel + supabase
+              {getMessage({
+                ja: "2.他社のやりとりは閲覧不可",
+                us: "2. Interactions with other companies are not viewable.",
+                cn: "2. 无法查看与其他公司的交流。",
+                language,
+              })}
               <br />
-              ブログはmicroCMS
+              <br />
+              {getMessage({
+                ja: "その他、最新のプログラムのダウンロードや使い方を載せていきます。",
+                us: "We will also post the latest program downloads and instructions on how to use them.",
+                cn: "此外，还将张贴最新的程序下载和使用说明。",
+                language,
+              })}
+              <br />
+              <br />
+              <br />
+              {getMessage({
+                ja: "このサイトのソースコードはGitHubに公開しています。",
+                us: "The source code for this site is available on GitHub.",
+                cn: "该网站的源代码可在 GitHub 上获取。",
+                language,
+              })}
+              <br />
+              {getMessage({
+                ja: "レポジトリは JAMstack-blog。 自由に使って構いません。",
+                us: "",
+                cn: "",
+                language,
+              })}
+              <br />
+              {getMessage({
+                ja: "※チャット内容/添付ファイル/ユーザー情報/その他一部のファイルはsupabase内にあるのでアクセス出来ない事をご了承ください。",
+                us: "Please note that the chat contents/attachments/user information and some other files are in supabase and cannot be accessed.",
+                cn: "请注意，聊天内容/附件/用户信息和其他一些文件位于 SUPABASE 中，无法访问。",
+                language,
+              })}
+              <br />
+              <br />
+              {getMessage({
+                ja: "Next.js + TypeScriptで書いています",
+                us: "Written in Next.js + TypeScript",
+                cn: "使用 Next.js + TypeScript 编写",
+                language,
+              })}
+              <br />
+              {getMessage({
+                ja: "CSSフレームワークはChakraUI",
+                us: "CSS framework is ChakraUI",
+                cn: "CSS 框架是 ChakraUI。",
+                language,
+              })}
+              <br />
+              {getMessage({
+                ja: "データベースはVercel + supabase",
+                us: "Database is Vercel + supabase",
+                cn: "数据库是 Vercel + supabase。",
+                language,
+              })}
+              <br />
+              {getMessage({
+                ja: "ブログはmicroCMS",
+                us: "Blog is microCMS",
+                cn: "博客是 microCMS。",
+                language,
+              })}
             </Text>
             <Flex alignItems="left" m={4} mt={6}>
               <Link href="https://github.com/teppy0422" isExternal>

@@ -1,3 +1,5 @@
+"use client";
+
 import NextAuth from "next-auth";
 import { useState, useContext } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -61,11 +63,13 @@ import AwesomIcon from "./awesomIcon";
 import Auth from "./Auth"; // Authコンポーネントをインポート
 import { useUserData } from "../hooks/useUserData";
 import { Global } from "@emotion/react";
-import { AppContext } from "../pages/_app";
+
+import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
 
 export default function Header() {
-  const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
+
   const { data: session } = useSession();
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("red.500", "red.200");
@@ -220,12 +224,7 @@ export default function Header() {
   };
   const updateLanguage = (newLanguage) => {
     console.log("Updating language to:", newLanguage);
-    try {
-      setLanguage(newLanguage);
-      localStorage.setItem("language", newLanguage); // ローカルストレージに保存
-    } catch (error) {
-      console.error("Failed to save language to localStorage:", error);
-    }
+    setLanguage(newLanguage);
   };
   return (
     <>
@@ -392,7 +391,7 @@ export default function Header() {
       </Modal>
 
       <Drawer isOpen={isMenuOpen} placement="left" onClose={onMenuClose}>
-        <DrawerOverlay>
+        <DrawerOverlay zIndex={3000}>
           <DrawerContent
             w={["75%", "50%", "25%"]}
             maxW="200px"

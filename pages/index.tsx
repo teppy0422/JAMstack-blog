@@ -78,7 +78,7 @@ export const getServerSideProps = async (context) => {
 };
 
 import getMessage from "../components/getMessage";
-import { AppContext } from "../pages/_app";
+import { useLanguage } from "../context/LanguageContext";
 
 const Welcome = ({ isNewCreated }) => {
   const router = useRouter();
@@ -94,7 +94,7 @@ const Welcome = ({ isNewCreated }) => {
       text: "#FFe",
     },
   };
-  const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
 
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加

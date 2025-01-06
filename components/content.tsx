@@ -7,15 +7,16 @@ import Header from "../components/header";
 import Header_ from "../components/header_";
 import { Global } from "@emotion/react";
 
+import { useLanguage } from "../context/LanguageContext";
 import getMessage from "./getMessage";
-import { AppContext } from "../pages/_app";
+// import { AppContext } from "../pages/_app";
 
 export default function Content({
   children,
   isCustomHeader = false,
   maxWidth = "900px",
 }) {
-  const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
 
   return (
     <>

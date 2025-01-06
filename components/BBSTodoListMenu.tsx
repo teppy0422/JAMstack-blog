@@ -17,6 +17,10 @@ import { useColorMode } from "@chakra-ui/react";
 import { supabase } from "../utils/supabase/client";
 import useFetchUserData from "../hooks/useFetchUserData";
 import useFetchTodos from "../hooks/useFetchTodos";
+
+import { useLanguage } from "../context/LanguageContext";
+import getMessage from "./getMessage";
+
 const TodoListMenu = ({
   id,
   postId,
@@ -35,6 +39,7 @@ const TodoListMenu = ({
   );
   const [sortedUserData, setSortedUserData] = useState<UserData[]>([]);
   const [sortedTodos, setSortedTodos] = useState<Todo[]>([]);
+  const { language, setLanguage } = useLanguage();
 
   interface UserData {
     user_metadata?: {
