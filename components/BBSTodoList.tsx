@@ -207,11 +207,11 @@ const BBSTodoList = () => {
                 language,
               })}
             </Th>
-            <Th py={0} px={1}>
+            <Th py={0} px={1} whiteSpace="nowrap">
               {getMessage({
-                ja: "状況",
-                us: "situation",
-                cn: "情势",
+                ja: "経過",
+                us: "days",
+                cn: "経過",
                 language,
               })}
             </Th>
@@ -326,7 +326,7 @@ const BBSTodoList = () => {
                             (diffTime / (1000 * 60 * 60)) % 24
                           );
                           const totalDays = diffDays + diffHours / 24;
-                          return `${totalDays.toFixed(1)}日`;
+                          return `${totalDays.toFixed(0)}`;
                         })()
                       : (() => {
                           const createdAt = new Date(detail.created_at);
@@ -341,7 +341,7 @@ const BBSTodoList = () => {
                             (diffTime / (1000 * 60 * 60)) % 24
                           );
                           const totalDays = diffDays + diffHours / 24;
-                          return `${totalDays.toFixed(1)}日`;
+                          return `${totalDays.toFixed(0)}`;
                         })()}
                   </Box>
                 </Tooltip>
@@ -407,6 +407,12 @@ const BBSTodoList = () => {
       textAlign="left"
       zIndex="1100"
       fontSize={15}
+      fontFamily={getMessage({
+        ja: "Noto Sans JP",
+        us: "Noto Sans JP",
+        cn: "Noto Sans SC",
+        language,
+      })}
     >
       {/* <Input
         value={newTodo}
@@ -428,14 +434,24 @@ const BBSTodoList = () => {
         px={2}
         _hover={{ bg: colorMode === "light" ? "gray.200" : "gray.700" }} // マウスオーバー時の背景色
       >
-        各システムの対応状況
+        {getMessage({
+          ja: "各システムの対応状況",
+          us: "Status of each system",
+          cn: "每个系统的支持状况",
+          language,
+        })}
       </Text>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent width="auto" maxWidth="80%">
           <ModalHeader fontSize={18} p={1} px={2} pr={10}>
-            各システムの対応状況
+            {getMessage({
+              ja: "各システムの対応状況",
+              us: "Status of each system",
+              cn: "每个系统的支持状况",
+              language,
+            })}
           </ModalHeader>
           <ModalCloseButton _focus={{ _focus: "none" }} top={0} right={0} />
           <Flex align="center" pl={1}>
@@ -446,7 +462,13 @@ const BBSTodoList = () => {
               color={colorMode === "light" ? "#000" : "#FFF"}
             />
             <Text p={1} fontSize={14} fontWeight={400}>
-              : 現在対応中
+              :
+              {getMessage({
+                ja: "現在対応中",
+                us: "Currently being handled",
+                cn: "目前正在处理中",
+                language,
+              })}
             </Text>
           </Flex>
           <ModalBody fontWeight={400} px={0} py={2}>
@@ -485,7 +507,10 @@ const BBSTodoList = () => {
                           bg={colorMode === "light" ? "#444" : "white"}
                           color={colorMode === "light" ? "white" : "#222"}
                         >
-                          {todo.title}
+                          {getMessage({
+                            ja: todo.title,
+                            language,
+                          })}
                         </Box>
                         <AccordionIcon
                           bg={colorMode === "light" ? "#444" : "white"}
@@ -504,7 +529,13 @@ const BBSTodoList = () => {
                                   fontSize={11}
                                   fontWeight={600}
                                 >
-                                  未着手 ({groupedDetails[0].length})
+                                  {getMessage({
+                                    ja: "未着手",
+                                    us: "not proceeded with",
+                                    cn: "未着手",
+                                    language,
+                                  })}
+                                  ({groupedDetails[0].length})
                                 </Box>
                                 <AccordionIcon />
                               </AccordionButton>
@@ -525,7 +556,13 @@ const BBSTodoList = () => {
                                   fontSize={11}
                                   fontWeight={600}
                                 >
-                                  取組中 ({groupedDetails[1].length})
+                                  {getMessage({
+                                    ja: "取組中",
+                                    us: "in progress",
+                                    cn: "取組中",
+                                    language,
+                                  })}
+                                  ({groupedDetails[1].length})
                                 </Box>
                                 <AccordionIcon />
                               </AccordionButton>
@@ -546,7 +583,13 @@ const BBSTodoList = () => {
                                   fontSize={11}
                                   fontWeight={600}
                                 >
-                                  完了済 ({groupedDetails[100].length})
+                                  {getMessage({
+                                    ja: "完了済",
+                                    us: "It's over.",
+                                    cn: "完了済",
+                                    language,
+                                  })}
+                                  ({groupedDetails[100].length})
                                 </Box>
                                 <AccordionIcon />
                               </AccordionButton>

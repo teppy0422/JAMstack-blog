@@ -22,7 +22,7 @@ import { ImAttachment } from "react-icons/im";
 import { BsSend } from "react-icons/bs";
 import { supabase } from "../../../utils/supabase/client";
 import { format } from "date-fns";
-import { ja } from "date-fns/locale";
+import { ja, enUS, zhCN } from "date-fns/locale";
 import "@fontsource/noto-sans-jp";
 import {
   Box,
@@ -812,23 +812,29 @@ function ThreadContent() {
   ) => {
     const date = new Date(dateString);
     const prevDate = prevDateString ? new Date(prevDateString) : null;
+    const locale = language === "us" ? enUS : language === "cn" ? zhCN : ja;
+
     if (isTimeOnly) {
-      return format(date, "H:mm", { locale: ja });
+      return format(date, "H:mm", { locale });
     }
+    const dayOfWeek = format(date, "E", { locale });
+    const translatedDayOfWeek = getMessage({
+      ja: dayOfWeek,
+      us: dayOfWeek, // 英語の曜日をそのまま使用
+      cn: dayOfWeek, // 中国語の曜日をそのまま使用
+      language,
+    });
+
     if (prevDate) {
       const isSameYear = date.getFullYear() === prevDate.getFullYear();
       const isSameMonth = isSameYear && date.getMonth() === prevDate.getMonth();
       const isSameDay = isSameMonth && date.getDate() === prevDate.getDate();
 
       if (isSameMonth) {
-        return `${format(date, "M/d", { locale: ja })} (${format(date, "E", {
-          locale: ja,
-        })})`;
+        return `${format(date, "M/d", { locale })} (${translatedDayOfWeek})`;
       }
     }
-    return `${format(date, "yyyy M/d", { locale: ja })} (${format(date, "E", {
-      locale: ja,
-    })})`;
+    return `${format(date, "yyyy M/d", { locale })} (${translatedDayOfWeek})`;
   };
   //リプライの名前を取得
   useEffect(() => {
@@ -979,7 +985,14 @@ function ThreadContent() {
   };
 
   return (
-    <>
+    <Box
+      fontFamily={getMessage({
+        ja: "Noto Sans JP",
+        us: "Noto Sans JP",
+        cn: "Noto Sans SC",
+        language,
+      })}
+    >
       <Global
         styles={{
           "@media print": {
@@ -2160,6 +2173,6 @@ function ThreadContent() {
         </Content>
         <BBSTodoList />
       </div>
-    </>
+    </Box>
   );
 }

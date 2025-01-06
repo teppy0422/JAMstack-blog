@@ -25,6 +25,22 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
       us: "Sequential Production System+",
       cn: "顺序生产系统+",
     },
+    誘導ポイント設定一覧表: {
+      us: "Induction point setting list",
+      cn: "感应点设置列表",
+    },
+    "誘導ポイント設定一覧表+": {
+      us: "Induction point setting list+",
+      cn: "感应点设置列表+",
+    },
+    配策誘導ナビ: {
+      us: "Guidance Navigation",
+      cn: "布局引导导航系统",
+    },
+    "誘導ナビ.net": {
+      us: "GuidanceNavi.net",
+      cn: "GuidanceNavi.net",
+    },
     開発履歴: { us: "Development History", cn: "发展历程" },
     生産効率化: { us: "Production Efficiency", cn: "生产效率" },
     相談: { us: "Consultation", cn: "协商" },
