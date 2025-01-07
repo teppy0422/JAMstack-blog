@@ -8,6 +8,8 @@ import HighchartsReact from "highcharts-react-official";
 import styles from "../../styles/home.module.scss";
 
 import GetWindowSize, { getWindowSize } from "../../script/GetWindowSize";
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 
 const SjpChart01: React.FunctionComponent = (): JSX.Element => {
   const WindowSize = GetWindowSize();
@@ -19,6 +21,7 @@ const SjpChart01: React.FunctionComponent = (): JSX.Element => {
   // } else {
   //   myHeight = myWidth - 100;
   // }
+  const { language, setLanguage } = useLanguage();
 
   if (typeof Highcharts === "object") {
     HighchartsMore(Highcharts);
@@ -73,15 +76,31 @@ const SjpChart01: React.FunctionComponent = (): JSX.Element => {
     },
     series: [
       {
-        name: "作業工数",
+        name: getMessage({
+          ja: "作業工数",
+          language,
+        }),
+
         data: [920, 635, 445, 300, 201, 93, 22],
       },
       {
-        name: "残業",
+        name: getMessage({
+          ja: "残業",
+          us: "residual industry",
+          cn: "残業",
+          language,
+        }),
+
         data: [320, 200, 133, 20, 0, 0, 0],
       },
       {
-        name: "休日出勤",
+        name: getMessage({
+          ja: "休日出勤",
+          us: "working on a day off",
+          cn: "假日工作",
+          language,
+        }),
+
         data: [98, 30, 16, 0, 0, 0, 0],
       },
     ],

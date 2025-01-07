@@ -10,6 +10,10 @@ type MessageDisplayProps = {
 
 const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
   const translations = {
+    お使いのブラウザは動画タグをサポートしていません: {
+      us: "Your browser does not support video tags",
+      cn: "您的浏览器不支持视频标记",
+    },
     更新日: { us: "renewal date", cn: "更新日" },
     はじめに: { us: "Introduction", cn: "介绍" },
     開発: { us: "Development", cn: "发展" },
@@ -20,6 +24,10 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
     "生産準備+": { us: "Production Preparation+", cn: "生产准备+" },
     生準: { us: "Prod Prep", cn: "生准" },
     "生準+": { us: "Prod Prep+", cn: "生准+" },
+    先ハメ誘導ナビ: {
+      us: "first insert navigation system",
+      cn: "首次插入导航系统",
+    },
     順立生産システム: {
       us: "Sequential Production System",
       cn: "顺序生产系统",
@@ -44,6 +52,12 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
       us: "GuidanceNavi.net",
       cn: "GuidanceNavi.net",
     },
+    検査履歴システム: { us: "Inspection History System", cn: "检查记录系统" },
+    作業工数: {
+      us: "Person-hours",
+      cn: "作業工数",
+    },
+    導通検査: { us: "continuity check", cn: "连续性检查" },
     開発履歴: { us: "Development History", cn: "发展历程" },
     生産効率化: { us: "Production Efficiency", cn: "生产效率" },
     相談: { us: "Consultation", cn: "协商" },

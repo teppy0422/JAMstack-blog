@@ -413,7 +413,7 @@ const Frame: React.FC<{
                       getMessage({
                         ja: "練習(中級)",
                         us: "Practice (Intermediate)",
-                        cn: "实践（中级）。",
+                        cn: "实践（中级）",
                         language,
                       })
                     )}

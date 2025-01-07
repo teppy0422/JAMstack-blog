@@ -152,8 +152,6 @@ const BlogPage: React.FC = () => {
           >
             {getMessage({
               ja: "更新日",
-              us: "renewal date",
-              cn: "更新日",
               language,
             })}
             :2024-11-18

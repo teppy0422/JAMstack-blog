@@ -50,36 +50,9 @@ import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
 import CustomModal from "./customModal";
 
-import "@fontsource/noto-sans-jp";
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 
-const customTheme = extendTheme({
-  fonts: {
-    heading: "'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
-  },
-  fontWeights: {
-    normal: 200,
-    medium: 300,
-    bold: 400,
-    light: 300,
-    extraLight: 100,
-  },
-});
-//テキストジャンプアニメーション
-const jumpAnimation = keyframes`
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-6px); }
-  60% { transform: translateY(-3px); }
-`;
-//Kbdのスタイル
-const kbdStyle = {
-  border: "1px solid",
-  fontSize: "16px",
-  bg: "white",
-  mx: 0.5,
-  borderRadius: "3px",
-  color: "black",
-};
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
   viewBox: "0 0 26 26",
@@ -99,7 +72,14 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
-
+  const { language, setLanguage } = useLanguage();
+  //右リストの読み込みをlanguage取得後にする
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
+  useEffect(() => {
+    if (language) {
+      setIsLanguageLoaded(true);
+    }
+  }, [language]);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
@@ -110,67 +90,6 @@ const BlogPage: React.FC = () => {
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
 
   const showToast = useCustomToast();
-  //64pxまでスクロールしないとサイドバーが表示されないから暫定
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 100); // 100msの遅延を追加
-    } else {
-      window.scrollTo(0, 150);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
-  //#の位置にスクロールした時のアクティブなセクションを装飾
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-    );
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
-
-    return () => {
-      sectionRefs.current.forEach((section) => {
-        if (section) observer.unobserve(section);
-      });
-    };
-  }, []);
-  //#クリックした時のオフセット
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange, false);
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange, false);
-    };
-  }, []);
 
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);
@@ -180,17 +99,10 @@ const BlogPage: React.FC = () => {
     setActiveDrawer(null);
     onClose();
   };
-  //生産準備+着手からの経過日数の計算
-  const calculateElapsedTime = () => {
-    const startDate = new Date(2016, 6, 11); // 月は0から始まるので7月は6
-    const today = new Date();
-    const diffTime = Math.abs(today.getTime() - startDate.getTime());
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    const years = Math.floor(diffDays / 365);
-    const months = Math.floor((diffDays % 365) / 30); // おおよその月数
-    const days = (diffDays % 365) % 30;
-    return `${years}年${months}ヶ月${days}日`;
-  };
+  //右リストの読み込みをlanguage取得後にする
+  if (!isLanguageLoaded) {
+    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
+  }
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs}>
@@ -204,7 +116,13 @@ const BlogPage: React.FC = () => {
             </AvatarGroup>
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>開発</Text> <Spacer />
+            <Text>
+              {getMessage({
+                ja: "開発",
+                language,
+              })}
+            </Text>
+            <Spacer />
             <Flex justifyContent="flex-end">
               <Text>
                 <Icon as={CustomIcon} mr={0} />
@@ -213,20 +131,40 @@ const BlogPage: React.FC = () => {
             </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            生産準備+の練習(初級)
+            {getMessage({
+              ja: "生産準備+の練習(初級)",
+              us: "Production Preparation+ Practice (Elem)",
+              cn: "生产准备+实践（初级）。",
+              language,
+            })}
           </Heading>
-          <CustomBadge text="生準+" />
+          <CustomBadge
+            text={getMessage({
+              ja: "生準+",
+              language,
+            })}
+          />
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-19
+            {getMessage({
+              ja: "更新日",
+              language,
+            })}
+            :2024-11-19
           </Text>
         </Box>
         <SectionBox
           id="section1"
-          title="1.はじめに"
+          title={
+            "1." +
+            getMessage({
+              ja: "はじめに",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -237,15 +175,26 @@ const BlogPage: React.FC = () => {
           <Box>
             <Text fontWeight="bold"></Text>
             <Text>
-              開発に着手してから{calculateElapsedTime()}
-              が経過しています。多くの機能を追加した結果、文章での理解が難しいものになってしまいました。
-              その為、まず最初に実際に操作して何となく理解する事を推奨しています。とりあえず以下の手順通りにやってみてください。
+              {getMessage({
+                ja: "多くの機能を追加した結果、文章での理解が難しいものになってしまいました。その為、まず最初に実際に操作して何となく理解する事を推奨しています。とりあえず以下の手順通りにやってみてください。",
+                us: "As a result of adding many functions, the text has become difficult to understand. Therefore, we recommend that you first try to understand it somewhat by actually operating it. For now, please try following the steps below.",
+                cn: "由于附加功能较多，文本内容难以理解。因此，我们建议您先实际操作一下系统，以便对其有所了解。同时，请尝试按照以下步骤操作。",
+                language,
+              })}
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section2"
-          title="2.練習用の生産準備+の入手"
+          title={
+            "2." +
+            getMessage({
+              ja: "練習用の生産準備+の入手",
+              us: "Obtaining a Practice Production Preparation+.",
+              cn: "为实践做好生产准备+。",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -253,22 +202,56 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text>ダウンロードして使えるように準備をします。</Text>
+          <Text>
+            {getMessage({
+              ja: "ダウンロードして使えるように準備をします。",
+              us: "Download and prepare for use.",
+              cn: "准备下载和使用。",
+              language,
+            })}
+          </Text>
           <Box m={3}>
             <Text fontWeight="400" my={4}>
-              2-1.ダウンロードの実行
+              {"2-1." +
+                getMessage({
+                  ja: "ダウンロードの実行",
+                  us: "Download Execution",
+                  cn: "表演下载",
+                  language,
+                })}
             </Text>
             <DownloadLink
-              text="ダウンロードする"
+              text={getMessage({
+                ja: "ダウンロードする ",
+                us: "Download ",
+                cn: "下载 ",
+                language,
+              })}
               href="/images/0007/003_練習用.zip"
             />
             <Text fontWeight="400" my={4}>
-              2-2.ダウンロードフォルダを開く
+              {"2-2." +
+                getMessage({
+                  ja: "ダウンロードフォルダを開く",
+                  us: "Open download folder",
+                  cn: "打开下载文件夹",
+                  language,
+                })}
             </Text>
             <Text>
-              ダウンロードが完了したら下図が表示されるので赤枠の辺りをクリックします
+              {getMessage({
+                ja: "ダウンロードが完了したら下図が表示されるので赤枠の辺りをクリックします",
+                us: "When the download is complete, the following diagram will be displayed, click around the red frame",
+                cn: "下载完成后，将显示下图，您可以点击红框周围。",
+                language,
+              })}
               <br />
-              ※Edgeの場合
+              {getMessage({
+                ja: "※Edgeの場合は",
+                us: "*For Edge",
+                cn: "*Edge",
+                language,
+              })}
             </Text>
             <Image src="/images/0007/0001.png" alt="0001.png" w="60%" />
 
@@ -277,28 +260,54 @@ const BlogPage: React.FC = () => {
               cursor="pointer"
               color="blue.500"
             >
-              ※Chromeの場合
+              {getMessage({
+                ja: "※Chromeの場合",
+                us: "*In case of Chrome",
+                cn: "*如果使用 Chrome 浏览器。",
+                language,
+              })}
             </Text>
             <CustomModal
               isOpen={activeDrawer === "chrome"}
               onClose={handleClose}
-              title="Chromeの場合"
+              title={getMessage({
+                ja: "※Chromeの場合",
+                us: "*In case of Chrome",
+                cn: "*如果使用 Chrome 浏览器。",
+                language,
+              })}
               modalBody=<>
                 <Image src="/images/0007/0004.png" alt="0004.png" />
               </>
             />
 
             <Text fontWeight="400" my={4}>
-              2-3.ダウンロードしたファイル(003_練習用.zip)の展開
+              {"2-3." +
+                getMessage({
+                  ja: "ダウンロードしたファイル(003_練習用.zip)の展開",
+                  us: "Extract the downloaded file (003_練習用.zip)",
+                  cn: "解压下载的文件 (003_練習用.zip)",
+                  language,
+                })}
             </Text>
             <Image src="/images/0007/0002.png" alt="0002.png" w="65%" />
             <Text my={4}>
-              ダウンロードした.zipを右クリックして「すべて展開」をクリック
+              {getMessage({
+                ja: "ダウンロードした.zipを右クリックして「すべて展開」をクリック",
+                us: "Right-click on the downloaded .zip and click [Extract All]",
+                cn: "右键单击下载的 .zip 文件，然后单击 [全部解压缩]",
+                language,
+              })}
             </Text>
             <Text fontWeight="400" my={4}>
-              2-4.展開されたフォルダのエクセルファイルを開く
+              {"2-4." +
+                getMessage({
+                  ja: "展開されたフォルダのエクセルファイルを開く",
+                  us: "Open the Excel file in the expanded folder.",
+                  cn: "打开扩展文件夹中的 Excel 文件。",
+                  language,
+                })}
             </Text>
-
             <Flex
               direction="column"
               alignItems="center"
@@ -306,14 +315,27 @@ const BlogPage: React.FC = () => {
             >
               <Image src="/images/0007/0003.png" alt="0003.png" w="70%" />
               <Box bg="gray.300" color="black" w="70%" p={1}>
-                このエクエルファイルが生産準備+の本体です
+                {getMessage({
+                  ja: "このエクエルファイルが生産準備+の本体です",
+                  us: "This Equel file is the main body of the Production Preparation+.",
+                  cn: "该 Equel 文件是 生产准备+ 的主体。",
+                  language,
+                })}
               </Box>
             </Flex>
           </Box>
         </SectionBox>
         <SectionBox
           id="section3"
-          title="3.必要データのインポート"
+          title={
+            "3." +
+            getMessage({
+              ja: "必要データのインポート",
+              us: "Import of required data",
+              cn: "导入所需数据",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -321,14 +343,33 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text>必要なファイルをインポートしていきます</Text>
+          <Text>
+            {getMessage({
+              ja: "必要なファイルをインポートしていきます",
+              us: "We will import the necessary files.",
+              cn: "导入必要的文件。",
+              language,
+            })}
+          </Text>
           <Box m={3}>
             <Text fontWeight="400" my={4}>
-              3-1.[MENU]を開く
+              {"3-1." +
+                getMessage({
+                  ja: "[MENU]を開く",
+                  us: "Open [MENU].",
+                  cn: "打开 [MENU]",
+                  language,
+                })}
             </Text>
             <Image src="/images/0007/0005.png" alt="0002.png" />
             <Text fontWeight="400" my={4}>
-              3-2.必要ファイルのインポートを行う
+              {"3-2." +
+                getMessage({
+                  ja: "必要ファイルのインポートを行う",
+                  us: "Import the necessary files.",
+                  cn: "导入必要的文件",
+                  language,
+                })}
             </Text>
 
             <Flex
@@ -338,26 +379,55 @@ const BlogPage: React.FC = () => {
             >
               <video width="90%" height="100%" loop autoPlay muted>
                 <source src="/images/0007/0006.mp4" type="video/mp4" />
-                お使いのブラウザは動画タグをサポートしていません。
+                {getMessage({
+                  ja: "お使いのブラウザは動画タグをサポートしていません",
+                  language,
+                })}
               </video>
               <Box bg="gray.300" color="black" w="90%" p={1} mb={6}>
-                入力→01_インポート→RTTFのサブを使用にチェック→全て実行
+                {getMessage({
+                  ja: "入力→01_インポート→RTTFのサブを使用にチェック→全て実行",
+                  us: "Input -> 01_Import -> Check Use RTTF sub -> Do all",
+                  cn: "输入 → 01_Import → 检查使用 RTTF 子项 → 全部执行。",
+                  language,
+                })}
                 <br />
-                動画と同じようにやってみてください
+                {getMessage({
+                  ja: "動画と同じようにやってみてください",
+                  us: "Try to do the same as in the video.",
+                  cn: "试着做和视频中一样的动作。",
+                  language,
+                })}
               </Box>
               <video width="60%" height="100%" loop autoPlay muted>
                 <source src="/images/0007/0007.mp4" type="video/mp4" />
-                お使いのブラウザは動画タグをサポートしていません。
+                {getMessage({
+                  ja: "お使いのブラウザは動画タグをサポートしていません",
+                  language,
+                })}
               </video>
               <Box bg="gray.300" color="black" w="60%" p={1}>
-                画面左下に進捗状況が表示されます
+                {getMessage({
+                  ja: "画面左下に進捗状況が表示されます",
+                  us: "Progress is displayed in the lower left corner of the screen",
+                  cn: "进度显示在屏幕左下角。",
+                  language,
+                })}
               </Box>
             </Flex>
           </Box>
         </SectionBox>
         <SectionBox
           id="section4"
-          title="4.シートの作成"
+          title={
+            "4." +
+            getMessage({
+              ja: "シートの作成",
+              us: "Creating Sheets",
+              cn: "创建床单",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -365,7 +435,14 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text>再度、MENUを開いて下図のように操作してください</Text>
+          <Text>
+            {getMessage({
+              ja: "再度、[MENU]を開いて下図のように操作してください",
+              us: "Open [MENU] again and operate as shown below.",
+              cn: "再次打开 [MENU]，如下图所示进行操作。",
+              language,
+            })}
+          </Text>
           <Box m={3}>
             <Flex
               direction="column"
@@ -374,21 +451,41 @@ const BlogPage: React.FC = () => {
             >
               <video width="65%" height="100%" loop autoPlay muted>
                 <source src="/images/0007/0008.mp4" type="video/mp4" />
-                お使いのブラウザは動画タグをサポートしていません。
+                {getMessage({
+                  ja: "お使いのブラウザは動画タグをサポートしていません",
+                  language,
+                })}
               </video>
               <Box bg="gray.300" color="black" w="65%" p={1} mb={6}>
-                入力→02_手入力シート作成→すべて実行をクリック
+                {getMessage({
+                  ja: "入力→02_手入力シート作成→すべて実行をクリック",
+                  us: "Input→02_Create Manual Input Sheet→Click on Do All",
+                  cn: "输入 → 02_创建手动输入表 → 点击全部运行。",
+                  language,
+                })}
               </Box>
             </Flex>
             <Text>
-              この操作によって複数のシートが作成されます。
-              このシートは不足したデータを補う為に入力する為に使用します。※今回は初級なので入力は省きます。
+              {getMessage({
+                ja: "この操作によって複数のシートが作成されます。このシートは不足したデータを補う為に入力する為に使用します。※今回は初級なので入力は省きます。",
+                us: "This operation creates multiple sheets. This sheet is used to input data to make up for missing data. Since this is a beginner's course, we will skip the input.",
+                cn: "此操作会创建多个工作表。这些工作表用于输入数据，以弥补缺失的数据。*在本例中，由于是初学者，因此省略了输入。",
+                language,
+              })}
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section5"
-          title="5.成果物の作成"
+          title={
+            "5." +
+            getMessage({
+              ja: "成果物の作成",
+              us: "Preparation of deliverables",
+              cn: "准备交付成果",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -396,12 +493,24 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text>[MENU]を開いて下図のように操作してください</Text>
+          <Text>
+            {getMessage({
+              ja: "[MENU]を開いて下図のように操作してください",
+              us: "Open [MENU] and operate as shown below",
+              cn: "打开 [MENU]，按下图所示操作。",
+              language,
+            })}
+          </Text>
           <Box m={3}>
             <Text fontWeight="400" my={4}>
-              5-1.サブ図の作成
+              {"5-1." +
+                getMessage({
+                  ja: "サブ図の作成",
+                  us: "Create sub-diagrams",
+                  cn: "创建子图",
+                  language,
+                })}
             </Text>
-
             <Flex
               direction="column"
               alignItems="center"
@@ -409,15 +518,36 @@ const BlogPage: React.FC = () => {
             >
               <video width="70%" height="100%" loop autoPlay muted>
                 <source src="/images/0007/0009.mp4" type="video/mp4" />
-                お使いのブラウザは動画タグをサポートしていません。
+                {getMessage({
+                  ja: "お使いのブラウザは動画タグをサポートしていません",
+                  language,
+                })}
               </video>
               <Box bg="gray.300" color="black" w="70%" p={1} mb={6}>
-                40-50_ハメ図 → サブ図 → 製品品番を選択 → 作成
+                {getMessage({
+                  ja: "40-50_ハメ図 → サブ図 → 製品品番を選択 → 作成",
+                  us: "40-50_frame_drawing → sub-drawing → select product part number → create",
+                  cn: "40-50_框架图 → 子图 → 选择产品部件号 → 创建",
+                  language,
+                })}
               </Box>
-              <Text>約30秒後に作成されます</Text>
+              <Text>
+                {getMessage({
+                  ja: "約30秒後に作成されます",
+                  us: "It will be created in about 30 seconds.",
+                  cn: "约 30 秒后创建。",
+                  language,
+                })}
+              </Text>
             </Flex>
             <Text fontWeight="400" my={4}>
-              5-2.配策誘導ナビの作成
+              {"5-2." +
+                getMessage({
+                  ja: "配策誘導ナビの作成",
+                  us: "Creation of a navigation system to guide the allocation of measures",
+                  cn: "建立导航系统，指导措施的分配。",
+                  language,
+                })}
             </Text>
 
             <Flex
@@ -427,22 +557,46 @@ const BlogPage: React.FC = () => {
             >
               <video width="50%" height="100%" loop autoPlay muted>
                 <source src="/images/0007/0010.mp4" type="video/mp4" />
-                お使いのブラウザは動画タグをサポートしていません。
+                {getMessage({
+                  ja: "お使いのブラウザは動画タグをサポートしていません",
+                  language,
+                })}
               </video>
               <Box bg="gray.300" color="black" w="50%" p={1} mb={6}>
-                50_配策図 → 実行
+                {getMessage({
+                  ja: "50_配策図 → 実行",
+                  us: "50_Schematic diagram → Execution",
+                  cn: "50_分布图 → 执行",
+                  language,
+                })}
               </Box>
               <Text>
-                約120秒後に配策誘導ナビが作成されます。
+                {getMessage({
+                  ja: "約120秒後に配策誘導ナビが作成されます。",
+                  us: "After approximately 120 seconds, a navigation system is created to guide the user through the allocation process.",
+                  cn: "大约 120 秒后，分配引导导航系统就会创建。",
+                  language,
+                })}
                 <br />
-                ※これはブラウザやブラウザコントロールで表示できます。
+                {getMessage({
+                  ja: "※これはブラウザやブラウザコントロールで表示できます。",
+                  us: "*This can be displayed in the browser or browser control.",
+                  cn: "*这可以在浏览器或浏览器控件中显示。",
+                  language,
+                })}
               </Text>
             </Flex>
           </Box>
         </SectionBox>
         <SectionBox
           id="section6"
-          title="6.まとめ"
+          title={
+            "6." +
+            getMessage({
+              ja: "まとめ",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -472,13 +626,33 @@ const BlogPage: React.FC = () => {
                 fontWeight: "400",
               }}
             >
-              なんとなく作成までの流れが分かったかと思います。
+              {getMessage({
+                ja: "なんとなく作成までの流れが分かったかと思います。",
+                us: "I hope you have somewhat understood the process of creation.",
+                cn: "我希望你们对创作过程有了一定的了解。",
+                language,
+              })}
               <br />
-              このように基本はクリックで進めていきます。
+              {getMessage({
+                ja: "このように基本はクリックで進めていきます。",
+                us: "Thus, the basics are a click away.",
+                cn: "这样，只需点击一下，就能获得基本信息。",
+                language,
+              })}
               <br />
               <br />
-              しかし実際には存在しないデータは手入力が必要です。
-              次の練習(中級)で手入力を経験してみてください。
+              {getMessage({
+                ja: "しかし実際には存在しないデータは手入力が必要です。",
+                us: "However, data that does not actually exist must be entered manually.",
+                cn: "但是，实际不存在的数据需要手动输入。",
+                language,
+              })}
+              {getMessage({
+                ja: "次の練習(中級)で手入力を経験してみてください。",
+                us: "You can experience manual input in the next exercise (intermediate).",
+                cn: "在下一个练习（中级）中体验手动输入。",
+                language,
+              })}
             </Text>
             <Image
               src="/images/hippo.gif"
@@ -492,7 +666,7 @@ const BlogPage: React.FC = () => {
             />
           </Box>
         </SectionBox>
-        <Box h="0.01vh" />
+        <Box h="3vh" />
       </Frame>
     </>
   );

@@ -45,8 +45,9 @@ import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
 
 import styles from "../../styles/home.module.scss";
-import "@fontsource/noto-sans-jp";
 
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 //テキストジャンプアニメーション
 const jumpAnimation = keyframes`
   0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
@@ -81,7 +82,14 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
-
+  const { language, setLanguage } = useLanguage();
+  //右リストの読み込みをlanguage取得後にする
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
+  useEffect(() => {
+    if (language) {
+      setIsLanguageLoaded(true);
+    }
+  }, [language]);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
@@ -92,100 +100,22 @@ const BlogPage: React.FC = () => {
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
 
   const showToast = useCustomToast();
-  //64pxまでスクロールしないとサイドバーが表示されないから暫定
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 100); // 100msの遅延を追加
-    } else {
-      window.scrollTo(0, 150);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
-  //#の位置にスクロールした時のアクティブなセクションを装飾
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-    );
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
-
-    return () => {
-      sectionRefs.current.forEach((section) => {
-        if (section) observer.unobserve(section);
-      });
-    };
-  }, []);
-  //#クリックした時のオフセット
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange, false);
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange, false);
-    };
-  }, []);
-
-  const handleOpen = (drawerName: string) => {
-    setActiveDrawer(drawerName);
-    onOpen();
-  };
-  const handleClose = () => {
-    setActiveDrawer(null);
-    onClose();
-  };
-  //現在のパスを取得
-  const [currentPath, setCurrentPath] = useState("");
-  const [accordionIndex, setAccordionIndex] = useState<number[]>([]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setCurrentPath(window.location.pathname);
-      // 現在のパスに基づいて開くべきアコーディオンのインデックスを設定
-      if (
-        window.location.pathname.includes("/skillBlogs/0001") ||
-        window.location.pathname.includes("/skillBlogs/0002")
-      ) {
-        setAccordionIndex([0]);
-      } else if (window.location.pathname.includes("/skillBlogs/0003")) {
-        setAccordionIndex([1]);
-      } else {
-        setAccordionIndex([]);
-      }
-    }
-  }, []);
+  //右リストの読み込みをlanguage取得後にする
+  if (!isLanguageLoaded) {
+    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
+  }
   const skillCards = [
     {
-      title: "生産準備+",
-      subTitle: "画像を自動で作る",
+      title: getMessage({
+        ja: "生産準備+",
+        language,
+      }),
+      subTitle: getMessage({
+        ja: "画像を自動で作る",
+        us: "Automatic image creation",
+        cn: "自动创建图像",
+        language,
+      }),
       eyeCatchPath: "/images/sjp_menu.png",
       detail: <Detail01 />,
       detailTalk: <Detail01talk />,
@@ -197,11 +127,24 @@ const BlogPage: React.FC = () => {
           skillColor: "green",
         },
       ],
-      titleTalk: "詳細(茶番劇1話)を見る",
+      titleTalk: getMessage({
+        ja: "詳細(第1話)を見る",
+        us: "Details (Episode 1)",
+        cn: "详情（第 1 集）",
+        language,
+      }),
     },
     {
-      title: "導通検査+",
-      subTitle: "WEB技術の基礎",
+      title: getMessage({
+        ja: "導通検査",
+        language,
+      }),
+      subTitle: getMessage({
+        ja: "WEB技術の基礎",
+        us: "Fundamentals of Web Technology",
+        cn: "网络技术基础",
+        language,
+      }),
       eyeCatchPath: "/images/sjp_kensarireki_YCC.png",
       detail: <Detail02 />,
       detailTalk: <Detail02talk />,
@@ -225,15 +168,37 @@ const BlogPage: React.FC = () => {
           skillColor: "yellow",
         },
       ],
-      titleTalk: "詳細(茶番劇2話)を見る",
+      titleTalk: getMessage({
+        ja: "詳細(第2話)を見る",
+        us: "Details (Episode 2)",
+        cn: "详情（第 2 集）",
+        language,
+      }),
     },
     {
-      title: "作業誘導+",
-      subTitle: "マイコン",
+      title: getMessage({
+        ja: "誘導ナビ.net",
+        language,
+      }),
+      subTitle: getMessage({
+        ja: "マイコン",
+        us: "microcomputer",
+        cn: "微机",
+        language,
+      }),
       eyeCatchPath: "/images/detail_03_title.png",
       detail: <Detail03 />,
-      detailTalk: <Center>Comming soon. maybe</Center>,
-      rate: 5,
+      detailTalk: (
+        <Center>
+          {getMessage({
+            ja: "そのうち追記します",
+            us: "I'll add it soon.",
+            cn: "我将在适当的时候补充这一点。",
+            language,
+          })}
+        </Center>
+      ),
+      rate: 4,
       users: 8,
       skillTags: [
         {
@@ -261,7 +226,12 @@ const BlogPage: React.FC = () => {
           skillColor: "teal",
         },
       ],
-      titleTalk: "詳細(茶番劇3話)を見る",
+      titleTalk: getMessage({
+        ja: "詳細(第3話)を見る",
+        us: "Details (Episode 3)",
+        cn: "详情（第 3 集）",
+        language,
+      }),
     },
   ];
   return (
@@ -276,7 +246,12 @@ const BlogPage: React.FC = () => {
             />
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>開発</Text>
+            <Text>
+              {getMessage({
+                ja: "開発",
+                language,
+              })}
+            </Text>
             <Spacer />
             <Flex justifyContent="flex-end">
               <Text>
@@ -286,20 +261,42 @@ const BlogPage: React.FC = () => {
             </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            改善活動の参考事例集
+            {getMessage({
+              ja: "改善活動の参考事例集",
+              us: "Reference Case Studies of Improvement Activities",
+              cn: "改进活动的参考案例研究。",
+              language,
+            })}
           </Heading>
-          <CustomBadge text="参考" />
+          <CustomBadge
+            text={getMessage({
+              ja: "参考",
+              us: "consultation",
+              cn: "参考",
+              language,
+            })}
+          />
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-18
+            {getMessage({
+              ja: "更新日",
+              language,
+            })}
+            :2024-11-18
           </Text>
         </Box>
         <SectionBox
           id="section1"
-          title="1.はじめに"
+          title={
+            "1." +
+            getMessage({
+              ja: "はじめに",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -309,14 +306,36 @@ const BlogPage: React.FC = () => {
           />
           <Box ml={4}>
             <Text>
-              現場の意見と相談しながらどのように改善していくかを試行錯誤した経験をまとめていきます。
-              改善を進める人の参考になれば幸いです。
+              {getMessage({
+                ja: "現場の意見と相談しながらどのように改善していくかを試行錯誤した経験をまとめていきます。改善を進める人の参考になれば幸いです。",
+                us: "This section summarizes our trial-and-error experience on how to make improvements in consultation with opinions from the field. We hope it will be helpful to those who promote improvements.",
+                cn: "本节总结了我们在征求实地意见的基础上进行改进的试错经验。希望能对推动改进工作的人员有所帮助。",
+                language,
+              })}
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section2"
-          title="2.生産準備+を使った業務改善"
+          title={
+            "2." +
+            getMessage({
+              ja: "",
+              us: "Business improvement using ",
+              cn: "",
+              language,
+            }) +
+            getMessage({
+              ja: "生産準備+",
+              language,
+            }) +
+            getMessage({
+              ja: "を使った業務改善",
+              us: "",
+              cn: " 使用以下方法改进操作",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -325,7 +344,14 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Box ml={4}>
-            <Text>実際の進め方をデフォルメしています。娘は居ません。</Text>
+            <Text>
+              {getMessage({
+                ja: "デフォルメしています。娘は居ません。",
+                us: "I'm deformed. I don't have a daughter.",
+                cn: "畸形。没有女儿",
+                language,
+              })}
+            </Text>
             <Box
               mt={4}
               display="flex"
@@ -358,11 +384,16 @@ const BlogPage: React.FC = () => {
               })}
             </Box>
           </Box>
-          <Text textAlign="center">---作成途中---</Text>
         </SectionBox>
         <SectionBox
           id="section3"
-          title="3.まとめ"
+          title={
+            "3." +
+            getMessage({
+              ja: "まとめ",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >

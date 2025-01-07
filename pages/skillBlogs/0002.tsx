@@ -540,7 +540,7 @@ const BlogPage: React.FC = () => {
             getMessage({
               ja: "コネクタ写真の加工(簡単)",
               us: "Processing connector photos (easy)",
-              cn: "处理连接器照片（简单）。",
+              cn: "处理连接器照片（简单）",
               language,
             })
           }
@@ -570,8 +570,13 @@ const BlogPage: React.FC = () => {
               })}
             </Text>
             <ExternalLink
-              href="https://www.photoroom.com/ja/tools/background-remover"
-              text="photoroom.com/ja/tools/background-remover"
+              href={getMessage({
+                ja: "https://www.photoroom.com/ja/tools/background-remover",
+                us: "https://www.photoroom.com/tools/background-remover",
+                cn: "https://www.photoroom.com/zh/tools/background-remover",
+                language,
+              })}
+              text="photoroom.com/tools/background-remover"
             />
             <Text display="inline-block" mt={4}>
               4-2.
