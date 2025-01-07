@@ -59,37 +59,9 @@ import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
 
-import "@fontsource/noto-sans-jp";
-import { BsFiletypeExe } from "react-icons/bs";
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 
-const customTheme = extendTheme({
-  fonts: {
-    heading: "'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
-  },
-  fontWeights: {
-    normal: 200,
-    medium: 300,
-    bold: 400,
-    light: 300,
-    extraLight: 100,
-  },
-});
-//テキストジャンプアニメーション
-const jumpAnimation = keyframes`
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-6px); }
-  60% { transform: translateY(-3px); }
-`;
-//Kbdのスタイル
-const kbdStyle = {
-  border: "1px solid",
-  fontSize: "16px",
-  bg: "white",
-  mx: 0.5,
-  borderRadius: "3px",
-  color: "black",
-};
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
   viewBox: "0 0 26 26",
@@ -109,7 +81,14 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
-
+  const { language, setLanguage } = useLanguage();
+  //右リストの読み込みをlanguage取得後にする
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
+  useEffect(() => {
+    if (language) {
+      setIsLanguageLoaded(true);
+    }
+  }, [language]);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
@@ -127,68 +106,6 @@ const BlogPage: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
 
   const showToast = useCustomToast();
-  //64pxまでスクロールしないとサイドバーが表示されないから暫定
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 100); // 100msの遅延を追加
-    } else {
-      window.scrollTo(0, 150);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
-  //#の位置にスクロールした時のアクティブなセクションを装飾
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-    );
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
-
-    return () => {
-      sectionRefs.current.forEach((section) => {
-        if (section) observer.unobserve(section);
-      });
-    };
-  }, []);
-  //#クリックした時のオフセット
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange, false);
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange, false);
-    };
-  }, []);
-
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);
     onOpen();
@@ -217,33 +134,63 @@ const BlogPage: React.FC = () => {
     icon?;
   };
   const directoryData: FileSystemItem = {
-    name: "任意のフォルダ",
+    name: getMessage({
+      ja: "任意のフォルダ",
+      us: "Any folder",
+      cn: "任何文件夹",
+      language,
+    }),
+
     type: "folder",
     isOpen: true,
-    popOver: "※社内間でアクセスできるNASSサーバーに作成がお勧め",
+    popOver: getMessage({
+      ja: "※社内間でアクセスできるNASSサーバーに作成がお勧め",
+      us: "*Recommended to create on a NASS server that can be accessed internally.",
+      cn: "*建议在 NASS 服务器上进行创建，以便公司之间进行访问。",
+      language,
+    }),
     children: [
       {
-        name: "メーカー名Aのフォルダ",
+        name: getMessage({
+          ja: "メーカー名Aのフォルダ",
+          us: "Folder with manufacturer name A",
+          cn: "印有制造商名称的文件夹 A.",
+          language,
+        }),
         type: "folder",
         isOpen: true,
         children: [
           {
-            name: "車種_モデル名のフォルダ",
+            name: getMessage({
+              ja: "車種_モデル名のフォルダ",
+              us: "Folder of car_type_model_name",
+              cn: "文件夹中的车型_车型名称",
+              language,
+            }),
             type: "folder",
             isOpen: true,
             children: [
               {
                 name: "Sjp3.100.89_Gタイプ.xlsm",
                 type: "file",
-                popOver:
-                  "ダウンロードした生産準備+をここに配置。治具タイプを末尾に付ける事をお勧めします。ここではGタイプの治具の場合です。",
+                popOver: getMessage({
+                  ja: "ダウンロードした生産準備+をここに配置。治具タイプを末尾に付ける事をお勧めします。ここではGタイプの治具の場合です。",
+                  us: "Place the downloaded Production Preparation+ here. It is recommended to put the jig type at the end. Here is the case of G type jig.",
+                  cn: "将下载的生产准备+ 放在此处。建议将夹具类型放在最后。这里是 G 型夹具的情况。",
+                  language,
+                }),
               },
             ],
           },
         ],
       },
       {
-        name: "メーカー名Bのフォルダ",
+        name: getMessage({
+          ja: "メーカー名Bのフォルダ",
+          us: "Folder with manufacturer name B",
+          cn: "印有制造商名称的文件夹 B",
+          language,
+        }),
         type: "folder",
         isOpen: false,
       },
@@ -251,7 +198,12 @@ const BlogPage: React.FC = () => {
   };
 
   const directoryData2: FileSystemItem = {
-    name: "生産準備+があるフォルダ",
+    name: getMessage({
+      ja: "生産準備+があるフォルダ",
+      us: "Folder with production ready+.",
+      cn: "生产准备文件夹+。",
+      language,
+    }),
     type: "folder",
     isOpen: true,
     children: [
@@ -300,7 +252,12 @@ const BlogPage: React.FC = () => {
     ],
   };
   const directoryData3: FileSystemItem = {
-    name: "生産準備+があるフォルダ",
+    name: getMessage({
+      ja: "生産準備+があるフォルダ",
+      us: "Folder with production ready+.",
+      cn: "生产准备文件夹+。",
+      language,
+    }),
     type: "folder",
     isOpen: true,
     children: [
@@ -318,7 +275,12 @@ const BlogPage: React.FC = () => {
             name: "PVSW-*.csv",
             type: "file",
             icon: <Icon as={FaFile} color="gray.600" mr={1} />,
-            popOver: "入手したPVSWを全てここに配置",
+            popOver: getMessage({
+              ja: "入手したPVSWを全てここに配置",
+              us: "Place all obtained PVSW here",
+              cn: "将所有获取的 PVSW 放在此处。",
+              language,
+            }),
           },
         ],
       },
@@ -331,7 +293,12 @@ const BlogPage: React.FC = () => {
             name: "*SUB.csv",
             type: "file",
             icon: <Icon as={FaFile} color="gray.600" mr={1} />,
-            popOver: "入手したSUBを含むファイルを全てここに配置",
+            popOver: getMessage({
+              ja: "入手したSUBを含むファイルを全てここに配置",
+              us: "Place all files containing the SUB you obtained here",
+              cn: "将包含您获得的 SUB 的所有文件放在此处。",
+              language,
+            }),
           },
         ],
       },
@@ -344,7 +311,12 @@ const BlogPage: React.FC = () => {
             name: "*MD*",
             type: "folder",
             icon: <Icon as={FaFolder} color="gray.600" mr={1} />,
-            popOver: "入手したMDを含むフォルダを全てここに配置",
+            popOver: getMessage({
+              ja: "入手したMDを含むフォルダを全てここに配置",
+              us: "Place all folders containing acquired MDs here",
+              cn: "将包含已获取 MD 的所有文件夹放在此处。",
+              language,
+            }),
           },
         ],
       },
@@ -361,7 +333,12 @@ const BlogPage: React.FC = () => {
     ],
   };
   const directoryData4: FileSystemItem = {
-    name: "生産準備+があるフォルダ",
+    name: getMessage({
+      ja: "生産準備+があるフォルダ",
+      us: "Folder with production Preparation+.",
+      cn: "生产准备文件夹+。",
+      language,
+    }),
     type: "folder",
     isOpen: true,
     children: [
@@ -391,7 +368,14 @@ const BlogPage: React.FC = () => {
             icon: <Icon as={FaFolder} color="gray.600" mr={1} />,
           },
           {
-            name: "WH-DataConvert ←1.これを実行すると...",
+            name:
+              "WH-DataConvert " +
+              getMessage({
+                ja: "←1.これを実行すると...",
+                us: "←1. Do this...",
+                cn: "←1.这样做是为了...",
+                language,
+              }),
             type: "file",
             icon: (
               <Icon
@@ -411,7 +395,14 @@ const BlogPage: React.FC = () => {
         isOpen: true,
         children: [
           {
-            name: "*MD(分解後) ← 2.この中に展開される",
+            name:
+              "*MD" +
+              getMessage({
+                ja: "←2.この中に展開される",
+                us: "←2.Unfolding in this",
+                cn: "←2.在此",
+                language,
+              }),
             type: "folder",
             isOpen: true,
             icon: <Icon as={FaFolder} color="gray.600" mr={1} />,
@@ -426,11 +417,9 @@ const BlogPage: React.FC = () => {
     ],
   };
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-  if (!isClient) {
-    return null; // クライアントサイドでのみ表示する場合はnullを返す
+  //右リストの読み込みをlanguage取得後にする
+  if (!isLanguageLoaded) {
+    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
   }
   return (
     <>
@@ -445,7 +434,12 @@ const BlogPage: React.FC = () => {
             </AvatarGroup>
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>開発</Text>
+            <Text>
+              {getMessage({
+                ja: "開発",
+                language,
+              })}
+            </Text>
             <Spacer />
             <Flex justifyContent="flex-end">
               <Text>
@@ -455,21 +449,40 @@ const BlogPage: React.FC = () => {
             </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            生産準備+の練習(中級)
+            {getMessage({
+              ja: "生産準備+の練習(中級)",
+              us: "Production Preparation+ Practice (Intermediate)",
+              cn: "生产准备+实践（中级）。",
+              language,
+            })}
           </Heading>
-          <CustomBadge text="生準+" />
-          <CustomBadge text="作成途中" />
+          <CustomBadge
+            text={getMessage({
+              ja: "生準+",
+              language,
+            })}
+          />
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-26
+            {getMessage({
+              ja: "更新日",
+              language,
+            })}
+            :2024-11-26
           </Text>
         </Box>
         <SectionBox
           id="section1"
-          title="1.はじめに"
+          title={
+            "1." +
+            getMessage({
+              ja: "はじめに",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -480,13 +493,26 @@ const BlogPage: React.FC = () => {
           <Box>
             <Text fontWeight="bold"></Text>
             <Text>
-              ここでは何もデータを持っていない状態から生産準備+で成果物を作成する流れを解説します。
+              {getMessage({
+                ja: "ここでは何もデータを持っていない状態から生産準備+で成果物を作成する流れを解説します。",
+                us: "This section describes the process of creating deliverables in Production Preparation+ from a state of having no data.",
+                cn: "本节介绍在 生产准备+ 中从无数据创建交付品的过程。",
+                language,
+              })}
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section2"
-          title="2.生産準備+の入手"
+          title={
+            "2." +
+            getMessage({
+              ja: "生産準備+の入手",
+              us: "Obtain Production Preparation+.",
+              cn: "为生产做好准备+。",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -496,26 +522,28 @@ const BlogPage: React.FC = () => {
           />
           <Box>
             <Text fontWeight="bold"></Text>
-            <Text>以下のリンクから最新版をダウンロードしてください。</Text>
+            <Text>
+              {getMessage({
+                ja: "以下のリンクから最新版をダウンロードしてください。",
+                us: "Please download the latest version from the link below.",
+                cn: "从以下链接下载最新版本。",
+                language,
+              })}
+            </Text>
             <ExternalLink href="../../download/sjp" text="download/sjp" />
           </Box>
         </SectionBox>
         <SectionBox
           id="section3"
-          title="3.生産準備+の配置"
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <Text mb={4}>下記のようにフォルダを作成して配置。</Text>
-          <FileSystemNode item={directoryData} />
-        </SectionBox>
-        <SectionBox
-          id="section4"
-          title="4.必要データの入手と配置"
+          title={
+            "3." +
+            getMessage({
+              ja: "生産準備+の配置",
+              us: "Production Preparation + Placement",
+              cn: "生产准备+安排",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -524,14 +552,58 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Text mb={4}>
-            生産準備+にインポートするデータを入手していきます。
+            {getMessage({
+              ja: "下記のようにフォルダを作成して配置。",
+              us: "Create and place folders as follows.",
+              cn: "创建并放置文件夹如下。",
+              language,
+            })}
+          </Text>
+          <FileSystemNode item={directoryData} />
+        </SectionBox>
+        <SectionBox
+          id="section4"
+          title={
+            "4." +
+            getMessage({
+              ja: "必要データの入手と配置",
+              us: "Obtain and deploy required data",
+              cn: "获取和部署所需数据",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text mb={4}>
+            {getMessage({
+              ja: "生産準備+にインポートするデータを入手していきます。",
+              us: "We will obtain the data to be imported into Production Preparation+.",
+              cn: "我们将获取要导入 生产准备+ 的数据。",
+              language,
+            })}
             <br />
-            入手せずにすぐに試したい場合は下記から準備済みのデータをダウンロードしてご利用ください。
+            {getMessage({
+              ja: "入手せずにすぐに試したい場合は下記から準備済みのデータをダウンロードしてご利用ください。",
+              us: "If you want to try it immediately without obtaining it, please download the prepared data from below.",
+              cn: "如果您想在未获取的情况下立即试用，可以从下面下载准备好的数据。",
+              language,
+            })}
           </Text>
           <UnderlinedTextWithDrawer
             text=<>
               <Box as="span" display="inline" borderBottom="2px solid">
-                #準備済みの必要データ
+                {"#" +
+                  getMessage({
+                    ja: "準備済みの必要データ",
+                    us: "Prepared required data",
+                    cn: "准备所需数据",
+                    language,
+                  })}
               </Box>
               <LuPanelRightOpen
                 size="20px"
@@ -541,11 +613,23 @@ const BlogPage: React.FC = () => {
             onOpen={() => handleOpen("準備済みの必要データ")}
             isOpen={isOpen && activeDrawer === "準備済みの必要データ"}
             onClose={handleClose}
-            header="準備済みの必要データ"
+            header={getMessage({
+              ja: "準備済みの必要データ",
+              us: "Prepared required data",
+              cn: "准备所需数据。",
+              language,
+            })}
             size="md"
             children={
               <>
-                <Text mb={4}>※このデータは以下の製品品番を含みます</Text>
+                <Text mb={4}>
+                  {getMessage({
+                    ja: "※このデータは以下の製品品番を含みます",
+                    us: "*This data includes the following product part numbers",
+                    cn: "*本数据包括以下产品部件号",
+                    language,
+                  })}
+                </Text>
                 <Box border="1px solid" p={2} borderRadius="md" mb={4}>
                   <Text fontWeight={400}>
                     8216136D20
@@ -560,9 +644,21 @@ const BlogPage: React.FC = () => {
                     <br />
                   </Text>
                 </Box>
-                <Text mb={4}>下記からダウンロードしてお使いください</Text>
+                <Text mb={4}>
+                  {getMessage({
+                    ja: "下記からダウンロードしてお使いください",
+                    us: "Please download and use the following",
+                    cn: "请下载并使用",
+                    language,
+                  })}
+                </Text>
                 <DownloadLink
-                  text="必要データのダウンロード"
+                  text={getMessage({
+                    ja: "必要データのダウンロード",
+                    us: "Download required data",
+                    cn: "下载所需数据",
+                    language,
+                  })}
                   href="/images/0008/必要データ.zip"
                 />
               </>
@@ -572,14 +668,27 @@ const BlogPage: React.FC = () => {
         <Box m={0} ml={3} w="100%">
           <SectionBox
             id="section4_1"
-            title="4-1.RLTFの入手"
+            title={
+              "4-1." +
+              getMessage({
+                ja: "RLTFの入手",
+                us: "Obtaining RLTF",
+                cn: "获得 RLTF",
+                language,
+              })
+            }
             sectionRefs={sectionRefs}
             sections={sections}
             size="sm"
           >
             <Divider borderColor={colorMode === "light" ? "black" : "white"} />
             <Text mb={4}>
-              EXTESから単線分析リクエストを実行して以下2つのRLTFを入手します
+              {getMessage({
+                ja: "EXTESから単線分析リクエストを実行して以下2つのRLTFを入手します",
+                us: "Execute a single-line analysis request from EXTES to obtain the following two RLTFs",
+                cn: "从 EXTES 中执行单线分析请求，获取以下两个 RLTF",
+                language,
+              })}
             </Text>
             <Text>
               <Icon as={FaFile} color="gray.600" mr={1} />
@@ -593,7 +702,15 @@ const BlogPage: React.FC = () => {
           <Box m={0} ml={3}>
             <SectionBox
               id="section4_1_1"
-              title="4-1-1.手動での起動"
+              title={
+                "4-1-1." +
+                getMessage({
+                  ja: "手動での起動",
+                  us: "Manual activation",
+                  cn: "手动启动",
+                  language,
+                })
+              }
               sectionRefs={sectionRefs}
               sections={sections}
               size="sm"

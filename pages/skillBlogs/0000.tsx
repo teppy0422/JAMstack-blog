@@ -41,34 +41,6 @@ import { useReadCount } from "../../hooks/useReadCount";
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
 
-const customTheme = extendTheme({
-  fonts: {
-    heading: "'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
-  },
-  fontWeights: {
-    normal: 200,
-    medium: 300,
-    bold: 400,
-    light: 300,
-    extraLight: 100,
-  },
-});
-//テキストジャンプアニメーション
-const jumpAnimation = keyframes`
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-6px); }
-  60% { transform: translateY(-3px); }
-`;
-//Kbdのスタイル
-const kbdStyle = {
-  border: "1px solid",
-  fontSize: "16px",
-  bg: "white",
-  mx: 0.5,
-  borderRadius: "3px",
-  color: "black",
-};
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
   viewBox: "0 0 26 26",
