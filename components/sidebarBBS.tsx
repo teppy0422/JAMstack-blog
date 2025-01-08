@@ -180,8 +180,18 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
           onClick={() => {
             if (isDifferentCompany) {
               showToast(
-                "閲覧できません",
-                "閲覧できるのは同じ会社のみです",
+                getMessage({
+                  ja: "閲覧できません",
+                  us: "Cannot view",
+                  cn: "无法查看",
+                  language,
+                }),
+                getMessage({
+                  ja: "閲覧できるのは同じ会社のみです",
+                  us: "Only the same company can view",
+                  cn: "只有同一家公司可以查看",
+                  language,
+                }),
                 "error"
               );
             }
@@ -208,7 +218,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
           <Box
             as="span"
             position="relative"
-            fontFamily="Noto Sans JP"
             fontWeight="200"
             _after={{
               content: '""',

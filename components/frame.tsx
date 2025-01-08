@@ -326,17 +326,19 @@ const Frame: React.FC<{
                 display={["none", "none", "none", "block"]}
                 color={colorMode === "light" ? "black" : "white"}
               >
-                <Flex alignItems="center" gap="3px">
-                  <Text fontWeight="bold" textAlign="left" m={1}>
-                    {getMessage({
-                      ja: "技術ブログ",
-                      us: "skills blog",
-                      cn: "技术博客",
-                      language,
-                    })}
-                  </Text>
-                  <PiGithubLogoFill size={24} />
-                </Flex>
+                <Link href="/skillBlogs/0000/">
+                  <Flex alignItems="center" gap="3px">
+                    <Text fontWeight="bold" textAlign="left" m={1}>
+                      {getMessage({
+                        ja: "技術ブログ",
+                        us: "skills blog",
+                        cn: "技术博客",
+                        language,
+                      })}
+                    </Text>
+                    <PiGithubLogoFill size={24} />
+                  </Flex>
+                </Link>
                 <Accordion
                   index={accordionIndex}
                   onChange={(index) =>

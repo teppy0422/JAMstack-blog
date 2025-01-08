@@ -1,0 +1,15 @@
+{
+getMessage({
+ja:"",
+us:"",
+cn:"",
+language,
+})
+}
+
+
+Production Preparation+
+生产准备+
+
+
+・フィールドがピンク色の箇所が使用するデータです。

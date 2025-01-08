@@ -67,7 +67,7 @@ const ImageSliderModal: React.FC<ImageSliderModalProps> = ({
         color={color}
         borderColor={color}
       >
-        EXTESの設定変更
+        {title}
         <Icon as={FaRegEdit} mr={1} />
       </Box>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
