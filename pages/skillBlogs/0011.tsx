@@ -63,39 +63,9 @@ import { useUserInfo } from "../../hooks/useUserId";
 import { supabase } from "../../utils/supabase/client";
 import { useReadCount } from "../../hooks/useReadCount";
 
-import "@fontsource/noto-sans-jp";
-import { BsFiletypeExe } from "react-icons/bs";
-import SjpChart01 from "./chart/chart_0009_01";
-import SjpChart02 from "./chart/chart_0009_02";
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 
-const customTheme = extendTheme({
-  fonts: {
-    heading: "'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
-  },
-  fontWeights: {
-    normal: 200,
-    medium: 300,
-    bold: 400,
-    light: 300,
-    extraLight: 100,
-  },
-});
-//テキストジャンプアニメーション
-const jumpAnimation = keyframes`
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-6px); }
-  60% { transform: translateY(-3px); }
-`;
-//Kbdのスタイル
-const kbdStyle = {
-  border: "1px solid",
-  fontSize: "16px",
-  bg: "white",
-  mx: 0.5,
-  borderRadius: "3px",
-  color: "black",
-};
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
   viewBox: "0 0 26 26",
@@ -115,7 +85,14 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
-
+  const { language, setLanguage } = useLanguage();
+  //右リストの読み込みをlanguage取得後にする
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
+  useEffect(() => {
+    if (language) {
+      setIsLanguageLoaded(true);
+    }
+  }, [language]);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
@@ -133,67 +110,6 @@ const BlogPage: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
 
   const showToast = useCustomToast();
-  //64pxまでスクロールしないとサイドバーが表示されないから暫定
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 100); // 100msの遅延を追加
-    } else {
-      window.scrollTo(0, 150);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
-  //#の位置にスクロールした時のアクティブなセクションを装飾
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-    );
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
-
-    return () => {
-      sectionRefs.current.forEach((section) => {
-        if (section) observer.unobserve(section);
-      });
-    };
-  }, []);
-  //#クリックした時のオフセット
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange, false);
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange, false);
-    };
-  }, []);
 
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);
@@ -203,14 +119,10 @@ const BlogPage: React.FC = () => {
     setActiveDrawer(null);
     onClose();
   };
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-  if (!isClient) {
-    return null;
+  //右リストの読み込みをlanguage取得後にする
+  if (!isLanguageLoaded) {
+    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
   }
-
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs}>
@@ -224,7 +136,12 @@ const BlogPage: React.FC = () => {
             </AvatarGroup>
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>開発</Text>
+            <Text>
+              {getMessage({
+                ja: "開発",
+                language,
+              })}
+            </Text>
             <Spacer />
             <Flex justifyContent="flex-end">
               <Text>
@@ -234,21 +151,46 @@ const BlogPage: React.FC = () => {
             </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            PC初回セットアップ手順
+            {getMessage({
+              ja: "PC初回セットアップ手順",
+              us: "PC First Time Setup Procedure",
+              cn: "电脑首次设置程序",
+              language,
+            })}
           </Heading>
-          <CustomBadge text="順立生産システム" />
-          <CustomBadge text="作成途中" />
+          <CustomBadge
+            text={getMessage({
+              ja: "順立生産システム",
+              language,
+            })}
+          />
+          <CustomBadge
+            text={getMessage({
+              ja: "作成途中",
+              language,
+            })}
+          />
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-12-07
+            {getMessage({
+              ja: "更新日",
+              language,
+            })}
+            :2024-12-07
           </Text>
         </Box>
         <SectionBox
           id="section1"
-          title="1.はじめに"
+          title={
+            "1." +
+            getMessage({
+              ja: "はじめに",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -258,13 +200,26 @@ const BlogPage: React.FC = () => {
           />
           <Box>
             <Text>
-              順立生産システムでは初回だけPCのセットアップが必要です。
+              {getMessage({
+                ja: "順立生産システムでは初回だけPCのセットアップが必要です。",
+                us: "The sequential production system requires PC setup only for the first time.",
+                cn: "顺序生产系统只要求首次设置 PC。",
+                language,
+              })}
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section2"
-          title="2.インストールソフトについて"
+          title={
+            "2." +
+            getMessage({
+              ja: "インストールソフトについて",
+              us: "About Installation Software",
+              cn: "关于安装软件",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -274,22 +229,55 @@ const BlogPage: React.FC = () => {
           />
           <Box>
             <Text>
-              現在のバージョンでは下記の他社製品を含んでいます。
+              {getMessage({
+                ja: "現在のバージョンでは下記の他社製品を含んでいます。",
+                us: "The current version includes the following third-party products",
+                cn: "当前版本包括以下第三方产品。",
+                language,
+              })}
               <br />
-              ・RS-RecieverLight(シリアル受信)
+              {"・" +
+                getMessage({
+                  ja: "RS-RecieverLight(シリアル受信)",
+                  us: "RS-RecieverLight (serial receive)",
+                  cn: "RS-Reciever 灯（串行接收）",
+                  language,
+                })}
               <br />
-              ・さくらさくQR(QR作成)
+              {"・" +
+                getMessage({
+                  ja: "さくらさくQR(QR作成)",
+                  us: "さくらさくQR (QR creation)",
+                  cn: "さくらさくQR（QR 创建）",
+                  language,
+                })}
               <br />
               <br />
-              これによりここでPCセットアップの全てを解決する事は出来ません。
+              {getMessage({
+                ja: "これによりここでPCセットアップの全てを解説する事が出来ません。",
+                us: "This makes it impossible to explain the entire PC setup here.",
+                cn: "因此，无法在此对 PC 设置的所有方面进行说明。",
+                language,
+              })}
               <br />
-              WEBサービス開始後に上記機能を自作してセットアップ手順を記載します。
+              {getMessage({
+                ja: "WEBサービス開始後に上記機能を自作してセットアップ手順を記載します。",
+                us: "After the web service is started, we will describe the setup procedure by creating the above functions by ourselves.",
+                cn: "网络服务启动后，将自行设计上述功能，并介绍设置程序。",
+                language,
+              })}
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section99"
-          title="99.まとめ"
+          title={
+            "99." +
+            getMessage({
+              ja: "まとめ",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -331,7 +319,7 @@ const BlogPage: React.FC = () => {
             />
           </Box>
         </SectionBox>
-        <Box h="0.01vh" />
+        <Box h="3vh" />
       </Frame>
     </>
   );

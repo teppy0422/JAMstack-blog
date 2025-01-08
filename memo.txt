@@ -11,7 +11,3 @@ language,
 Production Preparation+
 生产准备+
 
-
-正しく動作しない場合はAをしてください。
-If it does not work correctly, do A.
-如果不能正常工作，请执行 A。

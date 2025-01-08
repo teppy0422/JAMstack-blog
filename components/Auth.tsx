@@ -16,9 +16,10 @@ import {
   Tooltip,
   useColorMode,
   ButtonGroup,
+  Divider,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
-import "@fontsource/noto-sans-jp";
+import { MdBusiness } from "react-icons/md";
 
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "./getMessage";
@@ -307,15 +308,26 @@ export default function Auth({ userData }: AuthProps) {
     <Box>
       {user ? (
         <>
-          <Box textAlign="center" mb={4} fontFamily="Noto Sans JP">
+          <Box textAlign="center" mb={4}>
             <Text fontSize="lg">{userData.userName || "No Name"}</Text>
-            <Text fontSize="sm" color="gray.500">
+            <Text
+              fontSize="sm"
+              color={colorMode === "light" ? "black" : "white"}
+            >
               {getMessage({ ja: userData.userMainCompany || "", language }) ||
                 ""}
             </Text>
-            <Text fontSize="sm" color="gray.500">
-              {getMessage({ ja: userData.userCompany || "", language }) || ""}
-            </Text>
+            <Box display="flex" justifyContent="center">
+              <Box
+                display="flex"
+                alignItems="center"
+                mx="auto"
+                textAlign="center"
+              >
+                <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={1} />
+                {getMessage({ ja: userData.userCompany || "", language }) || ""}
+              </Box>
+            </Box>
             <Tooltip
               label={getMessage({
                 ja: "ユーザーアイコンを変更",
@@ -345,26 +357,21 @@ export default function Auth({ userData }: AuthProps) {
               onChange={handleFileChange} // ファイル選択時の処理
             />
           </Box>
-          <Button onClick={handleSignOut} colorScheme="red" width="full">
-            {getMessage({
-              ja: "ログアウト",
-              us: "Logout",
-              cn: "注销",
-              language,
-            })}
-          </Button>
-
-          {/* ボタンの色と幅を調整 */}
+          <Box display="flex" justifyContent="center">
+            <Button onClick={handleSignOut} colorScheme="red" mx="auto">
+              {getMessage({
+                ja: "ログアウト",
+                us: "Logout",
+                cn: "注销",
+                language,
+              })}
+            </Button>
+          </Box>
         </>
       ) : (
         <>
           <Tabs>
-            {/* <TabList> */}
-            {/* <Tab>メールアドレス</Tab> */}
-            {/* <Tab>Google(テスト中)</Tab> */}
-            {/* </TabList> */}
-
-            <TabPanels p={0} fontFamily="Noto Sans JP">
+            <TabPanels p={0}>
               <TabPanel p={0}>
                 <Tabs p={0}>
                   <TabList>
@@ -647,84 +654,110 @@ export default function Auth({ userData }: AuthProps) {
           )}
         </>
       )}
-      <ButtonGroup
-        my="16px"
-        bottom="0"
-        left="0"
-        width="100%" // 必要に応じて幅を設定
-        display="flex"
-        justifyContent="center" // 中央に配置
-      >
-        <Tooltip label={<Box>日本語</Box>} aria-label="English">
-          <img
-            src="/images/land/jp.svg"
-            alt="日本語"
-            style={{
-              width: "32px",
-              height: "24px",
-              margin: "0px",
-              padding: "0px",
-              border: "solid 1px",
-              marginRight: "10px",
-              cursor: "pointer",
-              opacity: language !== "ja" ? 0.3 : 1,
-            }}
-            onClick={() => updateLanguage("ja")}
-          />
-        </Tooltip>
-        <Tooltip
-          label={
-            <Box>
-              English
-              <br />
-              Not supported
-            </Box>
-          }
-          aria-label="English"
+      <Box mt={5} position="relative" borderRadius={8}>
+        <Divider position="relative" border="solid 1px" />
+        <Text
+          textAlign="center"
+          mx="auto"
+          px="6px"
+          position="relative"
+          top="-14px"
+          bg={colorMode === "light" ? "#F0E6DB" : "black"}
+          transform="translateX(-50%)"
+          left="50%"
+          display="inline-block"
         >
-          <img
-            src="/images/land/um.svg"
-            alt="英語"
-            style={{
-              width: "32px",
-              height: "24px",
-              margin: "0px",
-              padding: "0px",
-              border: "solid 1px",
-              marginRight: "10px",
-              cursor: "pointer",
-              opacity: language !== "us" ? 0.3 : 1,
-            }}
-            onClick={() => updateLanguage("us")}
-          />
-        </Tooltip>
-        <Tooltip
-          label={
-            <Box>
-              Français
-              <br />
-              Non pris en charge
-            </Box>
-          }
-          aria-label="English"
+          {getMessage({
+            ja: "言語選択",
+            us: "Language Selection",
+            cn: "语言选择",
+            language,
+          })}
+        </Text>
+        <Text
+          fontSize="13px"
+          mx="auto"
+          textAlign="center"
+          position="relative"
+          top="-10px"
+          my={0.5}
         >
-          <img
-            src="/images/land/cn.svg"
-            alt="簡体字中国語"
-            style={{
-              width: "32px",
-              height: "24px",
-              margin: "0px",
-              padding: "0px",
-              border: "solid 1px",
-              marginRight: "10px",
-              cursor: "pointer",
-              opacity: language !== "cn" ? 0.3 : 1,
-            }}
-            onClick={() => updateLanguage("cn")}
-          />
-        </Tooltip>
-      </ButtonGroup>
+          {getMessage({
+            ja: "画像の翻訳は未対応です",
+            us: "Translation of images is not yet supported",
+            cn: "尚未支持图像翻译",
+            language,
+          })}
+          <br />
+          {getMessage({
+            ja: "必要であれば対応するので連絡ください",
+            us: "Please contact me if you need assistance.",
+            cn: "如有必要，请联系我们寻求帮助。",
+            language,
+          })}
+        </Text>
+        <ButtonGroup
+          mt={0}
+          mb={3}
+          bottom="0"
+          left="0"
+          width="100%"
+          display="flex"
+          justifyContent="center"
+        >
+          <Tooltip label={<Box>日本語</Box>} aria-label="English">
+            <img
+              src="/images/land/jp.svg"
+              alt="日本語"
+              style={{
+                width: "32px",
+                height: "24px",
+                margin: "0px",
+                padding: "0px",
+                border: "solid 1px",
+                marginRight: "10px",
+                cursor: "pointer",
+                opacity: language !== "ja" ? 0.3 : 1,
+              }}
+              onClick={() => updateLanguage("ja")}
+            />
+          </Tooltip>
+          <Tooltip label={<Box>American English</Box>} aria-label="English">
+            <img
+              src="/images/land/um.svg"
+              alt="英語"
+              style={{
+                width: "32px",
+                height: "24px",
+                margin: "0px",
+                padding: "0px",
+                border: "solid 1px",
+                marginRight: "10px",
+                cursor: "pointer",
+                opacity: language !== "us" ? 0.3 : 1,
+              }}
+              onClick={() => updateLanguage("us")}
+            />
+          </Tooltip>
+          <Tooltip label={<Box>简体中文</Box>} aria-label="English">
+            <img
+              src="/images/land/cn.svg"
+              alt="簡体字中国語"
+              style={{
+                width: "32px",
+                height: "24px",
+                margin: "0px",
+                padding: "0px",
+                border: "solid 1px",
+                marginRight: "10px",
+                cursor: "pointer",
+                opacity: language !== "cn" ? 0.3 : 1,
+              }}
+              onClick={() => updateLanguage("cn")}
+            />
+          </Tooltip>
+        </ButtonGroup>
+      </Box>
     </Box>
   );
 }

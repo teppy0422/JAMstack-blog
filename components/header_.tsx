@@ -99,31 +99,6 @@ export default function Header() {
 
   // loginボタンを隠す
   let keyFlag: boolean = false;
-  // const handleKeyDown = (event: KeyboardEvent) => {
-  //   // CMDキー(Meta)の場合処理を行う
-  //   if (event.key === "Meta") {
-  //     const element = document.getElementById("none");
-  //     if (element!) {
-  //       if (keyFlag === false) {
-  //         element.style.display = "block";
-  //         keyFlag = true;
-  //       } else {
-  //         element.style.display = "none";
-  //         keyFlag = false;
-  //       }
-  //     }
-  //   }
-  // };
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     document.addEventListener("keydown", handleKeyDown, false);
-  //   }
-  //   return () => {
-  //     if (typeof window !== "undefined") {
-  //       document.removeEventListener("keydown", handleKeyDown, false);
-  //     }
-  //   };
-  // }, []);
   // ユーザーIDを取得する関数
   useEffect(() => {
     const fetchUserId = async () => {
@@ -373,8 +348,12 @@ export default function Header() {
       {/* ログインモーダル */}
       <Modal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader></ModalHeader>
+        <ModalContent
+          bg={colorMode === "light" ? "#F0E6DB" : "black"}
+          borderColor={colorMode === "light" ? "black" : "white"}
+          borderWidth="1px"
+        >
+          {/* <ModalHeader></ModalHeader> */}
           <ModalCloseButton
             _hover={{
               _hover: "none",
@@ -382,7 +361,7 @@ export default function Header() {
               backgroundColor: "transparent",
             }}
           />
-          <ModalBody>
+          <ModalBody mb={2}>
             <Auth
               userData={{ userName, userCompany, pictureUrl, userMainCompany }}
             />
@@ -469,86 +448,6 @@ export default function Header() {
                   <AiOutlineWechat size={22} />
                 )}
                 <Divider borderColor="white" />
-
-                <ButtonGroup
-                  my="16px"
-                  position="absolute"
-                  bottom="0"
-                  left="0"
-                  width="100%" // 必要に応じて幅を設定
-                  display="flex"
-                  justifyContent="center" // 中央に配置
-                >
-                  <Tooltip label={<Box>日本語</Box>} aria-label="English">
-                    <img
-                      src="/images/land/jp.svg"
-                      alt="日本語"
-                      style={{
-                        width: "32px",
-                        height: "24px",
-                        margin: "0px",
-                        padding: "0px",
-                        border: "solid 1px",
-                        marginRight: "10px",
-                        cursor: "pointer",
-                        opacity: language !== "ja" ? 0.3 : 1,
-                      }}
-                      onClick={() => updateLanguage("ja")}
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    label={
-                      <Box>
-                        English
-                        <br />
-                        Not supported
-                      </Box>
-                    }
-                    aria-label="English"
-                  >
-                    <img
-                      src="/images/land/um.svg"
-                      alt="英語"
-                      style={{
-                        width: "32px",
-                        height: "24px",
-                        margin: "0px",
-                        padding: "0px",
-                        border: "solid 1px",
-                        marginRight: "10px",
-                        cursor: "pointer",
-                        opacity: language !== "us" ? 0.3 : 1,
-                      }}
-                      onClick={() => updateLanguage("us")}
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    label={
-                      <Box>
-                        Français
-                        <br />
-                        Non pris en charge
-                      </Box>
-                    }
-                    aria-label="English"
-                  >
-                    <img
-                      src="/images/land/cn.svg"
-                      alt="簡体字中国語"
-                      style={{
-                        width: "32px",
-                        height: "24px",
-                        margin: "0px",
-                        padding: "0px",
-                        border: "solid 1px",
-                        marginRight: "10px",
-                        cursor: "pointer",
-                        opacity: language !== "cn" ? 0.3 : 1,
-                      }}
-                      onClick={() => updateLanguage("cn")}
-                    />
-                  </Tooltip>
-                </ButtonGroup>
               </VStack>
             </DrawerBody>
           </DrawerContent>

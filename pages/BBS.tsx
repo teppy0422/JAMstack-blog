@@ -193,21 +193,7 @@ const Roadmap = () => {
             })}
           </Badge>
           <Box mb={8} p={4} borderRadius="md">
-            <Text textAlign="left" colorScheme="gray">
-              {getMessage({
-                ja: "・以下は契約書に基づいた活動予定内容です。",
-                us: "・The following is a list of planned activities based on the contract.",
-                cn: "・以下是根据合同计划开展的活动清单。",
-                language,
-              })}
-              <br />
-              {getMessage({
-                ja: "・実行順は必要だと思う順になっています。順番を変更したい場合はご相談ください。",
-                us: "・The order of execution is in the order we think necessary. If you wish to change the order, please contact us.",
-                cn: "・执行的顺序是他们认为必要的顺序。如果您想更改订单，请联系我们。",
-                language,
-              })}
-            </Text>
+            <Text textAlign="left" colorScheme="gray"></Text>
           </Box>
           <SidebarBBS isMain={true} />
         </Container>

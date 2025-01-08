@@ -471,7 +471,15 @@ const BlogPage: React.FC = () => {
         </Box>
         <SectionBox
           id="section5"
-          title="5.YICへの出力"
+          title={
+            "5." +
+            getMessage({
+              ja: "YICへの出力",
+              us: "Output to YIC",
+              cn: "输出至 YIC",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -479,34 +487,105 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text fontWeight="bold">MENUの説明</Text>
+          <Text fontWeight="bold">
+            {getMessage({
+              ja: "MENUの説明",
+              us: "Explanation of MENU",
+              cn: "MENU 说明。",
+              language,
+            })}
+          </Text>
           <Image src="/images/0010/0003.png" w="45%" mb={6} />
 
-          <Text>
-            ①48P、100P、200Pを選択
+          <Text lineHeight={1.6}>
+            {"①" +
+              getMessage({
+                ja: "48P、100P、200Pを選択",
+                us: "Select 48P, 100P, or 200P",
+                cn: "选择 48p、100p 或 200p",
+                language,
+              })}
             <br />
-            ※200Pは動作未確認です。不具合がある場合は連絡をお願いします。
+            {getMessage({
+              ja: "※200Pは動作未確認です。不具合がある場合は連絡をお願いします。",
+              us: "*200P has not been tested. Please contact us if there are any problems.",
+              cn: "*200P 未经运行测试。如有任何问题，请联系我们。",
+              language,
+            })}
             <br />
-            ②YICと接続したシリアルポート番号を選択。背景色が白になったら接続完了です。
+            {"②" +
+              getMessage({
+                ja: "YICと接続したシリアルポート番号を選択。背景色が白になったら接続完了です。",
+                us: "Select the serial port number connected to the YIC. When the background color turns white, the connection is complete.",
+                cn: "选择与 YIC 连接的串行端口号。当背景颜色变白时，连接完成。",
+                language,
+              })}
             <br />
-            ③ｲﾝﾗｲﾝ色の選択。
+            {"③" +
+              getMessage({
+                ja: "ｲﾝﾗｲﾝ色の選択。",
+                us: "Inline color selection.",
+                cn: "内联颜色选择。",
+                language,
+              })}
             <br />
-            ④チェックオンでYICに直接転送する。
+            {"④" +
+              getMessage({
+                ja: "チェックオンでYICに直接転送する。",
+                us: "Check on to transfer directly to YIC.",
+                cn: "接通后直接转入青年信息中心。",
+                language,
+              })}
             <br />
-            ⑤チェックオンでインラインクリップ設定一覧表のシートを作成する。
+            {"⑤" +
+              getMessage({
+                ja: "チェックオンでインラインクリップ設定一覧表のシートを作成する。",
+                us: "Check on to create an inline clip settings list sheet.",
+                cn: "选中以创建内联剪辑设置列表表。",
+                language,
+              })}
             <br />
-            ※作成したシートからも出力可能です。
+            {getMessage({
+              ja: "※作成したシートからも出力可能です。",
+              us: "*Output is also possible from sheets that have been created.",
+              cn: "*也可从已创建的工作表中输出。",
+              language,
+            })}
             <br />
-            ⑥④または⑤を実行します。
+            {"⑥" +
+              getMessage({
+                ja: "④または⑤を実行します。",
+                us: "Perform ④ or ⑤.",
+                cn: "④ 或 ⑤。",
+                language,
+              })}
             <br />
-            ⑦このブックに含まれるバージョンをアップロード。
+            {"⑦" +
+              getMessage({
+                ja: "このブックに含まれるバージョンをアップロード。",
+                us: "Upload the version contained in this book.",
+                cn: "本书包含的上传版本。",
+                language,
+              })}
             <br />
-            ⑧カレントディレクトリ以下のサブディレクトリのファイル名が「誘導ポイント設定一覧表」を含むブックに対して⑦のプログラムを与えます
+            {"⑧" +
+              getMessage({
+                ja: "カレントディレクトリ以下のサブディレクトリのファイル名が「誘導ポイント設定一覧表」を含むブックに対して⑦のプログラムを与えます",
+                us: 'Give the program ⑦ to the book whose file name contains "Guidance Point Setting List" in the subdirectory under the current directory',
+                cn: '程序 ⑦ 给出的是一本书，其当前目录下子目录中的文件名包含 "引导点设置列表"。',
+                language,
+              })}
           </Text>
         </SectionBox>
         <SectionBox
           id="section6"
-          title="6.まとめ"
+          title={
+            "6." +
+            getMessage({
+              ja: "まとめ",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -535,15 +614,38 @@ const BlogPage: React.FC = () => {
                 fontFamily: "'Yomogi', sans-serif",
                 fontWeight: "400",
               }}
+              lineHeight={1.6}
             >
-              このシステムは実際に運用中ですが、未完成で以下の問題を含んでいます。
+              {getMessage({
+                ja: "このシステムは実際に運用中ですが、未完成で以下の問題を含んでいます。",
+                us: "This system is actually in operation, but it is incomplete and contains the following problems",
+                cn: "该系统已实际运行，但并不完整，存在以下问题",
+                language,
+              })}
               <br />
               <br />
-              1.200Pは運用中の工場での保有が無いので動作は未確認です。
+              {"1." +
+                getMessage({
+                  ja: "200Pは運用中の工場での保有が無いので動作は未確認です。",
+                  us: "The 200P has not been held at the factory in operation, so its operation has not been tested.",
+                  cn: "由于 200P 出厂时未进行运行测试。",
+                  language,
+                })}
               <br />
-              2.ポイント72と73が反対になる(LED72を指示をしても73が光る)不具合が発生しています。
+              {"2." +
+                getMessage({
+                  ja: "ポイント72と73が反対になる(LED72を指示をしても73が光る)不具合が発生しています。",
+                  us: "There is a problem with points 72 and 73 being opposite (LED 72 is indicated but 73 glows).",
+                  cn: "有一个问题是 72 和 73 点相反（LED 72 指示灯亮，但 73 点亮）。",
+                  language,
+                })}
               <br />
-              ※おそらく書き込み器側の不具合なのですが解決する方法が無いのでオプションで「入れ替える」機能の追加を予定しています。
+              {getMessage({
+                ja: "※おそらく書き込み器側の不具合なのですが解決する方法が無いのでオプションで「入れ替える」機能の追加を予定しています。",
+                us: '*This is probably a glitch on the burner side, but there is no way to solve it, so we are planning to add an optional "replace" function.',
+                cn: '*这可能是刻录机方面的故障，但没有办法解决，因此我们计划添加一个可选的 "替换" 功能。',
+                language,
+              })}
             </Text>
             <Image
               src="/images/hippo.gif"
@@ -557,7 +659,7 @@ const BlogPage: React.FC = () => {
             />
           </Box>
         </SectionBox>
-        <Box h="0.01vh" />
+        <Box h="3vh" />
       </Frame>
     </>
   );

@@ -63,39 +63,10 @@ import { useUserInfo } from "../../hooks/useUserId";
 import { supabase } from "../../utils/supabase/client";
 import { useReadCount } from "../../hooks/useReadCount";
 
-import "@fontsource/noto-sans-jp";
 import { BsFiletypeExe } from "react-icons/bs";
-import SjpChart01 from "./chart/chart_0009_01";
-import SjpChart02 from "./chart/chart_0009_02";
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 
-const customTheme = extendTheme({
-  fonts: {
-    heading: "'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
-  },
-  fontWeights: {
-    normal: 200,
-    medium: 300,
-    bold: 400,
-    light: 300,
-    extraLight: 100,
-  },
-});
-//テキストジャンプアニメーション
-const jumpAnimation = keyframes`
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-6px); }
-  60% { transform: translateY(-3px); }
-`;
-//Kbdのスタイル
-const kbdStyle = {
-  border: "1px solid",
-  fontSize: "16px",
-  bg: "white",
-  mx: 0.5,
-  borderRadius: "3px",
-  color: "black",
-};
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
   viewBox: "0 0 26 26",
@@ -115,7 +86,14 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
-
+  const { language, setLanguage } = useLanguage();
+  //右リストの読み込みをlanguage取得後にする
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
+  useEffect(() => {
+    if (language) {
+      setIsLanguageLoaded(true);
+    }
+  }, [language]);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
@@ -133,82 +111,10 @@ const BlogPage: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
 
   const showToast = useCustomToast();
-  //64pxまでスクロールしないとサイドバーが表示されないから暫定
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 100); // 100msの遅延を追加
-    } else {
-      window.scrollTo(0, 150);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
-  //#の位置にスクロールした時のアクティブなセクションを装飾
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-    );
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
 
-    return () => {
-      sectionRefs.current.forEach((section) => {
-        if (section) observer.unobserve(section);
-      });
-    };
-  }, []);
-  //#クリックした時のオフセット
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange, false);
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange, false);
-    };
-  }, []);
-
-  const handleOpen = (drawerName: string) => {
-    setActiveDrawer(drawerName);
-    onOpen();
-  };
-  const handleClose = () => {
-    setActiveDrawer(null);
-    onClose();
-  };
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-  if (!isClient) {
-    return null;
+  //右リストの読み込みをlanguage取得後にする
+  if (!isLanguageLoaded) {
+    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
   }
 
   function RenderNode({ nodes, num }) {
@@ -378,7 +284,12 @@ const BlogPage: React.FC = () => {
             </AvatarGroup>
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>開発</Text>
+            <Text>
+              {getMessage({
+                ja: "開発",
+                language,
+              })}
+            </Text>
             <Spacer />
             <Flex justifyContent="flex-end">
               <Text>
@@ -388,21 +299,44 @@ const BlogPage: React.FC = () => {
             </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            PC初回セットアップ手順
+            {getMessage({
+              ja: "ベース楽譜",
+              us: "Bass Scores",
+              cn: "低音提琴乐谱",
+              language,
+            })}
           </Heading>
-          <CustomBadge text="順立生産システム" />
-          <CustomBadge text="作成途中" />
+          <CustomBadge
+            text={getMessage({
+              ja: "バンド",
+              us: "band",
+              cn: "带",
+              language,
+            })}
+          />
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-12-07
+            {getMessage({
+              ja: "更新日",
+              language,
+            })}
+            :2024-12-07
           </Text>
         </Box>
         <SectionBox
           id="section1"
-          title="1.はじめに"
+          title={
+            "1." +
+            getMessage({
+              ja: "マリーゴールド",
+              us: "marigold",
+              cn: "万寿菊",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -588,33 +522,16 @@ const BlogPage: React.FC = () => {
           </Box>
         </SectionBox>
         <SectionBox
-          id="section2"
-          title="2.インストールソフトについて"
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <Box>
-            <Text>
-              現在のバージョンでは下記の他社製品を含んでいます。
-              <br />
-              ・RS-RecieverLight(シリアル受信)
-              <br />
-              ・さくらさくQR(QR作成)
-              <br />
-              <br />
-              これによりここでPCセットアップの全てを解決する事は出来ません。
-              <br />
-              WEBサービス開始後に上記機能を自作してセットアップ手順を記載します。
-            </Text>
-          </Box>
-        </SectionBox>
-        <SectionBox
           id="section99"
-          title="99.まとめ"
+          title={
+            "99." +
+            getMessage({
+              ja: "チューニング",
+              us: "tuning",
+              cn: "调音",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -643,7 +560,15 @@ const BlogPage: React.FC = () => {
                 fontFamily: "'Yomogi', sans-serif",
                 fontWeight: "400",
               }}
-            ></Text>
+            >
+              4.E
+              <br />
+              3.A
+              <br />
+              2.D
+              <br />
+              1.G
+            </Text>
             <Image
               src="/images/hippo.gif"
               alt="Hippo"
@@ -656,7 +581,7 @@ const BlogPage: React.FC = () => {
             />
           </Box>
         </SectionBox>
-        <Box h="0.01vh" />
+        <Box h="3vh" />
       </Frame>
     </>
   );
