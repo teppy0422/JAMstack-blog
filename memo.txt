@@ -1,8 +1,8 @@
 {
 getMessage({
-ja:"",
-us:"",
-cn:"",
+ja:'',
+us:'',
+cn:'',
 language,
 })
 }
@@ -12,4 +12,6 @@ Production Preparation+
 生产准备+
 
 
-・フィールドがピンク色の箇所が使用するデータです。
+正しく動作しない場合はAをしてください。
+If it does not work correctly, do A.
+如果不能正常工作，请执行 A。

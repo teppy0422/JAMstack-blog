@@ -8,8 +8,13 @@ import HighchartsReact from "highcharts-react-official";
 import styles from "../../../styles/home.module.scss";
 
 import GetWindowSize, { getWindowSize } from "../../../script/GetWindowSize";
+import getMessage from "../../../components/getMessage";
 
-const SjpChart01: React.FunctionComponent = (): JSX.Element => {
+interface SjpChart01Props {
+  language: string;
+}
+
+const SjpChart01: React.FunctionComponent<SjpChart01Props> = ({ language }) => {
   const WindowSize = GetWindowSize();
   // let myWidth: number = WindowSize.width;
   // let myHeight: number = 0;
@@ -36,7 +41,12 @@ const SjpChart01: React.FunctionComponent = (): JSX.Element => {
       enabled: false,
     },
     title: {
-      text: "立上げ工数推移 計56H",
+      text: getMessage({
+        ja: "立上げ工数 計56H",
+        us: "Start-up team-hours Total 56H",
+        cn: "启动工时 总计 56h",
+        language,
+      }),
       style: {
         fontSize: "14px",
         fontWeight: "bold",
@@ -47,15 +57,60 @@ const SjpChart01: React.FunctionComponent = (): JSX.Element => {
     },
     xAxis: {
       categories: [
-        '1月<br><span style="font-size:14px" >出図</span>',
-        '2月<br><span style="font-size:14px" >CV</span>',
-        "3月",
-        "4月",
-        '5月<br><span style="font-size:14px" >1A</span>',
-        '6月<br><span style="font-size:14px" >量確</span>',
-        '7月<br><span style="font-size:14px" >品確</span>',
-        '8月<br><span style="font-size:14px" >量産</span>',
-        "9月",
+        getMessage({
+          ja: '1月<br><span style="font-size:14px" >出図</span>',
+          us: 'Jan.<br><span style="font-size:14px" >DR</span>',
+          cn: '一月<br><span style="font-size:14px" >出図</span>',
+          language,
+        }),
+        getMessage({
+          ja: '2月<br><span style="font-size:14px" >CV</span>',
+          us: 'Feb.<br><span style="font-size:14px" >CV</span>',
+          cn: '二月<br><span style="font-size:14px" >CV</span>',
+          language,
+        }),
+        getMessage({
+          ja: "3月",
+          us: "Mar.",
+          cn: "三月",
+          language,
+        }),
+        getMessage({
+          ja: "4月",
+          us: "Apr.",
+          cn: "四月",
+          language,
+        }),
+        getMessage({
+          ja: '5月<br><span style="font-size:14px" >1A</span>',
+          us: 'May<br><span style="font-size:14px" >1A</span>',
+          cn: '五月<br><span style="font-size:14px" >1A</span>',
+          language,
+        }),
+        getMessage({
+          ja: '6月<br><span style="font-size:14px" >量確</span>',
+          us: 'Jun.<br><span style="font-size:14px" >MP</span>',
+          cn: '六月<br><span style="font-size:14px" >量確</span>',
+          language,
+        }),
+        getMessage({
+          ja: '7月<br><span style="font-size:14px" >品確</span>',
+          us: 'Jul.<br><span style="font-size:14px" >QP</span>',
+          cn: '七月<br><span style="font-size:14px" >品確</span>',
+          language,
+        }),
+        getMessage({
+          ja: '8月<br><span style="font-size:14px" >量産</span>',
+          us: 'Aug.<br><span style="font-size:14px" >SOP</span>',
+          cn: '八月<br><span style="font-size:14px" >量産</span>',
+          language,
+        }),
+        getMessage({
+          ja: "9月",
+          us: "Sep.",
+          cn: "九月",
+          language,
+        }),
       ],
       tickmarkPlacement: "on",
       title: {
@@ -88,7 +143,12 @@ const SjpChart01: React.FunctionComponent = (): JSX.Element => {
           width: 2, // 線の太さ
           dashStyle: "Solid", // 線のスタイル（例: 'Solid', 'Dash', 'Dot'）
           label: {
-            text: "定時能力", // 線のラベル
+            text: getMessage({
+              ja: "定時能力",
+              us: "Daily Punctuality",
+              cn: "定時能力",
+              language,
+            }),
             align: "right", // ラベルの位置
             x: -16,
             style: {
@@ -118,7 +178,13 @@ const SjpChart01: React.FunctionComponent = (): JSX.Element => {
     },
     series: [
       {
-        name: "定時工数",
+        name: getMessage({
+          ja: "定時工数",
+          us: "Number of timed jobs",
+          cn: "定時工数",
+          language,
+        }),
+
         data: [16, 10, 5, 2, 3, 3, 4, 1, 0],
         color: "#9bc4eb",
       },

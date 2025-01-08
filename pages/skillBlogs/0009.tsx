@@ -62,24 +62,13 @@ import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
 import { useReadCount } from "../../hooks/useReadCount";
 
-import "@fontsource/noto-sans-jp";
 import { BsFiletypeExe } from "react-icons/bs";
 import SjpChart01 from "./chart/chart_0009_01";
 import SjpChart02 from "./chart/chart_0009_02";
 
-const customTheme = extendTheme({
-  fonts: {
-    heading: "'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
-  },
-  fontWeights: {
-    normal: 200,
-    medium: 300,
-    bold: 400,
-    light: 300,
-    extraLight: 100,
-  },
-});
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
+
 //テキストジャンプアニメーション
 const jumpAnimation = keyframes`
   0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
@@ -114,7 +103,14 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
-
+  const { language, setLanguage } = useLanguage();
+  //右リストの読み込みをlanguage取得後にする
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
+  useEffect(() => {
+    if (language) {
+      setIsLanguageLoaded(true);
+    }
+  }, [language]);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
@@ -122,320 +118,10 @@ const BlogPage: React.FC = () => {
   const [showConfetti, setShowConfetti] = useState(false); // useStateをコンポーネント内に移動
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加
-  const {
-    isOpen: isModalOpen,
-    onOpen: onModalOpen,
-    onClose: onModalClose,
-  } = useDisclosure();
 
-  const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
-  const [isClient, setIsClient] = useState(false);
-
-  const showToast = useCustomToast();
-  //64pxまでスクロールしないとサイドバーが表示されないから暫定
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 100); // 100msの遅延を追加
-    } else {
-      window.scrollTo(0, 150);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
-  //#の位置にスクロールした時のアクティブなセクションを装飾
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-    );
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
-
-    return () => {
-      sectionRefs.current.forEach((section) => {
-        if (section) observer.unobserve(section);
-      });
-    };
-  }, []);
-  //#クリックした時のオフセット
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange, false);
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange, false);
-    };
-  }, []);
-
-  const handleOpen = (drawerName: string) => {
-    setActiveDrawer(drawerName);
-    onOpen();
-  };
-  const handleClose = () => {
-    setActiveDrawer(null);
-    onClose();
-  };
-  //生産準備+着手からの経過日数の計算
-  const calculateElapsedTime = () => {
-    const startDate = new Date(2016, 6, 11); // 月は0から始まるので7月は6
-    const today = new Date();
-    const diffTime = Math.abs(today.getTime() - startDate.getTime());
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    const years = Math.floor(diffDays / 365);
-    const months = Math.floor((diffDays % 365) / 30); // おおよその月数
-    const days = (diffDays % 365) % 30;
-    return `${years}年${months}ヶ月${days}日`;
-  };
-  type FileSystemItem = {
-    name: string;
-    type: "folder" | "file"; // 'folder' または 'file' のみを許可する
-    children?: FileSystemItem[];
-    popOver?: string;
-    isOpen?: boolean;
-    icon?;
-  };
-  const directoryData: FileSystemItem = {
-    name: "任意のフォルダ",
-    type: "folder",
-    isOpen: true,
-    popOver: "※社内間でアクセスできるNASSサーバーに作成がお勧め",
-    children: [
-      {
-        name: "メーカー名Aのフォルダ",
-        type: "folder",
-        isOpen: true,
-        children: [
-          {
-            name: "車種_モデル名のフォルダ",
-            type: "folder",
-            isOpen: true,
-            children: [
-              {
-                name: "Sjp3.100.89_Gタイプ.xlsm",
-                type: "file",
-                popOver:
-                  "ダウンロードした生産準備+をここに配置。治具タイプを末尾に付ける事をお勧めします。ここではGタイプの治具の場合です。",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "メーカー名Bのフォルダ",
-        type: "folder",
-        isOpen: false,
-      },
-    ],
-  };
-
-  const directoryData2: FileSystemItem = {
-    name: "生産準備+があるフォルダ",
-    type: "folder",
-    isOpen: true,
-    children: [
-      {
-        name: "00_temp",
-        type: "folder",
-        isOpen: true,
-        children: [
-          {
-            name: "RLTF*A*.txt",
-            type: "file",
-            icon: <Icon as={FaFile} color="gray.600" mr={1} />,
-          },
-          {
-            name: "RLTF*B*.txt",
-            type: "file",
-            icon: <Icon as={FaFile} color="gray.600" mr={1} />,
-          },
-        ],
-      },
-      {
-        name: "01_PVSW_csv",
-        type: "folder",
-        isOpen: false,
-      },
-      {
-        name: "05_RLTF_A",
-        type: "folder",
-        isOpen: false,
-      },
-      {
-        name: "06_RLTF_B",
-        type: "folder",
-        isOpen: false,
-      },
-      {
-        name: "07_SUB",
-        type: "folder",
-        isOpen: false,
-      },
-      {
-        name: "08_MD",
-        type: "folder",
-        isOpen: false,
-      },
-    ],
-  };
-  const directoryData3: FileSystemItem = {
-    name: "生産準備+があるフォルダ",
-    type: "folder",
-    isOpen: true,
-    children: [
-      {
-        name: "00_temp",
-        type: "folder",
-        isOpen: false,
-      },
-      {
-        name: "01_PVSW_csv",
-        type: "folder",
-        isOpen: true,
-        children: [
-          {
-            name: "PVSW-*.csv",
-            type: "file",
-            icon: <Icon as={FaFile} color="gray.600" mr={1} />,
-            popOver: "入手したPVSWを全てここに配置",
-          },
-        ],
-      },
-      {
-        name: "07_SUB",
-        type: "folder",
-        isOpen: true,
-        children: [
-          {
-            name: "*SUB.csv",
-            type: "file",
-            icon: <Icon as={FaFile} color="gray.600" mr={1} />,
-            popOver: "入手したSUBを含むファイルを全てここに配置",
-          },
-        ],
-      },
-      {
-        name: "08_hsfデータ変換",
-        type: "folder",
-        isOpen: true,
-        children: [
-          {
-            name: "*MD*",
-            type: "folder",
-            icon: <Icon as={FaFolder} color="gray.600" mr={1} />,
-            popOver: "入手したMDを含むフォルダを全てここに配置",
-          },
-        ],
-      },
-      {
-        name: "08_MD",
-        type: "folder",
-        isOpen: false,
-      },
-      {
-        name: "09_AutoSub",
-        type: "folder",
-        isOpen: false,
-      },
-    ],
-  };
-  const directoryData4: FileSystemItem = {
-    name: "生産準備+があるフォルダ",
-    type: "folder",
-    isOpen: true,
-    children: [
-      {
-        name: "00_temp",
-        type: "folder",
-        isOpen: false,
-      },
-      {
-        name: "01_PVSW_csv",
-        type: "folder",
-        isOpen: false,
-      },
-      {
-        name: "07_SUB",
-        type: "folder",
-        isOpen: false,
-      },
-      {
-        name: "08_hsfデータ変換",
-        type: "folder",
-        isOpen: true,
-        children: [
-          {
-            name: "*MD(分解前)",
-            type: "folder",
-            icon: <Icon as={FaFolder} color="gray.600" mr={1} />,
-          },
-          {
-            name: "WH-DataConvert ←1.これを実行すると...",
-            type: "file",
-            icon: (
-              <Icon
-                as={PiAppWindowFill}
-                color="gray.600"
-                mr={1}
-                fontSize={18}
-              />
-            ),
-            popOver: "",
-          },
-        ],
-      },
-      {
-        name: "08_MD",
-        type: "folder",
-        isOpen: true,
-        children: [
-          {
-            name: "*MD(分解後) ← 2.この中に展開される",
-            type: "folder",
-            isOpen: true,
-            icon: <Icon as={FaFolder} color="gray.600" mr={1} />,
-          },
-        ],
-      },
-      {
-        name: "09_AutoSub",
-        type: "folder",
-        isOpen: false,
-      },
-    ],
-  };
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-  if (!isClient) {
-    return null; // クライアントサイドでのみ表示する場合はnullを返す
+  //右リストの読み込みをlanguage取得後にする
+  if (!isLanguageLoaded) {
+    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
   }
   return (
     <>
@@ -450,7 +136,12 @@ const BlogPage: React.FC = () => {
             </AvatarGroup>
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>開発</Text>
+            <Text>
+              {getMessage({
+                ja: "開発",
+                language,
+              })}
+            </Text>
             <Spacer />
             <Flex justifyContent="flex-end">
               <Text>
@@ -460,21 +151,46 @@ const BlogPage: React.FC = () => {
             </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            導入の効果
+            {getMessage({
+              ja: "導入の効果",
+              us: "Effects of Introduction",
+              cn: "引进的影响",
+              language,
+            })}
           </Heading>
-          <CustomBadge text="生準+" />
-          <CustomBadge text="作成途中" />
+          <CustomBadge
+            text={getMessage({
+              ja: "生準+",
+              language,
+            })}
+          />
+          <CustomBadge
+            text={getMessage({
+              ja: "作成途中",
+              language,
+            })}
+          />
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-27
+            {getMessage({
+              ja: "更新日",
+              language,
+            })}
+            :2024-11-27
           </Text>
         </Box>
         <SectionBox
           id="section1"
-          title="1.はじめに"
+          title={
+            "1." +
+            getMessage({
+              ja: "はじめに",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -484,13 +200,26 @@ const BlogPage: React.FC = () => {
           />
           <Box>
             <Text>
-              生産準備+は相乗的に効果を発揮するので説明が難しいですが、頑張って書いてみます
+              {getMessage({
+                ja: "生産準備+は相乗的に効果を発揮するので説明が難しいですが、頑張って書いてみます",
+                us: "Production Preparation+ is difficult to explain because it works synergistically, but I'll do my best to write it down!",
+                cn: "生产准备+ 很难解释，因为它是协同作用的，但我会尽力写下来！",
+                language,
+              })}
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section2"
-          title="2.生産準備への効果"
+          title={
+            "2." +
+            getMessage({
+              ja: "生産準備への効果",
+              us: "Effect on production readiness",
+              cn: "对生产准备的影响。",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -499,12 +228,21 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Text fontWeight="bold">
-            生産準備では新規立上げ/切替時に多くの成果物を作成すると思います。
-            しかも必ず発生する設計変更などにより作り直しも必要になってきます。
-            その結果、多くの時間が掛かり作成ミスも多くなりがちで不良の原因にもなっていました。
-            そこでより効率的に作成/管理できる方法を考えてみました。
+            {getMessage({
+              ja: "生産準備では新規立上げ/切替時に多くの成果物を作成すると思います。しかも必ず発生する設計変更などにより作り直しも必要になってきます。その結果、多くの時間が掛かり作成ミスも多くなりがちで不良の原因にもなっていました。そこでより効率的に作成/管理できる方法を考えてみました。",
+              us: "In production preparation, many deliverables are created at the time of new start-up/switchover. In addition, design changes that are bound to occur require rework. As a result, it takes a lot of time and tends to cause many creation errors, which also leads to defects. Therefore, we have come up with a more efficient way to create and manage the work.",
+              cn: "在生产准备过程中，新机启动/切换时会产生大量的可交付成果。此外，设计变更不可避免地会发生，这就需要返工。因此，这需要花费大量时间，而且往往会出现大量创建错误，这也会造成缺陷。因此，我们考虑采用一种更有效的方法来创建/管理它们。",
+              language,
+            })}
           </Text>
-          <Text mt={6}>下記の条件で導入効果を見ていきます</Text>
+          <Text mt={6}>
+            {getMessage({
+              ja: "下記の条件で導入効果を見ていきます",
+              us: "We will look at the effects of introduction under the following conditions",
+              cn: "我们将研究在以下条件下引入的效果",
+              language,
+            })}
+          </Text>
           <VStack justifyContent="center" mt={4} spacing={0}>
             <Box
               borderTop="1px solid"
@@ -516,23 +254,93 @@ const BlogPage: React.FC = () => {
               bg="gray.300"
               w="60%"
             >
-              2018年_エンジンメイン(平均約550回路)
+              {getMessage({
+                ja: "2018年_エンジンメイン(平均約550回路)",
+                us: "2018_Engine main (average about 550 circuits)",
+                cn: "2018_发动机主电路（平均约 550 个电路）。",
+                language,
+              })}
             </Box>
             <Box border="1px solid" borderBottomRadius={5} p={2} mb={4} w="60%">
-              <Text>・新規立ち上げ</Text>
-              <Text>・担当は5名</Text>
-              <Text>・20品番/結き治具</Text>
-              <Text>・結き治具/検査台は1種類</Text>
-              <Text>・作成/更新する必要があるファイル数:77点</Text>
-              <Text>・1月出図-7月量確(マル即による変更5回)</Text>
-              <Text>・77×5=385ファイルの変更が必要</Text>
+              <Text>
+                {"・" +
+                  getMessage({
+                    ja: "新規立ち上げ",
+                    us: "starting anew",
+                    cn: "创业",
+                    language,
+                  })}
+              </Text>
+
+              <Text>
+                {"・" +
+                  getMessage({
+                    ja: "担当は5名",
+                    us: "Five people in charge",
+                    cn: "5 名负责人。",
+                    language,
+                  })}
+              </Text>
+              <Text>
+                {"・" +
+                  getMessage({
+                    ja: "20品番/結き治具",
+                    us: "20 part number / Knotting jig",
+                    cn: "20 个零件编号/连接夹具",
+                    language,
+                  })}
+              </Text>
+              <Text>
+                {"・" +
+                  getMessage({
+                    ja: "結き治具/検査台は1種類",
+                    us: "One type of tying jig/inspection table",
+                    cn: "1 种接经夹具/检测台",
+                    language,
+                  })}
+              </Text>
+              <Text>
+                {"・" +
+                  getMessage({
+                    ja: "作成/更新する必要があるファイル数:77点",
+                    us: "Number of files that need to be created/updated: 77",
+                    cn: "需要创建/更新的文件数量: 77",
+                    language,
+                  })}
+              </Text>
+              <Text>
+                {"・" +
+                  getMessage({
+                    ja: "1月出図-7月量確(マル即による変更5回)",
+                    us: "January chart - July volume confirmation (5 changes due to Maru-July)",
+                    cn: "1 月至 7 月（因 MaruSoku 而有 5 次变动）。",
+                    language,
+                  })}
+              </Text>
+              <Text>
+                {"・" +
+                  getMessage({
+                    ja: "77×5=385ファイルの変更が必要",
+                    us: "77 x 5 = 385 files need to be changed",
+                    cn: "77 x 5 = 385 个文件需要更改",
+                    language,
+                  })}
+              </Text>
             </Box>
           </VStack>
         </SectionBox>
         <Box ml="4">
           <SectionBox
             id="section2_1"
-            title="2-1.成果物作成の流れを比較"
+            title={
+              "2-1." +
+              getMessage({
+                ja: "成果物作成の流れを比較",
+                us: "Deliverable comparison",
+                cn: "创建交付品过程的比较",
+                language,
+              })
+            }
             sectionRefs={sectionRefs}
             sections={sections}
             size="sm"
@@ -542,7 +350,12 @@ const BlogPage: React.FC = () => {
               borderColor={colorMode === "light" ? "black" : "white"}
             />
             <Text fontWeight="bold">
-              下図のように回路マトリクスを手動で作成、それを基に各成果物を作成していました。
+              {getMessage({
+                ja: "下図のように回路マトリクスを手動で作成、それを基に各成果物を作成していました。",
+                us: "As shown in the figure below, a circuit matrix was manually created, and each deliverable was created based on this matrix.",
+                cn: "如下图所示，电路矩阵是人工创建的，每个交付品都是在此基础上创建的。",
+                language,
+              })}
             </Text>
             <VStack justifyContent="center" mt={4} spacing={0}>
               <Box
@@ -554,11 +367,21 @@ const BlogPage: React.FC = () => {
                 borderTopRadius={5}
                 border="1px solid"
               >
-                生産準備+の導入前
+                {getMessage({
+                  ja: "生産準備+の導入前",
+                  us: "Before introduction of Production Preparation+.",
+                  cn: "在引入生产准备+之前。",
+                  language,
+                })}
               </Box>
               <Image src="/images/0009/0001.svg" w="90%" />
               <Text w="90%">
-                立ち上げ時に作成したファイルをそれぞれ修正していました
+                {getMessage({
+                  ja: "立ち上げ時に作成したファイルをそれぞれ修正していました",
+                  us: "Each file created at startup was modified.",
+                  cn: "启动时创建的每个文件都被修改。",
+                  language,
+                })}
               </Text>
             </VStack>
             <HStack justifyContent="center" mt={4}>
@@ -574,20 +397,42 @@ const BlogPage: React.FC = () => {
                 borderTopRadius={5}
                 border="1px solid"
               >
-                生産準備+の導入後
+                {getMessage({
+                  ja: "生産準備+の導入後",
+                  us: "After the introduction of Production Preparation+.",
+                  cn: "在引入 生产准备+ 之后。",
+                  language,
+                })}
               </Box>
               <Image src="/images/0009/0002.svg" w="90%" />
               <Text w="90%">
-                導入後は生産準備+のファイル一つから各成果物を作成。
-                これにより一つのファイル修正で変更が反映できます。
+                {getMessage({
+                  ja: "導入後は生産準備+のファイル一つから各成果物を作成。これにより一つのファイル修正で変更が反映できます。",
+                  us: "After implementation, each deliverable is created from a single file in Production Preparation+. This allows changes to be reflected in a single file modification.",
+                  cn: "实施后，每个交付品都是通过 Production Preparation+ 中的单个文件创建的。这样，只需修改一次文件，就能反映出变化。",
+                  language,
+                })}
                 <br />
-                ※竿レイアウト図はクランプ番号の手入力が必要です。
+                {getMessage({
+                  ja: "※竿レイアウト図はクランプ番号の手入力が必要です。",
+                  us: "*Pole layout drawings require manual input of clamp numbers.",
+                  cn: "*杆布局图需要手动输入夹钳编号。",
+                  language,
+                })}
               </Text>
             </VStack>
           </SectionBox>
           <SectionBox
             id="section2_2"
-            title="2-2.工数の推移を比較"
+            title={
+              "2-2." +
+              getMessage({
+                ja: "工数の推移を比較",
+                us: "Person-hour comparison",
+                cn: "工时比较",
+                language,
+              })
+            }
             sectionRefs={sectionRefs}
             sections={sections}
             size="sm"
@@ -597,12 +442,20 @@ const BlogPage: React.FC = () => {
               borderColor={colorMode === "light" ? "black" : "white"}
             />
             <Text fontWeight="bold">
-              以上を踏まえて立上げ工数の推移を確認していきます。
+              {getMessage({
+                ja: "以上を踏まえて立上げ工数の推移を確認していきます。",
+                us: "Based on the above, we will check the start-up man-hours.",
+                cn: "根据上述情况，将对启动工时进行检查。",
+                language,
+              })}
             </Text>
-
             <Text my={6}>
-              マル即などによる変更を反映していく必要があります。
-              それを踏まえて実際の製品切替を数字を使って見てみましょう。
+              {getMessage({
+                ja: "マル即などによる変更を反映していく必要があります。それを踏まえて実際の製品切替を数字を使って見てみましょう。",
+                us: "It is necessary to reflect changes due to mal immediate and other factors. With that in mind, let's look at the actual product changeover using numbers.",
+                cn: "有必要反映出由于不当立即和其他因素造成的变化。有鉴于此，让我们用数字来看看实际的产品转换情况。",
+                language,
+              })}
             </Text>
             <Box
               bg="gray.300"
@@ -615,13 +468,23 @@ const BlogPage: React.FC = () => {
               borderRight="1px solid"
               borderLeft="1px solid"
             >
-              生産準備+の導入前
+              {getMessage({
+                ja: "生産準備+の導入前",
+                us: "Before introduction of Production Preparation+.",
+                cn: "在引入生产准备+之前。",
+                language,
+              })}
             </Box>
             <Box border="1px solid">
-              <SjpChart01 />
+              <SjpChart01 language={language} />
             </Box>
             <Text>
-              特定の期間に業務が集中した結果、残業と休出が発生しています。
+              {getMessage({
+                ja: "特定の期間に業務が集中した結果、残業と休出が発生しています。",
+                us: "Overtime and time off have been incurred as a result of the concentration of work during certain periods of the year.",
+                cn: "由于工作集中在某些时间段，造成了加班和请假。",
+                language,
+              })}
             </Text>
             <HStack justifyContent="center" mt={4}>
               <Icon as={PiArrowFatLineDownLight} fontSize="40px" />
@@ -637,18 +500,36 @@ const BlogPage: React.FC = () => {
               borderRight="1px solid"
               borderLeft="1px solid"
             >
-              生産準備+の導入後
+              {getMessage({
+                ja: "生産準備+の導入後",
+                us: "After the introduction of Production Preparation+.",
+                cn: "在引入 生产准备+ 之后",
+                language,
+              })}
             </Box>
             <Box border="1px solid">
-              <SjpChart02 />
+              <SjpChart02 language={language} />
             </Box>
             <Text>
-              一つのファイルを編集して成果物は自動作成する事で大幅に工数が下がっています。
+              {getMessage({
+                ja: "一つのファイルを編集して成果物は自動作成する事で大幅に工数が下がっています。",
+                us: "By editing a single file and automatically creating the deliverables, man-hours are significantly reduced.",
+                cn: "通过编辑单一文件并自动创建交付成果，可大大减少工时。",
+                language,
+              })}
             </Text>
           </SectionBox>
           <SectionBox
             id="section2_3"
-            title="2-3.効果の比較まとめ"
+            title={
+              "2-3." +
+              getMessage({
+                ja: "効果の比較まとめ",
+                us: "Effectiveness Comparison",
+                cn: "成效比较摘要",
+                language,
+              })
+            }
             sectionRefs={sectionRefs}
             sections={sections}
             size="sm"
@@ -658,7 +539,12 @@ const BlogPage: React.FC = () => {
               borderColor={colorMode === "light" ? "black" : "white"}
             />
             <Text fontWeight="bold">
-              実際に生産準備を行う人の意見をまとめました。
+              {getMessage({
+                ja: "実際に生産準備を行う人の意見をまとめました。",
+                us: "The following is a summary of the opinions of those who actually prepare for production.",
+                cn: "下表概括了实际准备生产者的意见。",
+                language,
+              })}
             </Text>
             <Box
               bg="gray.300"
@@ -671,7 +557,12 @@ const BlogPage: React.FC = () => {
               borderRight="1px solid"
               borderLeft="1px solid"
             >
-              生産準備+の導入前
+              {getMessage({
+                ja: "生産準備+の導入前",
+                us: "Before introduction of Production Preparation+.",
+                cn: "在引入生产准备+之前。",
+                language,
+              })}
             </Box>
             <Box
               borderBottom="1px solid"
@@ -679,32 +570,73 @@ const BlogPage: React.FC = () => {
               borderRight="1px solid"
               p={3}
             >
-              <Text>工数面</Text>
+              <Text>
+                {getMessage({
+                  ja: "工数",
+                  us: "Person-hours",
+                  cn: "工数",
+                  language,
+                })}
+              </Text>
               <Text>
                 <Icon as={FaStarHalfAlt} color="gray.600" mr={1} />
                 <Icon as={FaRegStar} color="gray.600" mr={1} />
                 <Icon as={FaRegStar} color="gray.600" mr={1} />
-                切り替え時に工数が集中して掛かる(業務工数の偏りによる残業)
+                {getMessage({
+                  ja: "切り替え時に工数が集中して掛かる(業務工数の偏りによる残業)",
+                  us: "Concentration of man-hours at the time of changeover (overtime due to uneven workload)",
+                  cn: "转换期间工时集中（工作量不均导致加班）。",
+                  language,
+                })}
                 <br />
                 <Icon as={FaStarHalfAlt} color="gray.600" mr={1} />
                 <Icon as={FaRegStar} color="gray.600" mr={1} />
                 <Icon as={FaRegStar} color="gray.600" mr={1} />
-                修正ファイルの数が多く修正が困難(ミス/不良発生の原因)
+                {getMessage({
+                  ja: "修正ファイルの数が多く修正が困難(ミス/不良発生の原因)",
+                  us: "Difficult to correct due to large number of corrected files (causes mistakes/defects)",
+                  cn: "由于修正文件较多（导致错误/缺陷），难以修正。",
+                  language,
+                })}
                 <br />
               </Text>
-              <Text mt={4}>品質面</Text>
-              <Text>
-                <Icon as={FaRegStar} color="gray.600" mr={1} />
-                <Icon as={FaRegStar} color="gray.600" mr={1} />
-                <Icon as={FaRegStar} color="gray.600" mr={1} />
-                手入力のミスによる切替時の不良発生の増加
+              <Text mt={4}>
+                {getMessage({
+                  ja: "品質面",
+                  us: "Quality",
+                  cn: "质量方面",
+                  language,
+                })}
               </Text>
-              <Text mt={4}>生活面</Text>
               <Text>
                 <Icon as={FaRegStar} color="gray.600" mr={1} />
                 <Icon as={FaRegStar} color="gray.600" mr={1} />
                 <Icon as={FaRegStar} color="gray.600" mr={1} />
-                切り替え時に生活が不安定になる(離職の原因)
+                {getMessage({
+                  ja: "手入力のミスによる切替時の不良発生の増加",
+                  us: "Increased occurrence of defects during changeover due to manual input errors",
+                  cn: "由于人工输入错误，在转换过程中出现的缺陷增加",
+                  language,
+                })}
+              </Text>
+              <Text mt={4}>
+                {getMessage({
+                  ja: "生活",
+                  us: "Lifestyles",
+                  cn: "生活",
+                  language,
+                })}
+              </Text>
+              <Text>
+                <Icon as={FaRegStar} color="gray.600" mr={1} />
+                <Icon as={FaRegStar} color="gray.600" mr={1} />
+                <Icon as={FaRegStar} color="gray.600" mr={1} />
+                {getMessage({
+                  ja: "切り替え時に生活が不安定になる(離職の原因)",
+                  us: "Life becomes unstable during the switchover (cause of turnover)",
+                  cn: "生计在转换时变得不稳定（脱离的原因）。",
+                  language,
+                })}
               </Text>
             </Box>
             <HStack justifyContent="center" mt={4}>
@@ -721,7 +653,12 @@ const BlogPage: React.FC = () => {
               borderRight="1px solid"
               borderLeft="1px solid"
             >
-              生産準備+の導入後
+              {getMessage({
+                ja: "生産準備+の導入後",
+                us: "After the introduction of Production Preparation+.",
+                cn: "在引入 生产准备+ 之后。",
+                language,
+              })}
             </Box>
             <Box
               borderBottom="1px solid"
@@ -729,32 +666,73 @@ const BlogPage: React.FC = () => {
               borderRight="1px solid"
               p={3}
             >
-              <Text>工数面</Text>
+              <Text>
+                {getMessage({
+                  ja: "工数",
+                  us: "Person-hours",
+                  cn: "工数",
+                  language,
+                })}
+              </Text>
               <Text>
                 <Icon as={FaStar} color="gray.600" mr={1} />
                 <Icon as={FaStar} color="gray.600" mr={1} />
                 <Icon as={FaStar} color="gray.600" mr={1} />
-                自動化により作成工数が極端に減少
+                {getMessage({
+                  ja: "自動化により作成工数が極端に減少",
+                  us: "Automation drastically reduces man-hours required for creation",
+                  cn: "自动化大大减少了创建所需的工时。",
+                  language,
+                })}
                 <br />
                 <Icon as={FaStar} color="gray.600" mr={1} />
                 <Icon as={FaStar} color="gray.600" mr={1} />
                 <Icon as={FaStar} color="gray.600" mr={1} />
-                修正ファイルは１個、反映が簡単
+                {getMessage({
+                  ja: "修正ファイルは１個、反映が簡単",
+                  us: "One modified file, easy to reflect",
+                  cn: "一个修正文件，易于反映。",
+                  language,
+                })}
                 <br />
               </Text>
-              <Text mt={4}>品質面</Text>
+              <Text mt={4}>
+                {getMessage({
+                  ja: "品質面",
+                  us: "Quality",
+                  cn: "质量方面",
+                  language,
+                })}
+              </Text>
               <Text>
                 <Icon as={FaStar} color="gray.600" mr={1} />
                 <Icon as={FaStar} color="gray.600" mr={1} />
                 <Icon as={FaStarHalfAlt} color="gray.600" mr={1} />
-                自動処理の箇所は入力ミスが発生しません
+                {getMessage({
+                  ja: "自動処理の箇所は入力ミスが発生しません",
+                  us: "Automatic processing sections will not cause input errors.",
+                  cn: "自动处理部分无输入错误",
+                  language,
+                })}
               </Text>
-              <Text mt={4}>生活面</Text>
+              <Text mt={4}>
+                {getMessage({
+                  ja: "生活",
+                  us: "Lifestyles",
+                  cn: "生活",
+                  language,
+                })}
+              </Text>
               <Text>
                 <Icon as={FaStar} color="gray.600" mr={1} />
                 <Icon as={FaStar} color="gray.600" mr={1} />
                 <Icon as={FaStar} color="gray.600" mr={1} />
-                安定した時間に帰宅できる
+                {getMessage({
+                  ja: "安定した時間に帰宅できる",
+                  us: "Able to return home at a stable time",
+                  cn: "能够在稳定的时间回家",
+                  language,
+                })}
               </Text>
             </Box>
           </SectionBox>
@@ -762,7 +740,13 @@ const BlogPage: React.FC = () => {
 
         <SectionBox
           id="section99"
-          title="99.まとめ"
+          title={
+            "99." +
+            getMessage({
+              ja: "まとめ",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -792,19 +776,53 @@ const BlogPage: React.FC = () => {
                 fontWeight: "400",
               }}
             >
-              上記の効果には以下を含んでいません。
+              {getMessage({
+                ja: "上記の効果には以下を含んでいません。",
+                us: "The above effects do not include.",
+                cn: "上述影响不包括。",
+                language,
+              })}
               <br />
               <br />
-              ・検査履歴システム用ポイント点滅
+              {"・" +
+                getMessage({
+                  ja: "検査履歴システム用ポイント点滅",
+                  us: "Point flashing for inspection history system",
+                  cn: "检查记录系统的点闪",
+                  language,
+                })}
               <br />
-              ・配策誘導ナビ(補給品で特に有効)
+              {"・" +
+                getMessage({
+                  ja: "配策誘導ナビ(補給品で特に有効)",
+                  us: "Guided navigation for distribution (especially useful for supplies)",
+                  cn: "配送指导导航（对供应品特别有用）。",
+                  language,
+                })}
               <br />
-              ・先ハメ誘導
+              {"・" +
+                getMessage({
+                  ja: "先ハメ誘導",
+                  us: "Prerecorded induction",
+                  cn: "预录诱导",
+                  language,
+                })}
               <br />
-              ・サブ自動立案
+              {"・" +
+                getMessage({
+                  ja: "サブ自動立案",
+                  us: "Subautomatic drafting",
+                  cn: "次自动起草",
+                  language,
+                })}
               <br />
               <br />
-              データがまとまり次第追記します。
+              {getMessage({
+                ja: "データがまとまり次第追記します。",
+                us: "We will add the data as soon as it is compiled.",
+                cn: "数据整理完成后将立即添加。",
+                language,
+              })}
             </Text>
             <Image
               src="/images/hippo.gif"
@@ -818,7 +836,7 @@ const BlogPage: React.FC = () => {
             />
           </Box>
         </SectionBox>
-        <Box h="0.01vh" />
+        <Box h="31vh" />
       </Frame>
     </>
   );

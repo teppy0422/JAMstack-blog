@@ -64,39 +64,11 @@ import { useUserInfo } from "../../hooks/useUserId";
 import { supabase } from "../../utils/supabase/client";
 import { useReadCount } from "../../hooks/useReadCount";
 
-import "@fontsource/noto-sans-jp";
 import { BsFiletypeExe } from "react-icons/bs";
-import SjpChart01 from "./chart/chart_0009_01";
-import SjpChart02 from "./chart/chart_0009_02";
 
-const customTheme = extendTheme({
-  fonts: {
-    heading: "'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
-  },
-  fontWeights: {
-    normal: 200,
-    medium: 300,
-    bold: 400,
-    light: 300,
-    extraLight: 100,
-  },
-});
-//テキストジャンプアニメーション
-const jumpAnimation = keyframes`
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-6px); }
-  60% { transform: translateY(-3px); }
-`;
-//Kbdのスタイル
-const kbdStyle = {
-  border: "1px solid",
-  fontSize: "16px",
-  bg: "white",
-  mx: 0.5,
-  borderRadius: "3px",
-  color: "black",
-};
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
+
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
   viewBox: "0 0 26 26",
@@ -116,7 +88,14 @@ const BlogPage: React.FC = () => {
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount } = useReadCount(userId);
-
+  const { language, setLanguage } = useLanguage();
+  //右リストの読み込みをlanguage取得後にする
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
+  useEffect(() => {
+    if (language) {
+      setIsLanguageLoaded(true);
+    }
+  }, [language]);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
@@ -134,84 +113,10 @@ const BlogPage: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
 
   const showToast = useCustomToast();
-  //64pxまでスクロールしないとサイドバーが表示されないから暫定
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 100); // 100msの遅延を追加
-    } else {
-      window.scrollTo(0, 150);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
-  //#の位置にスクロールした時のアクティブなセクションを装飾
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-    );
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
-
-    return () => {
-      sectionRefs.current.forEach((section) => {
-        if (section) observer.unobserve(section);
-      });
-    };
-  }, []);
-  //#クリックした時のオフセット
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64; // 64pxのオフセット
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange, false);
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange, false);
-    };
-  }, []);
-
-  const handleOpen = (drawerName: string) => {
-    setActiveDrawer(drawerName);
-    onOpen();
-  };
-  const handleClose = () => {
-    setActiveDrawer(null);
-    onClose();
-  };
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-  if (!isClient) {
-    return null; // クライアントサイドでのみ表示する場合はnullを返す
+  //右リストの読み込みをlanguage取得後にする
+  if (!isLanguageLoaded) {
+    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
   }
-
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs}>
@@ -225,7 +130,12 @@ const BlogPage: React.FC = () => {
             </AvatarGroup>
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>開発</Text>
+            <Text>
+              {getMessage({
+                ja: "開発",
+                language,
+              })}
+            </Text>
             <Spacer />
             <Flex justifyContent="flex-end">
               <Text>
@@ -235,21 +145,48 @@ const BlogPage: React.FC = () => {
             </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
-            誘導ポイント設定一覧表の使い方
+            {getMessage({
+              ja: "誘導ポイント設定一覧表の使い方",
+              us: "How to use the Guidance Point Setting List",
+              cn: "如何使用感应点设置列表。",
+              language,
+            })}
           </Heading>
-          <CustomBadge text="誘導ポイント設定" />
-          <CustomBadge text="作成途中" />
+          <CustomBadge
+            text={getMessage({
+              ja: "誘導ポイント設定",
+              us: "Guidance point setting",
+              cn: "感应点设置",
+              language,
+            })}
+          />
+          <CustomBadge
+            text={getMessage({
+              ja: "作成途中",
+              language,
+            })}
+          />
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            更新日:2024-11-30
+            {getMessage({
+              ja: "更新日",
+              language,
+            })}
+            :2024-11-30
           </Text>
         </Box>
         <SectionBox
           id="section1"
-          title="1.はじめに"
+          title={
+            "1." +
+            getMessage({
+              ja: "はじめに",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -259,15 +196,26 @@ const BlogPage: React.FC = () => {
           />
           <Box>
             <Text>
-              作業順を記した手順書にLED番号が有りますよね？
-              その手順書を見ながら制御器のデータを手入力作成していると思います。
-              手順書から制御器に直接書き込むシステムを作成しました。
+              {getMessage({
+                ja: "作業順を記した手順書にLED番号が有りますよね？その手順書を見ながら制御器のデータを手入力作成していると思います。手順書から制御器に直接書き込むシステムを作成しました。",
+                us: "There are LED numbers in the procedure manual that describes the work order, aren't there? I think you are manually inputting data into the controller while looking at the procedure manual. We have created a system that directly writes data from the procedure manual to the controller.",
+                cn: "程序手册中不是有描述操作顺序的 LED 编号吗？我认为控制器的数据是在查看程序手册时手动创建的。我们创建了一个系统，可以直接从程序手册写入控制器。",
+                language,
+              })}
             </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section2"
-          title="2.参照設定の確認"
+          title={
+            "2." +
+            getMessage({
+              ja: "参照設定の確認",
+              us: "Check reference settings",
+              cn: "检查参考设置",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -276,26 +224,70 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Text fontWeight="bold">
-            正しく動作しない場合は
+            {getMessage({
+              ja: "正しく動作しない場合は",
+              us: "If it does not work correctly, do ",
+              cn: "如果不能正常工作，请执行 ",
+              language,
+            })}
             <ReferenceSettingModal />
-            をしてください。
+            {getMessage({
+              ja: "をしてください。",
+              us: ".",
+              cn: "。",
+              language,
+            })}
           </Text>
 
           <Text mt={6}>
-            WindowsのOSによっては参照不可が発生すると思います。
+            {getMessage({
+              ja: "WindowsのOSによっては参照不可が発生すると思います。",
+              us: "I believe that depending on the Windows operating system, the reference will not be available.",
+              cn: "根据 Windows 操作系统的不同，将无法进行引用。",
+              language,
+            })}
             <br />
-            例えばWindows7で利用する場合は、制御器にデータ送信を行うためにMicroSoft社のMsComm32.ocxが参照不可になったと思います。
+            {getMessage({
+              ja: "例えばWindows7で利用する場合は、制御器にデータ送信を行うためにMicroSoft社のMsComm32.ocxが参照不可になったと思います。",
+              us: "For example, when using Windows 7, I believe MicroSoft's MsComm32.ocx is now unreferenced in order to send data to the controller.",
+              cn: "例如，在使用 Windows 7 时, MicroSoft 的 MsComm32.ocx 将无法向控制器发送数据。",
+              language,
+            })}
             <br />
-            スクリーンショットが撮れないのではっきりしません。
+            {getMessage({
+              ja: "スクリーンショットが撮れないのではっきりしません。",
+              us: "I can't take a screenshot so it's not clear.",
+              cn: "由于无法截图，所以不清楚。",
+              language,
+            })}
             <br />
-            参照不可になってる場合はその画面を「問い合わせ」チャットから送ってください。
+            {getMessage({
+              ja: "参照不可になってる場合はその画面を「問い合わせ」チャットから送ってください。",
+              us: 'If it is unreferenced, please send us the screen from the "Contact" chat.',
+              cn: '如果屏幕没有参考资料，请通过 "联系" 聊天将其发送给我们。',
+              language,
+            })}
             <br />
-            その場合の手順をここに追記します。
+
+            {getMessage({
+              ja: "その場合の対応方法をここに追記します。",
+              us: "We will add here how to handle such cases.",
+              cn: "这里补充了如何处理这种情况。",
+              language,
+            })}
           </Text>
         </SectionBox>
         <SectionBox
           id="section3"
-          title="3.シリアルポートの準備"
+          title={
+            "3." +
+            getMessage({
+              ja: "シリアルポートの準備",
+              us: "Serial port preparation",
+              cn: "准备串行端口",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -303,13 +295,32 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text fontWeight="bold">シリアルポートの準備を以下で行います。</Text>
-
-          <Text mt={6}>作成途中です</Text>
+          <Text fontWeight="bold">
+            {getMessage({
+              ja: "シリアルポートの準備を以下で行います。",
+              us: "Prepare the serial port as follows",
+              cn: "按如下步骤准备串行端口",
+              language,
+            })}
+          </Text>
         </SectionBox>
+        <Text mt={6} mx="auto">
+          {getMessage({
+            ja: "作成途中",
+            language,
+          })}
+        </Text>
         <SectionBox
           id="section4"
-          title="4.データ入力"
+          title={
+            "4." +
+            getMessage({
+              ja: "データ入力",
+              us: "data entry",
+              cn: "数据输入",
+              language,
+            })
+          }
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -323,7 +334,15 @@ const BlogPage: React.FC = () => {
         <Box ml={2}>
           <SectionBox
             id="section4_1"
-            title="4-1.列の指定"
+            title={
+              "4-1." +
+              getMessage({
+                ja: "列の指定",
+                us: "Specify columns",
+                cn: "栏目名称",
+                language,
+              })
+            }
             sectionRefs={sectionRefs}
             sections={sections}
             size="sm"
@@ -334,20 +353,61 @@ const BlogPage: React.FC = () => {
               borderColor={colorMode === "light" ? "black" : "white"}
             />
             <Text fontWeight="bold">
-              下記の3項目を以下のルールで配置してください。
-              それ以外は自由に編集が可能です。
+              {getMessage({
+                ja: "下記の3項目を以下のルールで配置してください。それ以外は自由に編集が可能です。",
+                us: "Please place the following three items according to the following rules. The rest can be freely edited.",
+                cn: "以下三项应按以下规则放置。其余可自由编辑。",
+                language,
+              })}
             </Text>
             <Image src="/images/0010/0001.png" w="100%" mb={6} />
-            <Text>1.ｲﾝﾗｲﾝ = 作業に対応するLED番号を入力する列を指定</Text>
-            <Text>2.start_ = 製品品番の左端の列を指定</Text>
-            <Text>3.end_ = 製品品番の右端の列を指定</Text>
+            <Text>
+              {"1.ｲﾝﾗｲﾝ = " +
+                getMessage({
+                  ja: "作業に対応するLED番号を入力する列を指定",
+                  us: "Specify the column to enter the LED number corresponding to the work",
+                  cn: "指定在哪一列输入与任务相对应的 LED 编号",
+                  language,
+                })}
+            </Text>
+            <Text>
+              {"2.start_ = " +
+                getMessage({
+                  ja: "製品品番の左端の列を指定",
+                  us: "Specify the left-most column of the product part number",
+                  cn: "指定产品部件编号的最左一列",
+                  language,
+                })}
+            </Text>
+            <Text>
+              {"3.end_ = " +
+                getMessage({
+                  ja: "製品品番の右端の列を指定",
+                  us: "Specify the rightmost column of the product part number",
+                  cn: "指定产品部件号最右边一列",
+                  language,
+                })}
+            </Text>
             <Text mt={2}>
-              ※実際には原紙を使うと思うので編集時に以上のルールを守るだけになると思います
+              {getMessage({
+                ja: "※実際には原紙を使うと思うので編集時に以上のルールを守るだけになると思います",
+                us: "*I think I'll actually use the original paper, so I'll just follow the above rules when editing.",
+                cn: "*我认为我们实际上会使用原稿，所以我们在编辑时只需遵循上述规则即可。",
+                language,
+              })}
             </Text>
           </SectionBox>
           <SectionBox
             id="section4_2"
-            title="4-2.値の入力"
+            title={
+              "4-2." +
+              getMessage({
+                ja: "値の入力",
+                us: "Enter a value",
+                cn: "输入数值",
+                language,
+              })
+            }
             sectionRefs={sectionRefs}
             sections={sections}
             size="sm"
@@ -357,20 +417,56 @@ const BlogPage: React.FC = () => {
               borderColor={colorMode === "light" ? "black" : "white"}
             />
             <Text fontWeight="bold">
-              入力ルールは以下のようになります。
+              {getMessage({
+                ja: "入力ルールは以下のようになります。",
+                us: "The input rules are as follows",
+                cn: "输入规则如下",
+                language,
+              })}
               <br />
-              入力箇所のセル結合はしないてください。
-              結合範囲のセルは左上しか認識できないので不具合の原因になります。
+              {getMessage({
+                ja: "入力箇所のセル結合はしないてください。結合範囲のセルは左上しか認識できないので不具合の原因になります。",
+                us: "Do not merge cells in the input area. The cells in the merged range can only be recognized in the upper left corner, which can cause problems.",
+                cn: "不要合并输入区域中的单元格。合并范围内的单元格只能在左上角识别，这可能会造成问题。",
+                language,
+              })}
             </Text>
             <Image src="/images/0010/0002.png" w="100%" mb={6} />
             <Text>
-              4.ｲﾝﾗｲﾝ番号の入力 = 作業に対し光らせたいLED番号の入力
+              {"4." +
+                getMessage({
+                  ja: "ｲﾝﾗｲﾝ番号の入力 = 作業に対し光らせたいLED番号の入力",
+                  us: "Enter inline number = enter the LED number you want to light up for your work",
+                  cn: "输入内联编号 = 输入任务要点亮的 LED 编号。",
+                  language,
+                })}
               <br />
-              4.ｲﾝﾗｲﾝ色 =
-              複数のYICで作業をする場合は背景色を変える事で背景色毎の出力が可能
+              {"4." +
+                getMessage({
+                  ja: "ｲﾝﾗｲﾝ色 = 複数のYICで作業をする場合は背景色を変える事で背景色毎の出力が可能",
+                  us: "Inline color = If you are working with multiple YICs, you can change the background color to output each background color.",
+                  cn: "内联颜色 = 使用多个 YIC 时，可更改背景颜色，以允许输出每种背景颜色。",
+                  language,
+                })}
             </Text>
-            <Text>5.YICの呼び出し番号 = 空欄の場合は出力しない</Text>
-            <Text>6.作業の有無 = 空欄の場合はLEDが光らない</Text>
+            <Text>
+              {"5." +
+                getMessage({
+                  ja: "YICの呼び出し番号 = 空欄の場合は出力しない",
+                  us: "YIC call number = if blank, no output",
+                  cn: "YIC 呼叫编号 = 空白时无输出",
+                  language,
+                })}
+            </Text>
+            <Text>
+              {"6." +
+                getMessage({
+                  ja: "作業の有無 = 空欄の場合はLEDが光らない",
+                  us: "Work = If left blank, LED will not light up",
+                  cn: "工作 = 如果留空, LED 不亮。",
+                  language,
+                })}
+            </Text>
           </SectionBox>
         </Box>
         <SectionBox
