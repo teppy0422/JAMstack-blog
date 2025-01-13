@@ -305,13 +305,38 @@ export default function Auth({ userData }: AuthProps) {
     setLanguage(newLanguage);
   };
   return (
-    <Box>
+    <Box
+      fontFamily={getMessage({
+        ja: "Noto Sans JP",
+        us: "Noto Sans JP",
+        cn: "Noto Sans SC",
+        language,
+      })}
+    >
       {user ? (
         <>
           <Box textAlign="center" mb={4}>
-            <Text fontSize="lg">{userData.userName || "No Name"}</Text>
+            <Divider
+              borderColor={colorMode === "light" ? "black" : "white"}
+              width="60%"
+              mx="auto"
+              mt={10}
+              mb={0}
+              position="relative"
+            />
+            <Text
+              fontSize="lg"
+              position="relative"
+              top="-16px"
+              px={2}
+              bg={colorMode === "light" ? "#F0E6DB" : "black"}
+              display={"inline-block"}
+            >
+              {userData.userName || "No Name"}
+            </Text>
             <Text
               fontSize="sm"
+              mb={1}
               color={colorMode === "light" ? "black" : "white"}
             >
               {getMessage({ ja: userData.userMainCompany || "", language }) ||
@@ -358,7 +383,13 @@ export default function Auth({ userData }: AuthProps) {
             />
           </Box>
           <Box display="flex" justifyContent="center">
-            <Button onClick={handleSignOut} colorScheme="red" mx="auto">
+            <Button
+              onClick={handleSignOut}
+              colorScheme="red"
+              mx="auto"
+              px={2}
+              height="1.8em"
+            >
               {getMessage({
                 ja: "ログアウト",
                 us: "Logout",
@@ -655,7 +686,7 @@ export default function Auth({ userData }: AuthProps) {
         </>
       )}
       <Box mt={5} position="relative" borderRadius={8}>
-        <Divider position="relative" border="solid 1px" />
+        <Divider position="relative" border="solid 0.5px" />
         <Text
           textAlign="center"
           mx="auto"
@@ -683,9 +714,9 @@ export default function Auth({ userData }: AuthProps) {
           my={0.5}
         >
           {getMessage({
-            ja: "画像の翻訳は未対応です",
-            us: "Translation of images is not yet supported",
-            cn: "尚未支持图像翻译",
+            ja: "画像の翻訳は日本語以外は未対応です",
+            us: "Translation of images is not yet available except for Japanese",
+            cn: "除日语外，尚未提供图像翻译。",
             language,
           })}
           <br />

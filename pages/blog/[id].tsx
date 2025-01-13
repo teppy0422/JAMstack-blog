@@ -6,7 +6,7 @@ import Header from "../../components/header";
 import styles from "../../styles/home.module.scss";
 
 //シンタックスハイライト用
-import cheerio from "cheerio";
+import { load } from "cheerio";
 import hljs from "highlight.js";
 import "highlight.js/styles/srcery.css";
 
@@ -69,7 +69,7 @@ export const getStaticProps = async (context) => {
     },
   });
 
-  const $ = cheerio.load(data.content); // data.contentはmicroCMSから返されるリッチエディタ部分
+  const $ = load(data.content); // data.contentはmicroCMSから返されるリッチエディタ部分
   $("pre code").each((_, elm) => {
     const result = hljs.highlightAuto($(elm).text());
     $(elm).html(result.value);

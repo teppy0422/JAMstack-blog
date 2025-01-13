@@ -7,7 +7,6 @@ import { Text, Box } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 
 import RenderResult from "next/dist/server/render-result";
-import { last } from "cheerio/lib/api/traversing";
 
 const Rig = ({ v = new Vector3() }) => {
   return useFrame((state) => {

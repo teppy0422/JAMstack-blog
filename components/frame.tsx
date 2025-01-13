@@ -311,13 +311,7 @@ const Frame: React.FC<{
               </Text>
             </Box>
           ) : (
-            <HStack
-              align="start"
-              spacing={2}
-              p={2}
-              fontFamily="Noto Sans JP"
-              w="100%"
-            >
+            <HStack align="start" spacing={2} p={2} w="100%">
               <VStack
                 align="start"
                 flex="3.5"

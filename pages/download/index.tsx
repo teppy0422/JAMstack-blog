@@ -44,7 +44,8 @@ import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar";
 import { Global } from "@emotion/react";
 
-import "@fontsource/noto-sans-jp";
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 
 // ファイル名から最大の数字を取得する関数
 function getMaxVersionNumber(directory: string): {
@@ -129,6 +130,7 @@ export default function About({
       {text}
     </Badge>
   );
+  const { language, setLanguage } = useLanguage();
 
   return (
     <>
@@ -141,7 +143,6 @@ export default function About({
               top: "10px",
               right: "10px",
               fontSize: "12px",
-              fontFamily: "Noto Sans JP",
             },
             ".print-only": {
               display: "block !important",
@@ -170,9 +171,14 @@ export default function About({
           className={styles.me}
           sx={{
             paddingTop: "30px",
-            fontFamily: "Noto Sans JP",
             fontWeight: "200",
           }}
+          fontFamily={getMessage({
+            ja: "Noto Sans JP",
+            us: "Noto Sans,Noto Sans JP",
+            cn: "Noto Sans SC,Noto Sans JP",
+            language,
+          })}
         >
           <Box textAlign="center" mb={8}>
             <HStack spacing={2} alignItems="center" justifyContent="center">
@@ -188,13 +194,33 @@ export default function About({
               </Text>
             </HStack>
             <Box fontSize="md">
-              ダウンロードと説明は適宜追加します
+              {getMessage({
+                ja: "ダウンロードと説明は適宜追加します",
+                us: "Downloads and descriptions will be added as appropriate.",
+                cn: "将酌情添加下载和说明",
+                language,
+              })}
               <br />
-              右側にある
+              {getMessage({
+                ja: "右側にある",
+                us: "Click on the ",
+                cn: "点击右侧的",
+                language,
+              })}
               <Badge backgroundColor="#444" color="white" mt={-0.5} mr={0.5}>
-                バッジ
+                {getMessage({
+                  ja: "バッジ",
+                  us: "badge",
+                  cn: "奖章",
+                  language,
+                })}
               </Badge>
-              をクリックすると説明ページが表示されます
+              {getMessage({
+                ja: "をクリックすると説明ページが表示されます",
+                us: "on the right to go to the description page",
+                cn: "进入说明页面",
+                language,
+              })}
               <Box
                 display="flex"
                 alignItems="center"
@@ -216,7 +242,10 @@ export default function About({
             >
               <CardHeader p={2} pl={3} pb={0}>
                 <Heading size="md" mb={3}>
-                  生産準備+
+                  {getMessage({
+                    ja: "生産準備+",
+                    language,
+                  })}
                 </Heading>
               </CardHeader>
               <Divider borderColor="gray.500" />
@@ -232,16 +261,20 @@ export default function About({
                   onMouseEnter={() => setIsHovered(true)}
                 >
                   <DownloadButton
-                    path="/download/sjp"
+                    path="/download/Sjp"
                     isHovered={isHovered}
                     backGroundColor="green"
                     userName={userName}
                   />
-
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
                       <Heading size="sm" mb={1.5}>
-                        Sjp+本体
+                        {getMessage({
+                          ja: "Sjp+本体",
+                          us: "Sjp+ main unit",
+                          cn: "Sjp+ 机构",
+                          language,
+                        })}
                       </Heading>
                       <Flex justifyContent="flex-end" alignItems="center">
                         <Badge
@@ -270,11 +303,26 @@ export default function About({
                         </Badge>
                       </Flex>
                       <Text pt="2" fontSize="sm">
-                        最初はこれから始めるのがおすすめです
+                        {getMessage({
+                          ja: "最初はこれから始めるのがおすすめです",
+                          us: "I recommend starting with this one.",
+                          cn: "建议从这里开始。",
+                          language,
+                        })}
                         <br />
-                        ハメ図を作成したりサブ形態を入力する本体
+                        {getMessage({
+                          ja: "ハメ図を作成したりサブ形態を入力する本体",
+                          us: "Main body to create frame diagrams and enter sub-forms",
+                          cn: "用于创建框架图和输入子表格的主单元",
+                          language,
+                        })}
                         <br />
-                        PVSW.csvとRLTF.txtが必須
+                        {getMessage({
+                          ja: "PVSW.csvとRLTF.txtが必須",
+                          us: "PVSW.csv and RLTF.txt are required",
+                          cn: "需要 PVSW.csv 和 RLTF.txt 文件",
+                          language,
+                        })}
                         <br />
                         <Badge
                           backgroundColor="#444"
@@ -282,9 +330,18 @@ export default function About({
                           mt={-0.5}
                           mr={0.5}
                         >
-                          41.先ハメ誘導
+                          {"41." +
+                            getMessage({
+                              ja: "先ハメ誘導",
+                              language,
+                            })}
                         </Badge>
-                        は生産準備+が自動立案したサブ形態のみ対応
+                        {getMessage({
+                          ja: "は生産準備+が自動立案したサブ形態のみ対応",
+                          us: "is only supported for sub-forms automatically planned by Production Preparation+.",
+                          cn: "仅支持由生产准备+ 自动起草的子表格。",
+                          language,
+                        })}
                       </Text>
                     </Flex>
                     <Stack
@@ -304,16 +361,55 @@ export default function About({
                           {maxVersionString}
                         </Text>
                       </Flex>
-                      <CustomBadge path="" text="10.竿レイアウト" />
                       <CustomBadge
-                        path="/files/download/Sjp/40/index.html"
-                        text="40.サブ図"
+                        path=""
+                        text={
+                          "10." +
+                          getMessage({
+                            ja: "竿レイアウト",
+                            language,
+                          })
+                        }
                       />
-                      <CustomBadge path="/41" text="41.先ハメ誘導" />
-                      <CustomBadge path="/56v3.1" text="56.配策経路" />
+                      <CustomBadge
+                        path="/download/Sjp/40/"
+                        text={
+                          "40." +
+                          getMessage({
+                            ja: "サブ図",
+                            language,
+                          })
+                        }
+                      />
+                      <CustomBadge
+                        path="/download/Sjp/41"
+                        text={
+                          "41." +
+                          getMessage({
+                            ja: "先ハメ誘導",
+                            language,
+                          })
+                        }
+                      />
+                      <CustomBadge
+                        path="/56v3.1"
+                        text={
+                          "56." +
+                          getMessage({
+                            ja: "配策誘導ナビ",
+                            language,
+                          })
+                        }
+                      />
                       <CustomBadge
                         path="/files/download/Sjp/70/index.html"
-                        text="70.検査履歴点滅"
+                        text={
+                          "70+" +
+                          getMessage({
+                            ja: "ポイント点滅",
+                            language,
+                          })
+                        }
                       />
                     </Stack>
                   </Flex>
@@ -353,13 +449,33 @@ export default function About({
                         </Badge>
                       </Flex>
                       <Text pt="2" fontSize="sm">
-                        コネクタを撮影するアプリケーション
+                        {getMessage({
+                          ja: "コネクタを撮影するアプリケーション",
+                          us: "Application to shoot connectors",
+                          cn: "应用于拍摄连接器",
+                          language,
+                        })}
                         <br />
-                        SONYのカメラのみ対応
+                        {getMessage({
+                          ja: "SONYのカメラのみ対応",
+                          us: "Only SONY cameras are supported.",
+                          cn: "仅与 SONY 相机兼容。",
+                          language,
+                        })}
                         <br />
-                        生産準備+で写真撮影を実行時に自動インストールされるので使用には必要ありません
+                        {getMessage({
+                          ja: "生産準備+で写真撮影を実行時に自動インストールされるので使用には必要ありません",
+                          us: "Automatically installed when running a photo shoot in Production Preparation+, so not required for use.",
+                          cn: "无需使用，因为在 生产准备+ 中运行照片拍摄时会自动安装。",
+                          language,
+                        })}
                         <br />
-                        アプリケーションを修正したい場合のみダウンロードしてください
+                        {getMessage({
+                          ja: "アプリケーションを修正したい場合のみダウンロードしてください",
+                          us: "Download only if you want to modify your application",
+                          cn: "仅在要修改应用程序时下载",
+                          language,
+                        })}
                       </Text>
                     </Flex>
                     <Stack
@@ -374,27 +490,30 @@ export default function About({
                           1.0.0.4
                         </Text>
                       </Flex>
-                      <CustomBadge path="" text="撮影方法" />
+                      <CustomBadge
+                        path=""
+                        text={getMessage({
+                          ja: "撮影方法",
+                          us: "Shooting Method",
+                          cn: "拍摄方法",
+                          language,
+                        })}
+                      />
                     </Stack>
                   </Flex>
                 </Box>
                 <Divider borderColor="gray.500" />
               </CardBody>
             </Card>
-            <Box
-              position="relative" // 基準位置を設定
-              h="20px" // 高さを設定
-              w="100%" // 幅を設定 (必要に応じて調整)
-              m="0"
-            >
+            <Box position="relative" h="20px" w="100%" m="0">
               <Box
-                position="absolute" // 絶対位置で配置
-                left="50%" // 左から50%の位置に配置
+                position="absolute"
+                left="50%"
                 top="0"
                 bottom="0"
-                borderLeft="1px solid" // 左に線を引く
+                borderLeft="1px solid"
                 borderColor="gray.500"
-                transform="translateX(-50%)" // 左に50%移動して中央に揃える
+                transform="translateX(-50%)"
               />
             </Box>
             <Card
@@ -405,7 +524,10 @@ export default function About({
             >
               <CardHeader p={1} pl={3} pb={0}>
                 <Heading size="sm" mb={1}>
-                  誘導ナビ+
+                  {getMessage({
+                    ja: "誘導ナビ.net",
+                    language,
+                  })}
                 </Heading>
               </CardHeader>
               <Divider borderColor="gray.500" />
@@ -447,22 +569,44 @@ export default function About({
                         </Badge>
                       </Flex>
                       <Text pt="2" fontSize="sm">
-                        ・
+                        {getMessage({
+                          ja: "",
+                          us: "Application for displaying ",
+                          cn: "申请显示 ",
+                          language,
+                        })}
                         <Badge
                           backgroundColor="#444"
                           color="white"
                           mt={-0.5}
                           mr={0.5}
                         >
-                          56.配策経路
+                          {"56." +
+                            getMessage({
+                              ja: "配策誘導ナビ",
+                              language,
+                            })}
                         </Badge>
-                        を表示する為のブラウザコントロール
+                        {getMessage({
+                          ja: " の表示とディスプレイ移動の為のアプリケーション",
+                          us: " and moving the display.",
+                          cn: " 和移动显示屏",
+                          language,
+                        })}
                         <br />
-                        ・ディスプレイ移動の為のシリアル送信
+                        {getMessage({
+                          ja: "ブラウザではCOMポートへのアクセス許可がページ毎に必要なので作成しました",
+                          us: "Created because the browser requires permission to access the COM port on a page-by-page basis.",
+                          cn: "创建的原因是浏览器需要逐页访问 COM 端口的权限",
+                          language,
+                        })}
                         <br />
-                        ブラウザではCOMポートへのアクセスがページ毎に許可される必要がある為に作成しました
-                        <br />
-                        .NetFrameWork4.8はインストーラーに含まれます
+                        {getMessage({
+                          ja: ".NetFrameWork4.8はインストーラーに含まれます",
+                          us: ".NetFrameWork4.8 is included in the installer.",
+                          cn: "安装程序中包含 .NetFrameWork4.8",
+                          language,
+                        })}
                       </Text>
                     </Flex>
                     <Stack
@@ -521,9 +665,19 @@ export default function About({
                         </Badge>
                       </Flex>
                       <Text pt="2" fontSize="sm">
-                        配策誘導のディスプレイを移動させる為にyudo.netから信号を受けて動作{" "}
+                        {getMessage({
+                          ja: "yudo.netから信号を受けて配策誘導のディスプレイを移動させるArduinoのスケッチ",
+                          us: "Sketch of an Arduino that receives a signal from yudo.net and moves the display of the routing guidance.",
+                          cn: "接收来自 yudo.net 的信号并移动分发指南显示屏的 Arduino 的草图。",
+                          language,
+                        })}
                         <br />
-                        ArduinoのATmega328P系にプログラムを書き込む事で動作可能
+                        {getMessage({
+                          ja: "ArduinoのATmega328P系にプログラムを書き込む事で動作可能",
+                          us: "Can be operated by writing a program to Arduino's ATmega328P series.",
+                          cn: "可通过向 Arduino ATmega328P 系列编写程序来操作。",
+                          language,
+                        })}
                       </Text>
                     </Flex>
                     <Stack
@@ -534,18 +688,21 @@ export default function About({
                       <Flex justifyContent="flex-end" width="100%">
                         <Text fontSize="xs" textAlign="right" right={0}></Text>
                       </Flex>
-                      <CustomBadge path="/56.net" text="ディスプレイ移動" />{" "}
+                      <CustomBadge
+                        path="../download/Sjp/56.net"
+                        text={getMessage({
+                          ja: "ディスプレイ移動",
+                          us: "Display Movement",
+                          cn: "显示屏移动",
+                          language,
+                        })}
+                      />
                     </Stack>
                   </Flex>
                 </Box>
               </CardBody>
             </Card>
-            <Box
-              position="relative" // 基準位置を設定
-              h="20px" // 高さを設定
-              w="100%" // 幅を設定 (必要に応じて調整)
-              m="0"
-            >
+            <Box position="relative" h="20px" w="100%" m="0">
               <Box
                 position="absolute" // 絶対位置で配置
                 left="50%" // 左から50%の位置に配置
@@ -589,7 +746,10 @@ export default function About({
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
                       <Heading size="sm" mb={1.5}>
-                        検査履歴システム
+                        {getMessage({
+                          ja: "検査履歴システム",
+                          language,
+                        })}
                       </Heading>
                       <Flex justifyContent="flex-end" alignItems="center">
                         <Badge
@@ -603,9 +763,19 @@ export default function About({
                         </Badge>
                       </Flex>
                       <Text pt="2" fontSize="sm">
-                        検査実績を記憶する事とラベル印刷が可能
+                        {getMessage({
+                          ja: "検査実績の記憶とラベル印刷が可能",
+                          us: "Capable of storing inspection results and printing labels.",
+                          cn: "能够存储检测结果并打印标签",
+                          language,
+                        })}
                         <br />
-                        開発は瀬戸内部品なのでここではダウンロードできません
+                        {getMessage({
+                          ja: "瀬戸内部品の開発なのでここではダウンロードできません",
+                          us: "Not available for download here as it is a development of the Setouchi component.",
+                          cn: "在此无法下载，因为它是 Setouchi 组件的开发版本。",
+                          language,
+                        })}
                         <br />
                         <Badge
                           backgroundColor="#444"
@@ -613,12 +783,33 @@ export default function About({
                           mt={-0.5}
                           mr={0.5}
                         >
-                          70.検査履歴点滅
+                          {"70." +
+                            getMessage({
+                              ja: "ポイント点滅",
+                              language,
+                            })}
                         </Badge>
-                        を導入する事でより作業効率の向上を図れます
+                        {getMessage({
+                          ja: "を利用すると更に作業効率の向上を図れます",
+                          us: "can be used to further improve work efficiency.",
+                          cn: "可以用来进一步提高工作效率。",
+                          language,
+                        })}
                         <br />
-                        ⚠️ブラウザのバージョンはPCに依存しているので注意
-                        ※最新Verは不明です <br />
+                        {"⚠️" +
+                          getMessage({
+                            ja: "ブラウザのバージョンはPCに依存しているので注意",
+                            us: "Note that browser version is PC-dependent.",
+                            cn: "请注意，浏览器版本取决于电脑。",
+                            language,
+                          })}
+                        {getMessage({
+                          ja: "※最新Verは不明です",
+                          us: "*Latest version is unknown.",
+                          cn: "*最新版本未知。",
+                          language,
+                        })}
+                        <br />
                       </Text>
                     </Flex>
                     <Stack
@@ -647,7 +838,10 @@ export default function About({
             >
               <CardHeader p={2} pl={3} pb={0}>
                 <Heading size="md" mb={3}>
-                  部材一覧+
+                  {getMessage({
+                    ja: "部材一覧+",
+                    language,
+                  })}
                 </Heading>
               </CardHeader>
               <Divider borderColor="gray.500" />
@@ -693,9 +887,19 @@ export default function About({
                     365
                   </Badge>
                   <Text pt="2" fontSize="sm">
-                    全製品品番の使用部品リストの一覧表を作成
+                    {getMessage({
+                      ja: "全製品品番の使用部品リストの一覧表を作成",
+                      us: "Create a list of parts used for all product part numbers",
+                      cn: "编制所有产品部件号所用部件清单",
+                      language,
+                    })}
                     <br />
-                    EXTESを自動制御して手入力の手間とミスを無くせます
+                    {getMessage({
+                      ja: "EXTESを自動制御して手入力の手間とミスを無くせます",
+                      us: "Automatically control EXTES to eliminate manual input and errors.",
+                      cn: "自动控制 EXTES，消除手动输入和错误。",
+                      language,
+                    })}
                   </Text>
                 </Box>
               </CardBody>
@@ -708,7 +912,10 @@ export default function About({
             >
               <CardHeader p={2} pl={3} pb={0}>
                 <Heading size="md" mb={3}>
-                  順立生産システム
+                  {getMessage({
+                    ja: "順立生産システム",
+                    language,
+                  })}
                 </Heading>
               </CardHeader>
               <Divider borderColor="gray.500" />
@@ -754,14 +961,33 @@ export default function About({
                         </Badge>
                       </Flex>
                       <Text pt="2" fontSize="sm">
-                        一貫工程などの連続して生産する工程で有効
+                        {getMessage({
+                          ja: "一貫工程などの連続して生産する工程で有効",
+                          us: "Effective in continuous production processes such as integrated processes.",
+                          cn: "适用于连续生产工艺，如集成工艺",
+                          language,
+                        })}
                         <br />
-                        カンバン等のデータを読み込んでその順番で各作業場所で生産指示を行う
+                        {getMessage({
+                          ja: "かんばん等のデータを読み込んでその順番で各作業場所で生産指示を行う",
+                          us: "Reads Kanban and other data and gives production instructions at each work location in that order.",
+                          cn: "读取来自看板和其他来源的数据，并按顺序在每个工作地点下达生产指令。",
+                          language,
+                        })}
                         <br />
-                        生産指示の対象は[作業者] [自動機(SA,AS)] [CB10,70]
-                        [YSS]に対応
+                        {getMessage({
+                          ja: "生産指示の対象は[作業者] [自動機(SA,AS)] ",
+                          us: "The subject of the production order is [Operator] [automatic(SA,AS)] ",
+                          cn: "生产订单受 [工人] [自动(SA,AS)] ",
+                          language,
+                        }) + "[CB10,70] [YSS]."}
                         <br />
-                        ※宮崎部品が委託開発した3つのシステムを統合したもの
+                        {getMessage({
+                          ja: "※宮崎部品が委託開発した3つのシステムを統合して機能追加しました",
+                          us: "*Miyazaki Parts has integrated three systems developed on consignment and added functionality.",
+                          cn: "*宮崎部品 整合了由 委托开发的三个系统，并增加了其他功能",
+                          language,
+                        })}
                       </Text>
                     </Flex>
                     <Stack
@@ -776,7 +1002,18 @@ export default function About({
                           128
                         </Text>
                       </Flex>
-                      <CustomBadge path="" text="main1.計画指示" />
+                      <CustomBadge
+                        path=""
+                        text={
+                          "main1." +
+                          getMessage({
+                            ja: "指示",
+                            us: "directives",
+                            cn: "指示",
+                            language,
+                          })
+                        }
+                      />
                       <CustomBadge path="/main2" text="main2.SSC" />
                       <CustomBadge path="" text="main3.CB" />
                       <CustomBadge path="/main3.plc" text="main3.PLC" />
@@ -803,7 +1040,12 @@ export default function About({
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
                       <Heading size="sm" mb={1.5}>
-                        main3用PLC
+                        {getMessage({
+                          ja: "main3用PLC",
+                          us: "PLC for main3",
+                          cn: "main3用PLC",
+                          language,
+                        })}
                       </Heading>
                       <Flex justifyContent="flex-end" alignItems="center">
                         <Badge
@@ -815,15 +1057,34 @@ export default function About({
                           OMRON CP**
                         </Badge>
                       </Flex>
-
                       <Text pt="2" fontSize="sm">
-                        main3からPLCへデータを送信して部品セットを行う
+                        {getMessage({
+                          ja: "main3からPLCへデータを送信して部品セットを行う",
+                          us: "Send data from main3 to PLC to set parts",
+                          cn: "从 main3 向 PLC 发送数据以设置部件。",
+                          language,
+                        })}
                         <br />
-                        main3からシリアル送信するデータは2進数でPLC受信で対応した内部リレーをON/OFFする
+                        {getMessage({
+                          ja: "main3からシリアル送信するデータは2進数でPLC受信で対応した内部リレーをON/OFFする",
+                          us: "Data sent serially from main3 is binary and turns on/off the internal relay corresponding to the PLC reception.",
+                          cn: "从 main3 串行发送的数据为二进制数，在 PLC 接收到这些数据时会打开/关闭相应的内部继电器。",
+                          language,
+                        })}
                         <br />
-                        このラダー図そのままでは使用できるケースは少ないですが部品セットの参考になる筈です
+                        {getMessage({
+                          ja: "このラダー図そのままでは使用できるケースは少ないですが部品セットの参考になると思います",
+                          us: "This ladder diagram can be used as is in only a few cases, but it can be used as a reference for the parts set.",
+                          cn: "这种梯形图只能在少数情况下使用，但可以作为组件集的参考。",
+                          language,
+                        })}
                         <br />
-                        CX-Programmerが必要です
+                        {getMessage({
+                          ja: "オムロン社のCX-Programmerが必要です",
+                          us: "Requires Omron's CX-Programmer",
+                          cn: "需要使用 Omron 的 CX-Programmer",
+                          language,
+                        })}
                       </Text>
                     </Flex>
                     <Stack
@@ -859,13 +1120,28 @@ export default function About({
                     borderColor="gray.500"
                   />
                   <Heading size="xs" textTransform="uppercase">
-                    初回セットアップ
+                    {getMessage({
+                      ja: "初回セットアップ",
+                      us: "Initial Setup",
+                      cn: "初始设置",
+                      language,
+                    })}
                   </Heading>
                   <Badge variant="solid" colorScheme="purple" mr={2}></Badge>
                   <Text pt="2" fontSize="sm">
-                    初回のPCセットアップに必要なファイル
+                    {getMessage({
+                      ja: "初回のPCセットアップに必要なファイル",
+                      us: "Files required for initial PC setup",
+                      cn: "初始 PC 设置所需的文件。",
+                      language,
+                    })}
                     <br />
-                    セットアップ終了後はMAINのみ更新を行う
+                    {getMessage({
+                      ja: "セットアップ終了後はmainのみ更新を行う",
+                      us: "Only main will be updated after setup is complete.",
+                      cn: "设置完成后只更新 main。",
+                      language,
+                    })}
                   </Text>
                 </Box>
               </CardBody>
@@ -878,7 +1154,10 @@ export default function About({
             >
               <CardHeader p={2} pl={3} pb={0}>
                 <Heading size="md" mb={3}>
-                  誘導ポイント設定一覧表
+                  {getMessage({
+                    ja: "誘導ポイント設定一覧表",
+                    language,
+                  })}
                 </Heading>
               </CardHeader>
               <Divider borderColor="gray.500" />
@@ -895,7 +1174,12 @@ export default function About({
                     borderColor="gray.500"
                   />
                   <Flex justifyContent="space-between" alignItems="center">
-                    <Heading size="sm">誘導ポイント設定一覧表</Heading>
+                    <Heading size="sm">
+                      {getMessage({
+                        ja: "誘導ポイント設定一覧表",
+                        language,
+                      })}
+                    </Heading>
                     <Flex justifyContent="flex-end" alignItems="center">
                       <Text
                         fontSize="xs"
@@ -924,8 +1208,18 @@ export default function About({
                     365
                   </Badge>
                   <Text pt="2" fontSize="sm">
-                    誘導ポイント設定一覧表(作業内容とインラインNo./忘れん棒番号/製品品番の使い分けを記した作業手順書)
-                    からYICの書き込み器にデータ転送を行います。作業効率化/入力ミス削減が図れます。
+                    {getMessage({
+                      ja: "誘導ポイント設定一覧表(作業内容とインラインNo./忘れん棒番号/製品品番の使い分けを記した作業手順書)",
+                      us: "Induction point setting list (work procedure document describing the work and the use of inline No./forgotten bar number/product part number)",
+                      cn: "上岗点设置清单（附有工作描述的工作程序以及内联编号/遗忘的条形码/产品部件编号的使用）。",
+                      language,
+                    })}
+                    {getMessage({
+                      ja: "からYICの書き込み器にデータ転送を行います。作業効率化/入力ミス削減が図れます。",
+                      us: "The data is transferred from the YIC to the writer of the YIC. This improves work efficiency and reduces input errors.",
+                      cn: "数据从 YIC 传输到 YIC 写入器。提高工作效率/减少输入错误。",
+                      language,
+                    })}
                   </Text>
                 </Box>
               </CardBody>
@@ -937,7 +1231,12 @@ export default function About({
             >
               <CardHeader p={2} pl={3} pb={0}>
                 <Heading size="md" mb={3}>
-                  その他ライブラリなど
+                  {getMessage({
+                    ja: "その他ライブラリなど",
+                    us: "Other libraries, etc.",
+                    cn: "其他图书馆等",
+                    language,
+                  })}
                 </Heading>
               </CardHeader>
               <Divider borderColor="gray.500" />
@@ -961,7 +1260,14 @@ export default function About({
                     borderBottomLeftRadius="5px"
                   />
                   <Flex justifyContent="space-between" alignItems="center">
-                    <Heading size="sm">Windowsライブラリ</Heading>
+                    <Heading size="sm">
+                      {getMessage({
+                        ja: "Windowsライブラリ",
+                        us: "Windows Library",
+                        cn: "视窗图书馆",
+                        language,
+                      })}
+                    </Heading>
                     <Flex justifyContent="flex-end" alignItems="center">
                       <Text
                         fontSize="xs"
@@ -989,9 +1295,12 @@ export default function About({
                     .DLL
                   </Badge>
                   <Text pt="2" fontSize="sm">
-                    WindowsOSが新しくなった場合にライブラリが削除される事があります。
-                    ライブラリが不足している場合はここからダウンロードして使用してください。
-                    <br />
+                    {getMessage({
+                      ja: "WindowsOSが新しくなった場合にライブラリが削除される事があります。ライブラリが不足している場合はここからダウンロードして使用してください。",
+                      us: "The library may be deleted when the Windows OS is newer. If the library is missing, download it from here and use it.",
+                      cn: "Windows 操作系统更新后，程序库可能会被删除。如果缺少库，请从此处下载并使用。",
+                      language,
+                    })}
                     <br />
                     <br />
                   </Text>
@@ -1011,13 +1320,17 @@ export default function About({
 
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent maxW="90vw" maxH="90%">
-              <ModalCloseButton right="3px" />
+            <ModalContent
+              maxW="90vw"
+              maxH="95%"
+              bg={colorMode === "light" ? "#f2e9df" : "black"}
+            >
+              <ModalCloseButton right="3px" _focus={{ _focus: "none" }} />
               {/* <ModalHeader></ModalHeader> */}
               <ModalBody mx={0}>
                 <Box
                   width="99%"
-                  height={{ base: "80vh", sm: "70vh", md: "70vh", lg: "80vh" }}
+                  height={{ base: "70vh", sm: "75vh", md: "75vh", lg: "85vh" }}
                   border="none"
                   maxW="90vw"
                 >

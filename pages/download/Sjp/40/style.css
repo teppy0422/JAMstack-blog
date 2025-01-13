@@ -1,4 +1,4 @@
-body {
+.body_ {
     background-color: #f2e9df;
     background-image: linear-gradient(45deg, #fff 25%, transparent 25%),
         linear-gradient(135deg, #fff 25%, transparent 25%),
@@ -8,18 +8,17 @@ body {
     /* チェックのサイズを調整 */
     background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
     background-attachment: fixed;
-    font-family: "Noto Sans Japanese", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Meiryo", "メイリオ", sans-serif;
     font-size: 16px;
     color: #111;
     margin: 0;
-    margin-top: 5vh;
     padding: 0;
 }
 
 .scroll_up {
     transition: 0.8s ease-in-out;
-    transform: translateY(100%);
-    opacity: 0;
+    /* transform: translateY(100%); */
+    /* opacity: 0; */
+
 }
 
 .scroll_up.on {
@@ -32,10 +31,10 @@ body {
     -moz-transition: 0.8s ease-in-out;
     -o-transition: 0.8s ease-in-out;
     transition: 0.8s ease-in-out;
-    transform: translateX(-100%);
-    opacity: 0;
-    filter: alpha(opacity=0);
-    -moz-opacity: 0;
+    /* transform: translateX(-100%); */
+    /* opacity: 0;
+filter: alpha(opacity=0);
+-moz-opacity: 0; */
     margin-left: 5px;
     align-self: flex-start;
     /* 左寄せ */
@@ -53,11 +52,11 @@ body {
     -moz-transition: 0.8s ease-in-out;
     -o-transition: 0.8s ease-in-out;
     transition: 0.8s ease-in-out;
-    transform: translateX(100%);
-    opacity: 0;
-    right: 10px;
-    filter: alpha(opacity=0);
-    -moz-opacity: 0;
+    /* transform: translateX(100%);
+opacity: 0;
+right: 10px;
+filter: alpha(opacity=0);
+-moz-opacity: 0; */
     margin-right: 5px;
     align-self: flex-end;
     /* 右寄せ */
@@ -85,7 +84,6 @@ ul.box {
 }
 
 ul.box li {
-    margin-bottom: 20vh;
     display: block;
 }
 
@@ -102,7 +100,6 @@ li {
     font-weight: normal;
     text-align: center;
     color: #000;
-    font-family: 'Noto Sans Japanese', sans-serif;
     text-shadow: 1px 1px 0 #fff,
         -1px -1px 0 #fff,
         -1px 1px 0 #fff,
@@ -112,14 +109,14 @@ li {
 .tag {
     background-color: #ff4f4f;
     color: #fff;
-    padding: 0rem 0.3rem;
+    padding: 0.1rem 0.3rem;
     border-radius: 0.5rem;
     text-shadow: none;
     line-height: 0.5;
+    text-align: left;
 }
 
 p {
-    font-family: 'Noto Sans Japanese', sans-serif;
     font-weight: 200;
     font-size: 2.0rem;
     text-align: center;

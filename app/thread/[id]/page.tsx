@@ -75,10 +75,6 @@ import getMessage from "../../../components/getMessage";
 import { Global } from "@emotion/react";
 import "@fontsource/noto-sans-jp";
 
-interface BBSTodoListProps {
-  userName: string;
-  userId: string;
-}
 let cachedUsers: any[] | null = null;
 const fetchUsers3 = async () => {
   if (cachedUsers) {
@@ -562,36 +558,6 @@ function ThreadContent() {
       };
     }
   }, [isClient, id]);
-  //既読数をリアルタイム更新(動作未確認)
-  // useEffect(() => {
-  //   if (isClient && id) {
-  //     const channel = supabase
-  //       .channel(`public:posts:thread_id=eq.${id}`)
-  //       .on(
-  //         "postgres_changes",
-  //         {
-  //           event: "UPDATE",
-  //           schema: "public",
-  //           table: "posts",
-  //           filter: `thread_id=eq.${id}`,
-  //         },
-  //         (payload) => {
-  //           setPosts((prevPosts) =>
-  //             prevPosts.map((post) =>
-  //               post.id === payload.new.id
-  //                 ? { ...post, read_by: payload.new.read_by }
-  //                 : post
-  //             )
-  //           );
-  //         }
-  //       )
-  //       .subscribe();
-
-  //     return () => {
-  //       supabase.removeChannel(channel);
-  //     };
-  //   }
-  // }, [isClient, id]);
   //全投稿を取得
   const fetchAllPosts = async (): Promise<void> => {
     setLoading(true);
@@ -745,7 +711,32 @@ function ThreadContent() {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      console.log("aaa:", file.type);
+      const maxSizeInBytes = 30 * 1024 * 1024; // 30MB
+
+      if (file.size > maxSizeInBytes) {
+        alert(
+          getMessage({
+            ja: "ファイルサイズが30MBを超えています。",
+            us: "File size exceeds 30 MB.",
+            cn: "文件大小超过 30 MB。",
+            language,
+          }) +
+            "(" +
+            (file.size / 1024 / 1024).toFixed(1) +
+            "MB)\n" +
+            getMessage({
+              ja: "以下を試してみてください。\n\n・ファイルを圧縮する\n・生産準備+の場合は画像シートを削除する\n\nそれでも送信できない場合はチャットでご相談ください。",
+              us: "Try the following\n\n・Compressing files.\n・Delete image sheet if Production Preparation+.\n\nIf you still cannot send the message, please contact us via chat.",
+              cn: "试试以下方法。\n\n・压缩文件\n・生产准备+时删除图像页\n\n如果仍然无法发送信息, 请通过聊天联系我们。",
+              language,
+            })
+        );
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ""; // ファイル入力の値をリセット
+        }
+        return;
+      }
+      console.log("file.type is:", file.type);
       setSelectedFile(file); // 選択されたファイルを設定
       setSelectedFileName(file.name); // ファイル名を設定
     }
@@ -988,8 +979,8 @@ function ThreadContent() {
     <Box
       fontFamily={getMessage({
         ja: "Noto Sans JP",
-        us: "Noto Sans JP",
-        cn: "Noto Sans SC",
+        us: "Noto Sans,Noto Sans JP",
+        cn: "Noto Sans SC,Noto Sans JP",
         language,
       })}
     >
@@ -1267,6 +1258,7 @@ function ThreadContent() {
             mb="0"
             className="no-print-page"
           >
+            {/* ファイル添付ボタン */}
             <Tooltip
               label={getMessage({
                 ja: "添付ファイルを選択",
@@ -1314,7 +1306,7 @@ function ThreadContent() {
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
                 target.style.height = "auto"; // 高さをリセット
-                target.style.height = `${target.scrollHeight + 10}px`; // 内容に応じて高さを設定
+                target.style.height = `${target.scrollHeight + 4}px`; // 内容に応じて高さを設定
               }}
               onKeyDown={(e) => {
                 if (e.shiftKey && e.key === "Enter") {
@@ -1325,28 +1317,21 @@ function ThreadContent() {
                   }
                 }
               }}
-              // value={newPostContent}
-              // onChange={(e) => setNewPostContent(e.target.value)}
-              // onInput={(e) => {
-              //   const target = e.target as HTMLTextAreaElement;
-              //   target.style.height = "auto"; // 高さをリセット
-              //   target.style.height = `${target.scrollHeight}px`; // 内容に応じて高さを設定
-              // }}
               _focus={{
                 borderColor: colorMode === "light" ? "gray.900" : "gray.200",
               }} // 追加: フォーカス時の枠線の色を指定
               _focusVisible={{
                 borderColor: colorMode === "light" ? "gray.900" : "gray.200",
               }} // 追加: フォーカスが可視状態の時の枠線の色を指定
-              fontFamily="Noto Sans JP"
               fontWeight="200"
+              fontSize="15px"
               placeholder={getMessage({
                 ja: "メッセージを入力 (Shift+Enterで送信)",
                 us: "Type your message (Shift+Enter to send)",
                 cn: "输入信息（Shift+Enter 发送）。",
                 language,
               })}
-              paddingTop={2}
+              py={2}
               size="md"
               color={colorMode === "light" ? "black" : "white"}
               bg={colorMode === "light" ? "gray.50" : "gray.800"}

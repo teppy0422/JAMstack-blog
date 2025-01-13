@@ -12,7 +12,6 @@ import {
   CardBody,
   Divider,
   Flex,
-  keyframes,
   Avatar,
   Center,
   Stack,
@@ -29,6 +28,7 @@ import {
   useDisclosure,
   Badge,
 } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import {
   FaArrowCircleDown,
   FaUser,
@@ -171,7 +171,7 @@ const Welcome = ({ isNewCreated }) => {
           fontFamily={getMessage({
             ja: "Dela Gothic One",
             us: "Dela Gothic One",
-            cn: "Noto Sans Jp",
+            cn: "Noto Sans SC",
             language,
           })}
           fontSize="28px"
@@ -268,7 +268,7 @@ const Welcome = ({ isNewCreated }) => {
         fontFamily={getMessage({
           ja: "Rampart One",
           us: "Rampart One",
-          cn: "Noto Sans Jp",
+          cn: "Noto Sans SC",
           language,
         })}
         fontWeight={800}
@@ -390,11 +390,7 @@ const Welcome = ({ isNewCreated }) => {
               ))}
             </Heading>
             {/* <Text fontSize={26} fontFamily="Not Sans Jp" fontWeight={600}> */}
-            <Text
-              fontSize={{ base: 24, sm: 26 }}
-              fontFamily="Noto Sans Jp"
-              fontWeight={600}
-            >
+            <Text fontSize={{ base: 24, sm: 26 }} fontWeight={600}>
               {/* 現場直送の声を、カタチにする */}
               {getMessage({
                 ja: "システム開発は、次の時代へ",
@@ -1543,11 +1539,7 @@ const Welcome = ({ isNewCreated }) => {
                 <Box transform="rotate(270deg)" position="relative" my={1.5}>
                   <IoTicketOutline size={80} />
                 </Box>,
-                <Text
-                  fontFamily="Noto Sans Jp"
-                  fontSize="13px"
-                  lineHeight={1.4}
-                >
+                <Text fontSize="13px" lineHeight={1.4}>
                   {getMessage({
                     ja: "プログラムのダウンロードと短い説明動画",
                     us: "Download the program and short instructional videos",
@@ -1590,11 +1582,7 @@ const Welcome = ({ isNewCreated }) => {
                   language,
                 }),
                 <AiOutlineWechat size={90} />,
-                <Text
-                  fontFamily="Noto Sans Jp"
-                  fontSize="13px"
-                  lineHeight={1.4}
-                >
+                <Text fontSize="13px" lineHeight={1.4}>
                   {getMessage({
                     ja: "LINEのようなリアルタイムチャットで分からない事や不具合 / 新機能の追加を相談",
                     us: "Real-time chat like LINE for questions, problems, and new features",
@@ -1613,11 +1601,7 @@ const Welcome = ({ isNewCreated }) => {
                   language,
                 }),
                 <MdEditRoad size={90} />,
-                <Text
-                  fontFamily="Noto Sans Jp"
-                  fontSize="13px"
-                  lineHeight={1.4}
-                >
+                <Text fontSize="13px" lineHeight={1.4}>
                   {getMessage({
                     ja: "各プログラムの改良/連携を長期的に進めていく道順の確認",
                     us: "Identification of a long-term path for improvement/coordination of each program",
@@ -1637,11 +1621,7 @@ const Welcome = ({ isNewCreated }) => {
                 <Box my={1.5}>
                   <FaEarthAsia size={75} />
                 </Box>,
-                <Text
-                  fontFamily="Noto Sans Jp"
-                  fontSize="13px"
-                  lineHeight={1.4}
-                >
+                <Text fontSize="13px" lineHeight={1.4}>
                   {getMessage({
                     ja: "練習実績が記録できるタイピング練習ソフトなど",
                     us: "Typing practice software that can record practice results, etc.",
@@ -1888,7 +1868,7 @@ const Welcome = ({ isNewCreated }) => {
           </Text>
           <Center>
             <Box
-              style={{ paddingTop: "30px", fontFamily: "Noto Sans JP" }}
+              style={{ paddingTop: "30px" }}
               justifyContent="center"
               alignItems="center"
               width="100%"

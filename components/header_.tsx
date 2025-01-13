@@ -351,7 +351,8 @@ export default function Header() {
         <ModalContent
           bg={colorMode === "light" ? "#F0E6DB" : "black"}
           borderColor={colorMode === "light" ? "black" : "white"}
-          borderWidth="1px"
+          borderWidth="0.5px"
+          px={0}
         >
           {/* <ModalHeader></ModalHeader> */}
           <ModalCloseButton

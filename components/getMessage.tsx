@@ -24,6 +24,8 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
     "生産準備+": { us: "Production Preparation+", cn: "生产准备+" },
     生準: { us: "Prod Prep", cn: "生准" },
     "生準+": { us: "Prod Prep+", cn: "生准+" },
+    部材一覧: { us: "Parts List", cn: "物料清单" },
+    "部材一覧+": { us: "Parts List+", cn: "物料清单+" },
     先ハメ誘導ナビ: {
       us: "first insert navigation system",
       cn: "首次插入导航系统",
@@ -45,14 +47,22 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
       cn: "感应点设置列表+",
     },
     配策誘導ナビ: {
-      us: "Guidance Navigation",
-      cn: "布局引导导航系统",
+      us: "Harness Placement Guide",
+      cn: "线束安装引导",
     },
     "誘導ナビ.net": {
       us: "GuidanceNavi.net",
       cn: "GuidanceNavi.net",
     },
+    ポイント点滅: { us: "Point Blinking", cn: "点闪烁" },
     検査履歴システム: { us: "Inspection History System", cn: "检查记录系统" },
+    先ハメ: { us: "Pre-Fitting", cn: "先装" },
+    先ハメ誘導: { us: "Pre-Fitting Guidance", cn: "先装引导" },
+    後ハメ: { us: "Post-Fitting", cn: "后装" },
+    後ハメ誘導: { us: "Post-Fitting  Guidance", cn: "后装引导" },
+    ハメ図: { us: "Fittingfigure", cn: "装图" },
+    竿レイアウト: { us: "Rod layout", cn: "杆件布局" },
+    サブ図: { us: "Subfigure", cn: "子图" },
     作業工数: {
       us: "Person-hours",
       cn: "作業工数",
