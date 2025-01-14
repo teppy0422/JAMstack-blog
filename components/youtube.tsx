@@ -129,6 +129,62 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     }
   }, []);
 
+  interface CustomCardProps {
+    src: string;
+    title: string;
+    name: string;
+  }
+
+  const CustomCard: React.FC<CustomCardProps> = ({ src, title, name }) => {
+    return (
+      <Card
+        direction={{ base: "column", sm: "row" }}
+        overflow="hidden"
+        variant="outline"
+        borderRadius="0"
+        border="0px"
+        bg="transparent"
+        boxShadow={0}
+      >
+        <Image
+          objectFit="cover"
+          maxW={{ base: "50%", sm: "100px" }}
+          maxH={{ base: "80px", sm: "60px" }}
+          src={src}
+          alt="Caffe Latte"
+          borderRadius="8px"
+          mt="8px"
+          mb="4px"
+          ml="10px"
+        />
+        <Stack>
+          <CardBody maxH={{ base: "80px", sm: "60px" }} p={2} pl={3}>
+            <Flex
+              direction="column"
+              justifyContent="space-between"
+              height="100%"
+            >
+              <Heading
+                size="xs"
+                overflow="hidden"
+                display="-webkit-box"
+                style={{
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 2, // 2行まで表示
+                }}
+              >
+                {title}
+              </Heading>
+              <Text py="1" fontSize={12} bottom="0" position="absolute">
+                {name}
+              </Text>
+            </Flex>
+          </CardBody>
+        </Stack>
+      </Card>
+    );
+  };
+
   const truncatedText = textContent
     .split("\n")
     .reduce((acc, line) => {
@@ -325,6 +381,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
           border="1px solid"
           borderColor="#888"
           height="80vh"
+          width="100%"
           bg="transparent"
         >
           <Box width="100%" bg="rgba(255, 255, 255, 0.3)">
@@ -341,420 +398,81 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             overflowY="auto" // 縦方向にスクロール可能にする
             // maxHeight="200px"
           >
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-              borderRadius="0"
-              border="0px"
-              bg="transparent"
-              // bg="rgba(0,0,0,0.1)"
-              boxShadow={0}
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "50%", sm: "100px" }}
-                maxH={{ base: "80px", sm: "60px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-                borderRadius="8px"
-                mt="8px"
-                mb="4px"
-                ml="10px"
-              />
-              <Stack>
-                <CardBody maxH={{ base: "80px", sm: "60px" }} p={2} pl={3}>
-                  <Flex
-                    direction="column"
-                    justifyContent="space-between"
-                    height="100%"
-                  >
-                    <Heading
-                      size="xs"
-                      overflow="hidden"
-                      display="-webkit-box"
-                      style={{
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2, // 2行まで表示
-                      }}
-                    >
-                      TEST
-                    </Heading>
-                    <Text py="1" fontSize={12} bottom="0" position="absolute">
-                      kataoka
-                    </Text>
-                  </Flex>
-                </CardBody>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-              borderRadius="0"
-              border="0px"
-              // bg="transparent"
-              bg="rgba(0,0,0,0.1)"
-              boxShadow={0}
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "50%", sm: "100px" }}
-                maxH={{ base: "80px", sm: "60px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-                borderRadius="8px"
-                mt="8px"
-                mb="4px"
-                ml="10px"
-              />
-              <Stack>
-                <CardBody maxH={{ base: "80px", sm: "60px" }} p={2} pl={3}>
-                  <Flex
-                    direction="column"
-                    justifyContent="space-between"
-                    height="100%"
-                  >
-                    <Heading
-                      size="xs"
-                      overflow="hidden"
-                      display="-webkit-box"
-                      style={{
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2, // 2行まで表示
-                      }}
-                    >
-                      順立生産システムの使い方_SSC
-                    </Heading>
-                    <Text py="1" fontSize={12} bottom="0" position="absolute">
-                      kataoka
-                    </Text>
-                  </Flex>
-                </CardBody>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-              borderRadius="0"
-              border="0px"
-              bg="transparent"
-              // bg="rgba(0,0,0,0.1)"
-              boxShadow={0}
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "50%", sm: "100px" }}
-                maxH={{ base: "80px", sm: "60px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-                borderRadius="8px"
-                mt="8px"
-                mb="4px"
-                ml="10px"
-              />
-              <Stack>
-                <CardBody maxH={{ base: "80px", sm: "60px" }} p={2} pl={3}>
-                  <Flex
-                    direction="column"
-                    justifyContent="space-between"
-                    height="100%"
-                  >
-                    <Heading
-                      size="xs"
-                      overflow="hidden"
-                      display="-webkit-box"
-                      style={{
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2, // 2行まで表示
-                      }}
-                    >
-                      順立生産システムの使い方_SSC
-                    </Heading>
-                    <Text py="1" fontSize={12} bottom="0" position="absolute">
-                      kataoka
-                    </Text>
-                  </Flex>
-                </CardBody>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-              borderRadius="0"
-              border="0px"
-              bg="transparent"
-              // bg="rgba(0,0,0,0.1)"
-              boxShadow={0}
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "50%", sm: "100px" }}
-                maxH={{ base: "80px", sm: "60px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-                borderRadius="8px"
-                mt="8px"
-                mb="4px"
-                ml="10px"
-              />
-              <Stack>
-                <CardBody maxH={{ base: "80px", sm: "60px" }} p={2} pl={3}>
-                  <Flex
-                    direction="column"
-                    justifyContent="space-between"
-                    height="100%"
-                  >
-                    <Heading
-                      size="xs"
-                      overflow="hidden"
-                      display="-webkit-box"
-                      style={{
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2, // 2行まで表示
-                      }}
-                    >
-                      順立生産システムの使い方_SSC
-                    </Heading>
-                    <Text py="1" fontSize={12} bottom="0" position="absolute">
-                      kataoka
-                    </Text>
-                  </Flex>
-                </CardBody>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-              borderRadius="0"
-              border="0px"
-              bg="transparent"
-              // bg="rgba(0,0,0,0.1)"
-              boxShadow={0}
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "50%", sm: "100px" }}
-                maxH={{ base: "80px", sm: "60px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-                borderRadius="8px"
-                mt="8px"
-                mb="4px"
-                ml="10px"
-              />
-              <Stack>
-                <CardBody maxH={{ base: "80px", sm: "60px" }} p={2} pl={3}>
-                  <Flex
-                    direction="column"
-                    justifyContent="space-between"
-                    height="100%"
-                  >
-                    <Heading
-                      size="xs"
-                      overflow="hidden"
-                      display="-webkit-box"
-                      style={{
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2, // 2行まで表示
-                      }}
-                    >
-                      順立生産システムの使い方_SSC
-                    </Heading>
-                    <Text py="1" fontSize={12} bottom="0" position="absolute">
-                      kataoka
-                    </Text>
-                  </Flex>
-                </CardBody>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-              borderRadius="0"
-              border="0px"
-              bg="transparent"
-              // bg="rgba(0,0,0,0.1)"
-              boxShadow={0}
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "50%", sm: "100px" }}
-                maxH={{ base: "80px", sm: "60px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-                borderRadius="8px"
-                mt="8px"
-                mb="4px"
-                ml="10px"
-              />
-              <Stack>
-                <CardBody maxH={{ base: "80px", sm: "60px" }} p={2} pl={3}>
-                  <Flex
-                    direction="column"
-                    justifyContent="space-between"
-                    height="100%"
-                  >
-                    <Heading
-                      size="xs"
-                      overflow="hidden"
-                      display="-webkit-box"
-                      style={{
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2, // 2行まで表示
-                      }}
-                    >
-                      順立生産システムの使い方_SSC
-                    </Heading>
-                    <Text py="1" fontSize={12} bottom="0" position="absolute">
-                      kataoka
-                    </Text>
-                  </Flex>
-                </CardBody>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-              borderRadius="0"
-              border="0px"
-              bg="transparent"
-              // bg="rgba(0,0,0,0.1)"
-              boxShadow={0}
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "50%", sm: "100px" }}
-                maxH={{ base: "80px", sm: "60px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-                borderRadius="8px"
-                mt="8px"
-                mb="4px"
-                ml="10px"
-              />
-              <Stack>
-                <CardBody maxH={{ base: "80px", sm: "60px" }} p={2} pl={3}>
-                  <Flex
-                    direction="column"
-                    justifyContent="space-between"
-                    height="100%"
-                  >
-                    <Heading
-                      size="xs"
-                      overflow="hidden"
-                      display="-webkit-box"
-                      style={{
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2, // 2行まで表示
-                      }}
-                    >
-                      順立生産システムの使い方_SSC
-                    </Heading>
-                    <Text py="1" fontSize={12} bottom="0" position="absolute">
-                      kataoka
-                    </Text>
-                  </Flex>
-                </CardBody>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-              borderRadius="0"
-              border="0px"
-              bg="transparent"
-              // bg="rgba(0,0,0,0.1)"
-              boxShadow={0}
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "50%", sm: "100px" }}
-                maxH={{ base: "80px", sm: "60px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-                borderRadius="8px"
-                mt="8px"
-                mb="4px"
-                ml="10px"
-              />
-              <Stack>
-                <CardBody maxH={{ base: "80px", sm: "60px" }} p={2} pl={3}>
-                  <Flex
-                    direction="column"
-                    justifyContent="space-between"
-                    height="100%"
-                  >
-                    <Heading
-                      size="xs"
-                      overflow="hidden"
-                      display="-webkit-box"
-                      style={{
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2, // 2行まで表示
-                      }}
-                    >
-                      順立生産システムの使い方_SSC
-                    </Heading>
-                    <Text py="1" fontSize={12} bottom="0" position="absolute">
-                      kataoka
-                    </Text>
-                  </Flex>
-                </CardBody>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-              borderRadius="0"
-              border="0px"
-              bg="transparent"
-              // bg="rgba(0,0,0,0.1)"
-              boxShadow={0}
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "50%", sm: "100px" }}
-                maxH={{ base: "80px", sm: "60px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-                borderRadius="8px"
-                mt="8px"
-                mb="4px"
-                ml="10px"
-              />
-              <Stack>
-                <CardBody maxH={{ base: "80px", sm: "60px" }} p={2} pl={3}>
-                  <Flex
-                    direction="column"
-                    justifyContent="space-between"
-                    height="100%"
-                  >
-                    <Heading
-                      size="xs"
-                      overflow="hidden"
-                      display="-webkit-box"
-                      style={{
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2, // 2行まで表示
-                      }}
-                    >
-                      順立生産システムの使い方_SSC
-                    </Heading>
-                    <Text py="1" fontSize={12} bottom="0" position="absolute">
-                      kataoka
-                    </Text>
-                  </Flex>
-                </CardBody>
-              </Stack>
-            </Card>
+            <CustomCard
+              title="test"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test2"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test3"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test4"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test5"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test6"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test7"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test8"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test9"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test10"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test11"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test12"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test13"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test14"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
+            <CustomCard
+              title="test15"
+              name="kataoka"
+              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+            />
           </Box>
         </Card>
       </VStack>
