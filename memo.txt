@@ -11,26 +11,7 @@ Production Preparation+
 生产准备+
 
 
-構成[A]が属するサブの先ハメ/後ハメが表示されています
-Pre/Post Fitting of the sub to which the composition [A] belongs are displayed
-如图所示为配置 [A] 的子框架图/后框架导线。
-
--以下の方法でアクセス可能です-
-
-1.画面上の電線をタップ
-1. Tap an electric wire on the screen
-点击屏幕上的电线。
-2.QRリーダーでエフを読み込む
-2. Read the ef with a QR reader
-QR 阅读器读取 Ef.
-3.右上に構成ナンバー4桁を入力
-3. Enter the 4-digit configuration number in the upper right corner.
-输入右上角的四位配置编号。
-
--以下の方法でアクセス可能です-
--It can be accessed in the following ways-
--可以通过以下方式访问它-
-
+Aを押しながら[このVerのアップロード]をクリック
 
 
 詰栓はAと表示されて部品品番は下方に表示されます

@@ -24,6 +24,7 @@ const HomePage: React.FC = () => {
             })
           }
           date="2021/3/24"
+          autoPlay={true}
           src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018145058.mp4"
           textContent={getMessage({
             ja: `先ハメ初心者でも最適な順番で作業が行えます。

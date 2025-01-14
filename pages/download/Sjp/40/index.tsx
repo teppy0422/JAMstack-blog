@@ -270,7 +270,7 @@ const Index: React.FC = () => {
               marginTop: "20px",
             }}
           >
-            <div style={{ textAlign: "left", marginLeft: "5%" }}>
+            <div style={{ textAlign: "left", marginLeft: "5%", padding: "3%" }}>
               <h1
                 style={{
                   textAlign: "left",

@@ -6,17 +6,6 @@ import {
   Text,
   Box,
   SimpleGrid,
-  Badge,
-  Kbd,
-  Button,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogCloseButton,
-  AlertDialogBody,
-  AlertDialogFooter,
-  useDisclosure,
   HStack,
   useColorMode,
 } from "@chakra-ui/react";
@@ -35,69 +24,16 @@ import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
 import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
-function TransitionExample() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef = React.useRef<FocusableElement>(null); // 型を明示的に指定
 
-  return (
-    <>
-      <Box onClick={onOpen} cursor="pointer">
-        <MdHelpOutline />
-      </Box>
-      <AlertDialog
-        motionPreset="slideInBottom"
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-        isOpen={isOpen}
-        isCentered
-      >
-        <AlertDialogOverlay />
-
-        <AlertDialogContent>
-          <AlertDialogHeader>アップロードの手順</AlertDialogHeader>
-          <AlertDialogCloseButton _focus={{ _focus: "none" }} />
-          <AlertDialogBody p={4}>
-            <Box as="p" textAlign="center" mb={4}>
-              1.ダウンロードしたエクセルブックを開く
-              <br />
-              2.Menuを開いてVerupを押す
-              <br />
-              3.
-              <span>
-                <Kbd>Shift</Kbd>
-              </span>
-              を押しながら[このVerのアップロード]をクリック
-            </Box>
-            <Box textAlign="center" mb={4}>
-              <video
-                src="/images/sjpUpload.mp4"
-                autoPlay
-                muted
-                loop
-                width="100%"
-              />
-            </Box>
-            <Box as="p" textAlign="center" mb={1}>
-              以上で全ての生産準備+からこのバージョンへの更新が可能になります
-            </Box>
-          </AlertDialogBody>
-          <AlertDialogFooter>
-            <Button colorScheme="red" ml={3} onClick={onClose}>
-              OK
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
-  );
-}
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 
 export default function About() {
   const { colorMode } = useColorMode();
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
-
+  const { language, setLanguage } = useLanguage();
   return (
     <>
       <Sidebar />
@@ -114,11 +50,21 @@ export default function About() {
                 color={colorMode === "light" ? "#000" : "#FFF"}
               />
               <Text fontSize="2xl" mb={2} fontWeight={600}>
-                その他のライブラリ
+                {getMessage({
+                  ja: "その他のライブラリ",
+                  us: "Other Libraries",
+                  cn: "其他图书馆",
+                  language,
+                })}
               </Text>
             </HStack>
             <Box fontSize="lg" fontWeight={400}>
-              以下からダウンロードしてください
+              {getMessage({
+                ja: "以下からダウンロードしてください",
+                us: "Please download below",
+                cn: "请在下方下载",
+                language,
+              })}
             </Box>
           </Box>
           <SimpleGrid
@@ -128,8 +74,18 @@ export default function About() {
           >
             <CustomLinkBox
               dateTime="2024-12-01T17:04:00+0900"
-              description1="Officeの参照設定で参照不可になる"
-              description2="このファイルを任意の場所に保存する"
+              description1={getMessage({
+                ja: "Officeの参照設定で参照不可になる",
+                us: `'Office's reference setting makes it unreferenced.`,
+                cn: "办公室参考设置使其没有参考。",
+                language,
+              })}
+              description2={getMessage({
+                ja: "このファイルを任意の場所に保存する",
+                us: "Save this file to any location.",
+                cn: "将此文件保存在任何位置。",
+                language,
+              })}
               descriptionIN=""
               linkHref="/files/download/Library_/MSCOMM32.OCX"
               inCharge=""

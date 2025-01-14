@@ -75,6 +75,7 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
     UK: { us: "UK", cn: "UK" },
     まとめ: { us: "Summary", cn: "总结" },
     作成途中: { us: "on the way", cn: "作成途中" },
+    新機能: { us: "new feature", cn: "新功能" },
   };
 
   const {

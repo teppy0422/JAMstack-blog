@@ -6,17 +6,6 @@ import {
   Text,
   Box,
   SimpleGrid,
-  Badge,
-  Kbd,
-  Button,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogCloseButton,
-  AlertDialogBody,
-  AlertDialogFooter,
-  useDisclosure,
   useColorMode,
   HStack,
 } from "@chakra-ui/react";
@@ -36,11 +25,17 @@ import Sidebar from "../../components/sidebar"; // Sidebar コンポーネント
 
 import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
+
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
+
 export default function About() {
   const { colorMode } = useColorMode();
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
+  const { language, setLanguage } = useLanguage();
+
   return (
     <>
       <Sidebar />
@@ -57,18 +52,36 @@ export default function About() {
                 color={colorMode === "light" ? "#800080" : "#FFF"} // カラーモードに応じて色を設定
               />
               <Text fontSize="2xl" fontWeight={600}>
-                順立生産システム+
+                {getMessage({
+                  ja: "順立生産システム+",
+                  language,
+                })}
               </Text>
             </HStack>
             <Text fontSize="sm" mb={2} fontWeight={300}>
               main3.CB/PLC
             </Text>
             <Box fontSize="lg" fontWeight={400}>
-              以下からダウンロードしてください
+              {getMessage({
+                ja: "以下からダウンロードしてください",
+                us: "Please download below",
+                cn: "请在下方下载。",
+                language,
+              })}
               <br />
-              ダウンロードした.zipは必ず展開(解凍)してください
+              {getMessage({
+                ja: "ダウンロードした.zipは必ず展開(解凍)してください",
+                us: "Be sure to extract (unzip) the .zip file you downloaded.",
+                cn: "请务必解压缩下载的 .zip 文件。",
+                language,
+              })}
               <br />
-              ファイルを閲覧するにはOMRONのCX-Programmerが必要です
+              {getMessage({
+                ja: "ファイルを閲覧するにはOMRONのCX-Programmerが必要です",
+                us: `'OMRON's CX-Programmer is required to view the files`,
+                cn: "需要使用 OMRON CX-Programmer 查看文件",
+                language,
+              })}
               <Box
                 display="flex"
                 alignItems="center"
@@ -86,7 +99,12 @@ export default function About() {
             <CustomLinkBox
               dateTime="2024-03-13T00:35:00+0900"
               description1=""
-              description2="内部タイマーの調整"
+              description2={getMessage({
+                ja: "内部タイマーの調整",
+                us: "Adjustment of internal timer",
+                cn: "调整内部计时器",
+                language,
+              })}
               descriptionIN=""
               linkHref="/files/download/Jdss/main3_17.zip"
               inCharge="徳島,Win10zip"

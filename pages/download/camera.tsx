@@ -34,11 +34,17 @@ import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar";
 import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
+
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
+
 export default function About() {
   const { colorMode } = useColorMode();
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
+  const { language, setLanguage } = useLanguage();
+
   return (
     <>
       <Sidebar />
@@ -55,13 +61,34 @@ export default function About() {
               </Text>
             </HStack>
             <Box fontSize="lg" fontWeight={400}>
-              通常は生産準備+がインストールを行うので必要ありません
+              {getMessage({
+                ja: "通常は生産準備+がインストールを行うので必要ありません",
+                us: "Usually not necessary as Production Preparation+ does the installation",
+                cn: "通常不需要，因为 Production Readiness+ 会进行安装。",
+                language,
+              })}
               <br />
-              編集が必要な場合にダウンロードしてください
+              {getMessage({
+                ja: "編集が必要な場合にダウンロードしてください",
+                us: "Download if you need to edit",
+                cn: "如果需要编辑，请下载。",
+                language,
+              })}
               <br />
-              ダウンロードしたファイルは展開(解凍)してから開いてください
+              {getMessage({
+                ja: "ダウンロードしたファイルは展開(解凍)してから開いてください",
+                us: "Please extract (unzip) the downloaded file before opening it.",
+                cn: "打开下载文件前，请先解压缩。",
+                language,
+              })}
               <br />
-              編集する際はVisualStudioで.solを開いてください
+
+              {getMessage({
+                ja: "編集する際はVisualStudioで.solを開いてください",
+                us: "Please open the .sol file in VisualStudio for editing",
+                cn: "要编辑，请在 VisualStudio 中打开 .sol",
+                language,
+              })}
             </Box>
           </Box>
           <SimpleGrid

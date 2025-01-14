@@ -36,9 +36,14 @@ import Sidebar from "../../components/sidebar"; // Sidebar コンポーネント
 import { useUserData } from "../../hooks/useUserData";
 import { useUserInfo } from "../../hooks/useUserId";
 
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
+
 function TransitionExample() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef<FocusableElement>(null); // 型を明示的に指定
+  const { language, setLanguage } = useLanguage();
+
   return (
     <>
       <Box onClick={onOpen} cursor="pointer">
@@ -54,19 +59,49 @@ function TransitionExample() {
         <AlertDialogOverlay />
 
         <AlertDialogContent>
-          <AlertDialogHeader>アップロードの手順</AlertDialogHeader>
+          <AlertDialogHeader>
+            {getMessage({
+              ja: "アップロードの手順",
+              us: "Upload Procedure",
+              cn: "上传程序",
+              language,
+            })}
+          </AlertDialogHeader>
           <AlertDialogCloseButton _focus={{ _focus: "none" }} />
           <AlertDialogBody p={4}>
             <Box as="p" textAlign="center" mb={4}>
-              1.ダウンロードしたエクセルブックを開く
+              {"1." +
+                getMessage({
+                  ja: "ダウンロードしたエクセルブックを開く",
+                  us: "Open the downloaded Excel book.",
+                  cn: "打开下载的 Excel 电子书。",
+                  language,
+                })}
               <br />
-              2.Menuを開いてVerupを押す
+              {"2." +
+                getMessage({
+                  ja: "Menuを開いてVerupを押す",
+                  us: "Open Menu and press Verup.",
+                  cn: "打开菜单并按下 Verup",
+                  language,
+                })}
               <br />
-              3.
+              {"3." +
+                getMessage({
+                  ja: "",
+                  us: "Click [このVerのアップロード] while holding down ",
+                  cn: "按住 ",
+                  language,
+                })}
               <span>
                 <Kbd>Shift</Kbd>
               </span>
-              を押しながら[このVerのアップロード]をクリック
+              {getMessage({
+                ja: "を押しながら[このVerのアップロード]をクリック",
+                us: ".",
+                cn: " 单击 [このVerのアップロード]",
+                language,
+              })}
             </Box>
             <Box textAlign="center" mb={4}>
               <video
@@ -78,7 +113,12 @@ function TransitionExample() {
               />
             </Box>
             <Box as="p" textAlign="center" mb={1}>
-              以上で全ての生産準備+からこのバージョンへの更新が可能になります
+              {getMessage({
+                ja: "以上で全ての生産準備+からこのバージョンへの更新が可能になります",
+                us: "This is all you need to do to update from Production Ready+ to this version!",
+                cn: "这将使所有生产准备+ 更新到该版本",
+                language,
+              })}
             </Box>
           </AlertDialogBody>
           <AlertDialogFooter>
@@ -96,6 +136,8 @@ export default function About() {
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
+  const { language, setLanguage } = useLanguage();
+
   return (
     <>
       <Sidebar />
@@ -112,13 +154,26 @@ export default function About() {
                 color={colorMode === "light" ? "#800080" : "#FFF"} // カラーモードに応じて色を設定
               />
               <Text fontSize="2xl" mb={2} fontWeight={600}>
-                順立生産システム+
+                {getMessage({
+                  ja: "順立生産システム+",
+                  language,
+                })}
               </Text>
             </HStack>
             <Box fontSize="lg" fontWeight={400}>
-              以下からダウンロードしてください
+              {getMessage({
+                ja: "以下からダウンロードしてください",
+                us: "Please download below",
+                cn: "请在下方下载。",
+                language,
+              })}
               <br />
-              ダウンロードした.zipは必ず展開(解凍)してください
+              {getMessage({
+                ja: "ダウンロードした.zipは展開(解凍)してください",
+                us: "Please extract (unzip) the .zip file you downloaded.",
+                cn: "请解压缩下载的 .zip",
+                language,
+              })}
               <Box
                 display="flex"
                 alignItems="center"

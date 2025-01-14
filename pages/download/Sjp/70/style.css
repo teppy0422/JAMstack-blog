@@ -1,4 +1,4 @@
-body {
+.body_ {
     background-color: #000;
     background-image: linear-gradient(45deg, #0a0a0a 25%, transparent 25%),
         linear-gradient(135deg, #0a0a0a 25%, transparent 25%),
@@ -8,7 +8,6 @@ body {
     /* チェックのサイズを調整 */
     background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
     background-attachment: fixed;
-    font-family: "Noto Sans Japanese", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Meiryo", "メイリオ", sans-serif;
     font-size: 16px;
     color: #111;
     margin: 0;
@@ -18,8 +17,8 @@ body {
 
 .scroll_up {
     transition: 0.8s ease-in-out;
-    transform: translateY(100%);
-    opacity: 0;
+    /* transform: translateY(100%);
+opacity: 0; */
 }
 
 .scroll_up.on {
@@ -32,10 +31,10 @@ body {
     -moz-transition: 0.8s ease-in-out;
     -o-transition: 0.8s ease-in-out;
     transition: 0.8s ease-in-out;
-    transform: translateX(-100%);
-    opacity: 0;
-    filter: alpha(opacity=0);
-    -moz-opacity: 0;
+    /* transform: translateX(-100%);
+opacity: 0;
+filter: alpha(opacity=0);
+-moz-opacity: 0; */
     margin-left: 5px;
     align-self: flex-start;
     /* 左寄せ */
@@ -53,11 +52,11 @@ body {
     -moz-transition: 0.8s ease-in-out;
     -o-transition: 0.8s ease-in-out;
     transition: 0.8s ease-in-out;
-    transform: translateX(100%);
-    opacity: 0;
+    /* transform: translateX(100%);
+opacity: 0;
+filter: alpha(opacity=0);
+-moz-opacity: 0; */
     right: 10px;
-    filter: alpha(opacity=0);
-    -moz-opacity: 0;
     margin-right: 5px;
     align-self: flex-end;
     /* 右寄せ */

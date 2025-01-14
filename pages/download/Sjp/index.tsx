@@ -34,9 +34,13 @@ import Sidebar from "../../../components/sidebar"; // Sidebar コンポーネン
 import { useUserData } from "../../../hooks/useUserData";
 import { useUserInfo } from "../../../hooks/useUserId";
 
+import { useLanguage } from "../../../context/LanguageContext";
+import getMessage from "../../../components/getMessage";
+
 function TransitionExample() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef<FocusableElement>(null); // 型を明示的に指定
+  const { language, setLanguage } = useLanguage();
 
   return (
     <>
@@ -53,19 +57,49 @@ function TransitionExample() {
         <AlertDialogOverlay />
 
         <AlertDialogContent>
-          <AlertDialogHeader>アップロードの手順</AlertDialogHeader>
+          <AlertDialogHeader>
+            {getMessage({
+              ja: "アップロードの手順",
+              us: "Upload Procedure",
+              cn: "上传程序",
+              language,
+            })}
+          </AlertDialogHeader>
           <AlertDialogCloseButton _focus={{ _focus: "none" }} />
           <AlertDialogBody p={4}>
             <Box as="p" textAlign="center" mb={4}>
-              1.ダウンロードしたエクセルブックを開く
+              {"1." +
+                getMessage({
+                  ja: "ダウンロードしたエクセルブックを開く",
+                  us: "Open the downloaded Excel book.",
+                  cn: "打开下载的 Excel 电子书。",
+                  language,
+                })}
               <br />
-              2.Menuを開いてVerupを押す
+              {"2." +
+                getMessage({
+                  ja: "Menuを開いてVerupを押す",
+                  us: "Open Menu and press Verup.",
+                  cn: "打开菜单并按下 Verup。",
+                  language,
+                })}
               <br />
-              3.
+              {"3." +
+                getMessage({
+                  ja: "",
+                  us: "Click [このVerのアップロード] while holding down ",
+                  cn: "按住 ",
+                  language,
+                })}
               <span>
                 <Kbd>Shift</Kbd>
               </span>
-              を押しながら[このVerのアップロード]をクリック
+              {getMessage({
+                ja: "を押しながら[このVerのアップロード]をクリック",
+                us: "",
+                cn: " 单击 [上传此 Ver]",
+                language,
+              })}
             </Box>
             <Box textAlign="center" mb={4}>
               <video
@@ -77,7 +111,12 @@ function TransitionExample() {
               />
             </Box>
             <Box as="p" textAlign="center" mb={1}>
-              以上で全ての生産準備+からこのバージョンへの更新が可能になります
+              {getMessage({
+                ja: "以上で全ての生産準備+からこのバージョンへの更新が可能になります",
+                us: "This is all you need to do to update from Production Preparation+ to this version!",
+                cn: "这将使所有生产准备+ 更新到该版本",
+                language,
+              })}
             </Box>
           </AlertDialogBody>
           <AlertDialogFooter>
@@ -96,6 +135,7 @@ export default function About() {
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
+  const { language, setLanguage } = useLanguage();
 
   return (
     <>
@@ -113,19 +153,43 @@ export default function About() {
                 color={colorMode === "light" ? "#000" : "#FFF"} // カラーモードに応じて色を設定
               />
               <Text fontSize="2xl" mb={2} fontWeight={600}>
-                生産準備+
+                {getMessage({
+                  ja: "生産準備+",
+                  language,
+                })}
               </Text>
             </HStack>
             <Box fontSize="lg" fontWeight={400}>
-              以下からダウンロードしてください
+              {getMessage({
+                ja: "以下からダウンロードしてください",
+                us: "Please download below",
+                cn: "请在下方下载。",
+                language,
+              })}
               <br />
-              通常は最新版
+              {getMessage({
+                ja: "通常は最新版",
+                us: "Usually select the latest version ",
+                cn: "通常选择最新版本 ",
+                language,
+              })}
               <Badge colorScheme="teal" margin={1}>
                 LATEST
               </Badge>
               を選択します
+              {getMessage({
+                ja: "を選択します",
+                us: ".",
+                cn: "。",
+                language,
+              })}
               <br />
-              最新版には以前の更新が全て含まれています
+              {getMessage({
+                ja: "最新版には以前の更新が全て含まれています",
+                us: "The latest version includes all previous updates",
+                cn: "最新版本包括之前的所有更新",
+                language,
+              })}
               <br />
               <Box
                 display="flex"
@@ -135,7 +199,12 @@ export default function About() {
                 mt={2}
               >
                 <Box fontSize="sm" mr={1}>
-                  アップロードの手順
+                  {getMessage({
+                    ja: "アップロードの手順",
+                    us: "Upload Procedure",
+                    cn: "上传程序",
+                    language,
+                  })}
                 </Box>
                 <TransitionExample />
               </Box>
@@ -149,10 +218,25 @@ export default function About() {
             <CustomLinkBox
               dateTime="2024-12-19T04:42:00+0900"
               description1=""
-              description2="主に共通する目的でボンダーの簡易機能を追加"
+              description2={getMessage({
+                ja: "主に共通する目的でボンダーの簡易機能を追加",
+                us: "Added simple functionality for bonders, mainly for common purposes",
+                cn: "粘合剂的附加简单功能，主要用于普通用途。",
+                language,
+              })}
               descriptionIN=""
               linkHref="/files/download/html/Sjp/Sjp3.101.12_.zip"
-              inCharge="高知,王さん,新機能"
+              inCharge={
+                getMessage({
+                  ja: "高知",
+                  language,
+                }) +
+                ",王さん," +
+                getMessage({
+                  ja: "新機能",
+                  language,
+                })
+              }
               isLatest={true}
               userName={userName ?? ""}
             />

@@ -21,6 +21,7 @@ const HomePage: React.FC = () => {
           })}
           date="2018/7/22"
           src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018150130.mp4"
+          autoPlay={true}
           textContent={getMessage({
             ja: `
 配策時にディスプレイが見えやすい位置に移動します。

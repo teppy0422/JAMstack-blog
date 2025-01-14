@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Box,
   Flex,
@@ -13,6 +13,10 @@ import {
   Heading,
   Text,
   Avatar,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
 } from "@chakra-ui/react";
 
 import { useLanguage } from "../context/LanguageContext";
@@ -23,15 +27,19 @@ interface YouTubePlayerProps {
   title: string;
   textContent: string;
   date: string;
+  autoPlay: boolean;
 }
 const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   src,
   title,
   textContent,
   date,
+  autoPlay,
 }) => {
   const [showFullText, setShowFullText] = useState(false);
   const { language, setLanguage } = useLanguage();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(false);
 
   const togglePlayPause = () => {
     const video = document.querySelector<HTMLVideoElement>(".box1");
@@ -43,7 +51,16 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       }
     }
   };
-
+  const toggleVolume = () => {
+    if (videoRef.current) {
+      if (isMuted) {
+        videoRef.current.volume = 1; // Set volume to 100%
+      } else {
+        videoRef.current.volume = 0; // Set volume to 0%
+      }
+      setIsMuted(!isMuted);
+    }
+  };
   const rewindPlay = () => {
     const video = document.querySelector<HTMLVideoElement>(".box1");
     if (video) {
@@ -150,11 +167,10 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         >
           <video
             className="box1"
+            ref={videoRef}
             onClick={togglePlayPause}
+            {...(autoPlay ? { autoPlay: true, loop: true } : {})}
             src={src}
-            autoPlay
-            loop
-            muted
             style={{
               width: "100%",
               height: "auto",
@@ -240,6 +256,29 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
               >
                 <path d="M3 5v14a1 1 0 0 0 1.504 .864l12 -7a1 1 0 0 0 0 -1.728l-12 -7a1 1 0 0 0 -1.504 .864z"></path>
                 <path d="M20 4a1 1 0 0 1 .993 .883l.007 .117v14a1 1 0 0 1 -1.993 .117l-.007 -.117v-14a1 1 0 0 1 1 -1z"></path>
+              </Box>
+              <Box
+                as="svg"
+                stroke="currentColor"
+                fill="currentColor"
+                strokeWidth="0"
+                viewBox="0 0 24 24"
+                height="24px"
+                width="24px"
+                xmlns="http://www.w3.org/2000/svg"
+                _hover={{ fill: "red", stroke: "red" }} // マウスオーバーで色を青に変更
+                // onClick={handleRewind} // クリックで先頭に戻る
+                cursor="pointer"
+                onClick={toggleVolume} // クリックでボリュームを切り替える
+              >
+                {isMuted ? (
+                  <path d="m7.727 6.313-4.02-4.02-1.414 1.414 18 18 1.414-1.414-2.02-2.02A9.578 9.578 0 0 0 21.999 12c0-4.091-2.472-7.453-5.999-9v2c2.387 1.386 3.999 4.047 3.999 7a8.13 8.13 0 0 1-1.671 4.914l-1.286-1.286C17.644 14.536 18 13.19 18 12c0-1.771-.775-3.9-2-5v7.586l-2-2V2.132L7.727 6.313zM4 17h2.697L14 21.868v-3.747L3.102 7.223A1.995 1.995 0 0 0 2 9v6c0 1.103.897 2 2 2z"></path>
+                ) : (
+                  <>
+                    <path d="M16 21c3.527-1.547 5.999-4.909 5.999-9S19.527 4.547 16 3v2c2.387 1.386 3.999 4.047 3.999 7S18.387 17.614 16 19v2z"></path>
+                    <path d="M16 7v10c1.225-1.1 2-3.229 2-5s-.775-3.9-2-5zM4 17h2.697L14 21.868V2.132L6.697 7H4c-1.103 0-2 .897-2 2v6c0 1.103.897 2 2 2z"></path>
+                  </>
+                )}
               </Box>
             </HStack>
           </Center>

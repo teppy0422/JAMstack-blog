@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Text, Button, IconButton } from "@chakra-ui/react";
 import { FaSyncAlt } from "react-icons/fa";
+import IpadFrame from "../components/ipad";
+import YouTubePlayer from "../components/youtube";
+
+import { useLanguage } from "../context/LanguageContext";
+import getMessage from "../components/getMessage";
 
 const Home = () => {
   const [dimensions, setDimensions] = useState({
@@ -9,6 +14,7 @@ const Home = () => {
   });
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [message, setMessage] = useState("");
+  const { language, setLanguage } = useLanguage();
 
   const toggleDimensions = () => {
     setDimensions((prev) => ({
@@ -30,43 +36,40 @@ const Home = () => {
   }, []);
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      height="100vh"
-      bg="#f0e5da"
-    >
-      <Box p={2} textAlign="center" color="gray.800">
-        <Text fontSize="2xl" fontWeight="bold" fontFamily="Noto Sans JP">
-          順立生産システム
-          <br />
-          SSC
-        </Text>
-      </Box>
-      <Box
-        width={dimensions.width}
-        height={dimensions.height}
-        border="16px solid #333"
-        borderRadius="36px"
-        boxShadow="0 0 20px rgba(0, 0, 0, 0.5)"
-        overflow="hidden"
-        position="relative"
-        bg="white"
-      >
-        <iframe
-          ref={iframeRef}
-          src="/files/download/Jdss/main2/index.html"
-          style={{ width: "100%", height: "100%", border: "none" }}
-        ></iframe>
-      </Box>
-      <Box p={2} textAlign="center">
-        <Text fontSize="sm" pb={0} pt={1} color="gray.800">
-          クリックで再生します
-        </Text>
-      </Box>
-    </Box>
+    <IpadFrame>
+      <YouTubePlayer
+        title={
+          getMessage({
+            ja: "順立生産システム",
+            language,
+          }) + "_SSC"
+        }
+        src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018151459.mp4"
+        textContent={getMessage({
+          ja: `SSCで使う場合の例です
+
+
+            一貫工程は全員が同じ製品を順番に作成する為、生産指示は一度で良い筈です。
+            それをコンセプトにYSSやCBやPLCなどにも対応しました
+                      `,
+          us: `Here is an example for use in SSC
+
+
+In an integrated process, everyone creates the same product in sequence, so production instructions should be given only once.
+Based on this concept, YSS, CB, PLC, etc. are also supported.
+            `,
+          cn: `用于 SSC 的示例。
+
+
+在集成流程中，每个人都按顺序生产相同的产品，因此只需下达一次生产指令。
+基于这一概念，还支持 YSS、CB 和 PLC。
+`,
+          language,
+        })}
+        date="2024/1/20"
+        autoPlay={false}
+      />
+    </IpadFrame>
   );
 };
 

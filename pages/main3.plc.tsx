@@ -1,75 +1,54 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Box, Text, Button, IconButton } from "@chakra-ui/react";
-import { FaSyncAlt } from "react-icons/fa";
+import React from "react";
+import { ChakraProvider, Box } from "@chakra-ui/react";
 
-const Home = () => {
-  const [dimensions, setDimensions] = useState({
-    width: "1024px",
-    height: "768px",
-  });
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [message, setMessage] = useState("");
+import YouTubePlayer from "../components/youtube";
+import IpadFrame from "../components/ipad";
 
-  const toggleDimensions = () => {
-    setDimensions((prev) => ({
-      width: prev.height,
-      height: prev.width,
-    }));
-  };
+import { useLanguage } from "../context/LanguageContext";
+import getMessage from "../components/getMessage";
 
-  useEffect(() => {
-    const updateDimensions = () => {
-      setDimensions({
-        width: window.innerWidth > 1024 ? "1024px" : `${window.innerWidth}px`,
-        height: window.innerHeight > 768 ? "768px" : `${window.innerHeight}px`,
-      });
-    };
-    updateDimensions(); // 初期サイズを設定
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
+const HomePage: React.FC = () => {
+  const { language, setLanguage } = useLanguage();
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      height="100vh"
-      bg="#f0e5da"
-    >
-      <Box p={2} textAlign="center" color="gray.800">
-        <Text fontSize="2xl" fontWeight="bold" fontFamily="Noto Sans JP">
-          順立生産システム
-          <br />
-          PLC
-        </Text>
-      </Box>
-      <Box
-        width={dimensions.width}
-        height={dimensions.height}
-        border="16px solid #333"
-        borderRadius="36px"
-        boxShadow="0 0 20px rgba(0, 0, 0, 0.5)"
-        overflow="hidden"
-        position="relative"
-        bg="white"
-      >
-        <iframe
-          ref={iframeRef}
-          src="/files/download/Jdss/main3_plc/index.html"
-          style={{ width: "100%", height: "100%", border: "none" }}
-        ></iframe>
-      </Box>
-      <Box p={2} textAlign="center">
-        <Text fontSize="sm" pb={0} pt={1} color="gray.800">
-          PLCなどの外部デバイスにシリアル送信を行なって製品品番に応じた動作を行います
-          <br />
-          動画のように忘れん棒に部品セットを行う場合はロボットアームの方が良いかもしれません
-        </Text>
-      </Box>
-    </Box>
+    <ChakraProvider>
+      <IpadFrame>
+        <YouTubePlayer
+          title={
+            "41." +
+            getMessage({
+              ja: "順立生産システム",
+              language,
+            }) +
+            "_main3"
+          }
+          date="2021/3/24"
+          autoPlay={true}
+          src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018145058.mp4"
+          textContent={getMessage({
+            ja: `PLCなどの外部デバイスにシリアル送信を行なって製品品番に応じた動作を行います
+
+動画のように忘れん棒に部品セットを行う場合はロボットアームの方が良いかもしれません
+        
+`,
+            us: `Serial transmission to external devices such as PLCs for operation according to product part number
+
+A robot arm may be better for setting parts on a forget-me-not as shown in the video.
+
+
+`,
+            cn: `串行传输到 PLC 等外部设备，以便根据产品部件号进行操作。
+
+如视频所示，机械臂可能更适合在勿忘我上设置零件。
+
+
+`,
+            language,
+          })}
+        />
+      </IpadFrame>
+    </ChakraProvider>
   );
 };
 
-export default Home;
+export default HomePage;

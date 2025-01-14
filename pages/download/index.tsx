@@ -402,7 +402,7 @@ export default function About({
                         }
                       />
                       <CustomBadge
-                        path="/files/download/Sjp/70/index.html"
+                        path="/download/Sjp/70/"
                         text={
                           "70+" +
                           getMessage({
