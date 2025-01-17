@@ -521,7 +521,7 @@ const GraphTemp = forwardRef((props, ref) => {
         style={{
           fontFamily: getMessage({
             ja: "Noto Sans JP",
-            us: "Noto Sans JP",
+            us: "Noto Sans,Noto Sans JP",
             cn: "Noto Sans SC",
             language,
           }),

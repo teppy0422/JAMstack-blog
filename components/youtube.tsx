@@ -36,6 +36,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   date,
   autoPlay,
 }) => {
+  const [currentSrc, setCurrentSrc] = useState(src);
   const [showFullText, setShowFullText] = useState(false);
   const { language, setLanguage } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -127,15 +128,25 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       //   document.removeEventListener("keydown", handleKeyDown);
       // };
     }
-  }, []);
+  }, [currentSrc]);
+
+  const changeVideoSource = (newSrc: string) => {
+    window.location.href = newSrc; // newSrcのページに遷移
+  };
 
   interface CustomCardProps {
     src: string;
     title: string;
     name: string;
+    thumbnail: string;
   }
 
-  const CustomCard: React.FC<CustomCardProps> = ({ src, title, name }) => {
+  const CustomCard: React.FC<CustomCardProps> = ({
+    src,
+    title,
+    name,
+    thumbnail,
+  }) => {
     return (
       <Card
         direction={{ base: "column", sm: "row" }}
@@ -145,12 +156,14 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         border="0px"
         bg="transparent"
         boxShadow={0}
+        cursor="pointer"
+        onClick={() => changeVideoSource(src)}
       >
         <Image
           objectFit="cover"
           maxW={{ base: "50%", sm: "100px" }}
           maxH={{ base: "80px", sm: "60px" }}
-          src={src}
+          src={thumbnail}
           alt="Caffe Latte"
           borderRadius="8px"
           mt="8px"
@@ -399,80 +412,45 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             // maxHeight="200px"
           >
             <CustomCard
-              title="test"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+              title="先ハメ誘導ナビを使った作業"
+              name="41.先ハメ誘導ナビ"
+              src="/youtube/41"
+              thumbnail="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
             />
             <CustomCard
-              title="test2"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+              title={getMessage({
+                ja: "ディスプレイ移動",
+                us: "Display Movement",
+                cn: "显示屏移动",
+                language,
+              })}
+              name="56.net"
+              src="/youtube/56.net"
+              thumbnail="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
             />
             <CustomCard
-              title="test3"
+              title={
+                getMessage({
+                  ja: "順立生産システム",
+                  language,
+                }) + "_main2(SSC)"
+              }
               name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+              src="/youtube/main2"
+              thumbnail="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
             />
             <CustomCard
-              title="test4"
+              title={
+                getMessage({
+                  ja: "順立生産システム",
+                  language,
+                }) + "_main3"
+              }
               name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+              src="/youtube/main3.plc"
+              thumbnail="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
             />
-            <CustomCard
-              title="test5"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-            />
-            <CustomCard
-              title="test6"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-            />
-            <CustomCard
-              title="test7"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-            />
-            <CustomCard
-              title="test8"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-            />
-            <CustomCard
-              title="test9"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-            />
-            <CustomCard
-              title="test10"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-            />
-            <CustomCard
-              title="test11"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-            />
-            <CustomCard
-              title="test12"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-            />
-            <CustomCard
-              title="test13"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-            />
-            <CustomCard
-              title="test14"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-            />
-            <CustomCard
-              title="test15"
-              name="kataoka"
-              src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-            />
+            <Box height="100vh" />
           </Box>
         </Card>
       </VStack>

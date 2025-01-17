@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Text, Button, IconButton } from "@chakra-ui/react";
 import { FaSyncAlt } from "react-icons/fa";
-import IpadFrame from "../components/ipad";
-import YouTubePlayer from "../components/youtube";
+import IpadFrame from "../../components/ipad";
+import YouTubePlayer from "../../components/youtube";
 
-import { useLanguage } from "../context/LanguageContext";
-import getMessage from "../components/getMessage";
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 
 const Home = () => {
   const [dimensions, setDimensions] = useState({

@@ -81,7 +81,10 @@ function getMaxVersionNumber(directory: string): {
 }
 // サーバーサイドでデータを取得
 export const getServerSideProps: GetServerSideProps = async () => {
-  const directoryPath = path.join(process.cwd(), "/public/files/download/Sjp/");
+  const directoryPath = path.join(
+    process.cwd(),
+    "/public/files/download/html/Sjp/"
+  );
   const { maxVersionString, lastModified: originalLastModified } =
     getMaxVersionNumber(directoryPath);
   const lastModified = new Date().toISOString(); // DateオブジェクトをISO文字列に変換
@@ -113,10 +116,11 @@ export default function About({
   };
   const [isClicked, setIsClicked] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const CustomBadge: React.FC<{ path: string; text: string }> = ({
-    path,
-    text,
-  }) => (
+  const CustomBadge: React.FC<{
+    path: string;
+    text: string;
+    media: string;
+  }> = ({ path, text, media }) => (
     <Badge
       variant={path ? "solid" : "outline"} // pathが空の場合はoutline
       colorScheme={path ? undefined : "gray"} // pathが空の場合はgrayのカラースキーム
@@ -127,7 +131,35 @@ export default function About({
       _hover={path ? { boxShadow: "dark-lg" } : undefined}
       onClick={path ? () => handleBoxClick(path) : undefined}
     >
-      {text}
+      <Flex alignItems="center">
+        <Box mr={0}>{text}</Box>
+        {media === "movie" ? (
+          <svg
+            stroke="currentColor"
+            fill="currentColor"
+            stroke-width="0"
+            viewBox="0 0 24 24"
+            height="20px"
+            width="20px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M19.437,19.937H4.562a2.5,2.5,0,0,1-2.5-2.5V6.563a2.5,2.5,0,0,1,2.5-2.5H19.437a2.5,2.5,0,0,1,2.5,2.5V17.437A2.5,2.5,0,0,1,19.437,19.937ZM4.562,5.063a1.5,1.5,0,0,0-1.5,1.5V17.437a1.5,1.5,0,0,0,1.5,1.5H19.437a1.5,1.5,0,0,0,1.5-1.5V6.563a1.5,1.5,0,0,0-1.5-1.5Z"></path>
+            <path d="M14.568,11.149,10.6,8.432a1.032,1.032,0,0,0-1.614.851v5.434a1.032,1.032,0,0,0,1.614.851l3.972-2.717A1.031,1.031,0,0,0,14.568,11.149Z"></path>
+          </svg>
+        ) : media === "html" ? (
+          <svg
+            stroke="currentColor"
+            fill="currentColor"
+            stroke-width="0"
+            viewBox="0 0 240 240"
+            height="20px"
+            width="20px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M214,120V88a6,6,0,0,0-1.76-4.24l-56-56A6,6,0,0,0,152,26H56A14,14,0,0,0,42,40v80a6,6,0,0,0,12,0V40a2,2,0,0,1,2-2h90V88a6,6,0,0,0,6,6h50v26a6,6,0,0,0,12,0ZM158,46.48,193.52,82H158ZM66,160v48a6,6,0,0,1-12,0V190H30v18a6,6,0,0,1-12,0V160a6,6,0,0,1,12,0v18H54V160a6,6,0,0,1,12,0Zm56,0a6,6,0,0,1-6,6H106v42a6,6,0,0,1-12,0V166H84a6,6,0,0,1,0-12h32A6,6,0,0,1,122,160Zm72,0v48a6,6,0,0,1-12,0V178l-13.2,17.6a6,6,0,0,1-9.6,0L146,178v30a6,6,0,0,1-12,0V160a6,6,0,0,1,10.8-3.6L164,182l19.2-25.6A6,6,0,0,1,194,160Zm56,48a6,6,0,0,1-6,6H216a6,6,0,0,1-6-6V160a6,6,0,0,1,12,0v42h22A6,6,0,0,1,250,208Z"></path>
+          </svg>
+        ) : null}
+      </Flex>
     </Badge>
   );
   const { language, setLanguage } = useLanguage();
@@ -185,13 +217,57 @@ export default function About({
               <Box transform="rotate(270deg)" position="relative" top="-3px">
                 <IoTicketOutline size={28} />
               </Box>
-              <Text
-                fontSize="lg"
-                mb={2}
-                fontFamily="'Archivo Black', 'M PLUS Rounded 1c'"
+              <svg
+                width="200"
+                height="50"
+                viewBox="0 0 200 50"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                DOWNLOAD
-              </Text>
+                <defs>
+                  <clipPath id="textClip">
+                    <rect x="0" y="0" width="0" height="50">
+                      <animate
+                        attributeName="width"
+                        from="0"
+                        to="200"
+                        dur="1s"
+                        begin="3s"
+                        fill="freeze"
+                      />
+                    </rect>
+                  </clipPath>
+                </defs>
+                <text
+                  x="0"
+                  y="30"
+                  font-family="'Archivo Black', 'M PLUS Rounded 1c'"
+                  font-size="24"
+                  fill="none"
+                  stroke={colorMode === "light" ? "#111" : "white"}
+                  stroke-width="2"
+                  stroke-dasharray="200"
+                  stroke-dashoffset="200"
+                >
+                  DOWNLOAD
+                  <animate
+                    attributeName="stroke-dashoffset"
+                    from="200"
+                    to="0"
+                    dur="3s"
+                    fill="freeze"
+                  />
+                </text>
+                <text
+                  x="0"
+                  y="30"
+                  font-family="'Archivo Black', 'M PLUS Rounded 1c'"
+                  font-size="24"
+                  fill={colorMode === "light" ? "#333" : "#111"}
+                  clip-path="url(#textClip)"
+                >
+                  DOWNLOAD
+                </text>
+              </svg>
             </HStack>
             <Box fontSize="md">
               {getMessage({
@@ -350,7 +426,7 @@ export default function About({
                       alignItems="flex-start"
                     >
                       <Flex justifyContent="flex-end" width="100%">
-                        <Text fontSize="xs" textAlign="right" right={0}>
+                        <Text fontSize="xs" textAlign="right">
                           #
                           {new Date(lastModified).toLocaleString("ja-JP", {
                             year: "numeric",
@@ -363,6 +439,7 @@ export default function About({
                       </Flex>
                       <CustomBadge
                         path=""
+                        media=""
                         text={
                           "10." +
                           getMessage({
@@ -373,6 +450,7 @@ export default function About({
                       />
                       <CustomBadge
                         path="/download/Sjp/40/"
+                        media="html"
                         text={
                           "40." +
                           getMessage({
@@ -382,7 +460,8 @@ export default function About({
                         }
                       />
                       <CustomBadge
-                        path="/download/Sjp/41"
+                        path="/youtube/41"
+                        media="movie"
                         text={
                           "41." +
                           getMessage({
@@ -393,6 +472,7 @@ export default function About({
                       />
                       <CustomBadge
                         path="/56v3.1"
+                        media="html"
                         text={
                           "56." +
                           getMessage({
@@ -403,6 +483,7 @@ export default function About({
                       />
                       <CustomBadge
                         path="/download/Sjp/70/"
+                        media="html"
                         text={
                           "70+" +
                           getMessage({
@@ -484,7 +565,7 @@ export default function About({
                       alignItems="flex-start"
                     >
                       <Flex justifyContent="flex-end" width="100%">
-                        <Text fontSize="xs" margin="auto" textAlign="right">
+                        <Text fontSize="xs" textAlign="right">
                           #2019/09/02
                           <br />
                           1.0.0.4
@@ -492,6 +573,7 @@ export default function About({
                       </Flex>
                       <CustomBadge
                         path=""
+                        media=""
                         text={getMessage({
                           ja: "撮影方法",
                           us: "Shooting Method",
@@ -689,7 +771,8 @@ export default function About({
                         <Text fontSize="xs" textAlign="right" right={0}></Text>
                       </Flex>
                       <CustomBadge
-                        path="../download/Sjp/56.net"
+                        path="/youtube/56.net"
+                        media="movie"
                         text={getMessage({
                           ja: "ディスプレイ移動",
                           us: "Display Movement",
@@ -1004,6 +1087,7 @@ export default function About({
                       </Flex>
                       <CustomBadge
                         path=""
+                        media=""
                         text={
                           "main1." +
                           getMessage({
@@ -1014,9 +1098,17 @@ export default function About({
                           })
                         }
                       />
-                      <CustomBadge path="/main2" text="main2.SSC" />
-                      <CustomBadge path="" text="main3.CB" />
-                      <CustomBadge path="/main3.plc" text="main3.PLC" />
+                      <CustomBadge
+                        path="/youtube/main2"
+                        media="movie"
+                        text="main2.SSC"
+                      />
+                      <CustomBadge path="" media="" text="main3.CB" />
+                      <CustomBadge
+                        path="/youtube/main3.plc"
+                        media="movie"
+                        text="main3.PLC"
+                      />
                     </Stack>
                   </Flex>
                 </Box>
@@ -1241,7 +1333,7 @@ export default function About({
               </CardHeader>
               <Divider borderColor="gray.500" />
               <CardBody p={0}>
-                <Box position="relative" px={4} pl={8} py={2}>
+                <Box position="relative" px={4} pl={8} py={2} minH={"9em"}>
                   <Box
                     position="absolute"
                     top={0}
