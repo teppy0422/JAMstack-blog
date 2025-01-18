@@ -37,6 +37,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   autoPlay,
 }) => {
   const [currentSrc, setCurrentSrc] = useState(src);
+
   const [showFullText, setShowFullText] = useState(false);
   const { language, setLanguage } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -74,6 +75,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     setShowFullText(!showFullText);
   };
   useEffect(() => {
+    setCurrentSrc(src);
     const video = document.querySelector<HTMLVideoElement>(".box1");
     const progressBar = document.getElementById("progress-bar");
     const progressContainer = document.getElementById("progress-container");
@@ -128,7 +130,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       //   document.removeEventListener("keydown", handleKeyDown);
       // };
     }
-  }, [currentSrc]);
+  }, []);
 
   const changeVideoSource = (newSrc: string) => {
     window.location.href = newSrc; // newSrcのページに遷移
@@ -147,6 +149,15 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     name,
     thumbnail,
   }) => {
+    const [youtubePath, setYoutubePath] = useState("");
+
+    useEffect(() => {
+      const href = window.location.href;
+      let path = "/youtube" + new URL(href).pathname.split("/youtube")[1] || "";
+      path = path.replace(/\/$/, ""); // 末尾のスラッシュを削除
+
+      setYoutubePath(path);
+    }, []);
     return (
       <Card
         direction={{ base: "column", sm: "row" }}
@@ -157,8 +168,18 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         bg="transparent"
         boxShadow={0}
         cursor="pointer"
+        _hover={{ backgroundColor: "#ddd" }}
         onClick={() => changeVideoSource(src)}
       >
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
+          position="absolute"
+        >
+          {youtubePath === src ? ">" : null}
+        </Box>
         <Image
           objectFit="cover"
           maxW={{ base: "50%", sm: "100px" }}
@@ -166,6 +187,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
           src={thumbnail}
           alt="Caffe Latte"
           borderRadius="8px"
+          border="0.5px solid"
           mt="8px"
           mb="4px"
           ml="10px"
@@ -186,10 +208,13 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                   WebkitLineClamp: 2, // 2行まで表示
                 }}
               >
-                {title}
+                {/* {title} */}
+
+                {src}
               </Heading>
               <Text py="1" fontSize={12} bottom="0" position="absolute">
-                {name}
+                {/* {name} */}
+                {youtubePath}
               </Text>
             </Flex>
           </CardBody>
@@ -412,10 +437,15 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             // maxHeight="200px"
           >
             <CustomCard
-              title="先ハメ誘導ナビを使った作業"
-              name="41.先ハメ誘導ナビ"
+              title={getMessage({
+                ja: "先ハメ誘導を使った作業",
+                us: "Work with Pre-Fitting Guidance",
+                cn: "使用先装引导",
+                language,
+              })}
+              name={"41." + getMessage({ ja: "先ハメ誘導", language })}
               src="/youtube/41"
-              thumbnail="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+              thumbnail="/images/thumbnail/41.png"
             />
             <CustomCard
               title={getMessage({
@@ -426,29 +456,25 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
               })}
               name="56.net"
               src="/youtube/56.net"
-              thumbnail="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+              thumbnail="/images/thumbnail/56.net.png"
             />
             <CustomCard
-              title={
-                getMessage({
-                  ja: "順立生産システム",
-                  language,
-                }) + "_main2(SSC)"
-              }
-              name="kataoka"
+              title="main2(SSC)"
+              name={getMessage({
+                ja: "順立生産システム",
+                language,
+              })}
               src="/youtube/main2"
-              thumbnail="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+              thumbnail="/images/thumbnail/main2.png"
             />
             <CustomCard
-              title={
-                getMessage({
-                  ja: "順立生産システム",
-                  language,
-                }) + "_main3"
-              }
-              name="kataoka"
+              title="main3(PLC)"
+              name={getMessage({
+                ja: "順立生産システム",
+                language,
+              })}
               src="/youtube/main3.plc"
-              thumbnail="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+              thumbnail="/images/thumbnail/main3.png"
             />
             <Box height="100vh" />
           </Box>
