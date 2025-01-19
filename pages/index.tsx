@@ -599,6 +599,7 @@ const Welcome = ({ isNewCreated }) => {
                       display="inline-flex"
                       borderBottom="1px solid"
                       mr="2px"
+                      fontWeight={600}
                     >
                       {getMessage({
                         ja: "速い",
@@ -670,6 +671,7 @@ const Welcome = ({ isNewCreated }) => {
                       display="inline-flex"
                       borderBottom="1px solid"
                       mr="2px"
+                      fontWeight={600}
                     >
                       {getMessage({
                         ja: "定額",
@@ -800,6 +802,7 @@ const Welcome = ({ isNewCreated }) => {
                       display="inline-flex"
                       borderBottom="1px solid"
                       mx="2px"
+                      fontWeight={600}
                     >
                       {getMessage({
                         ja: "高額な人件費",
@@ -903,6 +906,74 @@ const Welcome = ({ isNewCreated }) => {
             14,
             10
           )}
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            transform={{
+              base: "scale(1)",
+              sm: "scale(1.25)",
+              md: "scall(1.25)",
+              lg: "scall(1.25)",
+              xl: "scall(1.25)",
+            }}
+          >
+            {/* <svg
+              width="352"
+              height="50"
+              viewBox="0 0 352 50"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <clipPath id="textClip">
+                  <rect x="0" y="0" width="0" height="100">
+                    <animate
+                      attributeName="width"
+                      from="0"
+                      to="450"
+                      dur="1s"
+                      begin="2s"
+                      fill="freeze"
+                    />
+                  </rect>
+                </clipPath>
+              </defs>
+              <text
+                x="0"
+                y="30"
+                height="100"
+                font-family="'Rampart One', 'M PLUS Rounded 1c'"
+                font-size="32"
+                fill="none"
+                stroke={colorMode === "light" ? "Orange" : "white"}
+                // stroke={colorMode === "light" ? "#333" : "white"}
+                stroke-width="1"
+                stroke-dasharray="340"
+                stroke-dashoffset="340"
+              >
+                提供中の主なプログラム
+                <animate
+                  attributeName="stroke-dashoffset"
+                  from="450"
+                  to="0"
+                  dur="3s"
+                  fill="freeze"
+                />
+              </text>
+              <text
+                x="0"
+                y="30"
+                height="100"
+                font-family="'Rampart One', 'M PLUS Rounded 1c'"
+                font-size="32"
+                fill={colorMode === "light" ? "#333" : "#FFF"}
+                clip-path="url(#textClip)"
+              >
+                提供中の主なプログラム
+              </text>
+            </svg> */}
+          </Box>
 
           <Card
             maxW="640px"
@@ -1074,7 +1145,7 @@ const Welcome = ({ isNewCreated }) => {
                 size="xl"
                 children={
                   <Box>
-                    <IframeDisplay src="/56v3.1_" width="100%" />
+                    <IframeDisplay src="/56v3.1" width="100%" />
                     <Text mt={4}></Text>
                     <Text>
                       {getMessage({
@@ -1311,9 +1382,9 @@ const Welcome = ({ isNewCreated }) => {
                   })}
                   <br />
                   {getMessage({
-                    ja: "※2024年2月を目処に完成予定",
-                    us: "*Expected to be completed by February 2024.",
-                    cn: "*将于 2024 年 2 月完成。",
+                    ja: "※契約開始から3ヶ月で完成予定",
+                    us: "*Scheduled to be completed within 3 months from the start of the contract.",
+                    cn: "*预计在合同开始后 3 个月内完成",
                     language,
                   })}
                 </Text>

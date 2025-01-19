@@ -11,39 +11,14 @@ Production Preparation+
 生产准备+
 
 
-Aを押しながら[このVerのアップロード]をクリック
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
+
+  const { language, setLanguage } = useLanguage();
 
 
-詰栓はAと表示されて部品品番は下方に表示されます
-Plugs are marked with "A" and the part number is shown below
-插头标有 A，零件编号如下所示
 
 
-
-node_modulesを削除してから再インストールする手順は、依存関係の問題を解決するための一般的な方法です。以下の手順で実行できます。
-
-手順
-node_modulesの削除:
-プロジェクトのルートディレクトリで以下のコマンドを実行して、node_modulesディレクトリを削除します。
-node_modules
-
-Windowsの場合、コマンドプロンプトで以下を実行します。
-node_modules
-package-lock.jsonの削除（オプション）:
-package-lock.jsonを削除することで、依存関係を再解決することができます。以下のコマンドを実行します。
-json
-Windowsの場合、コマンドプロンプトで以下を実行します。
-json
-依存関係の再インストール:
-npm installを実行して、package.jsonに基づいて依存関係を再インストールします。
-install
-
-4. ビルドの再実行:
-依存関係を再インストールした後、プロジェクトをビルドします。
-build
-開発サーバーを再起動する場合は、以下を実行します。
-dev
-注意点
-package-lock.jsonの削除: package-lock.jsonを削除すると、依存関係のバージョンが再解決されるため、予期しないバージョンがインストールされる可能性があります。必要に応じて削除してください。
-バージョン管理: node_modulesやpackage-lock.jsonを削除する前に、バージョン管理システム（例: Git）で変更をコミットしておくと安全です。
-これらの手順を実行することで、依存関係の問題が解決されることが多いです。
+通常は最新版Aを選択します
+Usually select the latest version A
+通常选择最新版本 A。

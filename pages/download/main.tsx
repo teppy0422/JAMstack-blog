@@ -181,10 +181,15 @@ export default function About() {
                 width="auto"
                 mt={2}
               >
-                {/* <Box fontSize="sm" mr={1}>
-                  アップロードの手順
+                <Box fontSize="sm" mr={1}>
+                  {getMessage({
+                    ja: "ダウンロードしたmain_*.zipを展開(解凍)してからmain_*.mdbが在るフォルダに入れてください",
+                    us: "Extract (unzip) the downloaded main_*.zip file and place it in the folder containing the main_*.mdb file.",
+                    cn: "解压缩下载的 main_*.zip, 并将其放入 main_*.mdb 所在文件夹。",
+                    language,
+                  })}
                 </Box>
-                <TransitionExample /> */}
+                {/* <TransitionExample /> */}
               </Box>
             </Box>
           </Box>
@@ -194,11 +199,31 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-01-19T22:54:00+0900"
+              description1={getMessage({
+                ja: "自動機に送信できない。自動機タイプが常にASだから待機時間が常に長い(10秒)",
+                us: "Cannot transmit to automatic machine. Waiting time is always long (10 seconds) because automatic machine type is always AS.",
+                cn: "无法传输到自动设备。等待时间总是很长（10 秒），因为自动机器类型总是 AS。",
+                language,
+              })}
+              description2={getMessage({
+                ja: "自動機へのシリアル送信に関わる箇所の書き直し。自動機タイプSAを追加(3秒)",
+                us: "Rewriting of the part related to the serial transmission to the automatic machine. Add automatic machine type SA (3 seconds)",
+                cn: "重写与自动机串行传输有关的章节。增加自动机械类型 SA（3 秒）。",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_130.zip"
+              inCharge="徳島,小松さん,不具合,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2024-11-29T20:26:00+0900"
               description1="すべてOKになる。リンクテーブルが切れて起動時にエラー。次に読むべきレコードが画面外になる"
               description2="判別を修正。リンクテーブルの再作成を修正。absolutePosition=>.bookmark-5"
               descriptionIN=""
-              linkHref="/files/download/Jdss/main_128.zip"
+              linkHref="/files/download/html/Jdss/main_128.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={true}
               userName={userName ?? ""}
@@ -208,7 +233,7 @@ export default function About() {
               description1="起動時にsqlエラー"
               description2="sqlを使わないように変更。テーブルリンクが無い場合は作成"
               descriptionIN=""
-              linkHref="/files/download/Jdss/main_127.zip"
+              linkHref="/files/download/html/Jdss/main_127.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={false}
               userName={userName ?? ""}
@@ -218,7 +243,7 @@ export default function About() {
               description1="サーバー接続が出来ない場合にテーブル読み込みエラー"
               description2="サーバーIP接続とファイル接続を分ける"
               descriptionIN=""
-              linkHref="/files/download/Jdss/main_126.zip"
+              linkHref="/files/download/html/Jdss/main_126.zip"
               inCharge="徳島,小松さん,Win10zip"
               isLatest={false}
             />
