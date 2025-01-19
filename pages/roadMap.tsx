@@ -1124,11 +1124,11 @@ const Roadmap = () => {
           py={8}
           fontFamily={getMessage({
             ja: "Noto Sans JP",
-            us: "Noto Sans JP",
-            cn: "Noto Sans SC",
+            us: "Noto Sans,Noto Sans JP",
+            cn: "Noto Sans SC,Noto Sans JP",
             language,
           })}
-          fontWeight={200}
+          fontWeight="400"
         >
           <Heading as="h3" fontSize="24px" mb={8} textAlign="center">
             <HStack spacing={2} alignItems="center" justifyContent="center">

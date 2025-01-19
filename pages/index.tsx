@@ -355,15 +355,14 @@ const Welcome = ({ isNewCreated }) => {
       <Sidebar />
       <Content isCustomHeader={true} maxWidth="1200px">
         <Box
-          style={{
-            paddingTop: "30px",
-            fontFamily: getMessage({
-              ja: "Noto Sans JP",
-              us: "Noto Sans JP",
-              cn: "Noto Sans SC",
-              language,
-            }),
-          }}
+          paddingTop="30px"
+          fontFamily={getMessage({
+            ja: "Noto Sans JP",
+            us: "Noto Sans,Noto Sans JP",
+            cn: "Noto Sans SC,Noto Sans JP",
+            language,
+          })}
+          fontWeight="400"
         >
           <Box textAlign="center" mb={4}>
             <Heading

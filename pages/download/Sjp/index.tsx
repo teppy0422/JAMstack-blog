@@ -176,7 +176,6 @@ export default function About() {
               <Badge colorScheme="teal" margin={1}>
                 LATEST
               </Badge>
-              を選択します
               {getMessage({
                 ja: "を選択します",
                 us: ".",
@@ -219,7 +218,7 @@ export default function About() {
               dateTime="2024-12-19T04:42:00+0900"
               description1=""
               description2={getMessage({
-                ja: "主に共通する目的でボンダーの簡易機能を追加",
+                ja: "主に共通する目的でボンダーの簡易作成を追加",
                 us: "Added simple functionality for bonders, mainly for common purposes",
                 cn: "粘合剂的附加简单功能，主要用于普通用途。",
                 language,
