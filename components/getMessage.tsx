@@ -76,6 +76,17 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
     まとめ: { us: "Summary", cn: "总结" },
     作成途中: { us: "on the way", cn: "作成途中" },
     新機能: { us: "new feature", cn: "新功能" },
+    王さん: { us: "Ms.ou", cn: "王女士" },
+    不具合: { us: "undesirable", cn: "不具合" },
+    桑原さん: { us: "Ms.kuwahara", cn: "桑原女士" },
+    秋山さん: { us: "Ms.akiyama", cn: "秋山女士" },
+    小崎さん: { us: "Ms.kosaki", cn: "小崎女士" },
+    Win10zip: { us: "Win10zip", cn: "Win10zip" },
+    山田さん: { us: "Ms.yamada", cn: "山田女士" },
+    小松さん: { us: "Mr.komatsu", cn: "小松先生" },
+    緒方さん: { us: "Mr.ogata", cn: "緒方先生" },
+    書き直し: { us: "rewrite", cn: "重拟" },
+    更新: { us: "update", cn: "更新" },
   };
 
   const {

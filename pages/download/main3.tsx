@@ -106,7 +106,7 @@ export default function About() {
                 language,
               })}
               descriptionIN=""
-              linkHref="/files/download/Jdss/main3_17.zip"
+              linkHref="/files/download/html/Jdss/main3_17.zip"
               inCharge="徳島,Win10zip"
               isLatest={true}
               userName={userName ?? ""}

@@ -37,6 +37,10 @@ import {
 } from "@chakra-ui/icons";
 
 import { keyframes } from "@emotion/react";
+
+import { useLanguage } from "../context/LanguageContext";
+import getMessage from "../components/getMessage";
+
 const shake = keyframes`
   0% { transform: rotate(0deg); }
   70% { transform: rotate(0deg); }
@@ -62,6 +66,7 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
   const [modalSrc, setModalSrc] = useState("");
   const [isClient, setIsClient] = useState(false);
   const showToast = useCustomToast();
+  const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
     checkFileExists();
@@ -223,10 +228,13 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
                 key={index}
                 colorScheme={inChargeColors[index].color}
                 variant={inChargeColors[index].variant}
-                sx={inChargeColors[index].sx} // sxプロパティを適用
+                sx={{
+                  ...inChargeColors[index].sx,
+                  textTransform: "none", // アッパーケースを解除
+                }} // sxプロパティを適用
                 marginRight={1}
               >
-                {inCharge}
+                {getMessage({ ja: inCharge, language })}
               </Badge>
             ))}
             {props.description1 &&

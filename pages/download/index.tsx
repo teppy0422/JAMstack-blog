@@ -213,7 +213,7 @@ export default function About({
           className={styles.me}
           sx={{
             paddingTop: "30px",
-            fontWeight: "200",
+            fontWeight: "400",
           }}
           fontFamily={getMessage({
             ja: "Noto Sans JP",

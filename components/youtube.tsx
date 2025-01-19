@@ -208,13 +208,12 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                   WebkitLineClamp: 2, // 2行まで表示
                 }}
               >
-                {/* {title} */}
-
-                {src}
+                {title}
+                {/* {src} */}
               </Heading>
               <Text py="1" fontSize={12} bottom="0" position="absolute">
-                {/* {name} */}
-                {youtubePath}
+                {name}
+                {/* {youtubePath} */}
               </Text>
             </Flex>
           </CardBody>
@@ -398,9 +397,9 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             <Box fontWeight={500} fontSize={14}>
               {date}
             </Box>
-            <Text whiteSpace="pre-wrap">
+            <Text whiteSpace="pre-wrap" fontSize={14}>
               {showFullText ? textContent : `${truncatedText}...`}
-              <Box as="span" style={{ fontSize: "14px" }}>
+              <Box as="span" fontSize={11} ml={3}>
                 {showFullText
                   ? ""
                   : getMessage({

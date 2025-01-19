@@ -225,17 +225,7 @@ export default function About() {
               })}
               descriptionIN=""
               linkHref="/files/download/html/Sjp/Sjp3.101.12_.zip"
-              inCharge={
-                getMessage({
-                  ja: "高知",
-                  language,
-                }) +
-                ",王さん," +
-                getMessage({
-                  ja: "新機能",
-                  language,
-                })
-              }
+              inCharge="高知,王さん,新機能"
               isLatest={true}
               userName={userName ?? ""}
             />

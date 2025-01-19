@@ -261,7 +261,7 @@ export default function About() {
               description1="main2_次回QRラベルが飛ぶ時がある"
               description2="SQLクエリ->専用関数の作成に書き直し"
               descriptionIN="自動機を使用しない場合にラベル印刷だけできるように修正"
-              linkHref="/files/download/Jdss/main_123.zip"
+              linkHref="/files/download/html/Jdss/main_123.zip"
               inCharge="徳島,小松さん,藤原さん,Win10zip"
               isLatest={false}
             />

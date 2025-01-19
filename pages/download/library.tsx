@@ -87,7 +87,7 @@ export default function About() {
                 language,
               })}
               descriptionIN=""
-              linkHref="/files/download/Library_/MSCOMM32.OCX"
+              linkHref="/files/download/html/Library_/MSCOMM32.OCX"
               inCharge=""
               isLatest={true}
               userName={userName ?? ""}

@@ -101,7 +101,7 @@ export default function About() {
               description1="撮影環境が異なる場合、コネクタ写真の色が異なる。コネクタ写真の登録が面倒"
               description2="撮影するとコネクタ品番を付けて写真を生産準備+に渡す"
               descriptionIN=""
-              linkHref="/files/download/Camera/camera1.0.0.4_.zip"
+              linkHref="/files/download/html/Camera/camera1.0.0.4_.zip"
               inCharge="徳島,補給品,Win10zip"
               isLatest={true}
               userName={userName ?? ""}
