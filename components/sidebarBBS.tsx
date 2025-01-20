@@ -218,7 +218,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
           <Box
             as="span"
             position="relative"
-            fontWeight="200"
             _after={{
               content: '""',
               position: "absolute",
@@ -294,6 +293,13 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
         textAlign="left"
         zIndex="1100"
         fontSize={15}
+        fontFamily={getMessage({
+          ja: "Noto Sans JP",
+          us: "Noto Sans,Noto Sans JP",
+          cn: "Noto Sans SC,Noto Sans JP",
+          language,
+        })}
+        fontWeight={400}
       >
         <VStack spacing="0" align="stretch">
           {Object.entries(
