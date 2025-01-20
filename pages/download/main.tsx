@@ -199,6 +199,26 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-01-20T16:44:00+0900"
+              description1={getMessage({
+                ja: "自動機に送信しない不具合",
+                us: "Failure to transmit to automatic machine",
+                cn: "无法传输到自动机器",
+                language,
+              })}
+              description2={getMessage({
+                ja: "自動機バーコードを送信するように修正",
+                us: "Modified to send automatic machine barcodes",
+                cn: "经改装后可传输自动机器条形码",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_133.zip"
+              inCharge="徳島,小松さん,不具合,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-01-20T10:54:00+0900"
               description1={getMessage({
                 ja: "押せないボタンがある",
