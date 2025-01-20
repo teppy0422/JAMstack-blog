@@ -199,6 +199,26 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-01-20T10:54:00+0900"
+              description1={getMessage({
+                ja: "押せないボタンがある",
+                us: "There's a button I can't press.",
+                cn: "某些按钮无法按下",
+                language,
+              })}
+              description2={getMessage({
+                ja: "押せるように修正。ネーム印刷の下地",
+                us: "Modified so that it can be stamped.。 Base for name printing",
+                cn: "经过改装，可进行烫印。用于印制名称的底座。",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_132.zip"
+              inCharge="徳島,小松さん,不具合,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-01-19T22:54:00+0900"
               description1={getMessage({
                 ja: "自動機に送信できない。自動機タイプが常にASだから待機時間が常に長い(10秒)",
@@ -215,7 +235,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_130.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
@@ -225,7 +245,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_128.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
