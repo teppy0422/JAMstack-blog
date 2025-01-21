@@ -199,6 +199,26 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-01-21T14:14:00+0900"
+              description1={getMessage({
+                ja: "自動機に送信しないをオンでラベル印刷する",
+                us: 'No label printing with "Do not send to automatic machines" turned on.',
+                cn: "打开 不发送到自动机器，不打印标签",
+                language,
+              })}
+              description2={getMessage({
+                ja: "ラベル印刷もしないように修正",
+                us: "Fixed to not print labels as well.",
+                cn: "修改后也不打印标签",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_134.zip"
+              inCharge="徳島,小松さん,不具合,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-01-20T16:44:00+0900"
               description1={getMessage({
                 ja: "自動機に送信しない不具合",
