@@ -199,6 +199,21 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-01-21T19:24:00+0900"
+              description1={getMessage({
+                ja: "QRリーダーで読み込み時にENTERイベントが発生する",
+                us: "ENTER event occurs when reading with QR reader",
+                cn: "使用 QR 阅读器阅读时会发生 ENTER 事件。",
+                language,
+              })}
+              description2=""
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_135.zip"
+              inCharge="徳島,小松さん,不具合,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-01-21T14:14:00+0900"
               description1={getMessage({
                 ja: "自動機に送信しないをオンでラベル印刷する",
