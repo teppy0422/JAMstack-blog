@@ -199,6 +199,21 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-01-22T00:59:00+0900"
+              description1={getMessage({
+                ja: "ACCESS2003でエラー",
+                us: "Error in ACCESS2003",
+                cn: "ACCESS 2003 中的错误。",
+                language,
+              })}
+              description2=""
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_136.zip"
+              inCharge="徳島,小松さん,不具合,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-01-21T19:24:00+0900"
               description1={getMessage({
                 ja: "QRリーダーで読み込み時にENTERイベントが発生する",
