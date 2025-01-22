@@ -207,7 +207,7 @@ export default function About() {
                 language,
               })}
               description2={getMessage({
-                ja: "sleepとdoeventsを追記",
+                ja: "sleepとdoeventsを追記。データ仕掛中が無い場合にメッセージを追加。ロック中の非表示を削除",
                 us: "Add sleep and doevents",
                 cn: "添加了 SLEEP 和 doevents。",
                 language,
