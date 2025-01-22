@@ -1132,9 +1132,9 @@ export default function About({
                     >
                       <Flex justifyContent="flex-end" width="100%">
                         <Text fontSize="xs" textAlign="right">
-                          #2024/11/29
+                          #2025/01/22
                           <br />
-                          128
+                          136
                         </Text>
                       </Flex>
                       <CustomBadge

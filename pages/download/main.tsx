@@ -199,6 +199,26 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-01-22T14:50:00+0900"
+              description1={getMessage({
+                ja: "win7/access2003で送信印刷の途中でエラー無しで停止",
+                us: "Stopped without error in the middle of outgoing printing in win7/access2003",
+                cn: "在 win7/access2003 中，在外发打印过程中无错误地停止打印",
+                language,
+              })}
+              description2={getMessage({
+                ja: "sleepとdoeventsを追記",
+                us: "Add sleep and doevents",
+                cn: "添加了 SLEEP 和 doevents。",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_137.zip"
+              inCharge="徳島,小松さん,不具合,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-01-22T00:59:00+0900"
               description1={getMessage({
                 ja: "ACCESS2003でエラー",
