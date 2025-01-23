@@ -981,16 +981,12 @@ export default function About({
               </CardHeader>
               <Divider borderColor="gray.500" />
               <CardBody p={0}>
-                <Box position="relative" px={4} pl={8} py={2}>
-                  <Box
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    bottom={0}
-                    width="1.4rem"
-                    backgroundColor="transparent"
-                    borderRight="2px dotted"
-                    borderColor="gray.500"
+                <Box position="relative" px={4} pl={8} py={2} minH={140}>
+                  <DownloadButton
+                    path="/download/Bip"
+                    isHovered={isHovered}
+                    backGroundColor="green"
+                    userName={userName}
                   />
                   <Flex justifyContent="space-between" alignItems="center">
                     <Heading size="sm">Bip+</Heading>
