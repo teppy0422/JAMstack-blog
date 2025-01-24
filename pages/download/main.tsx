@@ -199,6 +199,26 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-01-23T13:59:00+0900"
+              description1={getMessage({
+                ja: "",
+                us: "",
+                cn: "",
+                language,
+              })}
+              description2={getMessage({
+                ja: "データインポート後に1秒の待機を追加",
+                us: "Add 1 second wait after data import",
+                cn: "数据导入后增加 1 秒等待时间",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_138.zip"
+              inCharge="徳島,小松さん,???,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-01-22T14:50:00+0900"
               description1={getMessage({
                 ja: "win7/access2003で送信印刷の途中でエラー無しで停止",
@@ -215,7 +235,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_137.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
@@ -230,7 +250,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_136.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
@@ -245,7 +265,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_135.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
@@ -265,7 +285,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_134.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
@@ -285,7 +305,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_133.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
@@ -305,7 +325,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_132.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox

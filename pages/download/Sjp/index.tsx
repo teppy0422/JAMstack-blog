@@ -67,56 +67,66 @@ function TransitionExample() {
           </AlertDialogHeader>
           <AlertDialogCloseButton _focus={{ _focus: "none" }} />
           <AlertDialogBody p={4}>
-            <Box as="p" textAlign="center" mb={4}>
-              {"1." +
-                getMessage({
-                  ja: "ダウンロードしたエクセルブックを開く",
-                  us: "Open the downloaded Excel book.",
-                  cn: "打开下载的 Excel 电子书。",
-                  language,
-                })}
-              <br />
-              {"2." +
-                getMessage({
-                  ja: "Menuを開いてVerupを押す",
-                  us: "Open Menu and press Verup.",
-                  cn: "打开菜单并按下 Verup。",
-                  language,
-                })}
-              <br />
-              {"3." +
-                getMessage({
-                  ja: "",
-                  us: "Click [このVerのアップロード] while holding down ",
-                  cn: "按住 ",
-                  language,
-                })}
-              <span>
-                <Kbd>Shift</Kbd>
-              </span>
-              {getMessage({
-                ja: "を押しながら[このVerのアップロード]をクリック",
-                us: "",
-                cn: " 单击 [上传此 Ver]",
+            <Box
+              fontFamily={getMessage({
+                ja: "Noto Sans JP",
+                us: "Noto Sans,Noto Sans JP",
+                cn: "Noto Sans SC,Noto Sans JP",
                 language,
               })}
-            </Box>
-            <Box textAlign="center" mb={4}>
-              <video
-                src="/images/sjpUpload.mp4"
-                autoPlay
-                muted
-                loop
-                width="100%"
-              />
-            </Box>
-            <Box as="p" textAlign="center" mb={1}>
-              {getMessage({
-                ja: "以上で全ての生産準備+からこのバージョンへの更新が可能になります",
-                us: "This is all you need to do to update from Production Preparation+ to this version!",
-                cn: "这将使所有生产准备+ 更新到该版本",
-                language,
-              })}
+              fontWeight={400}
+            >
+              <Box as="p" textAlign="center" mb={4}>
+                {"1." +
+                  getMessage({
+                    ja: "ダウンロードしたエクセルブックを開く",
+                    us: "Open the downloaded Excel book.",
+                    cn: "打开下载的 Excel 电子书。",
+                    language,
+                  })}
+                <br />
+                {"2." +
+                  getMessage({
+                    ja: "Menuを開いてVerupを押す",
+                    us: "Open Menu and press Verup.",
+                    cn: "打开菜单并按下 Verup。",
+                    language,
+                  })}
+                <br />
+                {"3." +
+                  getMessage({
+                    ja: "",
+                    us: "Click [このVerのアップロード] while holding down ",
+                    cn: "按住 ",
+                    language,
+                  })}
+                <span>
+                  <Kbd>Shift</Kbd>
+                </span>
+                {getMessage({
+                  ja: "を押しながら[このVerのアップロード]をクリック",
+                  us: "",
+                  cn: " 单击 [上传此 Ver]",
+                  language,
+                })}
+              </Box>
+              <Box textAlign="center" mb={4}>
+                <video
+                  src="/images/sjpUpload.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  width="100%"
+                />
+              </Box>
+              <Box as="p" textAlign="center" mb={1}>
+                {getMessage({
+                  ja: "以上で全ての生産準備+からこのバージョンへの更新が可能になります",
+                  us: "This is all you need to do to update from Production Preparation+ to this version!",
+                  cn: "这将使所有生产准备+ 更新到该版本",
+                  language,
+                })}
+              </Box>
             </Box>
           </AlertDialogBody>
           <AlertDialogFooter>
