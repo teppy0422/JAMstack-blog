@@ -199,7 +199,27 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
-              dateTime="2025-01-30T02:07:00+0900"
+              dateTime="2025-01-30T04:42:00+0900"
+              description1={getMessage({
+                ja: "access2003で閉じる時に最適化チェックオフになる?",
+                us: "Optimization check off when closing in access2003?",
+                cn: "在 access2003 中关闭时勾选优化？",
+                language,
+              })}
+              description2={getMessage({
+                ja: "オープン時にチェックオンを追加",
+                us: "Add check on when open",
+                cn: "开放时增加签到",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_145.zip"
+              inCharge="徳島,小松さん,???,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
+              dateTime="2025-01-30T02:37:00+0900"
               description1={getMessage({
                 ja: "動作が不安定",
                 us: "Unstable operation",
@@ -207,7 +227,7 @@ export default function About() {
                 language,
               })}
               description2={getMessage({
-                ja: "importRecord_Clickを1度のみ実行に修正。SSC更新を書き直し",
+                ja: "importRecord_Clickを1度のみ実行に修正。SSC更新を書き直し。閉じる時に最適化のチェックオン",
                 us: "Fixed importRecord_Click to be executed only once",
                 cn: "修复 importRecord_Click 只运行一次的问题。",
                 language,
@@ -215,7 +235,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_143.zip"
               inCharge="徳島,小松さん,???,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
