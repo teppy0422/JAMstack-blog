@@ -199,6 +199,26 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-01-29T14:52:00+0900"
+              description1={getMessage({
+                ja: "途中からデータがいかなくなる",
+                us: "No data will be sent from the middle of the process.",
+                cn: "数据不会半途而废",
+                language,
+              })}
+              description2={getMessage({
+                ja: "label.captionで条件分岐を変数に変更",
+                us: "Change conditional branch to variable in label.caption",
+                cn: "将条件分支改为标签标题中的变量",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_139.zip"
+              inCharge="徳島,小松さん,???,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-01-23T13:59:00+0900"
               description1={getMessage({
                 ja: "",
@@ -215,7 +235,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_138.zip"
               inCharge="徳島,小松さん,???,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
