@@ -199,11 +199,51 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-01-30T02:07:00+0900"
+              description1={getMessage({
+                ja: "動作が不安定",
+                us: "Unstable operation",
+                cn: "运行不稳定",
+                language,
+              })}
+              description2={getMessage({
+                ja: "importRecord_Clickを1度のみ実行に修正。SSC更新を書き直し",
+                us: "Fixed importRecord_Click to be executed only once",
+                cn: "修复 importRecord_Click 只运行一次的问题。",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_143.zip"
+              inCharge="徳島,小松さん,???,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
+              dateTime="2025-01-29T18:55:00+0900"
+              description1={getMessage({
+                ja: "動作が不安定",
+                us: "Unstable operation",
+                cn: "运行不稳定",
+                language,
+              })}
+              description2={getMessage({
+                ja: "タイマーの削除。解放を追加",
+                us: "Removed timer. Added release.",
+                cn: "删除计时器。增加了释放功能。",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_142.zip"
+              inCharge="徳島,小松さん,???,Win10zip"
+              isLatest={false}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-01-29T14:52:00+0900"
               description1={getMessage({
-                ja: "途中からデータがいかなくなる",
-                us: "No data will be sent from the middle of the process.",
-                cn: "数据不会半途而废",
+                ja: "途中からデータが送信できない時がある",
+                us: "Sometimes data cannot be sent during the process.",
+                cn: "有时，数据无法在过程中传输。",
                 language,
               })}
               description2={getMessage({
@@ -215,7 +255,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_139.zip"
               inCharge="徳島,小松さん,???,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
