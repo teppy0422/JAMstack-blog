@@ -472,7 +472,7 @@ const Roadmap = () => {
     },
     {
       year: getMessage({
-        ja: "-活動中断-",
+        ja: "-定額契約が未承認で1年間の活動中断",
         us: "-Activity Interruption-",
         cn: "-活動中断-",
         language,
@@ -481,7 +481,7 @@ const Roadmap = () => {
     },
 
     {
-      year: "2025",
+      year: "2026",
       month: "1",
       category: [
         getMessage({
@@ -520,7 +520,7 @@ const Roadmap = () => {
       possibility: 50,
     },
     {
-      year: "2025",
+      year: "2026",
       month: "2",
       category: [
         getMessage({
@@ -546,7 +546,7 @@ const Roadmap = () => {
       possibility: 70,
     },
     {
-      year: "2025",
+      year: "2026",
       category: [
         getMessage({
           ja: "生産準備+",
@@ -584,7 +584,7 @@ const Roadmap = () => {
       possibility: 95,
     },
     {
-      year: "2025",
+      year: "2026",
       month: "3",
       category: [
         getMessage({
@@ -609,7 +609,7 @@ const Roadmap = () => {
       possibility: 95,
     },
     {
-      year: "2025",
+      year: "2026",
       category: [
         getMessage({
           ja: "生産準備+",
@@ -653,7 +653,7 @@ const Roadmap = () => {
       possibility: 90,
     },
     {
-      year: "2025",
+      year: "2026",
       month: "4",
       category: [
         getMessage({
@@ -713,7 +713,7 @@ const Roadmap = () => {
       possibility: 100,
     },
     {
-      year: "2025",
+      year: "2026",
       month: "5",
       category: [
         getMessage({
@@ -783,7 +783,7 @@ const Roadmap = () => {
       possibility: 90,
     },
     {
-      year: "2025",
+      year: "2026",
       month: "6",
       category: [
         getMessage({
@@ -846,7 +846,7 @@ const Roadmap = () => {
       possibility: 90,
     },
     {
-      year: "2025",
+      year: "2026",
       month: "7",
       category: [
         getMessage({
@@ -900,7 +900,7 @@ const Roadmap = () => {
       possibility: 100,
     },
     {
-      year: "2025",
+      year: "2026",
       category: [
         getMessage({
           ja: "生産準備+",
@@ -971,7 +971,7 @@ const Roadmap = () => {
       possibility: 100,
     },
     {
-      year: "2025",
+      year: "2026",
       month: "8",
       category: [
         getMessage({
@@ -1019,7 +1019,7 @@ const Roadmap = () => {
       possibility: 90,
     },
     {
-      year: "2025",
+      year: "2026",
       month: "9",
       category: [
         getMessage({

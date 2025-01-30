@@ -199,6 +199,41 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-01-31T01:45:00+0900"
+              description1=""
+              description2={getMessage({
+                ja: "自動機側のデータ取得処理を書き直し",
+                us: "Rewrote data acquisition process on the automatic machine side",
+                cn: "重写自动机器端的数据采集流程",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_148.zip"
+              inCharge="徳島,小松さん,???,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
+              dateTime="2025-01-30T21:11:00+0900"
+              description1={getMessage({
+                ja: "印刷ボタンで印刷出来ない。強制移動でデータ仕掛中が表示されなくなる",
+                us: "Cannot print using the print button. 。Data in progress is not displayed when forced to move.",
+                cn: "无法使用打印按钮打印。强制移动时不显示正在进行的数据。",
+                language,
+              })}
+              description2={getMessage({
+                ja: "パブリック変数の呼び出しでモジュール名を含める。強制移動でrs_.closeを削除",
+                us: "Include module name in public variable calls.。 Remove rs_.close in forced move.",
+                cn: "在调用公有变量时包含模块名称。删除强制移动中的 rs_.close。",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_147.zip"
+              inCharge="徳島,小松さん,???,Win10zip"
+              isLatest={false}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-01-30T04:42:00+0900"
               description1={getMessage({
                 ja: "access2003で閉じる時に最適化チェックオフになる?",
@@ -215,7 +250,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_145.zip"
               inCharge="徳島,小松さん,???,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
