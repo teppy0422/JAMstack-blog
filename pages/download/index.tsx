@@ -1080,7 +1080,7 @@ export default function About({
                           mr={2}
                           opacity={0.8}
                         >
-                          ACCESS2002
+                          ACCESS2003
                         </Badge>
                         <Badge
                           variant="solid"

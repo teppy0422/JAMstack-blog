@@ -144,7 +144,15 @@ export default function About() {
       <Content isCustomHeader={true}>
         <div
           className={styles.me}
-          style={{ paddingTop: "10px", fontFamily: "Noto Sans JP" }}
+          style={{
+            paddingTop: "10px",
+            fontFamily: getMessage({
+              ja: "Noto Sans JP",
+              us: "Noto Sans,Noto Sans JP",
+              cn: "Noto Sans SC,Noto Sans JP",
+              language,
+            }),
+          }}
         >
           <Box textAlign="center" mb={8}>
             <HStack spacing={2} alignItems="center" justifyContent="center">
@@ -198,6 +206,36 @@ export default function About() {
             spacing={5}
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
+            <CustomLinkBox
+              dateTime="2025-02-03T1:23:00+0900"
+              description1=""
+              description2={getMessage({
+                ja: "不要なコードの削除。進捗状況の追加(設定項目を追加)。処理状況の追加。更新履歴の追加。デザインの変更",
+                us: "Removing unnecessary codes.。Adding progress status.。Addition of processing status.。Addition of update history.。Design changes",
+                cn: "删除不必要的代码。增加进度状态。添加处理状态。添加更新历史。设计更改",
+                language,
+              })}
+              descriptionIN="デザインの変更"
+              linkHref="/files/download/html/Jdss/main_158.zip"
+              inCharge="徳島,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
+              dateTime="2025-01-31T23:42:00+0900"
+              description1=""
+              description2={getMessage({
+                ja: "自動機に送信しないの時の動作を変更",
+                us: "Changed behavior when not sending to automatic machines",
+                cn: "更改了不发送到自动机器时的行为",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_150.zip"
+              inCharge="徳島,小松さん,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
             <CustomLinkBox
               dateTime="2025-01-31T01:45:00+0900"
               description1=""

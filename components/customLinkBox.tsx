@@ -354,7 +354,9 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
                   </Box>
                 </Box>
                 <Divider py={1} />
-                <Text fontSize="sm">{props.descriptionIN}</Text>
+                <Text fontSize="sm" fontWeight={400}>
+                  {props.descriptionIN}
+                </Text>
               </PopoverBody>
             )}
           </LinkBox>
