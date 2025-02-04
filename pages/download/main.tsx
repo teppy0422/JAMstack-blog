@@ -207,7 +207,22 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
-              dateTime="2025-02-03T1:23:00+0900"
+              dateTime="2025-02-04T09:23:00+0900"
+              description1=""
+              description2={getMessage({
+                ja: "TransferText=>importT_master。強制移動後にrequery。sql削除。進捗フレームに変更",
+                us: "TransferText=>importT_master.。requery after forced move.。sql deleted.。Change to progress frame.",
+                cn: "TransferText=>importT_master。强制移动后重新查询。已删除 sql。改为进度框",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_160.zip"
+              inCharge="徳島,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
+              dateTime="2025-02-03T01:23:00+0900"
               description1=""
               description2={getMessage({
                 ja: "不要なコードの削除。進捗状況の追加(設定項目を追加)。処理状況の追加。更新履歴の追加。デザインの変更",
@@ -218,7 +233,7 @@ export default function About() {
               descriptionIN="デザインの変更"
               linkHref="/files/download/html/Jdss/main_158.zip"
               inCharge="徳島,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
