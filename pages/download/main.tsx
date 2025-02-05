@@ -207,6 +207,41 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-02-05T23:04:00+0900"
+              description1=""
+              description2={getMessage({
+                ja: "軽微な不具合の修正。送信/印刷の数量の初期値を設定に追加",
+                us: "Minor bug fixes.。Added default values for sending/printing quantities to settings.",
+                cn: "小错误修复。在设置中添加了发送/打印数量的初始值。",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_164.zip"
+              inCharge="徳島,作業者さん,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
+              dateTime="2025-02-04T16:23:00+0900"
+              description1={getMessage({
+                ja: "access2003で開くとaccessが強制終了する",
+                us: "When I open with access2003, access is forced to close.",
+                cn: "在 Access2003 中打开时,Access 被强制关闭",
+                language,
+              })}
+              description2={getMessage({
+                ja: "Form!F_main2_settingが破損=>作り直し",
+                us: "Form!F_main2_setting is corrupted => rebuild",
+                cn: "Form!F_main2_setting 已损坏 => 重建",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_163.zip"
+              inCharge="徳島,小松さん,Win10zip,安定版"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-02-04T09:23:00+0900"
               description1=""
               description2={getMessage({
@@ -218,7 +253,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_160.zip"
               inCharge="徳島,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
