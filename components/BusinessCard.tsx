@@ -21,6 +21,8 @@ import {
   ListItem,
   ListIcon,
 } from "@chakra-ui/react";
+import QRCode from "qrcode.react";
+
 import { AiOutlineWechat } from "react-icons/ai";
 import { FaStarOfLife } from "react-icons/fa";
 import { CiBeerMugFull } from "react-icons/ci";
@@ -37,6 +39,8 @@ import styles from "../styles/home.module.scss";
 const BusinessCard: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { language, setLanguage } = useLanguage();
+  const { colorMode, toggleColorMode } = useColorMode();
+
   const skillCircles = [
     {
       value: 90,
@@ -164,11 +168,16 @@ const BusinessCard: React.FC = () => {
           />
           <Flex align="center">
             <Box ml={5}>
-              <Text fontWeight="bold" fontSize="sm" mt={0}>
+              <Text fontWeight="bold" fontSize="sm" mt={0} color="#000">
                 STUDIO+
               </Text>
               <Text fontSize="lg" color="black" mt={3}>
-                片岡 哲兵
+                {getMessage({
+                  ja: "片岡 哲兵",
+                  us: "\u00A0",
+                  cn: "\u00A0",
+                  language,
+                })}
               </Text>
               <Text fontSize="sm" color="black">
                 Kataoka Teppei
@@ -181,7 +190,12 @@ const BusinessCard: React.FC = () => {
                   color="#999"
                 />
                 <Text fontSize="xs" color="black">
-                  徳島県藍住町奥野和田135-35
+                  {getMessage({
+                    ja: "徳島県藍住町奥野和田135-35",
+                    us: "Tokushima Aizumi-cho OkunoWada135-35",
+                    cn: "徳島県藍住町奥野和田135-35",
+                    language,
+                  })}
                 </Text>
               </Flex>
             </Box>
@@ -200,7 +214,7 @@ const BusinessCard: React.FC = () => {
           height="180px"
           borderWidth="1px"
           overflow="hidden"
-          boxShadow="lg" // 影を追加
+          boxShadow="lg"
           p={0}
           bg="white"
           cursor="pointer"
@@ -222,7 +236,7 @@ const BusinessCard: React.FC = () => {
             clipPath="polygon(0 0, 100% 0, 0 100%)"
           />
           <Box p={4} alignContent="center" justifyItems="center" height="60%">
-            <Text fontWeight="bold" fontSize="md" mt={0}>
+            <Text fontWeight="bold" fontSize="md" mt={0} color="#000">
               OUR SERVICES
             </Text>
             <List spacing={0} mt={1}>
@@ -233,9 +247,15 @@ const BusinessCard: React.FC = () => {
                   fontSize={11}
                   position="relative"
                   top="-4px"
+                  mr={1.5}
                 />
                 <Text as="span" fontSize="xs" color="black">
-                  ワイヤーハーネス歴20年の知識
+                  {getMessage({
+                    ja: "ワイヤーハーネス歴20年の知識",
+                    us: "20 years of wiring harness knowledge.",
+                    cn: "20 年的线束知识",
+                    language,
+                  })}
                 </Text>
               </ListItem>
               <ListItem>
@@ -245,9 +265,15 @@ const BusinessCard: React.FC = () => {
                   fontSize={11}
                   position="relative"
                   top="-4px"
+                  mr={1.5}
                 />
                 <Text as="span" fontSize="xs" color="black">
-                  プログラム言語はだいたい対応可能
+                  {getMessage({
+                    ja: "プログラム言語はだいたい対応可能",
+                    us: "Most programming languages are supported.",
+                    cn: "支持大多数编程语言",
+                    language,
+                  })}
                 </Text>
               </ListItem>
             </List>
@@ -263,14 +289,25 @@ const BusinessCard: React.FC = () => {
             p={0}
           >
             <Flex>
-              <Box ml="62px" pt={1.5}>
+              <Box ml="46px" mt={2} p={1} pt={0} bg="#FFF" color="#000">
+                LINE
+                <QRCode value="https://line.me/ti/p/gtbexsxqus" size={38} />
+              </Box>
+              <Box ml="20px" pt={1.5}>
                 <Flex align="flex-start" my={0.5}>
                   <IoMdPhonePortrait
                     size={14}
                     style={{ marginRight: "4px", marginTop: "2px" }}
                     color="#FFF"
                   />
-                  <Text color="#FFF">090-8971-4946</Text>
+                  <Text color="#FFF">
+                    {getMessage({
+                      ja: "090-8971-4946",
+                      us: "(+81)090-8971-4946",
+                      cn: "(+81)090-8971-4946",
+                      language,
+                    })}
+                  </Text>
                 </Flex>
                 <Flex align="flex-start" my={0.5}>
                   <IoMdMail
@@ -289,7 +326,7 @@ const BusinessCard: React.FC = () => {
                   <Text color="#FFF">https://teppy.link</Text>
                 </Flex>
               </Box>
-              <Grid templateColumns="repeat(3, 1fr)" gap={0} mt={4} ml={12}>
+              {/* <Grid templateColumns="repeat(3, 1fr)" gap={0} mt={4} ml={12}>
                 <Box
                   width="14px"
                   height="10px"
@@ -307,7 +344,6 @@ const BusinessCard: React.FC = () => {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  color="white"
                 />
                 <Box
                   width="14px"
@@ -315,9 +351,9 @@ const BusinessCard: React.FC = () => {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  color="white"
                   borderTopWidth="2px"
                   borderRightWidth="2px"
+                  borderColor="#FFF"
                 />
 
                 <Box
@@ -326,7 +362,6 @@ const BusinessCard: React.FC = () => {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  color="white"
                 />
                 <Box
                   width="14px"
@@ -334,7 +369,6 @@ const BusinessCard: React.FC = () => {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  color="white"
                 />
                 <Box
                   width="14px"
@@ -342,7 +376,6 @@ const BusinessCard: React.FC = () => {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  color="white"
                 />
                 <Box
                   width="14px"
@@ -350,9 +383,9 @@ const BusinessCard: React.FC = () => {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  color="white"
                   borderLeftWidth="2px"
                   borderBottomWidth="2px"
+                  borderColor="#FFF"
                 />
                 <Box
                   width="14px"
@@ -360,7 +393,6 @@ const BusinessCard: React.FC = () => {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  color="white"
                 />
                 <Box
                   width="14px"
@@ -368,18 +400,25 @@ const BusinessCard: React.FC = () => {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  color="white"
                   borderBottomWidth="2px"
                   borderRightWidth="2px"
+                  borderColor="#FFF"
                 />
-              </Grid>
+              </Grid> */}
+              <Box ml={4} mt={2} p={1} pt={0} bg="#FFF" color="#000">
+                WEB
+                <QRCode value="https://teppy.link" size={38} />
+              </Box>
             </Flex>
           </Box>
         </Box>
       </Grid>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent maxWidth={["90%", "80%", "70%", "60%"]}>
+        <ModalContent
+          maxWidth={["90%", "80%", "70%", "60%"]}
+          bg={colorMode === "light" ? "#f2e9df" : "#000"}
+        >
           <ModalHeader>片岡 哲兵</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -440,7 +479,12 @@ const BusinessCard: React.FC = () => {
             </Box>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="gray" mr={3} onClick={onClose}>
+            <Button
+              colorScheme="gray"
+              mr={1}
+              border="1px solid gray"
+              onClick={onClose}
+            >
               Close
             </Button>
           </ModalFooter>
