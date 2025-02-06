@@ -358,7 +358,10 @@ export default function Header() {
       {/* 警告モーダル */}
       <Modal isOpen={isAlertModalOpen} onClose={() => setAlertModalOpen(false)}>
         <ModalOverlay />
-        <ModalContent overflow="hidden" bg="#f2e9df">
+        <ModalContent
+          overflow="hidden"
+          bg={colorMode === "light" ? "#f2e9df" : "#000"}
+        >
           <Box
             bgImage="url('/images/common/flower2985.png')" // 画像のパスを指定
             bgSize="cover" // 画像をカバーするように設定
@@ -404,28 +407,29 @@ export default function Header() {
                   color={colorMode === "light" ? "#000" : "#FFF"}
                   bg={colorMode === "light" ? "#f2e9df" : "#000"}
                   p={1}
-                  mb={4}
+                  mb={6}
                 >
                   停止した場合の連絡はLINEまたはメールでお願いします。
                   <br />
                   ファイルのやり取りが難しくなりますが、その時に考えます。
                 </Text>
+                <Text
+                  fontSize="sm"
+                  position="absolute"
+                  zIndex="1000"
+                  textAlign="right"
+                  right={1}
+                  bottom={1}
+                  mt={5}
+                  color={colorMode === "light" ? "#000" : "#000"}
+                  bg={colorMode === "light" ? "#f2e9df" : "#FFF"}
+                >
+                  {/* 2026年初旬の再開を予定しています。 */}
+                  Mail:teppy422@au.com
+                  <br />
+                  Line:teppy0422
+                </Text>
               </Box>
-              <Text
-                fontSize="sm"
-                position="absolute"
-                textAlign="right"
-                right={1}
-                bottom={1}
-                mt={5}
-                color={colorMode === "light" ? "#000" : "#FFF"}
-                bg={colorMode === "light" ? "#f2e9df" : "#000"}
-              >
-                {/* 2026年初旬の再開を予定しています。 */}
-                Mail:teppy422@au.com
-                <br />
-                LineID:teppy0422
-              </Text>
             </ModalBody>
             <ModalFooter>
               {/* <Button colorScheme="blue" onClick={() => setAlertModalOpen(false)}>
