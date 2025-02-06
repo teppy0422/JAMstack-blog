@@ -191,6 +191,7 @@ const BusinessCard: React.FC = () => {
               name="John Doe"
               src="/images/me.jpeg"
               mr={4}
+              filter="grayscale(5%)"
             />
           </Flex>
         </Box>
@@ -296,8 +297,8 @@ const BusinessCard: React.FC = () => {
                   alignItems="center"
                   justifyContent="center"
                   color="white"
-                  borderLeftWidth="1px"
-                  borderTopWidth="1px"
+                  borderLeftWidth="2px"
+                  borderTopWidth="2px"
                   borderColor="#FFF"
                 />
                 <Box
@@ -315,8 +316,8 @@ const BusinessCard: React.FC = () => {
                   alignItems="center"
                   justifyContent="center"
                   color="white"
-                  borderTopWidth="1px"
-                  borderRightWidth="1px"
+                  borderTopWidth="2px"
+                  borderRightWidth="2px"
                 />
 
                 <Box
@@ -350,8 +351,8 @@ const BusinessCard: React.FC = () => {
                   alignItems="center"
                   justifyContent="center"
                   color="white"
-                  borderLeftWidth="1px"
-                  borderBottomWidth="1px"
+                  borderLeftWidth="2px"
+                  borderBottomWidth="2px"
                 />
                 <Box
                   width="14px"
@@ -368,8 +369,8 @@ const BusinessCard: React.FC = () => {
                   alignItems="center"
                   justifyContent="center"
                   color="white"
-                  borderBottomWidth="1px"
-                  borderRightWidth="1px"
+                  borderBottomWidth="2px"
+                  borderRightWidth="2px"
                 />
               </Grid>
             </Flex>
@@ -439,7 +440,7 @@ const BusinessCard: React.FC = () => {
             </Box>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme="gray" mr={3} onClick={onClose}>
               Close
             </Button>
           </ModalFooter>

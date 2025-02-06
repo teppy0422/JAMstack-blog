@@ -27,6 +27,7 @@ import {
   ModalCloseButton,
   ModalHeader,
   ModalBody,
+  useColorMode,
 } from "@chakra-ui/react";
 import {
   CheckCircleIcon,
@@ -58,6 +59,7 @@ type CustomLinkBoxProps = {
   inCharge: string;
   isLatest: boolean;
   userName?: string;
+  humanHour?: string;
 };
 
 const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
@@ -67,6 +69,7 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
   const [isClient, setIsClient] = useState(false);
   const showToast = useCustomToast();
   const { language, setLanguage } = useLanguage();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   useEffect(() => {
     checkFileExists();
@@ -192,6 +195,8 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
                 <Button
                   size="sm"
                   colorScheme="teal"
+                  p={1}
+                  h={6}
                   as="a"
                   href={props.linkHref}
                   download={downloadFileName}
@@ -215,13 +220,15 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
                 </Button>
               )}
             </Box>
-            <Heading size="md" my="2">
+            <Heading size="md" my="1">
               <LinkOverlay>{ver}</LinkOverlay>
             </Heading>
-
             <Divider />
             <TimeIcon boxSize={4} paddingRight={1} mt="-0.5" />
             {formattedDateTime}
+            <Box as="span" fontSize="12px" fontWeight={600} px={1}>
+              {props.humanHour}
+            </Box>
             <br />
             {inChargeList.map((inCharge, index) => (
               <Badge

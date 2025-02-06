@@ -225,7 +225,50 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-02-06T22:19:00+0900"
+              humanHour="0.5H"
+              description1={getMessage({
+                ja: "ハメ図作成をグループ単位で作成すると進捗平均求める時に0が返ってエラー",
+                us: "Error when creating a frame diagram by group, 0 is returned when determining the average of progress.",
+                cn: "在分组中创建帧图时出错，且在确定进度平均值时返回 0",
+                language,
+              })}
+              description2={getMessage({
+                ja: "平均値が取得できない場合はgetAverageHoleTerminalNumberは1を返す",
+                us: "If the average value cannot be obtained, getAverageHoleTerminalNumber returns 1",
+                cn: "如果无法获得平均值,getAverageHoleTerminalNumber 返回 1",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Sjp/Sjp3.101.14_.zip"
+              inCharge="徳島,秋山さん,不具合"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
+              dateTime="2025-01-24T14:22:00+0900"
+              humanHour="0.5H"
+              description1={getMessage({
+                ja: "連続してハメ図を作成するとボンダー付属部品が取得できない",
+                us: "Cannot get bonder attached parts when creating frame drawings in succession.",
+                cn: "在创建连续框架图时，无法获取粘结剂连接部件",
+                language,
+              })}
+              description2={getMessage({
+                ja: "作成都度に取得し直すように変更",
+                us: "Changed to reacquire each time it is created.",
+                cn: "更改后，每次创建时都会重新获取",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Sjp/Sjp3.101.13_.zip"
+              inCharge="高知,王さん,不具合"
+              isLatest={false}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2024-12-19T04:42:00+0900"
+              humanHour="6.0H"
               description1=""
               description2={getMessage({
                 ja: "主に共通する目的でボンダーの簡易作成を追加",
@@ -236,11 +279,12 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Sjp/Sjp3.101.12_.zip"
               inCharge="高知,王さん,新機能"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-12-18T14:56:00+0900"
+              humanHour="3.5H"
               description1=""
               description2="MAX共通の書き直し_途中"
               descriptionIN=""
@@ -251,6 +295,7 @@ export default function About() {
             />
             <CustomLinkBox
               dateTime="2024-12-13T15:53:00+0900"
+              humanHour="33.0H"
               description1="共通化のハメ図作成時に極端に端末数が小さい時に進捗計算でエラー"
               description2="terminalの呼び出しの最大値を先頭の製品品番端末数と同じにする。説明WEBサイトへのリンクを追加"
               descriptionIN=""
@@ -261,6 +306,7 @@ export default function About() {
             />
             <CustomLinkBox
               dateTime="2024-12-06T14:19:00+0900"
+              humanHour="2.0H"
               description1="印刷シートでハメ図数が多い場合に型エラー"
               description2="関係する変数をInteger=>Long"
               descriptionIN=""
@@ -271,6 +317,7 @@ export default function About() {
             />
             <CustomLinkBox
               dateTime="2024-12-05T17:02:00+0900"
+              humanHour="1.5H"
               description1=""
               description2="チューブリスト作成機能の追加"
               descriptionIN=""
@@ -281,6 +328,7 @@ export default function About() {
             />
             <CustomLinkBox
               dateTime="2024-12-05T15:41:00+0900"
+              humanHour="7.0H"
               description1="端末No.が同じ部品品番で異なる条件でエラー"
               description2="修正"
               descriptionIN=""
@@ -291,6 +339,7 @@ export default function About() {
             />
             <CustomLinkBox
               dateTime="2024-12-01T16:22:00+0900"
+              humanHour="2.0H"
               description1="Ver3以降で出力したサブナンバーが上書き削除される"
               description2="高知のサブナンバーフォーマットに修正"
               descriptionIN=""
@@ -301,6 +350,7 @@ export default function About() {
             />
             <CustomLinkBox
               dateTime="2024-11-28T10:13:00+0900"
+              humanHour="4.5H"
               description1="A4-横の印刷範囲がずれる"
               description2="秋山さん調査の値に修正。WEBページに説明を移動"
               descriptionIN=""
@@ -311,6 +361,7 @@ export default function About() {
             />
             <CustomLinkBox
               dateTime="2024-11-26T11:02:00+0900"
+              humanHour="2.0H"
               description1="グループ単位で作成した印刷シートの配置がカオス"
               description2="ハメ図毎に作成するように修正。説明ページへのリンクに修正"
               descriptionIN=""
@@ -321,6 +372,7 @@ export default function About() {
             />
             <CustomLinkBox
               dateTime="2024-11-22T14:04:00+0900"
+              humanHour="1.0H"
               description1="サブナンバー印刷でデータが多い場合にオーバーフローエラー"
               description2="カウントの型を変更Integer=>Long"
               descriptionIN=""

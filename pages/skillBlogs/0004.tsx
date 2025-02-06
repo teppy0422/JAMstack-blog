@@ -270,7 +270,6 @@ const BlogPage: React.FC = () => {
             my={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-
           <BusinessCard />
           {/* 必要に応じて他のBusinessCardを追加 */}
           <Flex alignItems="left" m={4} mt={6}>
