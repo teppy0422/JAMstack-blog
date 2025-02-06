@@ -96,6 +96,16 @@ export default function Header() {
     };
     fetchWeather();
   }, []);
+  // 警告メッセージ(一日一回だけ表示)
+  const [isAlertModalOpen, setAlertModalOpen] = useState(false);
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0]; // 今日の日付を取得
+    const lastShownDate = localStorage.getItem("lastShownDate");
+    if (lastShownDate !== today) {
+      setAlertModalOpen(true); // 初回ロード時にモーダルを表示
+      localStorage.setItem("lastShownDate", today); // 今日の日付を記録
+    }
+  }, []);
 
   // loginボタンを隠す
   let keyFlag: boolean = false;
@@ -345,6 +355,86 @@ export default function Header() {
           </VStack>
         </header>
       </div>
+      {/* 警告モーダル */}
+      <Modal isOpen={isAlertModalOpen} onClose={() => setAlertModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent overflow="hidden" bg="#f2e9df">
+          <Box
+            bgImage="url('/images/common/flower2985.png')" // 画像のパスを指定
+            bgSize="cover" // 画像をカバーするように設定
+            bgPosition="center" // 画像の位置を中央に設定
+            p={0} // パディングを設定
+            filter={colorMode === "light" ? "" : "invert(1)"} // 白黒を入れ替えるフィルターを適用
+          >
+            <ModalHeader>
+              <Box
+                as="span"
+                color={colorMode === "light" ? "#000" : "#FFF"}
+                bg={colorMode === "light" ? "#f2e9df" : "#000"}
+                px={1}
+              >
+                注意
+              </Box>
+            </ModalHeader>
+            <ModalCloseButton
+              _focus={{ boxShadow: "none" }} // フォーカス時の影を削除
+              border="none"
+              outline="none"
+            />
+            <ModalBody>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center" // 垂直方向の中央寄せ
+              >
+                <Text
+                  fontSize="sm"
+                  color={colorMode === "light" ? "#000" : "#FFF"}
+                  bg={colorMode === "light" ? "#f2e9df" : "#000"}
+                  p={1}
+                  mb={2}
+                  display="inline-block"
+                >
+                  ・このWEBサービスの継続が困難な状況です
+                  <br />
+                  ・おそらく2月中にこのWEBサイトは停止します
+                </Text>
+                <Text
+                  fontSize="sm"
+                  color={colorMode === "light" ? "#000" : "#FFF"}
+                  bg={colorMode === "light" ? "#f2e9df" : "#000"}
+                  p={1}
+                  mb={4}
+                >
+                  停止した場合の連絡はLINEまたはメールでお願いします。
+                  <br />
+                  ファイルのやり取りが難しくなりますが、その時に考えます。
+                </Text>
+              </Box>
+              <Text
+                fontSize="sm"
+                position="absolute"
+                textAlign="right"
+                right={1}
+                bottom={1}
+                mt={5}
+                color={colorMode === "light" ? "#000" : "#FFF"}
+                bg={colorMode === "light" ? "#f2e9df" : "#000"}
+              >
+                {/* 2026年初旬の再開を予定しています。 */}
+                Mail:teppy422@au.com
+                <br />
+                LineID:teppy0422
+              </Text>
+            </ModalBody>
+            <ModalFooter>
+              {/* <Button colorScheme="blue" onClick={() => setAlertModalOpen(false)}>
+              閉じる
+            </Button> */}
+            </ModalFooter>
+          </Box>
+        </ModalContent>
+      </Modal>
       {/* ログインモーダル */}
       <Modal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)}>
         <ModalOverlay />
