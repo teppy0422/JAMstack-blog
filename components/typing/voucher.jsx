@@ -275,7 +275,7 @@ const Voucher = forwardRef((props, ref) => {
               language,
             })}
           </ModalHeader>
-          <ModalCloseButton _focus={{ _focus: "none" }} />
+          <ModalCloseButton _focus={{ boxShadow: "none" }} />
           <ModalBody fontSize="22px">
             <Flex>
               <Box w={["260px"]} position="relative">

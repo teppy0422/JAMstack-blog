@@ -131,10 +131,12 @@ const BusinessCard: React.FC = () => {
           width="336px"
           height="180px"
           borderWidth="1px"
+          bgImage="url('/images/common/paperf7f7f7.png')" // 画像のパスを指定
+          filter="brightness(1.05)"
+          bgSize="cover"
           overflow="hidden"
           boxShadow="lg" // 影を追加
           p={4}
-          bg="white"
           cursor="pointer"
           onClick={onOpen}
           _hover={{ boxShadow: "xl" }} // ホバー時に影を強調
@@ -205,7 +207,7 @@ const BusinessCard: React.FC = () => {
               name="John Doe"
               src="/images/me.jpeg"
               mr={4}
-              filter="grayscale(5%)"
+              filter="grayscale(10%)"
             />
           </Flex>
         </Box>
@@ -216,7 +218,9 @@ const BusinessCard: React.FC = () => {
           overflow="hidden"
           boxShadow="lg"
           p={0}
-          bg="white"
+          bgImage="url('/images/common/paperf7f7f7.png')"
+          filter="brightness(1.05)"
+          bgSize="cover"
           cursor="pointer"
           onClick={onOpen}
           _hover={{ boxShadow: "xl" }} // ホバー時に影を強調
@@ -281,7 +285,9 @@ const BusinessCard: React.FC = () => {
           <Box
             width="100%"
             height="41%"
-            backgroundColor="#424d6d"
+            bgImage="url('/images/common/paper181d26.png')"
+            filter="brightness(1.2)"
+            bgSize="cover"
             color="#FFF"
             fontSize="11px"
             textAlign="center"
@@ -420,7 +426,7 @@ const BusinessCard: React.FC = () => {
           bg={colorMode === "light" ? "#f2e9df" : "#000"}
         >
           <ModalHeader>片岡 哲兵</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton _focus={{ boxShadow: "none" }} />
           <ModalBody>
             <Flex alignItems="flex-start" mb={4} justifyContent="center">
               <Avatar src="/images/me.jpeg" width={8} height={8} m={2} />

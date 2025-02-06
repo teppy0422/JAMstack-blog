@@ -427,7 +427,7 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <ModalOverlay />
         <ModalContent maxW="90vw" maxH="90vh">
-          <ModalCloseButton />
+          <ModalCloseButton _focus={{ boxShadow: "none" }} />
           {/* <ModalHeader></ModalHeader> */}
           <ModalBody mx={0}>
             <Box

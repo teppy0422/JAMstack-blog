@@ -52,9 +52,7 @@ export default function ModalWork(pops) {
         >
           <ModalHeader p={2}>{property.imagetitle}</ModalHeader>
           <Divider />
-          <ModalCloseButton
-            _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す
-          />
+          <ModalCloseButton _focus={{ boxShadow: "none" }} />
           <ModalBody m={0} p={0}>
             {property.detail}
           </ModalBody>

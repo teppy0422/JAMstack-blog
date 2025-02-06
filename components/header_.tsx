@@ -293,7 +293,7 @@ export default function Header() {
                         language,
                       })}
                     </ModalHeader>
-                    <ModalCloseButton _focus={{ _focus: "none" }} />
+                    <ModalCloseButton _focus={{ boxShadow: "none" }} />
                     <ModalBody>
                       <Box mt="4" display="flex" justifyContent="center">
                         {typeof window !== "undefined" && (
@@ -380,7 +380,7 @@ export default function Header() {
               </Box>
             </ModalHeader>
             <ModalCloseButton
-              _focus={{ boxShadow: "none" }} // フォーカス時の影を削除
+              _focus={{ boxShadow: "none" }}
               border="none"
               outline="none"
             />
@@ -450,6 +450,7 @@ export default function Header() {
         >
           {/* <ModalHeader></ModalHeader> */}
           <ModalCloseButton
+            _focus={{ boxShadow: "none" }}
             _hover={{
               _hover: "none",
               border: "none",

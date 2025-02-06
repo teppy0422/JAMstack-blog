@@ -28,7 +28,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
     <ModalOverlay />
     <ModalContent>
       <ModalHeader>{title}</ModalHeader>
-      <ModalCloseButton />
+      <ModalCloseButton _focus={{ boxShadow: "none" }} />
       <ModalBody>{modalBody}</ModalBody>
       <ModalFooter></ModalFooter>
     </ModalContent>

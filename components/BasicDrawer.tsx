@@ -29,7 +29,7 @@ const BasicDrawer: React.FC<BasicDrawerProps> = ({
     <Drawer isOpen={isOpen} placement={placement} onClose={onClose} size={size}>
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerCloseButton _focus={{ _focus: "none" }} />
+        <DrawerCloseButton _focus={{ boxShadow: "none" }} />
         <DrawerHeader>{header}</DrawerHeader>
         <DrawerBody>{children}</DrawerBody>
       </DrawerContent>

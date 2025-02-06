@@ -453,7 +453,7 @@ const BBSTodoList = () => {
               language,
             })}
           </ModalHeader>
-          <ModalCloseButton _focus={{ _focus: "none" }} top={0} right={0} />
+          <ModalCloseButton _focus={{ boxShadow: "none" }} top={0} right={0} />
           <Flex align="center" pl={1}>
             <TodoIcon
               size={20}

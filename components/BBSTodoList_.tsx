@@ -277,7 +277,7 @@ const BBSTodoList = () => {
         <ModalOverlay />
         <ModalContent width="auto" maxWidth="80%">
           <ModalHeader>{selectedTodo?.title}</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton _focus={{ boxShadow: "none" }} />
           <ModalBody fontWeight={400} mb={4}>
             <TableContainer>
               <Table variant="simple">

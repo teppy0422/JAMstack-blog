@@ -539,7 +539,7 @@ const GraphTemp = forwardRef((props, ref) => {
             })}
           </ModalHeader>
 
-          <ModalCloseButton _focus={{ _focus: "none" }} />
+          <ModalCloseButton _focus={{ boxShadow: "none" }} />
           <ModalBody>
             <HighchartsReact highcharts={Highcharts} options={chartOptions} />
           </ModalBody>

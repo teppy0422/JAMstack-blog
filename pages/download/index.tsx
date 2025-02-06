@@ -1465,7 +1465,7 @@ export default function About({
               maxH="95%"
               bg={colorMode === "light" ? "#f2e9df" : "black"}
             >
-              <ModalCloseButton right="3px" _focus={{ _focus: "none" }} />
+              <ModalCloseButton right="3px" _focus={{ boxShadow: "none" }} />
               {/* <ModalHeader></ModalHeader> */}
               <ModalBody mx={0}>
                 <Box

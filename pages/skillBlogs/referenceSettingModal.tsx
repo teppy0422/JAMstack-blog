@@ -69,7 +69,7 @@ const referenceSettingModal: React.FC = () => {
               language,
             })}
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton _focus={{ boxShadow: "none" }} />
           <ModalBody>
             <Text>
               {"1. " +

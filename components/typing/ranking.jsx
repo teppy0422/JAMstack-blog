@@ -196,7 +196,7 @@ const Ranking = forwardRef((props, ref) => {
             })}
           </ModalHeader>
 
-          <ModalCloseButton _focus={{ _focus: "none" }} />
+          <ModalCloseButton _focus={{ boxShadow: "none" }} />
           <ModalBody>
             <Stack direction="column" margin="auto" spacing={4}>
               {ranking.map((user, index) => (

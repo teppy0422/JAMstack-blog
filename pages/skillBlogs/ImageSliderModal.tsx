@@ -74,7 +74,7 @@ const ImageSliderModal: React.FC<ImageSliderModalProps> = ({
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{title}</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton _focus={{ boxShadow: "none" }} />
           <ModalBody>
             <Text>{text}</Text>
             <Image

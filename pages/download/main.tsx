@@ -67,7 +67,7 @@ function TransitionExample() {
               language,
             })}
           </AlertDialogHeader>
-          <AlertDialogCloseButton _focus={{ _focus: "none" }} />
+          <AlertDialogCloseButton _focus={{ boxShadow: "none" }} />
           <AlertDialogBody p={4}>
             <Box as="p" textAlign="center" mb={4}>
               {"1." +

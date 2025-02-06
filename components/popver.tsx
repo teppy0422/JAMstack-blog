@@ -19,7 +19,7 @@ const CustomPopover = ({ isOpen, onOpen, onClose }) => (
     </PopoverTrigger>
     <PopoverContent _focus={{ _focus: "none" }}>
       <PopoverArrow />
-      <PopoverCloseButton />
+      <PopoverCloseButton _focus={{ boxShadow: "none" }} />
       <PopoverHeader>Download</PopoverHeader>
       <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
     </PopoverContent>
