@@ -45,7 +45,7 @@ h1.title {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 300000;
+  z-index: 3000000;
   height: 100%;
   width: 100%;
   overflow: hidden;

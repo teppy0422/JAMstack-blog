@@ -22,13 +22,14 @@ import {
   Icon,
   createIcon,
   Spacer,
+  useColorMode,
+  Grid,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { FaGithub } from "react-icons/fa";
 import { CiBeerMugFull } from "react-icons/ci";
 import Content from "../../components/content";
-import { useColorMode } from "@chakra-ui/react";
 import { useCustomToast } from "../../components/customToast";
 import SectionBox from "../../components/SectionBox";
 import BasicDrawer from "../../components/BasicDrawer";
@@ -38,6 +39,7 @@ import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
 import SkillGraph from "../../components/sillGraph";
 import SkillCircle from "../../components/skillCircle";
+import BusinessCard from "../../components/BusinessCard";
 import ICT from "./ICT";
 import styles from "../../styles/home.module.scss";
 import { useUserData } from "../../hooks/useUserData";
@@ -250,79 +252,27 @@ const BlogPage: React.FC = () => {
               ja: "更新日",
               language,
             })}
-            :2024-11-18
+            :2025-2-6
           </Text>
         </Box>
         <SectionBox
           id="section1"
           title={getMessage({
-            ja: "1.片岡哲兵",
-            us: "1.Kataoka Teppei",
-            cn: "1.Kataoka Teppei",
+            ja: "1.開発担当者",
+            us: "1.Development Members",
+            cn: "1.发展成员",
             language,
           })}
           sectionRefs={sectionRefs}
           sections={sections}
         >
           <Divider
-            mt={2}
+            my={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Flex alignItems="flex-start" mb={4} justifyContent="center">
-            <Avatar src="/images/me.jpeg" width={8} height={8} m={2} />
-            <Text
-              w={["100%", "95%", "90%", "90%"]}
-              fontFamily="Noto Sans JP"
-              mb={20}
-              ml={0}
-            >
-              {getMessage({
-                ja:
-                  "高知出身。ワイヤーハーネス製造工場で/機械保全/前工程生産分析/後工程生産分析/工務/工作改善チームを経験。" +
-                  "工作改善チームではPLC/Arduinoなどのハードウェアを経験させてもらいました。" +
-                  "その後、ハードウェアとソフトウェアを組み合わせる内にHTML/JavaScriptを経験してWEBアプリを作るに至りました。" +
-                  "現場の人と相談しながら更に発展させていくのが得意。プログラミングは嫌い。",
-                us: "Born in Kochi. Experienced in wire harness manufacturing plant / machine maintenance / front-end production analysis / back-end production analysis / engineering work / machine improvement team. The Craft Improvement Team gave me experience with PLC/Arduino and other hardware. Later, while combining hardware and software, I experienced HTML/JavaScript and went on to create web applications. He is good at consulting with people in the field to further develop the project. I hate programming.",
-                cn: "生于高知。在一家线束制造厂担任经验丰富的/机器维护/前端生产分析/后端生产分析/工程/机器改进小组的工作。工艺改进小组为我提供了使用 PLC/Arduino 等硬件的经验。后来，在结合硬件和软件的过程中，他体验了 HTML/JavaScript 并继续创建了一个网络应用程序。他善于与当地人协商，以进一步发展项目。我不喜欢编程。",
-                language,
-              })}
-            </Text>
-          </Flex>
-          <div data-aos="fade-right" style={{ display: "inline-block" }}>
-            <Text className={styles.subTitle}>
-              {getMessage({
-                ja: "スキル",
-                us: "skills",
-                cn: "技能",
-                language,
-              })}
-            </Text>
-          </div>
-          <Flex justifyContent="center">
-            <SkillGraph />
-          </Flex>
 
-          <Box style={{ textAlign: "center" }} mb={20}>
-            {skillCircles.map((item, index) => {
-              const aosOffset: number = (index % 5) * 70;
-              return (
-                <Flex
-                  key={index}
-                  data-aos="fade-up"
-                  data-aos-offset={aosOffset}
-                  style={{ display: "inline-block" }}
-                >
-                  <SkillCircle
-                    value={item.value}
-                    cirText={item.cirText}
-                    color={item.color}
-                    timing={index}
-                    img={item.img}
-                  />
-                </Flex>
-              );
-            })}
-          </Box>
+          <BusinessCard />
+          {/* 必要に応じて他のBusinessCardを追加 */}
           <Flex alignItems="left" m={4} mt={6}>
             <Flex alignItems="center" borderBottom="1px solid">
               <Icon as={CiBeerMugFull} w={6} h={6} />
