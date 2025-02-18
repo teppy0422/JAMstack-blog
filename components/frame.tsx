@@ -357,9 +357,9 @@ const Frame: React.FC<{
                     {createLinkPanel(
                       "/skillBlogs/0004/",
                       getMessage({
-                        ja: "メンバーリスト",
-                        us: "Member List",
-                        cn: "成员名单",
+                        ja: "開発スタッフ",
+                        us: "Development Staff",
+                        cn: "开发人员",
                         language,
                       })
                     )}

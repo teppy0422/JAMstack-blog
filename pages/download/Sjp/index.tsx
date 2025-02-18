@@ -225,6 +225,27 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-02-19T00:56:00+0900"
+              humanHour="3.0H"
+              description1={getMessage({
+                ja: "DSWに登録が無いコネクタがある場合、処理が中断する。部品リストの説明が正しく無い",
+                us: "If there is a connector that is not registered in the DSW, the process will be interrupted.",
+                cn: "如果连接器没有在 DSW 中注册，程序将被中断",
+                language,
+              })}
+              description2={getMessage({
+                ja: "登録が無い場合はPVSW_RLTFからキャビティ最大数を求める。部品リストの説明を修正",
+                us: "If there is no registration, the maximum number of cavities is obtained from PVSW_RLTF",
+                cn: "如果没有登记，则通过 PVSW_RLTF 获取最大空腔数。",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Sjp/Sjp3.101.15_.zip"
+              inCharge="徳島,山田さん"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-02-06T22:19:00+0900"
               humanHour="0.5H"
               description1={getMessage({
@@ -242,7 +263,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Sjp/Sjp3.101.14_.zip"
               inCharge="徳島,秋山さん,不具合"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox

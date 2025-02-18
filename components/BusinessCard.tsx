@@ -18,6 +18,7 @@ import {
   Icon,
   Grid,
   List,
+  SimpleGrid,
   ListItem,
   ListIcon,
 } from "@chakra-ui/react";
@@ -123,19 +124,20 @@ const BusinessCard: React.FC = () => {
   ];
   return (
     <>
-      <Grid
-        templateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]}
-        gap={6}
+      <SimpleGrid
+        columns={{ base: 1, sm: 1, md: 2, lg: 1, xl: 2 }}
+        spacing={2}
+        // justifyContent="center"
       >
         <Box
-          width="336px"
+          width="316px"
           height="180px"
           borderWidth="1px"
           bgImage="url('/images/common/paperf7f7f7.png')" // 画像のパスを指定
           filter="brightness(1.05)"
           bgSize="cover"
           overflow="hidden"
-          boxShadow="lg" // 影を追加
+          boxShadow="lg"
           p={4}
           cursor="pointer"
           onClick={onOpen}
@@ -193,7 +195,7 @@ const BusinessCard: React.FC = () => {
                 />
                 <Text fontSize="xs" color="black">
                   {getMessage({
-                    ja: "徳島県藍住町奥野和田135-35",
+                    ja: "徳島県藍住町\n奥野和田135-35",
                     us: "Tokushima Aizumi-cho OkunoWada135-35",
                     cn: "徳島県藍住町奥野和田135-35",
                     language,
@@ -202,7 +204,7 @@ const BusinessCard: React.FC = () => {
               </Flex>
             </Box>
             <Avatar
-              size="xl"
+              boxSize="64px"
               ml={8}
               name="John Doe"
               src="/images/me.jpeg"
@@ -211,8 +213,9 @@ const BusinessCard: React.FC = () => {
             />
           </Flex>
         </Box>
+
         <Box
-          width="336px"
+          width="316px"
           height="180px"
           borderWidth="1px"
           overflow="hidden"
@@ -282,6 +285,7 @@ const BusinessCard: React.FC = () => {
               </ListItem>
             </List>
           </Box>
+
           <Box
             width="100%"
             height="41%"
@@ -418,23 +422,28 @@ const BusinessCard: React.FC = () => {
             </Flex>
           </Box>
         </Box>
-      </Grid>
+      </SimpleGrid>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent
           maxWidth={["90%", "80%", "70%", "60%"]}
           bg={colorMode === "light" ? "#f2e9df" : "#000"}
         >
-          <ModalHeader>片岡 哲兵</ModalHeader>
-          <ModalCloseButton _focus={{ boxShadow: "none" }} />
+          <ModalHeader color={colorMode === "light" ? "#000" : "#FFF"}>
+            片岡 哲兵
+          </ModalHeader>
+          <ModalCloseButton
+            _focus={{ boxShadow: "none" }}
+            color={colorMode === "light" ? "#FFF" : "#000"}
+          />
           <ModalBody>
             <Flex alignItems="flex-start" mb={4} justifyContent="center">
               <Avatar src="/images/me.jpeg" width={8} height={8} m={2} />
               <Text
                 w={["100%", "95%", "90%", "90%"]}
-                fontFamily="Noto Sans JP"
                 mb={20}
                 ml={0}
+                color={colorMode === "light" ? "#000" : "#FFF"}
               >
                 {getMessage({
                   ja:
@@ -449,7 +458,10 @@ const BusinessCard: React.FC = () => {
               </Text>
             </Flex>
             <div data-aos="fade-right" style={{ display: "inline-block" }}>
-              <Text className={styles.subTitle}>
+              <Text
+                className={styles.subTitle}
+                color={colorMode === "light" ? "#000" : "#FFF"}
+              >
                 {getMessage({
                   ja: "スキル",
                   us: "skills",

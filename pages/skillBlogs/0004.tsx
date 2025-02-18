@@ -237,9 +237,9 @@ const BlogPage: React.FC = () => {
           </HStack>
           <Heading fontSize="3xl" mb={1}>
             {getMessage({
-              ja: "メンバーリスト",
-              us: "Member List",
-              cn: "成员名单",
+              ja: "開発スタッフ",
+              us: "Development Staff",
+              cn: "开发人员",
               language,
             })}
           </Heading>
@@ -258,9 +258,9 @@ const BlogPage: React.FC = () => {
         <SectionBox
           id="section1"
           title={getMessage({
-            ja: "1.開発担当者",
-            us: "1.Development Members",
-            cn: "1.发展成员",
+            ja: "1.片岡 哲兵",
+            us: "1.Kataoka Teppei",
+            cn: "1.片岡 哲兵",
             language,
           })}
           sectionRefs={sectionRefs}

@@ -392,6 +392,7 @@ export default function Header() {
               >
                 <Text
                   fontSize="sm"
+                  fontWeight="400"
                   color={colorMode === "light" ? "#000" : "#FFF"}
                   bg={colorMode === "light" ? "#f2e9df" : "#000"}
                   p={1}
@@ -407,11 +408,21 @@ export default function Header() {
                   color={colorMode === "light" ? "#000" : "#FFF"}
                   bg={colorMode === "light" ? "#f2e9df" : "#000"}
                   p={1}
-                  mb={6}
+                  mb={2}
                 >
                   停止した場合の連絡はLINEまたはメールでお願いします。
                   <br />
                   ファイルのやり取りが難しくなりますが、その時に考えます。
+                </Text>
+                <Text
+                  fontSize="sm"
+                  color={colorMode === "light" ? "#000" : "#FFF"}
+                  bg={colorMode === "light" ? "#f2e9df" : "#000"}
+                  p={1}
+                  mb={6}
+                >
+                  {/* 2026年初旬の再開を予定しています。 */}
+                  再開時期は未定です
                 </Text>
                 <Text
                   fontSize="sm"
@@ -424,7 +435,6 @@ export default function Header() {
                   color={colorMode === "light" ? "#000" : "#000"}
                   bg={colorMode === "light" ? "#f2e9df" : "#FFF"}
                 >
-                  {/* 2026年初旬の再開を予定しています。 */}
                   Mail:teppy422@au.com
                   <br />
                   Line:teppy0422
