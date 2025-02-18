@@ -509,6 +509,7 @@ export default function Header() {
                       fontFamily="Dela Gothic One"
                       fontWeight="900"
                       fontSize="36px"
+                      color={colorMode === "light" ? "#000" : "#000"}
                       mb={3}
                     >
                       告知
@@ -517,7 +518,7 @@ export default function Header() {
                       fontFamily=""
                       fontSize="md"
                       fontWeight="400"
-                      color={colorMode === "light" ? "#000" : "#FFF"}
+                      color={colorMode === "light" ? "#000" : "#000"}
                       // bg={colorMode === "light" ? "#f2e9df" : "#000"}
                       p={1}
                       mb={2}
