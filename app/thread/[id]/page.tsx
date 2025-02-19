@@ -138,7 +138,8 @@ function ThreadContent() {
   const [posts, setPosts] = useState<any[]>([]);
   const [newPostContent, setNewPostContent] = useState("");
   const [isClient, setIsClient] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const audioRef_send = useRef<HTMLAudioElement>(null);
+  const audioRef_recieving = useRef<HTMLAudioElement>(null);
   const [ipAddress, setIpAddress] = useState("");
   const [threadTitle, setThreadTitle] = useState("");
   const [threadMainCompany, setThreadMainCompany] = useState("");
@@ -525,8 +526,8 @@ function ThreadContent() {
           },
           (payload) => {
             setPosts((prevPosts) => [...prevPosts, payload.new]);
-            if (audioRef.current) {
-              audioRef.current.play();
+            if (audioRef_recieving.current) {
+              audioRef_recieving.current.play();
             }
             // タブのタイトルを点滅させる
             const originalTitle = document.title;
@@ -984,6 +985,8 @@ function ThreadContent() {
         language,
       })}
     >
+      <audio ref={audioRef_send} src="/sound/notification.mp3" />
+      <audio ref={audioRef_recieving} src="/sound/woodAlert.mp3" />
       <Global
         styles={{
           "@media print": {
@@ -1375,6 +1378,9 @@ function ThreadContent() {
                   inputValue.style.height = "38px"; // 高さを初期状態に戻す
                 }
                 setIsSubmitting(false); //post終了
+                if (audioRef_send.current) {
+                  audioRef_send.current.play();
+                }
               }}
               icon={
                 isSubmitting ? (
@@ -1396,7 +1402,6 @@ function ThreadContent() {
               // isDisabled={!newPostContent.trim() && !selectedFile} // テキストが空で、添付ファイルが無い場合はボタンを無効化
               aria-label="送信"
             />
-            <audio ref={audioRef} src="/sound/notification.mp3" />
           </Stack>
           {selectedFileName && (
             <Tooltip

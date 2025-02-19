@@ -13,6 +13,8 @@ import {
   HStack,
   Button,
   useColorMode,
+  Stack,
+  Input,
 } from "@chakra-ui/react";
 import {
   MdOutlineCheckBoxOutlineBlank,
@@ -22,7 +24,10 @@ import {
 import Sidebar from "../components/sidebar";
 import Content from "../components/content";
 import { Global } from "@emotion/react";
+import { useUserInfo } from "../hooks/useUserId";
+import { useUserData } from "../hooks/useUserData";
 import SidebarBBS from "../components/sidebarBBS";
+import { supabase } from "../utils/supabase/client";
 
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
@@ -72,30 +77,41 @@ function getBadgeForCategory(category: string): JSX.Element {
   );
 }
 
-const Roadmap = () => {
+const BBS = () => {
   const roadmapRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const { userId, email } = useUserInfo();
+  const { pictureUrl, userName, userCompany, userMainCompany } =
+    useUserData(userId);
   const { colorMode, toggleColorMode } = useColorMode();
+  const [newThreadTitle, setNewThreadTitle] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [threads, setThreads] = useState<any[]>([]);
 
   const [years, setYears] = useState<number[]>([]);
   let previousYear: string | undefined;
 
-  // 現在の年月にスクロール
-  const moveThisMonth = () => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1; // 月は0から始まるので+1
-    const targetTitle = `${currentYear}-${currentMonth}`;
-    const targetElement = roadmapRefs.current.find((ref) =>
-      ref?.textContent?.includes(targetTitle)
-    );
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: "auto", block: "center" });
+  const fetchThreads = async () => {
+    setLoading(true);
+    const { data } = await supabase.from("threads").select("*");
+    if (data) {
+      setThreads(data);
     }
+    setLoading(false);
   };
-
-  useEffect(() => {
-    moveThisMonth;
-  }, []);
+  //新規スレッド作成
+  const createThread = async () => {
+    setLoading(true);
+    await supabase.from("threads").insert([
+      {
+        title: newThreadTitle,
+        company: userCompany,
+        mainCompany: userMainCompany,
+      },
+    ]);
+    setNewThreadTitle("");
+    await fetchThreads();
+    setLoading(false);
+  };
 
   const { language, setLanguage } = useLanguage();
 
@@ -115,27 +131,6 @@ const Roadmap = () => {
       />
       <Sidebar />
       <Content isCustomHeader={true}>
-        <Button
-          onClick={() => moveThisMonth()}
-          position="fixed"
-          right="0"
-          // top="64px"
-          bottom="0px"
-          p={2}
-          m={2}
-          bg="transparent"
-          border="solid 1px"
-          zIndex={99999}
-          fontSize={13}
-          h={8}
-        >
-          {getMessage({
-            ja: "今月に移動",
-            us: "Moved to this month",
-            cn: "移至本月",
-            language,
-          })}
-        </Button>
         <Text ml={4} className="print-only">
           {getMessage({
             ja: "※別紙1",
@@ -196,10 +191,38 @@ const Roadmap = () => {
             <Text textAlign="left" colorScheme="gray"></Text>
           </Box>
           <SidebarBBS isMain={true} />
+
+          <Divider mt={2} border="solid 1px gray" />
+          <Text>作成中...</Text>
+          <Badge variant="outline" mr={2}>
+            {userMainCompany}
+          </Badge>
+          <Badge variant="outline" mr={2}>
+            {userCompany}
+          </Badge>
+          <Stack spacing="4" mt="2" direction="row" justify="flex-end">
+            <Input
+              type="text"
+              value={newThreadTitle}
+              onChange={(e) => setNewThreadTitle(e.target.value)}
+              placeholder="新規スレッドのタイトル"
+              size="md"
+              bg="white"
+              _focus={{ borderColor: "gray.400" }} // フォーカス時のボーダー色を変更
+            />
+            <Button
+              onClick={createThread}
+              colorScheme="gray"
+              width="5em"
+              outline="1px solid black"
+            >
+              新規作成
+            </Button>
+          </Stack>
         </Container>
       </Content>
     </>
   );
 };
 
-export default Roadmap;
+export default BBS;

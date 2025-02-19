@@ -454,8 +454,8 @@ export default function Header() {
                       attributeName="transform"
                       attributeType="XML"
                       type="scale"
-                      values="1.4;1.43;1.4"
-                      dur="8s"
+                      values="1.4;1.45;1.4"
+                      dur="4s"
                       repeatCount="indefinite"
                     />
                   </svg>
@@ -476,8 +476,8 @@ export default function Header() {
                       attributeName="transform"
                       attributeType="XML"
                       type="scale"
-                      values="1.25;1.28;1.25"
-                      dur="8s"
+                      values="1.25;1.3;1.25"
+                      dur="4s"
                       repeatCount="indefinite"
                     />
                   </svg>
@@ -494,7 +494,7 @@ export default function Header() {
                       type="rotate"
                       from="0 0 0"
                       to="360 0 0"
-                      dur="60s"
+                      dur="80s"
                       repeatCount="indefinite"
                     />
                     <path
@@ -538,6 +538,7 @@ export default function Header() {
                   p={1}
                   mt={10}
                   mb={2}
+                  fontWeight={400}
                 >
                   停止した場合の連絡はLINEまたはメールでお願いします。
                   <br />
@@ -549,6 +550,7 @@ export default function Header() {
                   bg={colorMode === "light" ? "#f2e9df" : "#000"}
                   p={1}
                   mb={6}
+                  fontWeight={400}
                 >
                   {/* 2026年初旬の再開を予定しています。 */}
                   再開時期は未定です

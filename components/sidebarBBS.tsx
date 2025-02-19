@@ -285,7 +285,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
         // maxWidth={{ base: "0px", xl: "180px", "2xl": "300px", "3xl": "400px" }}
         w={maxWidth}
         maxWidth={maxWidth}
-        h="80vh"
+        h={isMain ? "" : "80vh"}
         bg="white.200"
         p="0"
         top="60px"
