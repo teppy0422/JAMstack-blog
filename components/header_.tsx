@@ -433,6 +433,7 @@ export default function Header() {
                       stroke-width="0.3"
                     />
                   </svg>
+
                   <svg
                     width="400"
                     height="400"
@@ -455,10 +456,10 @@ export default function Header() {
                       repeatCount="indefinite"
                     />
                   </svg>
-                  <Box as="span" position="absolute" top="-20px" right="35px">
+                  <Box as="span" position="absolute" top="-30px" right="45px">
                     <img
                       src="/images/illust/hippo/hippo_005_a.png"
-                      style={{ transform: "rotate(20deg)", width: "130px" }}
+                      style={{ transform: "rotate(20deg)", width: "110px" }}
                     />
                   </Box>
                   <svg
@@ -483,12 +484,12 @@ export default function Header() {
                       repeatCount="indefinite"
                     />
                   </svg>
-                  <Box as="span" position="absolute" top="-10px" left="130px">
+                  <Box as="span" position="absolute" top="16px" left="150px">
                     <img
                       src="/images/illust/hippo/hippo_017_a.png"
                       style={{
-                        transform: "rotate(-15deg)",
-                        width: "100px",
+                        transform: "rotate(-18deg)",
+                        width: "70px",
                         animation: "moveDiagonal 4s linear infinite",
                       }}
                     />
@@ -540,7 +541,7 @@ export default function Header() {
                         transform: translateX(0px) rotate(0deg);
                       }
                       50% {
-                        transform: translateX(5px) rotate(1deg);
+                        transform: translateX(3px) rotate(1deg);
                       }
                       100% {
                         transform: translateX(0px) rotate(0deg);
@@ -549,13 +550,34 @@ export default function Header() {
 
                     @keyframes moveDiagonal {
                       0% {
-                        transform: translate(0, 0) rotate(-15deg);
+                        transform: translate(0, 0) rotate(-18deg);
                       }
                       50% {
-                        transform: translate(-6px, -10px) rotate(-15deg);
+                        transform: translate(-6px, -10px) rotate(-18deg);
                       }
                       100% {
-                        transform: translate(0, 0) rotate(-15deg);
+                        transform: translate(0, 0) rotate(-18deg);
+                      }
+                    }
+                    @keyframes rabitJump {
+                      0%,
+                      20%,
+                      50%,
+                      80%,
+                      90% {
+                        transform: translateY(0) rotate(0deg);
+                      }
+                      93% {
+                        transform: translateY(-10px) rotate(0deg);
+                      }
+                      95% {
+                        transform: translateY(0) rotate(0deg);
+                      }
+                      98% {
+                        transform: translateY(-6px) rotate(0deg);
+                      }
+                      100% {
+                        transform: translateY(0) rotate(0deg);
                       }
                     }
                   `}</style>
@@ -623,7 +645,7 @@ export default function Header() {
                     <FaLine
                       style={{
                         marginTop: "4px",
-                        marginLeft: "1px",
+                        marginLeft: "1.5px",
                         marginRight: "5px",
                         fontSize: "16px",
                       }}
@@ -662,8 +684,18 @@ export default function Header() {
                     animation="scrollText 30s linear infinite"
                     style={{ letterSpacing: "1px" }}
                   >
-                    CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;
+                    CLOSE&nbsp;MODAL&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;
                   </Box>
+                </Box>
+                <Box as="span" position="absolute" bottom="22px" right="4px">
+                  <img
+                    src="/images/illust/hippo/hippo_008.png"
+                    style={{
+                      transform: "rotate(0deg)",
+                      width: "32px",
+                      animation: "rabitJump 10s infinite",
+                    }}
+                  />
                 </Box>
               </Box>
             </ModalBody>
