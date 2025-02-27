@@ -104,8 +104,8 @@ export default function Header() {
   const [isAlertModalOpen, setAlertModalOpen] = useState(false);
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0]; // 今日の日付を取得
-    // const lastShownDate = localStorage.getItem("lastShownDate");
-    const lastShownDate = "";
+    const lastShownDate = localStorage.getItem("lastShownDate");
+    // const lastShownDate = "";
     if (lastShownDate !== today) {
       setAlertModalOpen(true); // 初回ロード時にモーダルを表示
       localStorage.setItem("lastShownDate", today); // 今日の日付を記録
