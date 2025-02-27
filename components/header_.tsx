@@ -68,6 +68,8 @@ import { Global } from "@emotion/react";
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
 
+import "@fontsource/dela-gothic-one";
+
 export default function Header() {
   const { language, setLanguage } = useLanguage();
 
@@ -97,16 +99,338 @@ export default function Header() {
     };
     fetchWeather();
   }, []);
+
   // 警告メッセージ(一日一回だけ表示)
   const [isAlertModalOpen, setAlertModalOpen] = useState(false);
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0]; // 今日の日付を取得
-    const lastShownDate = localStorage.getItem("lastShownDate");
+    // const lastShownDate = localStorage.getItem("lastShownDate");
+    const lastShownDate = "";
     if (lastShownDate !== today) {
       setAlertModalOpen(true); // 初回ロード時にモーダルを表示
       localStorage.setItem("lastShownDate", today); // 今日の日付を記録
     }
   }, []);
+  // 警告メッセージ(回転)
+  useEffect(() => {
+    const fetchElement = () => {
+      const path = document.getElementById("rotating-path");
+      if (!path) {
+        console.error("Element with id 'scaling-path' not found");
+        return;
+      }
+      let angle = 0;
+      let animationFrameId: number;
+      const rotate = () => {
+        if (path) {
+          angle = (angle + 0.1) % 360; // Adjust the increment for speed
+          path.setAttribute("transform", `rotate(${angle} 128.4 227.5)`); // Set the correct center
+        }
+        animationFrameId = requestAnimationFrame(rotate);
+      };
+      rotate();
+      return () => {
+        cancelAnimationFrame(animationFrameId);
+      };
+    };
+    const timeoutId = setTimeout(fetchElement, 100);
+    return () => clearTimeout(timeoutId);
+  }, []);
+  // 警告メッセージ(スケールが大小するアニメーション_内側)
+  useEffect(() => {
+    const fetchElement = () => {
+      const path = document.getElementById("scaling-path");
+      if (!path) {
+        console.error("Element with id 'scaling-path' not found");
+        return;
+      }
+      let direction = 1; // 1 for increasing, -1 for decreasing
+      let animationFrameId: number;
+      const duration = 1000;
+      const maxScale = 1.15;
+      const minScale = 1.1;
+      let scale = minScale;
+      const scaleIncrement = (maxScale - minScale) / (duration / 16.67); // Adjust for 60fps
+      const scaleAnimation = () => {
+        if (scale >= maxScale) direction = -1;
+        if (scale <= minScale) direction = 1;
+        scale += direction * scaleIncrement;
+        // Calculate the center of the viewBox
+        const centerX = 70.9 + 115 / 2;
+        const centerY = 170 + 115 / 2;
+        // Apply scale with translation to keep the center
+        path.setAttribute(
+          "transform",
+          `translate(${centerX}, ${centerY}) scale(${scale}) translate(${-centerX}, ${-centerY})`
+        );
+        animationFrameId = requestAnimationFrame(scaleAnimation);
+      };
+      scaleAnimation();
+      return () => {
+        cancelAnimationFrame(animationFrameId);
+      };
+    };
+    const timeoutId = setTimeout(fetchElement, 100);
+    return () => clearTimeout(timeoutId);
+  }, []);
+  // 警告メッセージ(スケールが大小するアニメーション_外側)
+  useEffect(() => {
+    const fetchElement = () => {
+      const path = document.getElementById("scaling-path2");
+      if (!path) {
+        console.error("Element with id 'scaling-path' not found");
+        return;
+      }
+      let direction = -1; // 1 for increasing, -1 for decreasing
+      let animationFrameId: number;
+      const duration = 1000;
+      const maxScale = 1.25;
+      const minScale = 1.2;
+      let scale = minScale;
+      const scaleIncrement = (maxScale - minScale) / (duration / 16.67); // Adjust for 60fps
+      const scaleAnimation = () => {
+        if (scale >= maxScale) direction = -1;
+        if (scale <= minScale) direction = 1;
+        scale += direction * scaleIncrement;
+        // Calculate the center of the viewBox
+        const centerX = 70.9 + 115 / 2;
+        const centerY = 170 + 115 / 2;
+        // Apply scale with translation to keep the center
+        path.setAttribute(
+          "transform",
+          `translate(${centerX}, ${centerY}) scale(${scale}) translate(${-centerX}, ${-centerY})`
+        );
+        animationFrameId = requestAnimationFrame(scaleAnimation);
+      };
+      scaleAnimation();
+      return () => {
+        cancelAnimationFrame(animationFrameId);
+      };
+    };
+    const timeoutId = setTimeout(fetchElement, 100);
+    return () => clearTimeout(timeoutId);
+  }, []);
+  // 警告メッセージ(モグラの動作)
+  useEffect(() => {
+    const fetchElement = () => {
+      const img = document.getElementById("moving-hippo_017_a");
+      if (!img) {
+        console.error("Element with id 'moving-hippo' not found");
+        return;
+      }
+      let positionX = 6;
+      let positionY = 10;
+      let direction = -1; // 1 for moving to (6, 10), -1 for moving back to (0, 0)
+      const duration = 2000; // 2 seconds for each half of the cycle
+      const maxPositionX = 6; // Maximum x position
+      const maxPositionY = 10; // Maximum y position
+      const incrementX = (maxPositionX * 2) / (duration / 16.67); // Adjust for 60fps
+      const incrementY = (maxPositionY * 2) / (duration / 16.67);
+      const moveAnimation = () => {
+        if (
+          direction === 1 &&
+          positionX >= maxPositionX &&
+          positionY >= maxPositionY
+        ) {
+          direction = -1;
+        } else if (direction === -1 && positionX <= 0 && positionY <= 0) {
+          direction = 1;
+        }
+        positionX += direction * incrementX;
+        positionY += direction * incrementY;
+
+        img.style.transform = `rotate(-18deg) translate(${positionX}px, ${positionY}px)`;
+
+        requestAnimationFrame(moveAnimation);
+      };
+      moveAnimation();
+    };
+    // Use setTimeout to ensure the element is available
+    const timeoutId = setTimeout(fetchElement, 100);
+    return () => clearTimeout(timeoutId);
+  }, []);
+  // dededede文字
+  const [animationStyle, setAnimationStyle] = useState<React.CSSProperties>({
+    opacity: 0,
+    transform: "translate(0, 0)",
+  });
+  const [animationStyle2, setAnimationStyle2] = useState<React.CSSProperties>({
+    opacity: 0,
+    transform: "translate(0, 0)",
+  });
+  useEffect(() => {
+    const colors = ["#82d9d0", "#FF5833", "#ffef42"];
+    const animateText = () => {
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+      setAnimationStyle((prevStyle) => ({
+        ...prevStyle,
+        opacity: 0,
+        color: randomColor,
+        transform: "translate(0px, 0px)",
+        transition: "transform 0s",
+      }));
+      setTimeout(() => {
+        setAnimationStyle({
+          color: randomColor,
+          transform: "translate(-2px, 3px)",
+          transition: "transform 0.01s",
+          opacity: 1,
+        });
+      }, 4860); // 81% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle({
+          color: randomColor,
+          transform: "translate(3px, -2px)",
+          transition: "transform 0.02s",
+          opacity: 1,
+        });
+      }, 4980); // 83% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle({
+          color: randomColor,
+          transform: "translate(-3px, 2px)",
+          transition: "transform 0.02s",
+          opacity: 1,
+        });
+      }, 5100); // 85% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle({
+          color: randomColor,
+          transform: "translate(4px, -3px)",
+          transition: "transform 0.02s",
+          opacity: 1,
+        });
+      }, 5220); // 87% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle({
+          color: randomColor,
+          transform: "translate(0px, 0px)",
+          transition: "transform 0.03s",
+          opacity: 0,
+        });
+      }, 5400); // 90% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle({
+          color: randomColor,
+          transform: "translate(2px, -4px)",
+          transition: "transform 0.02s",
+          opacity: 1,
+        });
+      }, 5760); // 96% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle({
+          color: randomColor,
+          transform: "translate(0px, 0px)",
+          transition: "transform 0.02s",
+          opacity: 1,
+        });
+      }, 5820); // 97% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle({
+          color: randomColor,
+          transform: "translate(0px, 0px)",
+          transition: "transform 0.01s",
+          opacity: 0,
+        });
+      }, 5880); // 98% of 6000ms
+
+      setAnimationStyle2({
+        opacity: 0,
+        transform: "translate(0px, 0px)",
+        transition: "transform 0s",
+      });
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(-3px, -2px)",
+          transition: "transform 0.02s",
+          opacity: 0.4,
+        });
+      }, 2040); // 34% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(4px, 3px)",
+          transition: "transform 0.02s",
+          opacity: 0.4,
+        });
+      }, 2160); // 36% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(-1px, -2px)",
+          transition: "transform 0.02s",
+          opacity: 0.4,
+        });
+      }, 2280); // 38% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(0px, 0px)",
+          transition: "transform 0.02s",
+          opacity: 0.4,
+        });
+      }, 2400); // 40% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(0px, 0px)",
+          transition: "transform 0.01s",
+          opacity: 0.4,
+        });
+      }, 2460); // 41% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(-3px, -3px)",
+          transition: "transform 0.02s",
+          opacity: 0.4,
+        });
+      }, 3900); // 65% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(4px, 2px)",
+          transition: "transform 0.02s",
+          opacity: 0.4,
+        });
+      }, 4020); // 67% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(-3px, -1px)",
+          transition: "transform 0.02s",
+          opacity: 0.4,
+        });
+      }, 4140); // 69% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(1px, -3px)",
+          transition: "transform 0.02s",
+          opacity: 0.4,
+        });
+      }, 4200); // 70% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(2px, 3px)",
+          transition: "transform 0.02s",
+          opacity: 0.4,
+        });
+      }, 4260); // 71% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(0px, 0px)",
+          transition: "transform 0.02s",
+          opacity: 0.4,
+        });
+      }, 4320); // 72% of 6000ms
+      setTimeout(() => {
+        setAnimationStyle2({
+          transform: "translate(0px, 0px)",
+          transition: "transform 0.01s",
+          opacity: 0,
+        });
+      }, 4380); // 73% of 6000ms
+    };
+    const startAnimation = () => {
+      animateText();
+      setTimeout(startAnimation, 7000); // 7秒ごとにアニメーションを繰り返す
+    };
+    startAnimation();
+  }, []); // 依存配列を空にすることで、初回マウント時にのみ実行
 
   // loginボタンを隠す
   let keyFlag: boolean = false;
@@ -371,7 +695,7 @@ export default function Header() {
             filter={colorMode === "light" ? "" : "invert(1)"} // 白黒を入れ替えるフィルターを適用
           >
             <ModalHeader></ModalHeader>
-            <ModalBody>
+            <ModalBody py={0} px={3}>
               <Box
                 display="flex"
                 flexDirection="column"
@@ -381,8 +705,8 @@ export default function Header() {
                   display="flex"
                   justifyContent="center"
                   alignItems="center"
-                  width="500px"
-                  height="500px"
+                  width="550px"
+                  height="550px"
                   position="relative"
                 >
                   <svg
@@ -433,99 +757,95 @@ export default function Header() {
                       stroke-width="0.3"
                     />
                   </svg>
-
                   <svg
-                    width="400"
-                    height="400"
+                    width="450"
+                    height="500"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="70.9 170 115 115"
                     style={{ position: "absolute" }}
                   >
                     <path
+                      id="scaling-path2"
                       d="m 100.75502,265.1916 c -2.16308,-1.10542 -3.495995,-3.10693 -5.129849,-7.703 -2.17034,-6.10521 -2.672624,-6.82025 -7.240335,-10.30721 -3.464822,-2.645 -4.955033,-4.20358 -5.725751,-5.98841 -0.901572,-2.08788 -0.788166,-3.52146 0.711847,-8.99849 0.808263,-2.95123 1.304931,-5.26354 1.32251,-6.15715 0.01682,-0.85486 -0.517511,-3.34681 -1.327075,-6.18909 -2.368648,-8.3161 -1.878074,-9.82593 4.926281,-15.16153 2.325605,-1.82361 4.222617,-3.52557 4.711482,-4.22705 0.511028,-0.73327 1.468359,-2.89591 2.549152,-5.75859 2.005777,-5.3127 2.756667,-6.53915 4.713278,-7.69833 1.67262,-0.99096 3.79434,-1.37594 8.15213,-1.47923 5.74494,-0.13618 6.57159,-0.41942 11.91598,-4.08295 6.46761,-4.43348 8.51988,-4.39608 15.33151,0.27939 4.72345,3.24215 6.09207,3.70486 11.27986,3.8136 8.79102,0.18428 10.44075,1.29311 13.11462,8.81477 2.17033,6.1052 2.67262,6.82025 7.24033,10.3072 3.46482,2.64502 4.95503,4.20359 5.72574,5.98843 0.90158,2.08787 0.78817,3.52145 -0.71184,8.99847 -0.80826,2.95124 -1.30493,5.26355 -1.32251,6.15716 -0.0168,0.85485 0.51751,3.3468 1.32707,6.18909 2.36616,8.3073 1.87387,9.80901 -4.98223,15.19816 -2.27387,1.78734 -4.17056,3.49455 -4.65552,4.19042 -0.51103,0.73328 -1.46836,2.89592 -2.54915,5.75859 -2.00578,5.31269 -2.75667,6.53914 -4.71328,7.69834 -1.67262,0.99094 -3.79434,1.37594 -8.15213,1.47922 -5.74075,0.13607 -6.57387,0.42099 -11.89289,4.06712 -6.52163,4.47051 -8.52093,4.43654 -15.35547,-0.26092 -4.76078,-3.27214 -6.01383,-3.68538 -11.68428,-3.85324 -4.01838,-0.11896 -6.35848,-0.45078 -7.57947,-1.07475 z"
                       fill="#F2e9df"
                       stroke="#000"
-                      stroke-width="0.5"
-                    />
-                    <animateTransform
-                      attributeName="transform"
-                      attributeType="XML"
-                      type="scale"
-                      values="1.4;1.45;1.4"
-                      dur="4s"
-                      repeatCount="indefinite"
+                      strokeWidth="0.5"
                     />
                   </svg>
-                  <Box as="span" position="absolute" top="-30px" right="45px">
-                    <img
-                      src="/images/illust/hippo/hippo_005_a.png"
-                      style={{ transform: "rotate(20deg)", width: "110px" }}
-                    />
-                  </Box>
+                  <img
+                    src="/images/illust/hippo/hippo_005_a.png"
+                    style={{
+                      position: "absolute",
+                      top: "30px",
+                      right: "70px",
+                      width: "110px",
+                      transform: "rotate(20deg)",
+                    }}
+                  />
                   <svg
-                    width="400"
+                    width="450"
+                    height="500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="70.9 170 115 115"
+                    style={{ position: "absolute" }}
+                  >
+                    <g transform-origin="128.4px 227.5px">
+                      <path
+                        id="scaling-path"
+                        d="m 100.75502,265.1916 c -2.16308,-1.10542 -3.495995,-3.10693 -5.129849,-7.703 -2.17034,-6.10521 -2.672624,-6.82025 -7.240335,-10.30721 -3.464822,-2.645 -4.955033,-4.20358 -5.725751,-5.98841 -0.901572,-2.08788 -0.788166,-3.52146 0.711847,-8.99849 0.808263,-2.95123 1.304931,-5.26354 1.32251,-6.15715 0.01682,-0.85486 -0.517511,-3.34681 -1.327075,-6.18909 -2.368648,-8.3161 -1.878074,-9.82593 4.926281,-15.16153 2.325605,-1.82361 4.222617,-3.52557 4.711482,-4.22705 0.511028,-0.73327 1.468359,-2.89591 2.549152,-5.75859 2.005777,-5.3127 2.756667,-6.53915 4.713278,-7.69833 1.67262,-0.99096 3.79434,-1.37594 8.15213,-1.47923 5.74494,-0.13618 6.57159,-0.41942 11.91598,-4.08295 6.46761,-4.43348 8.51988,-4.39608 15.33151,0.27939 4.72345,3.24215 6.09207,3.70486 11.27986,3.8136 8.79102,0.18428 10.44075,1.29311 13.11462,8.81477 2.17033,6.1052 2.67262,6.82025 7.24033,10.3072 3.46482,2.64502 4.95503,4.20359 5.72574,5.98843 0.90158,2.08787 0.78817,3.52145 -0.71184,8.99847 -0.80826,2.95124 -1.30493,5.26355 -1.32251,6.15716 -0.0168,0.85485 0.51751,3.3468 1.32707,6.18909 2.36616,8.3073 1.87387,9.80901 -4.98223,15.19816 -2.27387,1.78734 -4.17056,3.49455 -4.65552,4.19042 -0.51103,0.73328 -1.46836,2.89592 -2.54915,5.75859 -2.00578,5.31269 -2.75667,6.53914 -4.71328,7.69834 -1.67262,0.99094 -3.79434,1.37594 -8.15213,1.47922 -5.74075,0.13607 -6.57387,0.42099 -11.89289,4.06712 -6.52163,4.47051 -8.52093,4.43654 -15.35547,-0.26092 -4.76078,-3.27214 -6.01383,-3.68538 -11.68428,-3.85324 -4.01838,-0.11896 -6.35848,-0.45078 -7.57947,-1.07475 z"
+                        fill="#946641"
+                        stroke="#000"
+                        strokeWidth="0.5"
+                      />
+                    </g>
+                  </svg>
+                  <img
+                    id="moving-hippo_017_a"
+                    src="/images/illust/hippo/hippo_017_a.png"
+                    style={{
+                      position: "absolute",
+                      top: "34px",
+                      left: "162px",
+                      width: "70px",
+                      transform: "rotate(-18deg)",
+                    }}
+                  />
+                  <svg
+                    id="rotating-svg"
+                    width="450"
                     height="400"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="70.9 170 115 115"
                     style={{ position: "absolute" }}
                   >
                     <path
+                      id="rotating-path"
                       d="m 100.75502,265.1916 c -2.16308,-1.10542 -3.495995,-3.10693 -5.129849,-7.703 -2.17034,-6.10521 -2.672624,-6.82025 -7.240335,-10.30721 -3.464822,-2.645 -4.955033,-4.20358 -5.725751,-5.98841 -0.901572,-2.08788 -0.788166,-3.52146 0.711847,-8.99849 0.808263,-2.95123 1.304931,-5.26354 1.32251,-6.15715 0.01682,-0.85486 -0.517511,-3.34681 -1.327075,-6.18909 -2.368648,-8.3161 -1.878074,-9.82593 4.926281,-15.16153 2.325605,-1.82361 4.222617,-3.52557 4.711482,-4.22705 0.511028,-0.73327 1.468359,-2.89591 2.549152,-5.75859 2.005777,-5.3127 2.756667,-6.53915 4.713278,-7.69833 1.67262,-0.99096 3.79434,-1.37594 8.15213,-1.47923 5.74494,-0.13618 6.57159,-0.41942 11.91598,-4.08295 6.46761,-4.43348 8.51988,-4.39608 15.33151,0.27939 4.72345,3.24215 6.09207,3.70486 11.27986,3.8136 8.79102,0.18428 10.44075,1.29311 13.11462,8.81477 2.17033,6.1052 2.67262,6.82025 7.24033,10.3072 3.46482,2.64502 4.95503,4.20359 5.72574,5.98843 0.90158,2.08787 0.78817,3.52145 -0.71184,8.99847 -0.80826,2.95124 -1.30493,5.26355 -1.32251,6.15716 -0.0168,0.85485 0.51751,3.3468 1.32707,6.18909 2.36616,8.3073 1.87387,9.80901 -4.98223,15.19816 -2.27387,1.78734 -4.17056,3.49455 -4.65552,4.19042 -0.51103,0.73328 -1.46836,2.89592 -2.54915,5.75859 -2.00578,5.31269 -2.75667,6.53914 -4.71328,7.69834 -1.67262,0.99094 -3.79434,1.37594 -8.15213,1.47922 -5.74075,0.13607 -6.57387,0.42099 -11.89289,4.06712 -6.52163,4.47051 -8.52093,4.43654 -15.35547,-0.26092 -4.76078,-3.27214 -6.01383,-3.68538 -11.68428,-3.85324 -4.01838,-0.11896 -6.35848,-0.45078 -7.57947,-1.07475 z"
-                      fill="#946641"
+                      // fill="#FFF"
+                      fill="#ddd"
                       stroke="#000"
-                      stroke-width="0.5"
-                    />
-                    <animateTransform
-                      attributeName="transform"
-                      attributeType="XML"
-                      type="scale"
-                      values="1.25;1.3;1.25"
-                      dur="4s"
-                      repeatCount="indefinite"
-                    />
+                      stroke-width="3"
+                    ></path>
                   </svg>
-                  <Box as="span" position="absolute" top="16px" left="150px">
-                    <img
-                      src="/images/illust/hippo/hippo_017_a.png"
-                      style={{
-                        transform: "rotate(-18deg)",
-                        width: "70px",
-                        animation: "moveDiagonal 4s linear infinite",
-                      }}
-                    />
-                  </Box>
-                  <svg
-                    width="400"
-                    height="400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="70.9 170 115 115"
-                    style={{ position: "absolute" }}
-                  >
-                    <animateTransform
-                      attributeName="transform"
-                      attributeType="XML"
-                      type="rotate"
-                      from="0 0 0"
-                      to="360 0 0"
-                      dur="80s"
-                      repeatCount="indefinite"
-                    />
-                    <path
-                      d="m 100.75502,265.1916 c -2.16308,-1.10542 -3.495995,-3.10693 -5.129849,-7.703 -2.17034,-6.10521 -2.672624,-6.82025 -7.240335,-10.30721 -3.464822,-2.645 -4.955033,-4.20358 -5.725751,-5.98841 -0.901572,-2.08788 -0.788166,-3.52146 0.711847,-8.99849 0.808263,-2.95123 1.304931,-5.26354 1.32251,-6.15715 0.01682,-0.85486 -0.517511,-3.34681 -1.327075,-6.18909 -2.368648,-8.3161 -1.878074,-9.82593 4.926281,-15.16153 2.325605,-1.82361 4.222617,-3.52557 4.711482,-4.22705 0.511028,-0.73327 1.468359,-2.89591 2.549152,-5.75859 2.005777,-5.3127 2.756667,-6.53915 4.713278,-7.69833 1.67262,-0.99096 3.79434,-1.37594 8.15213,-1.47923 5.74494,-0.13618 6.57159,-0.41942 11.91598,-4.08295 6.46761,-4.43348 8.51988,-4.39608 15.33151,0.27939 4.72345,3.24215 6.09207,3.70486 11.27986,3.8136 8.79102,0.18428 10.44075,1.29311 13.11462,8.81477 2.17033,6.1052 2.67262,6.82025 7.24033,10.3072 3.46482,2.64502 4.95503,4.20359 5.72574,5.98843 0.90158,2.08787 0.78817,3.52145 -0.71184,8.99847 -0.80826,2.95124 -1.30493,5.26355 -1.32251,6.15716 -0.0168,0.85485 0.51751,3.3468 1.32707,6.18909 2.36616,8.3073 1.87387,9.80901 -4.98223,15.19816 -2.27387,1.78734 -4.17056,3.49455 -4.65552,4.19042 -0.51103,0.73328 -1.46836,2.89592 -2.54915,5.75859 -2.00578,5.31269 -2.75667,6.53914 -4.71328,7.69834 -1.67262,0.99094 -3.79434,1.37594 -8.15213,1.47922 -5.74075,0.13607 -6.57387,0.42099 -11.89289,4.06712 -6.52163,4.47051 -8.52093,4.43654 -15.35547,-0.26092 -4.76078,-3.27214 -6.01383,-3.68538 -11.68428,-3.85324 -4.01838,-0.11896 -6.35848,-0.45078 -7.57947,-1.07475 z"
-                      fill="#FFF"
-                      stroke="#000"
-                      stroke-width="4"
-                    />
-                  </svg>
-                  <Box as="span" position="absolute" bottom="0px">
-                    <img
-                      src="/images/illust/hippo/hippo_020.svg"
-                      style={{
-                        width: "180px",
-                        animation: "moveAndRotate 5s infinite alternate",
-                      }}
-                    />
-                  </Box>
+                  <img
+                    src="/images/illust/hippo/hippo_020.svg"
+                    style={{
+                      position: "absolute",
+                      bottom: "0px",
+                      width: "152px",
+                      animation: "moveAndRotate 5s infinite alternate",
+                    }}
+                  />
+                  <img
+                    src="/images/illust/hippo/hippo_008.png"
+                    style={{
+                      position: "absolute",
+                      left: "80px",
+                      bottom: "73px",
+                      width: "32px",
+                      animation: "rabitJump 10s infinite",
+                    }}
+                  />
                   <style jsx>{`
                     @keyframes scrollText {
                       0% {
@@ -535,7 +855,6 @@ export default function Header() {
                         transform: translateX(-50%);
                       }
                     }
-
                     @keyframes moveAndRotate {
                       0% {
                         transform: translateX(0px) rotate(0deg);
@@ -545,18 +864,6 @@ export default function Header() {
                       }
                       100% {
                         transform: translateX(0px) rotate(0deg);
-                      }
-                    }
-
-                    @keyframes moveDiagonal {
-                      0% {
-                        transform: translate(0, 0) rotate(-18deg);
-                      }
-                      50% {
-                        transform: translate(-6px, -10px) rotate(-18deg);
-                      }
-                      100% {
-                        transform: translate(0, 0) rotate(-18deg);
                       }
                     }
                     @keyframes rabitJump {
@@ -580,22 +887,88 @@ export default function Header() {
                         transform: translateY(0) rotate(0deg);
                       }
                     }
+                    @keyframes feedOut {
+                      0% {
+                        opacity: 0.6;
+                      }
+                      90% {
+                        opacity: 0.8;
+                      }
+                      100% {
+                        opacity: 0;
+                        display: none;
+                      }
+                    }
                   `}</style>
-                  <Box position="absolute" textAlign="center">
+                  <Box
+                    position="fixed"
+                    zIndex={0}
+                    top="0"
+                    left="0"
+                    bg="#111"
+                    w="100%"
+                    h="100%"
+                    style={{
+                      animation: "feedOut 6s forwards",
+                    }}
+                  />
+                  <Box
+                    position="absolute"
+                    textAlign="center"
+                    m={0}
+                    p={0}
+                    top="90px"
+                  >
                     <Text
                       fontFamily="Dela Gothic One"
                       fontWeight="400"
                       fontSize="84px"
-                      color={colorMode === "light" ? "#000" : "#000"}
+                      // color={colorMode === "light" ? "#000" : "#000"}
+                      color="white"
+                      position="relative"
+                      zIndex={2}
+                      top="0"
+                      left="0"
+                      style={{
+                        WebkitTextStroke: "1px #000", // アウトラインを黒にする
+                      }}
                     >
                       告知
                     </Text>
+                    <Text
+                      fontFamily="Dela Gothic One"
+                      fontWeight="400"
+                      fontSize="84px"
+                      color={colorMode === "light" ? "#F00" : "#000"}
+                      position="absolute"
+                      zIndex={1}
+                      top="0"
+                      left="21px"
+                      style={animationStyle}
+                    >
+                      告知
+                    </Text>
+                    <Text
+                      fontFamily="Dela Gothic One"
+                      fontWeight="400"
+                      fontSize="84px"
+                      color={colorMode === "light" ? "#FFF" : "#000"}
+                      position="absolute"
+                      zIndex={3}
+                      top="0"
+                      left="21px"
+                      style={animationStyle2}
+                    >
+                      告知
+                    </Text>
+
                     <Text
                       fontFamily=""
                       fontSize="md"
                       fontWeight="400"
                       color={colorMode === "light" ? "#000" : "#000"}
                       // bg={colorMode === "light" ? "#f2e9df" : "#000"}
+                      mt={-3}
                       mb={1}
                       display="inline-block"
                     >
@@ -605,18 +978,16 @@ export default function Header() {
                     </Text>
                   </Box>
                 </Box>
-
                 <Text
                   fontSize="sm"
                   color={colorMode === "light" ? "#000" : "#FFF"}
                   bg={colorMode === "light" ? "#f2e9df" : "#000"}
                   p={1}
-                  mt={10}
-                  mb={2}
+                  mt={6}
+                  mb={0}
                   fontWeight={400}
                 >
                   停止した場合の連絡はLINEまたはメールでお願いします。
-                  <br />
                   ファイルのやり取りが難しくなりますが、その時に考えます。
                 </Text>
                 <Text
@@ -624,7 +995,7 @@ export default function Header() {
                   color={colorMode === "light" ? "#000" : "#FFF"}
                   bg={colorMode === "light" ? "#f2e9df" : "#000"}
                   p={1}
-                  mb={2}
+                  mb={0.5}
                   fontWeight={400}
                 >
                   {/* 2026年初旬の再開を予定しています。 */}
@@ -635,20 +1006,20 @@ export default function Header() {
                     <IoIosMail
                       style={{
                         marginTop: "3px",
-                        marginRight: "4px",
+                        marginRight: "2px",
                         fontSize: "19px",
                       }}
+                      color="gray"
                     />
                     teppy422@au.com
-                  </Box>
-                  <Box display="flex" alignItems="center">
                     <FaLine
                       style={{
                         marginTop: "4px",
-                        marginLeft: "1.5px",
-                        marginRight: "5px",
+                        marginLeft: "10px",
+                        marginRight: "3px",
                         fontSize: "16px",
                       }}
+                      color="gray"
                     />
                     teppy0422
                   </Box>
@@ -661,42 +1032,36 @@ export default function Header() {
                   _focus={{ boxShadow: "none" }}
                   fontFamily="Dela Gothic One"
                   color="#82d9d0"
-                  bg="#000"
+                  // color="transparent"
+                  bg="#211c1c"
                   fontSize="18px"
-                  borderTop="solid 1px #000"
-                  outline="#000"
+                  // borderTop="solid 1px #000"
                   cursor="pointer"
                   overflow="hidden" // ボックスからはみ出さないようにする
-                  width="100%"
-                  style={{
-                    textShadow: `
-                    -1px -1px 0 #000,  
-                    1px -1px 0 #000,
-                    -1px 1px 0 #000,
-                    1px 1px 0 #000
-                  `,
-                  }}
+                  w="100%"
                 >
                   <Box
                     as="span"
                     display="inline-block"
                     whiteSpace="nowrap"
                     animation="scrollText 30s linear infinite"
-                    style={{ letterSpacing: "1px" }}
+                    style={{
+                      // WebkitTextStroke: "0.5px #e5f22c", // アウトラインを黒にする
+                      letterSpacing: "1px",
+                    }}
                   >
                     CLOSE&nbsp;MODAL&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;
                   </Box>
                 </Box>
-                <Box as="span" position="absolute" bottom="22px" right="4px">
-                  <img
-                    src="/images/illust/hippo/hippo_008.png"
-                    style={{
-                      transform: "rotate(0deg)",
-                      width: "32px",
-                      animation: "rabitJump 10s infinite",
-                    }}
-                  />
-                </Box>
+                <img
+                  src="/images/illust/hippo/hippo_a001_lyingDown.png"
+                  style={{
+                    position: "absolute",
+                    right: "2px",
+                    bottom: "22px",
+                    width: "92px",
+                  }}
+                />
               </Box>
             </ModalBody>
             <ModalFooter>
