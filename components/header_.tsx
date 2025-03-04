@@ -2,6 +2,7 @@
 
 import NextAuth from "next-auth";
 import { useState, useContext } from "react";
+
 import { useSession, signIn, signOut } from "next-auth/react";
 import { supabase } from "../utils/supabase/client";
 import NextLink from "next/link";
@@ -60,6 +61,9 @@ import styles from "../styles/home.module.scss";
 import React, { useEffect } from "react";
 import { WiDaySunny, WiCloudyGusts, WiRainMix } from "react-icons/wi";
 
+import SunderText from "./SunderText";
+import AnimationImage from "./AnimationImage";
+
 import AwesomIcon from "./awesomIcon";
 import Auth from "./Auth"; // Authコンポーネントをインポート
 import { useUserData } from "../hooks/useUserData";
@@ -104,8 +108,8 @@ export default function Header() {
   const [isAlertModalOpen, setAlertModalOpen] = useState(false);
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0]; // 今日の日付を取得
-    const lastShownDate = localStorage.getItem("lastShownDate");
-    // const lastShownDate = "";
+    // const lastShownDate = localStorage.getItem("lastShownDate");
+    const lastShownDate = "";
     if (lastShownDate !== today) {
       setAlertModalOpen(true); // 初回ロード時にモーダルを表示
       localStorage.setItem("lastShownDate", today); // 今日の日付を記録
@@ -249,189 +253,6 @@ export default function Header() {
     const timeoutId = setTimeout(fetchElement, 100);
     return () => clearTimeout(timeoutId);
   }, []);
-  // dededede文字
-  const [animationStyle, setAnimationStyle] = useState<React.CSSProperties>({
-    opacity: 0,
-    transform: "translate(0, 0)",
-  });
-  const [animationStyle2, setAnimationStyle2] = useState<React.CSSProperties>({
-    opacity: 0,
-    transform: "translate(0, 0)",
-  });
-  useEffect(() => {
-    const colors = ["#82d9d0", "#FF5833", "#ffef42"];
-    const animateText = () => {
-      const randomColor = colors[Math.floor(Math.random() * colors.length)];
-
-      setAnimationStyle((prevStyle) => ({
-        ...prevStyle,
-        opacity: 0,
-        color: randomColor,
-        transform: "translate(0px, 0px)",
-        transition: "transform 0s",
-      }));
-      setTimeout(() => {
-        setAnimationStyle({
-          color: randomColor,
-          transform: "translate(-2px, 3px)",
-          transition: "transform 0.01s",
-          opacity: 1,
-        });
-      }, 4860); // 81% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle({
-          color: randomColor,
-          transform: "translate(3px, -2px)",
-          transition: "transform 0.02s",
-          opacity: 1,
-        });
-      }, 4980); // 83% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle({
-          color: randomColor,
-          transform: "translate(-3px, 2px)",
-          transition: "transform 0.02s",
-          opacity: 1,
-        });
-      }, 5100); // 85% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle({
-          color: randomColor,
-          transform: "translate(4px, -3px)",
-          transition: "transform 0.02s",
-          opacity: 1,
-        });
-      }, 5220); // 87% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle({
-          color: randomColor,
-          transform: "translate(0px, 0px)",
-          transition: "transform 0.03s",
-          opacity: 0,
-        });
-      }, 5400); // 90% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle({
-          color: randomColor,
-          transform: "translate(2px, -4px)",
-          transition: "transform 0.02s",
-          opacity: 1,
-        });
-      }, 5760); // 96% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle({
-          color: randomColor,
-          transform: "translate(0px, 0px)",
-          transition: "transform 0.02s",
-          opacity: 1,
-        });
-      }, 5820); // 97% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle({
-          color: randomColor,
-          transform: "translate(0px, 0px)",
-          transition: "transform 0.01s",
-          opacity: 0,
-        });
-      }, 5880); // 98% of 6000ms
-
-      setAnimationStyle2({
-        opacity: 0,
-        transform: "translate(0px, 0px)",
-        transition: "transform 0s",
-      });
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(-3px, -2px)",
-          transition: "transform 0.02s",
-          opacity: 0.4,
-        });
-      }, 2040); // 34% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(4px, 3px)",
-          transition: "transform 0.02s",
-          opacity: 0.4,
-        });
-      }, 2160); // 36% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(-1px, -2px)",
-          transition: "transform 0.02s",
-          opacity: 0.4,
-        });
-      }, 2280); // 38% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(0px, 0px)",
-          transition: "transform 0.02s",
-          opacity: 0.4,
-        });
-      }, 2400); // 40% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(0px, 0px)",
-          transition: "transform 0.01s",
-          opacity: 0.4,
-        });
-      }, 2460); // 41% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(-3px, -3px)",
-          transition: "transform 0.02s",
-          opacity: 0.4,
-        });
-      }, 3900); // 65% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(4px, 2px)",
-          transition: "transform 0.02s",
-          opacity: 0.4,
-        });
-      }, 4020); // 67% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(-3px, -1px)",
-          transition: "transform 0.02s",
-          opacity: 0.4,
-        });
-      }, 4140); // 69% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(1px, -3px)",
-          transition: "transform 0.02s",
-          opacity: 0.4,
-        });
-      }, 4200); // 70% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(2px, 3px)",
-          transition: "transform 0.02s",
-          opacity: 0.4,
-        });
-      }, 4260); // 71% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(0px, 0px)",
-          transition: "transform 0.02s",
-          opacity: 0.4,
-        });
-      }, 4320); // 72% of 6000ms
-      setTimeout(() => {
-        setAnimationStyle2({
-          transform: "translate(0px, 0px)",
-          transition: "transform 0.01s",
-          opacity: 0,
-        });
-      }, 4380); // 73% of 6000ms
-    };
-    const startAnimation = () => {
-      animateText();
-      setTimeout(startAnimation, 7000); // 7秒ごとにアニメーションを繰り返す
-    };
-    startAnimation();
-  }, []); // 依存配列を空にすることで、初回マウント時にのみ実行
-
   // loginボタンを隠す
   let keyFlag: boolean = false;
   // ユーザーIDを取得する関数
@@ -772,15 +593,13 @@ export default function Header() {
                       strokeWidth="0.5"
                     />
                   </svg>
-                  <img
+                  <AnimationImage
                     src="/images/illust/hippo/hippo_005_a.png"
-                    style={{
-                      position: "absolute",
-                      top: "30px",
-                      right: "70px",
-                      width: "110px",
-                      transform: "rotate(20deg)",
-                    }}
+                    width="110px"
+                    top="30px"
+                    right="70px"
+                    rotate="20deg"
+                    animation="nyoki 5s forwards"
                   />
                   <svg
                     width="450"
@@ -816,7 +635,7 @@ export default function Header() {
                     height="400"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="70.9 170 115 115"
-                    style={{ position: "absolute" }}
+                    style={{ position: "absolute", zIndex: 101 }}
                   >
                     <path
                       id="rotating-path"
@@ -827,24 +646,18 @@ export default function Header() {
                       stroke-width="3"
                     ></path>
                   </svg>
-                  <img
-                    src="/images/illust/hippo/hippo_020.svg"
-                    style={{
-                      position: "absolute",
-                      bottom: "0px",
-                      width: "152px",
-                      animation: "moveAndRotate 5s infinite alternate",
-                    }}
+                  <AnimationImage
+                    src="/images/illust/hippo/hippo_020.png"
+                    width="152px"
+                    bottom="0px"
+                    animation="moveAndRotate 5s infinite alternate"
                   />
-                  <img
+                  <AnimationImage
                     src="/images/illust/hippo/hippo_008.png"
-                    style={{
-                      position: "absolute",
-                      left: "80px",
-                      bottom: "73px",
-                      width: "32px",
-                      animation: "rabitJump 10s infinite",
-                    }}
+                    width="32px"
+                    left="80px"
+                    bottom="73px"
+                    animation="rabitJump 10s infinite"
                   />
                   <style jsx>{`
                     @keyframes scrollText {
@@ -855,43 +668,11 @@ export default function Header() {
                         transform: translateX(-50%);
                       }
                     }
-                    @keyframes moveAndRotate {
-                      0% {
-                        transform: translateX(0px) rotate(0deg);
-                      }
-                      50% {
-                        transform: translateX(3px) rotate(1deg);
-                      }
-                      100% {
-                        transform: translateX(0px) rotate(0deg);
-                      }
-                    }
-                    @keyframes rabitJump {
-                      0%,
-                      20%,
-                      50%,
-                      80%,
-                      90% {
-                        transform: translateY(0) rotate(0deg);
-                      }
-                      93% {
-                        transform: translateY(-10px) rotate(0deg);
-                      }
-                      95% {
-                        transform: translateY(0) rotate(0deg);
-                      }
-                      98% {
-                        transform: translateY(-6px) rotate(0deg);
-                      }
-                      100% {
-                        transform: translateY(0) rotate(0deg);
-                      }
-                    }
                     @keyframes feedOut {
                       0% {
-                        opacity: 0.6;
+                        opacity: 0.9;
                       }
-                      90% {
+                      80% {
                         opacity: 0.8;
                       }
                       100% {
@@ -902,68 +683,26 @@ export default function Header() {
                   `}</style>
                   <Box
                     position="fixed"
-                    zIndex={0}
+                    zIndex={100}
                     top="0"
                     left="0"
                     bg="#111"
                     w="100%"
                     h="100%"
                     style={{
-                      animation: "feedOut 6s forwards",
+                      animation: "feedOut 5s forwards",
                     }}
                   />
                   <Box
                     position="absolute"
+                    zIndex={101}
                     textAlign="center"
                     m={0}
                     p={0}
                     top="90px"
                   >
+                    <SunderText colorMode={colorMode} text="告知" />
                     <Text
-                      fontFamily="Dela Gothic One"
-                      fontWeight="400"
-                      fontSize="84px"
-                      // color={colorMode === "light" ? "#000" : "#000"}
-                      color="white"
-                      position="relative"
-                      zIndex={2}
-                      top="0"
-                      left="0"
-                      style={{
-                        WebkitTextStroke: "1px #000", // アウトラインを黒にする
-                      }}
-                    >
-                      告知
-                    </Text>
-                    <Text
-                      fontFamily="Dela Gothic One"
-                      fontWeight="400"
-                      fontSize="84px"
-                      color={colorMode === "light" ? "#F00" : "#000"}
-                      position="absolute"
-                      zIndex={1}
-                      top="0"
-                      left="21px"
-                      style={animationStyle}
-                    >
-                      告知
-                    </Text>
-                    <Text
-                      fontFamily="Dela Gothic One"
-                      fontWeight="400"
-                      fontSize="84px"
-                      color={colorMode === "light" ? "#FFF" : "#000"}
-                      position="absolute"
-                      zIndex={3}
-                      top="0"
-                      left="21px"
-                      style={animationStyle2}
-                    >
-                      告知
-                    </Text>
-
-                    <Text
-                      fontFamily=""
                       fontSize="md"
                       fontWeight="400"
                       color={colorMode === "light" ? "#000" : "#000"}
@@ -1053,14 +792,12 @@ export default function Header() {
                     CLOSE&nbsp;MODAL&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;
                   </Box>
                 </Box>
-                <img
+                <AnimationImage
                   src="/images/illust/hippo/hippo_a001_lyingDown.png"
-                  style={{
-                    position: "absolute",
-                    right: "2px",
-                    bottom: "22px",
-                    width: "92px",
-                  }}
+                  width="92px"
+                  right="2px"
+                  bottom="21px"
+                  animation="dropBounce 5s forwards"
                 />
               </Box>
             </ModalBody>
@@ -1071,6 +808,7 @@ export default function Header() {
             </ModalFooter>
           </Box>
         </ModalContent>
+        ƒ
       </Modal>
       {/* ログインモーダル */}
       <Modal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)}>

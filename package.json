@@ -78,6 +78,7 @@
     "react-use": "^17.5.1",
     "recoil": "^0.7.3-alpha.2",
     "sass": "^1.51.0",
+    "styled-components": "^6.1.15",
     "three": "^0.165.0",
     "typeface-noto-sans-sc": "^1.1.13",
     "typescript": "^5.4.5",
