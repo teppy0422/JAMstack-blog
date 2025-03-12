@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
 import { MdBusiness, MdChat } from "react-icons/md";
 import { useCustomToast } from "../components/customToast";
+import { GetColor } from "../components/CustomColor";
 
 import {
   Box,
@@ -11,8 +12,13 @@ import {
   Divider,
   useBreakpointValue,
   Icon,
+  HStack,
+  Avatar,
+  Flex,
 } from "@chakra-ui/react";
 import { supabase } from "../utils/supabase/client-js";
+import { MdCheckBox } from "react-icons/md";
+import { MdCheckBoxOutlineBlank } from "react-icons/md";
 
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
@@ -24,7 +30,10 @@ import { useLanguage } from "../context/LanguageContext";
 
 // import { AppContext } from "../pages/_app";
 
-const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
+const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
+  isMain,
+  reload,
+}) => {
   const { language, setLanguage } = useLanguage();
 
   const [unreadCount, setUnreadCount] = useState(0);
@@ -32,12 +41,24 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
   const [threads, setThreads] = useState<
-    { id: string; title: string; company: string; mainCompany: string }[] // 修正: mainCompanyを追加
+    {
+      id: string;
+      title: string;
+      company: string;
+      mainCompany: string;
+      projectName: string;
+      category: string;
+      completed_at: string;
+    }[]
   >([]);
   const [loading, setLoading] = useState(true);
   const [ipAddress, setIpAddress] = useState("");
   const [newThreads, setNewThreads] = useState<string[]>([]);
   const { data: session } = useSession();
+  const [showCompleted, setShowCompleted] = useState(false);
+  const toggleShowCompleted = () => {
+    setShowCompleted((prev) => !prev);
+  };
 
   const { userId, email } = useUserInfo();
   const { pictureUrl, userName, userCompany, userMainCompany } =
@@ -55,7 +76,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
         console.log("userId is null, waiting for it to be set...");
         return;
       }
-
       console.log("Fetching unread count...");
       console.log("Current userId:", userId);
 
@@ -71,7 +91,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
         console.error("Error fetching unread count:", error);
         return;
       }
-
       const countsByThread = data.reduce((acc, post) => {
         if (
           (!post.read_by || !post.read_by.includes(userId)) &&
@@ -83,7 +102,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
       }, {});
 
       console.log("Final counts by thread:", countsByThread);
-
       setUnreadCountsByThread(countsByThread);
       const totalUnreadCount = Object.values(countsByThread).reduce(
         (sum: number, count: number) => sum + count,
@@ -93,7 +111,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
       setUnreadCount(totalUnreadCount as number);
       console.log("Unread counts by thread:", countsByThread);
     };
-
     fetchUnreadCount();
 
     const subscription = supabase
@@ -116,12 +133,16 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
         }
       )
       .subscribe();
-
     return () => {
       console.log("Unsubscribing from channel...");
       subscription.unsubscribe();
     };
   }, [userId]);
+  // reloadが変更されたときに再読み込みの処理を行う
+  useEffect(() => {
+    console.log("SidebarBBS reloaded");
+    fetchThreads();
+  }, [reload]);
 
   useEffect(() => {
     setCurrentPath(window.location.pathname);
@@ -135,6 +156,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
     // colorScheme: currentPath === path ? "red" : "gray", //
     color: colorMode === "light" ? "white" : "white",
   });
+
   useEffect(() => {
     const fetchIpAddress = async () => {
       try {
@@ -151,119 +173,271 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
     fetchIpAddress();
     fetchThreads();
   }, []);
+
   const fetchThreads = async () => {
-    setLoading(true); // 追加
+    setLoading(true);
     const { data } = await supabase.from("threads").select("*");
     if (data) {
+      // 並び替え
+      data.sort((a, b) => {
+        if (a.company !== b.company) {
+          return a.company.localeCompare(b.company);
+        }
+        if (a.projectName !== b.projectName) {
+          return a.projectName.localeCompare(b.projectName);
+        }
+        if (a.category !== b.category) {
+          return a.category.localeCompare(b.category);
+        }
+        return (
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+      });
       setThreads(data);
     }
-    setLoading(false); // 追加
+    setLoading(false);
   };
+
+  const [usersData2, setUsersData2] = useState<any[]>([]); // ユーザー情報の状態
+  useEffect(() => {
+    const fetchUsers2 = async () => {
+      // table_usersからすべてのデータを取得
+      const { data: usersData, error: usersError } = await supabase
+        .from("table_users")
+        .select("*"); // すべての情報を取得
+      if (usersError) {
+        console.log(
+          "Error fetching users from table_users:",
+          usersError.message
+        );
+        return;
+      }
+      // 取得したデータを状態にセット
+      setUsersData2(usersData || []);
+    };
+    fetchUsers2();
+  }, []);
+
   const menuItem = (
     path_,
-    label,
+    projectName,
+    category,
+    title,
     useColorMode,
     threadId,
-    isDifferentCompany
+    isDifferentCompany,
+    isSameProjectName,
+    isCurrentPage,
+    completed_at,
+    created_at,
+    isSameCategory,
+    user_uid
   ) => {
     const isNew = newThreads.includes(threadId);
+    const user = usersData2.find((user) => user.id === user_uid);
 
     return (
-      <NextLink
-        href={isDifferentCompany ? "#" : path_}
-        passHref
-        legacyBehavior
-        key={path_}
-      >
-        <Box
-          {...buttonStyle(path_)}
-          onClick={() => {
-            if (isDifferentCompany) {
-              showToast(
-                getMessage({
-                  ja: "閲覧できません",
-                  us: "Cannot view",
-                  cn: "无法查看",
-                  language,
-                }),
-                getMessage({
-                  ja: "閲覧できるのは同じ会社のみです",
-                  us: "Only the same company can view",
-                  cn: "只有同一家公司可以查看",
-                  language,
-                }),
-                "error"
-              );
-            }
-          }}
-          position="relative"
-          _hover={{
-            "& span::after": {
-              width: "100%",
-              transition: "width 0.2s",
-              height: "1px",
-            },
-          }}
-          color={useColorMode && colorMode === "light" ? "black" : "white"}
-          maxWidth={maxWidth}
-          width={maxWidth}
-          whiteSpace="nowrap"
-          overflow="hidden"
-          textOverflow="ellipsis"
-          py={0}
-          pl={0}
-          cursor={isDifferentCompany ? "default" : "pointer"}
-          opacity={isDifferentCompany ? 0.6 : 1}
-        >
-          <Box
-            as="span"
-            position="relative"
-            _after={{
-              content: '""',
-              position: "absolute",
-              width: "0",
-              height: "1px",
-              bottom: "-2px",
-              left: "0",
-              bg: "currentColor",
-              transition: "width 0.1s",
-              color: useColorMode
-                ? colorMode === "light"
-                  ? "black"
-                  : "white"
-                : "white",
-            }}
-          >
-            {getMessage({
-              ja: label,
-              language,
-            })}
-          </Box>
-          {/* 未読数の表示 */}
-          {unreadCountsByThread[threadId] > 0 && (
+      <>
+        {!isSameProjectName && projectName && (
+          <>
+            <HStack whiteSpace="nowrap" spacing={0} mt={0}>
+              <Box as="span" bg={GetColor(projectName)} bottom="0">
+                <Box
+                  userSelect="none"
+                  cursor="default"
+                  fontSize={9}
+                  bg={GetColor(projectName)}
+                  color="#FFF"
+                  borderRadius={0}
+                  pl={1.5}
+                  pr={1}
+                  // py={0.5}
+                  my={0}
+                >
+                  {projectName}
+                </Box>
+              </Box>
+            </HStack>
+          </>
+        )}
+        {!isSameCategory && category !== null && (
+          <Flex align="center" whiteSpace="nowrap" h={3.5}>
+            <Box h={3.5} w={1} bg={GetColor(projectName)} mr={0.5} />
             <Box
-              as="span"
-              backgroundColor="red"
-              position="absolute"
-              right="0px"
-              top="3px"
-              h="1.1rem"
-              w="1.1rem"
-              p={1}
-              borderRadius="50%"
-              opacity="0.8"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              color="white"
-              fontWeight={400}
-              fontSize={unreadCountsByThread[threadId] > 99 ? 10 : 12} // 文字数に応じてフォントサイズを変更
+              userSelect="none"
+              cursor="default"
+              fontSize={9}
+              bg={colorMode === "light" ? "transparent" : "white"}
+              border={
+                colorMode === "light"
+                  ? "1px solid " + GetColor(category)
+                  : "#000"
+              }
+              color={GetColor(category)}
+              borderRadius={3}
+              px={1}
+              mt={1}
             >
-              {unreadCountsByThread[threadId] || 0}
+              {category}
             </Box>
-          )}
+          </Flex>
+        )}
+        <Box display="flex" alignItems="center" key={threadId}>
+          <NextLink
+            href={isDifferentCompany ? "#" : path_}
+            passHref
+            legacyBehavior
+            key={path_}
+          >
+            <Box
+              {...buttonStyle(path_)}
+              onClick={() => {
+                if (isDifferentCompany) {
+                  showToast(
+                    getMessage({
+                      ja: "閲覧できません",
+                      us: "Cannot view",
+                      cn: "无法查看",
+                      language,
+                    }),
+                    getMessage({
+                      ja: "閲覧できるのは同じ会社のみです",
+                      us: "Only the same company can view",
+                      cn: "只有同一家公司可以查看",
+                      language,
+                    }),
+                    "error"
+                  );
+                }
+              }}
+              position="relative"
+              _hover={{
+                bg: colorMode === "light" ? "rgba(255,255,255,0.5)" : "#000",
+                width: "100%",
+              }}
+              bg={
+                isCurrentPage &&
+                (colorMode === "light" ? "rgba(255,255,255,0.5)" : "#000")
+              }
+              color={useColorMode && colorMode === "light" ? "black" : "white"}
+              maxWidth={maxWidth}
+              width={maxWidth}
+              whiteSpace="nowrap"
+              overflow="hidden"
+              textOverflow="ellipsis"
+              py={0}
+              pl={0}
+              cursor={isDifferentCompany ? "default" : "pointer"}
+              opacity={isDifferentCompany ? 0.6 : 1}
+            >
+              <HStack spacing={0} wrap="nowrap" overflow="hidden">
+                <Box
+                  position="relative"
+                  h={6}
+                  w={1}
+                  mr={0.5}
+                  bg={projectName && GetColor(projectName)}
+                  flexShrink={0} // Boxが縮小されないようにする
+                />
+                {user && (
+                  <Avatar
+                    boxSize="16px"
+                    zIndex="5"
+                    loading="lazy"
+                    src={user?.picture_url}
+                    mr={0.5}
+                  />
+                )}
+                <Box fontSize={isMain ? "md" : "sm"} isTruncated>
+                  {getMessage({
+                    ja: title,
+                    language,
+                  })}
+                  {projectName && showCompleted && (
+                    <>
+                      <Box
+                        as="span"
+                        display="inline-block"
+                        fontSize={11}
+                        ml={0.5}
+                      >
+                        {completed_at ? (
+                          <>
+                            <Box
+                              as="span"
+                              border={
+                                colorMode === "light"
+                                  ? "1px solid gray"
+                                  : "1px solid gray"
+                              }
+                              color={colorMode === "light" ? "gray" : "gray"}
+                              bg={colorMode === "light" ? "transparent" : ""}
+                              px={1}
+                            >
+                              <FormattedDate date={completed_at} />
+                              <DateDifference
+                                startDate={created_at}
+                                endDate={completed_at}
+                              />
+                            </Box>
+                          </>
+                        ) : (
+                          <>
+                            <Box
+                              as="span"
+                              border={
+                                colorMode === "light"
+                                  ? "1px solid red"
+                                  : "1px solid pink"
+                              }
+                              color={colorMode === "light" ? "red" : "pink"}
+                              bg={colorMode === "light" ? "transparent" : ""}
+                              px={1}
+                            >
+                              <FormattedDate date={created_at} />
+                              <DateDifference
+                                startDate={created_at}
+                                endDate={Date()}
+                              />
+                            </Box>
+                          </>
+                        )}
+                      </Box>
+                    </>
+                  )}
+                </Box>
+              </HStack>
+              {/* 未読数の表示 */}
+              {unreadCountsByThread[threadId] > 0 && (
+                <Box
+                  as="span"
+                  bg="red"
+                  position="absolute"
+                  right="0px"
+                  bottom="3px"
+                  h="50%"
+                  px={unreadCountsByThread[threadId] > 99 ? 0.5 : 1}
+                  borderRadius="50%"
+                  border={
+                    colorMode === "light"
+                      ? "1px solid #f0e5da"
+                      : "1px solid #000"
+                  }
+                  // opacity="0.8"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  color="white"
+                  fontWeight={400}
+                  fontSize={unreadCountsByThread[threadId] > 99 ? 6 : 9}
+                >
+                  {unreadCountsByThread[threadId] || 0}
+                </Box>
+              )}
+            </Box>
+          </NextLink>
         </Box>
-      </NextLink>
+      </>
     );
   };
   const maxWidth = isMain
@@ -274,10 +448,68 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
         "2xl": "300px",
         "3xl": "400px",
       });
-  let previousMainCompany = ""; // ここで変数を定義
+  let previousMainCompany = "";
+  let previousProjectName = "";
+  let previousCategory = "";
+
+  interface DateDifferenceProps {
+    startDate: string;
+    endDate: string;
+  }
+  const DateDifference: React.FC<DateDifferenceProps> = ({
+    startDate,
+    endDate,
+  }) => {
+    if (!startDate || !endDate) return null;
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const timeDifference = end.getTime() - start.getTime();
+    const dayDifference = timeDifference / (1000 * 3600 * 24);
+    return <span>({dayDifference.toFixed(1)}日)</span>;
+  };
+
+  interface FormattedDateProps {
+    date: string;
+  }
+  const FormattedDate: React.FC<FormattedDateProps> = ({ date }) => {
+    if (!date) return null;
+    const formattedDate = new Date(date)
+      .toLocaleDateString("ja-JP", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+      .replace(/\//g, "-");
+    return <span>{formattedDate}</span>;
+  };
 
   return (
     <>
+      {isMain && (
+        <>
+          <Box display="flex" justifyContent="center">
+            <Box textAlign="center">
+              <Flex
+                align="center"
+                gap="2px"
+                onClick={toggleShowCompleted}
+                userSelect="none"
+              >
+                {showCompleted ? (
+                  <>
+                    <MdCheckBox size="18px" />
+                  </>
+                ) : (
+                  <>
+                    <MdCheckBoxOutlineBlank size="18px" />
+                  </>
+                )}
+                <Box as="button">完了済みを表示</Box>
+              </Flex>
+            </Box>
+          </Box>
+        </>
+      )}
       <Box
         display={isMain ? "block" : { base: "none", xl: "block" }}
         position={isMain ? "static" : "fixed"}
@@ -332,44 +564,71 @@ const SidebarBBS: React.FC<{ isMain?: boolean }> = ({ isMain }) => {
                   })}
                 </Box>
               )}
-              {threads.map(
-                (thread: {
-                  id: string;
-                  title: string;
-                  company: string;
-                  mainCompany: string;
-                }) => {
-                  const isCurrentPage = currentPath === `/thread/${thread.id}/`;
-                  const isDifferentCompany =
-                    thread.mainCompany !== "開発" &&
-                    userMainCompany !== "開発" &&
-                    thread.mainCompany !== userMainCompany;
-                  previousMainCompany = thread.mainCompany; // 追加: 前回のmainCompanyを更新
-                  return (
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      ml={5}
-                      key={thread.id}
-                    >
-                      {isCurrentPage ? (
+              {threads
+                .filter(
+                  (thread) => showCompleted || thread.completed_at === null
+                )
+                .map(
+                  (thread: {
+                    id: string;
+                    title: string;
+                    company: string;
+                    mainCompany: string;
+                    projectName: string;
+                    category: string;
+                    completed_at: string;
+                    created_at: string;
+                    user_uid: string;
+                  }) => {
+                    const isCurrentPage =
+                      currentPath === `/thread/${thread.id}/`;
+                    const isDifferentCompany =
+                      thread.mainCompany !== "開発" &&
+                      userMainCompany !== "開発" &&
+                      thread.mainCompany !== userMainCompany;
+                    previousMainCompany = thread.mainCompany;
+
+                    const currentProjectName = String(
+                      thread.company + thread.projectName
+                    );
+                    const isSameProjectName =
+                      currentProjectName === previousProjectName;
+                    previousProjectName = currentProjectName;
+
+                    const currentCategory = String(
+                      thread.company + thread.projectName + thread.category
+                    );
+                    const isSameCategory = currentCategory === previousCategory;
+                    previousCategory = currentCategory;
+
+                    return (
+                      <Box ml={isMain ? "5" : "1"}>
+                        {/* {isCurrentPage ? (
                         <Box as="span" mr={-0.5}>
                           &gt;
                         </Box>
                       ) : (
                         <Box as="span" mr={2}></Box>
-                      )}
-                      {menuItem(
-                        `/thread/${thread.id}`,
-                        thread.title,
-                        true,
-                        thread.id,
-                        isDifferentCompany
-                      )}
-                    </Box>
-                  );
-                }
-              )}
+                        )} */}
+                        {menuItem(
+                          `/thread/${thread.id}`,
+                          thread.projectName,
+                          thread.category,
+                          thread.title,
+                          true,
+                          thread.id,
+                          isDifferentCompany,
+                          isSameProjectName,
+                          isCurrentPage,
+                          thread.completed_at,
+                          thread.created_at,
+                          isSameCategory,
+                          thread.user_uid
+                        )}
+                      </Box>
+                    );
+                  }
+                )}
             </>
           ))}
         </VStack>

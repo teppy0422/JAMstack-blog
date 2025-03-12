@@ -15,6 +15,14 @@ import {
   useColorMode,
   Stack,
   Input,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import {
   MdOutlineCheckBoxOutlineBlank,
@@ -24,28 +32,16 @@ import {
 import Sidebar from "../components/sidebar";
 import Content from "../components/content";
 import { Global } from "@emotion/react";
+import { supabase } from "../utils/supabase/client";
 import { useUserInfo } from "../hooks/useUserId";
 import { useUserData } from "../hooks/useUserData";
+
 import SidebarBBS from "../components/sidebarBBS";
-import { supabase } from "../utils/supabase/client";
+import { ScrollText } from "../components/CustomText";
+import { ProjectLists, CategoryLists } from "../components/CustomBadge";
 
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
-// import { AppContext } from "./_app";
-
-interface RoadmapItem {
-  year?: string;
-  month?: string;
-  titleColor?: string;
-  main?: string;
-  mainDetail?: string[];
-  items?: { text: string; completed: boolean }[];
-  result?: string;
-  possibility?: number;
-  duration?: number;
-  category?: string[];
-  idea?: string[];
-}
 
 function getBadgeForCategory(category: string): JSX.Element {
   let colorScheme: string;
@@ -84,8 +80,17 @@ const BBS = () => {
     useUserData(userId);
   const { colorMode, toggleColorMode } = useColorMode();
   const [newThreadTitle, setNewThreadTitle] = useState("");
+  const [clickedProject, setClickedProject] = useState<string | null>(null); // クリックされたバッジの状態を追加
+  const [clickedCategory, setClickedCategory] = useState<string | null>(null); // クリックされたバッジの状態を追加
+  const [reloadSidebar, setReloadSidebar] = useState<boolean>(false); // リロード用の状態
+
   const [loading, setLoading] = useState(true);
   const [threads, setThreads] = useState<any[]>([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [ProjectMessage, setProjectMessage] = useState<string>("");
+  const [CategoryMessage, setCategoryMessage] = useState<string>("");
+  const [TitleMessage, setTitleMessage] = useState<string>("");
+  const [CompleteMessage, setCompleteMessage] = useState<boolean>(false);
 
   const [years, setYears] = useState<number[]>([]);
   let previousYear: string | undefined;
@@ -100,21 +105,60 @@ const BBS = () => {
   };
   //新規スレッド作成
   const createThread = async () => {
+    if (!clickedProject) {
+      setProjectMessage("※選択して下さい");
+    }
+    if (!clickedCategory) {
+      setCategoryMessage("※選択して下さい");
+    }
+    if (!newThreadTitle) {
+      setTitleMessage("※入力して下さい");
+    }
+    if (!clickedProject || !clickedCategory || !newThreadTitle) {
+      return;
+    }
     setLoading(true);
     await supabase.from("threads").insert([
       {
+        projectName: clickedProject,
+        category: clickedCategory,
         title: newThreadTitle,
         company: userCompany,
         mainCompany: userMainCompany,
+        user_uid: userId,
       },
     ]);
     setNewThreadTitle("");
+    setClickedProject(null);
+    setClickedCategory(null);
     await fetchThreads();
     setLoading(false);
+    setCompleteMessage(true);
+    setTimeout(() => {
+      setCompleteMessage(false);
+      onClose();
+      setReloadSidebar((prev) => !prev);
+    }, 3000);
   };
-
   const { language, setLanguage } = useLanguage();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  const handleProjectClick = (clickedProject: string | null) => {
+    console.log("clickedProject: ", clickedProject);
+    setClickedProject(clickedProject);
+    if (clickedProject) {
+      setProjectMessage("");
+    }
+    inputRef.current?.focus();
+  };
+  const handleCategoryClick = (clickedCategory: string | null) => {
+    console.log("clickedCategory: ", clickedCategory);
+    setClickedCategory(clickedCategory);
+    if (clickedCategory) {
+      setCategoryMessage("");
+    }
+    inputRef.current?.focus();
+  };
   return (
     <>
       <Global
@@ -150,7 +194,7 @@ const BBS = () => {
           })}
           fontWeight={400}
         >
-          <Heading as="h3" fontSize="24px" mb={8} textAlign="center">
+          <Heading as="h3" fontSize="24px" mb={2} textAlign="center">
             <HStack spacing={2} alignItems="center" justifyContent="center">
               <Text>
                 {getMessage({
@@ -163,62 +207,171 @@ const BBS = () => {
               <MdEditRoad size={30} />
             </HStack>
           </Heading>
-          <Badge variant="solid" colorScheme="green" ml={2}>
-            {getMessage({
-              ja: "使用者",
-              us: "user",
-              cn: "使用者",
-              language,
-            })}
-          </Badge>
-          <Badge variant="solid" colorScheme="purple" ml={2}>
-            {getMessage({
-              ja: "管理者",
-              us: "administrator",
-              cn: "管理者",
-              language,
-            })}
-          </Badge>
-          <Badge variant="solid" colorScheme="red" ml={2}>
-            {getMessage({
-              ja: "開発者",
-              us: "developer",
-              cn: "开发人员",
-              language,
-            })}
-          </Badge>
-          <Box mb={8} p={4} borderRadius="md">
-            <Text textAlign="left" colorScheme="gray"></Text>
-          </Box>
-          <SidebarBBS isMain={true} />
 
-          <Divider mt={2} border="solid 1px gray" />
-          <Text>作成中...</Text>
-          <Badge variant="outline" mr={2}>
-            {userMainCompany}
-          </Badge>
-          <Badge variant="outline" mr={2}>
-            {userCompany}
-          </Badge>
-          <Stack spacing="4" mt="2" direction="row" justify="flex-end">
-            <Input
-              type="text"
-              value={newThreadTitle}
-              onChange={(e) => setNewThreadTitle(e.target.value)}
-              placeholder="新規スレッドのタイトル"
-              size="md"
-              bg="white"
-              _focus={{ borderColor: "gray.400" }} // フォーカス時のボーダー色を変更
-            />
-            <Button
-              onClick={createThread}
-              colorScheme="gray"
-              width="5em"
-              outline="1px solid black"
+          <Stack spacing="4" mb={4} direction="row" justify="center">
+            <Box
+              width={{
+                base: "90%",
+                sm: "60%",
+                md: "60%",
+                lg: "60%",
+                xl: "60%",
+              }}
+              textAlign="center"
             >
-              新規作成
-            </Button>
+              <Box mb={4}>
+                <Badge variant="solid" colorScheme="green" ml={2}>
+                  {getMessage({
+                    ja: "使用者",
+                    us: "user",
+                    cn: "使用者",
+                    language,
+                  })}
+                </Badge>
+                <Badge variant="solid" colorScheme="purple" ml={2}>
+                  {getMessage({
+                    ja: "管理者",
+                    us: "administrator",
+                    cn: "管理者",
+                    language,
+                  })}
+                </Badge>
+                <Badge variant="solid" colorScheme="red" ml={2}>
+                  {getMessage({
+                    ja: "開発者",
+                    us: "developer",
+                    cn: "开发人员",
+                    language,
+                  })}
+                </Badge>
+              </Box>
+              <Text textAlign="left" colorScheme="gray" fontSize="sm">
+                完了/未完了が管理できないので、
+                案件毎に[新しく追加]を実行するように変更しました。
+              </Text>
+            </Box>
           </Stack>
+          <SidebarBBS isMain={true} reload={reloadSidebar} />
+          <Divider mt={2} border="solid 1px gray" />
+          <HStack
+            spacing={2}
+            alignItems="center"
+            justifyContent="center"
+            mt={8}
+          >
+            <Button
+              onClick={onOpen}
+              color="#000"
+              outline="1px solid black"
+              px={2}
+            >
+              新しく追加
+            </Button>
+          </HStack>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader pb={0} userSelect="none">
+                新しいスレッドを追加
+              </ModalHeader>
+              <ModalCloseButton />
+              <ModalBody pt={0}>
+                <Badge variant="outline" mr={2} userSelect="none">
+                  {userMainCompany}
+                </Badge>
+                <Badge variant="outline" mr={2} userSelect="none">
+                  {userCompany}
+                </Badge>
+                <Badge variant="outline" mr={2} userSelect="none">
+                  {userName}
+                </Badge>
+                <Text mt={3} userSelect="none">
+                  対象のプロジェクトを選択
+                </Text>
+                <Divider border="1.4px solid #888" />
+                <Box as="span" fontSize="sm" fontWeight={400} color="red">
+                  {ProjectMessage}
+                </Box>
+                <ProjectLists
+                  colorMode={colorMode}
+                  onProjectClick={handleProjectClick}
+                />
+                <Text mt={4} userSelect="none">
+                  分類
+                </Text>
+                <Divider border="1.4px solid #888" />
+                <Box as="span" fontSize="sm" fontWeight={400} color="red">
+                  {CategoryMessage}
+                </Box>
+                <CategoryLists
+                  colorMode={colorMode}
+                  onCategoryClick={handleCategoryClick}
+                  userMainCompany={userMainCompany}
+                />
+                <Text mt={4} userSelect="none">
+                  内容(変更可能なので適当で構いません)
+                </Text>
+                <Divider border="1.4px solid #888" />
+                <Box as="span" fontSize="sm" fontWeight={400} color="red">
+                  {TitleMessage}
+                </Box>
+                <Stack spacing="4" mt={6} direction="row" justify="flex-end">
+                  <Input
+                    ref={inputRef}
+                    type="text"
+                    value={newThreadTitle}
+                    onChange={(e) => setNewThreadTitle(e.target.value)}
+                    placeholder="ハメ図に治具座標を表示したい : 等"
+                    size="sm"
+                    color="#000"
+                    border="none"
+                    borderRadius={0}
+                    mb={0}
+                    px={0}
+                    boxShadow="none"
+                    borderBottom="1px solid #333"
+                    _focus={{ boxShadow: "none", borderBottomColor: "#000" }}
+                    _hover={{ borderBottomColor: "#000" }}
+                  />
+                  <Button
+                    onClick={createThread}
+                    colorScheme="gray"
+                    px={3}
+                    top="-8px"
+                    outline="1px solid black"
+                  >
+                    追加
+                  </Button>
+                </Stack>
+                <HStack
+                  spacing={2}
+                  alignItems="center"
+                  justifyContent="center"
+                  mt={4}
+                >
+                  {CompleteMessage && (
+                    <Box
+                      as="button"
+                      position="absolute"
+                      bottom="8px"
+                      _focus={{ boxShadow: "none" }}
+                      fontFamily="Noto Sans JP"
+                      color="#82d9d0"
+                      // color="transparent"
+                      bg="#211c1c"
+                      fontSize="18px"
+                      // borderTop="solid 1px #000"
+                      cursor="pointer"
+                      overflow="hidden" // ボックスからはみ出さないようにする
+                      w="100%"
+                    >
+                      <ScrollText colorMode={colorMode} text="追加完了&nbsp;" />
+                    </Box>
+                  )}
+                </HStack>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
         </Container>
       </Content>
     </>

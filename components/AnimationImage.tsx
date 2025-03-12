@@ -11,6 +11,7 @@ interface AnimationImageProps {
   translate?: string;
   rotate?: string;
   animation?: string;
+  id?: string;
 }
 
 const AnimationImage: React.FC<AnimationImageProps> = ({
@@ -23,6 +24,7 @@ const AnimationImage: React.FC<AnimationImageProps> = ({
   translate,
   rotate,
   animation,
+  id,
 }) => {
   return (
     <>
@@ -38,8 +40,37 @@ const AnimationImage: React.FC<AnimationImageProps> = ({
           rotate: `${rotate}`,
           animation: `${animation}`,
         }}
+        id={id}
       />
       <style jsx>{`
+        @keyframes nyoki_rabit {
+          0% {
+            transform: translateY(100px) translateX(0px) scale(0.1);
+          }
+          80% {
+            transform: translateY(100px) translateX(0px) scale(0.1);
+          }
+          95% {
+            transform: translateY(-20px) translateX(0px) scale(1);
+          }
+          100% {
+            transform: translateY(0) translateX(0) scale(1);
+          }
+        }
+        @keyframes nyoki_mole {
+          0% {
+            transform: translateY(100px) translateX(40px) scale(0.1);
+          }
+          80% {
+            transform: translateY(100px) translateX(40px) scale(0.1);
+          }
+          95% {
+            transform: translateY(-30px) translateX(-18px) scale(1);
+          }
+          100% {
+            transform: translateY(0) translateX(0) scale(1);
+          }
+        }
         @keyframes nyoki {
           0% {
             transform: translateY(100px) translateX(-30px) scale(0.1);

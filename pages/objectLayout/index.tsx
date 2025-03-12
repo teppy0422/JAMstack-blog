@@ -118,7 +118,7 @@ export default function About() {
     {
       value: 30,
       cirText: "vb.net\nシリアル通信\nカメラ制御\n半年",
-      color: "dotNet",
+      color: "dotnet",
       img: "/images/logo_dotNet.svg",
     },
     {

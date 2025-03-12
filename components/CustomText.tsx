@@ -1,13 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { Box, Text } from "@chakra-ui/react";
 
+interface ScrollTextProps {
+  colorMode: "light" | "dark";
+  text: String;
+}
+export const ScrollText: React.FC<ScrollTextProps> = ({ colorMode, text }) => {
+  return (
+    <>
+      <Box
+        as="span"
+        display="inline-block"
+        whiteSpace="nowrap"
+        animation="scrollText 30s linear infinite"
+        style={{
+          // WebkitTextStroke: "0.5px #e5f22c", // アウトラインを黒にする
+          letterSpacing: "1px",
+        }}
+      >
+        {Array.from({ length: 20 }).map((_, index) => (
+          <span key={index}>{text}</span>
+        ))}
+      </Box>
+      <style jsx>{`
+        @keyframes scrollText {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+      `}</style>
+    </>
+  );
+};
+
+// dededede文字
 interface SunderTextProps {
   colorMode: "light" | "dark";
   text: String;
 }
-
-const SunderText: React.FC<SunderTextProps> = ({ colorMode, text }) => {
-  // dededede文字
+export const SunderText: React.FC<SunderTextProps> = ({ colorMode, text }) => {
   const [animationStyle, setAnimationStyle] = useState<React.CSSProperties>({
     opacity: 0,
     transform: "translate(0, 0)",
@@ -16,7 +50,6 @@ const SunderText: React.FC<SunderTextProps> = ({ colorMode, text }) => {
     opacity: 0,
     transform: "translate(0, 0)",
   });
-
   useEffect(() => {
     const colors = ["#82d9d0", "#FF5833", "#ffef42"];
     const animateText = () => {
@@ -240,5 +273,3 @@ const SunderText: React.FC<SunderTextProps> = ({ colorMode, text }) => {
     </Box>
   );
 };
-
-export default SunderText;

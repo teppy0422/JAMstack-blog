@@ -61,7 +61,7 @@ import styles from "../styles/home.module.scss";
 import React, { useEffect } from "react";
 import { WiDaySunny, WiCloudyGusts, WiRainMix } from "react-icons/wi";
 
-import SunderText from "./SunderText";
+import { SunderText, ScrollText } from "./CustomText";
 import AnimationImage from "./AnimationImage";
 
 import AwesomIcon from "./awesomIcon";
@@ -108,8 +108,8 @@ export default function Header() {
   const [isAlertModalOpen, setAlertModalOpen] = useState(false);
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0]; // 今日の日付を取得
-    // const lastShownDate = localStorage.getItem("lastShownDate");
-    const lastShownDate = "";
+    const lastShownDate = localStorage.getItem("lastShownDate");
+    // const lastShownDate = "";
     if (lastShownDate !== today) {
       setAlertModalOpen(true); // 初回ロード時にモーダルを表示
       localStorage.setItem("lastShownDate", today); // 今日の日付を記録
@@ -243,7 +243,7 @@ export default function Header() {
         positionX += direction * incrementX;
         positionY += direction * incrementY;
 
-        img.style.transform = `rotate(-18deg) translate(${positionX}px, ${positionY}px)`;
+        img.style.transform = `translate(${positionX}px, ${positionY}px)`;
 
         requestAnimationFrame(moveAnimation);
       };
@@ -618,17 +618,22 @@ export default function Header() {
                       />
                     </g>
                   </svg>
-                  <img
+                  <Box
                     id="moving-hippo_017_a"
-                    src="/images/illust/hippo/hippo_017_a.png"
-                    style={{
-                      position: "absolute",
-                      top: "34px",
-                      left: "162px",
-                      width: "70px",
-                      transform: "rotate(-18deg)",
-                    }}
-                  />
+                    width="70px"
+                    position="absolute"
+                    top="0px"
+                    left="0px"
+                  >
+                    <AnimationImage
+                      src="/images/illust/hippo/hippo_017_a.png"
+                      width="70px"
+                      top="34px"
+                      left="162px"
+                      rotate="-18deg"
+                      animation="nyoki_mole 5s forwards"
+                    />
+                  </Box>
                   <svg
                     id="rotating-svg"
                     width="450"
@@ -650,24 +655,28 @@ export default function Header() {
                     src="/images/illust/hippo/hippo_020.png"
                     width="152px"
                     bottom="0px"
-                    animation="moveAndRotate 5s infinite alternate"
+                    animation="nyoki_rabit 5s forwards, moveAndRotate 5s infinite 5s"
                   />
                   <AnimationImage
                     src="/images/illust/hippo/hippo_008.png"
                     width="32px"
                     left="80px"
                     bottom="73px"
-                    animation="rabitJump 10s infinite"
+                    animation="nyoki_rabit 5s forwards, rabitJump 10s infinite 7s"
+                  />
+                  <Box
+                    position="fixed"
+                    zIndex={100}
+                    top="0"
+                    left="0"
+                    bg="#111"
+                    w="100%"
+                    h="100%"
+                    style={{
+                      animation: "feedOut 5s forwards",
+                    }}
                   />
                   <style jsx>{`
-                    @keyframes scrollText {
-                      0% {
-                        transform: translateX(0);
-                      }
-                      100% {
-                        transform: translateX(-50%);
-                      }
-                    }
                     @keyframes feedOut {
                       0% {
                         opacity: 0.9;
@@ -681,18 +690,6 @@ export default function Header() {
                       }
                     }
                   `}</style>
-                  <Box
-                    position="fixed"
-                    zIndex={100}
-                    top="0"
-                    left="0"
-                    bg="#111"
-                    w="100%"
-                    h="100%"
-                    style={{
-                      animation: "feedOut 5s forwards",
-                    }}
-                  />
                   <Box
                     position="absolute"
                     zIndex={101}
@@ -713,7 +710,10 @@ export default function Header() {
                     >
                       ・WEBサービスの継続が困難
                       <br />
-                      ・おそらく2月中に停止
+                      ・おそらく3月中に停止??
+                      <br />
+                      <br />
+                      ・チャットの区分と仕様を変更中
                     </Text>
                   </Box>
                 </Box>
@@ -740,7 +740,7 @@ export default function Header() {
                   {/* 2026年初旬の再開を予定しています。 */}
                   再開時期は未定です
                 </Text>
-                <Box as="span" fontSize="sm" fontWeight={400}>
+                <Box as="span" fontSize="sm" fontWeight={400} zIndex={100}>
                   <Box display="flex" alignItems="center">
                     <IoIosMail
                       style={{
@@ -779,18 +779,7 @@ export default function Header() {
                   overflow="hidden" // ボックスからはみ出さないようにする
                   w="100%"
                 >
-                  <Box
-                    as="span"
-                    display="inline-block"
-                    whiteSpace="nowrap"
-                    animation="scrollText 30s linear infinite"
-                    style={{
-                      // WebkitTextStroke: "0.5px #e5f22c", // アウトラインを黒にする
-                      letterSpacing: "1px",
-                    }}
-                  >
-                    CLOSE&nbsp;MODAL&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;CLOSE&nbsp;&nbsp;
-                  </Box>
+                  <ScrollText colorMode={colorMode} text="CLOSE&nbsp;" />
                 </Box>
                 <AnimationImage
                   src="/images/illust/hippo/hippo_a001_lyingDown.png"
