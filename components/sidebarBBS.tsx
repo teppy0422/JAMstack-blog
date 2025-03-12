@@ -375,10 +375,12 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                               px={1}
                             >
                               <FormattedDate date={completed_at} />
+                              (
                               <DateDifference
                                 startDate={created_at}
                                 endDate={completed_at}
                               />
+                              日)
                             </Box>
                           </>
                         ) : (
@@ -395,10 +397,12 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                               px={1}
                             >
                               <FormattedDate date={created_at} />
+                              (
                               <DateDifference
                                 startDate={created_at}
                                 endDate={Date()}
                               />
+                              日)
                             </Box>
                           </>
                         )}
@@ -465,7 +469,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
     const end = new Date(endDate);
     const timeDifference = end.getTime() - start.getTime();
     const dayDifference = timeDifference / (1000 * 3600 * 24);
-    return <span>({dayDifference.toFixed(1)}日)</span>;
+    return dayDifference.toFixed(0);
   };
 
   interface FormattedDateProps {
@@ -485,10 +489,38 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
 
   return (
     <>
-      {isMain && (
+      <Box
+        display={isMain ? "block" : { base: "none", xl: "block" }}
+        position={isMain ? "static" : "fixed"}
+        // w={{ base: "0px", xl: "180px", "2xl": "300px", "3xl": "400px" }}
+        // maxWidth={{ base: "0px", xl: "180px", "2xl": "300px", "3xl": "400px" }}
+        w={maxWidth}
+        maxWidth={maxWidth}
+        h={isMain ? "" : "90vh"}
+        bg="white.200"
+        p="0"
+        top="60px"
+        left="0"
+        textAlign="left"
+        zIndex="1100"
+        fontSize={15}
+        fontFamily={getMessage({
+          ja: "Noto Sans JP",
+          us: "Noto Sans,Noto Sans JP",
+          cn: "Noto Sans SC,Noto Sans JP",
+          language,
+        })}
+        fontWeight={400}
+        overflowY={isMain ? "visible" : "auto"}
+      >
+        {/* {isMain && ( */}
         <>
-          <Box display="flex" justifyContent="center">
-            <Box textAlign="center">
+          <Box
+            display="flex"
+            justifyContent={isMain ? "center" : "left"}
+            ml={isMain ? "" : "2.5"}
+          >
+            <Box textAlign="left">
               <Flex
                 align="center"
                 gap="2px"
@@ -509,30 +541,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
             </Box>
           </Box>
         </>
-      )}
-      <Box
-        display={isMain ? "block" : { base: "none", xl: "block" }}
-        position={isMain ? "static" : "fixed"}
-        // w={{ base: "0px", xl: "180px", "2xl": "300px", "3xl": "400px" }}
-        // maxWidth={{ base: "0px", xl: "180px", "2xl": "300px", "3xl": "400px" }}
-        w={maxWidth}
-        maxWidth={maxWidth}
-        h={isMain ? "" : "80vh"}
-        bg="white.200"
-        p="0"
-        top="60px"
-        left="0"
-        textAlign="left"
-        zIndex="1100"
-        fontSize={15}
-        fontFamily={getMessage({
-          ja: "Noto Sans JP",
-          us: "Noto Sans,Noto Sans JP",
-          cn: "Noto Sans SC,Noto Sans JP",
-          language,
-        })}
-        fontWeight={400}
-      >
+        {/* )} */}
         <VStack spacing="0" align="stretch">
           {Object.entries(
             threads.reduce((acc, thread) => {

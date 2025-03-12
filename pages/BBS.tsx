@@ -24,11 +24,7 @@ import {
   useDisclosure,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import {
-  MdOutlineCheckBoxOutlineBlank,
-  MdOutlineCheckBox,
-  MdEditRoad,
-} from "react-icons/md";
+import { AiOutlineWechat } from "react-icons/ai";
 import Sidebar from "../components/sidebar";
 import Content from "../components/content";
 import { Global } from "@emotion/react";
@@ -204,7 +200,7 @@ const BBS = () => {
                   language,
                 })}
               </Text>
-              <MdEditRoad size={30} />
+              <AiOutlineWechat size={30} />
             </HStack>
           </Heading>
 
@@ -246,8 +242,10 @@ const BBS = () => {
                 </Badge>
               </Box>
               <Text textAlign="left" colorScheme="gray" fontSize="sm">
-                完了/未完了が管理できないので、
-                案件毎に[新しく追加]を実行するように変更しました。
+                完了していない項目が分かりづらいので内容毎にスレッドを分けました。
+                新しく追加する場合は[追加]を押して作成してから問い合わせしてください。
+                <br />
+                従来のものは手作業で分類しました。未完了のスレッドは確認をお願いします。
               </Text>
             </Box>
           </Stack>
