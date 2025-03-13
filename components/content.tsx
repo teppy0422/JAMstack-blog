@@ -28,6 +28,20 @@ export default function Content({
               display: "none !important",
             },
           },
+          "::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "::-webkit-scrollbar-track": {
+            background: colorMode === "light" ? "#f8e9df" : "#111",
+            borderRadius: "3px",
+          },
+          "::-webkit-scrollbar-thumb": {
+            background: colorMode === "light" ? "#8d7c6f" : "#555",
+            borderRadius: "3px",
+          },
+          "::-webkit-scrollbar-thumb:hover": {
+            background: colorMode === "light" ? "#555" : "#777",
+          },
         }}
       />
       <Flex direction="column" minHeight="90vh">

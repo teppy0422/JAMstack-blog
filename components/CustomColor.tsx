@@ -4,6 +4,7 @@ import React from "react";
 interface ColorMapperProps {
   text: string;
 }
+// サーバーサイドでtheme.tsの色を呼べないから色コードで書く
 export const GetColor = (text: string): string => {
   const colorMap: Record<string, string> = {
     "生産準備+": "#1f9b60",

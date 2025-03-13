@@ -54,7 +54,6 @@ function getBadgeForCategory(category: string): JSX.Element {
     default:
       colorScheme = "red";
   }
-
   return (
     <Badge
       variant="outline"
@@ -249,6 +248,7 @@ const BBS = () => {
               </Text>
             </Box>
           </Stack>
+
           <SidebarBBS isMain={true} reload={reloadSidebar} />
           <Divider mt={2} border="solid 1px gray" />
           <HStack

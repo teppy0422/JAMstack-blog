@@ -6,6 +6,7 @@ import { GetColor } from "../components/CustomColor";
 
 import {
   Box,
+  Text,
   VStack,
   useDisclosure,
   useColorMode,
@@ -15,6 +16,11 @@ import {
   HStack,
   Avatar,
   Flex,
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import { supabase } from "../utils/supabase/client-js";
 import { MdCheckBox } from "react-icons/md";
@@ -49,6 +55,8 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
       projectName: string;
       category: string;
       completed_at: string;
+      created_at: string;
+      user_uid: string;
     }[]
   >([]);
   const [loading, setLoading] = useState(true);
@@ -68,6 +76,8 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
   const [unreadCountsByThread, setUnreadCountsByThread] = useState<
     Record<string, number>
   >({});
+
+  const [visibleCompanies, setVisibleCompanies] = useState<number[]>([]);
 
   //新しい投稿の監視
   useEffect(() => {
@@ -147,6 +157,27 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
   useEffect(() => {
     setCurrentPath(window.location.pathname);
   }, []);
+
+  // userCompanyと同じ会社、または"開発"の場合は初期状態でオープンにする
+  useEffect(() => {
+    // userCompanyと同じ会社、または"開発"の場合は初期状態でオープンにする
+    const initialVisibleIndices: number[] = [];
+    Object.entries(
+      threads.reduce((acc, thread) => {
+        if (thread.company) {
+          acc[thread.company] = acc[thread.company] || [];
+          acc[thread.company].push(thread);
+        }
+        return acc;
+      }, {} as Record<string, typeof threads>)
+    ).forEach(([company], index) => {
+      if (company === userCompany || company === "開発") {
+        initialVisibleIndices.push(index);
+      }
+    });
+    setVisibleCompanies(initialVisibleIndices);
+    console.log("Initial visible indices:", initialVisibleIndices);
+  }, [threads, userCompany]);
 
   const buttonStyle = (path) => ({
     p: "2",
@@ -293,21 +324,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
               {...buttonStyle(path_)}
               onClick={() => {
                 if (isDifferentCompany) {
-                  showToast(
-                    getMessage({
-                      ja: "閲覧できません",
-                      us: "Cannot view",
-                      cn: "无法查看",
-                      language,
-                    }),
-                    getMessage({
-                      ja: "閲覧できるのは同じ会社のみです",
-                      us: "Only the same company can view",
-                      cn: "只有同一家公司可以查看",
-                      language,
-                    }),
-                    "error"
-                  );
                 }
               }}
               position="relative"
@@ -419,7 +435,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                   position="absolute"
                   right="0px"
                   bottom="3px"
-                  h="50%"
+                  h="60%"
                   px={unreadCountsByThread[threadId] > 99 ? 0.5 : 1}
                   borderRadius="50%"
                   border={
@@ -429,10 +445,9 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                   }
                   // opacity="0.8"
                   display="flex"
-                  alignItems="center"
-                  justifyContent="center"
                   color="white"
-                  fontWeight={400}
+                  fontWeight={600}
+                  lineHeight={3}
                   fontSize={unreadCountsByThread[threadId] > 99 ? 6 : 9}
                 >
                   {unreadCountsByThread[threadId] || 0}
@@ -469,7 +484,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
     const end = new Date(endDate);
     const timeDifference = end.getTime() - start.getTime();
     const dayDifference = timeDifference / (1000 * 3600 * 24);
-    return dayDifference.toFixed(0);
+    return <span>{dayDifference.toFixed(0)}</span>;
   };
 
   interface FormattedDateProps {
@@ -486,7 +501,11 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
       .replace(/\//g, "-");
     return <span>{formattedDate}</span>;
   };
-
+  const toggleCompanyVisibility = (index: number) => {
+    setVisibleCompanies((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
   return (
     <>
       <Box
@@ -512,6 +531,22 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
         })}
         fontWeight={400}
         overflowY={isMain ? "visible" : "auto"}
+        sx={{
+          "::-webkit-scrollbar": {
+            width: "2px",
+          },
+          "::-webkit-scrollbar-track": {
+            background: colorMode === "light" ? "transparent" : "#333",
+            borderRadius: "4px",
+          },
+          "::-webkit-scrollbar-thumb": {
+            background: colorMode === "light" ? "#888" : "#555",
+            borderRadius: "4px",
+          },
+          "::-webkit-scrollbar-thumb:hover": {
+            background: colorMode === "light" ? "#555" : "#777",
+          },
+        }}
       >
         {/* {isMain && ( */}
         <>
@@ -542,7 +577,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
           </Box>
         </>
         {/* )} */}
-        <VStack spacing="0" align="stretch">
+        <Accordion allowMultiple index={visibleCompanies}>
           {Object.entries(
             threads.reduce((acc, thread) => {
               if (thread.company) {
@@ -551,96 +586,131 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
               }
               return acc;
             }, {} as Record<string, typeof threads>)
-          ).map(([company, threads]) => (
-            <>
-              {threads[0].mainCompany !== previousMainCompany && (
-                <Box fontWeight="bold" pl={3} textAlign="left">
-                  {getMessage({
-                    ja: threads[0].mainCompany,
-                    language,
-                  })}
-                  <Divider
-                    borderColor={colorMode === "light" ? "black" : "white"}
-                  />
-                </Box>
-              )}
-              {company !== "開発" && ( // "開発" でない場合のみ表示
-                <Box fontWeight="bold" pl={3} textAlign="left">
-                  <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={2} />
-                  {getMessage({
-                    ja: company,
-                    language,
-                  })}
-                </Box>
-              )}
-              {threads
-                .filter(
-                  (thread) => showCompleted || thread.completed_at === null
-                )
-                .map(
-                  (thread: {
-                    id: string;
-                    title: string;
-                    company: string;
-                    mainCompany: string;
-                    projectName: string;
-                    category: string;
-                    completed_at: string;
-                    created_at: string;
-                    user_uid: string;
-                  }) => {
-                    const isCurrentPage =
-                      currentPath === `/thread/${thread.id}/`;
-                    const isDifferentCompany =
-                      thread.mainCompany !== "開発" &&
-                      userMainCompany !== "開発" &&
-                      thread.mainCompany !== userMainCompany;
-                    previousMainCompany = thread.mainCompany;
+          ).map(([company, companyThreads], index) => {
+            const mainCompany = companyThreads[0]?.mainCompany || "";
 
-                    const currentProjectName = String(
-                      thread.company + thread.projectName
-                    );
-                    const isSameProjectName =
-                      currentProjectName === previousProjectName;
-                    previousProjectName = currentProjectName;
-
-                    const currentCategory = String(
-                      thread.company + thread.projectName + thread.category
-                    );
-                    const isSameCategory = currentCategory === previousCategory;
-                    previousCategory = currentCategory;
-
-                    return (
-                      <Box ml={isMain ? "5" : "1"}>
-                        {/* {isCurrentPage ? (
-                        <Box as="span" mr={-0.5}>
-                          &gt;
+            return (
+              <AccordionItem key={company}>
+                {({ isExpanded }) => (
+                  <>
+                    <AccordionButton
+                      onClick={() => {
+                        if (
+                          mainCompany === userMainCompany ||
+                          mainCompany === "開発"
+                        ) {
+                          toggleCompanyVisibility(index);
+                        } else {
+                          showToast(
+                            getMessage({
+                              ja: "閲覧できません",
+                              us: "Cannot view",
+                              cn: "无法查看",
+                              language,
+                            }),
+                            getMessage({
+                              ja: "閲覧できるのは同じ会社のみです",
+                              us: "Only the same company can view",
+                              cn: "只有同一家公司可以查看",
+                              language,
+                            }),
+                            "error"
+                          );
+                        }
+                      }}
+                      m={0}
+                      py={0.5}
+                      px={0}
+                    >
+                      <AccordionIcon
+                        transform={
+                          isExpanded ? "rotate(0deg)" : "rotate(270deg)"
+                        }
+                        transition="transform 0.2s"
+                        boxSize={4}
+                      />
+                      <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={0} />
+                      <Box as="span" fontSize="sm">
+                        {mainCompany !== "開発" &&
+                          getMessage({
+                            ja: mainCompany,
+                            language,
+                          })}
+                        {getMessage({
+                          ja: company,
+                          language,
+                        })}
+                        <Box as="span">
+                          {"("}
+                          {
+                            companyThreads.filter(
+                              (thread) =>
+                                thread.completed_at === null &&
+                                thread.category !== null
+                            ).length
+                          }
+                          {")"}
                         </Box>
-                      ) : (
-                        <Box as="span" mr={2}></Box>
-                        )} */}
-                        {menuItem(
-                          `/thread/${thread.id}`,
-                          thread.projectName,
-                          thread.category,
-                          thread.title,
-                          true,
-                          thread.id,
-                          isDifferentCompany,
-                          isSameProjectName,
-                          isCurrentPage,
-                          thread.completed_at,
-                          thread.created_at,
-                          isSameCategory,
-                          thread.user_uid
-                        )}
                       </Box>
-                    );
-                  }
+                    </AccordionButton>
+                    <AccordionPanel pb={4} p={0} m={0}>
+                      {companyThreads
+                        .filter(
+                          (thread) =>
+                            showCompleted || thread.completed_at === null
+                        )
+                        .map((thread) => {
+                          const isCurrentPage =
+                            currentPath === `/thread/${thread.id}/`;
+                          const isDifferentCompany =
+                            thread.mainCompany !== "開発" &&
+                            userMainCompany !== "開発" &&
+                            thread.mainCompany !== userMainCompany;
+                          previousMainCompany = thread.mainCompany;
+
+                          const currentProjectName = String(
+                            thread.company + thread.projectName
+                          );
+                          const isSameProjectName =
+                            currentProjectName === previousProjectName;
+                          previousProjectName = currentProjectName;
+
+                          const currentCategory = String(
+                            thread.company +
+                              thread.projectName +
+                              thread.category
+                          );
+                          const isSameCategory =
+                            currentCategory === previousCategory;
+                          previousCategory = currentCategory;
+
+                          return (
+                            <Box ml={isMain ? "5" : "1"} key={thread.id}>
+                              {menuItem(
+                                `/thread/${thread.id}`,
+                                thread.projectName,
+                                thread.category,
+                                thread.title,
+                                true,
+                                thread.id,
+                                isDifferentCompany,
+                                isSameProjectName,
+                                isCurrentPage,
+                                thread.completed_at,
+                                thread.created_at,
+                                isSameCategory,
+                                thread.user_uid
+                              )}
+                            </Box>
+                          );
+                        })}
+                    </AccordionPanel>
+                  </>
                 )}
-            </>
-          ))}
-        </VStack>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
       </Box>
     </>
   );

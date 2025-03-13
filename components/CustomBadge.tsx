@@ -38,19 +38,19 @@ export const ProjectLists: React.FC<ProjectListsProps> = ({
   };
   return (
     <Box>
-      {myBadge("生産準備+", "excel")}
-      {myBadge("CAMERA+", "dotnet")}
-      {myBadge("誘導ナビ.net", "dotnet")}
+      {myBadge("生産準備+", "custom.excel")}
+      {myBadge("CAMERA+", "custom.dotnet")}
+      {myBadge("誘導ナビ.net", "custom.dotnet")}
       <br />
-      {myBadge("部材一覧+", "excel")}
+      {myBadge("部材一覧+", "custom.excel")}
       <br />
-      {myBadge("順立生産システム", "access")}
+      {myBadge("順立生産システム", "custom.access")}
       <br />
-      {myBadge("誘導ポイント設定一覧表", "excel")}
+      {myBadge("誘導ポイント設定一覧表", "custom.excel")}
       <br />
-      {myBadge("このWEBアプリ", "front")}
+      {myBadge("このWEBアプリ", "custom.front")}
       <br />
-      {myBadge("その他", "gray")}
+      {myBadge("その他", "custom.gray")}
     </Box>
   );
 };
