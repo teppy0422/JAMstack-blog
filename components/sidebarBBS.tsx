@@ -589,33 +589,45 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
           ).map(([company, companyThreads], index) => {
             const mainCompany = companyThreads[0]?.mainCompany || "";
 
+            // 各companyの未読数を計算
+            const unreadCountForCompany = companyThreads.reduce(
+              (count, thread) => {
+                return count + (unreadCountsByThread[thread.id] || 0);
+              },
+              0
+            );
+
             return (
               <AccordionItem key={company}>
                 {({ isExpanded }) => (
                   <>
                     <AccordionButton
                       onClick={() => {
-                        if (
-                          mainCompany === userMainCompany ||
-                          mainCompany === "開発"
-                        ) {
+                        if (userMainCompany === "開発") {
                           toggleCompanyVisibility(index);
                         } else {
-                          showToast(
-                            getMessage({
-                              ja: "閲覧できません",
-                              us: "Cannot view",
-                              cn: "无法查看",
-                              language,
-                            }),
-                            getMessage({
-                              ja: "閲覧できるのは同じ会社のみです",
-                              us: "Only the same company can view",
-                              cn: "只有同一家公司可以查看",
-                              language,
-                            }),
-                            "error"
-                          );
+                          if (
+                            mainCompany === userMainCompany ||
+                            mainCompany === "開発"
+                          ) {
+                            toggleCompanyVisibility(index);
+                          } else {
+                            showToast(
+                              getMessage({
+                                ja: "閲覧できません",
+                                us: "Cannot view",
+                                cn: "无法查看",
+                                language,
+                              }),
+                              getMessage({
+                                ja: "閲覧できるのは同じ会社のみです",
+                                us: "Only the same company can view",
+                                cn: "只有同一家公司可以查看",
+                                language,
+                              }),
+                              "error"
+                            );
+                          }
                         }
                       }}
                       m={0}
@@ -629,27 +641,49 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                         transition="transform 0.2s"
                         boxSize={4}
                       />
-                      <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={0} />
-                      <Box as="span" fontSize="sm">
-                        {mainCompany !== "開発" &&
-                          getMessage({
-                            ja: mainCompany,
+                      <Box>
+                        <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={0} />
+                        <Box as="span" fontSize="sm">
+                          {mainCompany !== "開発" &&
+                            getMessage({
+                              ja: mainCompany,
+                              language,
+                            })}
+                          {getMessage({
+                            ja: company,
                             language,
                           })}
-                        {getMessage({
-                          ja: company,
-                          language,
-                        })}
-                        <Box as="span">
-                          {"("}
-                          {
-                            companyThreads.filter(
-                              (thread) =>
-                                thread.completed_at === null &&
-                                thread.category !== null
-                            ).length
-                          }
-                          {")"}
+                          <Box as="span">
+                            {"("}
+                            {
+                              companyThreads.filter(
+                                (thread) =>
+                                  thread.completed_at === null &&
+                                  thread.category !== null
+                              ).length
+                            }
+                            {")"}
+                          </Box>
+                          {!isExpanded && unreadCountForCompany > 0 && (
+                            <Box
+                              as="span"
+                              bg="red"
+                              h="60%"
+                              px={unreadCountForCompany > 99 ? 0.5 : 1}
+                              borderRadius="50%"
+                              border={
+                                colorMode === "light"
+                                  ? "1px solid #f0e5da"
+                                  : "1px solid #000"
+                              }
+                              color="white"
+                              fontWeight={600}
+                              lineHeight={3}
+                              fontSize={unreadCountForCompany > 99 ? 6 : 9}
+                            >
+                              {unreadCountForCompany}
+                            </Box>
+                          )}
                         </Box>
                       </Box>
                     </AccordionButton>
