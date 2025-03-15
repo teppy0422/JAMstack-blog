@@ -244,7 +244,7 @@ const BlogPage: React.FC = () => {
                   left="80px"
                   bottom="73px"
                   animation="nyoki_rabit 5s forwards, rabitJump 10s infinite 7s"
-                  sealSize={2}
+                  sealSize={2.5}
                 />
               </Box>
             </Box>

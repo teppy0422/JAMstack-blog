@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
 interface AnimationImageProps {
@@ -9,25 +9,24 @@ interface AnimationImageProps {
   top?: string;
   right?: string;
   bottom?: string;
-  translate?: string;
   rotate?: string;
   animation?: string;
   id?: string;
 }
-
 export const AnimationImage: React.FC<AnimationImageProps> = ({
-  sealSize,
+  sealSize = 2,
   src,
   width,
   left,
   top,
   right,
   bottom,
-  translate,
   rotate,
   animation,
   id,
 }) => {
+  const numericSealSize = Number(sealSize);
+
   return (
     <>
       <img
@@ -42,7 +41,7 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
           rotate: `${rotate}`,
           animation: `${animation}`,
           filter:
-            sealSize !== undefined && sealSize > 0
+            numericSealSize > 0
               ? "url(#outline-filter) drop-shadow(1px 1px 3px rgba(0, 0, 0, 1))"
               : "none",
         }}
@@ -51,10 +50,10 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
       <svg width="0" height="0">
         <defs>
           <filter id="outline-filter">
-            {/* 余白を作成 */}
             <feMorphology
               operator="dilate"
-              radius={sealSize}
+              // radius={String(numericSealSize)}
+              radius={2}
               in="SourceAlpha"
               result="dilated"
             />
@@ -65,10 +64,9 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
               operator="in"
               result="outline"
             />
-            {/* 黒い線を追加 */}
             <feMorphology
               operator="dilate"
-              radius={0}
+              radius="0"
               in="outline"
               result="expanded"
             />
