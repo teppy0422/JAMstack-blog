@@ -33,6 +33,7 @@ import { useUserInfo } from "../hooks/useUserId";
 
 import getMessage from "../components/getMessage";
 import { useLanguage } from "../context/LanguageContext";
+import { CustomAccordionIcon } from "../components/CustomText";
 
 // import { AppContext } from "../pages/_app";
 
@@ -78,7 +79,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
   >({});
 
   const [visibleCompanies, setVisibleCompanies] = useState<number[]>([]);
-
   //新しい投稿の監視
   useEffect(() => {
     const fetchUnreadCount = async () => {
@@ -160,7 +160,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
 
   // userCompanyと同じ会社、または"開発"の場合は初期状態でオープンにする
   useEffect(() => {
-    // userCompanyと同じ会社、または"開発"の場合は初期状態でオープンにする
+    // userCompanyと同じ会社、または"開発"の場合、または現在のページのアドレスを含むcompanyは初期状態でオープンにする
     const initialVisibleIndices: number[] = [];
     Object.entries(
       threads.reduce((acc, thread) => {
@@ -170,14 +170,22 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
         }
         return acc;
       }, {} as Record<string, typeof threads>)
-    ).forEach(([company], index) => {
-      if (company === userCompany || company === "開発") {
+    ).forEach(([company, companyThreads], index) => {
+      const isCurrentPageCompany = companyThreads.some(
+        (thread) => currentPath === `/thread/${thread.id}/`
+      );
+
+      if (
+        company === userCompany ||
+        company === "開発" ||
+        isCurrentPageCompany
+      ) {
         initialVisibleIndices.push(index);
       }
     });
     setVisibleCompanies(initialVisibleIndices);
     console.log("Initial visible indices:", initialVisibleIndices);
-  }, [threads, userCompany]);
+  }, [threads, userCompany, currentPath]);
 
   const buttonStyle = (path) => ({
     p: "2",
@@ -322,13 +330,10 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
           >
             <Box
               {...buttonStyle(path_)}
-              onClick={() => {
-                if (isDifferentCompany) {
-                }
-              }}
               position="relative"
               _hover={{
                 bg: colorMode === "light" ? "rgba(255,255,255,0.5)" : "#000",
+                borderRadius: "5px",
                 width: "100%",
               }}
               bg={
@@ -339,7 +344,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
               maxWidth={maxWidth}
               width={maxWidth}
               whiteSpace="nowrap"
-              overflow="hidden"
+              // overflow="hidden"
               textOverflow="ellipsis"
               py={0}
               pl={0}
@@ -433,7 +438,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                   as="span"
                   bg="red"
                   position="absolute"
-                  right="0px"
+                  right="6px"
                   bottom="3px"
                   h="60%"
                   px={unreadCountsByThread[threadId] > 99 ? 0.5 : 1}
@@ -588,7 +593,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
             }, {} as Record<string, typeof threads>)
           ).map(([company, companyThreads], index) => {
             const mainCompany = companyThreads[0]?.mainCompany || "";
-
             // 各companyの未読数を計算
             const unreadCountForCompany = companyThreads.reduce(
               (count, thread) => {
@@ -596,12 +600,26 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
               },
               0
             );
+            const isCurrentPage = companyThreads.some(
+              (thread) => currentPath === `/thread/${thread.id}/`
+            );
 
             return (
               <AccordionItem key={company}>
                 {({ isExpanded }) => (
                   <>
                     <AccordionButton
+                      m={0}
+                      py={0.5}
+                      px={0}
+                      bg={
+                        !isExpanded && isCurrentPage
+                          ? colorMode === "light"
+                            ? "rgba(255,255,255,0.5)"
+                            : "rgba(255,255,255,0.5"
+                          : "transparent"
+                      }
+                      borderRadius="4px"
                       onClick={() => {
                         if (userMainCompany === "開発") {
                           toggleCompanyVisibility(index);
@@ -630,17 +648,8 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                           }
                         }
                       }}
-                      m={0}
-                      py={0.5}
-                      px={0}
                     >
-                      <AccordionIcon
-                        transform={
-                          isExpanded ? "rotate(0deg)" : "rotate(270deg)"
-                        }
-                        transition="transform 0.2s"
-                        boxSize={4}
-                      />
+                      <CustomAccordionIcon isExpanded={isExpanded} />
                       <Box>
                         <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={0} />
                         <Box as="span" fontSize="sm">
@@ -696,6 +705,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                         .map((thread) => {
                           const isCurrentPage =
                             currentPath === `/thread/${thread.id}/`;
+
                           const isDifferentCompany =
                             thread.mainCompany !== "開発" &&
                             userMainCompany !== "開発" &&

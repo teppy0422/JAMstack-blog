@@ -44,6 +44,7 @@ import { useReadCount } from "../../hooks/useReadCount";
 
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
+import { AnimationImage } from "../../components/CustomImage";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
@@ -688,12 +689,12 @@ const BlogPage: React.FC = () => {
               mt={4}
             >
               <IframeDisplay
-                src="../../files/download/Sjp/70/8211158A40/0080.html"
+                src="/files/download/html/Sjp/70/8211158A40/0080.html"
                 width="240"
                 height="300"
               />
               <IframeDisplay
-                src="../../files/download/Sjp/70/8211158A40/0022.html"
+                src="/files/download/html/Sjp/70/8211158A40/0022.html"
                 width="240"
                 height="300"
               />
@@ -1233,16 +1234,25 @@ const BlogPage: React.FC = () => {
                 language,
               })}
             </Text>
-            <Image
-              src="/images/hippo.gif"
-              alt="Hippo"
+            <Box
+              as="span"
               style={{
                 position: "absolute",
-                bottom: "10px",
-                right: "10px",
+                bottom: "-280px",
+                right: "-130px",
                 width: "50px",
+                margin: "200px",
               }}
-            />
+            >
+              <AnimationImage
+                src="/images/hippo.gif"
+                width="50px"
+                left="80px"
+                bottom="73px"
+                animation="nyoki_rabit 5s forwards, rabitJump 10s infinite 7s"
+                sealSize={2}
+              />
+            </Box>
           </Box>
         </SectionBox>
         <Box h="3vh" />

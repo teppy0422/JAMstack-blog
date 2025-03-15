@@ -35,6 +35,7 @@ import { useUserData } from "../hooks/useUserData";
 import SidebarBBS from "../components/sidebarBBS";
 import { ScrollText } from "../components/CustomText";
 import { ProjectLists, CategoryLists } from "../components/CustomBadge";
+import { AnimationImage } from "../components/CustomImage";
 
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
@@ -189,8 +190,19 @@ const BBS = () => {
           })}
           fontWeight={400}
         >
-          <Heading as="h3" fontSize="24px" mb={2} textAlign="center">
-            <HStack spacing={2} alignItems="center" justifyContent="center">
+          <Heading
+            as="h3"
+            fontSize="24px"
+            mb={2}
+            textAlign="center"
+            position="relative"
+          >
+            <HStack
+              w="100%"
+              spacing={2}
+              alignItems="center"
+              justifyContent="center"
+            >
               <Text>
                 {getMessage({
                   ja: "問い合わせ",
@@ -199,7 +211,17 @@ const BBS = () => {
                   language,
                 })}
               </Text>
-              <AiOutlineWechat size={30} />
+              {/* <AiOutlineWechat size={30} /> */}
+              <Box as="span" position="relative" width="20px">
+                <AnimationImage
+                  src="/images/illust/obj/obj_001.svg"
+                  width="50px"
+                  left="0px"
+                  bottom="-15px"
+                  animation="kinoco_nyoki 1s forwards 1s"
+                  sealSize={2}
+                />
+              </Box>
             </HStack>
           </Heading>
 

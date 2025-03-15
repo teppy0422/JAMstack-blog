@@ -1,5 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, AccordionIcon } from "@chakra-ui/react";
+
+interface CustomAccordionIconProps {
+  isExpanded: boolean;
+  color_?: string;
+}
+export const CustomAccordionIcon: React.FC<CustomAccordionIconProps> = ({
+  isExpanded,
+  color_,
+}) => {
+  return (
+    <>
+      <AccordionIcon
+        transform={isExpanded ? "rotate(0deg)" : "rotate(-90deg)"}
+        transition="transform 0.2s"
+        boxSize={4}
+        color={color_}
+      />
+    </>
+  );
+};
 
 interface ScrollTextProps {
   colorMode: "light" | "dark";

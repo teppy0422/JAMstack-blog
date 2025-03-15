@@ -2,6 +2,7 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 
 interface AnimationImageProps {
+  sealSize?: number;
   src: string;
   width: string;
   left?: string;
@@ -14,7 +15,8 @@ interface AnimationImageProps {
   id?: string;
 }
 
-const AnimationImage: React.FC<AnimationImageProps> = ({
+export const AnimationImage: React.FC<AnimationImageProps> = ({
+  sealSize,
   src,
   width,
   left,
@@ -39,9 +41,52 @@ const AnimationImage: React.FC<AnimationImageProps> = ({
           bottom: bottom,
           rotate: `${rotate}`,
           animation: `${animation}`,
+          filter:
+            sealSize !== undefined && sealSize > 0
+              ? "url(#outline-filter) drop-shadow(1px 1px 3px rgba(0, 0, 0, 1))"
+              : "none",
         }}
         id={id}
       />
+      <svg width="0" height="0">
+        <defs>
+          <filter id="outline-filter">
+            {/* 余白を作成 */}
+            <feMorphology
+              operator="dilate"
+              radius={sealSize}
+              in="SourceAlpha"
+              result="dilated"
+            />
+            <feFlood floodColor="white" result="flood" />
+            <feComposite
+              in="flood"
+              in2="dilated"
+              operator="in"
+              result="outline"
+            />
+            {/* 黒い線を追加 */}
+            <feMorphology
+              operator="dilate"
+              radius={0}
+              in="outline"
+              result="expanded"
+            />
+            <feFlood floodColor="#333" result="blackFlood" />
+            <feComposite
+              in="blackFlood"
+              in2="expanded"
+              operator="in"
+              result="blackOutline"
+            />
+            <feMerge>
+              <feMergeNode in="blackOutline" />
+              <feMergeNode in="outline" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
       <style jsx>{`
         @keyframes nyoki_rabit {
           0% {
@@ -138,5 +183,3 @@ const AnimationImage: React.FC<AnimationImageProps> = ({
     </>
   );
 };
-
-export default AnimationImage;

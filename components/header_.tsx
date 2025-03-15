@@ -62,7 +62,7 @@ import React, { useEffect } from "react";
 import { WiDaySunny, WiCloudyGusts, WiRainMix } from "react-icons/wi";
 
 import { SunderText, ScrollText } from "./CustomText";
-import AnimationImage from "./AnimationImage";
+import { AnimationImage } from "./CustomImage";
 
 import AwesomIcon from "./awesomIcon";
 import Auth from "./Auth"; // Authコンポーネントをインポート
@@ -600,6 +600,7 @@ export default function Header() {
                     right="70px"
                     rotate="20deg"
                     animation="nyoki 5s forwards"
+                    sealSize={2}
                   />
                   <svg
                     width="450"
@@ -632,6 +633,7 @@ export default function Header() {
                       left="162px"
                       rotate="-18deg"
                       animation="nyoki_mole 5s forwards"
+                      sealSize={2.5}
                     />
                   </Box>
                   <svg
@@ -652,10 +654,11 @@ export default function Header() {
                     ></path>
                   </svg>
                   <AnimationImage
-                    src="/images/illust/hippo/hippo_020.png"
+                    src="/images/illust/hippo/hippo_020.svg"
                     width="152px"
                     bottom="0px"
                     animation="nyoki_rabit 5s forwards, moveAndRotate 5s infinite 5s"
+                    sealSize={0}
                   />
                   <AnimationImage
                     src="/images/illust/hippo/hippo_008.png"
@@ -663,6 +666,7 @@ export default function Header() {
                     left="80px"
                     bottom="73px"
                     animation="nyoki_rabit 5s forwards, rabitJump 10s infinite 7s"
+                    sealSize={2}
                   />
                   <Box
                     position="fixed"
@@ -713,7 +717,7 @@ export default function Header() {
                       ・おそらく3月中に停止??
                       <br />
                       <br />
-                      ・チャットの区分と仕様を変更中
+                      ・チャットの区分と仕様を変更中3/14まで
                     </Text>
                   </Box>
                 </Box>
@@ -785,8 +789,9 @@ export default function Header() {
                   src="/images/illust/hippo/hippo_a001_lyingDown.png"
                   width="92px"
                   right="2px"
-                  bottom="21px"
+                  bottom="24px"
                   animation="dropBounce 5s forwards"
+                  sealSize={2.5}
                 />
               </Box>
             </ModalBody>

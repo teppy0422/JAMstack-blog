@@ -28,6 +28,7 @@ import { AiOutlineWechat } from "react-icons/ai";
 
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
+import { AnimationImage } from "../components/CustomImage";
 
 function Sidebar() {
   const [currentPath, setCurrentPath] = useState("");
@@ -140,7 +141,17 @@ function Sidebar() {
               language,
             }),
             true,
-            <PiGithubLogoFill size={22} />
+            <>
+              <Box position="relative" w="20px">
+                <AnimationImage
+                  src="/images/illust/hippo/hippo_016.svg"
+                  width="20px"
+                  left="0px"
+                  bottom="-12px"
+                  sealSize={0}
+                />
+              </Box>
+            </>
           )}
           {menuItem(
             "/app/typing",
