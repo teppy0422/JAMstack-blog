@@ -22,6 +22,7 @@ import {
   FaRedo,
   FaExternalLinkAlt,
 } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa6";
 import { ImAttachment } from "react-icons/im";
 import { BsSend } from "react-icons/bs";
 import { supabase } from "../../../utils/supabase/client";
@@ -149,6 +150,7 @@ function ThreadContent() {
   const [currentUrlIndex, setCurrentUrlIndex] = useState<{
     [key: string]: number;
   }>({});
+  const [urlTitles, setUrlTitles] = useState<{ [key: string]: string }>({});
 
   // URLの履歴を追加する関数
   const addToHistory = (originalUrl: string, newUrl: string) => {
@@ -1397,11 +1399,14 @@ function ThreadContent() {
                 display="inline-block"
                 cursor="pointer"
                 p="0"
+                borderRadius="50%"
               >
                 <IconButton
                   aria-label="Upload file"
-                  icon={<ImAttachment />}
-                  colorScheme={colorMode === "light" ? "purple" : "yellow"}
+                  icon={<FaPlus />}
+                  bg={colorMode === "light" ? "#bfb0a4" : "yellow"}
+                  color={colorMode === "light" ? "#8d7c6f" : "#000"}
+                  borderRadius="50%"
                   zIndex="0"
                 />
                 <Input
@@ -2202,7 +2207,6 @@ function ThreadContent() {
                                 fontFamily="Noto Sans JP"
                                 fontWeight="200"
                                 color="black"
-                                mb={2}
                               >
                                 <div
                                   dangerouslySetInnerHTML={{
@@ -2215,7 +2219,6 @@ function ThreadContent() {
                                   }}
                                 />
                               </Box>
-
                               {post.file_url && (
                                 <>
                                   {post.file_url.match(
@@ -2371,12 +2374,12 @@ function ThreadContent() {
                           return (
                             <Box>
                               <Box
-                                width={isExpanded ? "94%" : "60%"}
-                                height={isExpanded ? "80vh" : "20vh"}
+                                width={isExpanded ? "94%" : "50%"}
+                                height={isExpanded ? "70vh" : "12vh"}
                                 mt="8px"
                                 transition="all 0.3s ease"
                                 marginLeft={
-                                  post.user_uid === userId ? "auto" : "42px"
+                                  post.user_uid === userId ? "auto" : "44px"
                                 }
                                 marginRight={
                                   post.user_uid === userId ? "12px" : "auto"
@@ -2476,28 +2479,18 @@ function ThreadContent() {
                                         }}
                                       />
                                     </Box>
-                                    <Text
+                                    <Box
                                       flex="1"
+                                      overflow="hidden"
+                                      whiteSpace="nowrap"
+                                      textOverflow="ellipsis"
                                       fontSize="xs"
-                                      color="gray.600"
-                                      isTruncated
-                                      textAlign="center"
-                                      px={2}
+                                      color="#000"
                                     >
-                                      {(() => {
-                                        try {
-                                          const iframe = document.querySelector(
-                                            `iframe[data-original-url="${url}"]`
-                                          ) as HTMLIFrameElement;
-                                          return (
-                                            iframe?.contentDocument?.title ||
-                                            url
-                                          );
-                                        } catch (error) {
-                                          return url;
-                                        }
-                                      })()}
-                                    </Text>
+                                      {urlTitles[url] ||
+                                        "ページを読み込み中..."}
+                                    </Box>
+                                    <Box flex="1" />
                                     <IconButton
                                       color="#000"
                                       aria-label="新しいタブで開く"
@@ -2525,7 +2518,7 @@ function ThreadContent() {
                                       height: "calc(100% - 20px)",
                                       border: "none",
                                     }}
-                                    sandbox="allow-scripts allow-same-origin allow-popups allow-same-origin allow-forms"
+                                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
                                     loading="lazy"
                                     onLoad={(e) => {
                                       const iframe =
@@ -2540,10 +2533,37 @@ function ThreadContent() {
                                         ) {
                                           addToHistory(url, currentUrl);
                                         }
+                                        // まずURLからドメイン名を取得してタイトルの初期値として設定
+                                        const domain = new URL(url).hostname;
+                                        setUrlTitles((prev) => ({
+                                          ...prev,
+                                          [url]: domain,
+                                        }));
+                                        // タイトルの取得を試みる
+                                        const title =
+                                          iframe?.contentWindow?.document
+                                            ?.title ||
+                                          iframe?.contentDocument?.title;
+                                        if (title) {
+                                          setUrlTitles((prev) => ({
+                                            ...prev,
+                                            [url]: title,
+                                          }));
+                                        }
                                       } catch (error) {
-                                        console.log(
-                                          "Cannot access iframe URL due to same-origin policy"
-                                        );
+                                        // エラーの場合はドメイン名を表示
+                                        try {
+                                          const domain = new URL(url).hostname;
+                                          setUrlTitles((prev) => ({
+                                            ...prev,
+                                            [url]: domain,
+                                          }));
+                                        } catch (e) {
+                                          setUrlTitles((prev) => ({
+                                            ...prev,
+                                            [url]: url,
+                                          }));
+                                        }
                                       }
                                     }}
                                   />

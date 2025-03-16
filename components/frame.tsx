@@ -96,12 +96,14 @@ const Frame: React.FC<{
 }> = ({ children, sections, sectionRefs, isThrough, isMain }) => {
   const { language, setLanguage } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
+  const [retryCount, setRetryCount] = useState(0);
+  const maxRetries = 3;
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const { colorMode } = useColorMode();
-  const [showConfetti, setShowConfetti] = useState(false); // useStateをコンポーネント内に移動
+  const [showConfetti, setShowConfetti] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
   const showToast = useCustomToast();
   const [ipAddress, setIpAddress] = useState("");
@@ -112,16 +114,12 @@ const Frame: React.FC<{
   const { readByCount, skillBlogsData } = useReadCount(userId);
 
   useEffect(() => {
-    // 1秒後にローディングを終了
-    // 遅くなるけどログイン出来てない表示が出るから暫定で回避
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
-    // クリーンアップ関数
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
-  //64pxまでスクロールしないとサイドバーが表示されないから暫定
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
@@ -133,7 +131,7 @@ const Frame: React.FC<{
             element.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({ top: y, behavior: "smooth" });
         }
-      }, 100); // 100msの遅延を追加
+      }, 100);
     } else {
       window.scrollTo(0, 150);
       setTimeout(() => {
@@ -141,31 +139,52 @@ const Frame: React.FC<{
       }, 0);
     }
   }, []);
-  //#の位置にスクロールした時のアクティブなセクションを装飾
+
   useEffect(() => {
-    if (typeof window !== "undefined" && sectionRefs?.current) {
-      const sectionsToObserve = sectionRefs.current;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setActiveSection(entry.target.id);
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const updateActiveSection = () => {
+      if (sectionRefs?.current) {
+        const scrollPosition = window.scrollY + 100; // ヘッダーの高さを考慮
+
+        sectionRefs.current.forEach((section) => {
+          if (section) {
+            const sectionTop = section.offsetTop;
+            const sectionBottom = sectionTop + section.offsetHeight;
+
+            if (
+              scrollPosition >= sectionTop &&
+              scrollPosition <= sectionBottom
+            ) {
+              console.log("スクロールで検出したセクション:", section.id);
+              setActiveSection(section.id);
             }
-          });
-        },
-        { rootMargin: "-64px 0px -99% 0px", threshold: 0 }
-      );
-      sectionsToObserve.forEach((section) => {
-        if (section) observer.observe(section);
-      });
-      return () => {
-        sectionsToObserve.forEach((section) => {
-          if (section) observer.unobserve(section);
+          }
         });
-      };
-    }
-  }, [sectionRefs, userName]);
-  //#クリックした時のオフセット
+      }
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateActiveSection();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [sectionRefs]);
+
+  // activeSection変更時のデバッグログ
+  useEffect(() => {
+    console.log("現在のアクティブセクション:", activeSection);
+  }, [activeSection]);
+
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
@@ -184,26 +203,25 @@ const Frame: React.FC<{
       window.removeEventListener("hashchange", handleHashChange, false);
     };
   }, []);
-  // #に移動をレンダリング後に行う
+
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
       setTimeout(() => {
         const element = document.querySelector(hash);
         if (element) {
-          const yOffset = -64; // オフセットを設定
+          const yOffset = -64;
           const y =
             element.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({ top: y, behavior: "smooth" });
         }
-      }, 100);
+      }, 500);
     }
-  }, [userId, userName]); // userIdまたはuserNameが変更されたときに実行
+  }, [userId, userName]);
 
-  //現在のパスを取得
   const [currentPath, setCurrentPath] = useState("");
   const [accordionIndex, setAccordionIndex] = useState<number[]>([]);
-  // ブログリストを表示
+
   const createLinkPanel = (path: string, text: string, isMain?: boolean) => {
     const pathSplit = path.split("/").filter(Boolean);
     const pathUrl = pathSplit[1];
@@ -212,7 +230,7 @@ const Frame: React.FC<{
     if (pathUrl !== undefined) {
       const matchingData =
         skillBlogsData.find((data) => data.url === pathUrl)?.readBy || [];
-      isReadByUser = matchingData.includes(userId ?? ""); // matchingDataにuserIdが含まれるか確認
+      isReadByUser = matchingData.includes(userId ?? "");
     }
 
     const linkStyles = {
@@ -220,14 +238,14 @@ const Frame: React.FC<{
       ml: 6,
       px: 2,
       borderRadius: "4px",
-      bg: currentPath === path ? "#bfb0a4" : "transparent",
+      bg: currentPath === path ? "#d8cabf" : "transparent",
       color:
         currentPath === path
           ? "white"
           : colorMode === "light"
           ? "black"
           : "white",
-      cursor: path === "#" ? "not-allowed" : "pointer", // カーソルを変更
+      cursor: path === "#" ? "not-allowed" : "pointer",
     };
     return (
       <AccordionPanel m={0} p={0}>
@@ -244,36 +262,31 @@ const Frame: React.FC<{
       </AccordionPanel>
     );
   };
-  // 現在のパスに基づいて開くべきアコーディオンのインデックスを設定
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setCurrentPath(window.location.pathname);
       let index: number[] = [];
       switch (true) {
-        //自己紹介
-        case window.location.pathname.includes("/skillBlogs/0004"): //メンバーリスト
+        case window.location.pathname.includes("/skillBlogs/0004"):
           index = [0];
           break;
-        //生産準備+の使い方
-        case window.location.pathname.includes("/skillBlogs/0006"): //生産準備+とは
-        case window.location.pathname.includes("/skillBlogs/0009"): //効果の確認
-        case window.location.pathname.includes("/skillBlogs/0007"): //生産準備+の練習(初級)
-        case window.location.pathname.includes("/skillBlogs/0008"): //生産準備+の練習(中級)
-        case window.location.pathname.includes("/skillBlogs/0001"): //プログラミング解説
-        case window.location.pathname.includes("/skillBlogs/0002"): //コネクタの撮影から座標登録まで
-        case window.location.pathname.includes("/skillBlogs/0005"): //コネクタの撮影から座標登録まで
+        case window.location.pathname.includes("/skillBlogs/0006"):
+        case window.location.pathname.includes("/skillBlogs/0009"):
+        case window.location.pathname.includes("/skillBlogs/0007"):
+        case window.location.pathname.includes("/skillBlogs/0008"):
+        case window.location.pathname.includes("/skillBlogs/0001"):
+        case window.location.pathname.includes("/skillBlogs/0002"):
+        case window.location.pathname.includes("/skillBlogs/0005"):
           index = [1];
           break;
-        //順立生産システムの使い方
-        case window.location.pathname.includes("/skillBlogs/0011"): //
+        case window.location.pathname.includes("/skillBlogs/0011"):
           index = [2];
           break;
-        //誘導ポイント設定一覧表
-        case window.location.pathname.includes("/skillBlogs/0010"): //誘導ポイント設定一覧表
+        case window.location.pathname.includes("/skillBlogs/0010"):
           index = [3];
           break;
-        //改善活動の進め方
-        case window.location.pathname.includes("/skillBlogs/0003"): //参考事例集
+        case window.location.pathname.includes("/skillBlogs/0003"):
           index = [4];
           break;
         default:
@@ -283,10 +296,21 @@ const Frame: React.FC<{
     }
   }, []);
 
-  // userNameが変わったときの処理をここに記述
+  // sections.currentの監視と再試行ロジック
   useEffect(() => {
-    console.log("userNameが変更されました:", userName);
-  }, [userName]); // userNameを依存配列に追加
+    if (
+      sections?.current &&
+      Object.keys(sections.current).length === 0 &&
+      retryCount < maxRetries
+    ) {
+      const timer = setTimeout(() => {
+        console.log(`再試行 ${retryCount + 1}回目`);
+        setRetryCount((prev) => prev + 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [sections?.current, retryCount]);
+
   return (
     <>
       <Content isCustomHeader={true} maxWidth="1280px" isUse={!isMain}>
@@ -701,72 +725,99 @@ const Frame: React.FC<{
                   >
                     <>{children}</>
                   </VStack>
-                  {/* サイドバー */}
                   <VStack
                     align="start"
                     spacing={3}
                     flex="4"
                     position="sticky"
-                    top="64px"
+                    top="63px"
                     display={["none", "none", "none", "block"]}
                   >
                     <List spacing={1} fontSize="sm">
-                      {sections.current
-                        // ?.sort((a, b) => {
-                        //   const aParts = a.id.split('-').map(part => parseInt(part, 10));
-                        //   const bParts = b.id.split('-').map(part => parseInt(part, 10));
-
-                        //   for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
-                        //     const aPart = aParts[i] !== undefined ? aParts[i] : -1;
-                        //     const bPart = bParts[i] !== undefined ? bParts[i] : -1;
-
-                        //     if (aPart !== bPart) {
-                        //       return aPart - bPart;
-                        //     }
-                        //   }
-                        //   // 長さが異なる場合、短い方を先にする
-                        //   return aParts.length - bParts.length;
-                        // })
-                        .map((section) => {
-                          const underscoreCount = (section.id.match(/_/g) || [])
-                            .length; // アンダースコアの数をカウント
-                          const indent = 2 + underscoreCount * 3; // 基本インデントにアンダースコアの数に応じたインデントを追加
-
+                      {(() => {
+                        // 配列を適切に再構築
+                        const sectionsArray = sections?.current
+                          ? Object.entries(sections.current)
+                              .filter(([key]) => !isNaN(Number(key)))
+                              .map(
+                                ([_, value]) =>
+                                  value as { id: string; title: string }
+                              )
+                          : [];
+                        // 再試行中は読み込み中の表示
+                        if (
+                          sectionsArray.length === 0 &&
+                          retryCount < maxRetries
+                        ) {
                           return (
-                            <ListItem
-                              w="100%"
-                              maxWidth={["0px", "0px", "200px", "240px"]}
-                              key={section.id}
-                              p={0}
-                              borderRadius="5px"
-                              bg={
-                                activeSection === section.id
-                                  ? "#4a5569"
-                                  : "transparent"
-                              }
-                              color={
-                                activeSection === section.id
-                                  ? "white"
-                                  : colorMode === "light"
-                                  ? "black"
-                                  : "white"
-                              }
-                              pl={indent}
-                              style={{
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis", // 溢れた部分に「...」を付ける
-                              }}
-                            >
-                              <Link
-                                href={`#${section.id}`}
-                                title={section.title}
-                              >
-                                {section.title}
-                              </Link>
+                            <ListItem>
+                              <Text textAlign="center">
+                                {getMessage({
+                                  ja: "読み込み中...",
+                                  us: "Loading...",
+                                  cn: "正在加载...",
+                                  language,
+                                })}
+                              </Text>
                             </ListItem>
                           );
-                        })}
+                        }
+
+                        return sectionsArray.length > 0 ? (
+                          sectionsArray.map((section) => {
+                            const underscoreCount = (
+                              section.id.match(/_/g) || []
+                            ).length;
+                            const indent = 2 + underscoreCount * 3;
+
+                            return (
+                              <ListItem
+                                w="100%"
+                                maxWidth={["0px", "0px", "200px", "240px"]}
+                                key={section.id}
+                                p={0}
+                                borderRadius="5px"
+                                bg={
+                                  activeSection === section.id
+                                    ? "#d8cabf"
+                                    : "transparent"
+                                }
+                                color={
+                                  activeSection === section.id
+                                    ? "black"
+                                    : colorMode === "light"
+                                    ? "black"
+                                    : "white"
+                                }
+                                pl={indent}
+                                style={{
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                <Link
+                                  href={`#${section.id}`}
+                                  title={section.title}
+                                >
+                                  {section.title}
+                                </Link>
+                              </ListItem>
+                            );
+                          })
+                        ) : (
+                          <ListItem>
+                            <Text textAlign="center">
+                              {getMessage({
+                                ja: "レンダリング条件が見つかりませんでした",
+                                us: "No blog found",
+                                cn: "没有找到博客",
+                                language,
+                              })}
+                            </Text>
+                          </ListItem>
+                        );
+                      })()}
                     </List>
                   </VStack>
                 </>
@@ -780,7 +831,7 @@ const Frame: React.FC<{
           width={window.innerWidth}
           height={window.innerHeight}
           numberOfPieces={20}
-          gravity={1} // 重力を調整して紙吹雪の動きを制御
+          gravity={1}
           recycle={false}
           confettiSource={{
             x:
