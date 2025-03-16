@@ -17,6 +17,10 @@ import {
   FaReply,
   FaArrowDown,
   FaCheck,
+  FaArrowLeft,
+  FaArrowRight,
+  FaRedo,
+  FaExternalLinkAlt,
 } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
 import { BsSend } from "react-icons/bs";
@@ -57,6 +61,7 @@ import {
 } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
 import { MdBusiness } from "react-icons/md";
+import { LuPanelRightOpen } from "react-icons/lu";
 
 import Content from "../../../components/content";
 import SidebarBBS from "../../../components/sidebarBBS";
@@ -136,6 +141,57 @@ export default function Thread() {
 
 function ThreadContent() {
   const { language, setLanguage } = useLanguage();
+  const [expandedUrls, setExpandedUrls] = useState<{ [key: string]: boolean }>(
+    {}
+  );
+  // URL履歴を管理するstate
+  const [urlHistory, setUrlHistory] = useState<{ [key: string]: string[] }>({});
+  const [currentUrlIndex, setCurrentUrlIndex] = useState<{
+    [key: string]: number;
+  }>({});
+
+  // URLの履歴を追加する関数
+  const addToHistory = (originalUrl: string, newUrl: string) => {
+    setUrlHistory((prev) => {
+      const history = prev[originalUrl] || [originalUrl];
+      const currentIndex = currentUrlIndex[originalUrl] || 0;
+      // 現在のインデックスより後の履歴を削除して新しいURLを追加
+      const newHistory = [...history.slice(0, currentIndex + 1), newUrl];
+      return { ...prev, [originalUrl]: newHistory };
+    });
+    setCurrentUrlIndex((prev) => ({
+      ...prev,
+      [originalUrl]: (prev[originalUrl] || 0) + 1,
+    }));
+  };
+
+  // 戻る処理
+  const goBack = (originalUrl: string) => {
+    const history = urlHistory[originalUrl];
+    const currentIndex = currentUrlIndex[originalUrl];
+    if (history && currentIndex > 0) {
+      setCurrentUrlIndex((prev) => ({
+        ...prev,
+        [originalUrl]: currentIndex - 1,
+      }));
+      return history[currentIndex - 1];
+    }
+    return null;
+  };
+
+  // 進む処理
+  const goForward = (originalUrl: string) => {
+    const history = urlHistory[originalUrl];
+    const currentIndex = currentUrlIndex[originalUrl];
+    if (history && currentIndex < history.length - 1) {
+      setCurrentUrlIndex((prev) => ({
+        ...prev,
+        [originalUrl]: currentIndex + 1,
+      }));
+      return history[currentIndex + 1];
+    }
+    return null;
+  };
 
   const router = useRouter();
   const { id } = useParams() as { id: string };
@@ -1766,7 +1822,7 @@ function ThreadContent() {
                             <Text
                               fontSize="15px"
                               color="gray.500"
-                              whiteSpace="nowrap" // 改行を防ぐ
+                              whiteSpace="nowrap"
                               textAlign="center"
                               mx="2"
                               lineHeight="1.2"
@@ -1942,7 +1998,7 @@ function ThreadContent() {
                                 post.user_uid === userId
                                   ? "0 12px 0 2px"
                                   : "0 2px 0 12px",
-                              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // 影を追加
+                              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                             }}
                           >
                             {post.reply_post_id && ( //ポストにリプライを含む場合
@@ -2146,15 +2202,20 @@ function ThreadContent() {
                                 fontFamily="Noto Sans JP"
                                 fontWeight="200"
                                 color="black"
-                                dangerouslySetInnerHTML={{
-                                  __html: post.content
-                                    .replace(/\n/g, "<br />")
-                                    .replace(
-                                      /(http[s]?:\/\/[^\s]+)/g,
-                                      '<a href="$1" class="external-link" style="text-decoration: underline;">$1</a>'
-                                    ),
-                                }}
-                              />
+                                mb={2}
+                              >
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: post.content
+                                      .replace(/\n/g, "<br />")
+                                      .replace(
+                                        /(http[s]?:\/\/[^\s]+)/g,
+                                        '<a href="$1" class="external-link" style="text-decoration: underline;">$1</a>'
+                                      ),
+                                  }}
+                                />
+                              </Box>
+
                               {post.file_url && (
                                 <>
                                   {post.file_url.match(
@@ -2166,7 +2227,7 @@ function ThreadContent() {
                                         autoPlay
                                         loop
                                         muted
-                                        playsInline // モバイルデバイスで全画面表示を防ぐ
+                                        playsInline
                                         style={{
                                           maxWidth: "100%",
                                           maxHeight: "300px",
@@ -2212,8 +2273,8 @@ function ThreadContent() {
                                           touchStartRef.current = {
                                             x: e.touches[0].clientX,
                                             y: e.touches[0].clientY,
-                                          }; // タッチ開始位置を記録
-                                          setIsLongPress(false); // タッチ開始時に長押し状態をリセット
+                                          };
+                                          setIsLongPress(false);
                                         }}
                                         onTouchMove={(e) => {
                                           if (touchStartRef.current) {
@@ -2227,8 +2288,7 @@ function ThreadContent() {
                                               dx * dx + dy * dy
                                             );
                                             if (distance > 10) {
-                                              // 10px以上移動したらスクロールとみなす
-                                              setIsLongPress(true); // スクロール中は長押しとみなす
+                                              setIsLongPress(true);
                                             }
                                           }
                                         }}
@@ -2237,7 +2297,7 @@ function ThreadContent() {
                                             setSelectedImageUrl(post.file_url);
                                             setFileModalOpen(true);
                                           }
-                                          touchStartRef.current = null; // タッチ終了時にリセット
+                                          touchStartRef.current = null;
                                         }}
                                       />
                                     )
@@ -2245,7 +2305,6 @@ function ThreadContent() {
                                     <Box>
                                       <Button
                                         onClick={(e) => {
-                                          // e.preventDefault();
                                           handleDownload(
                                             post.file_url,
                                             post.original_file_name
@@ -2301,6 +2360,198 @@ function ThreadContent() {
                             post.read_by
                           )}
                         </Flex>
+                        {/* httpの場合はWEBページを表示 */}
+                        {(() => {
+                          const urls = post.content.match(
+                            /(http[s]?:\/\/[^\s]+)/g
+                          );
+                          if (!urls) return null;
+                          const url = urls[0];
+                          const isExpanded = expandedUrls[url] || false;
+                          return (
+                            <Box>
+                              <Box
+                                width={isExpanded ? "94%" : "60%"}
+                                height={isExpanded ? "80vh" : "20vh"}
+                                mt="8px"
+                                transition="all 0.3s ease"
+                                marginLeft={
+                                  post.user_uid === userId ? "auto" : "42px"
+                                }
+                                marginRight={
+                                  post.user_uid === userId ? "12px" : "auto"
+                                }
+                                style={{
+                                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                                  position: "relative",
+                                }}
+                                borderRadius="8px"
+                              >
+                                <Icon
+                                  as={LuPanelRightOpen}
+                                  position="absolute"
+                                  cursor="pointer"
+                                  boxSize="18px"
+                                  right={
+                                    post.user_uid === userId ? "" : "-22px"
+                                  }
+                                  left={post.user_uid === userId ? "-22px" : ""}
+                                  top="6px"
+                                  transform={
+                                    isExpanded
+                                      ? post.user_uid === userId
+                                        ? "rotate(180deg)"
+                                        : "rotate(0deg)"
+                                      : post.user_uid === userId
+                                      ? "rotate(0deg)"
+                                      : "rotate(180deg)"
+                                  }
+                                  transition="transform 0.3s ease"
+                                  onClick={() => {
+                                    setExpandedUrls((prev) => ({
+                                      ...prev,
+                                      [url]: !prev[url],
+                                    }));
+                                  }}
+                                />
+                                <Box
+                                  position="relative"
+                                  height="100%"
+                                  borderRadius="8px"
+                                  overflow="hidden"
+                                >
+                                  <Flex
+                                    bg={
+                                      post.user_uid === userId
+                                        ? "#DCF8C6"
+                                        : "#FFFFFF"
+                                    }
+                                    px={2}
+                                    alignItems="center"
+                                    borderBottom="1px solid"
+                                    borderColor="gray.200"
+                                    width="100%"
+                                  >
+                                    <Box display="flex" alignItems="center">
+                                      <IconButton
+                                        color="#000"
+                                        aria-label="戻る"
+                                        icon={<Icon as={FaArrowLeft} />}
+                                        size="sm"
+                                        variant="ghost"
+                                        mr={1}
+                                        isDisabled={
+                                          !urlHistory[url] ||
+                                          currentUrlIndex[url] === 0
+                                        }
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          const prevUrl = goBack(url);
+                                          if (prevUrl) {
+                                            const iframe =
+                                              document.querySelector(
+                                                `iframe[data-original-url="${url}"]`
+                                              ) as HTMLIFrameElement;
+                                            if (iframe) {
+                                              iframe.src = prevUrl;
+                                            }
+                                          }
+                                        }}
+                                      />
+                                      <IconButton
+                                        aria-label="リロード"
+                                        icon={<Icon as={FaRedo} />}
+                                        color="#000"
+                                        size="sm"
+                                        variant="ghost"
+                                        mr={2}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          const iframe = document.querySelector(
+                                            `iframe[data-original-url="${url}"]`
+                                          ) as HTMLIFrameElement;
+                                          if (iframe) {
+                                            iframe.src = iframe.src;
+                                          }
+                                        }}
+                                      />
+                                    </Box>
+                                    <Text
+                                      flex="1"
+                                      fontSize="xs"
+                                      color="gray.600"
+                                      isTruncated
+                                      textAlign="center"
+                                      px={2}
+                                    >
+                                      {(() => {
+                                        try {
+                                          const iframe = document.querySelector(
+                                            `iframe[data-original-url="${url}"]`
+                                          ) as HTMLIFrameElement;
+                                          return (
+                                            iframe?.contentDocument?.title ||
+                                            url
+                                          );
+                                        } catch (error) {
+                                          return url;
+                                        }
+                                      })()}
+                                    </Text>
+                                    <IconButton
+                                      color="#000"
+                                      aria-label="新しいタブで開く"
+                                      icon={<Icon as={FaExternalLinkAlt} />}
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        const currentUrl =
+                                          urlHistory[url]?.[
+                                            currentUrlIndex[url] || 0
+                                          ] || url;
+                                        window.open(currentUrl, "_blank");
+                                      }}
+                                    />
+                                  </Flex>
+                                  <iframe
+                                    src={url}
+                                    data-original-url={url}
+                                    style={{
+                                      position: "relative",
+                                      top: 0,
+                                      left: 0,
+                                      width: "100%",
+                                      height: "calc(100% - 20px)",
+                                      border: "none",
+                                    }}
+                                    sandbox="allow-scripts allow-same-origin allow-popups allow-same-origin allow-forms"
+                                    loading="lazy"
+                                    onLoad={(e) => {
+                                      const iframe =
+                                        e.target as HTMLIFrameElement;
+                                      try {
+                                        const currentUrl =
+                                          iframe.contentWindow?.location.href;
+                                        if (
+                                          currentUrl &&
+                                          currentUrl !== url &&
+                                          currentUrl !== iframe.src
+                                        ) {
+                                          addToHistory(url, currentUrl);
+                                        }
+                                      } catch (error) {
+                                        console.log(
+                                          "Cannot access iframe URL due to same-origin policy"
+                                        );
+                                      }
+                                    }}
+                                  />
+                                </Box>
+                              </Box>
+                            </Box>
+                          );
+                        })()}
                       </div>
                     </>
                   );
