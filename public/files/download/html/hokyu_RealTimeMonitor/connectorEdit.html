@@ -1,0 +1,74 @@
+
+				<div class="inner">
+					<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>コネクタ座標の新規登録/編集</strong><span style="font-size:9pt;color:#888"> @2024年3月17日に更新 #片岡哲兵<span></span></a>
+						<ul class="icons">
+							<li><i class="fa fa-arrow-circle-left" aria-hidden="true" onclick="javascript:window.history.back(-1);return false;"></i></li>
+							<li><i class="fa fa-expand-arrows-alt" aria-hidden="true" onclick="fullscreen()"></i></li>
+						</ul>
+					</header>
+
+					<p>コネクタ座標の新規登録/編集について解説します<br>
+					※生産準備+のバージョンによっては画面が異なる場合があります</p>
+					<h2>1.考え方</h2>
+					<div class="box26">
+						<span class="box-title"><i class="fas fa-check"></i> 効率良く座標登録する</span>
+						<div class="col-6 col-12-small">
+							<!-- <input type="checkbox" id="A1" name="A1"> -->
+							<label for="A1">
+								コネクタ座標が無い場合は新規作成<br>
+								ある場合はその座標を呼び出して編集<br>
+								以下はその手順の説明です
+							</label>
+						</div>
+					</div>
+
+					<h2 class="nav" id="00_03">2.コネクタ座標登録シートの呼び出し</h2>
+					<h4><mp>2-1</mp>.[端末一覧]を選択</h4>
+					<h4><mp>2-2</mp>.登録/修正したい端末を選択</h4>
+					<div class="code-frame" ><p>下図は11行目(7283039130)を選択している状態</p></div>
+					<div class="img-left"><img src="images/connector/0002.png" width=50%></div>
+	
+					<hr class="hr1">
+					<h4><mp>3-3</mp>.<div class="shift-key">Ctrl</div> + <div class="shift-key">Shift</div> + <div class="shift-key">Enter</div>を押す
+						<a href="../assets/images/key/shiftCtrlEnter.png"data-fancybox="" target="_blank"><i class="fas fa-keyboard fa-lg tifany"></i></a>
+					</h4>
+					<div class="code-frame" ><p>新規登録の場合は下図のようにcav1以外は空欄で表示されます</p></div>
+					<div class="img-left"><img src="images/connector/0003.png" width=50%></div>
+					<h4>※登録がある場合は登録済みのデータが表示されます</h4>
+					
+					<hr class="hr1">
+					<h4><mp>3-4</mp>.x,y,width,heightを入力する</h4>
+					<div class="code-frame" ><p>下の動画のように適当に入力していきます</p></div>
+					<video muted width="80%" loop autoplay>
+						<source src="images/connector/0001.mp4">
+					</video>
+					<hr class="hr2">
+					<h4 class="title">
+						　<span>操作方法</span><br>
+						　　<div class="shift-key">Ctrl</div> + <div class="shift-key">Enter</div>
+							<a href="../assets/images/key/ctrlEnter.png"data-fancybox="" target="_blank"><i class="fas fa-keyboard fa-lg tifany"></i></a>：画像の更新<br>
+						　　<div class="shift-key">Ctrl</div> + <div class="shift-key">Shift</div> + <div class="shift-key">Enter</div>
+						<a href="../assets/images/key/ShiftCtrlEnter.png"data-fancybox="" target="_blank"><i class="fas fa-keyboard fa-lg tifany"></i></a>：アクティブセルの上2行から値を推測して自動入力<br><br>
+						　<span>項目の見方</span><br>
+						　　x:キャビティの左端の座標<br>
+						　　y:キャビティの上端の座標<br>
+						　　Width:キャビティの横幅<br>
+						　　Hiehgt:キャビティの高さ<br>
+						　　形状:Box:キャビティが四角い<br>
+						　　　　 Cir:キャビティが丸い <br>
+						　　　　 Ter:アース端子<br>
+						　　Width_:画像の描写サイズ(空欄にすると自動計算)<br>
+						　　　　　 ※実際に使用される際のサイズには影響しません<br>
+						　　lock:二重係止を押す方向
+					</h4>
+					<div id = "00_031" style="width:300px;margin-left:70px"><img src="images/connector/0001.png" width=70% ></div>
+					<h4>　　　　0を略図(裏面視)の視点とする<br>
+						　　　　二重係止が無い場合は-(ハイフン)を入力</h4>
+					<hr class="hr1">
+					<h4><mp>3-5</mp>.登録ボタンを押す</h4>
+					<div class="img-left"><img src="images/connector/0005.png" width=70%></div>
+					<h4>　以上で写真と座標データが保存されて使用可能になります<br>
+						　この座標データと写真は全ての拠点で共有します</h4>						
+				</div>

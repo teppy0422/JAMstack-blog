@@ -1,0 +1,121 @@
+
+				<div class="inner">
+					<!-- Header -->
+					<header id="header">
+						<ul class="logo"><strong>OrderList</strong><span id="currentTime">aaaa</span></ul>
+						<ul class="icons">
+							<li><i class="fa fa-expand-arrows-alt" id="mode_full" aria-hidden="true" title="フルスクリーンにする" onclick="fullscreen()"></i></li>
+							<li><i class="fa fa-sun" id="theme-toggle" title="ライトモードに切り替える" onclick="toggleTheme()"></i></li>
+							<li><i class="fa fa-volume-up" id="startButton" title="音声を有効する"></i></li>
+							<li class="loader-container" onclick="getData()" title="最新のデータに更新">
+								<div class="loader">
+									<div class="CountDowntxt"><span>60</span></div>
+									<div class="spin a"></div>
+									<div class="spin b"></div>
+								</div> 
+							</li>
+							<!-- <li><i class="fab fa-get-pocket" onclick="execute();"></i></li>	 -->
+						</ul>
+					</header>
+					<audio id="notificationSound" src="assets/audio/finish.mp3" type="audio/mp3"></audio>
+					<!-- <div id="progressContainer"><div id="progressBar" style="width: 50%;"></div></div> -->
+					<div class="table-wrapper" style="padding:1em 0">	
+						<table class="inspectionList">
+							<!-- <h3 class="center-line-text">14:00</h3> -->
+							<thead>
+								<tr style="padding:0;">
+									<th>ID</th>
+									<th>製品品番</th>
+									<th>設変</th>
+									<th>回路数</th>
+									<th>数量</th>
+									<th>担当</th>
+									<th>作業完了まで</th>
+									<th>検査準備</th>
+									<th>検査状況</th>
+								</tr>
+							</thead>
+							<tbody id="saveTarget">
+								<tr>
+									<td class="targetID">1</td>
+									<td>8211156A10</td>
+									<td>F03</td>
+									<td>278</td>
+									<td>1</td>
+									<td>2号機</td>
+									<td class="countdown">00:00:05</td>
+									<td class="InspectionReady">Prepared</td>
+									<td class="InspectionCompleted">Completed</td>
+								</tr>
+								<tr>
+									<td class="targetID">2</td>
+									<td>8211136B30</td>
+									<td>B00</td>
+									<td>333</td>
+									<td>2</td>
+									<td>3号機</td>
+									<td class="countdown">00:00:10</td>
+									<td class="InspectionReady">awatting</td>
+									<td class="InspectionCompleted">Completed</td>
+								</tr>
+								<tr>
+									<td>8211156A40</td>
+									<td>F03</td>
+									<td>278</td>
+									<td>1</td>
+									<td>5号機</td>
+									<td class="countdown">00:00:20</td>
+								</tr>
+								<tr>
+									<td>8211136B50</td>
+									<td>B00</td>
+									<td>333</td>
+									<td>2</td>
+									<td>1号機</td>
+									<td class="countdown">00:00:30</td>
+								</tr>
+								<tr>
+									<td>8211156A60</td>
+									<td>F03</td>
+									<td>278</td>
+									<td>1</td>
+									<td>7号機</td>
+									<td class="countdown">00:30:00</td>
+								</tr>
+								<!-- <tr class="notHover" style="background-color: #FFF;">
+									<td  colspan="16">
+										<h5 class="center-line-text">残り1時間以内</h5>
+									</td>
+								</tr> -->
+								<tr>
+									<td>8211156A70</td>
+									<td>F03</td>
+									<td>278</td>
+									<td>1</td>
+									<td>山根</td>
+									<td class="countdown">01:00:10</td>
+								</tr>
+								<tr>
+									<td>8211136B80</td>
+									<td>B00</td>
+									<td>333</td>
+									<td>2</td>
+									<td>秋山</td>
+									<td class="countdown">01:00:15</td>
+								</tr>
+								<!-- <tr class="notHover" style="background-color: #FFF;">
+									<td  colspan="16">
+										<h5 class="center-line-text">残り2時間以内</h5>
+									</td>
+								</tr> -->
+							</tbody>
+							<!-- <tfoot>
+								<tr>
+									<td colspan="2"></td>
+									<td>100.00</td>
+								</tr>
+							</tfoot> -->
+						</table>
+					</div>
+					<div style="height:50vh"></div>
+				</div>

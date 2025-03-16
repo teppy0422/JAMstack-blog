@@ -1,0 +1,394 @@
+
+				<div class="inner">
+					<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>撮影装置の作り方</strong><span style="font-size:9pt;color:#888"> @2024年4月9日更新 #片岡哲兵<span></span></a>
+						<ul class="icons">
+							<li><i class="fa fa-arrow-circle-left" aria-hidden="true" onclick="javascript:window.history.back(-1);return false;"></i></li>
+							<li><i class="fa fa-expand-arrows-alt" aria-hidden="true" onclick="fullscreen()"></i></li>
+						</ul>
+					</header>
+					<h4>撮影装置を使うメリット</h4>
+					<h5>#誰が撮影しても同じような写真が撮れる<br>
+						└コネクタの色に応じて照明の色と明るさを自動制御<br>
+						└コネクタの色に応じてカメラの露出を自動制御<br>
+						#撮影した写真は自動でサーバーに名前を付けて保存<br>
+						└専用アプリ(CAMERA+)を使用します
+					</h5>
+
+					<hr class="hr2">
+					<h2 id = "00_01" style="margin-bottom: 0;">1.完成図</h2>
+
+					<div class="row" style="padding-left:1em;">
+						<h4 ><span class="image left"><a data-fancybox="a001" href="images/satuei/s001.png" target="_blank"><img src="images/satuei/s001.png" id="ico2" width=40%></a></span>
+							前面のダンプラを横にスライドしてコネクタを入れて撮影します<br>
+						外部の照明の影響を受けないように白色のダンプラで囲っています<br>			
+						</h4>
+					</div>
+
+					<hr class="hr2">
+					<h2 style="margin-bottom: 0;">2.作成手順</h2>
+					<div class="list">						
+						<h4>上から順に実施/確認してください</h4>
+						<label for="toggle-4" class="eject" >0.<marker_black style="cursor: pointer;">全体図 </marker_black><i class="fas fa-eject rotated"  id="rotate-icon"></i></label>
+						<input type="checkbox" id="toggle-4" hidden>
+						<div class="hidden" style="margin-left:1em;">
+							<div class="box26">
+								<span class="box-title"><i class="fas fa-check"></i> 配線</span>		
+								<nav class="navi">
+									<p>クリックで詳細の表示</p>
+									<ul>
+										<li>
+											<div class="tooltip2">
+												<a><p>PC</p>
+													<div class="description2">
+														生産準備+を実行するPC
+													</div>
+												</a>
+											</div>
+											<ul>
+												<li>
+													<div class="tooltip2">
+														<a><p>Arduino</p>
+															<div class="description2">
+																PCとUBSケーブルで接続
+														</div></a>
+													</div>
+													<ul>
+														<li>
+															<div class="tooltip2">
+																<a><p>LEDテープ</p>
+																<div class="description2">
+																	Arduinoと3本線で繋ぐ
+																</div></a>
+															</div>
+														</li>
+													</ul>
+												</li>
+												<li>
+													<div class="tooltip2">
+													<a><p><mgb>SONYカメラ</mgb></p>
+														<div class="description2">
+															PCと無線LAN通信で接続
+														</div></a>
+													</div>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</nav><P style="clear:left"></P>
+							</div>
+						</div>
+						<label for="toggle-1" class="eject">1.<marker_black style="cursor: pointer;">購入リスト </marker_black><i class="fas fa-eject rotate" ></i></label>
+						<input type="checkbox" id="toggle-1" hidden>
+						<div class="hidden" style="margin-left:1em;">
+							<div class="box26" style="padding: 1.5em 1.5em;">
+								<span class="box-title"><i class="fas fa-check"></i>購入リスト </span>
+								<p>主に購入する物の一覧です。相当品でも動作するので社内に無いか探してみてください。</p>
+								<a href="images/006_部品リスト/撮影装置/撮影装置_部品リスト_001.xlsx" download="撮影装置+部品リスト"><marker_green>部品リスト(EXCEL.xlsx)</marker_green>
+									<i class="fas fa-cloud-download-alt faa-vertical animated-hover green"></i></a>
+								<div class="row" style="padding-left:1em;">
+									<p ><span class="image left"><img src="images/howToMake_camera/61BGndsWKQL._AC_SX679_.jpg" alt="" /></span>
+										<span style="font-size:1.5em;font-weight: 600;">
+										1.カメラ本体</span> アプリからカメラを制御する為に <a href="https://support.d-imaging.sony.co.jp/app/sdk/ja/index.html" target="_blank" rel="noopener noreferrer"> <marker_pink>SONYのRemote API に対応したカメラ</marker_pink><i class="fas fa-external-link-alt pink"></i></a>
+										が必要です。WEBサイトに記載は無い
+										<a href="https://www.amazon.co.jp/s?k=dsc-wx500&__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&crid=3J830NAT97V4J&sprefix=dsc-wx500%2Caps%2C177&ref=nb_sb_noss_1" target="_blank" rel="noopener noreferrer"><marker_pink>DSC-WX500 </marker_pink><i class="fas fa-external-link-alt pink"></i></a>
+										(2017年当時&yen;33,000)で動作しました。カメラのアプリケーション→アプリ一覧→								
+										<a data-fancybox="" href="images/howToMake_camera/j2beyj7e.png" target="_blank">スマートリモコン内蔵版</a>
+										があれば動作すると思います。貴社のSONYカメラでトライしてみてください。もし新しく購入する場合は焦点距離が50mm程度が実物に近い写真が撮れるのでお勧めです。<br>
+									</p>
+									<hr class="hr2">
+									<p ><span class="image right"><img src="images/howToMake_camera/717RfrhtRZL._AC_SX679_.jpg" alt=""/></span>
+										<span style="font-size:1.5em;font-weight: 600;">
+										2.LEDテープ</span> WS2812Bを使用。必要な長さは60cm。100cmで&yen;2,000程度。Arduinoに接続して照明の色を変更します。コネクタ色によって照明色を変更しないと上手く撮影出来ません。より実物に近い色で撮影しないと直感的に
+										どのハメ図か分からなかったので追加しました。これが不要な場合はArduinoも必要ありません。LEDタイプには複数の種類があります。より新しいLEDテープは抵抗が少なく照明が明るすぎる可能性がありますが特に問題ありません。
+									</p>
+									<p ><span class="image left"><img src="images/006_部品リスト/撮影装置/pic/arduino_UNO.png" alt=""/></span>
+										<span style="font-size:1.5em;font-weight: 600;">
+										3.Arduino</span>Arduinoは組込み済みマイコンボード。LEDテープの色と明るさを制御する為に使用しました。最も有名な電子工作用の開発ボードでWEB上で情報が豊富。
+										3Dプリンターの制御にもよく使用されます。ここでは最も有名なArduino UNO(¥3,000)を使用。互換品のArduinoでも動作します。
+									</p>
+									<p><span class="image right"><img src="images/howToMake_camera/41eYLzR+FVL._AC_SX679_.jpg" alt="" /></span>
+										<span style="font-size:1.5em;font-weight: 600;">
+										4.無線LAN子機</span>
+										カメラとの無線通信で使用(約&yen;3,000-7,000)PCに接続して使用します。カメラとの無線通信は通常のネットワークとは別に接続する必要があります。
+										※使用PCがノートパソコンで有線LANのみ使用している場合のみ不要です。
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<label for="toggle-3" class="eject">2.<marker_black style="cursor: pointer;">撮影箱の寸法 </marker_black><i class="fas fa-eject rotate" ></i></label>
+						<input type="checkbox" id="toggle-3" hidden>
+						<div class="hidden" style="margin-left:1em;">
+							<div class="box26">
+								<span class="box-title"><i class="fas fa-check"></i>撮影箱の寸法 </span>
+								<p>目安の寸法と材料です。特にアルミフレームの切断工具は高額なので無い場合は</p>
+								<div class="row">
+									<div class="col-6 col-12-small">
+										<h3 id = "00_03">アルミフレーム切断寸法</h3>
+										<a href="images/006_部品リスト/撮影装置/3dCAD_1.png" data-fancybox="" target="_blank"><img src="images/006_部品リスト/撮影装置/3dCAD_1.png" id="ico2" class="float"width=80%></a>
+										<h4>1.<span class="tifany">■</span>400mm × 4本<br>
+											2.<span class="pink">■</span>300mm × 4本<br>
+											3.<span class="green">■</span>260mm × 5本<br clear="left">
+										</h4>
+									</div>
+									<div class="col-6 col-12-small">
+										<h3 id="00_04">ダンプラ切断寸法</h3>
+										<a data-fancybox="" href="images/006_部品リスト/撮影装置/3dCAD_2.png" target="_blank"><img src="images/006_部品リスト/撮影装置/3dCAD_2.png" id="ico2" class="float"width=80%></a>
+										<h4>4. 369 × 340 × 2枚<br>
+											5. 358 × 241 × 2枚<br>
+											6. 下図参照<br>
+											7. 下図参照<br clear="left"></h4>
+									</div>
+								</div>
+								<hr class="hr2">
+								<div class="row">
+									<div class="col-6 col-12-small">
+										<h3>6のサイズ</h3>
+										<a href="images/006_部品リスト/撮影装置/3dCAD_top.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/3dCAD_top.png" id="ico3"width=80%></a>
+									</div>
+									<div class="col-6 col-12-small">
+										<h3>7のサイズ</h3>
+										<a href="images/006_部品リスト/撮影装置/3dCAD_bottom.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/3dCAD_bottom.png" id="ico3"width=80%></a>
+									</div>
+								</div>
+								<h3 >参考写真</h3>
+								<div class="row">
+									<div class="col-4 col-12-medium">
+										<a href="images/006_部品リスト/撮影装置/PIC/参考写真 (2).JPG" data-fancybox="sanko"><img src="images/006_部品リスト/撮影装置/PIC/参考写真 (2).JPG" id="ico2" class="float" width=100%></a>
+										<p>右のUSBケーブルはPCとArduinoを接続、LEDの照度と色を変更。
+											左のUSBケーブルはPCとカメラを接続、カメラへの給電用</p>									
+									</div>
+									<div class="col-4 col-12-medium">
+										<a href="images/006_部品リスト/撮影装置/PIC/参考写真 (3).JPG" data-fancybox="sanko"><img src="images/006_部品リスト/撮影装置/PIC/参考写真 (3).JPG" id="ico2" class="float"width=100%></a>
+										<p>前面のダンプラをスライドさせてコネクタをセットします</p>
+									</div>
+									<div class="col-4 col-12-medium">
+										<a href="images/006_部品リスト/撮影装置/PIC/参考写真 (4).JPG" data-fancybox="sanko"><img src="images/006_部品リスト/撮影装置/PIC/参考写真 (4).JPG" id="ico2" class="float"width=100%></a>
+										<p>下のダンプラを外した状態</p>
+									</div>
+									<div class="col-4 col-12-medium">
+										<a href="images/006_部品リスト/撮影装置/PIC/参考写真 (5).JPG" data-fancybox="sanko"><img src="images/006_部品リスト/撮影装置/PIC/参考写真 (5).JPG" id="ico2" class="float"width=100%></a>
+										<p></p>
+									</div>
+									<div class="col-4 col-12-medium">
+										<a href="images/006_部品リスト/撮影装置/PIC/参考写真 (7).JPG" data-fancybox="sanko"><img src="images/006_部品リスト/撮影装置/PIC/参考写真 (7).JPG" id="ico2" class="float"width=100%></a>
+										<p>写真ではLEDの防水カバーを外していますが安定動作の為に外さない方が良いと思います</p>
+									</div>
+									<div class="col-4 col-12-medium">
+										<a href="images/006_部品リスト/撮影装置/PIC/参考写真 (6).JPG" data-fancybox="sanko"><img src="images/006_部品リスト/撮影装置/PIC/参考写真 (6).JPG" id="ico2" class="float"width=100%></a>
+										<p>フルカラーLEDをアルミフレームの溝に入れます</p>
+									</div>
+									<div class="col-4 col-12-medium">
+										<a href="images/006_部品リスト/撮影装置/PIC/参考写真 (8).JPG" data-fancybox="sanko"><img src="images/006_部品リスト/撮影装置/PIC/参考写真 (8).JPG" id="ico2" class="float"width=100%></a>
+										<p>カメラのマウントに合わせてカメラのセンターが中止の穴にあうように調整。
+											下のダンプラとカメラが水平になるように水平器で調整しておくと写真加工がやり易くなります</p>
+									</div>
+									<div class="col-4 col-12-medium">
+										<a href="images/006_部品リスト/撮影装置/PIC/参考写真 (9).JPG" data-fancybox="sanko"><img src="images/006_部品リスト/撮影装置/PIC/参考写真 (9).JPG" id="ico2" class="float"width=100%></a>
+										<p>専用のステーをアルミフレームなどで自作します</p>
+									</div>
+									<div class="col-4 col-12-medium">
+										<a href="images/006_部品リスト/撮影装置/PIC/参考写真 (10).JPG" data-fancybox="sanko"><img src="images/006_部品リスト/撮影装置/PIC/参考写真 (10).JPG" id="ico2" class="float"width=100%></a>
+										<p>四国部品では印刷前のネームプレート(グレー)を下に敷いて撮影時の位置を調整しています</p>									
+									</div>
+									<div class="col-4 col-12-medium">
+										<a href="images/006_部品リスト/撮影装置/PIC/参考写真 (1).JPG" data-fancybox="sanko"><img src="images/006_部品リスト/撮影装置/PIC/参考写真 (1).JPG" id="ico2" class="float"width=100%></a>
+										<p>白色のコネクタの時はグレー側を上にすると写真加工がやり易くなります</p>
+									</div>
+									<div class="col-4 col-12-medium">
+									</div>
+									<div class="col-4 col-12-medium">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<label for="toggle-5" class="eject">3.<marker_black style="cursor: pointer;">ArduinoIDEのインストール </marker_black><i class="fas fa-eject rotate" ></i></label>	
+						<input type="checkbox" id="toggle-5" hidden>
+						<div class="hidden" style="margin-left:1em;">							
+							<div class="box26">
+								<span class="box-title"><i class="fas fa-check"></i>ArduinoIDEのインストール </span>
+								<h5>ArduinoIDE(統合開発環境)はPCからArduinoにプログラムをインストールする為のソフト</h5>						
+								<img src="images/006_部品リスト/撮影装置/pic/arduino_UNO.png" ><br>
+								<label for="toggle-2" class="eject"><h5 style="margin-left:1em;"><marker_black style="cursor: pointer;">Arduinoとは? </marker_black><i class="fas fa-eject rotate" ></i></h5></label>	
+								<input type="checkbox" id="toggle-2" hidden>
+								<div class="hidden" style="margin-left:1em;">
+									<h5 >
+										組込み済みマイコンボード<br clear="left">
+										最も有名な電子工作用の開発ボードで情報が豊富<br>
+										3Dプリンターの制御にもよく使用されます<br>
+										ここでは最も有名なArduino UNO(&yen;3,000)を使用<br>
+										より最適な照明でコネクタ撮影をする為に利用<br>
+										自分はATmega328P系を使用しましたが、安価な互換品Arduinoでも動作します
+									</h5>
+								</div>
+								<h4>1.ダウンロード</h4>
+								<div style="padding-left:1em;margin-bottom: 1em;">
+									<p class="indent10"><a href="images/howToMake_camera/arduino-ide_nightly-20240409_Windows_64bit.zip" download="arduino_20240409_64bit"><marker_arduino>動作確認済みのVer2.3.2 </marker_arduino><i class="fas fa-cloud-download-alt faa-vertical animated-hover tifany"></i></a><br>
+									通常はVer2.3.2で問題無いと思います<br>
+									新しいバージョンが必要な場合は
+									<a href="https://www.arduino.cc/en/main/software" target="_blank" ><marker_pink>Arduinoの公式サイト </marker_pink> <i class="fas fa-external-link-alt pink"></i></a>
+									からダウンロードしてください</p>
+								</div>
+								<h4>2.インストール</h4>
+								<div style="padding-left:1em;">
+									<p class="indent10">2.1ダウンロードが完了したらフォルダーを開くをクリックします<br>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_04.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_04.png" width=30% ></a><br>
+										2.2.選択されているファイルを右クリックして管理者として実行をクリックします<br>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_05.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_05.png" width=30% ></a><br>
+										2.3.下図のウィザードが開きます。I Agree(同意する)をクリックします<br>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_06.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_06.png" width=30% ></a><br>
+										2.4.Nextをクリックします<br>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_07.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_07.png" width=30% ></a><br>
+										2.5.Installを...<br>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_08.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_08.png" width=30% ></a><br>
+										2.6.Completeが出たらインストール完了<br>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_09.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_09.png" width=30% ></a><br>
+									</p>
+								</div>
+							</div>
+						</div>
+						<label for="toggle-6" class="eject">4.<marker_black style="cursor: pointer;">ArduinoとLEDの接続 </marker_black><i class="fas fa-eject rotate" ></i></label>	
+						<input type="checkbox" id="toggle-6" hidden>
+						<div class="hidden" style="margin-left:1em;">							
+							<div class="box26">
+								<span class="box-title"><i class="fas fa-check"></i>ArduinoとLEDの接続 </span>
+								<h4>下図のようにArduinoとLEDテープを接続</h4>
+								<a href="images/howToMake_camera/arduino_ledtape.png" data-fancybox="sanko"><img src="images/howToMake_camera/arduino_ledtape.png" id="ico2" class="float"width=30%></a>
+								<p>Arduinoの5V - LEDテープの5V<br>
+									ArduinoのGND - LEDテープのGND<br>
+									ArduinoのDIGITAL6 - LEDテープのDI
+								</p>
+							</div>		
+						</div>
+						<label for="toggle-7" class="eject">5.<marker_black style="cursor: pointer;">Arduinoにプログラムを書き込む </marker_black><i class="fas fa-eject rotate" ></i></label>	
+						<input type="checkbox" id="toggle-7" hidden>
+						<div class="hidden" style="margin-left:1em;">
+							<div class="box26">
+								<span class="box-title"><i class="fas fa-check"></i>Arduinoにプログラムを書き込む </span>
+								<h4>1.PCとArduinoをUSBケーブルで接続します</h4>
+								<div class="indent10">
+									<a href="images/006_部品リスト/撮影装置/PIC/arduinoToPC.jpg" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduinoToPC.jpg" width=30% ></a>
+									<h5>この時PC側USBポートは給電専用を使用しないで下さい<br>
+										給電専用の場合は <i class="fas fa-bolt"></i>←こんな感じのマークが印刷されています</h5>
+									<h4>2.プログラムのダウンロード</h4>
+										<h5>下記からダウンロードして展開(解凍)して下さい<br>
+										<a href="images/006_部品リスト/撮影装置/001_satuei_shomei_07.zip" download="001_satuei_shomei_07"><marker_arduino>Arduino用のコード </marker_arduino><i class="fas fa-cloud-download-alt faa-vertical animated-hover tifany"></i></a><br>
+										</h5>
+									<h4>3.保存をクリック</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_10.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_10.png" width=30% ></a>
+										<h5>※Windowsのバージョンによって画面が異なるかもしまれません</h5>
+									<h4>4.フォルダーを開くをクリック</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_11.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_11.png" width=30% ></a>
+									<h4>5.選択されているファイルを右クリック、すべて展開をクリック</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_12.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_12.png" width=30% ></a>
+									<h4>6.展開をクリック</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_13.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_13.png" width=30% ></a>
+									<h4>7.展開されたフォルダが表示されるので開く</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_14.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_14.png" width=30% ></a>
+									<h4>8.001_satuei_shomei_**を開く</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_15.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_15.png" width=30% ></a>
+										<h5>ArduinoIDEがインストール済みの場合、ダブルクリックで開きます</h5>
+									<h4>9.ツール→シリアルポートの順にクリックして、Arduinoとして認識されているCOMを選択</h4>
+										<h5>ここではCOM4となっていますが、この番号はPCによって異なります</h5>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_16.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_16.png" width=30% ></a>
+									<h4>10.ツール→ボードの順にクリックして、Arduino/Genuino Unoを選択</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_17.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_17.png" width=30% ></a>
+									<h4>11.ツール→ライブラリを管理の順にクリック</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_19.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_19.png" width=30% ></a>
+									<h4>12.検索欄に <span class="gr"> Adafruit_neopixel </span> と入力</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_20.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_20.png" width=30% ></a>
+									<h4>13.検索結果が複数表示されるのでAdafruit NeoPixel by Adafruit のバージョン1.1.8 を選択して、インストールをクリック </h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_21.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_21.png" width=30% ></a>
+									<h4>14.インストール後、タイプの一覧からインストール済みを選択して、先ほどインストールしたものが表示されていたら成功</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_22.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_22.png" width=30% ></a>
+									<h4>15.右矢印のボタンを押すと、コンパイルして書き込みが開始されます</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_18.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_18.png" width=30% ></a>
+									<h4>16.ボードへの書き込みが完了しました。が表示されたらコードの書き込み完了です</h4>
+										<a href="images/006_部品リスト/撮影装置/PIC/arduino_23.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/arduino_23.png" width=30% ></a>
+										<h5>失敗する場合は、ツールの設定などこの説明通りに選択されているか確認してください</h5>
+								</div>
+							</div>
+						</div>
+						<!-- <label class="eject">6.camera+(自動でC:&yen;PLUS+にインストールされるので特に操作は必要ありません)</label><br> -->
+						
+						<label for="toggle-8" class="eject">6.<marker_black style="cursor: pointer;">PCの通信設定 </marker_black><i class="fas fa-eject rotate" ></i></label>	
+						<input type="checkbox" id="toggle-8" hidden>
+						<div class="hidden">
+							<div class="box26">
+								<span class="box-title"><i class="fas fa-check"></i> PCの通信設定 </span>
+								<h6>※カメラの固定IPと通信する為の設定<h6>
+								<h5>1.ウィンドウズキーを押す <a href="../assets/images/key/win.png"data-fancybox="" target="_blank"><i class="fas fa-keyboard fa-lg tifany" ></i></a><br>
+									　そのまま「インターネット」 と入力<br>
+									　インターネットオプションをクリック</h5>
+									<a href="images/006_部品リスト/撮影装置/PIC/camera_07.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/camera_07.png" width=50% ></a><br>
+									2.[接続] → [LANの設定]の順にクリック<br>
+									<a href="images/006_部品リスト/撮影装置/PIC/camera_08.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/camera_08.png" width=50% ></a><br>
+									3.[詳細設定]をクリック<br>
+									<a href="images/006_部品リスト/撮影装置/PIC/camera_09.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/camera_09.png" width=50% ></a><br>
+									4.例外の末尾に「;192.168.122.1」を追記<br>
+									<a href="images/006_部品リスト/撮影装置/PIC/camera_10.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/camera_10.png" width=50% ></a><br>
+									これでカメラとPCの無線通信設定が完了しました
+							</div>
+						</div>
+						<label for="toggle-9" class="eject">7.<marker_black style="cursor: pointer;">PCとカメラの通信設定 </marker_black><i class="fas fa-eject rotate" ></i></label>	
+						<input type="checkbox" id="toggle-9" hidden>
+						<div class="hidden">
+							<div class="box26">
+								<span class="box-title"><i class="fas fa-check"></i> PCとカメラの通信設定 </span>
+								1.カメラの電源を入れ▶ボタンを押すと、下の図の様に表示されるので実行を選択<br>
+								<a href="images/satuei/s010.png" data-fancybox=""><img src="images/satuei/s010.png" width=30% ></a><br>
+								2.MENUボタンを押してアプリ一覧を選択する<br>
+								<a href="images/satuei/s009.png" data-fancybox=""><img src="images/satuei/s009.png" width=30% ></a><br>
+								3.スマートリモコン内臓版を選択する<br>
+								<a href="images/satuei/s008.png" data-fancybox=""><img src="images/satuei/s008.png" width=30% ></a><br>
+								4.PCのWIFI接続からカメラに表示されたSSIDを選択<br>
+								　パスワードを入力して接続する<br>
+								<a href="images/satuei/s007.png" data-fancybox=""><img src="images/satuei/s007.png" width=30% ></a><br>
+								5.接続中の時にCAMERA+アプリのRecModeを押すと接続できます<br>
+								<a href="images/satuei/s006.png" data-fancybox=""><img src="images/satuei/s006.png" width=30% ></a>
+							</div>
+						</div>
+					</div>
+					
+					<!-- <h2 id="00_11">CAMERA+のインストール</h2>
+					<h4>1.トップページのダウンロードリンク、もしくは下記リンクをクリック。</h4>
+					<a href="http://10.7.120.37/myWeb/download/04.html" target="_blank"><i class=" fas fa-cloud-download-alt faa-vertical animated-hover" style=" color: #6c00aa "></i></a> CAMERA+<br>
+					<h4>2.CAMERA_Setup.msi をクリック。</h4>
+					<a href="images/006_部品リスト/撮影装置/PIC/camera_01.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/camera_01.png" width=30% ></a>
+					<h4>3.保存をクリック。</h4>
+					<a href="images/006_部品リスト/撮影装置/PIC/camera_02.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/camera_02.png" width=30% ></a>
+					<h4>4.実行をクリック。</h4>
+					<a href="images/006_部品リスト/撮影装置/PIC/camera_03.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/camera_03.png" width=30% ></a>
+					<h4>5.次へをクリック。</h4>
+					<a href="images/006_部品リスト/撮影装置/PIC/camera_04.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/camera_04.png" width=30% ></a>
+					<h4>6.フォルダーは初期値から変更しないでください。<br>　次へをクリック。</h4>
+					<a href="images/006_部品リスト/撮影装置/PIC/camera_05.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/camera_05.png" width=30% ></a>
+					<h4>7.完了。</h4>
+					<a href="images/006_部品リスト/撮影装置/PIC/camera_06.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/camera_06.png" width=30% ></a>
+					<br><br>
+					<p>CAMERA+アプリをダウンロード後、インストールする時に</p>
+					<a href="images/006_部品リスト/撮影装置/pic/dotNetFx1.png" data-fancybox=""><img src="images/006_部品リスト/撮影装置/PIC/dotNetFx1.png" width=30% ></a>
+					<p>と表示されたら下のリンクからdotNETFrameworkをインストールしてからCAMERA+アプリインストールする。</p>
+					<a href="images/006_部品リスト/撮影装置/download/dotnet.zip" target="_blank"><i class=" fas fa-cloud-download-alt faa-vertical animated-hover" style=" color: #6c00aa "></i></a> dotnet<br> -->
+					
+					<hr class="hr2">
+					<div class="bottom_dark">
+						<h3>まとめ</h3>
+						<P>
+							以上でcamera+での写真撮影が可能になります<br>
+							生産準備+のシート[端末一覧]からcamera+を起動してください<br>
+							<a href="http://192.168.11.8/01_web/top/index.html?page=connectorPic.html&navi=01&navi2=01_01" style="color:#FFF"><marker_write>コネクタ写真の撮影</marker_write><i class="fas fa-external-link-square-alt"></i></a>
+							<br>
+
+							正しく動作しない場合は以下の理由が考えられます<br><br>
+							・PCのOSのバージョン<br>
+							・dotNetFrameWorkのバージョン(または競合)<br>
+							・エクセルのバージョン<br><br>
+							不明な点はお問い合わせ下さい<br>
+							
+						</P>
+					</div>
+				</div>

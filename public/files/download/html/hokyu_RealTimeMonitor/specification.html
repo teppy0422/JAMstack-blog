@@ -1,0 +1,289 @@
+
+				<div class="inner">
+					<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>45</strong> by PLUS+</a>
+						<ul class="icons">							
+							<li><i class="fa fa-expand-arrows-alt" id="mode_full" aria-hidden="true" title="フルスクリーンにする" onclick="fullscreen()"></i></li>
+							<li><i class="fa fa-sun" id="theme-toggle" title="ライトモードに切り替える" onclick="toggleTheme()"></i></li>
+						</ul>
+					</header>
+					<header class="main">
+						<h2 style="margin-bottom: 1em;">仕様</h2>
+					</header>
+					<section style="padding:0;"></section>
+					<section style="padding:0;">
+						<h3 style="margin:0;padding:0.5em 0.5em;">各アプリの連携</h3>
+						<nav class="navi" style="padding:1em 0 3em 0;">
+							<ul>
+								<li >
+									<div class="tooltip2">													
+										<label for="trigger2" class="open_button"><span class="floor_color">2F</span> サーバー</label>
+										<div class="modal_wrap">
+											<input id="trigger2" type="checkbox">
+											<div class="modal_overlay">
+												<label for="trigger2" class="modal_trigger"></label>
+												<div class="modal_content">
+													<label for="trigger2" class="close_button">✖️</label>
+													<p class="modal_title">サーバーについて</p>
+													<h4>本体&yen;60,000 HDD&yen;10,000×4 (total:&yen;100,000)</h4><hr/>
+													<p><span class="image left"><img src="images/specification/amazon_ds918.png" alt="" /></span>
+														インストール:Apache2.4 PHP7.0<br>
+														IPアドレス:10.7.120.37 192.168..</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<ul>
+										<li>
+											<div class="tooltip2">
+												<label for="trigger3" class="open_button"><span class="floor_color">2F</span> 配索誘導ナビ</label>
+												<div class="modal_wrap">
+													<input id="trigger3" type="checkbox">
+													<div class="modal_overlay">
+														<label for="trigger3" class="modal_trigger"></label>
+														<div class="modal_content">
+															<label for="trigger3" class="close_button">✖️</label>
+															<p class="modal_title">配索誘導ナビ</p>
+															<h4>配索誘導ナビとは</h4><hr/>
+															<p><span class="image left"><video autoplay loop muted >
+																<source src="images/specification/yudonavi0001.mp4" type="video/mp4">
+															</video>
+															</span>
+															・配索経路とハメ箇所を表示するWEBアプリ<br>
+															・生産準備+から作成<br>
+															・補給品や試作や新規サブ考察の時に使用</p><div style="clear:both"></div>
+															<h4>使い方</h4><hr/>
+															<p>1.ネームを読んで誘導ナビを表示するとカウントダウン開始<br>
+																2.完了まで1時間前/2時間前など進捗状況に応じて専用のQRコードを読んで修正<br>
+																3.不足線や部品欠などで作業が止まる場合も専用のQRコードを読む</p>
+															<h4>反映方法</h4><hr/>
+															<p>上記で読まれた情報をサーバーに反映</p>
+														</div>
+													</div>
+												</div>
+											</div>
+										</li>
+										<li>
+											<div class="tooltip2">
+												<label for="trigger4" class="open_button"><span class="floor_color">1F</span> OrderList</label>
+												<div class="modal_wrap">
+													<input id="trigger4" type="checkbox">
+													<div class="modal_overlay">
+														<label for="trigger4" class="modal_trigger"></label>
+														<div class="modal_content">
+															<label for="trigger4" class="close_button">✖️</label>
+															<p class="modal_title">OrderList</p>
+															<h4>使い方</h4><hr/>
+															<p>1.次の検査予定製品品番が表示されます<br>
+																2.画面は1分毎に更新<br>
+																3.変更があった場合には音によって通知<br>
+																4.検査準備/検査完了をクリックする事によってサーバーに反映</p>
+														</div>
+													</div>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</nav><P style="clear:left"></P>
+					</section>
+					<section style="padding:0;">
+						<h3 style="margin:0;padding:0.5em 0.5em;">1日の流れ</h3>
+						<div class="flow_design03">
+							<ul class="flow03">
+								<li>
+									<dl>
+									<dt><span class="icon03">1</span>生産計画の立案</dt>
+									<dd>稼働日程(EXCEL)を設定後に作成ボタンを押す</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+									<dt><span class="icon03">2</span>生産開始</dt>
+									<dd>配索誘導ナビを読み込む事でカウントダウンの開始</dd>
+									<dd>終了予測時刻は前回の作業時間から算出</dd>
+									<dd>前回の作業時間が無い場合は端末数と回路数から予測</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+									<dt><span class="icon03">3</span>終了時間の調整</dt>
+									<dd>・作業完了まで1時間前/2時間前など作業者自身での入力</dd>
+									<dd>・不足線などで生産が停止中の場合も作業者自身での入力</dd>
+									<dd>入力にはQRコードを使用</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+									<dt><span class="icon03">4</span>検査準備</dt>
+									<dd>検査をする準備が出来たら画面をクリック</dd>
+									<dd>クリックする事で画面の着色が無くなり視覚的に準備完了が判断できます</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+									<dt><span class="icon03">5</span>検査完了</dt>
+									<dd>検査が完了したら画面をクリック</dd>
+									<dd>クリックする事で画面の着色が無くなり視覚的に準備完了が判断できます</dd>
+									</dl>
+								</li>
+							</ul>
+						</div>
+					</section>
+					<section style="padding:0;">
+						<h3 style="margin:0;padding:0.5em 0 0 0.5em;">画面への入力の仕方</h3>
+						<p class="attention">#赤い箇所は実装未定</p>
+						<nav class="navi" style="padding:1em 0 3em 0;">
+							<ul>
+								<li >
+									<div class="tooltip2">													
+										<label for="trigger2" class="open_button">サーバー</label>
+										<div class="modal_wrap">
+											<input id="trigger2" type="checkbox">
+										</div>
+									</div>
+									<ul>
+										<li>
+											<div class="tooltip2">
+												<label for="trigger3" class="open_button"><span class="floor_color">2F</span> 配索誘導ナビ</label>
+												<div class="modal_wrap">
+													<input id="trigger3" type="checkbox">
+													<div class="modal_overlay">
+														<label for="trigger3" class="modal_trigger"></label>
+													</div>
+												</div>
+											</div>
+											<ul>
+												<li>
+													<div class="tooltip2">
+														<label for="trigger5" class="open_button">NAVI.net</label>
+														<div class="modal_wrap">
+															<input id="trigger5" type="checkbox">
+															<div class="modal_overlay">
+																<label for="trigger5" class="modal_trigger"></label>
+																<div class="modal_content">
+																	<label for="trigger5" class="close_button">✖️</label>
+																	<p class="modal_title">NAVI.net</p>
+																	<h4>NAVI.net</h4><hr/>
+																	<p><span class="image left"><image src="images/thumbs/01.jpg"/></span>
+																	・マイコンに座標データをシリアル送信するアプリ<br>
+																	・WEBアプリからシリアル送信は設定が複雑になる為に使用<br>
+																	・WindowsOSのインストール可能</p><div style="clear:both"></div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<ul>
+														<li>
+															<div class="tooltip2">
+																<label for="trigger6" class="open_button">QRリーダー</label>
+																<div class="modal_wrap">
+																	<input id="trigger6" type="checkbox">
+																	<div class="modal_overlay">
+																		<label for="trigger6" class="modal_trigger"></label>
+																		<div class="modal_content">
+																			<label for="trigger6" class="close_button">✖️</label>
+																			<p class="modal_title">QRリーダー</p>
+																			<h4>用途と仕様</h4><hr/>
+																			<p><span class="image left"><image src="images/specification/qrreader.jpg"/></span>
+																			・小型で軽量で安価&yen;6,000な中華制QRリーダー<br>
+																			・手入力の手間を省く為に使用</p><div style="clear:both"></div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+										<li>
+											<div class="tooltip2">
+												<label for="trigger4" class="open_button"><span class="floor_color">1F</span> OrderList</label>
+												<div class="modal_wrap">
+													<input id="trigger4" type="checkbox">
+													<div class="modal_overlay">
+														<label for="trigger4" class="modal_trigger"></label>
+													</div>
+												</div>
+											</div>
+											<ul>
+												<li>
+													<div class="tooltip2">
+														<label for="trigger7" class="open_button">クリック</label>
+														<div class="modal_wrap">
+															<input id="trigger7" type="checkbox">
+															<div class="modal_overlay">
+																<label for="trigger7" class="modal_trigger"></label>
+																<div class="modal_content">
+																	<label for="trigger7" class="close_button">✖️</label>
+																	<p class="modal_title">クリック</p>
+																	<h4>検査準備/検査完了を反映</h4><hr/>
+																	<p><span class="image left"><image src="images/thumbs/02.jpg"/></span>
+																	・検査状況をクリックしてサーバーに反映する事で画面を更新
+																	</p><div style="clear:both"></div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</li>
+										<li>
+											<div class="tooltip2">
+												<label for="trigger99" class="open_button undecided"><span class="floor_color">2F</span> 生産状況入力</label>
+												<div class="modal_wrap">
+													<input id="trigger99" type="checkbox">
+													<div class="modal_overlay">
+														<label for="trigger99" class="modal_trigger"></label>
+														<div class="modal_content">
+															<label for="trigger99" class="close_button">✖️</label>
+															<p class="modal_title">生産状況入力</p>
+															<h4>実装未定</h4><hr/>
+															<p><span class="image left"><image src="images/thumbs/03.jpg"/></span>
+															・生産状況を入力する画面<br>
+															・タップする事でOrderListに反映<br>
+															・クリックだとマウスの設置場所が邪魔になりそうなのでタブレット推奨
+															</p><div style="clear:both"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<ul>
+												<li>
+													<div class="tooltip2">
+														<label for="trigger99" class="open_button undecided">タップ</label>
+														<div class="modal_wrap">
+															<input id="trigger99" type="checkbox">
+														</div>
+													</div>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</nav><P style="clear:left"></P>
+					</section>
+					<div class="bottom_dark">
+						<h2 style="color:#FFF">考察</h2>
+						<h3>　1.配索誘導ナビを使用している場合のみ下記の更新が可能</h3>
+						<p>　　※任意のQRコードを読む手動操作<br>
+							　　・生産開始から残り時間を推測して完了時間の更新<br>
+						　　・作業完了1時間とか30分前に完了時間を更新<br>
+						　　・電線欠等による作業停止</p>
+						<h3>　-対策-</h3>
+						<p>　　1-1.作業者毎に入力する為のデバイスを持つ(iPad等) - 徳島向上はWifiが使えない問題<br>
+						　　1-2.共通のデバイスで作業変化の都度入力の操作をする</p>
+
+						<h3>　2.連続して同じ製品品番がある場合</h3>
+						<p>　　製品品番と設変だけで判別してるのでプログラムから見分けがつきません<br>
+							　　先に生産を開始した製品のみ情報が表示されます</p>
+						<h3>　-対策-</h3>
+						<p>　　2-1.配索誘導ナビを開始する際に読むネームのQRコード?をサーバーにアップする<br>
+							　　　
+						</p>
+					</div>
+				</div>

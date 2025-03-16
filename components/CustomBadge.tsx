@@ -50,7 +50,7 @@ export const ProjectLists: React.FC<ProjectListsProps> = ({
       <br />
       {myBadge("このWEBアプリ", "custom.front")}
       <br />
-      {myBadge("その他", "custom.gray")}
+      {myBadge("その他", "gray")}
     </Box>
   );
 };

@@ -591,28 +591,12 @@ function ThreadContent() {
   ) => {
     const defaultCreatedAt = createdAt || new Date().toISOString();
     switch (category) {
-      case "機能追加":
+      case "追加/修正":
         return [
           {
             id: "fixed-post-id-1",
             content:
               "機能追加を依頼する場合は\n新しい機能が分かるものを添付してください",
-            created_at: defaultCreatedAt,
-            user_uid: masterUserId,
-          },
-          {
-            id: "fixed-post-id-2",
-            content: "-ここにサンプルを用意する予定-",
-            created_at: defaultCreatedAt,
-            user_uid: masterUserId,
-          },
-        ];
-      case "機能修正":
-        return [
-          {
-            id: "fixed-post-id-1",
-            content:
-              "機能修正について\n修正したい箇所が分かるものを添付してください",
             created_at: defaultCreatedAt,
             user_uid: masterUserId,
           },

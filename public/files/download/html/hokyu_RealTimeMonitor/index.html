@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+	<head>
+		<title>Sjp</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta http-equiv="X-UA-Compatible" content="chrome=1">
+		<link rel="icon" href="../assets/images/ico/decoration_miscellaneous_adornment_cultures_carpet_mat_icon_262790.ico">
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="../assets/awesome5/font-awesome-animation.min.css" type="text/css" media="all" />
+		<link rel="stylesheet" href="assets/fancybox-master/fancybox-master/dist/jquery.fancybox.min.css" />
+	</head>
+	<!-- <body class="is-preload" onload="load();loginCheck();"> -->
+	<body class="is-preload" onload="load();">
+		<div id="wrapper">
+			<div id="main"></div>
+			<div id="sidebar" class="inactive">
+				<div class="inner background-overlay" >
+					<section id="search" class="alt">
+						<form method="post" action="#">
+							<input type="text" name="query" id="query" placeholder="Search" />
+						</form>
+					</section>
+					<nav id="menu">
+						<!-- <div id="loginStatus" style="width:12em;margin:0 0 1em 0;padding:1em 0.5em 1em 0.5em;"><i class="fas fa-fw fa-sign-in-alt"></i>ログイン</div> -->
+						<header class="major">
+							<h2>Menu</h2>
+						</header>
+						<ul>
+							<li onclick="HTML_Load('manualEntry.html?page=manualEntry.html','main')"><a>生産状況入力</a></li>
+							<li onclick="HTML_Load('inspection.html?page=inspection.html','main')"><a>検査予定リスト</a></li>
+							<li onclick="HTML_Load('specification.html?page=specification.html','main')"><a>仕様</a></li>
+						</ul>
+					</nav>
+					<section>
+						<header class="major">
+							<h2>2階のWEBカメラ</h2>
+						</header>
+						<div class="mini-posts">
+							<article>
+								<a href="#" class="image"><img src="images/pic07.jpg" alt="" /></a>
+								<p>例えばここにWEBカメラの映像をリアルタイムで再生できます</p>
+							</article>
+						</div>
+						<ul class="actions">
+							<li><a href="#" class="button">More</a></li>
+						</ul>
+					</section>
+					<section>
+						<header class="major">
+							<h2>連絡</h2>
+						</header>
+						<p>不具合や変更点がある場合の連絡先</p>
+						<ul class="contact">
+							<li class="icon solid fa-envelope"><a href="#">teppy422@au.com</a></li>
+							<li class="icon solid fa-phone">090-8971-4946</li>
+						</ul>
+					</section>
+				</div>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+		<script src="assets/fancybox-master/fancybox-master/dist/jquery.fancybox.min.js"></script>
+		<script>			
+			function fullscreen() {
+				const rootElement = document.documentElement;
+				const mode_full = document.getElementById('mode_full');
+				if (!document.fullscreenElement) {
+					if (rootElement.requestFullscreen) {
+						rootElement.requestFullscreen();
+					} else if (rootElement.msRequestFullscreen) { // Microsoft Edge用のフルスクリーンメソッド
+						rootElement.msRequestFullscreen();
+					}
+					mode_full.className = "fas fa-compress-arrows-alt";
+					mode_full.title = "フルスクリーンを終了";
+				} else {
+					if (document.exitFullscreen) {
+						document.exitFullscreen();
+					} else if (document.msExitFullscreen) { // Microsoft Edge用のフルスクリーン終了メソッド
+						document.msExitFullscreen();
+					}
+					mode_full.className = "fas fa-expand-arrows-alt";
+					mode_full.title = "フルスクリーンにする";
+				}
+			}
+			function loginCheck(){
+				//Httpリクエスを作る
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("GET","assets/php/loginCheck.php",true);
+				xmlhttp.onreadystatechange = function(){
+					//とれた場合Idにそって入れ替え
+					if(xmlhttp.readyState == 4 && xmlhttp.status==200){
+						var data = xmlhttp.responseText;
+						var elem = document.getElementById("loginStatus");
+						elem.innerHTML= data;
+						if(data=='ログイン'){
+							elem.classList.add('neu');
+						}
+					}
+				}
+				xmlhttp.send(null);
+			}
+		</script>
+	</body>
+</html>

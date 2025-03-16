@@ -38,6 +38,7 @@ import { useUserData } from "../hooks/useUserData";
 import { useReadCount } from "../hooks/useReadCount";
 
 import { CustomAccordionIcon } from "../components/CustomText";
+import { CustomLoading } from "../components/CustomText";
 
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";
@@ -94,6 +95,7 @@ const Frame: React.FC<{
   isMain?: boolean;
 }> = ({ children, sections, sectionRefs, isThrough, isMain }) => {
   const { language, setLanguage } = useLanguage();
+  const [isLoading, setIsLoading] = useState(true);
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const { colorMode } = useColorMode();
@@ -108,6 +110,16 @@ const Frame: React.FC<{
   const { pictureUrl, userName, userCompany, userMainCompany } =
     useUserData(userId);
   const { readByCount, skillBlogsData } = useReadCount(userId);
+
+  useEffect(() => {
+    // 1秒後にローディングを終了
+    // 遅くなるけどログイン出来てない表示が出るから暫定で回避
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    // クリーンアップ関数
+    return () => clearTimeout(timer);
+  }, []);
 
   //64pxまでスクロールしないとサイドバーが表示されないから暫定
   useEffect(() => {
@@ -270,29 +282,40 @@ const Frame: React.FC<{
       setAccordionIndex(index);
     }
   }, []);
+
+  // userNameが変わったときの処理をここに記述
   useEffect(() => {
-    // userNameが変わったときの処理をここに記述
     console.log("userNameが変更されました:", userName);
   }, [userName]); // userNameを依存配列に追加
-
-  useEffect(() => {
-    // 言語が変更されたときに実行する処理
-    console.log(`Language changed to: ${language}`);
-    // 必要に応じて他の処理を追加
-  }, [language]); // 言語が変わるたびに実行
-
   return (
     <>
       <Content isCustomHeader={true} maxWidth="1280px" isUse={!isMain}>
         <ChakraProvider theme={customTheme}>
-          {!isThrough && !userId ? (
-            <Box h="60vh">
+          {isLoading ? (
+            <Box
+              h="30vh"
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <CustomLoading
+                text="LOADING LOADING LOADING "
+                radius={40}
+                fontSize={11}
+                imageUrl="/images/illust/hippo/hippo_014.svg"
+                imageSize={40}
+                color="#FFF"
+              />
+            </Box>
+          ) : !isThrough && !userId && !isLoading ? (
+            <Box h="30vh">
               <Text
                 fontSize="lg"
                 textAlign="center"
                 mt={4}
                 fontWeight="bold"
-                color={colorMode === "light" ? "red" : "orange"}
+                color={colorMode === "light" ? "orange" : "orange"}
               >
                 {getMessage({
                   ja: "閲覧するにはログインと開発による認証が必要です",
@@ -302,14 +325,14 @@ const Frame: React.FC<{
                 })}
               </Text>
             </Box>
-          ) : !isThrough && !userName ? (
-            <Box h="60vh">
+          ) : !isThrough && !userName && !isLoading ? (
+            <Box h="30vh">
               <Text
                 fontSize="lg"
                 textAlign="center"
                 mt={4}
                 fontWeight="bold"
-                color={colorMode === "light" ? "red" : "orange"}
+                color={colorMode === "light" ? "orange" : "orange"}
               >
                 {getMessage({
                   ja: "閲覧するには開発による認証が必要です",

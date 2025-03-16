@@ -1,0 +1,74 @@
+
+				<div class="inner">
+					<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>コネクタの撮影</strong><span style="font-size:9pt;color:#888"> @2024年3月17日に更新 #片岡哲兵<span></span></a>
+						<ul class="icons">
+							<li><i class="fa fa-arrow-circle-left" aria-hidden="true" onclick="javascript:window.history.back(-1);return false;"></i></li>
+							<li><i class="fa fa-expand-arrows-alt" aria-hidden="true" onclick="fullscreen()"></i></li>
+						</ul>
+					</header>
+
+					<p>コネクタの写真撮影について解説します<br>
+					※生産準備+のバージョンによっては画面が異なる場合があります</p>
+					<h2>1.考え方</h2>
+					<div class="box26">
+						<span class="box-title"><i class="fas fa-check"></i> 効率良く撮影する</span>
+						<div class="col-6 col-12-small">
+							<!-- <input type="checkbox" id="A1" name="A1"> -->
+							<label for="A1">新しくコネクタが追加になった場合、各工場でコネクタの写真撮影を行い端末毎にハメ作業用の画像を作成しています<br>
+								この問題に対し一度登録したコネクタ写真と座標データは共有して生産効率の向上を計ります<br>
+								ここでは専用撮影ソフトを使う事で、コネクタ品番の入力ミス/撮影時の照明を統一します<br>
+								以下はその手順の説明です
+							</label>
+						</div>
+					</div>
+
+					<h2>2.カメラの起動</h2>
+					<h4><mp>2-1</mp>.生産準備+の[端末一覧]を選択</h4>
+					<h4><mp>2-2</mp>.撮影する端末/コネクタ品番を選択</h4>
+					<div class="code-frame" ><p>下図は11行目(7283-0391-30)を選択している状態</p></div>
+					<div class="img-left"><img src="images/connector/0002.png" width=70%></div>
+					<hr class="hr1">
+					<h4><mp>2-3</mp>.<div class="shift-key">Ctrl</div> + <div class="shift-key">Enter</div>を押す
+						<a href="../assets/images/key/ctrlEnter.png"data-fancybox="" target="_blank"><i class="fas fa-keyboard fa-lg tifany" ></i></a>
+					</h4>
+					<div class="code-frame" ><p>撮影ソフト(camera+/無料)が起動します</p></div>
+					<div class="img-left"><img src="images/connector/0013.png" width="80%"></div>
+
+					<label for="toggle-1" style="cursor: pointer;"><h4><marker_black>camera+とは </marker_black><i class="fas fa-eject" style="transform: rotate(180deg);"></i></h4></label>	
+					<input type="checkbox" id="toggle-1" hidden>
+					<div class="content">				
+						<h4 >
+							└ コネクタ撮影用のデスクトップアプリケーション<br>						
+							　<marker_pink>SONYのRemote API に対応したカメラ</marker_pink> <a href="https://support.d-imaging.sony.co.jp/app/sdk/ja/index.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-info-circle pink"></i></a>
+							を制御<br>
+							　※徳島工場では上記リンクに記載が無い<marker_pink>DSC-WX500</marker_pink><a href="https://www.amazon.co.jp/s?k=dsc-wx500&__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&crid=3J830NAT97V4J&sprefix=dsc-wx500%2Caps%2C177&ref=nb_sb_noss_1" target="_blank" rel="noopener noreferrer"><i class="fas fa-info-circle pink"></i></a>を使用しています<br>
+							　おそらくWIFi搭載モデルのSONYのカメラなら動作します<br><br>
+							　ファイル名を手入力しないので写真の上書きミスを防ぎます<br>
+							　※VB.netで作成しました。ソースファイルはここに載せる予定です。急ぐ場合はご連絡下さい<br>
+							　　開発に使用したリファレンス<br>
+							　　　<a href="images/connector/Sony_CameraRemoteAPIbeta_API-Reference_v2.40.pdf" target="_blank" rel="noopener noreferrer"><span class="pink">API references v2.40</span></a><br>
+							　　　<a href="images/connector/Sony_CameraRemoteAPIbeta_DevelopmentGuide_v1.20.pdf" target="_blank" rel="noopener noreferrer"><span class="pink">How to use V1.20</span></a><br>
+							　　　開発した2018年にはbeta版でした。最新版が必要な場合はSONY公式よりダウンロードしてください<br><br>
+							└<mp>Arduino</mp>の照明制御と併用する事でより本物に近いコネクタ写真の撮影が可能になります<br><br>							
+							※以上は必須では有りません。自分で撮影した写真でも利用可能です
+						</h4>
+					</div>
+					
+					<label for="toggle-2" style="cursor: pointer;"><h4><marker_black>撮影装置の作り方 </marker_black><i class="fas fa-eject" style="transform: rotate(180deg);"></i></h4></label>	
+					<input type="checkbox" id="toggle-2" hidden>
+					<div class="content">			
+						ここに別のコンテンツが入ります。
+					</div>
+					
+
+					<h3></h3>
+					<h4>-ここら辺に撮影の手順-<br>
+						
+					<div class="bottom_dark">
+						<h3>まとめ</h3>
+						<P>
+						</P>
+					</div>
+				</div>
