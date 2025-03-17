@@ -1410,7 +1410,6 @@ function ThreadContent(): JSX.Element {
                 className="no-print-page"
               >
                 {/* ファイル添付ボタン */}
-
                 <Button
                   onClick={handleButtonClick}
                   position="absolute"
@@ -1477,16 +1476,19 @@ function ThreadContent(): JSX.Element {
                   as="textarea"
                   id="inputValue"
                   minH="40px"
-                  h="40px"
+                  // h="40px"
                   resize="none"
                   overflow="hidden"
                   onKeyDown={(e) => {
                     if (e.shiftKey && e.key === "Enter") {
+                      e.preventDefault(); // デフォルトの改行動作を防ぐ
                       const sendButton = document.getElementById("sendButton");
                       if (sendButton) {
                         sendButton.click();
                       }
                     }
+                  }}
+                  onInput={(e) => {
                     const textarea = e.target as HTMLTextAreaElement;
                     textarea.style.height = "40px";
                     textarea.style.height = `${textarea.scrollHeight}px`;
@@ -1506,8 +1508,8 @@ function ThreadContent(): JSX.Element {
                   pl={10}
                   pr={0}
                   size="md"
-                  color={colorMode === "light" ? "black" : "white"}
-                  bg={colorMode === "light" ? "fdf8f4" : "gray.800"}
+                  color={colorMode === "light" ? "#4d3c3f" : "white"}
+                  bg={colorMode === "light" ? "white" : "gray.800"}
                   borderColor={colorMode === "light" ? "#bfb0a4" : "gray.800"}
                   borderRadius="5px"
                   _placeholder={{
@@ -1544,19 +1546,18 @@ function ThreadContent(): JSX.Element {
                     setIsSubmitting(true); //post開始
                     createPost(inputValueElement.value);
                     // setNewPostContent(""); //クリア
-                    if (inputValueElement) {
-                      inputValueElement.value = "";
-                      inputValue.style.height = "38px"; // 高さを初期状態に戻す
-                    }
-                    setIsSubmitting(false); //post終了
-                    if (audioRef_send.current) {
-                      audioRef_send.current.play();
-                    }
+                    inputValueElement.value = "";
+                    inputValueElement.style.height = "40px"; // 高さを初期状態に戻す
+                    setTimeout(() => {
+                      setIsSubmitting(false); //post終了
+                      if (audioRef_send.current) {
+                        audioRef_send.current.play();
+                      }
+                    }, 2000); // 2秒待機
                   }}
                   icon={
                     isSubmitting ? (
                       <Spinner
-                        size="38px"
                         color={colorMode === "light" ? "purple" : "yellow"}
                       />
                     ) : (
