@@ -116,43 +116,22 @@ const Frame: React.FC<{
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
+      // ローディング完了後にハッシュ位置へスクロール
+      handleHashScroll();
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -64;
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 100);
-    } else {
-      window.scrollTo(0, 150);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    }
-  }, []);
-
-  useEffect(() => {
     let lastScrollY = window.scrollY;
     let ticking = false;
-
     const updateActiveSection = () => {
       if (sectionRefs?.current) {
         const scrollPosition = window.scrollY + 100; // ヘッダーの高さを考慮
-
         sectionRefs.current.forEach((section) => {
           if (section) {
             const sectionTop = section.offsetTop;
             const sectionBottom = sectionTop + section.offsetHeight;
-
             if (
               scrollPosition >= sectionTop &&
               scrollPosition <= sectionBottom
@@ -165,7 +144,6 @@ const Frame: React.FC<{
       }
       ticking = false;
     };
-
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
@@ -175,7 +153,6 @@ const Frame: React.FC<{
         ticking = true;
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [sectionRefs]);
@@ -185,26 +162,7 @@ const Frame: React.FC<{
     console.log("現在のアクティブセクション:", activeSection);
   }, [activeSection]);
 
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const element = document.querySelector(hash);
-        if (element) {
-          const yOffset = -50;
-          const y =
-            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange, false);
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange, false);
-    };
-  }, []);
-
-  useEffect(() => {
+  const handleHashScroll = () => {
     const hash = window.location.hash;
     if (hash) {
       setTimeout(() => {
@@ -215,9 +173,9 @@ const Frame: React.FC<{
             element.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({ top: y, behavior: "smooth" });
         }
-      }, 500);
+      }, 100); // ローディング完了直後にスクロール
     }
-  }, [userId, userName]);
+  };
 
   const [currentPath, setCurrentPath] = useState("");
   const [accordionIndex, setAccordionIndex] = useState<number[]>([]);
