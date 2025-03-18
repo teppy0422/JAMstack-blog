@@ -207,6 +207,26 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-03-18T11:07:00+0900"
+              description1={getMessage({
+                ja: "access2003のみ(?)で送信/印刷ボタンを押すと設定枚数以上に処理される",
+                us: "Only in access2003(?) More than the set number of sheets are processed when the send/print button is pressed in",
+                cn: "仅在 access2003（？）在下列情况下按下发送/打印按钮时，处理的页数超过了设定的页数。",
+                language,
+              })}
+              description2={getMessage({
+                ja: "送信/印刷ボタンを押した時のみ処理完了までこのボタンを無効",
+                us: "Disable this button until processing is complete only when the Send/Print button is pressed.",
+                cn: "只有按下发送/打印按钮时，该按钮才会禁用，直到处理完成。",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Jdss/main_165.zip"
+              inCharge="徳島,小松さん,不具合,Win10zip"
+              isLatest={true}
+              userName={userName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-02-05T23:04:00+0900"
               description1=""
               description2={getMessage({
@@ -218,7 +238,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Jdss/main_164.zip"
               inCharge="徳島,作業者さん,Win10zip"
-              isLatest={true}
+              isLatest={false}
               userName={userName ?? ""}
             />
             <CustomLinkBox
