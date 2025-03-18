@@ -360,12 +360,18 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                   bg={projectName && GetColor(projectName)}
                   flexShrink={0} // Boxが縮小されないようにする
                 />
-                {user && (
+                {user ? (
                   <Avatar
                     boxSize="16px"
-                    zIndex="5"
                     loading="lazy"
                     src={user?.picture_url}
+                    mr={0.5}
+                  />
+                ) : (
+                  <Box
+                    boxSize="16px"
+                    bg="#bfb0a4"
+                    borderRadius="50%"
                     mr={0.5}
                   />
                 )}
@@ -619,7 +625,8 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                             : "rgba(255,255,255,0.5"
                           : "transparent"
                       }
-                      borderRadius="4px"
+                      borderTop={isExpanded ? "1px solid #8d7c6f" : ""}
+                      // borderRadius="4px"
                       onClick={() => {
                         if (userMainCompany === "開発") {
                           toggleCompanyVisibility(index);
@@ -650,7 +657,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                       }}
                     >
                       <CustomAccordionIcon isExpanded={isExpanded} />
-                      <Box>
+                      <Box px={1} borderRadius="5px">
                         <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={0} />
                         <Box as="span" fontSize="sm">
                           {mainCompany !== "開発" &&
@@ -749,6 +756,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                           );
                         })}
                     </AccordionPanel>
+                    {isExpanded && <Divider borderColor="#8d7c6f" />}
                   </>
                 )}
               </AccordionItem>

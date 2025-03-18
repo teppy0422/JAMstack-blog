@@ -272,7 +272,6 @@ const BBS = () => {
           </Stack>
 
           <SidebarBBS isMain={true} reload={reloadSidebar} />
-          <Divider mt={2} border="solid 1px gray" />
           <HStack
             spacing={2}
             alignItems="center"
