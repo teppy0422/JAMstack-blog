@@ -368,7 +368,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                     mr={0.5}
                   />
                 ) : (
-                  <Box
+                  <Avatar
                     boxSize="16px"
                     bg="#bfb0a4"
                     borderRadius="50%"

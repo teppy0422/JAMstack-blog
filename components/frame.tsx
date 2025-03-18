@@ -331,7 +331,11 @@ const Frame: React.FC<{
                 flex={isMain ? "100" : "3.5"}
                 position="sticky"
                 top="64px"
-                display={["none", "none", "none", "block"]}
+                display={
+                  isMain
+                    ? ["block", "block", "block", "block"]
+                    : ["none", "none", "none", "block"]
+                }
                 color={colorMode === "light" ? "black" : "white"}
               >
                 {!isMain && (
