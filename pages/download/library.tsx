@@ -36,7 +36,7 @@ export default function About() {
   const { language, setLanguage } = useLanguage();
   return (
     <>
-      <Sidebar />
+      <Sidebar isDrawer={false} />
       <Content isCustomHeader={true}>
         <div
           className={styles.me}

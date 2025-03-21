@@ -1088,7 +1088,7 @@ const Roadmap = () => {
           },
         }}
       />
-      <Sidebar />
+      <Sidebar isDrawer={false} />
       <Content isCustomHeader={true}>
         <Button
           onClick={() => moveThisMonth()}

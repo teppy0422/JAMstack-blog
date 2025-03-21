@@ -508,7 +508,7 @@ export default function Header() {
           </VStack>
         </header>
       </div>
-      {/* 警告モーダル */}
+      {/* 告知モーダル */}
       <Modal isOpen={isAlertModalOpen} onClose={() => setAlertModalOpen(false)}>
         <ModalOverlay />
         <ModalContent
@@ -711,7 +711,7 @@ export default function Header() {
                     p={0}
                     top="90px"
                   >
-                    <SunderText colorMode={colorMode} text="告知" />
+                    <SunderText colorMode={colorMode} text="更新内容" />
                     <Text
                       fontSize="md"
                       fontWeight="400"
@@ -721,31 +721,29 @@ export default function Header() {
                       mb={1}
                       display="inline-block"
                     >
-                      ・WEBサービスの継続が困難
+                      ・1/15 中国語(簡体字)と米英語に対応
                       <br />
-                      ・おそらく3月中に停止??
+                      ・3/13 チャット追加機能の追加
                       <br />
+                      ・3/20 開発メンバーの状態表示を追加
                       <br />
-                      ・チャットの区分と仕様を変更中3/14まで
                     </Text>
                   </Box>
                 </Box>
                 <Text
                   fontSize="sm"
                   color={colorMode === "light" ? "#000" : "#FFF"}
-                  bg={colorMode === "light" ? "#f2e9df" : "#000"}
                   p={1}
                   mt={6}
                   mb={0}
                   fontWeight={400}
                 >
-                  停止した場合の連絡はLINEまたはメールでお願いします。
+                  このサイトが停止した場合の連絡はLINEまたはメールでお願いします。
                   ファイルのやり取りが難しくなりますが、その時に考えます。
                 </Text>
                 <Text
                   fontSize="sm"
                   color={colorMode === "light" ? "#000" : "#FFF"}
-                  bg={colorMode === "light" ? "#f2e9df" : "#000"}
                   p={1}
                   mb={0.5}
                   fontWeight={400}

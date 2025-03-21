@@ -175,7 +175,7 @@ export const StatusDisplay = () => {
       position="fixed"
       zIndex={1100}
       top="46px"
-      right="7px"
+      right="1px"
       borderRadius="md"
     >
       <Stack spacing={1}>

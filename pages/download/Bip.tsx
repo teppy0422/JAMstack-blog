@@ -140,7 +140,7 @@ export default function About() {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar isDrawer={false} />
       <Content isCustomHeader={true}>
         <div
           className={styles.me}

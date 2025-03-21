@@ -207,7 +207,7 @@ export default function About({
       <Text ml={4} className="print-only">
         ※別紙3
       </Text>
-      <Sidebar />
+      <Sidebar isDrawer={false} />
       <Content isCustomHeader={true}>
         <Box
           className={styles.me}
