@@ -564,7 +564,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
           <Box
             display="flex"
             justifyContent={isMain ? "center" : "left"}
-            ml={isMain ? "" : "2.5"}
+            ml={isMain ? "" : "1"}
           >
             <Box textAlign="left">
               <Flex
@@ -575,14 +575,16 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
               >
                 {showCompleted ? (
                   <>
-                    <MdCheckBox size="18px" />
+                    <MdCheckBox size="16px" />
                   </>
                 ) : (
                   <>
-                    <MdCheckBoxOutlineBlank size="18px" />
+                    <MdCheckBoxOutlineBlank size="16px" />
                   </>
                 )}
-                <Box as="button">完了済みを表示</Box>
+                <Box as="button" fontSize="13px">
+                  完了済みを表示
+                </Box>
               </Flex>
             </Box>
           </Box>

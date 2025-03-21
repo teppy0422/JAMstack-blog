@@ -157,7 +157,6 @@ const BlogPage: React.FC = () => {
                     left="0px"
                     bottom="-36px"
                     animation="kinoco_nyoki 1s forwards 1s"
-                    sealSize={2}
                   />
                   <Box
                     position="absolute"
@@ -244,7 +243,6 @@ const BlogPage: React.FC = () => {
                   left="80px"
                   bottom="73px"
                   animation="nyoki_rabit 5s forwards, rabitJump 10s infinite 7s"
-                  sealSize={2.5}
                 />
               </Box>
             </Box>

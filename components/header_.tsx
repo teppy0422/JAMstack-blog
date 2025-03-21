@@ -71,6 +71,8 @@ import { Global } from "@emotion/react";
 
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
+import Sidebar from "../components/sidebar";
+import { NowStatus } from "../components/NowStatus";
 
 import "@fontsource/dela-gothic-one";
 
@@ -372,31 +374,32 @@ export default function Header() {
         <header id="navTop" style={{ maxWidth: "100vw", overflowX: "hidden" }}>
           <VStack>
             <Flex className={`${myClass} ${styles.headerNav}`} maxWidth="100vw">
-              <IconButton
-                className={`${styles.snowTarget}`}
-                style={{
-                  transform: "translateX(0rem)",
-                }}
-                display={{ base: "block", xl: "block" }}
-                icon={<HamburgerIcon />}
-                bg="white.1"
-                aria-label="Open Menu"
-                onClick={onMenuOpen}
-                position="fixed"
-                top="8px"
-                left="10px"
-                zIndex="1101"
-                opacity="0.85"
-                borderColor={colorMode === "light" ? "black" : "white"}
-                borderWidth="1px"
-              />
+              <Center>
+                <IconButton
+                  className={`${styles.snowTarget}`}
+                  style={{
+                    transform: "translateX(0rem)",
+                  }}
+                  display={{ base: "block", xl: "block" }}
+                  icon={<HamburgerIcon />}
+                  bg="white.1"
+                  aria-label="Open Menu"
+                  onClick={onMenuOpen}
+                  ml="4px"
+                  zIndex="1101"
+                  opacity="0.85"
+                  borderColor={colorMode === "light" ? "black" : "white"}
+                  borderWidth="1px"
+                  fontSize="sm"
+                  size="sm"
+                />
+              </Center>
               <Center
                 flex="1"
                 style={{ gap: "4px" }}
                 className={styles.logoAndText}
-                ml="42px"
               >
-                <Flex alignItems="center" gap="4px">
+                <Flex alignItems="center" gap="2px">
                   <svg
                     viewBox="-15,80,60,60"
                     className={styles.logo}
@@ -406,19 +409,21 @@ export default function Header() {
                   </svg>
                   <NextLink href="/" legacyBehavior>
                     <Link _focus={{ _focus: "none" }}>
-                      <Text className={styles.logoText}>STUDIO+</Text>
+                      <Text className={styles.logoText} fontSize="md" mr="10px">
+                        STUDIO+
+                      </Text>
                     </Link>
                   </NextLink>
-                  <Box
+                  <Center
                     onClick={onOpen}
                     cursor="pointer"
                     _hover={{ bg: "transparent" }}
                     bg="transparent"
-                    h="32px"
-                    maxH="32px"
+                    h="24px"
+                    maxH="24px"
                   >
                     <IconButton
-                      icon={<ImQrcode size="xl" />}
+                      icon={<ImQrcode size="md" />}
                       _hover={{ bg: "transparent" }}
                       bg="transparent"
                       p="0"
@@ -426,14 +431,14 @@ export default function Header() {
                       width="100%"
                       aria-label="QR Code Icon"
                     />
-                  </Box>
+                  </Center>
                 </Flex>
                 <Modal isOpen={isOpen} onClose={onClose}>
                   <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>
+                  <ModalContent bg="#FFF">
+                    <ModalHeader py={2} textAlign="center" color="#000">
                       {getMessage({
-                        ja: "QRコード",
+                        ja: "QR Code",
                         us: "QR Code",
                         cn: "QR 码",
                         language,
@@ -448,7 +453,7 @@ export default function Header() {
                       </Box>
                     </ModalBody>
                     <ModalFooter>
-                      <Text fontSize="12px" fontWeight={400}>
+                      <Text fontSize="12px" fontWeight={400} color="#000">
                         {getMessage({
                           ja: "スマホで読み込む事でこのページにアクセスできます",
                           us: "You can access this page by loading it with your phone",
@@ -463,7 +468,7 @@ export default function Header() {
                   </ModalContent>
                 </Modal>
               </Center>
-              <Center w="64px">
+              <Center>
                 <IconButton
                   className={`${styles.modeChange} ${styles.snowTarget}`}
                   style={{
@@ -472,7 +477,8 @@ export default function Header() {
                   _focus={{ _focus: "none" }}
                   aria-label="DarkMode Switch"
                   icon={colorMode === "light" ? weatherIcon : <IoMoonOutline />}
-                  fontSize="28px"
+                  fontSize="xl"
+                  size="sm"
                   colorScheme={colorMode === "light" ? "purple" : "yellow"}
                   onClick={function (event) {
                     const icon = event.currentTarget.querySelector("svg");
@@ -487,14 +493,14 @@ export default function Header() {
                   }}
                 />
               </Center>
-              <Center w="64px">
+              <Center w="54px">
                 <Box
                   onClick={() =>
                     session?.user ? signOut() : setLoginModalOpen(true)
                   }
                   cursor="pointer"
                 >
-                  {getAvatarProps(pictureUrl, true, "md")}
+                  {getAvatarProps(pictureUrl, true, "34px")}
                 </Box>
               </Center>
             </Flex>
@@ -509,7 +515,7 @@ export default function Header() {
           bg={colorMode === "light" ? "#f2e9df" : "#000"}
         >
           <Box
-            bgImage="url('/images/common/flower2985.png')" // 画像のパスを指定
+            bgImage="url('/images/common/flower2985.png')"
             bgSize="cover" // 画像をカバーするように設定
             bgPosition="center" // 画像の位置を中央に設定
             p={0} // パディングを設定
@@ -600,7 +606,6 @@ export default function Header() {
                     right="70px"
                     rotate="20deg"
                     animation="nyoki 5s forwards"
-                    sealSize={2}
                   />
                   <svg
                     width="450"
@@ -631,7 +636,6 @@ export default function Header() {
                       left="162px"
                       rotate="-18deg"
                       animation="nyoki_mole 5s forwards"
-                      sealSize={2.5}
                     />
                   </Box>
                   <svg
@@ -656,7 +660,6 @@ export default function Header() {
                     width="152px"
                     bottom="0px"
                     animation="nyoki_rabit 5s forwards, moveAndRotate 5s infinite 5s"
-                    sealSize={0}
                   />
                   <AnimationImage
                     src="/images/illust/hippo/hippo_008.png"
@@ -664,7 +667,6 @@ export default function Header() {
                     left="80px"
                     bottom="73px"
                     animation="nyoki_rabit 5s forwards, rabitJump 10s infinite 7s"
-                    sealSize={2}
                   />
                   <Box
                     position="fixed"
@@ -789,7 +791,6 @@ export default function Header() {
                   right="2px"
                   bottom="24px"
                   animation="dropBounce 5s forwards"
-                  sealSize={2.5}
                 />
               </Box>
             </ModalBody>
@@ -823,90 +824,25 @@ export default function Header() {
             <Auth
               userData={{ userName, userCompany, pictureUrl, userMainCompany }}
             />
+            {userMainCompany === "開発" && <NowStatus />}
           </ModalBody>
         </ModalContent>
       </Modal>
 
       <Drawer isOpen={isMenuOpen} placement="left" onClose={onMenuClose}>
-        <DrawerOverlay zIndex={3000}>
+        <DrawerOverlay zIndex={1000}>
           <DrawerContent
             w={["75%", "50%", "25%"]}
             maxW="200px"
-            bg="rgba(255, 255, 255, 0.4)" // 背景の透明度を設定
+            bg="white" // 背景の透明度を設定
             backdropFilter="blur(10px)" // ブラー効果を設定
+            opacity="0.6"
           >
-            <DrawerHeader color="white">MENU</DrawerHeader>
+            <DrawerHeader color={colorMode === "light" ? "#000" : "#FFF"}>
+              MENU
+            </DrawerHeader>
             <DrawerBody>
-              <VStack
-                spacing="1"
-                align="stretch"
-                fontWeight={400}
-                fontSize={13}
-              >
-                <Divider borderColor="white" />
-                {menuItem(
-                  "/roadMap",
-                  getMessage({
-                    ja: "ロードマップ",
-                    us: "Road Map",
-                    cn: "路线图",
-                    language,
-                  }),
-                  false,
-                  <MdEditRoad size={22} />
-                )}
-                <Divider borderColor="white" />
-                {menuItem(
-                  "/skillBlogs/0000",
-                  getMessage({
-                    ja: "技術ブログ",
-                    us: "Skills Blog",
-                    cn: "技术博客",
-                    language,
-                  }),
-                  false,
-                  <PiGithubLogoFill size={22} />
-                )}
-                <Divider borderColor="white" />
-                {menuItem(
-                  "/app/typing",
-                  getMessage({
-                    ja: "タイピング練習",
-                    us: "Typing Practice",
-                    cn: "打字练习",
-                    language,
-                  }),
-                  false,
-                  <FaKeyboard size={22} />
-                )}
-                <Divider borderColor="white" />
-                {menuItem(
-                  "/download",
-                  getMessage({
-                    ja: "ダウンロード",
-                    us: "Download",
-                    cn: "下载",
-                    language,
-                  }),
-                  false,
-                  <Box transform="rotate(270deg)">
-                    <IoTicketOutline size={23} />
-                  </Box>
-                )}
-                <Divider borderColor="white" />
-                {menuItem(
-                  "/BBS",
-                  getMessage({
-                    ja: "問い合わせ",
-                    us: "Inquiry",
-                    cn: "询问",
-                    language,
-                  }),
-                  false,
-                  <AiOutlineWechat size={22} />
-                )}
-                <Divider borderColor="white" />
-              </VStack>
+              <Sidebar />
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>
@@ -933,7 +869,7 @@ const getWeatherIcon = async () => {
     } else if (weather.includes("くもり")) {
       return <BsCloud />;
     } else if (weather.includes("晴")) {
-      return <BsSun />;
+      return <FaSun />;
     } else {
       return <FaSun />; // デフォルトのアイコン
     }

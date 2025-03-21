@@ -26,7 +26,6 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
   id,
 }) => {
   const numericSealSize = Number(sealSize);
-
   return (
     <>
       <img
@@ -49,7 +48,14 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
       />
       <svg width="0" height="0">
         <defs>
-          <filter id="outline-filter">
+          <filter
+            id="outline-filter"
+            filterUnits="userSpaceOnUse"
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+          >
             <feMorphology
               operator="dilate"
               // radius={String(numericSealSize)}

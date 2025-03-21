@@ -62,9 +62,7 @@ function Sidebar() {
               transition: "width 0.5s",
             },
           }}
-          {...(useColorMode
-            ? { color: colorMode === "light" ? "black" : "white" }
-            : { color: "white" })}
+          color={colorMode === "light" ? "black" : "white"}
         >
           {currentPath === `${path_}/` && (
             <ChevronRightIcon
@@ -72,12 +70,13 @@ function Sidebar() {
               left="-10px"
               top="50%"
               transform="translateY(-50%)"
-              color="currentColor"
+              color={colorMode === "light" ? "#000" : "#FFF"}
             />
           )}
           <Box
             as="span"
             position="relative"
+            color={colorMode === "light" ? "#000" : "white"}
             _after={{
               content: '""',
               position: "absolute",
@@ -85,17 +84,22 @@ function Sidebar() {
               height: "1px",
               bottom: "-2px",
               left: "0",
-              bg: "currentColor",
+              bg: "transparent",
               transition: "width 0.1s",
-              color: useColorMode
-                ? colorMode === "light"
-                  ? "black"
-                  : "white"
-                : "white",
+              color: colorMode === "light" ? "white" : "white",
             }}
           >
-            <Flex alignItems="center" gap="3px">
-              {label}
+            <Flex alignItems="center" gap="4px">
+              <Box
+                as="span"
+                px="3px"
+                _hover={{
+                  bg: colorMode === "light" ? "#fff" : "#0F0",
+                  borderRadius: "5px",
+                }}
+              >
+                {label}
+              </Box>
               {icons_}
             </Flex>
           </Box>

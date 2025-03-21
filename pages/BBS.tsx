@@ -219,7 +219,6 @@ const BBS = () => {
                   left="0px"
                   bottom="-15px"
                   animation="kinoco_nyoki 1s forwards 1s"
-                  sealSize={2}
                 />
               </Box>
             </HStack>

@@ -399,14 +399,14 @@ const BBSTodoList = () => {
       display={{ base: "none", xl: "block" }}
       position="fixed"
       maxWidth={maxWidth}
-      h="80vh"
       bg="white.200"
+      border="1px solid"
+      borderColor={colorMode === "light" ? "#bfb0a4" : "gray.500"}
       p="0"
-      top="60px"
+      top="142px"
       right="8px"
       textAlign="left"
       zIndex="1100"
-      fontSize={15}
       fontFamily={getMessage({
         ja: "Noto Sans JP",
         us: "Noto Sans JP",
@@ -421,11 +421,10 @@ const BBSTodoList = () => {
       />
       <Button onClick={addTodo}>追加</Button> */}
       <Text
-        border="1px solid"
         textAlign="center"
         color={colorMode === "light" ? "black" : "white"}
+        fontSize={13}
         fontWeight={400}
-        mb={2}
         onClick={() => {
           console.log(todos);
           onOpen();

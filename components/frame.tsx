@@ -724,14 +724,12 @@ const Frame: React.FC<{
                             </ListItem>
                           );
                         }
-
                         return sectionsArray.length > 0 ? (
                           sectionsArray.map((section) => {
                             const underscoreCount = (
                               section.id.match(/_/g) || []
                             ).length;
                             const indent = 2 + underscoreCount * 3;
-
                             return (
                               <ListItem
                                 w="100%"
@@ -807,7 +805,7 @@ const Frame: React.FC<{
           }}
           style={{
             position: "absolute",
-            zIndex: 10000,
+            zIndex: 1000,
             top: 0,
             left: 0,
             pointerEvents: "none",

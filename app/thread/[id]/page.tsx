@@ -70,6 +70,7 @@ import BBSTodoList from "../../../components/BBSTodoList";
 import TodoListMenu from "../../../components/BBSTodoListMenu";
 import { useCustomToast } from "../../../components/customToast";
 import { GetColor } from "../../../components/CustomColor";
+import { NowStatus } from "../../../components/NowStatus";
 
 import { useUserData } from "../../../hooks/useUserData";
 import { useUserInfo } from "../../../hooks/useUserId";
@@ -85,6 +86,7 @@ import getMessage from "../../../components/getMessage";
 import { Global } from "@emotion/react";
 import "@fontsource/noto-sans-jp";
 import { CustomLoading } from "../../../components/CustomText";
+import { StatusDisplay } from "../../../components/NowStatus";
 
 let cachedUsers: any[] | null = null;
 const fetchUsers3 = async () => {
@@ -122,7 +124,6 @@ const fetchUser3 = async (userId: string) => {
     .select("*") // 必要なフィールドを選択
     .eq("id", userId)
     .single();
-
   if (error) {
     console.error(`Error fetching user with id ${userId}:`, error);
     return null;
@@ -179,20 +180,6 @@ function ThreadContent(): JSX.Element {
         [originalUrl]: currentIndex - 1,
       }));
       return history[currentIndex - 1];
-    }
-    return null;
-  };
-
-  // 進む処理
-  const goForward = (originalUrl: string) => {
-    const history = urlHistory[originalUrl];
-    const currentIndex = currentUrlIndex[originalUrl];
-    if (history && currentIndex < history.length - 1) {
-      setCurrentUrlIndex((prev) => ({
-        ...prev,
-        [originalUrl]: currentIndex + 1,
-      }));
-      return history[currentIndex + 1];
     }
     return null;
   };
@@ -1070,25 +1057,6 @@ function ThreadContent(): JSX.Element {
       );
     }
   };
-  //リンクをクリックした時にページがリロードされないようにする
-  useEffect(() => {
-    const links = document.querySelectorAll(".external-link");
-    links.forEach((link) => {
-      const handleClick = (e: MouseEvent) => {
-        e.preventDefault();
-        const url = link.getAttribute("href");
-        if (url) {
-          window.open(url, "_blank", "noopener,noreferrer");
-        }
-      };
-      link.addEventListener("click", handleClick);
-
-      // クリーンアップ関数でイベントリスナーを削除
-      return () => {
-        link.removeEventListener("click", handleClick);
-      };
-    });
-  }, [posts]);
 
   if (!isClient) {
     return <></>; // 空のフラグメントを返す
@@ -1169,7 +1137,7 @@ function ThreadContent(): JSX.Element {
             `}</style>
             <Stack // inputForm
               position="fixed"
-              zIndex="2000"
+              zIndex="1000"
               spacing={0}
               bottom="0"
               right="0"
@@ -1664,63 +1632,82 @@ function ThreadContent(): JSX.Element {
             </Modal>
             <SidebarBBS isMain={false} />
             <Content isCustomHeader={true}>
-              <Heading size="md" mb="1" ml="1" position="fixed" zIndex={8888}>
-                <Box position="relative">
-                  <Box as="span" fontSize={14} fontWeight={600} mr={1}>
-                    {getMessage({
-                      ja: threadCompany,
-                      language,
-                    })}
-                  </Box>
-                  <Box
-                    display="inline-block"
-                    fontFamily="Noto Sans Jp"
-                    fontWeight={400}
-                    fontSize={14}
-                    borderRadius={3}
-                    px={1}
-                    mr={1}
-                    cursor="pointer"
-                    border="transparent"
-                    bg={GetColor(threadProjectName)}
-                    color="#FFF"
-                  >
-                    {threadProjectName}
-                  </Box>
-                  <Box
-                    display="inline-block"
-                    fontFamily="Noto Sans Jp"
-                    fontWeight={400}
-                    fontSize={14}
-                    borderRadius={3}
-                    px={1}
-                    mr={1}
-                    cursor="pointer"
-                    border={"1px solid " + GetColor(threadCategory)}
-                    bg="transparent"
-                    color={GetColor(threadCategory)}
-                  >
-                    {threadCategory}
-                  </Box>
-                  <Box display="inline-block" fontSize="sm" fontWeight={400}>
-                    {ipAddress}
-                  </Box>
+              <Box
+                position="fixed"
+                mb={0}
+                ml={0}
+                pt={0}
+                pb={1}
+                px={1}
+                top="46px"
+                zIndex={1001}
+                display={{
+                  base: "none",
+                  sm: "none",
+                  md: "block",
+                  lg: "block",
+                  xl: "block",
+                }}
+                bg={{
+                  base: colorMode === "light" ? "#fff" : "#000",
+                  xl: colorMode === "light" ? "#f2e9df" : "#000",
+                }}
+                border="1px solid #bfb0a4"
+                borderRadius="md"
+              >
+                <Box as="span" fontSize={11} fontWeight={400} mr={1}>
+                  {getMessage({
+                    ja: threadCompany,
+                    language,
+                  })}
+                </Box>
+                <Box
+                  display="inline-block"
+                  fontFamily="Noto Sans Jp"
+                  fontWeight={400}
+                  fontSize={9}
+                  borderRadius={3}
+                  px={1}
+                  mr={1}
+                  border="transparent"
+                  bg={GetColor(threadProjectName)}
+                  color="#FFF"
+                >
+                  {threadProjectName}
+                </Box>
+                <Box
+                  display="inline-block"
+                  fontFamily="Noto Sans Jp"
+                  fontWeight={400}
+                  fontSize={9}
+                  borderRadius={3}
+                  px={1}
+                  mr={1}
+                  border={"1px solid " + GetColor(threadCategory)}
+                  bg="transparent"
+                  color={GetColor(threadCategory)}
+                >
+                  {threadCategory}
+                </Box>
+                <Box display="inline-block" fontSize={10} fontWeight={400}>
+                  {ipAddress}
                 </Box>
                 <Box>
                   <Box
-                    fontSize={18}
-                    fontWeight={500}
-                    textShadow={
-                      colorMode === "light"
-                        ? `-1px -1px 0 rgba(245, 237, 230,1),
-                   1px -1px 0 rgba(245, 237, 230,1),
-                  -1px  1px 0 rgba(245, 237, 230,1),
-                   1px  1px 0 rgba(245, 237, 230,1)`
-                        : `-1px -1px 0 rgba(0,0,0,1),
-                   1px -1px 0 rgba(0,0,0,1),
-                  -1px  1px 0 rgba(0,0,0,1),
-                   1px  1px 0 rgba(0,0,0,1)`
-                    }
+                    fontSize={13}
+                    fontWeight={400}
+                    //   fontWeight={500}
+                    //   textShadow={
+                    //     colorMode === "light"
+                    //       ? `-1px -1px 0 rgba(245, 237, 230,1),
+                    //  1px -1px 0 rgba(245, 237, 230,1),
+                    // -1px  1px 0 rgba(245, 237, 230,1),
+                    //  1px  1px 0 rgba(245, 237, 230,1)`
+                    //       : `-1px -1px 0 rgba(0,0,0,1),
+                    //  1px -1px 0 rgba(0,0,0,1),
+                    // -1px  1px 0 rgba(0,0,0,1),
+                    //  1px  1px 0 rgba(0,0,0,1)`
+                    //   }
                     style={{
                       letterSpacing: "1px",
                     }}
@@ -1731,8 +1718,8 @@ function ThreadContent(): JSX.Element {
                     })}
                   </Box>
                 </Box>
-              </Heading>
-              <Box height="3em" />
+              </Box>
+              <Box height="4.5em" />
               <Stack
                 spacing="2"
                 style={{ padding: "0px", flexDirection: "column" }}
@@ -1879,7 +1866,7 @@ function ThreadContent(): JSX.Element {
                               >
                                 <Divider borderColor="gray.500" />
                                 <Text
-                                  fontSize="15px"
+                                  fontSize="14px"
                                   color="gray.500"
                                   whiteSpace="nowrap"
                                   textAlign="center"
@@ -2285,6 +2272,7 @@ function ThreadContent(): JSX.Element {
                                     fontFamily="Noto Sans JP"
                                     fontWeight="200"
                                     color="black"
+                                    fontSize="15px"
                                   >
                                     <div
                                       dangerouslySetInnerHTML={{
@@ -2703,9 +2691,10 @@ function ThreadContent(): JSX.Element {
                     })
                 )}
               </Stack>
-              <Box mb="10vh" />
+              <Box mb="30vh" />
             </Content>
             <BBSTodoList />
+            <StatusDisplay />
           </div>
         </>
       )}
