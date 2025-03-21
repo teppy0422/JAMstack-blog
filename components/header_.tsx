@@ -39,6 +39,7 @@ import {
   MenuItem,
   Tooltip,
   ButtonGroup,
+  Badge,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { IoIosMail } from "react-icons/io";
@@ -512,7 +513,15 @@ export default function Header() {
         <ModalOverlay />
         <ModalContent
           overflow="hidden"
-          bg={colorMode === "light" ? "#f2e9df" : "#000"}
+          bg={
+            colorMode === "light"
+              ? "rgba(240, 228, 218, 0.8)"
+              : "rgba(51, 51, 51, 0.8)"
+          }
+          backdropFilter="blur(10px)"
+          style={{
+            WebkitBackdropFilter: "blur(10px)", // Safari対応
+          }}
         >
           <Box
             bgImage="url('/images/common/flower2985.png')"
@@ -830,19 +839,26 @@ export default function Header() {
       </Modal>
 
       <Drawer isOpen={isMenuOpen} placement="left" onClose={onMenuClose}>
-        <DrawerOverlay zIndex={1000}>
+        <DrawerOverlay zIndex={1100}>
           <DrawerContent
-            w={["75%", "50%", "25%"]}
+            w={["75%", "100%", "100%"]}
             maxW="200px"
-            bg="white" // 背景の透明度を設定
-            backdropFilter="blur(10px)" // ブラー効果を設定
-            opacity="0.6"
+            bg={
+              colorMode === "light"
+                ? "rgba(240, 228, 218, 0.8)"
+                : "rgba(51, 51, 51, 0.8)"
+            }
+            backdropFilter="blur(10px)"
+            style={{
+              WebkitBackdropFilter: "blur(10px)", // Safari対応
+            }}
           >
             <DrawerHeader color={colorMode === "light" ? "#000" : "#FFF"}>
               MENU
             </DrawerHeader>
+            <Divider borderColor={colorMode === "light" ? "#a69689" : "#fff"} />
             <DrawerBody>
-              <Sidebar />
+              <Sidebar isDrawer={true} />
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>

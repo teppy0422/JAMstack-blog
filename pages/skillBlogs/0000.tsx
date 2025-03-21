@@ -102,7 +102,7 @@ const BlogPage: React.FC = () => {
   return (
     <>
       <Content isCustomHeader={true}>
-        <Sidebar />
+        <Sidebar isDrawer={false} />
         <Stack mb={4} direction="row" justify="center">
           <Box
             width={{

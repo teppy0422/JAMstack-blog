@@ -352,7 +352,7 @@ const Welcome = ({ isNewCreated }) => {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar isDrawer={false} />
       <Content isCustomHeader={true} maxWidth="1200px">
         <Box
           paddingTop="30px"

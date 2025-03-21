@@ -214,10 +214,10 @@ export const StatusDisplay = () => {
                 <Flex textAlign="left" align="center" gap={1}>
                   <Avatar src={status.picture_url} boxSize="18px" />
                   {status.time && (
-                    <Text fontSize="13px">{formatTime(status.time)}まで</Text>
+                    <Text fontSize="12px">{formatTime(status.time)}まで</Text>
                   )}
                   <Box
-                    fontSize="13px"
+                    fontSize="11px"
                     bg={getActivityColor(status.activity)}
                     px={0.5}
                     borderRadius="4px"

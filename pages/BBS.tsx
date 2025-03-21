@@ -169,7 +169,7 @@ const BBS = () => {
           },
         }}
       />
-      <Sidebar />
+      <Sidebar isDrawer={false} />
       <Content isCustomHeader={true}>
         <Text ml={4} className="print-only">
           {getMessage({

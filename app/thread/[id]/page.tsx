@@ -1137,7 +1137,7 @@ function ThreadContent(): JSX.Element {
             `}</style>
             <Stack // inputForm
               position="fixed"
-              zIndex="1000"
+              zIndex="1100"
               spacing={0}
               bottom="0"
               right="0"

@@ -30,7 +30,7 @@ import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
 import { AnimationImage } from "../components/CustomImage";
 
-function Sidebar() {
+function Sidebar({ isDrawer }: { isDrawer: boolean }) {
   const [currentPath, setCurrentPath] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
@@ -111,7 +111,7 @@ function Sidebar() {
   return (
     <>
       <Box
-        display={{ base: "none", xl: "block" }}
+        display={{ base: isDrawer ? "block" : "none", xl: "block" }}
         position="fixed"
         w={["100px", "100px", "150px", "200px"]}
         h="100vh"
@@ -123,7 +123,7 @@ function Sidebar() {
         zIndex="1100"
         fontWeight={400}
       >
-        <VStack spacing="1" align="stretch" fontSize={14}>
+        <VStack spacing="1" fontSize={14} w="200px">
           {menuItem(
             "/roadMap",
             getMessage({
@@ -132,7 +132,6 @@ function Sidebar() {
               cn: "路线图",
               language,
             }),
-
             true,
             <FaRoad size={21} />
           )}
