@@ -2694,7 +2694,7 @@ function ThreadContent(): JSX.Element {
               <Box mb="30vh" />
             </Content>
             <BBSTodoList />
-            <StatusDisplay />
+            <StatusDisplay userId={userId} />
           </div>
         </>
       )}

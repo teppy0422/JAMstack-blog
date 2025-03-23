@@ -723,6 +723,8 @@ export default function Header() {
                     >
                       ・1/15 中国語(簡体字)と米英語に対応
                       <br />
+                      ・3/10 チャット内容を分類
+                      <br />
                       ・3/13 チャット追加機能の追加
                       <br />
                       ・3/20 開発メンバーの状態表示を追加
@@ -831,7 +833,6 @@ export default function Header() {
             <Auth
               userData={{ userName, userCompany, pictureUrl, userMainCompany }}
             />
-            {userMainCompany === "開発" && <NowStatus />}
           </ModalBody>
         </ModalContent>
       </Modal>
