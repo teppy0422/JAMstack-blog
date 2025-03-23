@@ -231,7 +231,7 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
       if (!userStatuses[schedule.user_id]) {
         userStatuses[schedule.user_id] = {
           activity: "absent",
-          note: "オフライン",
+          note: "",
           picture_url: schedule.picture_url,
           created_at: schedule.created_at,
           startTime: "",
@@ -320,6 +320,7 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
                   transform: "translateY(-2px)",
                   boxShadow: "md",
                   transition: "all 0.2s",
+                  filter: "none",
                 }}
                 color={{
                   base: colorMode === "light" ? "#000" : "#FFF",
@@ -398,7 +399,7 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
-                    })}
+                    }) + "更新"}
                   </Text>
                 </Box>
               </>
@@ -476,7 +477,7 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
                       textAlign="left"
                       justify="left"
                       mt={5}
-                      ml={8}
+                      ml={7}
                     >
                       <Stack spacing={0} align="center" position="relative">
                         <Text fontWeight="medium" fontSize="12px">
@@ -508,23 +509,27 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
                         />
                       </Stack>
                       <Flex direction="column">
-                        {schedule.activity !== "other" && (
-                          <Box textAlign="center" justifyContent="left" ml={2}>
-                            <Text
-                              color="white"
-                              bg={getActivityColor(schedule.activity)}
-                              fontSize="10px"
-                              py={0.5}
-                              px={1}
-                              m={0}
-                              borderRadius="5px"
-                            >
-                              {getActivityLabel(schedule.activity)}
-                            </Text>
-                          </Box>
-                        )}
+                        <Box textAlign="center" justifyContent="left" ml={2}>
+                          <Text
+                            color="white"
+                            bg={getActivityColor(schedule.activity)}
+                            fontSize="10px"
+                            fontWeight="medium"
+                            py={0.5}
+                            px={1}
+                            m={0}
+                            borderRadius="5px"
+                          >
+                            {getActivityLabel(schedule.activity)}
+                          </Text>
+                        </Box>
                         <Box>
-                          <Text textAlign="left" ml={2}>
+                          <Text
+                            textAlign="left"
+                            ml={2}
+                            fontSize="12px"
+                            fontWeight="bold"
+                          >
                             {schedule.note}
                           </Text>
                         </Box>
@@ -878,6 +883,12 @@ export const NowStatus = ({
       alert("スケジュールの保存に失敗しました。時間の形式を確認してください。");
     }
   };
+
+  // 最新のcreated_atを取得
+  const latestCreatedAt = schedules.reduce((latest, schedule) => {
+    const createdAtDate = new Date(schedule.created_at);
+    return createdAtDate > latest ? createdAtDate : latest;
+  }, new Date(0)); // 初期値を1970年1月1日に設定
 
   return (
     <Box
