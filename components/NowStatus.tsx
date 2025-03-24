@@ -44,6 +44,8 @@ import {
   FormControl,
   FormLabel,
   Textarea,
+  Center,
+  HStack,
 } from "@chakra-ui/react";
 import { supabase } from "../utils/supabase/client";
 import "@fontsource/noto-sans-jp";
@@ -53,6 +55,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useLanguage } from "../context/LanguageContext";
 import { useUserData } from "../hooks/useUserData";
 import { useUserInfo } from "../hooks/useUserId";
+
+import { useUserContext } from "../context/useUserContext";
+
 import getMessage from "./getMessage";
 
 const activityOptions = [
@@ -71,16 +76,7 @@ const getActivityColor = (value: string) => {
 };
 
 // ステータス表示用コンポーネント
-export const StatusDisplay = ({ userId }: { userId: string | null }) => {
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
-
-  const getUseUserData = (id: string) => {
-    const { pictureUrl, userName, userCompany, userMainCompany } =
-      useUserData(id);
-    return { pictureUrl, userName, userCompany, userMainCompany };
-  };
-
+export const StatusDisplay = () => {
   const [schedules, setSchedules] = useState<
     Array<{
       user_id: string;
@@ -88,7 +84,6 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
       endTime: string | null;
       activity: string;
       note: string;
-      picture_url: string;
       created_at: string;
     }>
   >([]);
@@ -96,11 +91,11 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
     [key: string]: {
       activity: string;
       note: string;
-      picture_url: string;
       created_at: string;
       startTime: string;
       endTime: string | null;
       user_id: string;
+      picture_url: string | null;
     };
   } | null>(null);
   const { colorMode } = useColorMode();
@@ -119,9 +114,8 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
       note: string;
     }>
   >([]);
-  const [userPictures, setUserPictures] = useState<{
-    [key: string]: string | null;
-  }>({});
+
+  const { currentUserId, getUserById } = useUserContext();
 
   // ステータス表示用の関数
   const getActivityLabel = (value: string) => {
@@ -130,46 +124,43 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
   };
 
   // ユーザーのスケジュールを取得する関数
-  const fetchUserSchedules = async (userId: string) => {
+  const fetchUserSchedules = async (selectedUserId: string | null) => {
     const now = new Date();
     const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-    const { data, error } = await supabase
-      .from("admin_status")
-      .select("*")
-      .eq("user_id", userId)
-      .gte("startTime", new Date(firstDayOfMonth).toISOString())
-      .lte("startTime", new Date(lastDayOfMonth).toISOString())
-      .order("startTime", { ascending: true });
+    // schedulesから該当ユーザーのデータをフィルタリング
+    const userSchedulesData = schedules.filter(
+      (schedule) =>
+        schedule.user_id === selectedUserId &&
+        new Date(schedule.startTime) >= firstDayOfMonth &&
+        new Date(schedule.startTime) <= lastDayOfMonth
+    );
 
-    if (error) {
-      console.error("Error fetching user schedules:", error);
-    } else {
-      const formattedSchedules = data.map((schedule) => ({
-        startTime: new Date(schedule.startTime).toLocaleString("ja-JP", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          timeZone: "Asia/Tokyo",
-        }),
-        endTime: schedule.endTime
-          ? new Date(schedule.endTime).toLocaleString("ja-JP", {
-              year: "numeric",
-              month: "numeric",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-              timeZone: "Asia/Tokyo",
-            })
-          : null,
-        activity: schedule.activity,
-        note: schedule.note,
-      }));
-      setUserSchedules(formattedSchedules);
-    }
+    const formattedSchedules = userSchedulesData.map((schedule) => ({
+      startTime: new Date(schedule.startTime).toLocaleString("ja-JP", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "Asia/Tokyo",
+      }),
+      endTime: schedule.endTime
+        ? new Date(schedule.endTime).toLocaleString("ja-JP", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "Asia/Tokyo",
+          })
+        : null,
+      activity: schedule.activity,
+      note: schedule.note,
+      pictureUrl: getUserById(schedule.user_id)?.picture_url ?? null,
+    }));
+    setUserSchedules(formattedSchedules);
   };
 
   // スケジュールモーダルを開く関数
@@ -209,14 +200,15 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
       const end = schedule.endTime ? new Date(schedule.endTime) : null;
       return now >= start && (!end || now <= end);
     });
-
     // ユーザーIDごとにグループ化
     const userStatuses = currentSchedules.reduce((acc, schedule) => {
       if (!acc[schedule.user_id]) {
         acc[schedule.user_id] = {
           activity: schedule.activity,
           note: schedule.note,
-          picture_url: schedule.picture_url,
+          picture_url: schedule.user_id
+            ? getUserById(schedule.user_id)?.picture_url ?? null
+            : null,
           created_at: schedule.created_at,
           startTime: schedule.startTime,
           endTime: schedule.endTime,
@@ -224,15 +216,16 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
         };
       }
       return acc;
-    }, {} as Record<string, { activity: string; note: string; picture_url: string; created_at: string; startTime: string; endTime: string | null; user_id: string }>);
-
+    }, {} as Record<string, { activity: string; note: string; picture_url: string | null; created_at: string; startTime: string; endTime: string | null; user_id: string }>);
     // オフラインのユーザーを追加
     schedules.forEach((schedule) => {
       if (!userStatuses[schedule.user_id]) {
         userStatuses[schedule.user_id] = {
           activity: "absent",
           note: "",
-          picture_url: schedule.picture_url,
+          picture_url: schedule.user_id
+            ? getUserById(schedule.user_id)?.picture_url ?? null
+            : null,
           created_at: schedule.created_at,
           startTime: "",
           endTime: "",
@@ -287,7 +280,7 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
         }}
         position="fixed"
         zIndex={1100}
-        top="46px"
+        top="68px"
         right="1px"
         borderRadius="md"
       >
@@ -340,7 +333,7 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
                 <Flex textAlign="left" align="center" gap={1}>
                   {/* <Text>{status.user_id}</Text> */}
                   <Avatar
-                    src={userPictures[userId] || status.picture_url}
+                    src={status.picture_url ?? undefined}
                     boxSize="20px"
                     borderColor={getActivityColor(status.activity)}
                   />
@@ -389,12 +382,18 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
             {selectedUserId && (
               <>
                 <Box>
-                  <Text fontSize="lg" fontWeight="bold">
-                    {userSchedules.length > 0
-                      ? "スケジュール一覧"
-                      : "スケジュールなし"}
-                  </Text>
-                  <Text fontSize="sm" color="gray.500">
+                  <HStack>
+                    <Avatar
+                      src={
+                        getUserById(selectedUserId)?.picture_url ?? undefined
+                      }
+                      boxSize="24px"
+                    />
+                    <Text fontSize="16px" fontWeight="bold">
+                      {getUserById(selectedUserId)?.user_metadata.name}
+                    </Text>
+                  </HStack>
+                  <Text fontSize="12px" color="gray.500" fontWeight={400}>
                     {new Date().toLocaleDateString("ja-JP", {
                       year: "numeric",
                       month: "long",
@@ -408,10 +407,16 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Stack spacing={1}>
-              {userId === selectedUserId && (
+              {currentUserId === selectedUserId && (
                 <NowStatus
                   schedules={schedules}
-                  onSchedulesUpdate={setSchedules}
+                  onSchedulesUpdate={(newSchedules) => {
+                    // 親コンポーネントのschedulesを更新
+                    setSchedules(newSchedules);
+                    // 現在のユーザーのスケジュールも更新
+                    fetchUserSchedules(selectedUserId);
+                  }}
+                  userId={currentUserId}
                 />
               )}
               {userSchedules.map((schedule, index) => {
@@ -550,6 +555,7 @@ export const StatusDisplay = ({ userId }: { userId: string | null }) => {
 export const NowStatus = ({
   schedules,
   onSchedulesUpdate,
+  userId,
 }: {
   schedules: Array<{
     user_id: string;
@@ -557,7 +563,6 @@ export const NowStatus = ({
     endTime: string | null;
     activity: string;
     note: string;
-    picture_url: string;
     created_at: string;
   }>;
   onSchedulesUpdate: (
@@ -567,10 +572,10 @@ export const NowStatus = ({
       endTime: string | null;
       activity: string;
       note: string;
-      picture_url: string;
       created_at: string;
     }>
   ) => void;
+  userId: string | null;
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode } = useColorMode();
@@ -585,9 +590,7 @@ export const NowStatus = ({
       note: string;
     }>
   >([]);
-  const [userId, setUserId] = useState<string | null>(null);
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingSchedule, setEditingSchedule] = useState<{
     startTime: string;
@@ -604,22 +607,9 @@ export const NowStatus = ({
 
   let previousDate: string | null = null;
 
-  useEffect(() => {
-    const fetchUserId = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        setUserId(user.id);
-      }
-    };
-    fetchUserId();
-  }, []);
-
   // 選択された日付のスケジュールを取得
   useEffect(() => {
     if (!selectedDate || !userId) return;
-
     // 選択された日付の開始と終了（日本時間）
     const startOfDay = new Date(selectedDate);
     startOfDay.setHours(0, 0, 0, 0);
@@ -827,9 +817,7 @@ export const NowStatus = ({
         endTime: endDateTime ? endDateTime.toISOString() : null,
         activity: formData.activity,
         note: formData.note,
-        picture_url: pictureUrl || "",
       };
-      console.log("pictureUrl:", pictureUrl);
 
       if (editingSchedule) {
         // 既存のスケジュールを更新
@@ -916,7 +904,7 @@ export const NowStatus = ({
         _hover={{ bg: colorMode === "light" ? "gray.200" : "gray.700" }}
       >
         {getMessage({
-          ja: "スケジュール更新",
+          ja: "更新",
           us: "Admin status update",
           cn: "管理员状态更新。",
           language,

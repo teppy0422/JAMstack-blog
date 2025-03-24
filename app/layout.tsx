@@ -2,6 +2,7 @@
 
 import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
+import { UserProvider } from "../context/useUserContext";
 
 // export const metadata = {
 //   title: "Next.js",
@@ -17,7 +18,9 @@ export default function RootLayout({
     <html lang="ja">
       <body>
         <SessionProvider>
-          <ChakraProvider>{children}</ChakraProvider>
+          <UserProvider>
+            <ChakraProvider>{children}</ChakraProvider>
+          </UserProvider>
         </SessionProvider>
       </body>
     </html>

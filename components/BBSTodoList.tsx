@@ -403,7 +403,7 @@ const BBSTodoList = () => {
       border="1px solid"
       borderColor={colorMode === "light" ? "#bfb0a4" : "gray.500"}
       p="0"
-      top="145px"
+      top="44px"
       right="1px"
       textAlign="left"
       zIndex="1100"

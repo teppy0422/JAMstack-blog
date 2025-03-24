@@ -33,13 +33,6 @@ import {
   DrawerBody,
   Divider,
   Avatar,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Tooltip,
-  ButtonGroup,
-  Badge,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { IoIosMail } from "react-icons/io";
@@ -75,6 +68,8 @@ import getMessage from "../components/getMessage";
 import Sidebar from "../components/sidebar";
 import { NowStatus } from "../components/NowStatus";
 
+import { useUserContext } from "../context/useUserContext";
+
 import "@fontsource/dela-gothic-one";
 
 export default function Header() {
@@ -82,20 +77,24 @@ export default function Header() {
 
   const { data: session } = useSession();
   const { colorMode, toggleColorMode } = useColorMode();
-  const bg = useColorModeValue("red.500", "red.200");
-  const bg2 = useColorModeValue("#000", "pink");
-  const color = useColorModeValue("tomato", "pink");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [userId, setUserId] = useState<string | null>(null); // userIdの状態を追加
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+
+  const {
+    currentUserId,
+    currentUserName,
+    currentUserCompany,
+    currentUserMainCompany,
+    currentUserPictureUrl,
+  } = useUserContext();
+
   const {
     isOpen: isMenuOpen,
     onOpen: onMenuOpen,
     onClose: onMenuClose,
   } = useDisclosure();
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [weatherIcon, setWeatherIcon] = useState(<FaSun />);
 
@@ -256,88 +255,6 @@ export default function Header() {
     const timeoutId = setTimeout(fetchElement, 100);
     return () => clearTimeout(timeoutId);
   }, []);
-  // loginボタンを隠す
-  let keyFlag: boolean = false;
-  // ユーザーIDを取得する関数
-  useEffect(() => {
-    const fetchUserId = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        setUserId(user.id);
-        console.log("getしたよーーーーーーーーーー");
-      } else {
-        console.error("User is not logged in");
-      }
-    };
-    fetchUserId();
-  }, []);
-  const buttonStyle = (path) => ({
-    p: "2",
-    w: "full",
-    _hover: { bg: "gray.900" },
-    cursor: "pointer",
-    color: colorMode === "light" ? "white" : "white",
-  });
-  const menuItem = (path_, label, useColorMode, icons_) => {
-    return (
-      <NextLink href={path_} passHref legacyBehavior>
-        <Box
-          {...buttonStyle(path_)}
-          onClick={onClose}
-          position="relative"
-          _hover={{
-            "& span::after": {
-              width: "100%",
-              transition: "width 0.5s",
-            },
-          }}
-          {...(useColorMode
-            ? { color: colorMode === "light" ? "black" : "white" }
-            : { color: "white" })}
-        >
-          <Box
-            as="span"
-            position="relative"
-            _after={{
-              content: '""',
-              position: "absolute",
-              width: "0",
-              height: "1px",
-              bottom: "-2px",
-              left: "0",
-              bg: "currentColor",
-              transition: "width 0.1s",
-              color: useColorMode
-                ? colorMode === "light"
-                  ? "black"
-                  : "white"
-                : "white",
-            }}
-          >
-            <Flex alignItems="center" gap="3px">
-              {label}
-              {icons_}
-            </Flex>
-          </Box>
-        </Box>
-      </NextLink>
-    );
-  };
-  //table_usersからユーザー情報を取得
-  const fetchUserFromTable = async (userId: string) => {
-    const { data, error } = await supabase
-      .from("table_users") // テーブル名を指定
-      .select("*") // 全ての情報を取得
-      .eq("id", userId) // userIdでフィルタリング
-      .single(); // 一つの行を取得
-    if (error) {
-      console.error("Error fetching user data:", error.message);
-      return null;
-    }
-    return data; // 取得したデータを返す
-  };
   //アバター作成
   const getAvatarProps = (
     post_userID: any,
@@ -356,10 +273,7 @@ export default function Header() {
       );
     }
   };
-  const updateLanguage = (newLanguage) => {
-    console.log("Updating language to:", newLanguage);
-    setLanguage(newLanguage);
-  };
+
   return (
     <>
       <Global
@@ -501,7 +415,7 @@ export default function Header() {
                   }
                   cursor="pointer"
                 >
-                  {getAvatarProps(pictureUrl, true, "34px")}
+                  {getAvatarProps(currentUserPictureUrl, true, "34px")}
                 </Box>
               </Center>
             </Flex>
@@ -751,7 +665,7 @@ export default function Header() {
                   fontWeight={400}
                 >
                   {/* 2026年初旬の再開を予定しています。 */}
-                  再開時期は未定です
+                  {/* 再開時期は未定です */}
                 </Text>
                 <Box as="span" fontSize="sm" fontWeight={400} zIndex={100}>
                   <Box display="flex" alignItems="center">
@@ -831,7 +745,12 @@ export default function Header() {
           />
           <ModalBody mb={2}>
             <Auth
-              userData={{ userName, userCompany, pictureUrl, userMainCompany }}
+              userData={{
+                userName: currentUserName,
+                userCompany: currentUserCompany,
+                pictureUrl: currentUserPictureUrl,
+                userMainCompany: currentUserMainCompany,
+              }}
             />
           </ModalBody>
         </ModalContent>
@@ -869,14 +788,14 @@ export default function Header() {
 // 天気情報を取得する関数
 const getWeatherIcon = async () => {
   try {
-    const response = await fetch(
-      "https://www.jma.go.jp/bosai/forecast/data/forecast/360000.json"
-    );
-    const data = await response.json();
+    // const response = await fetch(
+    //   "https://www.jma.go.jp/bosai/forecast/data/forecast/360000.json"
+    // );
+    // const data = await response.json();
 
     // 天気情報を解析して適切なアイコンを選択
-    const weather = data[0].timeSeries[0].areas[0].weathers[0];
-
+    // const weather = data[0].timeSeries[0].areas[0].weathers[0];
+    const weather = "晴";
     if (weather.includes("くもり") && weather.includes("雨")) {
       return <WiRainMix />; // 雨のちくもりのアイコン
     } else if (weather.includes("雨")) {

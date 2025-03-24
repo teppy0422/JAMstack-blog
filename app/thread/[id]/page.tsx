@@ -64,6 +64,8 @@ import { ChatIcon } from "@chakra-ui/icons";
 import { MdBusiness } from "react-icons/md";
 import { LuPanelRightOpen } from "react-icons/lu";
 
+import { useUserContext } from "../../../context/useUserContext";
+
 import Content from "../../../components/content";
 import SidebarBBS from "../../../components/sidebarBBS";
 import BBSTodoList from "../../../components/BBSTodoList";
@@ -72,8 +74,8 @@ import { useCustomToast } from "../../../components/customToast";
 import { GetColor } from "../../../components/CustomColor";
 import { NowStatus } from "../../../components/NowStatus";
 
-import { useUserData } from "../../../hooks/useUserData";
-import { useUserInfo } from "../../../hooks/useUserId";
+// import { useUserData } from "../../../hooks/useUserData";
+// import { useUserInfo } from "../../../hooks/useUserId";
 import IconWithDrawer from "./IconWithDrawer";
 
 // import { AppContext } from "../../../pages/_app";
@@ -89,50 +91,6 @@ import { CustomLoading } from "../../../components/CustomText";
 import { StatusDisplay } from "../../../components/NowStatus";
 
 let cachedUsers: any[] | null = null;
-const fetchUsers3 = async () => {
-  if (cachedUsers) {
-    return cachedUsers;
-  }
-  const { data, error } = await supabase.from("table_users").select("*");
-
-  if (error) {
-    console.error("Error fetching users:", error);
-    return null;
-  }
-  cachedUsers = data;
-  return cachedUsers;
-};
-const getUserById3 = async (userId: string) => {
-  const users = await fetchUsers3();
-  if (!users) {
-    console.error("No users found");
-    return null;
-  }
-  const user = users.find((user) => user.id === userId);
-  if (!user) {
-    console.error(`User with id ${userId} not found`);
-    return null;
-  }
-  return {
-    name: user?.user_metadata?.name || "Unknown User",
-    pictureUrl: user?.picture_url || "No Picture",
-  };
-};
-const fetchUser3 = async (userId: string) => {
-  const { data, error } = await supabase
-    .from("table_users")
-    .select("*") // 必要なフィールドを選択
-    .eq("id", userId)
-    .single();
-  if (error) {
-    console.error(`Error fetching user with id ${userId}:`, error);
-    return null;
-  }
-  return {
-    name: data?.user_metadata?.name || "Unknown User",
-    pictureUrl: data?.user_metadata?.picture_url || "No Picture",
-  };
-};
 
 export default function Thread() {
   return (
@@ -235,12 +193,23 @@ function ThreadContent(): JSX.Element {
   const [loading, setLoading] = useState(false); // 追加: ローディング状態を管理
   const [initialLoadComplete, setInitialLoadComplete] = useState(false); // 初回ロード完了フラグ
   const postsPerPage = 1000; // 1回の取得で読み込む投稿数
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+
+  // const { userId, email } = useUserInfo();
+  // const { pictureUrl, userName, userCompany, userMainCompany } =
+  //   useUserData(userId);
+  const {
+    currentUserId,
+    currentUserName,
+    currentUserMainCompany,
+    currentUserCompany,
+    getUserById,
+  } = useUserContext();
+
+  const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
+
   //既読チェック
   const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0"; // 任意のユーザーID
-  const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
+
   useEffect(() => {
     const handleScroll = () => {
       const postsElements = document.querySelectorAll(".post"); // 投稿要素を取得
@@ -249,9 +218,9 @@ function ThreadContent(): JSX.Element {
         const isInViewport = isElementInViewport(postElement); // ビューポート内にあるか確認
         if (isInViewport) {
           const postUserId = postElement.getAttribute("data-user-id"); // 投稿のユーザーIDを取得
-          if (postUserId !== userId) {
-            if (postId && userId) {
-              markAsRead(postId, userId); // 既読をマーク
+          if (postUserId !== currentUserId) {
+            if (postId && currentUserId) {
+              markAsRead(postId, currentUserId); // 既読をマーク
             }
           }
         }
@@ -261,7 +230,8 @@ function ThreadContent(): JSX.Element {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [userId]);
+  }, [currentUserId]);
+
   const markAsRead = async (postId: string, userId: string) => {
     // 現在のread_byの値を取得
     const { data: post, error: fetchError } = await supabase
@@ -372,18 +342,6 @@ function ThreadContent(): JSX.Element {
       }, 1000);
     }
   };
-  // ユーザー情報を検索する関数
-  const getUserById = (id: string) => {
-    const user = usersData2.find((user) => user.id === id); // IDでユーザーを検索
-    if (user) {
-      return {
-        displayName: user.user_metadata?.name,
-        userCompany: user.user_company,
-      };
-    }
-    return null;
-  };
-  //ユーザー名を取得
   //postのリプライ
   const [replyToPostId, setReplyToPostId] = useState<string | null>(null); // リプライ対象の投稿ID
   const [replyPostContent, setReplyPostContent] = useState<string>(""); // リプライ対象の投稿内容
@@ -421,25 +379,6 @@ function ThreadContent(): JSX.Element {
   const [usersData2, setUsersData2] = useState<any[]>([]); // ユーザー情報の状態
   const [targetUser, setTargetUser] = useState<any | null>(null); // 特定のユーザー情報の状態
   const [postUserIds, setPostUserIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    const fetchUsers2 = async () => {
-      // table_usersからすべてのデータを取得
-      const { data: usersData, error: usersError } = await supabase
-        .from("table_users")
-        .select("*"); // すべての情報を取得
-      if (usersError) {
-        console.log(
-          "Error fetching users from table_users:",
-          usersError.message
-        );
-        return;
-      }
-      // 取得したデータを状態にセット
-      setUsersData2(usersData || []);
-    };
-    fetchUsers2();
-  }, []);
   // 特定のユーザーIDでユーザー情報を取得する関数
   const [postUserId, setPostUserId] = useState("");
   const [postAvatarUrl, setPostAvatarUrl] = useState("");
@@ -511,24 +450,8 @@ function ThreadContent(): JSX.Element {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  // 現在のユーザーIDを取得する関数
-  const getCurrentUserId = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    return user?.id;
-  };
+
   const { isOpen, onOpen, onClose } = useDisclosure();
-  //ログイン状態の確認
-  useEffect(() => {
-    const checkUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setIsLoggedIn(!!user);
-    };
-    checkUser();
-  }, []);
 
   useEffect(() => {
     const fetchIpAddress = async () => {
@@ -625,7 +548,6 @@ function ThreadContent(): JSX.Element {
       .select("*")
       .eq("thread_id", id)
       .order("created_at", { ascending: false });
-
     if (error) {
       console.error("Error fetching all posts:", error.message);
     } else {
@@ -868,13 +790,7 @@ function ThreadContent(): JSX.Element {
   };
   //ファイルをダウンロードする関数
   const handleDownload = async (url: string, originalFileName: string) => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    // デバッグ情報を追加
-    const userName = getUserById(user?.id ?? "");
-    console.log(userName);
-    if (!userName) {
+    if (!currentUserName) {
       showToast(
         getMessage({
           ja: "ダウンロードできません",
@@ -1025,16 +941,18 @@ function ThreadContent(): JSX.Element {
                     read_by.length > 0 && (
                       <>
                         {read_by.map(async (reader, index) => {
-                          const user = await getUserById3(reader);
+                          const userData = getUserById(reader);
                           return (
                             <Flex alignItems="center">
                               <Avatar
-                                src={user?.pictureUrl}
+                                src={userData?.picture_url ?? undefined}
                                 boxSize="14px"
                                 mr={2}
                               />
                               <Text key={index}>
-                                {user ? user.name : "Unknown User"}
+                                {userData
+                                  ? userData.user_metadata.name
+                                  : "Unknown User"}
                               </Text>
                             </Flex>
                           );
@@ -1724,7 +1642,7 @@ function ThreadContent(): JSX.Element {
                 spacing="2"
                 style={{ padding: "0px", flexDirection: "column" }}
               >
-                {!userName && threadMainCompany !== "開発" ? (
+                {!currentUserName && threadMainCompany !== "開発" ? (
                   <Text color="red" fontWeight="bold">
                     {getMessage({
                       ja: "認証されていません",
@@ -1733,9 +1651,9 @@ function ThreadContent(): JSX.Element {
                       language,
                     })}
                   </Text>
-                ) : threadMainCompany !== userMainCompany &&
+                ) : threadMainCompany !== currentUserMainCompany &&
                   threadMainCompany !== "開発" &&
-                  userMainCompany !== "開発" ? (
+                  currentUserMainCompany !== "開発" ? (
                   <Text color="red" fontWeight="bold">
                     {getMessage({
                       ja: "このチャットは ",
@@ -1743,7 +1661,7 @@ function ThreadContent(): JSX.Element {
                       cn: "此聊天只能由 ",
                       language,
                     })}
-                    {getMessage({ ja: userMainCompany || "", language })}
+                    {getMessage({ ja: currentUserMainCompany || "", language })}
                     {getMessage({
                       ja: " のみ閲覧可能です",
                       us: "",
@@ -1895,13 +1813,17 @@ function ThreadContent(): JSX.Element {
                                   "max-height 1s ease, opacity 1s ease", // 高さと不透明度のトランジション
                               }}
                               justifyContent={
-                                post.user_uid === userId
+                                post.user_uid === currentUserId
                                   ? "flex-end"
                                   : "flex-start"
                               }
                               maxWidth="98vw"
-                              pr={post.user_uid === userId ? "0px" : "10px"}
-                              pl={post.user_uid === userId ? "10px" : "0px"}
+                              pr={
+                                post.user_uid === currentUserId ? "0px" : "10px"
+                              }
+                              pl={
+                                post.user_uid === currentUserId ? "10px" : "0px"
+                              }
                               onMouseDown={() => handleLongPressStart(post.id)} // 長押し開始
                               onMouseUp={handleMouseUp} // マウスアップで長押し終了
                               onMouseLeave={handleMouseLeave} // マウスが要素から離れたときに長押しを終了
@@ -1954,9 +1876,9 @@ function ThreadContent(): JSX.Element {
                                       width="3rem"
                                       isDisabled={
                                         !(
-                                          userId && // userIdが存在する場合のみ
-                                          (post.user_uid === userId ||
-                                            userId === masterUserId)
+                                          currentUserId && // userIdが存在する場合のみ
+                                          (post.user_uid === currentUserId ||
+                                            currentUserId === masterUserId)
                                         )
                                       }
                                     >
@@ -2017,7 +1939,7 @@ function ThreadContent(): JSX.Element {
                                         </Text>
                                       </Stack>
                                     </Button>
-                                    {userId === masterUserId && ( // masterUserIdと一致する場合のみ表示
+                                    {currentUserId === masterUserId && ( // masterUserIdと一致する場合のみ表示
                                       <>
                                         <Divider borderColor="black" />
                                         <TodoListMenu
@@ -2036,26 +1958,26 @@ function ThreadContent(): JSX.Element {
                                   true
                                 ),
                                 false,
-                                post.user_uid === userId,
+                                post.user_uid === currentUserId,
                                 post.read_by
                               )}
                               {getAvatarProps(
                                 post.user_uid,
-                                post.user_uid !== userId,
+                                post.user_uid !== currentUserId,
                                 "sm"
                               )}
                               <Card
                                 id={post.id}
                                 style={{
                                   backgroundColor:
-                                    post.user_uid === userId
+                                    post.user_uid === currentUserId
                                       ? "#DCF8C6"
                                       : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
                                   borderRadius: "10px",
                                   maxWidth: "86vw",
                                   padding: "0px",
                                   margin:
-                                    post.user_uid === userId
+                                    post.user_uid === currentUserId
                                       ? "0 12px 0 2px"
                                       : "0 2px 0 12px",
                                   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
@@ -2148,7 +2070,7 @@ function ThreadContent(): JSX.Element {
                                             mr="1"
                                           >
                                             {getUserById(post.reply_user_id)
-                                              ?.displayName || "未登録"}
+                                              ?.user_metadata.name || "未登録"}
                                           </Text>
                                           <Text
                                             fontSize="10px"
@@ -2157,7 +2079,7 @@ function ThreadContent(): JSX.Element {
                                           >
                                             -
                                             {getUserById(post.reply_user_id)
-                                              ?.userCompany || "未登録"}
+                                              ?.user_metadata.name || "未登録"}
                                             -
                                           </Text>
                                         </Flex>
@@ -2410,22 +2332,22 @@ function ThreadContent(): JSX.Element {
                                     position: "absolute",
                                     top: "5px",
                                     left:
-                                      post.user_uid === userId
+                                      post.user_uid === currentUserId
                                         ? "auto"
                                         : "-10px",
                                     right:
-                                      post.user_uid === userId
+                                      post.user_uid === currentUserId
                                         ? "-10px"
                                         : "auto",
                                     width: 0,
                                     height: 0,
                                     borderStyle: "solid",
                                     borderWidth:
-                                      post.user_uid === userId
+                                      post.user_uid === currentUserId
                                         ? "5px 0 10px 15px"
                                         : "5px 15px 10px 0",
                                     borderColor:
-                                      post.user_uid === userId
+                                      post.user_uid === currentUserId
                                         ? "transparent transparent transparent #DCF8C6"
                                         : "transparent #FFFFFF transparent transparent",
                                     zIndex: 1,
@@ -2439,7 +2361,7 @@ function ThreadContent(): JSX.Element {
                                   true
                                 ),
                                 true,
-                                post.user_uid !== userId,
+                                post.user_uid !== currentUserId,
                                 post.read_by
                               )}
                             </Flex>
@@ -2459,10 +2381,14 @@ function ThreadContent(): JSX.Element {
                                     mt="8px"
                                     transition="all 0.3s ease"
                                     marginLeft={
-                                      post.user_uid === userId ? "auto" : "44px"
+                                      post.user_uid === currentUserId
+                                        ? "auto"
+                                        : "44px"
                                     }
                                     marginRight={
-                                      post.user_uid === userId ? "12px" : "auto"
+                                      post.user_uid === currentUserId
+                                        ? "12px"
+                                        : "auto"
                                     }
                                     style={{
                                       boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
@@ -2487,22 +2413,22 @@ function ThreadContent(): JSX.Element {
                                           cursor="pointer"
                                           boxSize="18px"
                                           right={
-                                            post.user_uid === userId
+                                            post.user_uid === currentUserId
                                               ? ""
                                               : "-22px"
                                           }
                                           left={
-                                            post.user_uid === userId
+                                            post.user_uid === currentUserId
                                               ? "-22px"
                                               : ""
                                           }
                                           top="6px"
                                           transform={
                                             isExpanded
-                                              ? post.user_uid === userId
+                                              ? post.user_uid === currentUserId
                                                 ? "rotate(180deg)"
                                                 : "rotate(0deg)"
-                                              : post.user_uid === userId
+                                              : post.user_uid === currentUserId
                                               ? "rotate(0deg)"
                                               : "rotate(180deg)"
                                           }
@@ -2515,10 +2441,10 @@ function ThreadContent(): JSX.Element {
                                           }}
                                           _hover={{
                                             transform: isExpanded
-                                              ? post.user_uid === userId
+                                              ? post.user_uid === currentUserId
                                                 ? "rotate(180deg) scale(1.2)"
                                                 : "rotate(0deg) scale(1.2)"
-                                              : post.user_uid === userId
+                                              : post.user_uid === currentUserId
                                               ? "rotate(0deg) scale(1.2)"
                                               : "rotate(180deg) scale(1.2)",
                                           }}
@@ -2533,7 +2459,7 @@ function ThreadContent(): JSX.Element {
                                     >
                                       <Flex
                                         bg={
-                                          post.user_uid === userId
+                                          post.user_uid === currentUserId
                                             ? "#DCF8C6"
                                             : "#FFFFFF"
                                         }
@@ -2694,7 +2620,7 @@ function ThreadContent(): JSX.Element {
               <Box mb="30vh" />
             </Content>
             <BBSTodoList />
-            <StatusDisplay userId={userId} />
+            <StatusDisplay />
           </div>
         </>
       )}

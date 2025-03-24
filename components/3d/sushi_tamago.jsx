@@ -48,5 +48,4 @@ export default function Model(props) {
     </group>
   );
 }
-
 useGLTF.preload("/images/3d/sushi_tamago.glb");

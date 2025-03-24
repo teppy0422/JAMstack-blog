@@ -31,6 +31,7 @@ export const myContext = createContext(myState);
 export { myContext as AppContext };
 import { AppProps } from "next/app";
 import { LanguageProvider } from "../context/LanguageContext";
+import { UserProvider } from "../context/useUserContext";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
@@ -58,12 +59,14 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         {/* アクセス解析 */}
         {/* <script src="//accaii.com/teppy/script.js" async></script> */}
       </Head>
-      <ChakraProvider theme={theme}>
-        <NextNprogress color="#f88" showOnShallow={false} height={3} />
-        <SessionProvider session={session}>
-          <Component {...pageProps} />
-        </SessionProvider>
-      </ChakraProvider>
+      <UserProvider>
+        <ChakraProvider theme={theme}>
+          <NextNprogress color="#f88" showOnShallow={false} height={3} />
+          <SessionProvider session={session}>
+            <Component {...pageProps} />
+          </SessionProvider>
+        </ChakraProvider>
+      </UserProvider>
     </LanguageProvider>
   );
 }
