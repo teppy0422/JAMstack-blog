@@ -300,7 +300,7 @@ export default function Header() {
                   bg="white.1"
                   aria-label="Open Menu"
                   onClick={onMenuOpen}
-                  ml="4px"
+                  ml="2px"
                   zIndex="1101"
                   opacity="0.85"
                   borderColor={colorMode === "light" ? "black" : "white"}
@@ -311,7 +311,7 @@ export default function Header() {
               </Center>
               <Center
                 flex="1"
-                style={{ gap: "4px" }}
+                style={{ gap: "2px" }}
                 className={styles.logoAndText}
               >
                 <Flex alignItems="center" gap="2px">
@@ -324,7 +324,7 @@ export default function Header() {
                   </svg>
                   <NextLink href="/" legacyBehavior>
                     <Link _focus={{ _focus: "none" }}>
-                      <Text className={styles.logoText} fontSize="md" mr="10px">
+                      <Text className={styles.logoText} fontSize="md" mr="3px">
                         STUDIO+
                       </Text>
                     </Link>
@@ -338,7 +338,7 @@ export default function Header() {
                     maxH="24px"
                   >
                     <IconButton
-                      icon={<ImQrcode size="md" />}
+                      icon={<ImQrcode style={{ fontSize: "24px" }} />}
                       _hover={{ bg: "transparent" }}
                       bg="transparent"
                       p="0"

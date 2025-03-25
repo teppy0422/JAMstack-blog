@@ -87,10 +87,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       try {
         // 現在のユーザーIDを取得
         const userId = await fetchCurrentUserId();
-        if (userId) {
-          // 全ユーザー情報を取得
-          await fetchAllUsers();
-        }
+        // 全ユーザー情報を取得
+        await fetchAllUsers();
       } catch (error) {
         console.error("Error in initializeUser:", error);
       } finally {

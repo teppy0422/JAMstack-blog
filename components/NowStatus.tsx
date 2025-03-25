@@ -68,6 +68,11 @@ const activityOptions = [
   { value: "sleeping", label: "就寝", color: "gray" },
   { value: "other", label: "その他", color: "#555" },
 ];
+// ステータス表示用の関数
+const getActivityLabel = (value: string) => {
+  const option = activityOptions.find((opt) => opt.value === value);
+  return option ? option.label : value;
+};
 
 // ステータス表示用の関数
 const getActivityColor = (value: string) => {
@@ -117,18 +122,11 @@ export const StatusDisplay = () => {
 
   const { currentUserId, getUserById } = useUserContext();
 
-  // ステータス表示用の関数
-  const getActivityLabel = (value: string) => {
-    const option = activityOptions.find((opt) => opt.value === value);
-    return option ? option.label : value;
-  };
-
   // ユーザーのスケジュールを取得する関数
   const fetchUserSchedules = async (selectedUserId: string | null) => {
     const now = new Date();
     const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
     // schedulesから該当ユーザーのデータをフィルタリング
     const userSchedulesData = schedules.filter(
       (schedule) =>
@@ -136,7 +134,6 @@ export const StatusDisplay = () => {
         new Date(schedule.startTime) >= firstDayOfMonth &&
         new Date(schedule.startTime) <= lastDayOfMonth
     );
-
     const formattedSchedules = userSchedulesData.map((schedule) => ({
       startTime: new Date(schedule.startTime).toLocaleString("ja-JP", {
         year: "numeric",
@@ -383,6 +380,7 @@ export const StatusDisplay = () => {
               <>
                 <Box>
                   <HStack>
+                    <Text>日程</Text>
                     <Avatar
                       src={
                         getUserById(selectedUserId)?.picture_url ?? undefined
@@ -393,7 +391,7 @@ export const StatusDisplay = () => {
                       {getUserById(selectedUserId)?.user_metadata.name}
                     </Text>
                   </HStack>
-                  <Text fontSize="12px" color="gray.500" fontWeight={400}>
+                  <Text fontSize="12px" color="gray.500" fontWeight={600}>
                     {new Date().toLocaleDateString("ja-JP", {
                       year: "numeric",
                       month: "long",
@@ -448,6 +446,11 @@ export const StatusDisplay = () => {
                 const showDate = currentDate !== previousDate;
                 previousDate = currentDate;
 
+                // 今日の日付かどうかを判定
+                const isToday =
+                  new Date().toDateString() ===
+                  new Date(schedule.startTime).toDateString();
+
                 return (
                   <Flex direction="column" key={index}>
                     {showDate && (
@@ -455,25 +458,49 @@ export const StatusDisplay = () => {
                         textAlign="center"
                         flex="1"
                         position="relative"
-                        mb={2}
+                        mb={6}
                         w="100%"
                       >
                         <Text
-                          fontWeight="medium"
                           bg={colorMode === "light" ? "#FFF" : "#2d3747"}
                           zIndex="2"
                           position="absolute"
-                          top="0"
+                          top="-4px"
+                          fontWeight={isToday ? "bold" : "medium"}
+                          // borderBottom={isToday ? "2px solid" : ""}
+                          // borderBottomColor={
+                          //   isToday
+                          //     ? colorMode === "light"
+                          //       ? "red"
+                          //       : "#F55"
+                          //     : "inherit"
+                          // }
                         >
                           {currentDate}
                         </Text>
+                        {isToday && (
+                          <Box
+                            w="3px"
+                            h="1rem"
+                            position="absolute"
+                            zIndex="3"
+                            bg={
+                              isCurrent
+                                ? colorMode === "light"
+                                  ? "red"
+                                  : "#F55"
+                                : "#ccc"
+                            }
+                            left="-5px"
+                          />
+                        )}
                         <Divider
                           position="absolute"
                           w="100%"
-                          top="12px"
+                          top="8px"
                           zIndex="1"
-                          border="0.5px solid"
-                          borderColor="#666"
+                          borderWidth={0.1}
+                          borderColor="#777"
                         />
                       </Box>
                     )}
@@ -481,17 +508,36 @@ export const StatusDisplay = () => {
                       direction="row"
                       textAlign="left"
                       justify="left"
-                      mt={5}
+                      mt={0}
                       ml={7}
                     >
-                      <Stack spacing={0} align="center" position="relative">
+                      <Stack
+                        spacing={0}
+                        mb={1}
+                        align="center"
+                        position="relative"
+                      >
                         <Text fontWeight="medium" fontSize="12px">
                           {new Date(schedule.startTime).toLocaleTimeString(
                             "ja-JP",
                             { hour: "2-digit", minute: "2-digit" }
                           )}
                         </Text>
-                        <Text>|</Text>
+                        <Box
+                          w="1px"
+                          h={
+                            schedule.endTime
+                              ? `${
+                                  ((new Date(schedule.endTime).getTime() -
+                                    new Date(schedule.startTime).getTime()) /
+                                    (1000 * 60 * 30)) *
+                                  2
+                                }px`
+                              : "20px"
+                          }
+                          bg={colorMode === "light" ? "#000" : "#aaa"}
+                          my={0}
+                        />
                         <Text fontWeight="medium" fontSize="12px">
                           {schedule.endTime &&
                             new Date(schedule.endTime).toLocaleTimeString(
@@ -513,32 +559,32 @@ export const StatusDisplay = () => {
                           left="-6px"
                         />
                       </Stack>
-                      <Flex direction="column">
-                        <Box textAlign="center" justifyContent="left" ml={2}>
-                          <Text
-                            color="white"
-                            bg={getActivityColor(schedule.activity)}
-                            fontSize="10px"
-                            fontWeight="medium"
-                            py={0.5}
-                            px={1}
-                            m={0}
-                            borderRadius="5px"
-                          >
-                            {getActivityLabel(schedule.activity)}
-                          </Text>
-                        </Box>
-                        <Box>
-                          <Text
-                            textAlign="left"
-                            ml={2}
-                            fontSize="12px"
-                            fontWeight="bold"
-                          >
-                            {schedule.note}
-                          </Text>
-                        </Box>
-                      </Flex>
+
+                      <Stack spacing={1} ml={2}>
+                        <Text
+                          display="inline-block"
+                          color="white"
+                          bg={getActivityColor(schedule.activity)}
+                          fontSize="10px"
+                          fontWeight="medium"
+                          py={0.5}
+                          px={1}
+                          m={0}
+                          borderRadius="5px"
+                          width="fit-content"
+                        >
+                          {getActivityLabel(schedule.activity)}
+                        </Text>
+                        <Text
+                          display="inline-block"
+                          textAlign="left"
+                          fontSize="12px"
+                          fontWeight="bold"
+                          width="fit-content"
+                        >
+                          {schedule.note}
+                        </Text>
+                      </Stack>
                     </Flex>
                   </Flex>
                 );
@@ -931,7 +977,7 @@ export const NowStatus = ({
                   // renderDayContents={renderDayContents}
                   inline
                   dateFormat="yyyy/MM/dd"
-                  minDate={new Date()}
+                  // minDate={new Date()}
                   highlightDates={
                     schedules
                       .filter((schedule) => schedule.user_id === userId) // user_idが一致するスケジュールのみをフィルタリング
@@ -966,13 +1012,13 @@ export const NowStatus = ({
                     {selectedDaySchedules.map((schedule, index) => (
                       <Box
                         key={index}
-                        p={4}
+                        p={2}
                         border="1px solid"
                         borderColor="gray.200"
                         borderRadius="md"
                       >
-                        <Flex justify="space-between" align="center" mb={2}>
-                          <Text fontWeight="medium">
+                        <Flex justify="space-between" align="center">
+                          <Text fontSize="sm" fontWeight="medium">
                             {schedule.startTime}-{schedule.endTime}
                           </Text>
                           <Button
@@ -983,8 +1029,22 @@ export const NowStatus = ({
                             削除
                           </Button>
                         </Flex>
-                        <Text>活動内容: {schedule.activity}</Text>
-                        {schedule.note && <Text>メモ: {schedule.note}</Text>}
+                        <Text
+                          color="white"
+                          bg={getActivityColor(schedule.activity)}
+                          fontSize="10px"
+                          fontWeight="medium"
+                          display="inline"
+                          py={0.5}
+                          px={1}
+                          m={0}
+                          borderRadius="5px"
+                        >
+                          {getActivityLabel(schedule.activity)}
+                        </Text>
+                        <Text fontSize="sm" fontWeight={400}>
+                          {schedule.note}
+                        </Text>
                       </Box>
                     ))}
                   </Stack>

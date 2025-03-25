@@ -89,6 +89,7 @@ import { Global } from "@emotion/react";
 import "@fontsource/noto-sans-jp";
 import { CustomLoading } from "../../../components/CustomText";
 import { StatusDisplay } from "../../../components/NowStatus";
+import { isatty } from "tty";
 
 let cachedUsers: any[] | null = null;
 
@@ -174,12 +175,6 @@ function ThreadContent(): JSX.Element {
   );
   const blinkIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const showToast = useCustomToast();
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setNewPostContent(e.target.value);
-    },
-    []
-  );
   // スマートフォンかどうかを判別
   const isMobileDevice = () => {
     return /Mobi|Android/i.test(navigator.userAgent);
@@ -193,44 +188,83 @@ function ThreadContent(): JSX.Element {
   const [loading, setLoading] = useState(false); // 追加: ローディング状態を管理
   const [initialLoadComplete, setInitialLoadComplete] = useState(false); // 初回ロード完了フラグ
   const postsPerPage = 1000; // 1回の取得で読み込む投稿数
+  const [unreadPostIds, setUnreadPostIds] = useState<string[]>([]); // 未読の投稿IDを管理
+  const [isAtBottom, setIsAtBottom] = useState(false); // ページ最下部にいるかどうか
 
-  // const { userId, email } = useUserInfo();
-  // const { pictureUrl, userName, userCompany, userMainCompany } =
-  //   useUserData(userId);
   const {
     currentUserId,
     currentUserName,
     currentUserMainCompany,
     currentUserCompany,
     getUserById,
+    isLoading: isLoadingContext,
   } = useUserContext();
 
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
 
   //既読チェック
   const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0"; // 任意のユーザーID
-
   useEffect(() => {
     const handleScroll = () => {
-      const postsElements = document.querySelectorAll(".post"); // 投稿要素を取得
-      postsElements.forEach((postElement) => {
-        const postId = postElement.getAttribute("data-post-id"); // 投稿IDを取得
-        const isInViewport = isElementInViewport(postElement); // ビューポート内にあるか確認
-        if (isInViewport) {
-          const postUserId = postElement.getAttribute("data-user-id"); // 投稿のユーザーIDを取得
-          if (postUserId !== currentUserId) {
-            if (postId && currentUserId) {
-              markAsRead(postId, currentUserId); // 既読をマーク
-            }
-          }
-        }
-      });
+      setIsAtBottom(
+        window.scrollY + window.innerHeight >= document.body.scrollHeight - 50
+      );
     };
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [currentUserId]);
+  }, []);
+
+  // isAtBottomがtrueになった時に未読の投稿を既読にする
+  useEffect(() => {
+    if (isAtBottom && unreadPostIds.length > 0 && currentUserId) {
+      const markUnreadPostsAsRead = async () => {
+        try {
+          // 一括で未読投稿のread_byを取得
+          const { data: posts, error: fetchError } = await supabase
+            .from("posts")
+            .select("id, read_by, content, thread_id, user_uid, created_at")
+            .in("id", unreadPostIds);
+          if (fetchError) {
+            console.error(
+              "Error fetching posts markUnreadPostsAsRead:",
+              fetchError.message
+            );
+            return;
+          }
+          // 更新が必要な投稿をフィルタリング
+          const postsToUpdate = posts.filter(
+            (post) => !post.read_by?.includes(currentUserId)
+          );
+          if (postsToUpdate.length > 0) {
+            // 一括で更新を実行
+            const { error: updateError } = await supabase.from("posts").upsert(
+              postsToUpdate.map((post) => ({
+                id: post.id,
+                read_by: [...(post.read_by || []), currentUserId],
+                content: post.content, // contentカラムを追加
+                thread_id: post.thread_id, // thread_idも追加
+                user_uid: post.user_uid, // user_uidも追加
+                created_at: post.created_at, // created_atも追加
+              }))
+            );
+            if (updateError) {
+              console.error(
+                "Error marking posts as read:",
+                updateError.message
+              );
+            }
+          }
+          // 未読リストをクリア
+          setUnreadPostIds([]);
+        } catch (error) {
+          console.error("Error in markUnreadPostsAsRead:", error);
+        }
+      };
+      markUnreadPostsAsRead();
+    }
+  }, [isAtBottom]);
 
   const markAsRead = async (postId: string, userId: string) => {
     // 現在のread_byの値を取得
@@ -259,17 +293,6 @@ function ThreadContent(): JSX.Element {
     } else {
       console.log("post marked as read:", postId);
     }
-  };
-  const isElementInViewport = (el: Element, offset: number = 50) => {
-    const rect = el.getBoundingClientRect();
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) -
-          offset &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
   };
   // 長押しイベント
   const [longPressTimeout, setLongPressTimeout] =
@@ -347,98 +370,31 @@ function ThreadContent(): JSX.Element {
   const [replyPostContent, setReplyPostContent] = useState<string>(""); // リプライ対象の投稿内容
   const [replyPostUserId, setReplyPostUserId] = useState<string | null>(null); // リプライ対象のユーザーID
   const [replyPostFileUrl, setReplyPostFileUrl] = useState<string | null>(null); // リプライ対象のファイルURL
-  const [replyPostId, setReplyPostId] = useState<string | null>(null); // replyPostIdを新たに作成
   const [replyPostUserDisplayName, setReplyPostUserDisplayName] = useState<
     string | null
-  >(null); // 追加: リプライ対象のユーザー表示名を管理する状態
+  >(null);
   const [replyPostUserCompany, setReplyPostUserCompany] = useState<
     string | null
-  >(null); // 追加: リプライ対象のユーザー会社を管理する状態
+  >(null);
   //リプライ情報を取得
   const handleReplyPost = async (postId: string) => {
     const post = posts.find((p) => p.id === postId); // 対象の投稿を取得
     if (post) {
-      setReplyPostContent(post.content); // 投稿内容を設定
-      setReplyPostUserId(post.user_uid); // ユーザーIDを設定
-      setReplyPostFileUrl(post.file_url); // ファイルURLを設定
-      // displayNameとuser_companyを取得
-      const userDisplayNameData = await fetchUserFromTable(post.user_uid); // post.user_uidを引数に渡す
-      const displayName = userDisplayNameData?.displayName; // nullチェックを追加
-      const userCompany = userDisplayNameData?.userCompany; // nullチェックを追加
-      setReplyPostUserDisplayName(displayName as string | null); // displayNameを状態に設定
-      setReplyPostUserCompany(userCompany as string | null); // userCompanyを状態に設定
+      setReplyPostContent(post.content);
+      setReplyPostUserId(post.user_uid);
+      setReplyPostFileUrl(post.file_url);
+
+      const userData = getUserById(post.user_uid);
+      setReplyPostUserDisplayName(userData?.user_metadata.name ?? null);
+      setReplyPostUserCompany(userData?.user_company ?? null);
     }
-    setReplyToPostId(postId); // リプライ対象投稿IDを設定
-    // フォーカスを入力フィールドに当てる
+    setReplyToPostId(postId);
     const textarea = document.querySelector("textarea");
     if (textarea) {
-      textarea.focus(); // フォーカスを設定
+      textarea.focus();
     }
-  };
-  //newユーザー情報
-  const [usersData2, setUsersData2] = useState<any[]>([]); // ユーザー情報の状態
-  const [targetUser, setTargetUser] = useState<any | null>(null); // 特定のユーザー情報の状態
-  const [postUserIds, setPostUserIds] = useState<string[]>([]);
-  // 特定のユーザーIDでユーザー情報を取得する関数
-  const [postUserId, setPostUserId] = useState("");
-  const [postAvatarUrl, setPostAvatarUrl] = useState("");
-  const getUserById2 = (userId: string) => {
-    const user = usersData2.find((user) => user.id === userId); // ユーザーIDで検索
-    // setTargetUser(user || null); // 特定のユーザー情報を状態にセット
-    // setPostAvatarUrl(user.picture_url);
-  };
-  //ユーザー情報
-  let postCount = 0;
-  const [userInfo, setUserInfo] = useState<any[]>([]); // ユーザー情報の配列
-  const fetchUserInfo = async (userId: string) => {
-    if (!userId) {
-      console.error("User ID is not provided;;;;;;", userId);
-      return null;
-    }
-    const existingUser = userInfo.find((user) => user.id === userId); // userInfoから既存のユーザーを検索
-    if (existingUser) {
-      return existingUser; // 既存のユーザー情報を返す
-    }
-    const fetchedUser = await fetchUserFromTable(userId); // Supabaseからユーザー情報を取得
-    if (fetchedUser) {
-      setUserInfo((prev) => [...prev, { id: userId, ...fetchedUser }]); // userInfoに追加
-    }
-    return fetchedUser; // 取得したユーザー情報を返す
-  };
-  const fetchAndSetUserInfo = async (post_userID: any) => {
-    if (!post_userID) {
-      return;
-    }
-    const userInfo = await fetchUserInfo(post_userID); // ユーザー情報を取得
-    if (userInfo) {
-      setUserInfo((prev) => [...prev, userInfo]); // ここでuserInfoを状態に追加
-    } else {
-      console.error(`User with ID ${post_userID} not found`); // ユーザーが見つからない場合のエラーログ
-      // ここでデフォルトのユーザー情報を設定することも検討できます
-      setUserInfo((prev) => [
-        ...prev,
-        { id: post_userID, displayName: "Unknown User" },
-      ]);
-    }
-  };
-  const fetchUserFromTable = async (userId: string) => {
-    const { data, error } = await supabase
-      .from("table_users") // 新しいテーブル名を指定
-      .select("user_metadata->name, user_company,picture_url") // displayNameとuser_companyを取得
-      .eq("id", userId) // 引数のuserIdでフィルタリング
-      .single();
-    if (error) {
-      console.error("Error fetching user display name:", error.message);
-      return null;
-    }
-    return {
-      displayName: data.name || null, // user_metadataを直接参照
-      userCompany: data.user_company || null, // user_companyを返す
-      userPicture: data.picture_url || null,
-    };
   };
   //スクロール位置がボトムにあるかを管理する状態
-  const [isAtBottom, setIsAtBottom] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
       setIsAtBottom(
@@ -479,10 +435,10 @@ function ThreadContent(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (isClient && id) {
-      fetchPosts(); // 初回ロード時に投稿を取得
+    if (isClient && id && !isLoadingContext) {
+      fetchAllPosts(); // 初回ロード時に投稿を取得
     }
-  }, [isClient, id, threadCategory]);
+  }, [isClient, id, threadCategory, isLoadingContext]);
 
   useEffect(() => {
     if (isAtBottom && blinkIntervalRef.current) {
@@ -494,7 +450,7 @@ function ThreadContent(): JSX.Element {
   //リアルタイムにコンテンツを表示
   useEffect(() => {
     if (isClient && id) {
-      fetchPosts();
+      fetchAllPosts();
       const channel = supabase
         .channel(`public:posts:thread_id=eq.${id}`)
         .on(
@@ -507,6 +463,13 @@ function ThreadContent(): JSX.Element {
           },
           (payload) => {
             setPosts((prevPosts) => [...prevPosts, payload.new]);
+            // 新しい投稿が追加された場合、未読リストに追加
+            if (
+              currentUserId &&
+              !payload.new.read_by?.includes(currentUserId)
+            ) {
+              setUnreadPostIds((prev) => [...prev, payload.new.id]);
+            }
             if (audioRef_recieving.current) {
               audioRef_recieving.current.play();
             }
@@ -552,6 +515,19 @@ function ThreadContent(): JSX.Element {
       console.error("Error fetching all posts:", error.message);
     } else {
       setPosts(data.reverse());
+
+      // 未読の投稿IDを収集
+      if (currentUserId) {
+        const unreadIds = data
+          .filter(
+            (post) =>
+              !post.read_by?.includes(currentUserId) &&
+              post.user_uid !== currentUserId
+          )
+          .map((post) => post.id);
+        setUnreadPostIds(unreadIds);
+        console.log("eeeee", unreadIds);
+      }
     }
     setLoading(false);
   };
@@ -642,17 +618,17 @@ function ThreadContent(): JSX.Element {
       setInitialLoadComplete(true);
     }
   };
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY === 0 && hasMore && !loading) {
-        fetchPosts(posts.length); // 現在の投稿数をオフセットとして使用
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [posts, hasMore, loading]);
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (window.scrollY === 0 && hasMore && !loading) {
+  //       fetchPosts(posts.length); // 現在の投稿数をオフセットとして使用
+  //     }
+  //   };
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, [posts, hasMore, loading]);
   // 投稿する
   const createPost = async (inputValue: string) => {
     let fileUrl: string = "";
@@ -668,9 +644,7 @@ function ThreadContent(): JSX.Element {
         console.log("Public URL:", fileUrl);
       }
     }
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+
     const { error } = await supabase.from("posts").insert([
       {
         thread_id: id,
@@ -678,7 +652,7 @@ function ThreadContent(): JSX.Element {
         ip_address: ipAddress,
         file_url: fileUrl,
         original_file_name: originalFileName,
-        user_uid: user?.id, // ログインしているユーザーのUIDを追加
+        user_uid: currentUserId, // ログインしているユーザーのUIDを追加
         //リプライの内容
         reply_post_id: replyToPostId,
         reply_content: replyPostContent,
@@ -857,17 +831,6 @@ function ThreadContent(): JSX.Element {
     }
     return `${format(date, "yyyy M/d", { locale })} (${translatedDayOfWeek})`;
   };
-  //リプライの名前を取得
-  useEffect(() => {
-    const fetchDisplayName = async (id_) => {
-      let user = userInfo.find((user) => user.id === id_); // ユーザー情報を取得
-      if (!user) {
-        user = await fetchAndSetUserInfo(id_); // ユーザー情報を取得して状態に保存
-      }
-      setReplyPostUserDisplayName(user?.displayName || "不明"); // displayNameがundefinedの場合のデフォルト値
-    };
-    fetchDisplayName(replyPostUserId);
-  }, [replyPostUserId, userInfo]); // 依存関係に追加
 
   //アバター
   const getAvatarProps = (
@@ -876,17 +839,17 @@ function ThreadContent(): JSX.Element {
     size: string
   ) => {
     if (isReturn) {
-      // getUserById2(post_userID);
-      const user = usersData2.find((user) => user.id === post_userID);
+      const userData = getUserById(post_userID);
       return (
-        <Avatar
-          size={size}
-          ml={size === "xs" ? "1" : "0"}
-          zIndex="5"
-          loading="lazy"
-          // name={user ? user.displayName : "ユーザー名"} // 修正: userからdisplayNameを取得
-          src={user?.picture_url ? user.picture_url : undefined} // 修正: userからuserPictureを取得
-        />
+        <Tooltip label={userData?.user_metadata.name} hasArrow>
+          <Avatar
+            size={size}
+            ml={size === "xs" ? "1" : "0"}
+            zIndex="5"
+            loading="lazy"
+            src={userData?.picture_url ?? undefined}
+          />
+        </Tooltip>
       );
     }
   };
@@ -1055,7 +1018,7 @@ function ThreadContent(): JSX.Element {
             `}</style>
             <Stack // inputForm
               position="fixed"
-              zIndex="1100"
+              zIndex="2000"
               spacing={0}
               bottom="0"
               right="0"
@@ -1094,77 +1057,55 @@ function ThreadContent(): JSX.Element {
               >
                 <IconWithDrawer
                   text=""
-                  onOpen={() => handleOpen("メッセージ送信のコツ")}
-                  isOpen={isOpen && activeDrawer === "メッセージ送信のコツ"}
+                  onOpen={() => handleOpen("機能一覧")}
+                  isOpen={isOpen && activeDrawer === "機能一覧"}
                   onClose={handleClose}
                   header={getMessage({
-                    ja: "メッセージ送信のコツ",
-                    us: "Tips for Sending Messages",
-                    cn: "发送信息的提示",
+                    ja: "機能一覧",
+                    us: "List of Functions",
+                    cn: "功能一览",
                     language,
                   })}
                   size="md"
                   children={
                     <Box>
-                      <Text fontWeight={600}>
-                        {getMessage({
-                          ja: "新規開発依頼の場合",
-                          us: "For new development requests",
-                          cn: "新开发申请",
-                          language,
-                        })}
-                      </Text>
                       <Text fontWeight={400}>
-                        {getMessage({
-                          ja: "・目的と機能を伝える",
-                          us: "・Communicate purpose and function",
-                          cn: "・传达目的和功能",
-                          language,
-                        })}
-                      </Text>
-                      <Box
-                        bg="gray.300"
-                        color="black"
-                        w="100%"
-                        px={2}
-                        fontWeight={400}
-                        mt={2}
-                      >
-                        {getMessage({
-                          ja: "参考のやりとり",
-                          us: "Exchange of references",
-                          cn: "交换参考资料",
-                          language,
-                        })}
-                      </Box>
-                      <Image src="/images/0005/0005.png" w="100%" />
-                      <Text mt={4} fontWeight={600}>
-                        {getMessage({
-                          ja: "機能紹介",
-                          us: "Functions",
-                          cn: "功能",
-                          language,
-                        })}
-                      </Text>
-                      <Text mt={1} fontWeight={400}>
                         {getMessage({
                           ja: "クリック長押しで以下の機能が使えます",
                           us: "Click and hold to use the following functions",
                           cn: "点击并按住可使用以下功能",
                           language,
                         })}
-                        <br />
+                      </Text>
+                      <Text mt={4} fontWeight={600}>
                         {getMessage({
-                          ja: "・リプライ:長押しした投稿を参照",
-                          us: "Reply: See long-pressed post",
-                          cn: "答复：见长按帖子",
+                          ja: "リプライ",
+                          us: "Functions",
+                          cn: "功能",
                           language,
                         })}
-                        <br />
+                      </Text>
+                      <Text mt={1} ml={4} fontWeight={400}>
                         {getMessage({
-                          ja: "・削除:自分の投稿のみ削除できます",
-                          us: "Delete: You can delete only your own postings.",
-                          cn: "删除：您只能删除自己的帖子。",
+                          ja: "投稿を参照",
+                          us: "See post",
+                          cn: "参见帖子",
+                          language,
+                        })}
+                      </Text>
+                      <Text mt={4} fontWeight={600}>
+                        {getMessage({
+                          ja: "削除",
+                          us: "Delete",
+                          cn: "删除",
+                          language,
+                        })}
+                      </Text>
+                      <Text mt={1} ml={4} fontWeight={400}>
+                        {getMessage({
+                          ja: "投稿を削除",
+                          us: "delete post",
+                          cn: "删除帖子",
                           language,
                         })}
                       </Text>
@@ -1294,30 +1235,31 @@ function ThreadContent(): JSX.Element {
                 direction="row"
                 justify="flex-end"
                 className="no-print-page"
+                position="relative"
               >
                 {/* ファイル添付ボタン */}
-                <Button
-                  onClick={handleButtonClick}
+                <Tooltip
                   position="absolute"
+                  left="0"
+                  label={getMessage({
+                    ja: "添付ファイルを選択",
+                    us: "Select Attachment",
+                    cn: "选择附件",
+                    language,
+                  })}
                   cursor="pointer"
-                  left="8px"
-                  top="5px"
-                  p="0"
-                  bg="none"
-                  _hover={{ bg: "none" }}
+                  placement="top"
+                  hasArrow
                 >
-                  <Tooltip
+                  <Button
+                    onClick={handleButtonClick}
                     position="absolute"
-                    left="0"
-                    label={getMessage({
-                      ja: "添付ファイルを選択",
-                      us: "Select Attachment",
-                      cn: "选择附件",
-                      language,
-                    })}
                     cursor="pointer"
-                    placement="right"
-                    hasArrow
+                    left="2px"
+                    top="0px"
+                    p="0"
+                    bg="none"
+                    _hover={{ bg: "none" }}
                   >
                     <IconButton
                       position="absolute"
@@ -1335,34 +1277,32 @@ function ThreadContent(): JSX.Element {
                       h="28px"
                       minW="28px"
                       p="0"
-                      mt="6px"
-                      ml="3px"
                       zIndex="99"
                     />
-                  </Tooltip>
-                  <Input
-                    type="file"
-                    accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,.7z,.gif,.mp4"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    position="absolute"
-                    top="0"
-                    left="0"
-                    opacity="0"
-                    width="100%"
-                    height="100%"
-                    zIndex="2"
-                    title=""
-                    aria-label="Upload file"
-                    name=""
-                  />
-                </Button>
+                    <Input
+                      type="file"
+                      position="absolute"
+                      display="none"
+                      accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,.7z,.gif,.mp4"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      top="0"
+                      left="0"
+                      opacity="0"
+                      width="100%"
+                      height="100%"
+                      zIndex="2"
+                      title=""
+                      aria-label="Upload file"
+                      name=""
+                    />
+                  </Button>
+                </Tooltip>
                 <Input
                   position="relative"
                   as="textarea"
                   id="inputValue"
                   minH="40px"
-                  // h="40px"
                   resize="none"
                   overflow="hidden"
                   onKeyDown={(e) => {
@@ -1383,7 +1323,7 @@ function ThreadContent(): JSX.Element {
                     borderColor: colorMode === "light" ? "#a69689" : "gray.400",
                   }}
                   fontWeight="200"
-                  fontSize="15px"
+                  fontSize={isMobile ? "16px" : "15px"} //iphone_safariなら16px以下で自動ズームが働く
                   placeholder={getMessage({
                     ja: "メッセージを入力 (Shift+Enterで送信)",
                     us: "Type your message (Shift+Enter to send)",
@@ -1402,68 +1342,83 @@ function ThreadContent(): JSX.Element {
                     color: colorMode === "light" ? "#bfb0a4" : "gray.500",
                   }}
                 />
-                <IconButton
-                  id="sendButton"
-                  onClick={() => {
-                    if (isSubmitting) return;
-                    const inputValue = document.getElementById("inputValue");
-                    if (inputValue === null) return;
-                    const inputValueElement = inputValue as HTMLTextAreaElement;
-                    if (!inputValueElement.value.trim() && !selectedFile) {
-                      showToast(
-                        getMessage({
-                          ja: "送信するものが有りません",
-                          us: "Nothing to send",
-                          cn: "没什么可发送的。",
-                          language,
-                        }),
-                        getMessage({
-                          ja: "メッセージまたはファイル添付が必要です",
-                          us: "Message or file attachment required",
-                          cn: "需要信息或文件附件",
-                          language,
-                        }),
-                        "error"
-                      );
-                      return;
-                    }
-                    console.log(inputValueElement.value);
-                    // setNewPostContent(inputValueElement.value);
-                    setIsSubmitting(true); //post開始
-                    createPost(inputValueElement.value);
-                    // setNewPostContent(""); //クリア
-                    inputValueElement.value = "";
-                    inputValueElement.style.height = "40px"; // 高さを初期状態に戻す
-                    setTimeout(() => {
-                      setIsSubmitting(false); //post終了
-                      if (audioRef_send.current) {
-                        audioRef_send.current.play();
+                <Tooltip
+                  position="absolute"
+                  left="0"
+                  label={getMessage({
+                    ja: "送信",
+                    us: "send",
+                    cn: "传动",
+                    language,
+                  })}
+                  cursor="pointer"
+                  placement="top"
+                  hasArrow
+                >
+                  <IconButton
+                    id="sendButton"
+                    onClick={() => {
+                      if (isSubmitting) return;
+                      const inputValue = document.getElementById("inputValue");
+                      if (inputValue === null) return;
+                      const inputValueElement =
+                        inputValue as HTMLTextAreaElement;
+                      if (!inputValueElement.value.trim() && !selectedFile) {
+                        showToast(
+                          getMessage({
+                            ja: "送信するものが有りません",
+                            us: "Nothing to send",
+                            cn: "没什么可发送的。",
+                            language,
+                          }),
+                          getMessage({
+                            ja: "メッセージまたはファイル添付が必要です",
+                            us: "Message or file attachment required",
+                            cn: "需要信息或文件附件",
+                            language,
+                          }),
+                          "error"
+                        );
+                        return;
                       }
-                    }, 2000); // 2秒待機
-                  }}
-                  icon={
-                    isSubmitting ? (
-                      <Spinner
-                        color={colorMode === "light" ? "purple" : "yellow"}
-                      />
-                    ) : (
-                      <BsSend
-                        color={colorMode === "light" ? "purple" : "yellow"}
-                        style={{ transform: "rotate(0deg)" }}
-                        size="24px"
-                      />
-                    )
-                  }
-                  bg="none"
-                  top={0}
-                  right={-1}
-                  aria-label="送信"
-                />
+                      console.log(inputValueElement.value);
+                      // setNewPostContent(inputValueElement.value);
+                      setIsSubmitting(true); //post開始
+                      createPost(inputValueElement.value);
+                      // setNewPostContent(""); //クリア
+                      inputValueElement.value = "";
+                      inputValueElement.style.height = "40px"; // 高さを初期状態に戻す
+                      setTimeout(() => {
+                        setIsSubmitting(false); //post終了
+                        if (audioRef_send.current) {
+                          audioRef_send.current.play();
+                        }
+                      }, 2000); // 2秒待機
+                    }}
+                    icon={
+                      isSubmitting ? (
+                        <Spinner
+                          color={colorMode === "light" ? "purple" : "yellow"}
+                        />
+                      ) : (
+                        <BsSend
+                          color={colorMode === "light" ? "purple" : "yellow"}
+                          style={{ transform: "rotate(0deg)" }}
+                          size="24px"
+                        />
+                      )
+                    }
+                    bg="none"
+                    top={0}
+                    right={-1}
+                    aria-label="送信"
+                  />
+                </Tooltip>
               </Stack>
               {selectedFileName && (
                 <Tooltip
                   label={getMessage({
-                    ja: "添付をキャンセルします",
+                    ja: "添付をキャンセル",
                     us: "Cancel attachment",
                     cn: "取消附件。",
                     language,
@@ -1614,18 +1569,6 @@ function ThreadContent(): JSX.Element {
                   <Box
                     fontSize={13}
                     fontWeight={400}
-                    //   fontWeight={500}
-                    //   textShadow={
-                    //     colorMode === "light"
-                    //       ? `-1px -1px 0 rgba(245, 237, 230,1),
-                    //  1px -1px 0 rgba(245, 237, 230,1),
-                    // -1px  1px 0 rgba(245, 237, 230,1),
-                    //  1px  1px 0 rgba(245, 237, 230,1)`
-                    //       : `-1px -1px 0 rgba(0,0,0,1),
-                    //  1px -1px 0 rgba(0,0,0,1),
-                    // -1px  1px 0 rgba(0,0,0,1),
-                    //  1px  1px 0 rgba(0,0,0,1)`
-                    //   }
                     style={{
                       letterSpacing: "1px",
                     }}
@@ -1678,10 +1621,6 @@ function ThreadContent(): JSX.Element {
                         new Date(b.created_at).getTime()
                     )
                     .map((post, index) => {
-                      // console.log(post[index]);
-                      // console.log(index, post.id);
-                      // console.log(targetUser?.user_uid);
-                      // getUserById2(post.user_uid);
                       const prevPost = posts[index - 1];
                       const prevDateString = prevPost
                         ? prevPost.created_at
@@ -1697,7 +1636,7 @@ function ThreadContent(): JSX.Element {
                           <React.Fragment key={`${post.created_at}-${index}`}>
                             {isNewDay && (
                               <Flex
-                                key={`${post.created_at}-${index}`} // ここにkeyを設定
+                                key={`${post.created_at}-${index}`}
                                 alignItems="center"
                                 justifyContent="center"
                                 width="100%"
@@ -1707,7 +1646,7 @@ function ThreadContent(): JSX.Element {
                                 <Text
                                   fontSize="15px"
                                   color="gray.500"
-                                  whiteSpace="nowrap" // 改行を防ぐ
+                                  whiteSpace="nowrap"
                                   textAlign="center"
                                   mx="2"
                                   lineHeight="1.2"
@@ -1939,15 +1878,6 @@ function ThreadContent(): JSX.Element {
                                         </Text>
                                       </Stack>
                                     </Button>
-                                    {currentUserId === masterUserId && ( // masterUserIdと一致する場合のみ表示
-                                      <>
-                                        <Divider borderColor="black" />
-                                        <TodoListMenu
-                                          postId={longPressPostId}
-                                          id={id}
-                                        />
-                                      </>
-                                    )}
                                   </Box>
                                 </>
                               )}
@@ -2071,16 +2001,7 @@ function ThreadContent(): JSX.Element {
                                           >
                                             {getUserById(post.reply_user_id)
                                               ?.user_metadata.name || "未登録"}
-                                          </Text>
-                                          <Text
-                                            fontSize="10px"
-                                            fontWeight="300"
-                                            color="gray.800"
-                                          >
-                                            -
-                                            {getUserById(post.reply_user_id)
-                                              ?.user_metadata.name || "未登録"}
-                                            -
+                                            {post.replay_user_id}
                                           </Text>
                                         </Flex>
                                         <Text
@@ -2543,69 +2464,71 @@ function ThreadContent(): JSX.Element {
                                           }}
                                         />
                                       </Flex>
-                                      <iframe
-                                        src={url}
-                                        data-original-url={url}
-                                        style={{
-                                          position: "relative",
-                                          top: 0,
-                                          left: 0,
-                                          width: "100%",
-                                          height: "calc(100% - 20px)",
-                                          border: "none",
-                                        }}
-                                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-                                        loading="lazy"
-                                        onLoad={(e) => {
-                                          const iframe =
-                                            e.target as HTMLIFrameElement;
-                                          try {
-                                            const currentUrl =
-                                              iframe.contentWindow?.location
-                                                .href;
-                                            if (
-                                              currentUrl &&
-                                              currentUrl !== url &&
-                                              currentUrl !== iframe.src
-                                            ) {
-                                              addToHistory(url, currentUrl);
-                                            }
-                                            // まずURLからドメイン名を取得してタイトルの初期値として設定
-                                            const domain = new URL(url)
-                                              .hostname;
-                                            setUrlTitles((prev) => ({
-                                              ...prev,
-                                              [url]: domain,
-                                            }));
-                                            // タイトルの取得を試みる
-                                            const title =
-                                              iframe?.contentWindow?.document
-                                                ?.title ||
-                                              iframe?.contentDocument?.title;
-                                            if (title) {
-                                              setUrlTitles((prev) => ({
-                                                ...prev,
-                                                [url]: title,
-                                              }));
-                                            }
-                                          } catch (error) {
-                                            // エラーの場合はドメイン名を表示
+                                      {isExpanded && (
+                                        <iframe
+                                          src={url}
+                                          data-original-url={url}
+                                          style={{
+                                            position: "relative",
+                                            top: 0,
+                                            left: 0,
+                                            width: "100%",
+                                            height: "calc(100% - 20px)",
+                                            border: "none",
+                                          }}
+                                          sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                                          loading="lazy"
+                                          onLoad={(e) => {
+                                            const iframe =
+                                              e.target as HTMLIFrameElement;
                                             try {
+                                              const currentUrl =
+                                                iframe.contentWindow?.location
+                                                  .href;
+                                              if (
+                                                currentUrl &&
+                                                currentUrl !== url &&
+                                                currentUrl !== iframe.src
+                                              ) {
+                                                addToHistory(url, currentUrl);
+                                              }
+                                              // まずURLからドメイン名を取得してタイトルの初期値として設定
                                               const domain = new URL(url)
                                                 .hostname;
                                               setUrlTitles((prev) => ({
                                                 ...prev,
                                                 [url]: domain,
                                               }));
-                                            } catch (e) {
-                                              setUrlTitles((prev) => ({
-                                                ...prev,
-                                                [url]: url,
-                                              }));
+                                              // タイトルの取得を試みる
+                                              const title =
+                                                iframe?.contentWindow?.document
+                                                  ?.title ||
+                                                iframe?.contentDocument?.title;
+                                              if (title) {
+                                                setUrlTitles((prev) => ({
+                                                  ...prev,
+                                                  [url]: title,
+                                                }));
+                                              }
+                                            } catch (error) {
+                                              // エラーの場合はドメイン名を表示
+                                              try {
+                                                const domain = new URL(url)
+                                                  .hostname;
+                                                setUrlTitles((prev) => ({
+                                                  ...prev,
+                                                  [url]: domain,
+                                                }));
+                                              } catch (e) {
+                                                setUrlTitles((prev) => ({
+                                                  ...prev,
+                                                  [url]: url,
+                                                }));
+                                              }
                                             }
-                                          }
-                                        }}
-                                      />
+                                          }}
+                                        />
+                                      )}
                                     </Box>
                                   </Box>
                                 </Box>
@@ -2617,7 +2540,7 @@ function ThreadContent(): JSX.Element {
                     })
                 )}
               </Stack>
-              <Box mb="30vh" />
+              <Box mb="20vh" />
             </Content>
             <BBSTodoList />
             <StatusDisplay />

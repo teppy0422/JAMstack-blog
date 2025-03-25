@@ -30,7 +30,7 @@ export default function Content({
             },
           },
           "::-webkit-scrollbar": {
-            width: "8px",
+            width: "6px",
           },
           "::-webkit-scrollbar-track": {
             background: colorMode === "light" ? "#f8e9df" : "#111",

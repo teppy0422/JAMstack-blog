@@ -36,6 +36,7 @@ import SidebarBBS from "../components/sidebarBBS";
 import { ScrollText } from "../components/CustomText";
 import { ProjectLists, CategoryLists } from "../components/CustomBadge";
 import { AnimationImage } from "../components/CustomImage";
+import { StatusDisplay } from "../components/NowStatus";
 
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
@@ -391,6 +392,7 @@ const BBS = () => {
             </ModalContent>
           </Modal>
         </Container>
+        <StatusDisplay />
       </Content>
     </>
   );
