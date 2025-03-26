@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { MdBusiness, MdChat } from "react-icons/md";
 import { useCustomToast } from "../components/customToast";
 import { GetColor } from "../components/CustomColor";
+import { useUnread } from "../context/UnreadContext";
 
 import {
   Box,
@@ -28,10 +29,9 @@ import { MdCheckBoxOutlineBlank } from "react-icons/md";
 
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
-import { useUserData } from "../hooks/useUserData";
-import { useUserInfo } from "../hooks/useUserId";
-
 import getMessage from "../components/getMessage";
+
+import { useUserContext } from "../context/useUserContext";
 import { useLanguage } from "../context/LanguageContext";
 import { CustomAccordionIcon } from "../components/CustomText";
 
@@ -42,6 +42,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
   reload,
 }) => {
   const { language, setLanguage } = useLanguage();
+  const { unreadCountsByThread, setUnreadCountsByThread } = useUnread();
 
   const [unreadCount, setUnreadCount] = useState(0);
   const [currentPath, setCurrentPath] = useState("");
@@ -69,25 +70,20 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
     setShowCompleted((prev) => !prev);
   };
 
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+  const { currentUserId, currentUserCompany, currentUserMainCompany } =
+    useUserContext();
   const showToast = useCustomToast();
-
-  const [unreadCountsByThread, setUnreadCountsByThread] = useState<
-    Record<string, number>
-  >({});
 
   const [visibleCompanies, setVisibleCompanies] = useState<number[]>([]);
   //新しい投稿の監視
   useEffect(() => {
     const fetchUnreadCount = async () => {
-      if (!userId) {
+      if (!currentUserId) {
         console.log("userId is null, waiting for it to be set...");
         return;
       }
       console.log("Fetching unread count...");
-      console.log("Current userId:", userId);
+      console.log("Current userId:", currentUserId);
 
       const { data, error } = await supabase
         .from("posts")
@@ -101,25 +97,26 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
         console.error("Error fetching unread count:", error);
         return;
       }
-      const countsByThread = data.reduce((acc, post) => {
-        if (
-          (!post.read_by || !post.read_by.includes(userId)) &&
-          post.user_uid !== userId
-        ) {
-          acc[post.thread_id] = (acc[post.thread_id] || 0) + 1;
-        }
-        return acc;
-      }, {});
 
-      console.log("Final counts by thread:", countsByThread);
-      setUnreadCountsByThread(countsByThread);
-      const totalUnreadCount = Object.values(countsByThread).reduce(
+      // スレッドごとの未読数を計算
+      const counts: Record<string, number> = {};
+      data.forEach((post) => {
+        if (
+          !post.read_by?.includes(currentUserId) &&
+          post.user_uid !== currentUserId
+        ) {
+          counts[post.thread_id] = (counts[post.thread_id] || 0) + 1;
+        }
+      });
+
+      setUnreadCountsByThread(counts);
+      const totalUnreadCount = Object.values(counts).reduce(
         (sum: number, count: number) => sum + count,
         0
       );
 
       setUnreadCount(totalUnreadCount as number);
-      console.log("Unread counts by thread:", countsByThread);
+      console.log("Unread counts by thread:", counts);
     };
     fetchUnreadCount();
 
@@ -129,14 +126,15 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "posts" },
         (payload) => {
-          if (!userId) {
+          if (!currentUserId) {
             console.log("userId is null, waiting for it to be set...");
             return;
           }
           console.log("Real-time notification received:", payload);
           if (
-            (!payload.new.read_by || !payload.new.read_by.includes(userId)) &&
-            payload.new.user_uid !== userId
+            (!payload.new.read_by ||
+              !payload.new.read_by.includes(currentUserId)) &&
+            payload.new.user_uid !== currentUserId
           ) {
             fetchUnreadCount();
           }
@@ -147,7 +145,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
       console.log("Unsubscribing from channel...");
       subscription.unsubscribe();
     };
-  }, [userId]);
+  }, [currentUserId, reload]);
   // reloadが変更されたときに再読み込みの処理を行う
   useEffect(() => {
     console.log("SidebarBBS reloaded");
@@ -176,7 +174,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
       );
 
       if (
-        company === userCompany ||
+        company === currentUserCompany ||
         company === "開発" ||
         isCurrentPageCompany
       ) {
@@ -185,7 +183,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
     });
     setVisibleCompanies(initialVisibleIndices);
     console.log("Initial visible indices:", initialVisibleIndices);
-  }, [threads, userCompany, currentPath]);
+  }, [threads, currentUserCompany, currentPath]);
 
   const buttonStyle = (path) => ({
     p: "2",
@@ -630,11 +628,11 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                       borderTop={isExpanded ? "1px solid #8d7c6f" : ""}
                       // borderRadius="4px"
                       onClick={() => {
-                        if (userMainCompany === "開発") {
+                        if (currentUserMainCompany === "開発") {
                           toggleCompanyVisibility(index);
                         } else {
                           if (
-                            mainCompany === userMainCompany ||
+                            mainCompany === currentUserMainCompany ||
                             mainCompany === "開発"
                           ) {
                             toggleCompanyVisibility(index);
@@ -717,8 +715,8 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
 
                           const isDifferentCompany =
                             thread.mainCompany !== "開発" &&
-                            userMainCompany !== "開発" &&
-                            thread.mainCompany !== userMainCompany;
+                            currentUserMainCompany !== "開発" &&
+                            thread.mainCompany !== currentUserMainCompany;
                           previousMainCompany = thread.mainCompany;
 
                           const currentProjectName = String(

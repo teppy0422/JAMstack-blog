@@ -72,10 +72,7 @@ import BBSTodoList from "../../../components/BBSTodoList";
 import TodoListMenu from "../../../components/BBSTodoListMenu";
 import { useCustomToast } from "../../../components/customToast";
 import { GetColor } from "../../../components/CustomColor";
-import { NowStatus } from "../../../components/NowStatus";
 
-// import { useUserData } from "../../../hooks/useUserData";
-// import { useUserInfo } from "../../../hooks/useUserId";
 import IconWithDrawer from "./IconWithDrawer";
 
 // import { AppContext } from "../../../pages/_app";
@@ -90,6 +87,7 @@ import "@fontsource/noto-sans-jp";
 import { CustomLoading } from "../../../components/CustomText";
 import { StatusDisplay } from "../../../components/NowStatus";
 import { isatty } from "tty";
+import { useUnread } from "../../../context/UnreadContext";
 
 let cachedUsers: any[] | null = null;
 
@@ -103,6 +101,7 @@ export default function Thread() {
 
 function ThreadContent(): JSX.Element {
   const { language, setLanguage } = useLanguage();
+  const { updateUnreadCount } = useUnread();
   const [expandedUrls, setExpandedUrls] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -258,6 +257,24 @@ function ThreadContent(): JSX.Element {
           }
           // 未読リストをクリア
           setUnreadPostIds([]);
+
+          // 未読数を0に更新
+          updateUnreadCount(id, 0);
+
+          // ファビコンをデフォルトにする
+          const favicon = document.querySelector(
+            "link[rel='icon']"
+          ) as HTMLLinkElement;
+          const shortcutIcon = document.querySelector(
+            "link[rel='shortcut icon']"
+          ) as HTMLLinkElement;
+
+          if (favicon) {
+            favicon.href = "/images/ico/hippo_000_foot.ico";
+          }
+          if (shortcutIcon) {
+            shortcutIcon.href = "/images/ico/hippo_000_foot.ico";
+          }
         } catch (error) {
           console.error("Error in markUnreadPostsAsRead:", error);
         }
@@ -473,27 +490,42 @@ function ThreadContent(): JSX.Element {
             if (audioRef_recieving.current) {
               audioRef_recieving.current.play();
             }
-            // タブのタイトルを点滅させる
-            const originalTitle = document.title;
-            const blinkInterval = setInterval(() => {
-              document.title =
-                document.title === "新しい投稿があります！"
-                  ? originalTitle
-                  : "新しい投稿があります！";
-            }, 1000);
-            setTimeout(() => {
-              clearInterval(blinkInterval);
-              document.title = originalTitle;
-            }, 10000); // 5秒後に点滅を停止
-            // デスクトップ通知を表示
-            if (Notification.permission === "granted") {
-              new Notification("新しい投稿があります！");
-            } else if (Notification.permission !== "denied") {
-              Notification.requestPermission().then((permission) => {
-                if (permission === "granted") {
-                  new Notification("新しい投稿があります！");
-                }
-              });
+
+            // faviconを変更して通知を表示
+            const originalFavicon = document.querySelector(
+              "link[rel='icon']"
+            ) as HTMLLinkElement;
+            const originalShortcutIcon = document.querySelector(
+              "link[rel='shortcut icon']"
+            ) as HTMLLinkElement;
+
+            // 通知用のfaviconを設定
+            const notificationFavicon = document.createElement("link");
+            notificationFavicon.rel = "icon";
+            notificationFavicon.type = "image/x-icon";
+            notificationFavicon.href = "/images/ico/hippo_000_foot_no.ico";
+
+            // 既存のfaviconを削除
+            if (originalFavicon) {
+              originalFavicon.remove();
+            }
+            if (originalShortcutIcon) {
+              originalShortcutIcon.remove();
+            }
+            // 新しいfaviconを追加
+            document.head.appendChild(notificationFavicon);
+
+            // デスクトップ通知を表示（iOSのSafari以外の場合のみ）
+            if (typeof Notification !== "undefined") {
+              if (Notification.permission === "granted") {
+                new Notification("新しい投稿があります！");
+              } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then((permission) => {
+                  if (permission === "granted") {
+                    new Notification("新しい投稿があります！");
+                  }
+                });
+              }
             }
           }
         )

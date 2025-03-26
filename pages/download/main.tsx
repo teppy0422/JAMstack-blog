@@ -32,9 +32,8 @@ import styles from "../../styles/home.module.scss";
 
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
-import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
-import { useUserData } from "../../hooks/useUserData";
-import { useUserInfo } from "../../hooks/useUserId";
+import Sidebar from "../../components/sidebar";
+import { useUserContext } from "../../context/useUserContext";
 
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
@@ -133,9 +132,7 @@ function TransitionExample() {
 }
 export default function About() {
   const { colorMode } = useColorMode();
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+  const { currentUserId, currentUserName } = useUserContext();
   const { language, setLanguage } = useLanguage();
 
   return (
@@ -224,7 +221,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_165.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={true}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-02-05T23:04:00+0900"
@@ -239,7 +236,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_164.zip"
               inCharge="徳島,作業者さん,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-02-04T16:23:00+0900"
@@ -259,7 +256,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_163.zip"
               inCharge="徳島,小松さん,Win10zip,安定版"
               isLatest={true}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-02-04T09:23:00+0900"
@@ -274,7 +271,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_160.zip"
               inCharge="徳島,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-02-03T01:23:00+0900"
@@ -289,7 +286,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_158.zip"
               inCharge="徳島,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-31T23:42:00+0900"
@@ -304,7 +301,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_150.zip"
               inCharge="徳島,小松さん,Win10zip"
               isLatest={true}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-31T01:45:00+0900"
@@ -319,7 +316,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_148.zip"
               inCharge="徳島,小松さん,???,Win10zip"
               isLatest={true}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-30T21:11:00+0900"
@@ -339,7 +336,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_147.zip"
               inCharge="徳島,小松さん,???,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-30T04:42:00+0900"
@@ -359,7 +356,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_145.zip"
               inCharge="徳島,小松さん,???,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-30T02:37:00+0900"
@@ -379,7 +376,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_143.zip"
               inCharge="徳島,小松さん,???,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-29T18:55:00+0900"
@@ -399,7 +396,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_142.zip"
               inCharge="徳島,小松さん,???,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-29T14:52:00+0900"
@@ -419,7 +416,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_139.zip"
               inCharge="徳島,小松さん,???,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-23T13:59:00+0900"
@@ -439,7 +436,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_138.zip"
               inCharge="徳島,小松さん,???,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-22T14:50:00+0900"
@@ -459,7 +456,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_137.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-22T00:59:00+0900"
@@ -474,7 +471,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_136.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-21T19:24:00+0900"
@@ -489,7 +486,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_135.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-21T14:14:00+0900"
@@ -509,7 +506,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_134.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-20T16:44:00+0900"
@@ -529,7 +526,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_133.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-20T10:54:00+0900"
@@ -549,7 +546,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_132.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-19T22:54:00+0900"
@@ -569,7 +566,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_130.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-11-29T20:26:00+0900"
@@ -579,7 +576,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_128.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-11-01T16:33:00+0900"
@@ -589,7 +586,7 @@ export default function About() {
               linkHref="/files/download/html/Jdss/main_127.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-10-11T23:44:00+0900"

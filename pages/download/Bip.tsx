@@ -31,9 +31,8 @@ import styles from "../../styles/home.module.scss";
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
-import { useUserData } from "../../hooks/useUserData";
-import { useUserInfo } from "../../hooks/useUserId";
 
+import { useUserContext } from "../../context/useUserContext";
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
 
@@ -133,9 +132,7 @@ function TransitionExample() {
 
 export default function About() {
   const { colorMode } = useColorMode();
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+  const { currentUserId, currentUserName } = useUserContext();
   const { language, setLanguage } = useLanguage();
 
   return (
@@ -228,7 +225,7 @@ export default function About() {
               linkHref="/files/download/html/Bip/Bip2.200.15_.zip"
               inCharge="徳島"
               isLatest={true}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
           </SimpleGrid>
         </div>

@@ -40,8 +40,8 @@ import Detail01talk from "../../components/worksDetail/01_talk";
 import Detail02 from "../../components/worksDetail/02";
 import Detail02talk from "../../components/worksDetail/02_talk";
 import Detail03 from "../../components/worksDetail/03";
-import { useUserData } from "../../hooks/useUserData";
-import { useUserInfo } from "../../hooks/useUserId";
+
+import { useUserContext } from "../../context/useUserContext";
 import { useReadCount } from "../../hooks/useReadCount";
 
 import styles from "../../styles/home.module.scss";
@@ -78,10 +78,8 @@ const CustomIcon = createIcon({
   ),
 });
 const BlogPage: React.FC = () => {
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
-  const { readByCount } = useReadCount(userId);
+  const { currentUserId } = useUserContext();
+  const { readByCount } = useReadCount(currentUserId);
   const { language, setLanguage } = useLanguage();
   //右リストの読み込みをlanguage取得後にする
   const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);

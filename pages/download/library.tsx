@@ -21,18 +21,16 @@ import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
-import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
-import { useUserData } from "../../hooks/useUserData";
-import { useUserInfo } from "../../hooks/useUserId";
+import Sidebar from "../../components/sidebar";
+
+import { useUserContext } from "../../context/useUserContext";
 
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
 
 export default function About() {
   const { colorMode } = useColorMode();
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+  const { currentUserId, currentUserName } = useUserContext();
   const { language, setLanguage } = useLanguage();
   return (
     <>
@@ -90,7 +88,7 @@ export default function About() {
               linkHref="/files/download/html/Library_/MSCOMM32.OCX"
               inCharge=""
               isLatest={true}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
           </SimpleGrid>
         </div>

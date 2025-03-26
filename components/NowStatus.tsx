@@ -53,11 +53,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { useLanguage } from "../context/LanguageContext";
-import { useUserData } from "../hooks/useUserData";
-import { useUserInfo } from "../hooks/useUserId";
-
 import { useUserContext } from "../context/useUserContext";
-
 import getMessage from "./getMessage";
 
 const activityOptions = [
@@ -484,13 +480,7 @@ export const StatusDisplay = () => {
                             h="1rem"
                             position="absolute"
                             zIndex="3"
-                            bg={
-                              isCurrent
-                                ? colorMode === "light"
-                                  ? "red"
-                                  : "#F55"
-                                : "#ccc"
-                            }
+                            bg={colorMode === "light" ? "red" : "#F55"}
                             left="-5px"
                           />
                         )}

@@ -57,9 +57,11 @@ import { AiOutlineWechat } from "react-icons/ai";
 import { FaEarthAsia } from "react-icons/fa6";
 import Sidebar from "../components/sidebar"; // Sidebar コンポーネントをインポート
 import Content from "../components/content"; // Content コンポーネントをインポート
-import { useUserInfo } from "../hooks/useUserId";
-import { useUserData } from "../hooks/useUserData";
+
+import { useUserContext } from "../context/useUserContext";
+
 import { useColorMode } from "@chakra-ui/react";
+
 import UnderlinedTextWithDrawer from "./skillBlogs/UnderlinedTextWithDrawer";
 import CustomModal from "./skillBlogs/customModal";
 import IframeDisplay from "./skillBlogs/IframeDisplay";
@@ -82,9 +84,8 @@ import { useLanguage } from "../context/LanguageContext";
 
 const Welcome = ({ isNewCreated }) => {
   const router = useRouter();
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+
+  const { currentUserId, currentUserName } = useUserContext();
   const { colorMode } = useColorMode();
   const colors = {
     light: {
@@ -440,7 +441,7 @@ const Welcome = ({ isNewCreated }) => {
               </>
             ) : (
               <>
-                {userId === null && (
+                {currentUserId === null && (
                   <Text
                     fontSize="lg"
                     color={colorMode === "light" ? "red" : "orange"}
@@ -476,7 +477,7 @@ const Welcome = ({ isNewCreated }) => {
                     )}
                   </Text>
                 )}
-                {userName === null && (
+                {currentUserName === null && (
                   <Text
                     fontSize="lg"
                     color={colorMode === "light" ? "red" : "orange"}

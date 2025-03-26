@@ -32,17 +32,14 @@ import styles from "../../styles/home.module.scss";
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar";
-import { useUserData } from "../../hooks/useUserData";
-import { useUserInfo } from "../../hooks/useUserId";
 
+import { useUserContext } from "../../context/useUserContext";
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
 
 export default function About() {
   const { colorMode } = useColorMode();
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+  const { currentUserId, currentUserName } = useUserContext();
   const { language, setLanguage } = useLanguage();
 
   return (
@@ -104,7 +101,7 @@ export default function About() {
               linkHref="/files/download/html/Camera/camera1.0.0.4_.zip"
               inCharge="徳島,補給品,Win10zip"
               isLatest={true}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
           </SimpleGrid>
         </div>

@@ -33,9 +33,9 @@ import Content from "./content";
 import { useColorMode } from "@chakra-ui/react";
 import { useCustomToast } from "./customToast";
 import { useDisclosure } from "@chakra-ui/react";
-import { useUserInfo } from "../hooks/useUserId";
-import { useUserData } from "../hooks/useUserData";
+
 import { useReadCount } from "../hooks/useReadCount";
+import { useUserContext } from "../context/useUserContext";
 
 import { CustomAccordionIcon } from "../components/CustomText";
 import { CustomLoading } from "../components/CustomText";
@@ -108,10 +108,8 @@ const Frame: React.FC<{
   const showToast = useCustomToast();
   const [ipAddress, setIpAddress] = useState("");
 
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
-  const { readByCount, skillBlogsData } = useReadCount(userId);
+  const { currentUserId, currentUserName } = useUserContext();
+  const { readByCount, skillBlogsData } = useReadCount(currentUserId);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -188,7 +186,7 @@ const Frame: React.FC<{
     if (pathUrl !== undefined) {
       const matchingData =
         skillBlogsData.find((data) => data.url === pathUrl)?.readBy || [];
-      isReadByUser = matchingData.includes(userId ?? "");
+      isReadByUser = matchingData.includes(currentUserId ?? "");
     }
 
     const linkStyles = {
@@ -290,7 +288,7 @@ const Frame: React.FC<{
                 color="#FFF"
               />
             </Box>
-          ) : !isThrough && !userId && !isLoading ? (
+          ) : !isThrough && !currentUserId && !isLoading ? (
             <Box h="30vh">
               <Text
                 fontSize="lg"
@@ -307,7 +305,7 @@ const Frame: React.FC<{
                 })}
               </Text>
             </Box>
-          ) : !isThrough && !userName && !isLoading ? (
+          ) : !isThrough && !currentUserName && !isLoading ? (
             <Box h="30vh">
               <Text
                 fontSize="lg"

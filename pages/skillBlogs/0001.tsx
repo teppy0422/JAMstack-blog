@@ -37,8 +37,8 @@ import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./customBadge";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
-import { useUserData } from "../../hooks/useUserData";
-import { useUserInfo } from "../../hooks/useUserId";
+
+import { useUserContext } from "../../context/useUserContext";
 import { useReadCount } from "../../hooks/useReadCount";
 
 import { useLanguage } from "../../context/LanguageContext";
@@ -73,10 +73,8 @@ const CustomIcon = createIcon({
   ),
 });
 const BlogPage: React.FC = () => {
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
-  const { readByCount } = useReadCount(userId);
+  const { currentUserId, currentUserCompany } = useUserContext();
+  const { readByCount } = useReadCount(currentUserId);
   const { language, setLanguage } = useLanguage();
   //右リストの読み込みをlanguage取得後にする
   const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);

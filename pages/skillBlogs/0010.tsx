@@ -59,8 +59,7 @@ import ExternalLink from "./ExternalLink";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import ImageSliderModal from "./ImageSliderModal"; // モーダルコンポーネントをインポート
 import ReferenceSettingModal from "./referenceSettingModal";
-import { useUserData } from "../../hooks/useUserData";
-import { useUserInfo } from "../../hooks/useUserId";
+import { useUserContext } from "../../context/useUserContext";
 import { supabase } from "../../utils/supabase/client";
 import { useReadCount } from "../../hooks/useReadCount";
 
@@ -84,10 +83,8 @@ const CustomIcon = createIcon({
   ),
 });
 const BlogPage: React.FC = () => {
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
-  const { readByCount } = useReadCount(userId);
+  const { currentUserId } = useUserContext();
+  const { readByCount } = useReadCount(currentUserId);
   const { language, setLanguage } = useLanguage();
   //右リストの読み込みをlanguage取得後にする
   const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);

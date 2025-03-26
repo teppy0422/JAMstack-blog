@@ -59,8 +59,7 @@ import { SunderText, ScrollText } from "./CustomText";
 import { AnimationImage } from "./CustomImage";
 
 import AwesomIcon from "./awesomIcon";
-import Auth from "./Auth"; // Authコンポーネントをインポート
-import { useUserData } from "../hooks/useUserData";
+import Auth from "./Auth";
 import { Global } from "@emotion/react";
 
 import { useLanguage } from "../context/LanguageContext";

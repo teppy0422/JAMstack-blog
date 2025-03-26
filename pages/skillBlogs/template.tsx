@@ -40,8 +40,7 @@ import UnderlinedTextWithDrawer from "./UnderlinedTextWithDrawer";
 import ExternalLink from "./ExternalLink";
 import IframeDisplay from "./IframeDisplay";
 import OptionalBox from "./OptionalBox";
-import { useUserData } from "../../hooks/useUserData";
-import { useUserInfo } from "../../hooks/useUserId";
+import { useUserContext } from "../../context/useUserContext";
 import { useReadCount } from "../../hooks/useReadCount";
 
 const customTheme = extendTheme({
@@ -87,10 +86,8 @@ const CustomIcon = createIcon({
   ),
 });
 const BlogPage: React.FC = () => {
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
-  const { readByCount } = useReadCount(userId);
+  const { currentUserId } = useUserContext();
+  const { readByCount } = useReadCount(currentUserId);
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);

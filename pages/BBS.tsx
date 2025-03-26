@@ -29,8 +29,7 @@ import Sidebar from "../components/sidebar";
 import Content from "../components/content";
 import { Global } from "@emotion/react";
 import { supabase } from "../utils/supabase/client";
-import { useUserInfo } from "../hooks/useUserId";
-import { useUserData } from "../hooks/useUserData";
+import { UnreadProvider } from "../context/UnreadContext";
 
 import SidebarBBS from "../components/sidebarBBS";
 import { ScrollText } from "../components/CustomText";
@@ -40,41 +39,18 @@ import { StatusDisplay } from "../components/NowStatus";
 
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
-
-function getBadgeForCategory(category: string): JSX.Element {
-  let colorScheme: string;
-  switch (category) {
-    case "生産準備+":
-      colorScheme = "green";
-      break;
-    case "順立生産システム":
-      colorScheme = "purple";
-      break;
-    case "部材一覧+":
-      colorScheme = "yellow";
-      break;
-    default:
-      colorScheme = "red";
-  }
-  return (
-    <Badge
-      variant="outline"
-      colorScheme={colorScheme}
-      mr={2}
-      p={0.5}
-      px={1}
-      mb={1}
-    >
-      {category}
-    </Badge>
-  );
-}
+import { useUserContext } from "../context/useUserContext";
 
 const BBS = () => {
   const roadmapRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+
+  const {
+    currentUserId,
+    currentUserName,
+    currentUserCompany,
+    currentUserMainCompany,
+  } = useUserContext();
+
   const { colorMode, toggleColorMode } = useColorMode();
   const [newThreadTitle, setNewThreadTitle] = useState("");
   const [clickedProject, setClickedProject] = useState<string | null>(null); // クリックされたバッジの状態を追加
@@ -120,9 +96,9 @@ const BBS = () => {
         projectName: clickedProject,
         category: clickedCategory,
         title: newThreadTitle,
-        company: userCompany,
-        mainCompany: userMainCompany,
-        user_uid: userId,
+        company: currentUserCompany,
+        mainCompany: currentUserMainCompany,
+        user_uid: currentUserId,
       },
     ]);
     setNewThreadTitle("");
@@ -157,7 +133,7 @@ const BBS = () => {
     inputRef.current?.focus();
   };
   return (
-    <>
+    <UnreadProvider>
       <Global
         styles={{
           "@media print": {
@@ -296,13 +272,13 @@ const BBS = () => {
               <ModalCloseButton />
               <ModalBody pt={0}>
                 <Badge variant="outline" mr={2} userSelect="none">
-                  {userMainCompany}
+                  {currentUserMainCompany}
                 </Badge>
                 <Badge variant="outline" mr={2} userSelect="none">
-                  {userCompany}
+                  {currentUserCompany}
                 </Badge>
                 <Badge variant="outline" mr={2} userSelect="none">
-                  {userName}
+                  {currentUserName}
                 </Badge>
                 <Text mt={3} userSelect="none">
                   対象のプロジェクトを選択
@@ -325,7 +301,7 @@ const BBS = () => {
                 <CategoryLists
                   colorMode={colorMode}
                   onCategoryClick={handleCategoryClick}
-                  userMainCompany={userMainCompany}
+                  userMainCompany={currentUserMainCompany}
                 />
                 <Text mt={4} userSelect="none">
                   内容(変更可能なので適当で構いません)
@@ -394,7 +370,7 @@ const BBS = () => {
         </Container>
         <StatusDisplay />
       </Content>
-    </>
+    </UnreadProvider>
   );
 };
 

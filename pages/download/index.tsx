@@ -37,8 +37,7 @@ import NextImage from "next/image";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import DownloadButton from "../../components/DownloadButton";
 import styles from "../../styles/home.module.scss";
-import { useUserInfo } from "../../hooks/useUserId";
-import { useUserData } from "../../hooks/useUserData";
+import { useUserContext } from "../../context/useUserContext";
 import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 
 import CustomLinkBox from "../../components/customLinkBox";
@@ -107,9 +106,7 @@ export default function About({
 }) {
   const { colorMode } = useColorMode();
   const router = useRouter();
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+  const { currentUserId, currentUserName } = useUserContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalPath, setModalPath] = useState("");
   const handleBoxClick = (path) => {
@@ -394,7 +391,7 @@ export default function About({
                     path="/download/Sjp"
                     isHovered={isHovered}
                     backGroundColor="green"
-                    userName={userName}
+                    userName={currentUserName}
                   />
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
@@ -554,7 +551,7 @@ export default function About({
                     path="/download/camera"
                     isHovered={isHovered}
                     backGroundColor="#6C277D"
-                    userName={userName}
+                    userName={currentUserName}
                     borderBottomLeftRadius="5px"
                   />
                   <Flex justifyContent="space-between" alignItems="flex-start">
@@ -986,7 +983,7 @@ export default function About({
                     path="/download/Bip"
                     isHovered={isHovered}
                     backGroundColor="green"
-                    userName={userName}
+                    userName={currentUserName}
                   />
                   <Flex justifyContent="space-between" alignItems="center">
                     <Heading size="sm">Bip+</Heading>
@@ -1066,7 +1063,7 @@ export default function About({
                     path="/download/main"
                     isHovered={isHovered}
                     backGroundColor="#B02334"
-                    userName={userName}
+                    userName={currentUserName}
                   />
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
@@ -1175,7 +1172,7 @@ export default function About({
                     path="/download/main3"
                     isHovered={isHovered}
                     backGroundColor="#005cb3"
-                    userName={userName}
+                    userName={currentUserName}
                   />
                   <Flex justifyContent="space-between" alignItems="flex-start">
                     <Flex direction="column" alignItems="flex-start" flex={1}>
@@ -1396,7 +1393,7 @@ export default function About({
                     path="/download/library"
                     isHovered={isHovered}
                     backGroundColor="#333"
-                    userName={userName}
+                    userName={currentUserName}
                     borderBottomLeftRadius="5px"
                   />
                   <Flex justifyContent="space-between" alignItems="center">

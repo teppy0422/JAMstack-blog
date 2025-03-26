@@ -30,9 +30,9 @@ import styles from "../../../styles/home.module.scss";
 
 import CustomLinkBox from "../../../components/customLinkBox";
 import CustomPopver from "../../../components/popver";
-import Sidebar from "../../../components/sidebar"; // Sidebar コンポーネントをインポート
-import { useUserData } from "../../../hooks/useUserData";
-import { useUserInfo } from "../../../hooks/useUserId";
+import Sidebar from "../../../components/sidebar";
+
+import { useUserContext } from "../../../context/useUserContext";
 
 import { useLanguage } from "../../../context/LanguageContext";
 import getMessage from "../../../components/getMessage";
@@ -142,9 +142,7 @@ function TransitionExample() {
 
 export default function About() {
   const { colorMode } = useColorMode();
-  const { userId, email } = useUserInfo();
-  const { pictureUrl, userName, userCompany, userMainCompany } =
-    useUserData(userId);
+  const { currentUserId, currentUserName } = useUserContext();
   const { language, setLanguage } = useLanguage();
 
   return (
@@ -243,7 +241,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.101.16_.zip"
               inCharge="徳島,山田さん"
               isLatest={true}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-02-06T22:19:00+0900"
@@ -264,7 +262,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.101.14_.zip"
               inCharge="徳島,秋山さん,不具合"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2025-01-24T14:22:00+0900"
@@ -285,7 +283,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.101.13_.zip"
               inCharge="高知,王さん,不具合"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-12-19T04:42:00+0900"
@@ -301,7 +299,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.101.12_.zip"
               inCharge="高知,王さん,新機能"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-12-18T14:56:00+0900"
@@ -312,7 +310,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.101.10_.zip"
               inCharge="高知,王さん"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-12-13T15:53:00+0900"
@@ -323,7 +321,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.101.01_.zip"
               inCharge="高知,王さん,不具合"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-12-06T14:19:00+0900"
@@ -334,7 +332,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.100.99_.zip"
               inCharge="高知,王さん,不具合"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-12-05T17:02:00+0900"
@@ -345,7 +343,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.100.98_.zip"
               inCharge="徳島,桑原さん,新機能"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-12-05T15:41:00+0900"
@@ -356,7 +354,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.100.96_.zip"
               inCharge="高知,王さん,不具合"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-12-01T16:22:00+0900"
@@ -367,7 +365,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.100.92_.zip"
               inCharge="高知,王さん,不具合"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-11-28T10:13:00+0900"
@@ -378,7 +376,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.100.91_.zip"
               inCharge="徳島,秋山さん"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-11-26T11:02:00+0900"
@@ -389,7 +387,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.100.90_.zip"
               inCharge="高知,王さん,不具合"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-11-22T14:04:00+0900"
@@ -400,7 +398,7 @@ export default function About() {
               linkHref="/files/download/html/Sjp/Sjp3.100.88_.zip"
               inCharge="高知,王さん,不具合"
               isLatest={false}
-              userName={userName ?? ""}
+              userName={currentUserName ?? ""}
             />
             <CustomLinkBox
               dateTime="2024-11-21T23:32:00+0900"
