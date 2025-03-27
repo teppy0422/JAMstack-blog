@@ -3,8 +3,8 @@ import { useContext } from "react";
 import { Container, Center, Box, Flex, useColorMode } from "@chakra-ui/react";
 import NextLink from "next/link";
 
-import Header from "../components/header";
-import Header_ from "../components/header_";
+import Header from "./header";
+import Header_ from "./header_";
 import { Global } from "@emotion/react";
 
 import { useLanguage } from "../context/LanguageContext";

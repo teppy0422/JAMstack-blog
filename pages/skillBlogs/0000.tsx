@@ -181,7 +181,6 @@ const BlogPage: React.FC = () => {
               })}
               :2024-11-18
             </Text>
-
             <Text fontSize="sm" my={5}>
               {getMessage({
                 ja: "ここに各システムの使い方や開発の経緯/進め方をまとめていきます。",

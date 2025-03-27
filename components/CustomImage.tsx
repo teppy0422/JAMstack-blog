@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
 interface AnimationImageProps {
-  sealSize?: number;
+  sealSize?: string;
   src: string;
   width: string;
   left?: string;
@@ -12,9 +12,10 @@ interface AnimationImageProps {
   rotate?: string;
   animation?: string;
   id?: string;
+  position?: React.CSSProperties["position"];
 }
 export const AnimationImage: React.FC<AnimationImageProps> = ({
-  sealSize = 2,
+  sealSize = "2",
   src,
   width,
   left,
@@ -24,14 +25,16 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
   rotate,
   animation,
   id,
+  position = "absolute",
 }) => {
   const numericSealSize = Number(sealSize);
   return (
     <>
+      {/* #outline-filterはpages/_app.tsxに書いてる。ここに書いたらウィンドウ幅が狭くなった時にfloodColorが効かなくなる */}
       <img
         src={src}
         style={{
-          position: "absolute",
+          position: position,
           width: width,
           left: left,
           top: top,
@@ -58,12 +61,12 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
           >
             <feMorphology
               operator="dilate"
-              // radius={String(numericSealSize)}
-              radius={2}
+              // radius={sealSize}
+              radius="2"
               in="SourceAlpha"
               result="dilated"
             />
-            <feFlood floodColor="white" result="flood" />
+            <feFlood floodColor="#fff" result="flood" />
             <feComposite
               in="flood"
               in2="dilated"

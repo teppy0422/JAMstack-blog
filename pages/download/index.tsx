@@ -39,7 +39,7 @@ import DownloadButton from "../../components/DownloadButton";
 import styles from "../../styles/home.module.scss";
 import { useUserContext } from "../../context/useUserContext";
 import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
-
+import { AnimationImage } from "../../components/CustomImage";
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar";
@@ -220,7 +220,12 @@ export default function About({
           })}
         >
           <Box textAlign="center" mb={8}>
-            <HStack spacing={2} alignItems="center" justifyContent="center">
+            <HStack
+              spacing={2}
+              alignItems="center"
+              justifyContent="center"
+              mb={3}
+            >
               <Box transform="rotate(270deg)" position="relative" top="-3px">
                 {/* <IoTicketOutline size={28} /> */}
                 <svg
@@ -319,6 +324,12 @@ export default function About({
                   DOWNLOAD
                 </text>
               </svg>
+              <AnimationImage
+                src="/images/illust/hippo/hippo_007_pixcel.png"
+                width="50px"
+                position="relative"
+                left="-40px"
+              />
             </HStack>
             <Box fontSize="md">
               {getMessage({

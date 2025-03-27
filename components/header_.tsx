@@ -264,9 +264,9 @@ export default function Header() {
       return (
         <Box position="relative" display="inline-block">
           <Avatar
-            boxSize={size === "md" ? "40px" : size} // サイズを引数から設定
+            boxSize={size === "md" ? "40px" : size}
             zIndex="5"
-            src={post_userID || undefined} // picture_urlを使用
+            src={post_userID || undefined}
           />
         </Box>
       );

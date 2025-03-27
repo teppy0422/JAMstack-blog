@@ -6,6 +6,7 @@ import React, {
   useState,
   useRef,
   useContext,
+  useLayoutEffect,
 } from "react";
 import { useRouter, useParams } from "next/navigation";
 import {
@@ -81,6 +82,7 @@ import {
   LanguageProvider,
 } from "../../../context/LanguageContext";
 import getMessage from "../../../components/getMessage";
+import SakuraAnimation from "../../../components/SakuraAnimation";
 
 import { Global } from "@emotion/react";
 import "@fontsource/noto-sans-jp";
@@ -257,10 +259,8 @@ function ThreadContent(): JSX.Element {
           }
           // 未読リストをクリア
           setUnreadPostIds([]);
-
           // 未読数を0に更新
           updateUnreadCount(id, 0);
-
           // ファビコンをデフォルトにする
           const favicon = document.querySelector(
             "link[rel='icon']"
@@ -283,34 +283,6 @@ function ThreadContent(): JSX.Element {
     }
   }, [isAtBottom]);
 
-  const markAsRead = async (postId: string, userId: string) => {
-    // 現在のread_byの値を取得
-    const { data: post, error: fetchError } = await supabase
-      .from("posts")
-      .select("read_by")
-      .eq("id", postId)
-      .single();
-    if (fetchError) {
-      return;
-    }
-    // userIdが既に存在する場合は何もしない
-    if (post.read_by?.includes(userId)) {
-      return; // 既に登録されている場合は処理を終了
-    } else {
-    }
-    // read_byにuserIdを追加
-    const updatedReadBy = [...(post.read_by || []), userId];
-    // 更新を実行
-    const { error } = await supabase
-      .from("posts")
-      .update({ read_by: updatedReadBy }) // 更新する配列を指定
-      .eq("id", postId);
-    if (error) {
-      console.error("Error marking post as read:", error.message);
-    } else {
-      console.log("post marked as read:", postId);
-    }
-  };
   // 長押しイベント
   const [longPressTimeout, setLongPressTimeout] =
     useState<NodeJS.Timeout | null>(null);
@@ -350,10 +322,10 @@ function ThreadContent(): JSX.Element {
           .split("/storage/v1/object/public/uploads/")
           .pop(); // public以下のパスを取得
         // fullPathの設定を修正
-        const fullPath = filePath; // publicを含まないパスを指定
+        const fullPath = filePath;
         const { error: deleteFileError } = await supabase.storage
           .from("uploads")
-          .remove([fullPath]); // 修正: publicを含まないパスを指定
+          .remove([fullPath]);
         if (deleteFileError) {
           console.error(
             "Error deleting file from storage:",
@@ -558,7 +530,6 @@ function ThreadContent(): JSX.Element {
           )
           .map((post) => post.id);
         setUnreadPostIds(unreadIds);
-        console.log("eeeee", unreadIds);
       }
     }
     setLoading(false);
@@ -624,7 +595,7 @@ function ThreadContent(): JSX.Element {
       .from("posts")
       .select("*")
       .eq("thread_id", id)
-      .order("created_at", { ascending: false }) // 最新の投稿から取得
+      .order("created_at", { ascending: false })
       .range(offset, offset + postsPerPage - 1); // オフセットから20件取得
 
     if (error) {
@@ -676,7 +647,6 @@ function ThreadContent(): JSX.Element {
         console.log("Public URL:", fileUrl);
       }
     }
-
     const { error } = await supabase.from("posts").insert([
       {
         thread_id: id,
@@ -705,7 +675,7 @@ function ThreadContent(): JSX.Element {
       scrollToBottom();
     }
   };
-  //ファイルをアップロードする関数
+  //ファイルをアップロード
   const uploadFile = async (file: File) => {
     const encodedFileName = encodeFileName(file.name);
     console.log("encodedFileName:", encodedFileName);
@@ -750,6 +720,7 @@ function ThreadContent(): JSX.Element {
   const scrollToBottom = () => {
     window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -794,7 +765,7 @@ function ThreadContent(): JSX.Element {
       fileInputRef.current.click();
     }
   };
-  //ファイルをダウンロードする関数
+  //ファイルをダウンロード
   const handleDownload = async (url: string, originalFileName: string) => {
     if (!currentUserName) {
       showToast(
@@ -831,7 +802,7 @@ function ThreadContent(): JSX.Element {
       console.error("Error downloading the file:", error);
     }
   };
-  //日付をフォーマットする関数
+  //日付をフォーマット
   const formatDate = (
     dateString: string,
     prevDateString?: string,
@@ -1013,6 +984,7 @@ function ThreadContent(): JSX.Element {
         <>
           <audio ref={audioRef_send} src="/sound/notification.mp3" />
           <audio ref={audioRef_recieving} src="/sound/woodAlert.mp3" />
+          <SakuraAnimation />
           <Global
             styles={{
               "@media print": {
@@ -1145,10 +1117,28 @@ function ThreadContent(): JSX.Element {
                   }
                 />
               </Box>
-              {!isAtBottom ? ( // 最下部でない場合にアイコンを表示
+              {!isAtBottom && ( // 最下部でない場合にアイコンを表示
                 <Box
                   onClick={(e) => {
-                    scrollToBottom();
+                    if (unreadPostIds.length > 0) {
+                      const firstUnreadId = unreadPostIds[0];
+                      const element = document.getElementById(
+                        `post-${firstUnreadId}`
+                      );
+                      if (element) {
+                        const offset = 80;
+                        const elementPosition =
+                          element.getBoundingClientRect().top;
+                        const offsetPosition =
+                          elementPosition + window.scrollY - offset;
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      }
+                    } else {
+                      scrollToBottom();
+                    }
                   }}
                   className="no-print-page"
                   position="absolute"
@@ -1157,7 +1147,13 @@ function ThreadContent(): JSX.Element {
                   aria-label="Your Icon"
                   cursor="pointer"
                   bg={colorMode === "light" ? "white" : "gray.900"}
-                  color={colorMode === "light" ? "gray.900" : "gray"}
+                  color={
+                    colorMode === "light"
+                      ? unreadPostIds.length > 0
+                        ? "red"
+                        : "gray.900"
+                      : "gray"
+                  }
                   borderRadius="10%"
                   width="32px"
                   height="32px"
@@ -1167,7 +1163,7 @@ function ThreadContent(): JSX.Element {
                 >
                   <Icon size="28px" as={FaArrowDown} />
                 </Box>
-              ) : null}
+              )}
               {replyToPostId && (
                 <Stack
                   fontSize="sm"
@@ -1776,8 +1772,9 @@ function ThreadContent(): JSX.Element {
                               data-post-id={post.id}
                               data-user-id={post.user_uid}
                               key={post.id}
+                              id={`post-${post.id}`} // IDを追加
                               style={{
-                                height: post.isDeleting ? 0 : "auto", // 高さを0にする
+                                height: post.isDeleting ? 0 : "auto",
                                 opacity: post.isDeleting ? 0 : 1,
                                 overflow: "visible", // 内容がはみ出さないようにする
                                 transition:
@@ -2072,9 +2069,9 @@ function ThreadContent(): JSX.Element {
                                               src={post.reply_file_url}
                                               alt="Reply attached file"
                                               loading="lazy"
-                                              maxW="100%" // 最大幅を100%に設定
+                                              maxW="100%"
                                               maxH="40px"
-                                              objectFit="contain" // 画像が枠内に収まるようにする
+                                              objectFit="contain"
                                             />
                                           ) : (
                                             <>
