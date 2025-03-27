@@ -4,58 +4,41 @@ import { Box, Image } from "@chakra-ui/react";
 interface Sakura {
   id: number;
   x: number;
-  y: number;
-  rotation: number;
   size: number;
-  speed: number;
   opacity: number;
-  sway: number; // 左右の揺れを追加
+  sway: number;
+  duration: number;
+  delay: number;
 }
 
 const SakuraAnimation: React.FC = () => {
   const [sakuras, setSakuras] = useState<Sakura[]>([]);
 
-  // 桜の生成を最適化
   const createSakura = useCallback(
     (): Sakura => ({
       id: Math.random(),
       x: Math.random() * window.innerWidth,
-      y: -20,
-      rotation: Math.random() * 360,
-      size: Math.random() * 12 + 6, // サイズを少し小さく
-      speed: Math.random() * 0.8 + 5, // 速度を遅く
-      opacity: Math.random() * 0.2 + 0.2, // 透明度を調整
-      sway: Math.random() * 2 - 1, // -1から1の間の値で左右の揺れを設定
+      size: Math.random() * 12 + 6,
+      opacity: Math.random() * 0.2 + 0.2,
+      sway: Math.random() * 100 - 50, // -50pxから50pxの間で左右の揺れ
+      duration: Math.random() * 10 + 15, // 15-25秒
+      delay: Math.random() * 5, // 0-5秒の遅延
     }),
     []
   );
 
   useEffect(() => {
-    // 初期の桜を生成
     const initialSakuras = Array.from({ length: 15 }, createSakura);
     setSakuras(initialSakuras);
 
-    // アニメーションループ
     const interval = setInterval(() => {
       setSakuras((prevSakuras) => {
-        // 既存の桜を更新
-        const updatedSakuras = prevSakuras
-          .map((sakura) => ({
-            ...sakura,
-            y: sakura.y + sakura.speed,
-            x: sakura.x + sakura.sway, // 左右に揺れる
-            rotation: (sakura.rotation + 0.3) % 360, // 回転速度を遅く
-          }))
-          .filter((sakura) => sakura.y < window.innerHeight + 20);
-
-        // 新しい桜を追加
-        if (Math.random() < 0.05 && updatedSakuras.length < 20) {
-          updatedSakuras.push(createSakura());
+        if (Math.random() < 0.05 && prevSakuras.length < 20) {
+          return [...prevSakuras, createSakura()];
         }
-
-        return updatedSakuras;
+        return prevSakuras;
       });
-    }, 50); // 更新頻度を上げて滑らかに
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [createSakura]);
@@ -69,20 +52,49 @@ const SakuraAnimation: React.FC = () => {
       height="100%"
       pointerEvents="none"
       zIndex={1000}
+      overflow="hidden"
     >
+      <style jsx global>{`
+        @keyframes fall {
+          0% {
+            transform: translateY(-100vh) translateX(0) rotate(0deg);
+            opacity: 0;
+          }
+          5% {
+            opacity: 1;
+          }
+          95% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) translateX(var(--sway)) rotate(360deg);
+            opacity: 0;
+          }
+        }
+      `}</style>
       {sakuras.map((sakura) => (
-        <Image
+        <Box
           key={sakura.id}
-          src="/images/illust/obj/sakura_pixcel.svg"
           position="absolute"
           left={`${sakura.x}px`}
-          top={`${sakura.y}px`}
+          top="0"
           width={`${sakura.size}px`}
           height={`${sakura.size}px`}
-          transform={`rotate(${sakura.rotation}deg)`}
-          opacity={sakura.opacity}
-          transition="all 0.05s linear"
-        />
+          style={
+            {
+              "--sway": `${sakura.sway}px`,
+              animation: `fall ${sakura.duration}s linear infinite`,
+              animationDelay: `${sakura.delay}s`,
+            } as React.CSSProperties
+          }
+        >
+          <Image
+            src="/images/illust/obj/sakura_pixcel.svg"
+            width="100%"
+            height="100%"
+            opacity={sakura.opacity}
+          />
+        </Box>
       ))}
     </Box>
   );

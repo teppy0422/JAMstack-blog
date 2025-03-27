@@ -49,51 +49,6 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
         }}
         id={id}
       />
-      <svg width="0" height="0">
-        <defs>
-          <filter
-            id="outline-filter"
-            filterUnits="userSpaceOnUse"
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
-          >
-            <feMorphology
-              operator="dilate"
-              // radius={sealSize}
-              radius="2"
-              in="SourceAlpha"
-              result="dilated"
-            />
-            <feFlood floodColor="#fff" result="flood" />
-            <feComposite
-              in="flood"
-              in2="dilated"
-              operator="in"
-              result="outline"
-            />
-            <feMorphology
-              operator="dilate"
-              radius="0"
-              in="outline"
-              result="expanded"
-            />
-            <feFlood floodColor="#333" result="blackFlood" />
-            <feComposite
-              in="blackFlood"
-              in2="expanded"
-              operator="in"
-              result="blackOutline"
-            />
-            <feMerge>
-              <feMergeNode in="blackOutline" />
-              <feMergeNode in="outline" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-      </svg>
       <style jsx>{`
         @keyframes nyoki_rabit {
           0% {

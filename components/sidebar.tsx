@@ -151,7 +151,6 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
                   width="20px"
                   left="0px"
                   bottom="-12px"
-                  sealSize={0}
                 />
               </Box>
             </>
