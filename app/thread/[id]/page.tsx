@@ -92,6 +92,7 @@ import { isatty } from "tty";
 import { useUnread } from "../../../context/UnreadContext";
 
 let cachedUsers: any[] | null = null;
+const now = new Date();
 
 export default function Thread() {
   return (
@@ -164,9 +165,11 @@ function ThreadContent(): JSX.Element {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [isZoomed, setIsZoomed] = useState(false); // ズームインの状態を管理
-  const { colorMode, toggleColorMode } = useColorMode(); //ダークモード
+  const { colorMode, toggleColorMode } = useColorMode();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); //ログイン有無
+
+  const [isSakuraActive, setIsSakuraActive] = useState(false);
+
   //PCとスマホ
   //長押し
   const [isLongPress, setIsLongPress] = useState(false);
@@ -215,6 +218,13 @@ function ThreadContent(): JSX.Element {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+  }, []);
+  //桜ふる判断
+  useEffect(() => {
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), 2, 29); // 3月29日
+    const endDate = new Date(today.getFullYear(), 3, 10); // 4月10日
+    setIsSakuraActive(today >= startDate && today <= endDate);
   }, []);
 
   // isAtBottomがtrueになった時に未読の投稿を既読にする
@@ -984,7 +994,7 @@ function ThreadContent(): JSX.Element {
         <>
           <audio ref={audioRef_send} src="/sound/notification.mp3" />
           <audio ref={audioRef_recieving} src="/sound/woodAlert.mp3" />
-          <SakuraAnimation />
+          {isSakuraActive && <SakuraAnimation />}
           <Global
             styles={{
               "@media print": {
@@ -1031,6 +1041,7 @@ function ThreadContent(): JSX.Element {
               px="8px"
               py="8px"
               bg={colorMode === "light" ? "white" : "gray.900"}
+              data-roof-id="sakura"
             >
               {loading && (
                 <Flex
@@ -1264,6 +1275,7 @@ function ThreadContent(): JSX.Element {
                 justify="flex-end"
                 className="no-print-page"
                 position="relative"
+                data-roof-id="sakura"
               >
                 {/* ファイル添付ボタン */}
                 <Tooltip
