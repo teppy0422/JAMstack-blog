@@ -324,8 +324,9 @@ export default function About({
                   DOWNLOAD
                 </text>
               </svg>
+
               <AnimationImage
-                src="/images/illust/hippo/hippo_007_pixcel.png"
+                src="/images/illust/hippo/hippo_007_pixcel.gif"
                 width="50px"
                 position="relative"
                 left="-40px"

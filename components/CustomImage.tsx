@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Box, PlacementWithLogical, Tooltip } from "@chakra-ui/react";
+
 import styled, { keyframes } from "styled-components";
 
 interface AnimationImageProps {
@@ -13,6 +15,8 @@ interface AnimationImageProps {
   animation?: string;
   id?: string;
   position?: React.CSSProperties["position"];
+  label?: string;
+  labelPlacement?: PlacementWithLogical;
 }
 export const AnimationImage: React.FC<AnimationImageProps> = ({
   sealSize = "2",
@@ -26,29 +30,76 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
   animation,
   id,
   position = "absolute",
+  label,
+  labelPlacement,
 }) => {
   const numericSealSize = Number(sealSize);
+  const isGif = src.endsWith(".gif");
   return (
     <>
       {/* #outline-filterはpages/_app.tsxに書いてる。ここに書いたらウィンドウ幅が狭くなった時にfloodColorが効かなくなる */}
-      <img
-        src={src}
-        style={{
-          position: position,
-          width: width,
-          left: left,
-          top: top,
-          right: right,
-          bottom: bottom,
-          rotate: `${rotate}`,
-          animation: `${animation}`,
-          filter:
-            numericSealSize > 0
-              ? "url(#outline-filter) drop-shadow(1px 1px 3px rgba(0, 0, 0, 1))"
-              : "none",
-        }}
-        id={id}
-      />
+      <Tooltip
+        label={label}
+        hasArrow
+        placement={labelPlacement}
+        paddingY="4px"
+        paddingX="5px"
+        borderRadius="5px"
+      >
+        <img
+          src={src}
+          onClick={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = target.src.split("?")[0] + "?" + new Date().getTime(); // クエリパラメータを追加して再読み込み
+          }}
+          style={{
+            position: position,
+            cursor: isGif ? "pointer" : "",
+            width: width,
+            left: left,
+            top: top,
+            right: right,
+            bottom: bottom,
+            rotate: `${rotate}`,
+            animation: `${animation}`,
+            filter:
+              numericSealSize > 0
+                ? "url(#outline-filter) drop-shadow(1px 1px 3px rgba(0, 0, 0, 1))"
+                : "none",
+          }}
+          id={id}
+        />
+      </Tooltip>
+      <svg width="0" height="0">
+        <defs>
+          <filter
+            id="outline-filter"
+            filterUnits="objectBoundingBox"
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+          >
+            <feMorphology
+              operator="dilate"
+              radius="2"
+              in="SourceAlpha"
+              result="dilated"
+            />
+            <feFlood floodColor="white" result="flood" />
+            <feComposite
+              in="flood"
+              in2="dilated"
+              operator="in"
+              result="outline"
+            />
+            <feMerge>
+              <feMergeNode in="outline" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
       <style jsx>{`
         @keyframes nyoki_rabit {
           0% {

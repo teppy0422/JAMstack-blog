@@ -14,26 +14,26 @@ interface Sakura {
   pausedPosition?: { x: number; y: number };
 }
 
-const MAX_SAKURAS = 100;
+const MAX_SAKURAS = 10;
 const INITIAL_SAKURAS = 15;
 
 const SakuraAnimation: React.FC = () => {
   const [sakuras, setSakuras] = useState<Sakura[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const createSakura = useCallback(
-    (): Sakura => ({
+  const createSakura = useCallback((): Sakura => {
+    const swayValue = Math.random() * 100 - 50;
+    return {
       id: Math.random(),
       x: Math.random() * window.innerWidth,
       size: Math.random() * 8 + 12,
       opacity: Math.random() * 0.2 + 0.4,
-      sway: Math.random() * 100 - 50,
-      duration: Math.random() * 10 + 15,
+      sway: swayValue,
+      duration: Math.random() * 10 + 5,
       delay: Math.random() * 5,
       isPaused: false,
-    }),
-    []
-  );
+    };
+  }, []);
 
   // ローディング完了後に桜を開始
   useEffect(() => {
@@ -85,6 +85,7 @@ const SakuraAnimation: React.FC = () => {
 
           const roofRect = roofElement.getBoundingClientRect();
           const stopY = roofRect.top;
+
           // 固定要素の上で停止
           if (sakuraY >= stopY && stopY > 500 && sakuraY > 500) {
             // 衝突した桜を5秒後に削除
@@ -97,6 +98,7 @@ const SakuraAnimation: React.FC = () => {
               ...sakura,
               isPaused: true,
               pausedPosition: { x: rect.left, y: sakuraY },
+              zIndex: 10000,
             };
           }
           return sakura;
@@ -128,57 +130,63 @@ const SakuraAnimation: React.FC = () => {
       <style jsx global>{`
         @keyframes fall {
           0% {
-            transform: translateY(-100vh) translateX(0) rotate(0deg);
-            opacity: 0;
+            transform: translateY(-10vh) translateX(0) rotate(0deg);
           }
           5% {
-            opacity: 1;
           }
-          50% {
-            transform: translateX(40vw);
+          40% {
+            transform: translateY(40vh) translateX(-10vw) rotate(144deg);
+          }
+          60% {
+            transform: translateY(60vh) translateX(-15vw) rotate(216deg);
+          }
+          80% {
+            transform: translateY(80vh) translateX(-25vw) rotate(288deg);
           }
           95% {
-            opacity: 1;
           }
           100% {
-            transform: translateY(150vh) translateX(var(--sway)) rotate(360deg);
-            opacity: 0;
+            transform: translateY(100vh) translateX(-30vw) rotate(360deg);
           }
         }
       `}</style>
-      {sakuras.map((sakura) => (
-        <Box
-          key={sakura.id}
-          data-sakura-id={sakura.id}
-          position="absolute"
-          left={
-            sakura.isPaused ? `${sakura.pausedPosition?.x}px` : `${sakura.x}px`
-          }
-          top={sakura.isPaused ? `${sakura.pausedPosition?.y}px` : "-100px"}
-          width={`${sakura.size}px`}
-          height={`${sakura.size}px`}
-          style={
-            {
-              "--sway": `${sakura.sway}px`,
-              animation: sakura.isPaused
-                ? "none"
-                : `fall ${sakura.duration}s linear infinite`,
-              animationDelay: `${sakura.delay}s`,
-              animationPlayState: sakura.isPaused ? "paused" : "running",
-              transform: sakura.isPaused ? "none" : undefined,
-              willChange: "transform",
-              zIndex: sakura.isPaused ? 10001 : "",
-            } as React.CSSProperties
-          }
-        >
-          <Image
-            src="/images/illust/obj/sakura_pixcel.svg"
-            width="100%"
-            height="100%"
-            opacity={sakura.opacity}
-          />
-        </Box>
-      ))}
+      {sakuras.map((sakura) => {
+        return (
+          <Box
+            key={sakura.id}
+            data-sakura-id={sakura.id}
+            position="absolute"
+            left={
+              sakura.isPaused
+                ? `${sakura.pausedPosition?.x}px`
+                : `${sakura.x}px`
+            }
+            top={sakura.isPaused ? `${sakura.pausedPosition?.y}px` : "0"}
+            width={`${sakura.size}px`}
+            height={`${sakura.size}px`}
+            style={
+              {
+                "--sway": `${sakura.sway}px`,
+                animation: sakura.isPaused
+                  ? "none"
+                  : `fall ${sakura.duration}s linear infinite`,
+                animationDelay: `${sakura.delay}s`,
+                animationPlayState: sakura.isPaused ? "paused" : "running",
+                willChange: "transform",
+                zIndex: sakura.isPaused ? 10001 : 10,
+                opacity: sakura.opacity,
+                transition: "opacity 0.3s ease",
+              } as React.CSSProperties
+            }
+          >
+            <Image
+              src="/images/illust/obj/sakura_pixcel.svg"
+              width="100%"
+              height="100%"
+            />
+          </Box>
+        );
+      })}
     </Box>
   );
 };

@@ -27,6 +27,7 @@ import { CustomLoading } from "../components/CustomText";
 
 import { useUserContext } from "../context/useUserContext";
 import { StatusDisplay } from "../components/NowStatus";
+import { AnimationImage } from "../components/CustomImage";
 
 export default function Home({ blog, category, tag, blog2 }) {
   const [showBlogs, setShowBlogs] = useState(blog);
@@ -74,6 +75,18 @@ export default function Home({ blog, category, tag, blog2 }) {
 
           <Box mx={[0, 0, 8, 20]} my={[1, 1, 2, 4]}>
             <Box h="10px" />
+            <img src="/images/illust/hippo/hippo_007_pixcel.gif" />
+            <AnimationImage
+              src="/images/illust/hippo/hippo_007_pixcel.gif"
+              width="70px"
+              position="static"
+              label="焼き鳥まだかなー"
+            />
+            <AnimationImage
+              src="/images/illust/hippo/hippo_007_pixcel.png"
+              width="70px"
+              position="static"
+            />
             <img src="/images/illust/hippo/hippo_001.svg" />
             <img
               src="/images/illust/hippo/hippo_001.svg"

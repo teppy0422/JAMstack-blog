@@ -299,7 +299,7 @@ export default function Header() {
                   bg="white.1"
                   aria-label="Open Menu"
                   onClick={onMenuOpen}
-                  ml="2px"
+                  ml="6px"
                   zIndex="1101"
                   opacity="0.85"
                   borderColor={colorMode === "light" ? "black" : "white"}

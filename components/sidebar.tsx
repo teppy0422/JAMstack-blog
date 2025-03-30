@@ -14,6 +14,7 @@ import {
   useColorMode,
   Divider,
   Flex,
+  Image,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HamburgerIcon, ChevronRightIcon } from "@chakra-ui/icons";
@@ -149,6 +150,7 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
                 <AnimationImage
                   src="/images/illust/hippo/hippo_016.svg"
                   width="20px"
+                  sealSize="0"
                   left="0px"
                   bottom="-12px"
                 />
@@ -175,9 +177,17 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
               language,
             }),
             true,
-            <Box transform="rotate(270deg)" position="relative">
-              <IoTicketSharp size={22} />
-            </Box>
+            <>
+              <Box position="relative" w="24px">
+                <AnimationImage
+                  src="/images/illust/hippo/hippo_007_pixcel.png"
+                  width="24px"
+                  sealSize="0"
+                  left="-4px"
+                  bottom="-12px"
+                />
+              </Box>
+            </>
           )}
           {menuItem(
             "/BBS",

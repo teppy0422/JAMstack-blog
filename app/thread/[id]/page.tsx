@@ -73,6 +73,7 @@ import BBSTodoList from "../../../components/BBSTodoList";
 import TodoListMenu from "../../../components/BBSTodoListMenu";
 import { useCustomToast } from "../../../components/customToast";
 import { GetColor } from "../../../components/CustomColor";
+import { AnimationImage } from "../../../components/CustomImage";
 
 import IconWithDrawer from "./IconWithDrawer";
 
@@ -222,7 +223,7 @@ function ThreadContent(): JSX.Element {
   //桜ふる判断
   useEffect(() => {
     const today = new Date();
-    const startDate = new Date(today.getFullYear(), 2, 29); // 3月29日
+    const startDate = new Date(today.getFullYear(), 2, 27); // 3月29日
     const endDate = new Date(today.getFullYear(), 3, 10); // 4月10日
     setIsSakuraActive(today >= startDate && today <= endDate);
   }, []);
@@ -1338,6 +1339,7 @@ function ThreadContent(): JSX.Element {
                     />
                   </Button>
                 </Tooltip>
+
                 <Input
                   position="relative"
                   as="textarea"

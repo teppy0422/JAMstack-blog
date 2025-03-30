@@ -149,7 +149,7 @@ const BlogPage: React.FC = () => {
                   mx={5}
                 >
                   <AnimationImage
-                    src="/images/illust/hippo/hippo_016.svg"
+                    src="/images/illust/hippo/hippo_016.png"
                     width="50px"
                     left="0px"
                     bottom="-36px"
