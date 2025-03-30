@@ -171,7 +171,7 @@ const BBSTodoList = () => {
     }
   };
   const maxWidth = useBreakpointValue({
-    base: "0px",
+    base: "190px",
     xl: "190px",
     "2xl": "300px",
     "3xl": "500px",
@@ -396,7 +396,6 @@ const BBSTodoList = () => {
 
   return (
     <Box
-      display={{ base: "none", xl: "block" }}
       position="fixed"
       maxWidth={maxWidth}
       bg="white.200"
@@ -422,7 +421,8 @@ const BBSTodoList = () => {
       <Button onClick={addTodo}>追加</Button> */}
       <Text
         textAlign="center"
-        color={colorMode === "light" ? "black" : "white"}
+        color={colorMode === "light" ? "white" : "white"}
+        bg="gray"
         fontSize={13}
         fontWeight={400}
         onClick={() => {
@@ -431,7 +431,8 @@ const BBSTodoList = () => {
         }}
         cursor="pointer"
         px={2}
-        _hover={{ bg: colorMode === "light" ? "gray.200" : "gray.700" }} // マウスオーバー時の背景色
+        borderRadius="4px"
+        _hover={{ bg: colorMode === "light" ? "gray.400" : "gray.400" }} // マウスオーバー時の背景色
       >
         {getMessage({
           ja: "各システムの対応状況",

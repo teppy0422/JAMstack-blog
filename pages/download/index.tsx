@@ -38,7 +38,7 @@ import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemN
 import DownloadButton from "../../components/DownloadButton";
 import styles from "../../styles/home.module.scss";
 import { useUserContext } from "../../context/useUserContext";
-import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
+// import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 import { AnimationImage } from "../../components/CustomImage";
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";
@@ -1463,7 +1463,7 @@ export default function About({
                 height={200}
                 style={{ marginTop: "40px" }}
               />
-              <Hippo_001_wrap />
+              {/* <Hippo_001_wrap /> */}
             </HStack>
           </SimpleGrid>
 

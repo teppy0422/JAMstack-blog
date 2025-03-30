@@ -51,6 +51,7 @@ import { supabase } from "../utils/supabase/client";
 import "@fontsource/noto-sans-jp";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import BBSTodoList from "../components/BBSTodoList";
 
 import { useLanguage } from "../context/LanguageContext";
 import { useUserContext } from "../context/useUserContext";
@@ -278,6 +279,7 @@ export const StatusDisplay = () => {
         borderRadius="md"
       >
         <Stack spacing={1}>
+          <BBSTodoList />
           {Object.entries(currentStatus).map(([userId, status]) => (
             <Tooltip
               key={userId}

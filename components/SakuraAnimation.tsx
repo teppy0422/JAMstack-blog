@@ -30,7 +30,7 @@ const SakuraAnimation: React.FC = () => {
       opacity: Math.random() * 0.2 + 0.4,
       sway: swayValue,
       duration: Math.random() * 10 + 5,
-      delay: Math.random() * 5,
+      delay: Math.random() * 0,
       isPaused: false,
     };
   }, []);
@@ -133,6 +133,7 @@ const SakuraAnimation: React.FC = () => {
             transform: translateY(-10vh) translateX(0) rotate(0deg);
           }
           5% {
+            translateY(5vh);
           }
           40% {
             transform: translateY(40vh) translateX(-10vw) rotate(144deg);
@@ -143,10 +144,8 @@ const SakuraAnimation: React.FC = () => {
           80% {
             transform: translateY(80vh) translateX(-25vw) rotate(288deg);
           }
-          95% {
-          }
           100% {
-            transform: translateY(100vh) translateX(-30vw) rotate(360deg);
+            transform: translateY(100vh) translateX(-35vw) rotate(360deg);
           }
         }
       `}</style>
@@ -170,7 +169,7 @@ const SakuraAnimation: React.FC = () => {
                 animation: sakura.isPaused
                   ? "none"
                   : `fall ${sakura.duration}s linear infinite`,
-                animationDelay: `${sakura.delay}s`,
+                // animationDelay: `${sakura.delay}s`,
                 animationPlayState: sakura.isPaused ? "paused" : "running",
                 willChange: "transform",
                 zIndex: sakura.isPaused ? 10001 : 10,
