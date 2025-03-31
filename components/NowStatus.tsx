@@ -446,6 +446,7 @@ export const StatusDisplay = () => {
                       src="/images/illust/hippo/hippo_014_pixcel.gif"
                       width="28px"
                       position="static"
+                      sealSize="0"
                     />
                     {currentUserId === selectedUserId && (
                       <NowStatus
