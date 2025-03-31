@@ -1,7 +1,6 @@
 import NextLink from "next/link";
 import { useState, useEffect, useId } from "react";
 import Content from "../components/content";
-import BBSTodoList from "../components/BBSTodoList";
 import {
   Container,
   Tag,
@@ -58,7 +57,6 @@ export default function Home({ blog, category, tag, blog2 }) {
   return (
     <>
       <StatusDisplay />
-      <BBSTodoList />
 
       <Content isCustomHeader={true}>
         <>

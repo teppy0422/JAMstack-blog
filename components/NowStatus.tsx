@@ -46,16 +46,23 @@ import {
   Textarea,
   Center,
   HStack,
+  IconButton,
 } from "@chakra-ui/react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import {
+  MdKeyboardDoubleArrowLeft,
+  MdKeyboardDoubleArrowRight,
+} from "react-icons/md";
 import { supabase } from "../utils/supabase/client";
 import "@fontsource/noto-sans-jp";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import BBSTodoList from "../components/BBSTodoList";
 
 import { useLanguage } from "../context/LanguageContext";
 import { useUserContext } from "../context/useUserContext";
 import getMessage from "./getMessage";
+import { getBoxShadow } from "@chakra-ui/react/dist/types/popper/utils";
+import { AnimationImage } from "./CustomImage";
 
 const activityOptions = [
   { value: "online", label: "オンライン", color: "#815ad6" },
@@ -118,19 +125,41 @@ export const StatusDisplay = () => {
   >([]);
 
   const { currentUserId, getUserById } = useUserContext();
+  const [targetDate, setTargetDate] = useState<Date | null>(null);
 
   // ユーザーのスケジュールを取得する関数
-  const fetchUserSchedules = async (selectedUserId: string | null) => {
+  const getUserSchedules = async (
+    selectedUserId: string | null,
+    selectedDate: Date
+  ) => {
     const now = new Date();
-    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    // 与えられた日付が所属する週の月曜日と日曜日を計算
+    const firstDayOfWeek = new Date(selectedDate);
+    const lastDayOfWeek = new Date(selectedDate);
+
+    // 月曜日を計算
+    firstDayOfWeek.setDate(
+      selectedDate.getDate() -
+        (selectedDate.getDay() === 0 ? 6 : selectedDate.getDay() - 0)
+    );
+    // 日曜日を計算
+    lastDayOfWeek.setDate(
+      selectedDate.getDate() +
+        (selectedDate.getDay() === 0 ? 0 : 7 - selectedDate.getDay())
+    );
+
+    // ここでlastDayOfWeekを23:59:59に設定
+    lastDayOfWeek.setHours(23, 59, 59, 999);
+
     // schedulesから該当ユーザーのデータをフィルタリング
     const userSchedulesData = schedules.filter(
       (schedule) =>
         schedule.user_id === selectedUserId &&
-        new Date(schedule.startTime) >= firstDayOfMonth &&
-        new Date(schedule.startTime) <= lastDayOfMonth
+        new Date(schedule.startTime) >= firstDayOfWeek &&
+        new Date(schedule.startTime) <= lastDayOfWeek
     );
+
     const formattedSchedules = userSchedulesData.map((schedule) => ({
       startTime: new Date(schedule.startTime).toLocaleString("ja-JP", {
         year: "numeric",
@@ -158,24 +187,56 @@ export const StatusDisplay = () => {
   };
 
   // スケジュールモーダルを開く関数
-  const handleOpenScheduleModal = (userId: string) => {
+  const handleOpenScheduleModal = (userId: string, targetDate: Date) => {
+    // 与えられた日付が所属する週の月曜日を計算
+    const mondayDate = new Date(targetDate);
+    mondayDate.setDate(
+      targetDate.getDate() -
+        (targetDate.getDay() === 0 ? 6 : targetDate.getDay() - 1)
+    );
+
     setSelectedUserId(userId);
-    fetchUserSchedules(userId);
+    setTargetDate(mondayDate); // 月曜日の日付を設定
+    getUserSchedules(userId, mondayDate);
     onScheduleModalOpen();
+  };
+
+  const handlePreviousWeek = () => {
+    if (targetDate) {
+      // 1週間前の日付を計算
+      const previousWeekDate = new Date(targetDate);
+      previousWeekDate.setDate(previousWeekDate.getDate() - 7);
+      // ユーザーのスケジュールを取得
+      getUserSchedules(selectedUserId, previousWeekDate);
+      setTargetDate(previousWeekDate); // targetDateを更新
+    }
+  };
+  const handleNextWeek = () => {
+    if (targetDate) {
+      // 1週間後の日付を計算
+      const previousWeekDate = new Date(targetDate);
+      previousWeekDate.setDate(previousWeekDate.getDate() + 7);
+      // ユーザーのスケジュールを取得
+      getUserSchedules(selectedUserId, previousWeekDate);
+      setTargetDate(previousWeekDate); // targetDateを更新
+    }
   };
 
   // スケジュールを取得する関数
   const fetchSchedules = async () => {
     // 現在の月の最初の日と最後の日を取得（日本時間）
-    const now = new Date();
-    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    // const now = new Date();
+    // const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    // const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    // ここでlastDayOfMonthを23:59:59に設定
+    // lastDayOfMonth.setHours(23, 59, 59, 999);
 
     const { data, error } = await supabase
       .from("admin_status")
       .select("*")
-      .gte("startTime", new Date(firstDayOfMonth).toISOString())
-      .lte("startTime", new Date(lastDayOfMonth).toISOString())
+      // .gte("startTime", new Date(firstDayOfMonth).toISOString())
+      // .lte("startTime", new Date(lastDayOfMonth).toISOString())
       .order("startTime", { ascending: true });
 
     if (error) {
@@ -274,12 +335,11 @@ export const StatusDisplay = () => {
         }}
         position="fixed"
         zIndex={1100}
-        top="68px"
+        top="46px"
         right="1px"
         borderRadius="md"
       >
         <Stack spacing={1}>
-          <BBSTodoList />
           {Object.entries(currentStatus).map(([userId, status]) => (
             <Tooltip
               key={userId}
@@ -310,15 +370,9 @@ export const StatusDisplay = () => {
                   transition: "all 0.2s",
                   filter: "none",
                 }}
-                color={{
-                  base: colorMode === "light" ? "#000" : "#FFF",
-                  sm: colorMode === "light" ? "#000" : "#FFF",
-                  md: colorMode === "light" ? "#000" : "#FFF",
-                  lg: colorMode === "light" ? "#000" : "#FFF",
-                  xl: colorMode === "light" ? "#000" : "#FFF",
-                }}
+                color={colorMode === "light" ? "#000" : "#FFF"}
                 cursor="pointer"
-                onClick={() => handleOpenScheduleModal(userId)}
+                onClick={() => handleOpenScheduleModal(userId, new Date())}
                 sx={{
                   filter:
                     status.activity === "online" ? "none" : "grayscale(100%)",
@@ -373,7 +427,7 @@ export const StatusDisplay = () => {
       <Modal isOpen={isScheduleModalOpen} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>
+          <ModalHeader py={2} px={3}>
             {selectedUserId && (
               <>
                 <Box>
@@ -388,6 +442,23 @@ export const StatusDisplay = () => {
                     <Text fontSize="16px" fontWeight="bold">
                       {getUserById(selectedUserId)?.user_metadata.name}
                     </Text>
+                    <AnimationImage
+                      src="/images/illust/hippo/hippo_014_pixcel.gif"
+                      width="28px"
+                      position="static"
+                    />
+                    {currentUserId === selectedUserId && (
+                      <NowStatus
+                        schedules={schedules}
+                        onSchedulesUpdate={(newSchedules) => {
+                          // 親コンポーネントのschedulesを更新
+                          setSchedules(newSchedules);
+                          // 現在のユーザーのスケジュールも更新
+                          getUserSchedules(selectedUserId, new Date());
+                        }}
+                        userId={currentUserId}
+                      />
+                    )}
                   </HStack>
                   <Text fontSize="12px" color="gray.500" fontWeight={600}>
                     {new Date().toLocaleDateString("ja-JP", {
@@ -400,21 +471,38 @@ export const StatusDisplay = () => {
               </>
             )}
           </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
+          <ModalCloseButton _focus={{ boxShadow: "none" }} />
+          <ModalBody pb={3}>
             <Stack spacing={1}>
-              {currentUserId === selectedUserId && (
-                <NowStatus
-                  schedules={schedules}
-                  onSchedulesUpdate={(newSchedules) => {
-                    // 親コンポーネントのschedulesを更新
-                    setSchedules(newSchedules);
-                    // 現在のユーザーのスケジュールも更新
-                    fetchUserSchedules(selectedUserId);
-                  }}
-                  userId={currentUserId}
+              <Center mb={3}>
+                {/* 週を戻るアイコン */}
+                <IconButton
+                  aria-label="Previous week"
+                  icon={<MdKeyboardDoubleArrowLeft />}
+                  bg="transparent"
+                  _hover={{ bg: "transparent", fontSize: "md" }}
+                  onClick={() => handlePreviousWeek()}
+                  h="18px"
+                  w="36px"
                 />
-              )}
+                <Box fontWeight={400}>
+                  {targetDate &&
+                    `${targetDate.getFullYear()}/${
+                      targetDate.getMonth() + 1
+                    }/${targetDate.getDate()}`}
+                  の週
+                </Box>
+                {/* 週を進めるアイコン */}
+                <IconButton
+                  aria-label="Next week"
+                  icon={<MdKeyboardDoubleArrowRight />}
+                  bg="transparent"
+                  _hover={{ bg: "transparent", fontSize: "md" }}
+                  onClick={() => handleNextWeek()}
+                  h="18px"
+                  w="36px"
+                />
+              </Center>
               {userSchedules.map((schedule, index) => {
                 const now = new Date();
                 const start = schedule.startTime
@@ -465,14 +553,6 @@ export const StatusDisplay = () => {
                           position="absolute"
                           top="-4px"
                           fontWeight={isToday ? "bold" : "medium"}
-                          // borderBottom={isToday ? "2px solid" : ""}
-                          // borderBottomColor={
-                          //   isToday
-                          //     ? colorMode === "light"
-                          //       ? "red"
-                          //       : "#F55"
-                          //     : "inherit"
-                          // }
                         >
                           {currentDate}
                         </Text>
@@ -551,7 +631,6 @@ export const StatusDisplay = () => {
                           left="-6px"
                         />
                       </Stack>
-
                       <Stack spacing={1} ml={2}>
                         <Text
                           display="inline-block"
@@ -920,9 +999,10 @@ export const NowStatus = ({
     <Box
       bg="white.200"
       p="0"
+      top="4px"
       right="8px"
       textAlign="left"
-      fontSize={15}
+      fontSize={14}
       fontFamily={getMessage({
         ja: "Noto Sans JP",
         us: "Noto Sans JP",
@@ -935,7 +1015,6 @@ export const NowStatus = ({
         textAlign="center"
         color={colorMode === "light" ? "black" : "white"}
         fontWeight={400}
-        mb={2}
         onClick={onOpen}
         cursor="pointer"
         px={2}

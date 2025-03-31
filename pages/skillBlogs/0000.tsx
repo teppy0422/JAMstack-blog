@@ -157,15 +157,15 @@ const BlogPage: React.FC = () => {
                   />
                   <Box
                     position="absolute"
-                    top="-28px"
-                    left="6px"
+                    top={colorMode === "light" ? "-28px" : "-42px"}
+                    left={colorMode === "light" ? "6px" : "-6px"}
                     borderRadius="50%"
-                    w={10}
-                    h={10}
+                    w={colorMode === "light" ? 10 : 16}
+                    h={colorMode === "light" ? 10 : 16}
                     bg="yellow"
                     opacity="0.1"
                     animation={`${pulseAnimation} 3s infinite 2s`}
-                    background="radial-gradient(circle, rgba(255,255,0,1) 0%, rgba(255,255,0,0) 70%)"
+                    background="radial-gradient(circle, rgba(255,255,0,1) 10%, rgba(255,255,0,0) 70%)"
                   />
                 </Box>
               </Flex>

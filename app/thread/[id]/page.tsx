@@ -69,7 +69,6 @@ import { useUserContext } from "../../../context/useUserContext";
 
 import Content from "../../../components/content";
 import SidebarBBS from "../../../components/sidebarBBS";
-import BBSTodoList from "../../../components/BBSTodoList";
 import { useCustomToast } from "../../../components/customToast";
 import { GetColor } from "../../../components/CustomColor";
 import { AnimationImage } from "../../../components/CustomImage";
@@ -131,9 +130,9 @@ function ThreadContent(): JSX.Element {
     }));
   };
 
-  // ページロード時にsessionStorageからメッセージを取得
+  // ページロード時にlocalStorageからメッセージを取得
   useEffect(() => {
-    const savedMessage = sessionStorage.getItem("savedMessage");
+    const savedMessage = localStorage.getItem("savedMessage");
     if (savedMessage) {
       const inputTaget = document.getElementById(
         "inputValue"
@@ -143,12 +142,13 @@ function ThreadContent(): JSX.Element {
       }
     }
   }, [isLoading]);
+  // メッセージ入力都度にlocalStorageに保存
   const handleInputChange = () => {
     // setInputValue(inputValue);
     const inputValue = document.getElementById(
       "inputValue"
     ) as HTMLTextAreaElement;
-    sessionStorage.setItem("savedMessage", inputValue.value);
+    localStorage.setItem("savedMessage", inputValue.value);
   };
 
   // 戻る処理
@@ -703,8 +703,8 @@ function ThreadContent(): JSX.Element {
       setReplyPostUserId(null); // 追加: リプライ対象のユーザーIDをリセット
       setReplyPostFileUrl(null); // 追加: リプライ対象のファイルURLをリセット
       scrollToBottom();
-      // sessionStorageからメッセージを削除
-      sessionStorage.removeItem("savedMessage");
+      // localStorageからメッセージを削除
+      localStorage.removeItem("savedMessage");
     }
   };
   //ファイルをアップロード
@@ -1581,15 +1581,18 @@ function ThreadContent(): JSX.Element {
                 zIndex={1001}
                 display={{
                   base: "none",
-                  sm: "none",
+                  sm: "block",
                   md: "block",
                   lg: "block",
                   xl: "block",
                 }}
-                bg={{
-                  base: colorMode === "light" ? "#fff" : "#000",
-                  xl: colorMode === "light" ? "#f2e9df" : "#000",
-                }}
+                backdropFilter={
+                  colorMode === "light" ? "blur(20px)" : "blur(100px)"
+                }
+                // bg={{
+                //   base: colorMode === "light" ? "#fff" : "#000",
+                //   xl: colorMode === "light" ? "#f2e9df" : "#000",
+                // }}
                 border="1px solid #bfb0a4"
                 borderRadius="md"
               >
@@ -2608,7 +2611,6 @@ function ThreadContent(): JSX.Element {
               </Stack>
               <Box mb="20vh" />
             </Content>
-            <BBSTodoList />
             <StatusDisplay />
           </div>
         </>
