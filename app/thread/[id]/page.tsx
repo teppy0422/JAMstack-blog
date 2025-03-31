@@ -131,6 +131,26 @@ function ThreadContent(): JSX.Element {
     }));
   };
 
+  // ページロード時にsessionStorageからメッセージを取得
+  useEffect(() => {
+    const savedMessage = sessionStorage.getItem("savedMessage");
+    if (savedMessage) {
+      const inputTaget = document.getElementById(
+        "inputValue"
+      ) as HTMLTextAreaElement;
+      if (inputTaget) {
+        inputTaget.value = savedMessage;
+      }
+    }
+  }, [isLoading]);
+  const handleInputChange = () => {
+    // setInputValue(inputValue);
+    const inputValue = document.getElementById(
+      "inputValue"
+    ) as HTMLTextAreaElement;
+    sessionStorage.setItem("savedMessage", inputValue.value);
+  };
+
   // 戻る処理
   const goBack = (originalUrl: string) => {
     const history = urlHistory[originalUrl];
@@ -222,7 +242,7 @@ function ThreadContent(): JSX.Element {
   //桜ふる判断
   useEffect(() => {
     const today = new Date();
-    const startDate = new Date(today.getFullYear(), 2, 27); // 3月29日
+    const startDate = new Date(today.getFullYear(), 2, 27); // 3月27日
     const endDate = new Date(today.getFullYear(), 3, 10); // 4月10日
     setIsSakuraActive(today >= startDate && today <= endDate);
   }, []);
@@ -683,6 +703,8 @@ function ThreadContent(): JSX.Element {
       setReplyPostUserId(null); // 追加: リプライ対象のユーザーIDをリセット
       setReplyPostFileUrl(null); // 追加: リプライ対象のファイルURLをリセット
       scrollToBottom();
+      // sessionStorageからメッセージを削除
+      sessionStorage.removeItem("savedMessage");
     }
   };
   //ファイルをアップロード
@@ -1346,6 +1368,8 @@ function ThreadContent(): JSX.Element {
                   minH="40px"
                   resize="none"
                   overflow="hidden"
+                  // value={inputValue}
+                  onChange={(e) => handleInputChange()} // 修正
                   onKeyDown={(e) => {
                     if (e.shiftKey && e.key === "Enter") {
                       e.preventDefault(); // デフォルトの改行動作を防ぐ
