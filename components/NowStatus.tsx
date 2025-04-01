@@ -454,54 +454,60 @@ export const StatusDisplay = () => {
                         userId={currentUserId}
                       />
                     )}
-                    <Box flex={1} position="relative" width="400px">
+                    <Box position="relative" w="400px" h="20px" flex={1}>
                       <Image
                         src="/images/illust/hippo/hippo_014_pixcel.gif"
                         width="28px"
-                        position="static"
+                        position="absolute"
                         left="0"
-                        animation="nyoki 3s forwards, moveHorizontal 6s ease-in-out infinite, floatUpDown 3s ease-in-out infinite"
+                        top="0"
+                        style={{
+                          animation:
+                            "moveHorizontal 8s ease-in-out infinite, floatUpDown 8s ease-in-out infinite",
+                        }}
                       />
                       <style jsx>{`
-                        @keyframes nyoki {
-                          0% {
-                            transform: translateY(100px) translateX(-30px)
-                              scale(0.1);
-                          }
-                          80% {
-                            transform: translateY(100px) translateX(-30px)
-                              scale(0.1);
-                          }
-                          100% {
-                            transform: translateY(0) translateX(0) scale(1);
-                          }
-                        }
                         @keyframes moveHorizontal {
                           0% {
-                            transform: translateX(0) scaleX(1);
-                          }
-                          25% {
-                            transform: translateX(100px) scaleX(1);
+                            left: 0;
                           }
                           50% {
-                            transform: translateX(100%) scaleX(-1);
-                          }
-                          75% {
-                            transform: translateX(calc(50% - 14px)) scaleX(-1);
+                            left: calc(100% - 58px);
                           }
                           100% {
-                            transform: translateX(0) scaleX(1);
+                            left: 0;
                           }
                         }
                         @keyframes floatUpDown {
                           0% {
-                            transform: translateY(0px);
+                            transform: translateY(-3px) scaleX(1);
+                          }
+                          12% {
+                            transform: translateY(-28px) scaleX(1);
+                          }
+                          25% {
+                            transform: translateY(0px) scaleX(1);
+                          }
+                          37% {
+                            transform: translateY(-12px) scaleX(1);
                           }
                           50% {
-                            transform: translateY(-4px);
+                            transform: translateY(-3px) scaleX(1);
+                          }
+                          51% {
+                            transform: translateY(-3px) scaleX(-1);
+                          }
+                          63% {
+                            transform: translateY(-28px) scaleX(-1);
+                          }
+                          75% {
+                            transform: translateY(0px) scaleX(-1);
+                          }
+                          87% {
+                            transform: translateY(-12px) scaleX(-1);
                           }
                           100% {
-                            transform: translateY(0px);
+                            transform: translateY(-3px) scaleX(-1);
                           }
                         }
                       `}</style>

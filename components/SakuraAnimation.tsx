@@ -93,7 +93,7 @@ const SakuraAnimation: React.FC = () => {
               setSakuras((currentSakuras) =>
                 currentSakuras.filter((s) => s.id !== sakura.id)
               );
-            }, 5000);
+            }, 2000);
             return {
               ...sakura,
               isPaused: true,
@@ -148,6 +148,19 @@ const SakuraAnimation: React.FC = () => {
             transform: translateY(100vh) translateX(-35vw) rotate(360deg);
           }
         }
+        @keyframes slideLeft {
+          0% {
+            transform: translateX(0);
+          }
+          50%{
+            transform:translateX(-10px);
+            opacity:0.3;
+          }
+          100% {
+            transform: translateX(-16px);
+            opacity:0;
+          }
+        }
       `}</style>
       {sakuras.map((sakura) => {
         return (
@@ -167,10 +180,9 @@ const SakuraAnimation: React.FC = () => {
               {
                 "--sway": `${sakura.sway}px`,
                 animation: sakura.isPaused
-                  ? "none"
+                  ? `slideLeft 2s ease-out forwards`
                   : `fall ${sakura.duration}s linear infinite`,
-                // animationDelay: `${sakura.delay}s`,
-                animationPlayState: sakura.isPaused ? "paused" : "running",
+                animationPlayState: sakura.isPaused ? "running" : "running",
                 willChange: "transform",
                 zIndex: sakura.isPaused ? 10001 : 10,
                 opacity: sakura.opacity,
