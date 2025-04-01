@@ -47,6 +47,8 @@ import {
   Center,
   HStack,
   IconButton,
+  Spacer,
+  Image,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
@@ -350,7 +352,7 @@ export const StatusDisplay = () => {
                   </Box>
                 )
               }
-              placement="top"
+              placement="left"
               hasArrow
             >
               <Box
@@ -442,24 +444,68 @@ export const StatusDisplay = () => {
                     <Text fontSize="16px" fontWeight="bold">
                       {getUserById(selectedUserId)?.user_metadata.name}
                     </Text>
-                    <AnimationImage
-                      src="/images/illust/hippo/hippo_014_pixcel.gif"
-                      width="28px"
-                      position="static"
-                      sealSize="0"
-                    />
                     {currentUserId === selectedUserId && (
                       <NowStatus
                         schedules={schedules}
                         onSchedulesUpdate={(newSchedules) => {
-                          // 親コンポーネントのschedulesを更新
                           setSchedules(newSchedules);
-                          // 現在のユーザーのスケジュールも更新
                           getUserSchedules(selectedUserId, new Date());
                         }}
                         userId={currentUserId}
                       />
                     )}
+                    <Box flex={1} position="relative" width="400px">
+                      <Image
+                        src="/images/illust/hippo/hippo_014_pixcel.gif"
+                        width="28px"
+                        position="static"
+                        left="0"
+                        animation="nyoki 3s forwards, moveHorizontal 6s ease-in-out infinite, floatUpDown 3s ease-in-out infinite"
+                      />
+                      <style jsx>{`
+                        @keyframes nyoki {
+                          0% {
+                            transform: translateY(100px) translateX(-30px)
+                              scale(0.1);
+                          }
+                          80% {
+                            transform: translateY(100px) translateX(-30px)
+                              scale(0.1);
+                          }
+                          100% {
+                            transform: translateY(0) translateX(0) scale(1);
+                          }
+                        }
+                        @keyframes moveHorizontal {
+                          0% {
+                            transform: translateX(0) scaleX(1);
+                          }
+                          25% {
+                            transform: translateX(100px) scaleX(1);
+                          }
+                          50% {
+                            transform: translateX(100%) scaleX(-1);
+                          }
+                          75% {
+                            transform: translateX(calc(50% - 14px)) scaleX(-1);
+                          }
+                          100% {
+                            transform: translateX(0) scaleX(1);
+                          }
+                        }
+                        @keyframes floatUpDown {
+                          0% {
+                            transform: translateY(0px);
+                          }
+                          50% {
+                            transform: translateY(-4px);
+                          }
+                          100% {
+                            transform: translateY(0px);
+                          }
+                        }
+                      `}</style>
+                    </Box>
                   </HStack>
                   <Text fontSize="12px" color="gray.500" fontWeight={600}>
                     {new Date().toLocaleDateString("ja-JP", {
@@ -722,8 +768,6 @@ export const NowStatus = ({
     activity: "online",
     note: "",
   });
-
-  let previousDate: string | null = null;
 
   // 選択された日付のスケジュールを取得
   useEffect(() => {

@@ -17,16 +17,19 @@ import {
   useColorMode,
   ButtonGroup,
   Divider,
+  Center,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import { MdBusiness } from "react-icons/md";
 
 import { useLanguage } from "../context/LanguageContext";
+import { CustomAvatar } from "./CustomAvatar";
+
 import getMessage from "./getMessage";
 
 interface AuthProps {
   userData: {
-    pictureUrl: string | null;
+    pictureUrl: string | undefined;
     userName: string | null;
     userCompany: string | null;
     userMainCompany: string | null;
@@ -270,8 +273,8 @@ export default function Auth({ userData }: AuthProps) {
         img.onload = () => {
           const canvas = document.createElement("canvas");
           const ctx = canvas.getContext("2d");
-          const MAX_WIDTH = 300; // 最大幅
-          const MAX_HEIGHT = 300; // 最大高さ
+          const MAX_WIDTH = 200; // 最大幅
+          const MAX_HEIGHT = 200; // 最大高さ
           let width = img.width;
           let height = img.height;
           if (width > height) {
@@ -367,13 +370,17 @@ export default function Auth({ userData }: AuthProps) {
                 language,
               })}
             >
-              <Avatar
-                src={userData.pictureUrl || undefined}
-                size="2xl"
-                mt={2}
+              <Center
+                as="span"
                 cursor="pointer"
                 onClick={handleAvatarClick} // クリックで画像選択
-              />
+              >
+                <CustomAvatar
+                  src={userData.pictureUrl}
+                  boxSize="200px"
+                  mt={2}
+                />
+              </Center>
             </Tooltip>
             <input
               type="file"

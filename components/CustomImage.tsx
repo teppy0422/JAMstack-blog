@@ -192,6 +192,34 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
             transform: translateY(0) rotate(0deg);
           }
         }
+        @keyframes moveHorizontal {
+          0% {
+            transform: translateX(0) scaleX(1);
+          }
+          25% {
+            transform: translateX(50%) scaleX(1);
+          }
+          50% {
+            transform: translateX(100%) scaleX(-1);
+          }
+          75% {
+            transform: translateX(50%) scaleX(-1);
+          }
+          100% {
+            transform: translateX(0) scaleX(1);
+          }
+        }
+        @keyframes floatUpDown {
+          0% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+          100% {
+            transform: translateY(0);
+          }
+        }
       `}</style>
     </>
   );

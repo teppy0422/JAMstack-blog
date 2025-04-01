@@ -21,7 +21,7 @@ export default function Content({
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <>
+    <Box id="content">
       <Global
         styles={{
           "@media print": {
@@ -48,7 +48,7 @@ export default function Content({
       {isUse ? (
         <>
           <Flex direction="column" minHeight="90vh">
-            <Box flex="1" zIndex="1000">
+            <Box flex="1">
               {isCustomHeader ? <Header_ /> : <Header />}
               <Box height="66px"></Box>
               <Container
@@ -110,6 +110,6 @@ export default function Content({
       ) : (
         <>{children}</>
       )}
-    </>
+    </Box>
   );
 }

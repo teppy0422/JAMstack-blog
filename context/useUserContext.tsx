@@ -10,7 +10,7 @@ import { supabase } from "../utils/supabase/client";
 
 interface UserData {
   id: string;
-  picture_url: string | null;
+  picture_url: string | undefined;
   user_metadata: {
     name: string;
   };
@@ -21,13 +21,13 @@ interface UserData {
 interface UserContextType {
   // 現在のユーザー情報
   currentUserId: string | null;
-  currentUserPictureUrl: string | null;
+  currentUserPictureUrl: string | undefined;
   currentUserName: string | null;
   currentUserCompany: string | null;
   currentUserMainCompany: string | null;
 
   // ユーザー検索機能
-  getUserById: (id: string) => UserData | null;
+  getUserById: (id: string | null) => UserData | null;
   refreshUsers: () => Promise<void>;
   isLoading: boolean;
 }
@@ -42,8 +42,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   // 現在のユーザー情報のステート
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [currentUserPictureUrl, setCurrentUserPictureUrl] = useState<
-    string | null
-  >(null);
+    string | undefined
+  >(undefined);
   const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const [currentUserCompany, setCurrentUserCompany] = useState<string | null>(
     null

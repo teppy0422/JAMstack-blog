@@ -65,7 +65,7 @@ import { Global } from "@emotion/react";
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
 import Sidebar from "../components/sidebar";
-import { NowStatus } from "../components/NowStatus";
+import { CustomAvatar } from "../components/CustomAvatar";
 
 import { useUserContext } from "../context/useUserContext";
 
@@ -254,24 +254,6 @@ export default function Header() {
     const timeoutId = setTimeout(fetchElement, 100);
     return () => clearTimeout(timeoutId);
   }, []);
-  //アバター作成
-  const getAvatarProps = (
-    post_userID: any,
-    isReturn: boolean,
-    size: string
-  ) => {
-    if (isReturn) {
-      return (
-        <Box position="relative" display="inline-block">
-          <Avatar
-            boxSize={size === "md" ? "40px" : size}
-            zIndex="5"
-            src={post_userID || undefined}
-          />
-        </Box>
-      );
-    }
-  };
 
   return (
     <>
@@ -414,7 +396,10 @@ export default function Header() {
                   }
                   cursor="pointer"
                 >
-                  {getAvatarProps(currentUserPictureUrl, true, "34px")}
+                  <CustomAvatar
+                    src={currentUserPictureUrl ?? undefined}
+                    boxSize="34px"
+                  />
                 </Box>
               </Center>
             </Flex>

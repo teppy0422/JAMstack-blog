@@ -1118,7 +1118,7 @@ function ThreadContent(): JSX.Element {
               touchAction: "pan-y", // タッチアクションを設定
             }}
           >
-            <Text ml={4} className="print-only">
+            <Text ml={4} className="print-only" id="printName">
               ※別紙2
             </Text>
             <style jsx>{`
@@ -1132,8 +1132,9 @@ function ThreadContent(): JSX.Element {
               }
             `}</style>
             <Stack // inputForm
+              id="inputForm"
               position="fixed"
-              zIndex="2000"
+              zIndex="5001"
               spacing={0}
               bottom="0"
               right="0"
@@ -1651,13 +1652,13 @@ function ThreadContent(): JSX.Element {
             <Content isCustomHeader={true}>
               <Box
                 position="fixed"
+                zIndex="1000"
                 mb={0}
                 ml={0}
                 pt={0}
                 pb={1}
                 px={1}
                 top="46px"
-                zIndex={1001}
                 display={{
                   base: "none",
                   sm: "block",
@@ -1932,12 +1933,12 @@ function ThreadContent(): JSX.Element {
                                     width="100%"
                                     height="100%"
                                     bg="rgba(0, 0, 0, 0.5)" // 半透明の黒
-                                    zIndex="9" // メニューより下に表示
+                                    zIndex="5000" // メニューより下に表示
                                     onClick={handleLongPressEnd} // 長押しを終了
                                   />
                                   <Box //リプライとか削除のメニュー
                                     position="absolute"
-                                    zIndex="10"
+                                    zIndex="5010"
                                     bg="white"
                                     borderRadius="5px"
                                     boxShadow="md"

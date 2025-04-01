@@ -4,7 +4,6 @@ import { MdBusiness, MdChat } from "react-icons/md";
 import { useCustomToast } from "../components/customToast";
 import { GetColor } from "../components/CustomColor";
 import { useUnread } from "../context/UnreadContext";
-
 import {
   Box,
   Text,
@@ -22,6 +21,7 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionIcon,
+  SkeletonCircle,
 } from "@chakra-ui/react";
 import { supabase } from "../utils/supabase/client-js";
 import { MdCheckBox } from "react-icons/md";
@@ -30,10 +30,11 @@ import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
 import getMessage from "../components/getMessage";
+import { CustomAccordionIcon } from "../components/CustomText";
+import { CustomAvatar } from "../components/CustomAvatar";
 
 import { useUserContext } from "../context/useUserContext";
 import { useLanguage } from "../context/LanguageContext";
-import { CustomAccordionIcon } from "../components/CustomText";
 
 // import { AppContext } from "../pages/_app";
 
@@ -274,7 +275,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
     const user = usersData2.find((user) => user.id === user_uid);
 
     return (
-      <>
+      <Box id="sidebarBBS">
         {!isSameProjectName && projectName && (
           <>
             <HStack whiteSpace="nowrap" spacing={0} mt={0}>
@@ -359,19 +360,13 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                   flexShrink={0} // Boxが縮小されないようにする
                 />
                 {user ? (
-                  <Avatar
+                  <CustomAvatar
                     boxSize="16px"
-                    loading="lazy"
                     src={user?.picture_url}
                     mr={0.5}
                   />
                 ) : (
-                  <Avatar
-                    boxSize="16px"
-                    bg="#bfb0a4"
-                    borderRadius="50%"
-                    mr={0.5}
-                  />
+                  <CustomAvatar boxSize="16px" src=" " mr={0.5} />
                 )}
                 <Box fontSize={isMain ? "md" : "sm"} isTruncated>
                   {getMessage({
@@ -465,7 +460,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
             </Box>
           </NextLink>
         </Box>
-      </>
+      </Box>
     );
   };
   const maxWidth = isMain
@@ -520,8 +515,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
       <Box
         display={isMain ? "block" : { base: "none", xl: "block" }}
         position={isMain ? "static" : "fixed"}
-        // w={{ base: "0px", xl: "180px", "2xl": "300px", "3xl": "400px" }}
-        // maxWidth={{ base: "0px", xl: "180px", "2xl": "300px", "3xl": "400px" }}
         w={maxWidth}
         maxWidth={maxWidth}
         h={isMain ? "" : "90vh"}
@@ -530,7 +523,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
         top="60px"
         left="0"
         textAlign="left"
-        zIndex="1100"
         fontSize={15}
         fontFamily={getMessage({
           ja: "Noto Sans JP",
