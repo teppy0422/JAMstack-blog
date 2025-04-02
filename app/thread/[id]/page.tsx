@@ -2385,7 +2385,7 @@ function ThreadContent(): JSX.Element {
                                             loading="lazy"
                                             style={{
                                               maxWidth: "100%",
-                                              maxHeight: "300px",
+                                              maxHeight: "240px",
                                               marginTop: "1px",
                                               backgroundColor: "#f2e9df",
                                               backgroundImage: `

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Box, Image } from "@chakra-ui/react";
-import { AnimationImage } from "./CustomImage";
+import { Box } from "@chakra-ui/react";
+import Image from "next/image";
 
 interface Sakura {
   id: number;
@@ -16,6 +16,9 @@ interface Sakura {
 
 const MAX_SAKURAS = 10;
 const INITIAL_SAKURAS = 15;
+
+// SVGのURLを定数として定義
+const SAKURA_SVG_URL = "/images/illust/obj/sakura_pixcel.svg";
 
 const SakuraAnimation: React.FC = () => {
   const [sakuras, setSakuras] = useState<Sakura[]>([]);
@@ -127,6 +130,17 @@ const SakuraAnimation: React.FC = () => {
       zIndex={10000}
       overflow="hidden"
     >
+      {/* 桜のSVGを一度だけ読み込むための非表示コンテナ */}
+      <Box display="none">
+        <Image
+          src={SAKURA_SVG_URL}
+          alt="sakura"
+          width={32}
+          height={32}
+          priority
+          unoptimized
+        />
+      </Box>
       <style jsx global>{`
         @keyframes fall {
           0% {
@@ -187,15 +201,13 @@ const SakuraAnimation: React.FC = () => {
                 zIndex: sakura.isPaused ? 10001 : 10,
                 opacity: sakura.opacity,
                 transition: "opacity 0.3s ease",
+                backgroundImage: `url(${SAKURA_SVG_URL})`,
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
               } as React.CSSProperties
             }
-          >
-            <Image
-              src="/images/illust/obj/sakura_pixcel.svg"
-              width="100%"
-              height="100%"
-            />
-          </Box>
+          />
         );
       })}
     </Box>
