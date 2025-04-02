@@ -91,6 +91,7 @@ import { CustomLoading } from "../../../components/CustomText";
 import { StatusDisplay } from "../../../components/NowStatus";
 import { isatty } from "tty";
 import { useUnread } from "../../../context/UnreadContext";
+import imageCompression from "browser-image-compression";
 
 let cachedUsers: any[] | null = null;
 const now = new Date();
@@ -491,7 +492,11 @@ function ThreadContent(): JSX.Element {
             ) {
               setUnreadPostIds((prev) => [...prev, payload.new.id]);
             }
-            if (audioRef_recieving.current) {
+            // 投稿者が自分でない場合のみ受信音を鳴らす
+            if (
+              payload.new.user_uid !== currentUserId &&
+              audioRef_recieving.current
+            ) {
               audioRef_recieving.current.play();
             }
 
@@ -572,7 +577,11 @@ function ThreadContent(): JSX.Element {
             ) {
               setUnreadPostIds((prev) => [...prev, payload.new.id]);
             }
-            if (audioRef_recieving.current) {
+            // 投稿者が自分でない場合のみ受信音を鳴らす
+            if (
+              payload.new.user_uid !== currentUserId &&
+              audioRef_recieving.current
+            ) {
               audioRef_recieving.current.play();
             }
 
@@ -788,16 +797,50 @@ function ThreadContent(): JSX.Element {
       scrollToBottom();
       // localStorageからメッセージを削除
       localStorage.removeItem("savedMessage");
+      // 送信音を鳴らす
+      if (audioRef_send.current) {
+        audioRef_send.current.play();
+      }
     }
   };
   //ファイルをアップロード
   const uploadFile = async (file: File) => {
-    const encodedFileName = encodeFileName(file.name);
+    let processedFile = file;
+
+    // 画像ファイルの場合、圧縮を実行
+    if (file.type.startsWith("image/")) {
+      const options = {
+        maxSizeMB: 0.7, // 最大ファイルサイズを0.5MBに制限
+        maxWidthOrHeight: 1200, // 最大幅または高さを1200pxに制限
+        useWebWorker: true, // Web Workerを使用して圧縮
+        fileType: file.type, // 元のファイルタイプを維持
+        initialQuality: 0.7, // 初期品質を70%に設定
+        alwaysKeepResolution: true, // 解像度を維持
+        signal: undefined, // キャンセル用のシグナル
+        maxIteration: 10, // 最大圧縮回数
+        exifOrientation: -1, // EXIF情報を維持
+        onProgress: undefined, // 進捗状況のコールバック
+      };
+
+      try {
+        processedFile = await imageCompression(file, options);
+        console.log("Original size:", file.size / 1024 / 1024, "MB");
+        console.log("Compressed size:", processedFile.size / 1024 / 1024, "MB");
+      } catch (error) {
+        console.error("Error compressing image:", error);
+        // 圧縮に失敗した場合は元のファイルを使用
+      }
+    }
+
+    const encodedFileName = encodeFileName(processedFile.name);
     console.log("encodedFileName:", encodedFileName);
     // まずファイルが存在するか確認
-    const { data: existingFile, error: checkError } = await supabase.storage
+    const { data: existingFile, error: checkError } = (await supabase.storage
       .from("uploads")
-      .list("public", { search: encodedFileName });
+      .list("public", { search: encodedFileName })) as {
+      data: any[] | null;
+      error: any;
+    };
     if (checkError) {
       console.error("Error checking file existence:", checkError.message);
       return null;
@@ -807,12 +850,12 @@ function ThreadContent(): JSX.Element {
       // ファイルが存在する場合は更新
       uploadResponse = await supabase.storage
         .from("uploads")
-        .update(`public/${encodedFileName}`, file);
+        .update(`public/${encodedFileName}`, processedFile);
     } else {
       // ファイルが存在しない場合は新規アップロード
       uploadResponse = await supabase.storage
         .from("uploads")
-        .upload(`public/${encodedFileName}`, file);
+        .upload(`public/${encodedFileName}`, processedFile);
     }
     const { data, error } = uploadResponse;
     if (error) {
@@ -975,7 +1018,7 @@ function ThreadContent(): JSX.Element {
     if (isReturn) {
       const userData = getUserById(post_userID);
       return (
-        <Tooltip label={userData?.user_metadata.name} hasArrow>
+        <Tooltip label={userData?.user_metadata.name} hasArrow placement="top">
           <Avatar
             size={size}
             ml={size === "xs" ? "1" : "0"}
@@ -1562,7 +1605,7 @@ function ThreadContent(): JSX.Element {
                     icon={
                       isSubmitting ? (
                         <Spinner
-                          color={colorMode === "light" ? "#8d7c6f" : "yellow"}
+                          color={colorMode === "light" ? "#8d7c6f" : "gray.500"}
                         />
                       ) : (
                         <BsSend
@@ -1595,6 +1638,10 @@ function ThreadContent(): JSX.Element {
                         maxW="128px"
                         objectFit="contain"
                         borderRadius="md"
+                        border="3px solid"
+                        borderColor={
+                          colorMode === "light" ? "#f0e4da" : "gray.500"
+                        }
                       />
                       <IconButton
                         aria-label="Remove file"
@@ -2180,11 +2227,6 @@ function ThreadContent(): JSX.Element {
                                         ); // レンダリングが完了するのを待つ
                                         const postElement =
                                           document.getElementById(post.id);
-                                        console.log("id_________", post.id);
-                                        console.log(
-                                          "postElement_________",
-                                          postElement
-                                        );
                                         if (postElement) {
                                           const offset = 80; // 調整したいオフセット値
                                           const elementPosition =

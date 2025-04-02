@@ -46,6 +46,42 @@ export default function Home({ blog, category, tag, blog2 }) {
   const { currentUserId, currentUserPictureUrl, getUserById, isLoading } =
     useUserContext();
 
+  const [isMoving, setIsMoving] = useState(false);
+  const [position, setPosition] = useState(0); // 初期位置を0に設定
+  const [startX, setStartX] = useState(0); // マウスの開始位置
+  const [message, setMessage] = useState(""); // メッセージの状態を追加
+
+  const handleMouseDown = (e) => {
+    setIsMoving(true);
+    setStartX(e.clientX); // マウスの開始位置を記録
+  };
+
+  const handleMouseUp = () => {
+    setIsMoving(false);
+    setPosition(0); // 元の位置に戻す
+    document.body.style.userSelect = "auto"; // ユーザー選択を有効に戻す
+    setMessage(""); // メッセージをリセット
+  };
+
+  const handleMouseMove = (e) => {
+    if (isMoving) {
+      const dx = e.clientX - startX; // マウスの移動量を計算
+
+      // 左に移動した場合のみuser-selectを無効にする
+      if (dx < 0) {
+        document.body.style.userSelect = "none"; // ユーザー選択を無効にする
+        setPosition((prevPosition) => prevPosition + dx); // 移動量に係数を掛けて位置を更新
+
+        // 50px移動したらメッセージを表示
+        if (Math.abs(position + dx) >= 50 && message === "") {
+          setMessage("50px左に移動しました！"); // メッセージを設定
+        }
+      }
+
+      setStartX(e.clientX); // 新しい開始位置を更新
+    }
+  };
+
   if (isLoading) {
     return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
   }
@@ -65,12 +101,29 @@ export default function Home({ blog, category, tag, blog2 }) {
           ) : (
             <Box>isLoading is false</Box>
           )}
+          <Box
+            bg="orange"
+            display="inline-block"
+            p="3px"
+            my={10}
+            borderRadius="5px"
+            style={{
+              transform: `translateX(${position}px)`, // 位置を変更
+              transition: isMoving ? "none" : "transform 0.3s ease", // スムーズな移動を実現
+            }}
+            onMouseDown={handleMouseDown} // クリック開始
+            onMouseUp={handleMouseUp} // クリック終了
+            onMouseMove={handleMouseMove} // マウス移動を追跡
+            onMouseLeave={handleMouseUp} // マウスが離れたときも元に戻す
+          >
+            ああああ
+          </Box>
+          {message && <Text mt={4}>{message}</Text>} {/* メッセージを表示 */}
           <Box>{currentUserId}</Box>
           <Box>{userData?.user_metadata.name}</Box>
           <Avatar src={userData?.picture_url || undefined} size="md" />
           <Box>{currentUserPictureUrl}</Box>
           <Avatar src={currentUserPictureUrl || undefined} size="md" />
-
           <Box mx={[0, 0, 8, 20]} my={[1, 1, 2, 4]}>
             <Box h="10px" />
             <img src="/images/illust/hippo/hippo_007_pixcel.gif" />

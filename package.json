@@ -45,6 +45,7 @@
     "@types/three": "^0.141.0",
     "aos": "^3.0.0-beta.6",
     "axios": "^1.7.2",
+    "browser-image-compression": "^2.0.2",
     "cheerio": "^1.0.0-rc.10",
     "date-fns": "^3.6.0",
     "file-loader": "^6.2.0",

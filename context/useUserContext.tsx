@@ -104,13 +104,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     if (currentUserId && allUsers.length > 0) {
       const userData = getUserById(currentUserId);
       if (userData) {
-        console.log("Setting user data:", userData);
+        // console.log("Setting user data:", userData);
         setCurrentUserPictureUrl(userData.picture_url);
         setCurrentUserName(userData.user_metadata.name);
         setCurrentUserCompany(userData.user_company);
         setCurrentUserMainCompany(userData.user_mainCompany);
       } else {
-        console.log("No user data found for ID:", currentUserId);
+        // console.log("No user data found for ID:", currentUserId);
       }
     }
   }, [allUsers, currentUserId]);
