@@ -463,10 +463,21 @@ export const StatusDisplay = () => {
                         top="0"
                         style={{
                           animation:
-                            "moveHorizontal 8s ease-in-out infinite, floatUpDown 8s ease-in-out infinite",
+                            "zoomUp 3s forwards,moveHorizontal 8s ease-in-out infinite, floatUpDown 8s ease-in-out infinite",
                         }}
                       />
                       <style jsx>{`
+                        @keyframes zoomUp {
+                          0% {
+                            top: 60px;
+                            left: -60px;
+                            width: 0;
+                          }
+                          100% {
+                            top: 0;
+                            left: 0;
+                          }
+                        }
                         @keyframes moveHorizontal {
                           0% {
                             left: 0;
@@ -480,10 +491,10 @@ export const StatusDisplay = () => {
                         }
                         @keyframes floatUpDown {
                           0% {
-                            transform: translateY(-3px) scaleX(1);
+                            transform: translateY(-6px) scaleX(1);
                           }
                           12% {
-                            transform: translateY(-28px) scaleX(1);
+                            transform: translateY(-32px) scaleX(1);
                           }
                           25% {
                             transform: translateY(0px) scaleX(1);
@@ -492,13 +503,13 @@ export const StatusDisplay = () => {
                             transform: translateY(-12px) scaleX(1);
                           }
                           50% {
-                            transform: translateY(-3px) scaleX(1);
+                            transform: translateY(-6px) scaleX(1);
                           }
-                          51% {
-                            transform: translateY(-3px) scaleX(-1);
+                          50.1% {
+                            transform: translateY(-6px) scaleX(-1);
                           }
                           63% {
-                            transform: translateY(-28px) scaleX(-1);
+                            transform: translateY(-32px) scaleX(-1);
                           }
                           75% {
                             transform: translateY(0px) scaleX(-1);
@@ -507,7 +518,7 @@ export const StatusDisplay = () => {
                             transform: translateY(-12px) scaleX(-1);
                           }
                           100% {
-                            transform: translateY(-3px) scaleX(-1);
+                            transform: translateY(-6px) scaleX(-1);
                           }
                         }
                       `}</style>

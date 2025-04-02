@@ -356,32 +356,43 @@ export default function Auth({ userData }: AuthProps) {
                 {getMessage({ ja: userData.userCompany || "", language }) || ""}
               </Box>
             </Box>
-            <Tooltip
-              label={getMessage({
-                ja: "ユーザーアイコンを変更",
-                us: "Change user icon",
-                cn: "更改用户图标",
-                language,
-              })}
-              aria-label={getMessage({
-                ja: "ユーザーアイコンを変更",
-                us: "Change user icon",
-                cn: "更改用户图标",
-                language,
-              })}
+
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              mt={2}
             >
-              <Center
-                as="span"
-                cursor="pointer"
-                onClick={handleAvatarClick} // クリックで画像選択
+              <Tooltip
+                label={getMessage({
+                  ja: "ユーザーアイコンを変更",
+                  us: "Change user icon",
+                  cn: "更改用户图标",
+                  language,
+                })}
+                aria-label={getMessage({
+                  ja: "ユーザーアイコンを変更",
+                  us: "Change user icon",
+                  cn: "更改用户图标",
+                  language,
+                })}
+                hasArrow
+                placement="top"
               >
-                <CustomAvatar
-                  src={userData.pictureUrl}
-                  boxSize="200px"
-                  mt={2}
-                />
-              </Center>
-            </Tooltip>
+                <Box
+                  onClick={handleAvatarClick} // クリックで画像選択
+                  cursor="pointer"
+                  borderRadius="50%"
+                  overflow="hidden"
+                >
+                  <CustomAvatar
+                    src={userData.pictureUrl}
+                    boxSize="200px"
+                    mt={2}
+                  />
+                </Box>
+              </Tooltip>
+            </Box>
             <input
               type="file"
               ref={fileInputRef}

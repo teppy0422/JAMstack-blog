@@ -60,10 +60,12 @@ import {
   TagRightIcon,
   Icon,
   Checkbox,
+  useToast,
 } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
 import { MdBusiness } from "react-icons/md";
 import { LuPanelRightOpen } from "react-icons/lu";
+import { CloseIcon } from "@chakra-ui/icons";
 
 import { useUserContext } from "../../../context/useUserContext";
 
@@ -104,6 +106,7 @@ export default function Thread() {
 function ThreadContent(): JSX.Element {
   const { language, setLanguage } = useLanguage();
   const { updateUnreadCount } = useUnread();
+  const toast = useToast();
   const [expandedUrls, setExpandedUrls] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -180,6 +183,7 @@ function ThreadContent(): JSX.Element {
   const [threadCompany, setThreadCompany] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fileModalOpen, setFileModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -833,49 +837,65 @@ function ThreadContent(): JSX.Element {
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const maxSizeInBytes = 30 * 1024 * 1024; // 30MB
-
-      if (file.size > maxSizeInBytes) {
-        alert(
-          getMessage({
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 30 * 1024 * 1024) {
+        toast({
+          title: getMessage({
             ja: "ファイルサイズが30MBを超えています。",
             us: "File size exceeds 30 MB.",
             cn: "文件大小超过 30 MB。",
             language,
-          }) +
-            "(" +
-            (file.size / 1024 / 1024).toFixed(1) +
-            "MB)\n" +
+          }),
+          description:
+            `(${(file.size / 1024 / 1024).toFixed(1)}MB)\n` +
             getMessage({
               ja: "以下を試してみてください。\n\n・ファイルを圧縮する\n・生産準備+の場合は画像シートを削除する\n\nそれでも送信できない場合はチャットでご相談ください。",
               us: "Try the following\n\n・Compressing files.\n・Delete image sheet if Production Preparation+.\n\nIf you still cannot send the message, please contact us via chat.",
               cn: "试试以下方法。\n\n・压缩文件\n・生产准备+时删除图像页\n\n如果仍然无法发送信息, 请通过聊天联系我们。",
               language,
-            })
-        );
+            }),
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
         if (fileInputRef.current) {
-          fileInputRef.current.value = ""; // ファイル入力の値をリセット
+          fileInputRef.current.value = "";
         }
         return;
       }
-      console.log("file.type is:", file.type);
-      setSelectedFile(file); // 選択されたファイルを設定
-      setSelectedFileName(file.name); // ファイル名を設定
+
+      // 画像ファイルかどうかをチェック
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrl(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setPreviewUrl(null);
+      }
+
+      setSelectedFile(file);
+      setSelectedFileName(file.name);
     }
   };
-  //添付ファイルをキャンセルする関数
-  const handleFileRemove = () => {
+
+  const clearFileSelection = () => {
     setSelectedFile(null);
     setSelectedFileName(null);
+    setPreviewUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
-  //添付ファイルを選択するボタンをクリック
+
   const handleButtonClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
+
   //ファイルをダウンロード
   const handleDownload = async (url: string, originalFileName: string) => {
     if (!currentUserName) {
@@ -1408,11 +1428,12 @@ function ThreadContent(): JSX.Element {
                       cursor="pointer"
                       aria-label="Upload file"
                       icon={<FaPlus size="14px" />}
-                      bg={colorMode === "light" ? "#f0e4da" : "yellow"}
-                      color={colorMode === "light" ? "#8d7c6f" : "#000"}
+                      bg={colorMode === "light" ? "#f0e4da" : "gray.500"}
+                      color={colorMode === "light" ? "#8d7c6f" : "#181a24"}
                       _hover={{
-                        bg: colorMode === "light" ? "#8d7c6f" : "",
-                        color: colorMode === "light" ? "#f0e4da" : "#000",
+                        bg: colorMode === "light" ? "#8d7c6f" : "gray.400",
+                        color: colorMode === "light" ? "#f0e4da" : "#181a24",
+                        transition: "all 0.3s ease-in-out",
                       }}
                       borderRadius="50%"
                       w="28px"
@@ -1488,8 +1509,6 @@ function ThreadContent(): JSX.Element {
                   }}
                 />
                 <Tooltip
-                  position="absolute"
-                  left="0"
                   label={getMessage({
                     ja: "送信",
                     us: "send",
@@ -1497,7 +1516,7 @@ function ThreadContent(): JSX.Element {
                     language,
                   })}
                   cursor="pointer"
-                  placement="top"
+                  placement="left"
                   hasArrow
                 >
                   <IconButton
@@ -1543,51 +1562,105 @@ function ThreadContent(): JSX.Element {
                     icon={
                       isSubmitting ? (
                         <Spinner
-                          color={colorMode === "light" ? "purple" : "yellow"}
+                          color={colorMode === "light" ? "#8d7c6f" : "yellow"}
                         />
                       ) : (
                         <BsSend
-                          color={colorMode === "light" ? "purple" : "yellow"}
                           style={{ transform: "rotate(0deg)" }}
                           size="24px"
                         />
                       )
                     }
-                    bg="none"
+                    bg={colorMode === "light" ? "#f0e4da" : "gray.500"}
+                    color={colorMode === "light" ? "#8d7c6f" : "#181a24"}
+                    _hover={{
+                      bg: colorMode === "light" ? "#8d7c6f" : "gray.400",
+                      color: colorMode === "light" ? "#f0e4da" : "#181a24",
+                      transition: "all 0.3s ease-in-out",
+                    }}
                     top={0}
                     right={-1}
                     aria-label="送信"
                   />
                 </Tooltip>
               </Stack>
-              {selectedFileName && (
-                <Tooltip
-                  label={getMessage({
-                    ja: "添付をキャンセル",
-                    us: "Cancel attachment",
-                    cn: "取消附件。",
-                    language,
-                  })}
-                  placement="top"
-                >
-                  <Box
-                    display="inline-flex"
-                    alignItems="center"
-                    mt="1"
-                    px="2"
-                    border="1px solid"
-                    borderColor="gray.200"
-                    borderRadius="md"
-                    bg="gray.50"
-                    cursor="pointer"
-                    onClick={handleFileRemove}
-                    width="fit-content"
-                    color="gray.900"
-                  >
-                    <FaPaperclip style={{ marginRight: "6px" }} />
-                    <Text>{selectedFileName}</Text>
-                  </Box>
-                </Tooltip>
+              {selectedFile && (
+                <Box mt={2}>
+                  {previewUrl ? (
+                    <Box position="relative" display="inline-block">
+                      <Image
+                        src={previewUrl}
+                        alt="Preview"
+                        maxH="64px"
+                        maxW="128px"
+                        objectFit="contain"
+                        borderRadius="md"
+                      />
+                      <IconButton
+                        aria-label="Remove file"
+                        icon={<CloseIcon boxSize="9px" />}
+                        size="xs"
+                        position="absolute"
+                        borderRadius="50%"
+                        border="2px solid"
+                        borderColor={
+                          colorMode === "light" ? "white" : "#181a24"
+                        }
+                        top="-4px"
+                        right="-4px"
+                        onClick={clearFileSelection}
+                        bg={colorMode === "light" ? "#f0e4da" : "gray.500"}
+                        color={colorMode === "light" ? "#8d7c6f" : "#181a24"}
+                        variant="solid"
+                        _hover={{
+                          bg: colorMode === "light" ? "#8d7c6f" : "gray.400",
+                          color: colorMode === "light" ? "#f0e4da" : "#181a24",
+                          transition: "all 0.3s ease-in-out",
+                        }}
+                      />
+                    </Box>
+                  ) : (
+                    <Flex align="center" gap={2}>
+                      <Box
+                        position="relative"
+                        border="1px solid"
+                        borderRadius="6px"
+                        borderColor={
+                          colorMode === "light" ? "#bfb0a4" : "gray.800"
+                        }
+                        bg={colorMode === "light" ? "#f0e4da" : "gray.500"}
+                        color={colorMode === "light" ? "#8d7c6f" : "#181a24"}
+                        px="2"
+                        py="1"
+                      >
+                        <Text fontSize="sm">{selectedFileName}</Text>
+                        <IconButton
+                          position="absolute"
+                          aria-label="Remove file"
+                          icon={<CloseIcon boxSize="9px" />}
+                          size="xs"
+                          borderRadius="50%"
+                          border="2px solid"
+                          borderColor={
+                            colorMode === "light" ? "white" : "#181a24"
+                          }
+                          top="-7px"
+                          right="-16px"
+                          onClick={clearFileSelection}
+                          bg={colorMode === "light" ? "#f0e4da" : "gray.500"}
+                          color={colorMode === "light" ? "#8d7c6f" : "#181a24"}
+                          variant="solid"
+                          _hover={{
+                            bg: colorMode === "light" ? "#8d7c6f" : "gray.400",
+                            color:
+                              colorMode === "light" ? "#f0e4da" : "#181a24",
+                            transition: "all 0.3s ease-in-out",
+                          }}
+                        />
+                      </Box>
+                    </Flex>
+                  )}
+                </Box>
               )}
             </Stack>
             <Modal
