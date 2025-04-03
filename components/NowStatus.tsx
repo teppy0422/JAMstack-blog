@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Input,
@@ -49,7 +49,9 @@ import {
   IconButton,
   Spacer,
   Image,
+  ChakraProvider,
 } from "@chakra-ui/react";
+import { theme } from "../libs/theme";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
   MdKeyboardDoubleArrowLeft,
@@ -65,6 +67,10 @@ import { useUserContext } from "../context/useUserContext";
 import getMessage from "./getMessage";
 import { getBoxShadow } from "@chakra-ui/react/dist/types/popper/utils";
 import { AnimationImage } from "./CustomImage";
+import {
+  ProjectLists,
+  getProjectOptionsColor,
+} from "../components/CustomBadge";
 
 const activityOptions = [
   { value: "online", label: "オンライン", color: "#815ad6" },
@@ -79,7 +85,6 @@ const getActivityLabel = (value: string) => {
   const option = activityOptions.find((opt) => opt.value === value);
   return option ? option.label : value;
 };
-
 // ステータス表示用の関数
 const getActivityColor = (value: string) => {
   const option = activityOptions.find((opt) => opt.value === value);
@@ -96,6 +101,7 @@ export const StatusDisplay = () => {
       activity: string;
       note: string;
       created_at: string;
+      project: string;
     }>
   >([]);
   const [currentStatus, setCurrentStatus] = useState<{
@@ -107,6 +113,7 @@ export const StatusDisplay = () => {
       endTime: string | null;
       user_id: string;
       picture_url: string | null;
+      project: string;
     };
   } | null>(null);
   const { colorMode } = useColorMode();
@@ -123,6 +130,7 @@ export const StatusDisplay = () => {
       endTime: string | null;
       activity: string;
       note: string;
+      project: string;
     }>
   >([]);
 
@@ -183,7 +191,7 @@ export const StatusDisplay = () => {
         : null,
       activity: schedule.activity,
       note: schedule.note,
-      pictureUrl: getUserById(schedule.user_id)?.picture_url ?? null,
+      project: schedule.project,
     }));
     setUserSchedules(formattedSchedules);
   };
@@ -258,22 +266,38 @@ export const StatusDisplay = () => {
       return now >= start && (!end || now <= end);
     });
     // ユーザーIDごとにグループ化
-    const userStatuses = currentSchedules.reduce((acc, schedule) => {
-      if (!acc[schedule.user_id]) {
-        acc[schedule.user_id] = {
-          activity: schedule.activity,
-          note: schedule.note,
-          picture_url: schedule.user_id
-            ? getUserById(schedule.user_id)?.picture_url ?? null
-            : null,
-          created_at: schedule.created_at,
-          startTime: schedule.startTime,
-          endTime: schedule.endTime,
-          user_id: schedule.user_id,
-        };
-      }
-      return acc;
-    }, {} as Record<string, { activity: string; note: string; picture_url: string | null; created_at: string; startTime: string; endTime: string | null; user_id: string }>);
+    const userStatuses = currentSchedules.reduce(
+      (acc, schedule) => {
+        if (!acc[schedule.user_id]) {
+          acc[schedule.user_id] = {
+            activity: schedule.activity,
+            note: schedule.note,
+            picture_url: schedule.user_id
+              ? getUserById(schedule.user_id)?.picture_url ?? null
+              : null,
+            created_at: schedule.created_at,
+            startTime: schedule.startTime,
+            endTime: schedule.endTime,
+            user_id: schedule.user_id,
+            project: schedule.project,
+          };
+        }
+        return acc;
+      },
+      {} as Record<
+        string,
+        {
+          activity: string;
+          note: string;
+          picture_url: string | null;
+          created_at: string;
+          startTime: string;
+          endTime: string | null;
+          user_id: string;
+          project: string;
+        }
+      >
+    );
     // オフラインのユーザーを追加
     schedules.forEach((schedule) => {
       if (!userStatuses[schedule.user_id]) {
@@ -287,6 +311,7 @@ export const StatusDisplay = () => {
           startTime: "",
           endTime: "",
           user_id: schedule.user_id,
+          project: schedule.project,
         };
       }
     });
@@ -681,35 +706,54 @@ export const StatusDisplay = () => {
                               { hour: "2-digit", minute: "2-digit" }
                             )}
                         </Text>
-                        <Box
-                          w="3px"
-                          h="100%"
-                          position="absolute"
-                          bg={
-                            isCurrent
-                              ? colorMode === "light"
-                                ? "red"
-                                : "#F55"
-                              : "#ccc"
-                          }
-                          left="-6px"
-                        />
-                      </Stack>
-                      <Stack spacing={1} ml={2}>
-                        <Text
-                          display="inline-block"
-                          color="white"
-                          bg={getActivityColor(schedule.activity)}
-                          fontSize="10px"
-                          fontWeight="medium"
-                          py={0.5}
-                          px={1}
-                          m={0}
-                          borderRadius="5px"
-                          width="fit-content"
+                        <Tooltip
+                          label={getActivityLabel(schedule.activity)}
+                          placement="top"
+                          hasArrow
                         >
-                          {getActivityLabel(schedule.activity)}
-                        </Text>
+                          <Box
+                            w="3px"
+                            h="100%"
+                            position="absolute"
+                            bg={getActivityColor(schedule.activity)}
+                            left="-6px"
+                          />
+                        </Tooltip>
+                        {isCurrent && (
+                          <Box
+                            w="3px"
+                            h="100%"
+                            position="absolute"
+                            bg={colorMode === "light" ? "red" : "#F55"}
+                            left="-9px"
+                          />
+                        )}
+                      </Stack>
+                      <Stack spacing={0} ml={2}>
+                        <Flex direction="row" alignItems="center">
+                          <Box
+                            bg={getProjectOptionsColor(schedule.project)}
+                            color="white"
+                            fontFamily="Noto Sans Jp"
+                            fontWeight={400}
+                            fontSize={13}
+                            borderRadius={3}
+                            lineHeight={1.2}
+                            px={1}
+                          >
+                            <Text
+                              display="inline-block"
+                              textAlign="left"
+                              fontSize="12px"
+                              fontWeight="bold"
+                              width="fit-content"
+                            >
+                              {schedule.project}
+                            </Text>
+                          </Box>
+                        </Flex>
+                        {/* {getActivityLabel(schedule.activity)} */}
+                        {/* </Text> */}
                         <Text
                           display="inline-block"
                           textAlign="left"
@@ -745,6 +789,7 @@ export const NowStatus = ({
     activity: string;
     note: string;
     created_at: string;
+    project: string;
   }>;
   onSchedulesUpdate: (
     schedules: Array<{
@@ -754,6 +799,7 @@ export const NowStatus = ({
       activity: string;
       note: string;
       created_at: string;
+      project: string;
     }>
   ) => void;
   userId: string | null;
@@ -769,8 +815,20 @@ export const NowStatus = ({
       endTime: string | null;
       activity: string;
       note: string;
+      project: string;
     }>
   >([]);
+  const [clickedProject, setClickedProject] = useState<string | null>(null); // クリックされたバッジの状態を追加
+  const [ProjectMessage, setProjectMessage] = useState<string>("");
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const handleProjectClick = (clickedProject: string | null) => {
+    console.log("clickedProject: ", clickedProject);
+    setClickedProject(clickedProject);
+    if (clickedProject) {
+      setProjectMessage("");
+    }
+  };
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingSchedule, setEditingSchedule] = useState<{
@@ -778,12 +836,14 @@ export const NowStatus = ({
     endTime: string | null;
     activity: string;
     note: string;
+    project: string;
   } | null>(null);
   const [formData, setFormData] = useState({
     startTime: "",
     endTime: "",
     activity: "online",
     note: "",
+    project: "",
   });
 
   // 選択された日付のスケジュールを取得
@@ -819,6 +879,7 @@ export const NowStatus = ({
           : null,
         activity: schedule.activity,
         note: schedule.note,
+        project: schedule.project,
       }));
 
     setSelectedDaySchedules(daySchedules);
@@ -878,17 +939,7 @@ export const NowStatus = ({
       endTime: "17:00",
       activity: "online",
       note: "",
-    });
-    setIsEditModalOpen(true);
-  };
-
-  const handleEdit = (schedule: any) => {
-    setEditingSchedule(schedule);
-    setFormData({
-      startTime: schedule.startTime,
-      endTime: schedule.endTime || "",
-      activity: schedule.activity,
-      note: schedule.note,
+      project: "",
     });
     setIsEditModalOpen(true);
   };
@@ -970,7 +1021,6 @@ export const NowStatus = ({
 
   const handleSubmit = async () => {
     if (!userId || !selectedDate) return;
-
     try {
       // 開始時間の設定
       const startDateTime = new Date(selectedDate);
@@ -981,7 +1031,6 @@ export const NowStatus = ({
         0,
         0
       );
-
       // 終了時間の設定
       let endDateTime: Date | null = null;
       if (formData.endTime) {
@@ -989,15 +1038,14 @@ export const NowStatus = ({
         const [endHours, endMinutes] = formData.endTime.split(":");
         endDateTime.setHours(parseInt(endHours), parseInt(endMinutes), 0, 0);
       }
-
       const scheduleData = {
         user_id: userId,
         startTime: startDateTime.toISOString(),
         endTime: endDateTime ? endDateTime.toISOString() : null,
         activity: formData.activity,
+        project: clickedProject,
         note: formData.note,
       };
-
       if (editingSchedule) {
         // 既存のスケジュールを更新
         const { error } = await supabase
@@ -1013,7 +1061,6 @@ export const NowStatus = ({
           .insert([scheduleData]);
         if (error) throw error;
       }
-
       // スケジュールを再取得
       const { data, error } = await supabase
         .from("admin_status")
@@ -1039,6 +1086,7 @@ export const NowStatus = ({
         endTime: "",
         activity: "online",
         note: "",
+        project: "",
       });
 
       // カレンダーを再レンダリングするために日付を更新
@@ -1162,19 +1210,41 @@ export const NowStatus = ({
                             削除
                           </Button>
                         </Flex>
-                        <Text
-                          color="white"
-                          bg={getActivityColor(schedule.activity)}
-                          fontSize="10px"
-                          fontWeight="medium"
-                          display="inline"
-                          py={0.5}
-                          px={1}
-                          m={0}
-                          borderRadius="5px"
-                        >
-                          {getActivityLabel(schedule.activity)}
-                        </Text>
+                        <Flex direction="row" alignItems="center">
+                          <Text
+                            color="white"
+                            bg={getActivityColor(schedule.activity)}
+                            fontSize="10px"
+                            fontWeight="medium"
+                            display="inline"
+                            py={0.5}
+                            px={1}
+                            m={0}
+                            mr={1}
+                            borderRadius="5px"
+                          >
+                            {getActivityLabel(schedule.activity)}
+                          </Text>
+                          <Box
+                            bg={getProjectOptionsColor(schedule.project)}
+                            color="white"
+                            fontFamily="Noto Sans Jp"
+                            fontWeight={400}
+                            fontSize={14}
+                            borderRadius={3}
+                            px={1}
+                          >
+                            <Text
+                              display="inline-block"
+                              textAlign="left"
+                              fontSize="12px"
+                              fontWeight="bold"
+                              width="fit-content"
+                            >
+                              {schedule.project}
+                            </Text>
+                          </Box>
+                        </Flex>
                         <Text fontSize="sm" fontWeight={400}>
                           {schedule.note}
                         </Text>
@@ -1243,6 +1313,14 @@ export const NowStatus = ({
                   ))}
                 </Select>
               </FormControl>
+
+              <FormControl>
+                <ProjectLists
+                  colorMode={colorMode}
+                  onProjectClick={handleProjectClick}
+                />
+              </FormControl>
+
               <FormControl>
                 <FormLabel>メモ</FormLabel>
                 <Textarea

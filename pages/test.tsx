@@ -46,48 +46,58 @@ export default function Home({ blog, category, tag, blog2 }) {
   const { currentUserId, currentUserPictureUrl, getUserById, isLoading } =
     useUserContext();
 
-  const [isMoving, setIsMoving] = useState(false);
-  const [position, setPosition] = useState(0); // 初期位置を0に設定
+  // 左スライドでメニュー開く
+  const [positions, setPositions] = useState([0, 0, 0]); // 各要素の位置を配列で管理
+  const [originalPositions, setOriginalPositions] = useState([0, 0, 0]); // 元の位置を保存
+  const [isMoving, setIsMoving] = useState(false); // スライド中かどうかの状態
   const [startX, setStartX] = useState(0); // マウスの開始位置
+  const [activeIndex, setActiveIndex] = useState(null); // 現在スライド中の要素のインデックス
   const [message, setMessage] = useState(""); // メッセージの状態を追加
-
-  const handleMouseDown = (e) => {
+  const handleMouseDown = (index, e) => {
     setIsMoving(true);
-    setStartX(e.clientX); // マウスの開始位置を記録
+    setActiveIndex(index);
+    setStartX(e.clientX || e.touches[0].clientX);
+    setOriginalPositions([...positions]); // 現在の位置を元の位置として保存
   };
-
-  const handleMouseUp = () => {
-    setIsMoving(false);
-    setPosition(0); // 元の位置に戻す
-    document.body.style.userSelect = "auto"; // ユーザー選択を有効に戻す
-    setMessage(""); // メッセージをリセット
-  };
-
   const handleMouseMove = (e) => {
-    if (isMoving) {
-      const dx = e.clientX - startX; // マウスの移動量を計算
-
-      // 左に移動した場合のみuser-selectを無効にする
+    if (isMoving && activeIndex !== null) {
+      const dx = (e.clientX || e.touches[0].clientX) - startX;
+      // 左に移動している場合
       if (dx < 0) {
         document.body.style.userSelect = "none"; // ユーザー選択を無効にする
-        setPosition((prevPosition) => prevPosition + dx); // 移動量に係数を掛けて位置を更新
-
-        // 50px移動したらメッセージを表示
-        if (Math.abs(position + dx) >= 50 && message === "") {
-          setMessage("50px左に移動しました！"); // メッセージを設定
-        }
+        document.body.style.cursor = "pointer";
+        // 各要素の位置を更新
+        setPositions((prevPositions) =>
+          prevPositions.map((pos, index) => {
+            // 50px移動したらメッセージを表示
+            if (
+              index === activeIndex &&
+              Math.abs(pos + dx) >= 100 &&
+              message === ""
+            ) {
+              setMessage("50px左に移動しました！"); // メッセージを設定
+            }
+            return index === activeIndex ? pos + dx : pos; // スライド中の要素のみ位置を更新
+          })
+        );
       }
-
-      setStartX(e.clientX); // 新しい開始位置を更新
+      setStartX(e.clientX || e.touches[0].clientX);
     }
+  };
+  const handleMouseUp = () => {
+    setIsMoving(false);
+    setActiveIndex(null);
+    setMessage("");
+    setPositions(originalPositions); // 元の位置に戻す
+    document.body.style.cursor = "";
+    setTimeout(() => {
+      document.body.style.userSelect = "auto";
+    }, 500);
   };
 
   if (isLoading) {
     return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
   }
-
-  // const userData = getUserById(userId);
-
   const userData = currentUserId ? getUserById(currentUserId) : null;
 
   return (
@@ -101,22 +111,30 @@ export default function Home({ blog, category, tag, blog2 }) {
           ) : (
             <Box>isLoading is false</Box>
           )}
-          <Box
-            bg="orange"
-            display="inline-block"
-            p="3px"
-            my={10}
-            borderRadius="5px"
-            style={{
-              transform: `translateX(${position}px)`, // 位置を変更
-              transition: isMoving ? "none" : "transform 0.3s ease", // スムーズな移動を実現
-            }}
-            onMouseDown={handleMouseDown} // クリック開始
-            onMouseUp={handleMouseUp} // クリック終了
-            onMouseMove={handleMouseMove} // マウス移動を追跡
-            onMouseLeave={handleMouseUp} // マウスが離れたときも元に戻す
-          >
-            ああああ
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <Box display="flex" flexDirection="column" alignItems="center">
+              {positions.map((position, index) => (
+                <Box
+                  my={10}
+                  key={index} // 各要素にユニークなキーを設定
+                  style={{
+                    transform: `translateX(${position}px)`, // 各要素の位置を変更
+                    transition: isMoving ? "none" : "transform 0.3s ease", // スムーズな移動を実現
+                  }}
+                  onMouseDown={(e) => handleMouseDown(index, e)} // クリック開始
+                  onMouseUp={handleMouseUp} // クリック終了
+                  onMouseMove={handleMouseMove} // マウス移動を追跡
+                  onMouseLeave={handleMouseUp} // マウスが離れたときも元に戻す
+                  onTouchStart={(e) => handleMouseDown(index, e)} // タッチ開始
+                  onTouchEnd={handleMouseUp} // タッチ終了
+                  onTouchMove={handleMouseMove} // タッチ移動を追跡
+                >
+                  <Box bg="orange" p="3px" borderRadius="5px">
+                    {`要素 ${index * index * index * 1000}`}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
           </Box>
           {message && <Text mt={4}>{message}</Text>} {/* メッセージを表示 */}
           <Box>{currentUserId}</Box>

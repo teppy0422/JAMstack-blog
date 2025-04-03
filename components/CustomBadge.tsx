@@ -1,5 +1,23 @@
 import React, { useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, ChakraProvider } from "@chakra-ui/react";
+
+const projectOptions = [
+  { value: "生産準備+", color: "custom.excel" },
+  { value: "CAMERA+", color: "custom.dotnet" },
+  { value: "誘導ナビ.net", color: "custom.dotnet" },
+  { value: "部材一覧+", color: "custom.excel" },
+  { value: "順立生産システム", color: "custom.access" },
+  { value: "誘導ポイント設定一覧表", color: "custom.excel" },
+  { value: "このWEBアプリ", color: "custom.front" },
+  { value: "その他", color: "gray" },
+  { value: "追加/修正", color: "blue" },
+  { value: "不具合", color: "red" },
+  { value: "提案", color: "purple" },
+];
+export const getProjectOptionsColor = (value: string) => {
+  const option = projectOptions.find((opt) => opt.value === value);
+  return option ? option.color : "transparent";
+};
 
 interface ProjectListsProps {
   colorMode: "light" | "dark";
@@ -10,8 +28,10 @@ export const ProjectLists: React.FC<ProjectListsProps> = ({
   onProjectClick,
 }) => {
   const [clicked, setClicked] = useState<string | null>(null);
-  const myBadge = (text: string, bg: string) => {
+
+  const myBadge = (text: string) => {
     const isClicked = clicked === text;
+    const bg = getProjectOptionsColor(text);
     return (
       <Box
         display="inline-block"
@@ -36,21 +56,22 @@ export const ProjectLists: React.FC<ProjectListsProps> = ({
       </Box>
     );
   };
+
   return (
     <Box>
-      {myBadge("生産準備+", "custom.excel")}
-      {myBadge("CAMERA+", "custom.dotnet")}
-      {myBadge("誘導ナビ.net", "custom.dotnet")}
+      {myBadge("生産準備+")}
+      {myBadge("CAMERA+")}
+      {myBadge("誘導ナビ.net")}
       <br />
-      {myBadge("部材一覧+", "custom.excel")}
+      {myBadge("部材一覧+")}
       <br />
-      {myBadge("順立生産システム", "custom.access")}
+      {myBadge("順立生産システム")}
       <br />
-      {myBadge("誘導ポイント設定一覧表", "custom.excel")}
+      {myBadge("誘導ポイント設定一覧表")}
       <br />
-      {myBadge("このWEBアプリ", "custom.front")}
+      {myBadge("このWEBアプリ")}
       <br />
-      {myBadge("その他", "gray")}
+      {myBadge("その他")}
     </Box>
   );
 };
@@ -66,8 +87,9 @@ export const CategoryLists: React.FC<CategoryListsProps> = ({
   userMainCompany,
 }) => {
   const [clicked, setClicked] = useState<string | null>(null);
-  const myBadge = (text: string, bg: string) => {
+  const myBadge = (text: string) => {
     const isClicked = clicked === text;
+    const bg = getProjectOptionsColor(text);
     return (
       <Box
         display="inline-block"
@@ -94,15 +116,15 @@ export const CategoryLists: React.FC<CategoryListsProps> = ({
   };
   return (
     <Box>
-      {myBadge("追加/修正", "blue")}
+      {myBadge("追加/修正")}
       <br />
-      {myBadge("不具合", "red")}
+      {myBadge("不具合")}
       <br />
-      {myBadge("その他", "gray")}
+      {myBadge("その他")}
       {userMainCompany === "開発" && (
         <>
           <br />
-          {myBadge("提案", "purple")}
+          {myBadge("提案")}
         </>
       )}
     </Box>
