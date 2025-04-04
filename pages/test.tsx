@@ -43,8 +43,14 @@ export default function Home({ blog, category, tag, blog2 }) {
   const color = useColorModeValue("#111111", "#111111");
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   //右リストの読み込みをlanguage取得後にする
-  const { currentUserId, currentUserPictureUrl, getUserById, isLoading } =
-    useUserContext();
+  const {
+    currentUserId,
+    currentUserPictureUrl,
+    currentUserEmail,
+    currentUserCreatedAt,
+    getUserById,
+    isLoading,
+  } = useUserContext();
 
   // 左スライドでメニュー開く
   const [positions, setPositions] = useState([0, 0, 0]); // 各要素の位置を配列で管理
@@ -139,6 +145,7 @@ export default function Home({ blog, category, tag, blog2 }) {
           {message && <Text mt={4}>{message}</Text>} {/* メッセージを表示 */}
           <Box>{currentUserId}</Box>
           <Box>{userData?.user_metadata.name}</Box>
+          <Box>{currentUserEmail}</Box>
           <Avatar src={userData?.picture_url || undefined} size="md" />
           <Box>{currentUserPictureUrl}</Box>
           <Avatar src={currentUserPictureUrl || undefined} size="md" />

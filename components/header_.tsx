@@ -85,6 +85,8 @@ export default function Header() {
     currentUserCompany,
     currentUserMainCompany,
     currentUserPictureUrl,
+    currentUserEmail,
+    currentUserCreatedAt,
   } = useUserContext();
 
   const {
@@ -734,6 +736,8 @@ export default function Header() {
                 userCompany: currentUserCompany,
                 pictureUrl: currentUserPictureUrl,
                 userMainCompany: currentUserMainCompany,
+                userEmail: currentUserEmail,
+                created_at: currentUserCreatedAt,
               }}
             />
           </ModalBody>

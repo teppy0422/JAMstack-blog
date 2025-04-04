@@ -16,6 +16,7 @@ interface UserData {
   };
   user_company: string | null;
   user_mainCompany: string | null;
+  created_at: string | null;
 }
 
 interface UserContextType {
@@ -25,6 +26,8 @@ interface UserContextType {
   currentUserName: string | null;
   currentUserCompany: string | null;
   currentUserMainCompany: string | null;
+  currentUserEmail: string | null;
+  currentUserCreatedAt: string | null;
 
   // ユーザー検索機能
   getUserById: (id: string | null) => UserData | null;
@@ -49,6 +52,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     null
   );
   const [currentUserMainCompany, setCurrentUserMainCompany] = useState<
+    string | null
+  >(null);
+  const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
+  const [currentUserCreatedAt, setCurrentUserCreatedAt] = useState<
     string | null
   >(null);
 
@@ -76,6 +83,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     } = await supabase.auth.getUser();
     if (user) {
       setCurrentUserId(user.id);
+      const { email } = user;
+      setCurrentUserEmail(email || null);
       return user.id;
     }
     return null;
@@ -104,11 +113,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     if (currentUserId && allUsers.length > 0) {
       const userData = getUserById(currentUserId);
       if (userData) {
-        // console.log("Setting user data:", userData);
+        console.log("Setting user data:", userData);
         setCurrentUserPictureUrl(userData.picture_url);
         setCurrentUserName(userData.user_metadata.name);
         setCurrentUserCompany(userData.user_company);
         setCurrentUserMainCompany(userData.user_mainCompany);
+        setCurrentUserCreatedAt(userData.created_at);
       } else {
         // console.log("No user data found for ID:", currentUserId);
       }
@@ -134,6 +144,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         currentUserName,
         currentUserCompany,
         currentUserMainCompany,
+        currentUserEmail,
+        currentUserCreatedAt,
 
         // ユーザー検索機能
         getUserById,

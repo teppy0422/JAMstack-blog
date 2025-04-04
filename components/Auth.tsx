@@ -20,7 +20,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
-import { MdBusiness } from "react-icons/md";
+import { MdBusiness, MdEmail, MdHistory } from "react-icons/md";
 
 import { useLanguage } from "../context/LanguageContext";
 import { CustomAvatar } from "./CustomAvatar";
@@ -33,6 +33,8 @@ interface AuthProps {
     userName: string | null;
     userCompany: string | null;
     userMainCompany: string | null;
+    userEmail: string | null;
+    created_at: string | null;
   };
 }
 export default function Auth({ userData }: AuthProps) {
@@ -307,6 +309,23 @@ export default function Auth({ userData }: AuthProps) {
     console.log("Updating language to:", newLanguage);
     setLanguage(newLanguage);
   };
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // 月は0から始まるため +1
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}/${month}/${day}`;
+  };
+
+  const calculateDaysSince = (dateString: string | null) => {
+    if (!dateString) return 0;
+    const date = new Date(dateString);
+    const today = new Date();
+    const timeDiff = today.getTime() - date.getTime();
+    return Math.floor(timeDiff / (1000 * 3600 * 24)); // ミリ秒を日数に変換
+  };
+
   return (
     <Box
       fontFamily={getMessage({
@@ -354,6 +373,29 @@ export default function Auth({ userData }: AuthProps) {
               >
                 <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={1} />
                 {getMessage({ ja: userData.userCompany || "", language }) || ""}
+              </Box>
+            </Box>
+            <Box display="flex" justifyContent="center">
+              <Box
+                display="flex"
+                alignItems="center"
+                mx="auto"
+                textAlign="center"
+              >
+                <Icon as={MdEmail} boxSize={4} mr={0.5} mt={1} />
+                {userData.userEmail}
+              </Box>
+            </Box>
+            <Box display="flex" justifyContent="center">
+              <Box
+                display="flex"
+                alignItems="center"
+                mx="auto"
+                textAlign="center"
+              >
+                <Icon as={MdHistory} boxSize={4} mr={0.5} mt={1} />
+                {formatDate(userData.created_at)} (
+                {calculateDaysSince(userData.created_at)}日)
               </Box>
             </Box>
 

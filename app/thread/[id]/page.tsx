@@ -62,6 +62,7 @@ import {
   Checkbox,
   useToast,
   ChakraProvider,
+  Center,
 } from "@chakra-ui/react";
 import { theme } from "../../../libs/theme";
 
@@ -228,6 +229,7 @@ function ThreadContent(): JSX.Element {
     currentUserName,
     currentUserMainCompany,
     currentUserCompany,
+    currentUserCreatedAt,
     getUserById,
     isLoading: isLoadingContext,
   } = useUserContext();
@@ -1011,7 +1013,13 @@ function ThreadContent(): JSX.Element {
     }
     return `${format(date, "yyyy M/d", { locale })} (${translatedDayOfWeek})`;
   };
-
+  const calculateDaysSince = (dateString: string | null | undefined) => {
+    if (!dateString) return 0;
+    const date = new Date(dateString);
+    const today = new Date();
+    const timeDiff = today.getTime() - date.getTime();
+    return Math.floor(timeDiff / (1000 * 3600 * 24)); // ミリ秒を日数に変換
+  };
   //アバター
   const getAvatarProps = (
     post_userID: any,
@@ -1021,7 +1029,22 @@ function ThreadContent(): JSX.Element {
     if (isReturn) {
       const userData = getUserById(post_userID);
       return (
-        <Tooltip label={userData?.user_metadata.name} hasArrow placement="top">
+        <Tooltip
+          label={
+            userData && (
+              <>
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Text fontSize="sm">{userData?.user_metadata.name}</Text>
+                  <Text fontSize="10px">
+                    {calculateDaysSince(userData?.created_at)}日目
+                  </Text>
+                </Box>
+              </>
+            )
+          }
+          hasArrow
+          placement="top"
+        >
           <Avatar
             size={size}
             ml={size === "xs" ? "1" : "0"}
@@ -2577,6 +2600,18 @@ function ThreadContent(): JSX.Element {
                                                   ? "#dbf7c6"
                                                   : "white"
                                               }
+                                              _hover={{
+                                                bg:
+                                                  colorMode === "light"
+                                                    ? "#8d7c6f"
+                                                    : "gray.400",
+                                                color:
+                                                  colorMode === "light"
+                                                    ? "#f0e4da"
+                                                    : "#181a24",
+                                                transition:
+                                                  "all 0.3s ease-in-out",
+                                              }}
                                               top="-7px"
                                               right="-9px"
                                               p="2px"
