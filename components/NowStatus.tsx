@@ -492,6 +492,17 @@ export const StatusDisplay = () => {
                         }}
                       />
                       <style jsx>{`
+                        @keyframes upDown {
+                          0% {
+                            transform: translateY(100%);
+                          }
+                          50% {
+                            transform: translateY(0);
+                          }
+                          100% {
+                            transform: translateY(100%);
+                          }
+                        }
                         @keyframes zoomUp {
                           0% {
                             top: 60px;
@@ -720,13 +731,25 @@ export const StatusDisplay = () => {
                           />
                         </Tooltip>
                         {isCurrent && (
-                          <Box
-                            w="3px"
-                            h="100%"
-                            position="absolute"
-                            bg={colorMode === "light" ? "red" : "#F55"}
-                            left="-9px"
-                          />
+                          <>
+                            {/* <Box
+                              w="3px"
+                              h="100%"
+                              position="absolute"
+                              bg={colorMode === "light" ? "red" : "#F55"}
+                              left="-9px"
+                            /> */}
+                            <Image
+                              src="/images/illust/hippo/hippo_023_pixcel.gif"
+                              width="28px"
+                              position="absolute"
+                              left="-27px"
+                              top="0"
+                              style={{
+                                animation: "upDown 8s ease-in-out infinite",
+                              }}
+                            />
+                          </>
                         )}
                       </Stack>
                       <Stack spacing={0} ml={2}>

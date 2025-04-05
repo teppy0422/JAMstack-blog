@@ -31,6 +31,8 @@ import Sushi_ootoro_wrap from "../../components/3d/sushi_ootoro_wrap";
 import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap";
 import Sushi_ikura_wrap from "../../components/3d/sushi_ikura_wrap";
 
+import { AnimationImage } from "../../components/CustomImage";
+
 export default function About() {
   const illusts = [
     {
@@ -114,6 +116,15 @@ export default function About() {
     {
       src: "/images/illust/obj/obj_004.png",
     },
+    {
+      src: "/images/illust/hippo/hippo_007_pixcel.gif",
+    },
+    {
+      src: "/images/illust/hippo/hippo_014_pixcel.gif",
+    },
+    {
+      src: "/images/illust/hippo/hippo_023_pixcel.gif",
+    },
   ];
   return (
     <Content isCustomHeader={false}>
@@ -157,6 +168,7 @@ export default function About() {
             const aosOffset: number = (index % 2) * 150;
             const aosDuration = (index % 4) * 700;
             const aosDelay = (index % 4) * 300;
+            const fileName = item.src.split("/").pop();
             return (
               <div
                 data-aos="flip-left"
@@ -171,6 +183,7 @@ export default function About() {
                   m={3}
                   className={styles.purupuru}
                 />
+                <Box>{fileName}</Box>
               </div>
             );
           })}

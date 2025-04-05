@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, ChakraProvider } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 const projectOptions = [
   { value: "生産準備+", color: "custom.excel" },

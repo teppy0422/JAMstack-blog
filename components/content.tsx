@@ -11,6 +11,12 @@ import { useLanguage } from "../context/LanguageContext";
 import getMessage from "./getMessage";
 // import { AppContext } from "../pages/_app";
 
+import {
+  ChakraProvider,
+  useColorModeValue,
+  ColorModeScript,
+} from "@chakra-ui/react";
+
 export default function Content({
   children,
   isCustomHeader = false,
@@ -47,10 +53,18 @@ export default function Content({
       />
       {isUse ? (
         <>
-          <Flex direction="column" minHeight="90vh">
+          <Flex
+            direction="column"
+            minHeight="90vh"
+            bg={
+              colorMode === "light"
+                ? "custom.theme.light.500"
+                : "custom.theme.dark.500"
+            }
+          >
             <Box flex="1">
               {isCustomHeader ? <Header_ /> : <Header />}
-              <Box height="66px"></Box>
+              <Box height="66px" />
               <Container
                 maxWidth={maxWidth}
                 className="container"
@@ -63,7 +77,7 @@ export default function Content({
                   left="0"
                   right="0"
                   bottom="0"
-                  background="rgba(255,255,255,0.05)"
+                  bg="rgba(255,255,255,0.05)"
                   filter="blur(20px)" // ブラー効果を追加
                   zIndex="-1" // 背景として扱うためにzIndexを設定
                 />

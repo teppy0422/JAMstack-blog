@@ -1156,106 +1156,225 @@ function ThreadContent(): JSX.Element {
   };
 
   return (
-    <ChakraProvider theme={theme}>
-      <Box
-        fontFamily={getMessage({
-          ja: "Noto Sans JP",
-          us: "Noto Sans,Noto Sans JP",
-          cn: "Noto Sans SC,Noto Sans JP",
-          language,
-        })}
-      >
-        {isLoading ? (
-          <Box
-            h="30vh"
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <CustomLoading
-              text="LOADING LOADING LOADING "
-              radius={40}
-              fontSize={11}
-              imageUrl="/images/illust/hippo/hippo_014.svg"
-              imageSize={40}
-              color="#FFF"
-            />
-          </Box>
-        ) : (
-          <>
-            <audio ref={audioRef_send} src="/sound/notification.mp3" />
-            <audio ref={audioRef_recieving} src="/sound/woodAlert.mp3" />
-            {isSakuraActive && <SakuraAnimation />}
-            <Global
-              styles={{
-                "@media print": {
-                  ".no-print-page": {
-                    display: "none !important",
-                  },
-                  ".print-only": {
-                    display: "block !important",
-                  },
+    <Box
+      fontFamily={getMessage({
+        ja: "Noto Sans JP",
+        us: "Noto Sans,Noto Sans JP",
+        cn: "Noto Sans SC,Noto Sans JP",
+        language,
+      })}
+    >
+      {isLoading ? (
+        <Box
+          h="30vh"
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CustomLoading
+            text="LOADING LOADING LOADING "
+            radius={40}
+            fontSize={11}
+            imageUrl="/images/illust/hippo/hippo_014.svg"
+            imageSize={40}
+            color="#FFF"
+          />
+        </Box>
+      ) : (
+        <>
+          <audio ref={audioRef_send} src="/sound/notification.mp3" />
+          <audio ref={audioRef_recieving} src="/sound/woodAlert.mp3" />
+          {isSakuraActive && <SakuraAnimation />}
+          <Global
+            styles={{
+              "@media print": {
+                ".no-print-page": {
+                  display: "none !important",
                 },
                 ".print-only": {
-                  display: "none",
+                  display: "block !important",
                 },
-              }}
-            />
-            <div
-              style={{
-                height: "100vh",
-                scrollbarWidth: "none",
-                touchAction: "pan-y", // タッチアクションを設定
-              }}
+              },
+              ".print-only": {
+                display: "none",
+              },
+            }}
+          />
+          <div
+            style={{
+              height: "100vh",
+              scrollbarWidth: "none",
+              touchAction: "pan-y", // タッチアクションを設定
+            }}
+          >
+            <Text ml={4} className="print-only" id="printName">
+              ※別紙2
+            </Text>
+            <style jsx>{`
+              /* Firefox */
+              div {
+                scrollbar-width: none; /* Firefox */
+              }
+              /* Webkit */
+              div::-webkit-scrollbar {
+                display: none; /* Chrome, Safari, and Opera */
+              }
+            `}</style>
+            <Stack // inputForm
+              id="inputForm"
+              position="fixed"
+              zIndex="5001"
+              spacing={0}
+              bottom="0"
+              right="0"
+              left="0"
+              borderRadius="0px"
+              px="8px"
+              py="8px"
+              bg={
+                colorMode === "light"
+                  ? "custom.theme.light.50"
+                  : "custom.theme.dark.700"
+              }
+              data-roof-id="sakura"
             >
-              <Text ml={4} className="print-only" id="printName">
-                ※別紙2
-              </Text>
-              <style jsx>{`
-                /* Firefox */
-                div {
-                  scrollbar-width: none; /* Firefox */
+              {loading && (
+                <Flex
+                  justifyContent="center"
+                  alignItems="center"
+                  position="fixed"
+                  top="48px"
+                  left="50%"
+                >
+                  <Spinner size="sm" />
+                </Flex>
+              )}
+              <Box
+                className="no-print-page"
+                position="absolute"
+                top="-37px"
+                right="8px"
+                aria-label="Your Icon"
+                cursor="pointer"
+                bg={
+                  colorMode === "light" ? "custom.theme.light.50" : "gray.900"
                 }
-                /* Webkit */
-                div::-webkit-scrollbar {
-                  display: none; /* Chrome, Safari, and Opera */
+                color={
+                  colorMode === "light" ? "custom.theme.light.900" : "gray"
                 }
-              `}</style>
-              <Stack // inputForm
-                id="inputForm"
-                position="fixed"
-                zIndex="5001"
-                spacing={0}
-                bottom="0"
-                right="0"
-                left="0"
-                borderRadius="0px"
-                px="8px"
-                py="8px"
-                bg={colorMode === "light" ? "white" : "gray.900"}
-                data-roof-id="sakura"
+                _hover={{
+                  bg:
+                    colorMode === "light"
+                      ? "custom.theme.light.700"
+                      : "gray.900",
+                  color: colorMode === "light" ? "white" : "",
+                  transition: "all 0.3s ease-in-out",
+                }}
+                borderRadius="10%"
+                width="32px"
+                height="32px"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
               >
-                {loading && (
-                  <Flex
-                    justifyContent="center"
-                    alignItems="center"
-                    position="fixed"
-                    top="48px"
-                    left="50%"
-                  >
-                    <Spinner size="sm" />
-                  </Flex>
-                )}
+                <IconWithDrawer
+                  text=""
+                  onOpen={() => handleOpen("機能一覧")}
+                  isOpen={isOpen && activeDrawer === "機能一覧"}
+                  onClose={handleClose}
+                  header={getMessage({
+                    ja: "機能一覧",
+                    us: "List of Functions",
+                    cn: "功能一览",
+                    language,
+                  })}
+                  size="md"
+                  children={
+                    <Box>
+                      <Text fontWeight={400}>
+                        {getMessage({
+                          ja: "クリック長押しで以下の機能が使えます",
+                          us: "Click and hold to use the following functions",
+                          cn: "点击并按住可使用以下功能",
+                          language,
+                        })}
+                      </Text>
+                      <Text mt={4} fontWeight={600}>
+                        {getMessage({
+                          ja: "リプライ",
+                          us: "Functions",
+                          cn: "功能",
+                          language,
+                        })}
+                      </Text>
+                      <Text mt={1} ml={4} fontWeight={400}>
+                        {getMessage({
+                          ja: "投稿を参照",
+                          us: "See post",
+                          cn: "参见帖子",
+                          language,
+                        })}
+                      </Text>
+                      <Text mt={4} fontWeight={600}>
+                        {getMessage({
+                          ja: "削除",
+                          us: "Delete",
+                          cn: "删除",
+                          language,
+                        })}
+                      </Text>
+                      <Text mt={1} ml={4} fontWeight={400}>
+                        {getMessage({
+                          ja: "投稿を削除",
+                          us: "delete post",
+                          cn: "删除帖子",
+                          language,
+                        })}
+                      </Text>
+                    </Box>
+                  }
+                />
+              </Box>
+              {!isAtBottom && ( // 最下部でない場合にアイコンを表示
                 <Box
+                  onClick={(e) => {
+                    if (unreadPostIds.length > 0) {
+                      const firstUnreadId = unreadPostIds[0];
+                      const element = document.getElementById(
+                        `post-${firstUnreadId}`
+                      );
+                      if (element) {
+                        const offset = 80;
+                        const elementPosition =
+                          element.getBoundingClientRect().top;
+                        const offsetPosition =
+                          elementPosition + window.scrollY - offset;
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      }
+                    } else {
+                      scrollToBottom();
+                    }
+                  }}
                   className="no-print-page"
                   position="absolute"
-                  top="-37px"
+                  top="-74px"
                   right="8px"
                   aria-label="Your Icon"
                   cursor="pointer"
-                  bg={colorMode === "light" ? "white" : "gray.900"}
-                  color={colorMode === "light" ? "gray.900" : "gray"}
+                  bg={
+                    colorMode === "light" ? "custom.theme.light.50" : "gray.900"
+                  }
+                  color={
+                    colorMode === "light"
+                      ? unreadPostIds.length > 0
+                        ? "red"
+                        : "custom.theme.light.900"
+                      : "custom.theme.light.900"
+                  }
                   borderRadius="10%"
                   width="32px"
                   height="32px"
@@ -1263,1002 +1382,1032 @@ function ThreadContent(): JSX.Element {
                   justifyContent="center"
                   alignItems="center"
                 >
-                  <IconWithDrawer
-                    text=""
-                    onOpen={() => handleOpen("機能一覧")}
-                    isOpen={isOpen && activeDrawer === "機能一覧"}
-                    onClose={handleClose}
-                    header={getMessage({
-                      ja: "機能一覧",
-                      us: "List of Functions",
-                      cn: "功能一览",
-                      language,
-                    })}
-                    size="md"
-                    children={
-                      <Box>
-                        <Text fontWeight={400}>
-                          {getMessage({
-                            ja: "クリック長押しで以下の機能が使えます",
-                            us: "Click and hold to use the following functions",
-                            cn: "点击并按住可使用以下功能",
-                            language,
-                          })}
-                        </Text>
-                        <Text mt={4} fontWeight={600}>
-                          {getMessage({
-                            ja: "リプライ",
-                            us: "Functions",
-                            cn: "功能",
-                            language,
-                          })}
-                        </Text>
-                        <Text mt={1} ml={4} fontWeight={400}>
-                          {getMessage({
-                            ja: "投稿を参照",
-                            us: "See post",
-                            cn: "参见帖子",
-                            language,
-                          })}
-                        </Text>
-                        <Text mt={4} fontWeight={600}>
-                          {getMessage({
-                            ja: "削除",
-                            us: "Delete",
-                            cn: "删除",
-                            language,
-                          })}
-                        </Text>
-                        <Text mt={1} ml={4} fontWeight={400}>
-                          {getMessage({
-                            ja: "投稿を削除",
-                            us: "delete post",
-                            cn: "删除帖子",
-                            language,
-                          })}
-                        </Text>
-                      </Box>
-                    }
-                  />
+                  <Icon size="28px" as={FaArrowDown} />
                 </Box>
-                {!isAtBottom && ( // 最下部でない場合にアイコンを表示
-                  <Box
-                    onClick={(e) => {
-                      if (unreadPostIds.length > 0) {
-                        const firstUnreadId = unreadPostIds[0];
-                        const element = document.getElementById(
-                          `post-${firstUnreadId}`
-                        );
-                        if (element) {
-                          const offset = 80;
-                          const elementPosition =
-                            element.getBoundingClientRect().top;
-                          const offsetPosition =
-                            elementPosition + window.scrollY - offset;
-                          window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth",
-                          });
-                        }
-                      } else {
-                        scrollToBottom();
-                      }
-                    }}
-                    className="no-print-page"
-                    position="absolute"
-                    top="-74px"
-                    right="8px"
-                    aria-label="Your Icon"
-                    cursor="pointer"
-                    bg={colorMode === "light" ? "white" : "gray.900"}
-                    color={
-                      colorMode === "light"
-                        ? unreadPostIds.length > 0
-                          ? "red"
-                          : "gray.900"
-                        : "gray"
-                    }
-                    borderRadius="10%"
-                    width="32px"
-                    height="32px"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Icon size="28px" as={FaArrowDown} />
-                  </Box>
-                )}
-                {replyToPostId && (
-                  <Stack
-                    fontSize="sm"
-                    p="0px"
-                    mx="0px"
-                    pb="10px"
-                    fontFamily="Noto Sans JP"
-                    fontWeight="400"
-                    direction="row"
-                    alignItems="flex-start"
-                    borderRadius="0px"
-                    animation="slideIn 0.3s ease-out"
-                  >
-                    {getAvatarProps(replyPostUserId, true, "sm")}
-                    <Stack ml="1">
-                      <Flex alignItems="center" mb="0">
-                        <Text fontWeight="400" m="0" lineHeight="0.5" mr="1">
-                          {replyPostUserDisplayName}
-                        </Text>
-                        <Text
-                          fontSize="xs"
-                          color="gray.900"
-                          fontStyle="italic"
-                          lineHeight="0.5"
-                        >
-                          -{replyPostUserCompany}-
-                        </Text>
-                      </Flex>
-                      <Text
-                        m="0"
-                        lineHeight="1"
-                        whiteSpace="nowrap"
-                        overflow="hidden"
-                        textOverflow="ellipsis"
-                        position="relative"
-                        maxWidth="85vw"
-                        fontSize="xs"
-                      >
-                        {replyPostContent}
-                      </Text>
-                    </Stack>
-                    <Stack>
-                      {replyPostFileUrl &&
-                      replyPostFileUrl.match(
-                        /\.(jpeg|jpg|gif|png|bmp|webp)$/i
-                      ) ? ( // 画像ファイルの拡張子をチェック
-                        <Box
-                          display="flex"
-                          justifyContent="flex-end"
-                          alignItems="flex-start"
-                          ml="2"
-                        >
-                          <Image
-                            src={replyPostFileUrl}
-                            alt="Reply attached image"
-                            loading="lazy"
-                            maxW="100%" // 最大幅を100%に設定
-                            maxH="40px" // 最大高さを50pxに設定
-                            objectFit="contain" // 画像が枠内に収まるようにする
-                            m="0"
-                            p="0"
-                          />
-                        </Box>
-                      ) : (
-                        replyPostFileUrl && ( // nullチェックを追加
-                          <Box display="flex" alignItems="center" ml="2">
-                            <FaPaperclip />
-                            <Text ml="1">
-                              {replyPostFileUrl.split("/").pop()}
-                            </Text>
-                          </Box>
-                        )
-                      )}
-                    </Stack>
-                    <IconButton
-                      aria-label="Close reply"
-                      icon={<FaTimes />}
-                      onClick={() => {
-                        setReplyToPostId(null); // リプライを閉じる
-                        setReplyPostContent(""); // リプライ内容をリセット
-                        setReplyPostUserId(null); // リプライ対象のユーザーIDをリセット
-                        setReplyPostFileUrl(null); // リプライ対象のファイルURLをリセット
-                      }}
-                      position="absolute"
-                      variant="ghost"
-                      size="sm"
-                      ml="2"
-                      top="1"
-                      right="1"
-                      _hover={{ backgroundColor: "transparent" }}
-                    />
-                  </Stack>
-                )}
+              )}
+              {replyToPostId && (
                 <Stack
-                  spacing="0"
-                  my="0"
+                  fontSize="sm"
+                  p="0px"
+                  mx="0px"
+                  pb="10px"
+                  fontFamily="Noto Sans JP"
+                  fontWeight="400"
                   direction="row"
-                  justify="flex-end"
-                  className="no-print-page"
-                  position="relative"
-                  data-roof-id="sakura"
+                  alignItems="flex-start"
+                  borderRadius="0px"
+                  animation="slideIn 0.3s ease-out"
                 >
-                  {/* ファイル添付ボタン */}
-                  <Tooltip
-                    position="absolute"
-                    left="0"
-                    label={getMessage({
-                      ja: "添付ファイルを選択",
-                      us: "Select Attachment",
-                      cn: "选择附件",
-                      language,
-                    })}
-                    cursor="pointer"
-                    placement="top"
-                    hasArrow
-                  >
-                    <Button
-                      onClick={handleButtonClick}
-                      position="absolute"
-                      cursor="pointer"
-                      left="2px"
-                      top="0px"
-                      p="0"
-                      bg="none"
-                      _hover={{ bg: "none" }}
+                  {getAvatarProps(replyPostUserId, true, "sm")}
+                  <Stack ml="1">
+                    <Flex alignItems="center" mb="0">
+                      <Text
+                        fontWeight="400"
+                        m="0"
+                        lineHeight="0.5"
+                        mr="1"
+                        color={
+                          colorMode === "light"
+                            ? "custom.theme.light.900"
+                            : "red"
+                        }
+                      >
+                        {replyPostUserDisplayName}
+                      </Text>
+                      <Text
+                        fontSize="xs"
+                        fontStyle="italic"
+                        lineHeight="0.8"
+                        color={
+                          colorMode === "light"
+                            ? "custom.theme.light.900"
+                            : "red"
+                        }
+                      >
+                        -{replyPostUserCompany}-
+                      </Text>
+                    </Flex>
+                    <Text
+                      m="0"
+                      lineHeight="1"
+                      whiteSpace="nowrap"
+                      overflow="hidden"
+                      textOverflow="ellipsis"
+                      position="relative"
+                      maxWidth="85vw"
+                      fontSize="xs"
+                      color={
+                        colorMode === "light" ? "custom.theme.light.900" : "red"
+                      }
                     >
-                      <IconButton
-                        position="absolute"
-                        cursor="pointer"
-                        aria-label="Upload file"
-                        icon={<FaPlus size="14px" />}
-                        bg={colorMode === "light" ? "#f0e4da" : "gray.500"}
-                        color={colorMode === "light" ? "#8d7c6f" : "#181a24"}
-                        _hover={{
-                          bg: colorMode === "light" ? "#8d7c6f" : "gray.400",
-                          color: colorMode === "light" ? "#f0e4da" : "#181a24",
-                          transition: "all 0.3s ease-in-out",
-                        }}
-                        borderRadius="50%"
-                        w="28px"
-                        h="28px"
-                        minW="28px"
-                        p="0"
-                        zIndex="99"
-                      />
-                      <Input
-                        type="file"
-                        position="absolute"
-                        display="none"
-                        accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,.7z,.gif,.mp4"
-                        ref={fileInputRef}
-                        onChange={handleFileChange}
-                        top="0"
-                        left="0"
-                        opacity="0"
-                        width="100%"
-                        height="100%"
-                        zIndex="2"
-                        title=""
-                        aria-label="Upload file"
-                        name=""
-                      />
-                    </Button>
-                  </Tooltip>
-
-                  <Input
-                    position="relative"
-                    as="textarea"
-                    id="inputValue"
-                    minH="40px"
-                    resize="none"
-                    overflow="hidden"
-                    // value={inputValue}
-                    onChange={(e) => handleInputChange()} // 修正
-                    onKeyDown={(e) => {
-                      if (e.shiftKey && e.key === "Enter") {
-                        e.preventDefault(); // デフォルトの改行動作を防ぐ
-                        const sendButton =
-                          document.getElementById("sendButton");
-                        if (sendButton) {
-                          sendButton.click();
-                        }
-                      }
-                    }}
-                    onInput={(e) => {
-                      const textarea = e.target as HTMLTextAreaElement;
-                      textarea.style.height = "40px";
-                      textarea.style.height = `${textarea.scrollHeight}px`;
-                    }}
-                    _focusVisible={{
-                      borderColor:
-                        colorMode === "light" ? "#a69689" : "gray.400",
-                    }}
-                    fontWeight="200"
-                    fontSize={isMobile ? "16px" : "15px"} //iphone_safariなら16px以下で自動ズームが働く
-                    placeholder={getMessage({
-                      ja: "メッセージを入力 (Shift+Enterで送信)",
-                      us: "Type your message (Shift+Enter to send)",
-                      cn: "输入信息（Shift+Enter 发送）。",
-                      language,
-                    })}
-                    py={2}
-                    pl={10}
-                    pr={0}
-                    size="md"
-                    color={colorMode === "light" ? "#4d3c3f" : "white"}
-                    bg={colorMode === "light" ? "white" : "gray.800"}
-                    borderColor={colorMode === "light" ? "#bfb0a4" : "gray.800"}
-                    borderRadius="5px"
-                    _placeholder={{
-                      color: colorMode === "light" ? "#bfb0a4" : "gray.500",
-                    }}
-                  />
-                  <Tooltip
-                    label={getMessage({
-                      ja: "送信",
-                      us: "send",
-                      cn: "传动",
-                      language,
-                    })}
-                    cursor="pointer"
-                    placement="left"
-                    hasArrow
-                  >
-                    <IconButton
-                      id="sendButton"
-                      onClick={() => {
-                        if (isSubmitting) return;
-                        const inputValue =
-                          document.getElementById("inputValue");
-                        if (inputValue === null) return;
-                        const inputValueElement =
-                          inputValue as HTMLTextAreaElement;
-                        if (!inputValueElement.value.trim() && !selectedFile) {
-                          showToast(
-                            getMessage({
-                              ja: "送信するものが有りません",
-                              us: "Nothing to send",
-                              cn: "没什么可发送的。",
-                              language,
-                            }),
-                            getMessage({
-                              ja: "メッセージまたはファイル添付が必要です",
-                              us: "Message or file attachment required",
-                              cn: "需要信息或文件附件",
-                              language,
-                            }),
-                            "error"
-                          );
-                          return;
-                        }
-                        console.log(inputValueElement.value);
-                        // setNewPostContent(inputValueElement.value);
-                        setIsSubmitting(true); //post開始
-                        createPost(inputValueElement.value);
-                        // setNewPostContent(""); //クリア
-                        inputValueElement.value = "";
-                        inputValueElement.style.height = "40px"; // 高さを初期状態に戻す
-                        setTimeout(() => {
-                          setIsSubmitting(false); //post終了
-                          if (audioRef_send.current) {
-                            audioRef_send.current.play();
-                          }
-                        }, 2000); // 2秒待機
-                      }}
-                      icon={
-                        isSubmitting ? (
-                          <Spinner
-                            color={
-                              colorMode === "light" ? "#8d7c6f" : "gray.500"
-                            }
-                          />
-                        ) : (
-                          <BsSend
-                            style={{ transform: "rotate(0deg)" }}
-                            size="24px"
-                          />
-                        )
-                      }
-                      bg={colorMode === "light" ? "#f0e4da" : "gray.500"}
-                      color={colorMode === "light" ? "#8d7c6f" : "#181a24"}
-                      _hover={{
-                        bg: colorMode === "light" ? "#8d7c6f" : "gray.400",
-                        color: colorMode === "light" ? "#f0e4da" : "#181a24",
-                        transition: "all 0.3s ease-in-out",
-                      }}
-                      top={0}
-                      right={-1}
-                      aria-label="送信"
-                    />
-                  </Tooltip>
-                </Stack>
-                {selectedFile && (
-                  <Box mt={2}>
-                    {previewUrl ? (
-                      <Box position="relative" display="inline-block">
+                      {replyPostContent}
+                    </Text>
+                  </Stack>
+                  <Stack>
+                    {replyPostFileUrl &&
+                    replyPostFileUrl.match(
+                      /\.(jpeg|jpg|gif|png|bmp|webp)$/i
+                    ) ? ( // 画像ファイルの拡張子をチェック
+                      <Box
+                        display="flex"
+                        justifyContent="flex-end"
+                        alignItems="flex-start"
+                        ml="2"
+                      >
                         <Image
-                          src={previewUrl}
-                          alt="Preview"
-                          maxH="64px"
-                          maxW="128px"
-                          objectFit="contain"
-                          borderRadius="md"
-                          border="3px solid"
-                          borderColor={
-                            colorMode === "light" ? "#f0e4da" : "gray.500"
-                          }
-                        />
-                        <IconButton
-                          aria-label="Remove file"
-                          icon={<CloseIcon boxSize="9px" />}
-                          size="xs"
-                          position="absolute"
-                          borderRadius="50%"
-                          border="2px solid"
-                          borderColor={
-                            colorMode === "light" ? "white" : "#181a24"
-                          }
-                          top="-4px"
-                          right="-4px"
-                          onClick={clearFileSelection}
-                          bg={colorMode === "light" ? "#f0e4da" : "gray.500"}
-                          color={colorMode === "light" ? "#8d7c6f" : "#181a24"}
-                          variant="solid"
-                          _hover={{
-                            bg: colorMode === "light" ? "#8d7c6f" : "gray.400",
-                            color:
-                              colorMode === "light" ? "#f0e4da" : "#181a24",
-                            transition: "all 0.3s ease-in-out",
-                          }}
+                          src={replyPostFileUrl}
+                          alt="Reply attached image"
+                          loading="lazy"
+                          maxW="100%" // 最大幅を100%に設定
+                          maxH="40px" // 最大高さを50pxに設定
+                          objectFit="contain" // 画像が枠内に収まるようにする
+                          m="0"
+                          p="0"
                         />
                       </Box>
                     ) : (
-                      <Flex align="center" gap={2}>
-                        <Box
-                          position="relative"
-                          border="1px solid"
-                          borderRadius="6px"
-                          borderColor={
-                            colorMode === "light" ? "#bfb0a4" : "gray.800"
-                          }
-                          bg={colorMode === "light" ? "#f0e4da" : "gray.500"}
-                          color={colorMode === "light" ? "#8d7c6f" : "#181a24"}
-                          px="2"
-                          py="1"
-                        >
-                          <Text fontSize="sm" pr="13px">
-                            {selectedFileName}
+                      replyPostFileUrl && ( // nullチェックを追加
+                        <Box display="flex" alignItems="center" ml="2">
+                          <FaPaperclip />
+                          <Text ml="1">
+                            {replyPostFileUrl.split("/").pop()}
                           </Text>
-                          <IconButton
-                            position="absolute"
-                            aria-label="Remove file"
-                            icon={<CloseIcon boxSize="9px" />}
-                            size="xs"
-                            borderRadius="50%"
-                            border="1px solid"
-                            borderColor={
-                              colorMode === "light" ? "#bfb0a4" : "gray.800"
-                            }
-                            outline="1.5px solid"
-                            outlineColor={
-                              colorMode === "light" ? "white" : "#181a24"
-                            }
-                            top="-6px"
-                            right="-9px"
-                            onClick={clearFileSelection}
-                            bg={colorMode === "light" ? "#f0e4da" : "gray.500"}
-                            color={
-                              colorMode === "light" ? "#8d7c6f" : "#181a24"
-                            }
-                            variant="solid"
-                            _hover={{
-                              bg:
-                                colorMode === "light" ? "#8d7c6f" : "gray.400",
-                              color:
-                                colorMode === "light" ? "#f0e4da" : "#181a24",
-                              transition: "all 0.3s ease-in-out",
-                            }}
-                          />
                         </Box>
-                      </Flex>
+                      )
                     )}
-                  </Box>
-                )}
-              </Stack>
-              <Modal
-                isOpen={fileModalOpen}
-                onClose={() => setFileModalOpen(false)}
-              >
-                <ModalOverlay />
-                <ModalContent>
-                  {/* <ModalCloseButton position="absolute" top="10px" right="-10px" /> */}
-                  <ModalBody
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    p={0}
+                  </Stack>
+                  <IconButton
+                    aria-label="Close reply"
+                    icon={<FaTimes />}
                     onClick={() => {
-                      if (!isLongPress) {
-                        setIsZoomed(!isZoomed); // クリックでズームイン/アウトを切り替え
-                      }
+                      setReplyToPostId(null); // リプライを閉じる
+                      setReplyPostContent(""); // リプライ内容をリセット
+                      setReplyPostUserId(null); // リプライ対象のユーザーIDをリセット
+                      setReplyPostFileUrl(null); // リプライ対象のファイルURLをリセット
                     }}
-                    style={{
-                      backgroundColor: "#f2e9df",
-                      backgroundImage: `
+                    color={
+                      colorMode === "light" ? "custom.theme.light.900" : ""
+                    }
+                    position="absolute"
+                    variant="ghost"
+                    size="sm"
+                    ml="2"
+                    top="1"
+                    right="1"
+                    _hover={{ backgroundColor: "transparent" }}
+                  />
+                </Stack>
+              )}
+              <Stack
+                spacing="0"
+                my="0"
+                direction="row"
+                justify="flex-end"
+                className="no-print-page"
+                position="relative"
+                data-roof-id="sakura"
+              >
+                {/* ファイル添付ボタン */}
+                <Tooltip
+                  position="absolute"
+                  left="0"
+                  label={getMessage({
+                    ja: "添付ファイルを選択",
+                    us: "Select Attachment",
+                    cn: "选择附件",
+                    language,
+                  })}
+                  cursor="pointer"
+                  placement="top"
+                  hasArrow
+                >
+                  <Button
+                    onClick={handleButtonClick}
+                    position="absolute"
+                    cursor="pointer"
+                    left="2px"
+                    top="0px"
+                    p="0"
+                    bg="none"
+                    _hover={{ bg: "none" }}
+                  >
+                    <IconButton
+                      position="absolute"
+                      cursor="pointer"
+                      aria-label="Upload file"
+                      icon={<FaPlus size="14px" />}
+                      bg={
+                        colorMode === "light"
+                          ? "custom.theme.light.500"
+                          : "custom.theme.dark.100"
+                      }
+                      color={
+                        colorMode === "light"
+                          ? "custom.theme.light.800"
+                          : "custom.theme.dark.700"
+                      }
+                      _hover={{
+                        bg:
+                          colorMode === "light"
+                            ? "custom.theme.light.800"
+                            : "gray.400",
+                        color:
+                          colorMode === "light"
+                            ? "custom.theme.light.500"
+                            : "#181a24",
+                        transition: "all 0.2s ease-in-out",
+                      }}
+                      borderRadius="50%"
+                      w="28px"
+                      h="28px"
+                      minW="28px"
+                      p="0"
+                      zIndex="99"
+                    />
+                    <Input
+                      type="file"
+                      position="absolute"
+                      display="none"
+                      accept="image/*,.xlsm,.xlsx,.xls,.csv,.txt,.zip,.pdf,.doc,.docx,.7z,.gif,.mp4"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      top="0"
+                      left="0"
+                      opacity="0"
+                      width="100%"
+                      height="100%"
+                      zIndex="2"
+                      title=""
+                      aria-label="Upload file"
+                      name=""
+                    />
+                  </Button>
+                </Tooltip>
+
+                <Input
+                  position="relative"
+                  as="textarea"
+                  id="inputValue"
+                  minH="40px"
+                  resize="none"
+                  overflow="hidden"
+                  // value={inputValue}
+                  onChange={(e) => handleInputChange()} // 修正
+                  onKeyDown={(e) => {
+                    if (e.shiftKey && e.key === "Enter") {
+                      e.preventDefault(); // デフォルトの改行動作を防ぐ
+                      const sendButton = document.getElementById("sendButton");
+                      if (sendButton) {
+                        sendButton.click();
+                      }
+                    }
+                  }}
+                  onInput={(e) => {
+                    const textarea = e.target as HTMLTextAreaElement;
+                    textarea.style.height = "40px";
+                    textarea.style.height = `${textarea.scrollHeight}px`;
+                  }}
+                  _focusVisible={{
+                    borderColor:
+                      colorMode === "light"
+                        ? "custom.theme.light.850"
+                        : "gray.400",
+                  }}
+                  fontWeight="200"
+                  fontSize={isMobile ? "16px" : "15px"} //iphone_safariなら16px以下で自動ズームが働く
+                  placeholder={getMessage({
+                    ja: "メッセージを入力 (Shift+Enterで送信)",
+                    us: "Type your message (Shift+Enter to send)",
+                    cn: "输入信息（Shift+Enter 发送）。",
+                    language,
+                  })}
+                  py={2}
+                  pl={10}
+                  pr={0}
+                  size="md"
+                  color={
+                    colorMode === "light" ? "custom.theme.light.900" : "white"
+                  }
+                  bg={colorMode === "light" ? "white" : "gray.800"}
+                  borderColor={
+                    colorMode === "light"
+                      ? "custom.theme.light.700"
+                      : "gray.800"
+                  }
+                  borderRadius="5px"
+                  _placeholder={{
+                    color:
+                      colorMode === "light"
+                        ? "custom.theme.light.600"
+                        : "gray.500",
+                  }}
+                />
+                <Tooltip
+                  label={getMessage({
+                    ja: "送信",
+                    us: "send",
+                    cn: "传动",
+                    language,
+                  })}
+                  cursor="pointer"
+                  placement="left"
+                  hasArrow
+                >
+                  <IconButton
+                    id="sendButton"
+                    onClick={() => {
+                      if (isSubmitting) return;
+                      const inputValue = document.getElementById("inputValue");
+                      if (inputValue === null) return;
+                      const inputValueElement =
+                        inputValue as HTMLTextAreaElement;
+                      if (!inputValueElement.value.trim() && !selectedFile) {
+                        showToast(
+                          getMessage({
+                            ja: "送信するものが有りません",
+                            us: "Nothing to send",
+                            cn: "没什么可发送的。",
+                            language,
+                          }),
+                          getMessage({
+                            ja: "メッセージまたはファイル添付が必要です",
+                            us: "Message or file attachment required",
+                            cn: "需要信息或文件附件",
+                            language,
+                          }),
+                          "error"
+                        );
+                        return;
+                      }
+                      console.log(inputValueElement.value);
+                      // setNewPostContent(inputValueElement.value);
+                      setIsSubmitting(true); //post開始
+                      createPost(inputValueElement.value);
+                      // setNewPostContent(""); //クリア
+                      inputValueElement.value = "";
+                      inputValueElement.style.height = "40px"; // 高さを初期状態に戻す
+                      setTimeout(() => {
+                        setIsSubmitting(false); //post終了
+                        if (audioRef_send.current) {
+                          audioRef_send.current.play();
+                        }
+                      }, 2000); // 2秒待機
+                    }}
+                    icon={
+                      isSubmitting ? (
+                        <Spinner
+                          color={
+                            colorMode === "light"
+                              ? "custom.theme.light.800"
+                              : "gray.500"
+                          }
+                        />
+                      ) : (
+                        <BsSend
+                          style={{ transform: "rotate(0deg)" }}
+                          size="24px"
+                        />
+                      )
+                    }
+                    bg={
+                      colorMode === "light"
+                        ? "custom.theme.light.500"
+                        : "gray.500"
+                    }
+                    color={
+                      colorMode === "light"
+                        ? "custom.theme.light.800"
+                        : "#181a24"
+                    }
+                    border="1px solid"
+                    borderColor={
+                      colorMode === "light" ? "custom.theme.light.800" : ""
+                    }
+                    _hover={{
+                      bg:
+                        colorMode === "light"
+                          ? "custom.theme.light.400"
+                          : "gray.400",
+                      color:
+                        colorMode === "light"
+                          ? "custom.theme.light.850"
+                          : "#181a24",
+                      transition: "all 0.2s ease-in-out",
+                    }}
+                    top={0}
+                    right={-1}
+                    aria-label="送信"
+                  />
+                </Tooltip>
+              </Stack>
+              {selectedFile && (
+                <Box mt={2}>
+                  {previewUrl ? (
+                    <Box position="relative" display="inline-block">
+                      <Image
+                        src={previewUrl}
+                        alt="Preview"
+                        maxH="64px"
+                        maxW="128px"
+                        objectFit="contain"
+                        borderRadius="md"
+                        border="2px solid"
+                        borderColor={
+                          colorMode === "light"
+                            ? "custom.theme.light.500"
+                            : "gray.500"
+                        }
+                        outline="1px solid"
+                        outlineColor={
+                          colorMode === "light"
+                            ? "custom.theme.light.800"
+                            : "gray.500"
+                        }
+                      />
+                      <IconButton
+                        aria-label="Remove file"
+                        icon={<CloseIcon boxSize="9px" />}
+                        size="xs"
+                        position="absolute"
+                        borderRadius="50%"
+                        border="1px solid"
+                        borderColor={
+                          colorMode === "light"
+                            ? "custom.theme.light.800"
+                            : "#181a24"
+                        }
+                        outline="2px solid"
+                        outlineColor={
+                          colorMode === "light"
+                            ? "custom.theme.light.50"
+                            : "#181a24"
+                        }
+                        top="-4px"
+                        right="-4px"
+                        onClick={clearFileSelection}
+                        bg={
+                          colorMode === "light"
+                            ? "custom.theme.light.500"
+                            : "gray.500"
+                        }
+                        color={
+                          colorMode === "light"
+                            ? "custom.theme.light.800"
+                            : "#181a24"
+                        }
+                        variant="solid"
+                        _hover={{
+                          bg:
+                            colorMode === "light"
+                              ? "custom.theme.light.800"
+                              : "gray.400",
+                          color:
+                            colorMode === "light"
+                              ? "custom.theme.light.500"
+                              : "#181a24",
+                          transition: "all 0.2s ease-in-out",
+                        }}
+                      />
+                    </Box>
+                  ) : (
+                    <Flex align="center" gap={2}>
+                      <Box
+                        position="relative"
+                        border="1px solid"
+                        borderRadius="6px"
+                        borderColor={
+                          colorMode === "light"
+                            ? "custom.theme.light.800"
+                            : "gray.800"
+                        }
+                        bg={
+                          colorMode === "light"
+                            ? "custom.theme.light.500"
+                            : "gray.500"
+                        }
+                        color={
+                          colorMode === "light"
+                            ? "custom.theme.light.850"
+                            : "#181a24"
+                        }
+                        px="2"
+                        py="1"
+                      >
+                        <Text fontSize="sm" pr="13px">
+                          {selectedFileName}
+                        </Text>
+                        <IconButton
+                          position="absolute"
+                          aria-label="Remove file"
+                          icon={<CloseIcon boxSize="9px" />}
+                          size="xs"
+                          borderRadius="50%"
+                          border="1px solid"
+                          borderColor={
+                            colorMode === "light"
+                              ? "custom.theme.light.800"
+                              : "gray.800"
+                          }
+                          outline="2px solid"
+                          outlineColor={
+                            colorMode === "light"
+                              ? "custom.theme.light.50"
+                              : "#181a24"
+                          }
+                          top="-6px"
+                          right="-9px"
+                          onClick={clearFileSelection}
+                          bg={
+                            colorMode === "light"
+                              ? "custom.theme.light.500"
+                              : "gray.500"
+                          }
+                          color={
+                            colorMode === "light"
+                              ? "custom.theme.light.850"
+                              : "#181a24"
+                          }
+                          variant="solid"
+                          _hover={{
+                            bg:
+                              colorMode === "light"
+                                ? "custom.theme.light.800"
+                                : "gray.400",
+                            color:
+                              colorMode === "light"
+                                ? "custom.theme.light.400"
+                                : "#181a24",
+                            transition: "all 0.2s ease-in-out",
+                          }}
+                        />
+                      </Box>
+                    </Flex>
+                  )}
+                </Box>
+              )}
+            </Stack>
+            <Modal
+              isOpen={fileModalOpen}
+              onClose={() => setFileModalOpen(false)}
+            >
+              <ModalOverlay />
+              <ModalContent>
+                {/* <ModalCloseButton position="absolute" top="10px" right="-10px" /> */}
+                <ModalBody
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  p={0}
+                  onClick={() => {
+                    if (!isLongPress) {
+                      setIsZoomed(!isZoomed); // クリックでズームイン/アウトを切り替え
+                    }
+                  }}
+                  style={{
+                    backgroundColor: "#f2e9df",
+                    backgroundImage: `
                     linear-gradient(45deg, #fff 25%, transparent 25%),
                     linear-gradient(135deg, #fff 25%, transparent 25%),
                     linear-gradient(45deg, transparent 75%, #fff 75%),
                     linear-gradient(135deg, transparent 75%, #fff 75%)
                   `,
-                      backgroundSize: "20px 20px",
-                      backgroundPosition: "0 0, 10px 0, 10px -10px, 0px 10px",
-                      backgroundAttachment: "fixed",
+                    backgroundSize: "20px 20px",
+                    backgroundPosition: "0 0, 10px 0, 10px -10px, 0px 10px",
+                    backgroundAttachment: "fixed",
+                  }}
+                >
+                  {selectedImageUrl &&
+                    (selectedImageUrl.match(/\.mp4$/) ? (
+                      <video
+                        src={selectedImageUrl}
+                        autoPlay
+                        loop
+                        muted
+                        style={{
+                          maxWidth: isZoomed ? "99vw" : "80vw", // ズームイン時は制限なし
+                          maxHeight: isZoomed ? "99vh" : "80vh", // ズームイン時は制限なし
+                          objectFit: "contain", // 動画がモーダルの範囲内に収まるようにする
+                          cursor: isZoomed ? "zoom-out" : "zoom-in", // ズームイン/アウトのカーソルを設定
+                        }}
+                      />
+                    ) : (
+                      <Image
+                        src={selectedImageUrl}
+                        alt="Uploaded image"
+                        loading="lazy"
+                        maxW={isZoomed ? "99vw" : "80vw"} // ズームイン時は制限なし
+                        maxH={isZoomed ? "99vh" : "80vh"} // ズームイン時は制限なし
+                        objectFit="contain" // 画像がモーダルの範囲内に収まるようにする
+                        cursor={isZoomed ? "zoom-out" : "zoom-in"} // ズームイン/アウトのカーソルを設定
+                      />
+                    ))}
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+            <SidebarBBS isMain={false} />
+            <Content isCustomHeader={true}>
+              <Box
+                position="fixed"
+                zIndex="1000"
+                mb={0}
+                ml={0}
+                pt={0}
+                pb={1}
+                px={1}
+                top="46px"
+                display={{
+                  base: "none",
+                  sm: "block",
+                  md: "block",
+                  lg: "block",
+                  xl: "block",
+                }}
+                backdropFilter={
+                  colorMode === "light" ? "blur(20px)" : "blur(100px)"
+                }
+                // bg={{
+                //   base: colorMode === "light" ? "#fff" : "#000",
+                //   xl: colorMode === "light" ? "#f2e9df" : "#000",
+                // }}
+                border="1px solid #bfb0a4"
+                borderRadius="md"
+              >
+                <Box as="span" fontSize={11} fontWeight={400} mr={1}>
+                  {getMessage({
+                    ja: threadCompany,
+                    language,
+                  })}
+                </Box>
+                <Box
+                  display="inline-block"
+                  fontFamily="Noto Sans Jp"
+                  fontWeight={400}
+                  fontSize={9}
+                  borderRadius={3}
+                  px={1}
+                  mr={1}
+                  border="transparent"
+                  bg={GetColor(threadProjectName)}
+                  color="#FFF"
+                >
+                  {threadProjectName}
+                </Box>
+                <Box
+                  display="inline-block"
+                  fontFamily="Noto Sans Jp"
+                  fontWeight={400}
+                  fontSize={9}
+                  borderRadius={3}
+                  px={1}
+                  mr={1}
+                  border={"1px solid " + GetColor(threadCategory)}
+                  bg="transparent"
+                  color={GetColor(threadCategory)}
+                >
+                  {threadCategory}
+                </Box>
+                <Box display="inline-block" fontSize={10} fontWeight={400}>
+                  {ipAddress}
+                </Box>
+                <Box>
+                  <Box
+                    fontSize={13}
+                    fontWeight={400}
+                    style={{
+                      letterSpacing: "1px",
                     }}
                   >
-                    {selectedImageUrl &&
-                      (selectedImageUrl.match(/\.mp4$/) ? (
-                        <video
-                          src={selectedImageUrl}
-                          autoPlay
-                          loop
-                          muted
-                          style={{
-                            maxWidth: isZoomed ? "99vw" : "80vw", // ズームイン時は制限なし
-                            maxHeight: isZoomed ? "99vh" : "80vh", // ズームイン時は制限なし
-                            objectFit: "contain", // 動画がモーダルの範囲内に収まるようにする
-                            cursor: isZoomed ? "zoom-out" : "zoom-in", // ズームイン/アウトのカーソルを設定
-                          }}
-                        />
-                      ) : (
-                        <Image
-                          src={selectedImageUrl}
-                          alt="Uploaded image"
-                          loading="lazy"
-                          maxW={isZoomed ? "99vw" : "80vw"} // ズームイン時は制限なし
-                          maxH={isZoomed ? "99vh" : "80vh"} // ズームイン時は制限なし
-                          objectFit="contain" // 画像がモーダルの範囲内に収まるようにする
-                          cursor={isZoomed ? "zoom-out" : "zoom-in"} // ズームイン/アウトのカーソルを設定
-                        />
-                      ))}
-                  </ModalBody>
-                </ModalContent>
-              </Modal>
-              <SidebarBBS isMain={false} />
-              <Content isCustomHeader={true}>
-                <Box
-                  position="fixed"
-                  zIndex="1000"
-                  mb={0}
-                  ml={0}
-                  pt={0}
-                  pb={1}
-                  px={1}
-                  top="46px"
-                  display={{
-                    base: "none",
-                    sm: "block",
-                    md: "block",
-                    lg: "block",
-                    xl: "block",
-                  }}
-                  backdropFilter={
-                    colorMode === "light" ? "blur(20px)" : "blur(100px)"
-                  }
-                  // bg={{
-                  //   base: colorMode === "light" ? "#fff" : "#000",
-                  //   xl: colorMode === "light" ? "#f2e9df" : "#000",
-                  // }}
-                  border="1px solid #bfb0a4"
-                  borderRadius="md"
-                >
-                  <Box as="span" fontSize={11} fontWeight={400} mr={1}>
                     {getMessage({
-                      ja: threadCompany,
+                      ja: threadTitle,
                       language,
                     })}
                   </Box>
-                  <Box
-                    display="inline-block"
-                    fontFamily="Noto Sans Jp"
-                    fontWeight={400}
-                    fontSize={9}
-                    borderRadius={3}
-                    px={1}
-                    mr={1}
-                    border="transparent"
-                    bg={GetColor(threadProjectName)}
-                    color="#FFF"
-                  >
-                    {threadProjectName}
-                  </Box>
-                  <Box
-                    display="inline-block"
-                    fontFamily="Noto Sans Jp"
-                    fontWeight={400}
-                    fontSize={9}
-                    borderRadius={3}
-                    px={1}
-                    mr={1}
-                    border={"1px solid " + GetColor(threadCategory)}
-                    bg="transparent"
-                    color={GetColor(threadCategory)}
-                  >
-                    {threadCategory}
-                  </Box>
-                  <Box display="inline-block" fontSize={10} fontWeight={400}>
-                    {ipAddress}
-                  </Box>
-                  <Box>
-                    <Box
-                      fontSize={13}
-                      fontWeight={400}
-                      style={{
-                        letterSpacing: "1px",
-                      }}
-                    >
-                      {getMessage({
-                        ja: threadTitle,
-                        language,
-                      })}
-                    </Box>
-                  </Box>
                 </Box>
-                <Box height="4.5em" />
-                <Stack
-                  spacing="2"
-                  style={{ padding: "0px", flexDirection: "column" }}
-                >
-                  {!currentUserName && threadMainCompany !== "開発" ? (
-                    <Text color="red" fontWeight="bold">
-                      {getMessage({
-                        ja: "認証されていません",
-                        us: "Not authenticated.",
-                        cn: "未经授权。",
-                        language,
-                      })}
-                    </Text>
-                  ) : threadMainCompany !== currentUserMainCompany &&
-                    threadMainCompany !== "開発" &&
-                    currentUserMainCompany !== "開発" ? (
-                    <Text color="red" fontWeight="bold">
-                      {getMessage({
-                        ja: "このチャットは ",
-                        us: "This chat is only viewable by ",
-                        cn: "此聊天只能由 ",
-                        language,
-                      })}
-                      {getMessage({
-                        ja: currentUserMainCompany || "",
-                        language,
-                      })}
-                      {getMessage({
-                        ja: " のみ閲覧可能です",
-                        us: "",
-                        cn: " 查看",
-                        language,
-                      })}
-                    </Text>
-                  ) : (
-                    posts
-                      .sort(
-                        // created_atでソート
-                        (a, b) =>
-                          new Date(a.created_at).getTime() -
-                          new Date(b.created_at).getTime()
-                      )
-                      .map((post, index) => {
-                        const prevPost = posts[index - 1];
-                        const prevDateString = prevPost
-                          ? prevPost.created_at
-                          : undefined;
-                        const isNewDay =
-                          index === 0 || // 一番最初の投稿の場合
-                          (prevDateString &&
-                            new Date(post.created_at).toDateString() !==
-                              new Date(prevDateString).toDateString());
-                        // :で囲んだ文字はタイトル
-                        if (post.content.match(/:(.*?):/)) {
-                          return (
-                            <React.Fragment key={`${post.created_at}-${index}`}>
-                              {isNewDay && (
-                                <Flex
-                                  key={`${post.created_at}-${index}`}
-                                  alignItems="center"
-                                  justifyContent="center"
-                                  width="100%"
-                                  mb="1.5"
+              </Box>
+              <Box height="4.5em" />
+              <Stack
+                spacing="2"
+                style={{ padding: "0px", flexDirection: "column" }}
+              >
+                {!currentUserName && threadMainCompany !== "開発" ? (
+                  <Text color="red" fontWeight="bold">
+                    {getMessage({
+                      ja: "認証されていません",
+                      us: "Not authenticated.",
+                      cn: "未经授权。",
+                      language,
+                    })}
+                  </Text>
+                ) : threadMainCompany !== currentUserMainCompany &&
+                  threadMainCompany !== "開発" &&
+                  currentUserMainCompany !== "開発" ? (
+                  <Text color="red" fontWeight="bold">
+                    {getMessage({
+                      ja: "このチャットは ",
+                      us: "This chat is only viewable by ",
+                      cn: "此聊天只能由 ",
+                      language,
+                    })}
+                    {getMessage({
+                      ja: currentUserMainCompany || "",
+                      language,
+                    })}
+                    {getMessage({
+                      ja: " のみ閲覧可能です",
+                      us: "",
+                      cn: " 查看",
+                      language,
+                    })}
+                  </Text>
+                ) : (
+                  posts
+                    .sort(
+                      // created_atでソート
+                      (a, b) =>
+                        new Date(a.created_at).getTime() -
+                        new Date(b.created_at).getTime()
+                    )
+                    .map((post, index) => {
+                      const prevPost = posts[index - 1];
+                      const prevDateString = prevPost
+                        ? prevPost.created_at
+                        : undefined;
+                      const isNewDay =
+                        index === 0 || // 一番最初の投稿の場合
+                        (prevDateString &&
+                          new Date(post.created_at).toDateString() !==
+                            new Date(prevDateString).toDateString());
+                      // :で囲んだ文字はタイトル
+                      if (post.content.match(/:(.*?):/)) {
+                        return (
+                          <React.Fragment key={`${post.created_at}-${index}`}>
+                            {isNewDay && (
+                              <Flex
+                                key={`${post.created_at}-${index}`}
+                                alignItems="center"
+                                justifyContent="center"
+                                width="100%"
+                                mb="1.5"
+                              >
+                                <Divider borderColor="gray.500" />
+                                <Text
+                                  fontSize="15px"
+                                  color="gray.500"
+                                  whiteSpace="nowrap"
+                                  textAlign="center"
+                                  mx="2"
+                                  lineHeight="1.2"
                                 >
-                                  <Divider borderColor="gray.500" />
-                                  <Text
-                                    fontSize="15px"
-                                    color="gray.500"
-                                    whiteSpace="nowrap"
-                                    textAlign="center"
-                                    mx="2"
-                                    lineHeight="1.2"
-                                  >
-                                    {formatDate(
-                                      post.created_at,
-                                      prevDateString,
-                                      false
-                                    )}
-                                  </Text>
-                                  <Divider borderColor="gray.500" />
-                                </Flex>
-                              )}
+                                  {formatDate(
+                                    post.created_at,
+                                    prevDateString,
+                                    false
+                                  )}
+                                </Text>
+                                <Divider borderColor="gray.500" />
+                              </Flex>
+                            )}
+                            <Flex
+                              alignItems="center"
+                              justifyContent="center"
+                              width="100%"
+                              mb="1.5"
+                              color="red"
+                            >
+                              <Divider
+                                borderColor={
+                                  colorMode === "light" ? "red" : "pink"
+                                }
+                              />
+                              <Tag
+                                colorScheme="red"
+                                minWidth="fit-content"
+                                maxWidth="100%"
+                                display="inline-flex"
+                                variant="outline"
+                                mt="1em"
+                                mb="1em"
+                              >
+                                <TagLeftIcon
+                                  as={ChatIcon}
+                                  color={colorMode === "light" ? "red" : "pink"}
+                                />
+                                <TagLabel
+                                  textAlign="center"
+                                  whiteSpace="nowrap"
+                                  width="auto"
+                                  maxWidth="80vw"
+                                  display="inline"
+                                  overflow="hidden"
+                                  textOverflow="ellipsis"
+                                  color={colorMode === "light" ? "red" : "pink"}
+                                >
+                                  {post.content.match(/:(.*?):/)[1]}
+                                </TagLabel>
+                                <TagRightIcon
+                                  as={ChatIcon}
+                                  color={colorMode === "light" ? "red" : "pink"}
+                                />
+                              </Tag>
+                              <Divider
+                                borderColor={
+                                  colorMode === "light" ? "red" : "pink"
+                                }
+                              />
+                            </Flex>
+                          </React.Fragment>
+                        );
+                      }
+                      return (
+                        <>
+                          <div className="post">
+                            {isNewDay && ( //日付の区切り線
                               <Flex
                                 alignItems="center"
                                 justifyContent="center"
                                 width="100%"
                                 mb="1.5"
-                                color="red"
                               >
-                                <Divider
-                                  borderColor={
-                                    colorMode === "light" ? "red" : "pink"
-                                  }
-                                />
-                                <Tag
-                                  colorScheme="red"
-                                  minWidth="fit-content"
-                                  maxWidth="100%"
-                                  display="inline-flex"
-                                  variant="outline"
-                                  mt="1em"
-                                  mb="1em"
+                                <Divider borderColor="gray.500" />
+                                <Text
+                                  fontSize="14px"
+                                  color="gray.500"
+                                  whiteSpace="nowrap"
+                                  textAlign="center"
+                                  mx="2"
+                                  lineHeight="1.2"
                                 >
-                                  <TagLeftIcon
-                                    as={ChatIcon}
-                                    color={
-                                      colorMode === "light" ? "red" : "pink"
-                                    }
-                                  />
-                                  <TagLabel
-                                    textAlign="center"
-                                    whiteSpace="nowrap"
-                                    width="auto"
-                                    maxWidth="80vw"
-                                    display="inline"
-                                    overflow="hidden"
-                                    textOverflow="ellipsis"
-                                    color={
-                                      colorMode === "light" ? "red" : "pink"
-                                    }
-                                  >
-                                    {post.content.match(/:(.*?):/)[1]}
-                                  </TagLabel>
-                                  <TagRightIcon
-                                    as={ChatIcon}
-                                    color={
-                                      colorMode === "light" ? "red" : "pink"
-                                    }
-                                  />
-                                </Tag>
-                                <Divider
-                                  borderColor={
-                                    colorMode === "light" ? "red" : "pink"
-                                  }
-                                />
-                              </Flex>
-                            </React.Fragment>
-                          );
-                        }
-                        return (
-                          <>
-                            <div className="post">
-                              {isNewDay && ( //日付の区切り線
-                                <Flex
-                                  alignItems="center"
-                                  justifyContent="center"
-                                  width="100%"
-                                  mb="1.5"
-                                >
-                                  <Divider borderColor="gray.500" />
-                                  <Text
-                                    fontSize="14px"
-                                    color="gray.500"
-                                    whiteSpace="nowrap"
-                                    textAlign="center"
-                                    mx="2"
-                                    lineHeight="1.2"
-                                  >
-                                    {formatDate(
-                                      post.created_at,
-                                      prevDateString,
-                                      false
-                                    )}
-                                  </Text>
-                                  <Divider borderColor="gray.500" />
-                                </Flex>
-                              )}
-                              <Flex //post内容
-                                className="post"
-                                data-post-id={post.id}
-                                data-user-id={post.user_uid}
-                                key={post.id}
-                                id={`post-${post.id}`} // IDを追加
-                                style={{
-                                  height: post.isDeleting ? 0 : "auto",
-                                  opacity: post.isDeleting ? 0 : 1,
-                                  overflow: "visible", // 内容がはみ出さないようにする
-                                  transition:
-                                    "max-height 1s ease, opacity 1s ease", // 高さと不透明度のトランジション
-                                }}
-                                justifyContent={
-                                  post.user_uid === currentUserId
-                                    ? "flex-end"
-                                    : "flex-start"
-                                }
-                                maxWidth="98vw"
-                                pr={
-                                  post.user_uid === currentUserId
-                                    ? "0px"
-                                    : "10px"
-                                }
-                                pl={
-                                  post.user_uid === currentUserId
-                                    ? "10px"
-                                    : "0px"
-                                }
-                                onMouseDown={() =>
-                                  handleLongPressStart(post.id)
-                                } // 長押し開始
-                                onMouseUp={handleMouseUp} // マウスアップで長押し終了
-                                onMouseLeave={handleMouseLeave} // マウスが要素から離れたときに長押しを終了
-                                onClick={(e) => {
-                                  if (
-                                    isLongPress &&
-                                    longPressPostId === post.id
-                                  ) {
-                                    e.stopPropagation();
-                                  }
-                                }}
-                              >
-                                {isLongPress && longPressPostId === post.id && (
-                                  <>
-                                    <Box //オーバーレイ
-                                      position="fixed"
-                                      top="0"
-                                      left="0"
-                                      width="100%"
-                                      height="100%"
-                                      bg="rgba(0, 0, 0, 0.5)" // 半透明の黒
-                                      zIndex="5000" // メニューより下に表示
-                                      onClick={handleLongPressEnd} // 長押しを終了
-                                    />
-                                    <Box //リプライとか削除のメニュー
-                                      position="absolute"
-                                      zIndex="5010"
-                                      bg="white"
-                                      borderRadius="5px"
-                                      boxShadow="md"
-                                      onClick={(e) => e.stopPropagation()} // クリックイベントの伝播を防ぐ
-                                      width="auto"
-                                      height="auto"
-                                    >
-                                      <Button //削除ボタン
-                                        onClick={() =>
-                                          handleDeletePost(longPressPostId!)
-                                        }
-                                        onMouseEnter={() =>
-                                          handleMouseEnter("delete")
-                                        }
-                                        onMouseLeave={handleMouseLeave}
-                                        borderRight="1px"
-                                        borderColor="gray.500"
-                                        borderRadius="0"
-                                        bg="transparent"
-                                        _hover={{
-                                          backgroundColor: "transparent",
-                                        }}
-                                        width="3rem"
-                                        isDisabled={
-                                          !(
-                                            currentUserId && // userIdが存在する場合のみ
-                                            (post.user_uid === currentUserId ||
-                                              currentUserId === masterUserId)
-                                          )
-                                        }
-                                      >
-                                        <Stack
-                                          alignItems="center"
-                                          spacing="1"
-                                          maxWidth={1.5}
-                                          color="gray.900"
-                                        >
-                                          <Icon as={FaTrashAlt} boxSize={5} />
-                                          <Text
-                                            fontSize="0.5rem"
-                                            lineHeight="1"
-                                          >
-                                            {getMessage({
-                                              ja: "削除",
-                                              us: "Delete",
-                                              cn: "删减",
-                                              language,
-                                            })}
-                                          </Text>
-                                        </Stack>
-                                      </Button>
-                                      <Button //リプライボタン
-                                        onClick={() => {
-                                          handleReplyPost(longPressPostId!);
-                                          handleLongPressEnd();
-                                        }}
-                                        onMouseEnter={() => {
-                                          handleMouseEnter("reply");
-                                        }}
-                                        onMouseLeave={handleMouseLeave}
-                                        borderRight="1px"
-                                        borderColor="gray.500"
-                                        borderRadius="0"
-                                        bg="transparent"
-                                        _hover={{
-                                          backgroundColor: "transparent",
-                                        }}
-                                        width="3rem"
-                                      >
-                                        <Stack
-                                          alignItems="center"
-                                          spacing="1"
-                                          maxWidth={1.5}
-                                          color="gray.900"
-                                        >
-                                          <Icon as={FaReply} boxSize={5} />
-                                          <Text
-                                            fontSize="0.5rem"
-                                            lineHeight="1"
-                                            p={0}
-                                            m={0}
-                                          >
-                                            {getMessage({
-                                              ja: "リプライ",
-                                              us: "reply",
-                                              cn: "回复",
-                                              language,
-                                            })}
-                                          </Text>
-                                        </Stack>
-                                      </Button>
-                                    </Box>
-                                  </>
-                                )}
-                                {getTimeStamp(
-                                  formatDate(
+                                  {formatDate(
                                     post.created_at,
                                     prevDateString,
-                                    true
-                                  ),
-                                  false,
-                                  post.user_uid === currentUserId,
-                                  post.read_by
-                                )}
-                                {getAvatarProps(
-                                  post.user_uid,
-                                  post.user_uid !== currentUserId,
-                                  "sm"
-                                )}
-                                <Card
-                                  id={post.id}
-                                  style={{
-                                    backgroundColor:
-                                      post.user_uid === currentUserId
-                                        ? "#DCF8C6"
-                                        : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
-                                    borderRadius: "10px",
-                                    maxWidth: "86vw",
-                                    padding: "0px",
-                                    margin:
-                                      post.user_uid === currentUserId
-                                        ? "0 12px 0 2px"
-                                        : "0 2px 0 12px",
-                                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                                  }}
-                                >
-                                  {post.reply_post_id && ( //ポストにリプライを含む場合
-                                    <CardBody
-                                      px="0"
-                                      py="0"
-                                      cursor="pointer"
-                                      onClick={async () => {
-                                        //リプライをクリックしたらポストにスクロール
+                                    false
+                                  )}
+                                </Text>
+                                <Divider borderColor="gray.500" />
+                              </Flex>
+                            )}
+                            <Flex //post内容
+                              className="post"
+                              data-post-id={post.id}
+                              data-user-id={post.user_uid}
+                              key={post.id}
+                              id={`post-${post.id}`} // IDを追加
+                              style={{
+                                height: post.isDeleting ? 0 : "auto",
+                                opacity: post.isDeleting ? 0 : 1,
+                                overflow: "visible", // 内容がはみ出さないようにする
+                                transition:
+                                  "max-height 1s ease, opacity 1s ease", // 高さと不透明度のトランジション
+                              }}
+                              justifyContent={
+                                post.user_uid === currentUserId
+                                  ? "flex-end"
+                                  : "flex-start"
+                              }
+                              maxWidth="98vw"
+                              pr={
+                                post.user_uid === currentUserId ? "0px" : "10px"
+                              }
+                              pl={
+                                post.user_uid === currentUserId ? "10px" : "0px"
+                              }
+                              onMouseDown={() => handleLongPressStart(post.id)} // 長押し開始
+                              onMouseUp={handleMouseUp} // マウスアップで長押し終了
+                              onMouseLeave={handleMouseLeave} // マウスが要素から離れたときに長押しを終了
+                              onClick={(e) => {
+                                if (
+                                  isLongPress &&
+                                  longPressPostId === post.id
+                                ) {
+                                  e.stopPropagation();
+                                }
+                              }}
+                            >
+                              {isLongPress && longPressPostId === post.id && (
+                                <>
+                                  <Box //オーバーレイ
+                                    position="fixed"
+                                    top="0"
+                                    left="0"
+                                    width="100%"
+                                    height="100%"
+                                    bg="rgba(0, 0, 0, 0.5)" // 半透明の黒
+                                    zIndex="5000" // メニューより下に表示
+                                    onClick={handleLongPressEnd} // 長押しを終了
+                                  />
+                                  <Box //リプライとか削除のメニュー
+                                    position="absolute"
+                                    zIndex="5010"
+                                    bg="white"
+                                    borderRadius="5px"
+                                    boxShadow="md"
+                                    onClick={(e) => e.stopPropagation()} // クリックイベントの伝播を防ぐ
+                                    width="auto"
+                                    height="auto"
+                                  >
+                                    <Button //削除ボタン
+                                      onClick={() =>
+                                        handleDeletePost(longPressPostId!)
+                                      }
+                                      onMouseEnter={() =>
+                                        handleMouseEnter("delete")
+                                      }
+                                      onMouseLeave={handleMouseLeave}
+                                      borderRight="1px"
+                                      borderColor="gray.500"
+                                      borderRadius="0"
+                                      bg="transparent"
+                                      _hover={{
+                                        backgroundColor: "transparent",
+                                      }}
+                                      width="3rem"
+                                      isDisabled={
+                                        !(
+                                          currentUserId && // userIdが存在する場合のみ
+                                          (post.user_uid === currentUserId ||
+                                            currentUserId === masterUserId)
+                                        )
+                                      }
+                                    >
+                                      <Stack
+                                        alignItems="center"
+                                        spacing="1"
+                                        maxWidth={1.5}
+                                        color="gray.900"
+                                      >
+                                        <Icon as={FaTrashAlt} boxSize={5} />
+                                        <Text fontSize="0.5rem" lineHeight="1">
+                                          {getMessage({
+                                            ja: "削除",
+                                            us: "Delete",
+                                            cn: "删减",
+                                            language,
+                                          })}
+                                        </Text>
+                                      </Stack>
+                                    </Button>
+                                    <Button //リプライボタン
+                                      onClick={() => {
+                                        handleReplyPost(longPressPostId!);
+                                        handleLongPressEnd();
+                                      }}
+                                      onMouseEnter={() => {
+                                        handleMouseEnter("reply");
+                                      }}
+                                      onMouseLeave={handleMouseLeave}
+                                      borderRight="1px"
+                                      borderColor="gray.500"
+                                      borderRadius="0"
+                                      bg="transparent"
+                                      _hover={{
+                                        backgroundColor: "transparent",
+                                      }}
+                                      width="3rem"
+                                    >
+                                      <Stack
+                                        alignItems="center"
+                                        spacing="1"
+                                        maxWidth={1.5}
+                                        color="gray.900"
+                                      >
+                                        <Icon as={FaReply} boxSize={5} />
+                                        <Text
+                                          fontSize="0.5rem"
+                                          lineHeight="1"
+                                          p={0}
+                                          m={0}
+                                        >
+                                          {getMessage({
+                                            ja: "リプライ",
+                                            us: "reply",
+                                            cn: "回复",
+                                            language,
+                                          })}
+                                        </Text>
+                                      </Stack>
+                                    </Button>
+                                  </Box>
+                                </>
+                              )}
+                              {getTimeStamp(
+                                formatDate(
+                                  post.created_at,
+                                  prevDateString,
+                                  true
+                                ),
+                                false,
+                                post.user_uid === currentUserId,
+                                post.read_by
+                              )}
+                              {getAvatarProps(
+                                post.user_uid,
+                                post.user_uid !== currentUserId,
+                                "sm"
+                              )}
+                              <Card
+                                id={post.id}
+                                style={{
+                                  backgroundColor:
+                                    post.user_uid === currentUserId
+                                      ? "#DCF8C6"
+                                      : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
+                                  borderRadius: "10px",
+                                  maxWidth: "86vw",
+                                  padding: "0px",
+                                  margin:
+                                    post.user_uid === currentUserId
+                                      ? "0 12px 0 2px"
+                                      : "0 2px 0 12px",
+                                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                                }}
+                              >
+                                {post.reply_post_id && ( //ポストにリプライを含む場合
+                                  <CardBody
+                                    px="0"
+                                    py="0"
+                                    cursor="pointer"
+                                    onClick={async () => {
+                                      //リプライをクリックしたらポストにスクロール
+                                      const postElement =
+                                        document.getElementById(
+                                          post.reply_post_id
+                                        ); // post.idに基づいて要素を取得
+                                      if (postElement) {
+                                        postElement.scrollIntoView({
+                                          behavior: "smooth",
+                                        });
+                                        // スクロール位置をさらに調整
+                                        const offset = 80; // 調整したいオフセット値
+                                        const elementPosition =
+                                          postElement.getBoundingClientRect()
+                                            .top; // 要素の位置を取得
+                                        const offsetPosition =
+                                          elementPosition +
+                                          window.scrollY -
+                                          offset; // オフセットを考慮した位置を計算
+                                        window.scrollTo({
+                                          top: offsetPosition,
+                                          behavior: "smooth", // スムーズにスクロール
+                                        });
+                                        // スクロールが完了した後にアニメーションを適用
+                                        setTimeout(() => {
+                                          postElement.classList.add("shake"); // アニメーションを追加
+                                          setTimeout(() => {
+                                            postElement.classList.remove(
+                                              "shake"
+                                            ); // アニメーションを削除
+                                          }, 500); // アニメーションの持続時間と一致させる
+                                        }, 500); // スクロールのアニメーションが完了するまで待つ
+                                      } else {
+                                        // リプライ先がない場合
+                                        await fetchAllPosts();
+                                        await new Promise((resolve) =>
+                                          setTimeout(resolve, 0)
+                                        ); // レンダリングが完了するのを待つ
                                         const postElement =
-                                          document.getElementById(
-                                            post.reply_post_id
-                                          ); // post.idに基づいて要素を取得
+                                          document.getElementById(post.id);
+
                                         if (postElement) {
-                                          postElement.scrollIntoView({
-                                            behavior: "smooth",
-                                          });
-                                          // スクロール位置をさらに調整
                                           const offset = 80; // 調整したいオフセット値
                                           const elementPosition =
                                             postElement.getBoundingClientRect()
@@ -2271,680 +2420,635 @@ function ThreadContent(): JSX.Element {
                                             top: offsetPosition,
                                             behavior: "smooth", // スムーズにスクロール
                                           });
-                                          // スクロールが完了した後にアニメーションを適用
-                                          setTimeout(() => {
-                                            postElement.classList.add("shake"); // アニメーションを追加
-                                            setTimeout(() => {
-                                              postElement.classList.remove(
-                                                "shake"
-                                              ); // アニメーションを削除
-                                            }, 500); // アニメーションの持続時間と一致させる
-                                          }, 500); // スクロールのアニメーションが完了するまで待つ
-                                        } else {
-                                          // リプライ先がない場合
-                                          await fetchAllPosts();
-                                          await new Promise((resolve) =>
-                                            setTimeout(resolve, 0)
-                                          ); // レンダリングが完了するのを待つ
-                                          const postElement =
-                                            document.getElementById(post.id);
-
-                                          if (postElement) {
-                                            const offset = 80; // 調整したいオフセット値
-                                            const elementPosition =
-                                              postElement.getBoundingClientRect()
-                                                .top; // 要素の位置を取得
-                                            const offsetPosition =
-                                              elementPosition +
-                                              window.scrollY -
-                                              offset; // オフセットを考慮した位置を計算
-                                            window.scrollTo({
-                                              top: offsetPosition,
-                                              behavior: "smooth", // スムーズにスクロール
-                                            });
-                                          }
                                         }
-                                      }}
-                                    >
-                                      <Flex alignItems="center">
-                                        {getAvatarProps(
-                                          post.reply_user_id,
-                                          true,
-                                          "xs"
-                                        )}
-                                        <Stack mx={2} spacing={0} maxW="90%">
-                                          <Flex
-                                            alignItems="center"
-                                            mb="0"
-                                            lineHeight="1.4"
-                                            fontFamily="Noto Sans JP"
-                                            fontWeight="300"
-                                          >
-                                            <Text
-                                              color="black"
-                                              fontSize="12px"
-                                              mr="1"
-                                            >
-                                              {getUserById(post.reply_user_id)
-                                                ?.user_metadata.name ||
-                                                "未登録"}
-                                              {post.replay_user_id}
-                                            </Text>
-                                          </Flex>
+                                      }
+                                    }}
+                                  >
+                                    <Flex alignItems="center">
+                                      {getAvatarProps(
+                                        post.reply_user_id,
+                                        true,
+                                        "xs"
+                                      )}
+                                      <Stack mx={2} spacing={0} maxW="90%">
+                                        <Flex
+                                          alignItems="center"
+                                          mb="0"
+                                          lineHeight="1.4"
+                                          fontFamily="Noto Sans JP"
+                                          fontWeight="300"
+                                        >
                                           <Text
                                             color="black"
-                                            fontFamily="Noto Sans JP"
-                                            fontWeight="200"
-                                            fontSize="10px"
-                                            noOfLines={1} // 1行まで表示
-                                            isTruncated // 改行が必要な場合は...を表示
-                                            whiteSpace="nowrap"
-                                            lineHeight="1.4"
+                                            fontSize="12px"
+                                            mr="1"
                                           >
-                                            <span
-                                              dangerouslySetInnerHTML={{
-                                                __html: post.reply_content
-                                                  .replace(/\n/g, "<br />")
-                                                  .replace(
-                                                    /(http[s]?:\/\/[^\s]+)/g,
-                                                    '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;" class="external-link">$1</a>'
-                                                  ),
-                                              }}
-                                            />
+                                            {getUserById(post.reply_user_id)
+                                              ?.user_metadata.name || "未登録"}
+                                            {post.replay_user_id}
                                           </Text>
-                                        </Stack>
-                                        {post.reply_file_url && ( // 追加: reply_file_urlが存在する場合
-                                          <Box
-                                            my="0.5"
-                                            display="flex"
-                                            alignItems="center"
-                                            mr="2"
-                                          >
-                                            {post.reply_file_url.match(
-                                              /\.(jpeg|jpg|gif|png|bmp|webp|mp4)$/i
-                                            ) ? (
-                                              <Image
-                                                src={post.reply_file_url}
-                                                alt="Reply attached file"
-                                                loading="lazy"
-                                                maxW="100%"
-                                                maxH="40px"
-                                                objectFit="contain"
-                                              />
-                                            ) : (
-                                              <>
-                                                <IconButton
-                                                  icon={<FaPaperclip />}
-                                                  aria-label="添付ファイル"
-                                                  bg="transparent"
-                                                  p={0}
-                                                  m={0}
-                                                  minWidth={0}
-                                                  onMouseLeave={(e) => {
-                                                    const tooltip =
-                                                      e.currentTarget.dataset
-                                                        .tooltip; // データ属性から取得
-                                                    if (tooltip) {
-                                                      const tooltipElement =
-                                                        document.getElementById(
-                                                          tooltip
-                                                        ); // IDから要素を取得
-                                                      if (tooltipElement) {
-                                                        tooltipElement.remove(); // 要素を削除
-                                                        delete e.currentTarget
-                                                          .dataset.tooltip; // データ属性を削除
-                                                      }
-                                                    }
-                                                  }}
-                                                  onMouseOver={(e) => {
-                                                    const existingTooltip =
-                                                      e.currentTarget.dataset
-                                                        .tooltip; // 既存のツールチップIDを取得
-                                                    if (!existingTooltip) {
-                                                      // 既存のツールチップがない場合のみ作成
-                                                      const tooltip =
-                                                        document.createElement(
-                                                          "span"
-                                                        );
-                                                      tooltip.innerText =
-                                                        post.reply_file_url
-                                                          .split("/")
-                                                          .pop() ||
-                                                        "ファイル名";
-                                                      tooltip.id = `tooltip-${post.id}`; // 一意のIDを設定
-                                                      tooltip.style.position =
-                                                        "absolute";
-                                                      tooltip.style.backgroundColor =
-                                                        "white";
-                                                      tooltip.style.border =
-                                                        "1px solid gray";
-                                                      tooltip.style.padding =
-                                                        "5px";
-                                                      tooltip.style.zIndex =
-                                                        "1000";
-                                                      e.currentTarget.appendChild(
-                                                        tooltip
-                                                      );
-                                                      e.currentTarget.dataset.tooltip =
-                                                        tooltip.id; // データ属性にIDを保存
-                                                    }
-                                                  }}
-                                                />
-                                              </>
-                                            )}
-                                          </Box>
-                                        )}
-                                      </Flex>
-                                      <Divider borderColor="gray.400" />
-                                    </CardBody>
-                                  )}
-                                  <CardBody px="8px" py="5px">
-                                    <Box
-                                      fontFamily="Noto Sans JP"
-                                      fontWeight="200"
-                                      color="black"
-                                      fontSize="15px"
-                                    >
-                                      <div
-                                        dangerouslySetInnerHTML={{
-                                          __html: post.content
-                                            .replace(/\n/g, "<br />")
-                                            .replace(
-                                              /(http[s]?:\/\/[^\s]+)/g,
-                                              '<a href="$1" class="external-link" style="text-decoration: underline;">$1</a>'
-                                            ),
-                                        }}
-                                      />
-                                    </Box>
-                                    {post.file_url && (
-                                      <>
-                                        {post.file_url.match(
-                                          /\.(jpeg|jpg|gif|png|mp4|bmp|webp)$/i
-                                        ) ? (
-                                          post.file_url.endsWith(".mp4") ? (
-                                            <video
-                                              src={post.file_url}
-                                              autoPlay
-                                              loop
-                                              muted
-                                              playsInline
-                                              style={{
-                                                maxWidth: "100%",
-                                                maxHeight: "300px",
-                                                marginTop: "1px",
-                                                cursor: "pointer",
-                                              }}
-                                              onClick={(e) => {
-                                                if (!isMobile) {
-                                                  setSelectedImageUrl(
-                                                    post.file_url
-                                                  );
-                                                  setFileModalOpen(true);
-                                                }
-                                              }}
+                                        </Flex>
+                                        <Text
+                                          color="black"
+                                          fontFamily="Noto Sans JP"
+                                          fontWeight="200"
+                                          fontSize="10px"
+                                          noOfLines={1} // 1行まで表示
+                                          isTruncated // 改行が必要な場合は...を表示
+                                          whiteSpace="nowrap"
+                                          lineHeight="1.4"
+                                        >
+                                          <span
+                                            dangerouslySetInnerHTML={{
+                                              __html: post.reply_content
+                                                .replace(/\n/g, "<br />")
+                                                .replace(
+                                                  /(http[s]?:\/\/[^\s]+)/g,
+                                                  '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;" class="external-link">$1</a>'
+                                                ),
+                                            }}
+                                          />
+                                        </Text>
+                                      </Stack>
+                                      {post.reply_file_url && ( // 追加: reply_file_urlが存在する場合
+                                        <Box
+                                          my="0.5"
+                                          display="flex"
+                                          alignItems="center"
+                                          mr="2"
+                                        >
+                                          {post.reply_file_url.match(
+                                            /\.(jpeg|jpg|gif|png|bmp|webp|mp4)$/i
+                                          ) ? (
+                                            <Image
+                                              src={post.reply_file_url}
+                                              alt="Reply attached file"
+                                              loading="lazy"
+                                              maxW="100%"
+                                              maxH="40px"
+                                              objectFit="contain"
                                             />
                                           ) : (
-                                            <Image
-                                              src={post.file_url}
-                                              alt="Uploaded image"
-                                              cursor="pointer"
-                                              loading="lazy"
-                                              style={{
-                                                maxWidth: "100%",
-                                                maxHeight: "240px",
-                                                marginTop: "1px",
-                                                backgroundColor: "#f2e9df",
-                                                backgroundImage: `
+                                            <>
+                                              <IconButton
+                                                icon={<FaPaperclip />}
+                                                aria-label="添付ファイル"
+                                                bg="transparent"
+                                                p={0}
+                                                m={0}
+                                                minWidth={0}
+                                                onMouseLeave={(e) => {
+                                                  const tooltip =
+                                                    e.currentTarget.dataset
+                                                      .tooltip; // データ属性から取得
+                                                  if (tooltip) {
+                                                    const tooltipElement =
+                                                      document.getElementById(
+                                                        tooltip
+                                                      ); // IDから要素を取得
+                                                    if (tooltipElement) {
+                                                      tooltipElement.remove(); // 要素を削除
+                                                      delete e.currentTarget
+                                                        .dataset.tooltip; // データ属性を削除
+                                                    }
+                                                  }
+                                                }}
+                                                onMouseOver={(e) => {
+                                                  const existingTooltip =
+                                                    e.currentTarget.dataset
+                                                      .tooltip; // 既存のツールチップIDを取得
+                                                  if (!existingTooltip) {
+                                                    // 既存のツールチップがない場合のみ作成
+                                                    const tooltip =
+                                                      document.createElement(
+                                                        "span"
+                                                      );
+                                                    tooltip.innerText =
+                                                      post.reply_file_url
+                                                        .split("/")
+                                                        .pop() || "ファイル名";
+                                                    tooltip.id = `tooltip-${post.id}`; // 一意のIDを設定
+                                                    tooltip.style.position =
+                                                      "absolute";
+                                                    tooltip.style.backgroundColor =
+                                                      "white";
+                                                    tooltip.style.border =
+                                                      "1px solid gray";
+                                                    tooltip.style.padding =
+                                                      "5px";
+                                                    tooltip.style.zIndex =
+                                                      "1000";
+                                                    e.currentTarget.appendChild(
+                                                      tooltip
+                                                    );
+                                                    e.currentTarget.dataset.tooltip =
+                                                      tooltip.id; // データ属性にIDを保存
+                                                  }
+                                                }}
+                                              />
+                                            </>
+                                          )}
+                                        </Box>
+                                      )}
+                                    </Flex>
+                                    <Divider borderColor="gray.400" />
+                                  </CardBody>
+                                )}
+                                <CardBody px="8px" py="5px">
+                                  <Box
+                                    fontFamily="Noto Sans JP"
+                                    fontWeight="200"
+                                    color="black"
+                                    fontSize="15px"
+                                  >
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: post.content
+                                          .replace(/\n/g, "<br />")
+                                          .replace(
+                                            /(http[s]?:\/\/[^\s]+)/g,
+                                            '<a href="$1" class="external-link" style="text-decoration: underline;">$1</a>'
+                                          ),
+                                      }}
+                                    />
+                                  </Box>
+                                  {post.file_url && (
+                                    <>
+                                      {post.file_url.match(
+                                        /\.(jpeg|jpg|gif|png|mp4|bmp|webp)$/i
+                                      ) ? (
+                                        post.file_url.endsWith(".mp4") ? (
+                                          <video
+                                            src={post.file_url}
+                                            autoPlay
+                                            loop
+                                            muted
+                                            playsInline
+                                            style={{
+                                              maxWidth: "100%",
+                                              maxHeight: "300px",
+                                              marginTop: "1px",
+                                              cursor: "pointer",
+                                            }}
+                                            onClick={(e) => {
+                                              if (!isMobile) {
+                                                setSelectedImageUrl(
+                                                  post.file_url
+                                                );
+                                                setFileModalOpen(true);
+                                              }
+                                            }}
+                                          />
+                                        ) : (
+                                          <Image
+                                            src={post.file_url}
+                                            alt="Uploaded image"
+                                            cursor="pointer"
+                                            loading="lazy"
+                                            style={{
+                                              maxWidth: "100%",
+                                              maxHeight: "240px",
+                                              marginTop: "1px",
+                                              backgroundColor: "#f2e9df",
+                                              backgroundImage: `
                                           linear-gradient(45deg, #fff 25%, transparent 25%),
                                           linear-gradient(135deg, #fff 25%, transparent 25%),
                                           linear-gradient(45deg, transparent 75%, #fff 75%),
                                           linear-gradient(135deg, transparent 75%, #fff 75%)
                                         `,
-                                                backgroundSize: "20px 20px",
-                                                backgroundPosition:
-                                                  "0 0, 10px 0, 10px -10px, 0px 10px",
-                                                backgroundAttachment: "fixed",
-                                              }}
-                                              onClick={(e) => {
-                                                if (!isLongPress) {
-                                                  setSelectedImageUrl(
-                                                    post.file_url
-                                                  );
-                                                  setFileModalOpen(true);
+                                              backgroundSize: "20px 20px",
+                                              backgroundPosition:
+                                                "0 0, 10px 0, 10px -10px, 0px 10px",
+                                              backgroundAttachment: "fixed",
+                                            }}
+                                            onClick={(e) => {
+                                              if (!isLongPress) {
+                                                setSelectedImageUrl(
+                                                  post.file_url
+                                                );
+                                                setFileModalOpen(true);
+                                              }
+                                            }}
+                                            onTouchStart={(e) => {
+                                              touchStartRef.current = {
+                                                x: e.touches[0].clientX,
+                                                y: e.touches[0].clientY,
+                                              };
+                                              setIsLongPress(false);
+                                            }}
+                                            onTouchMove={(e) => {
+                                              if (touchStartRef.current) {
+                                                const dx =
+                                                  e.touches[0].clientX -
+                                                  touchStartRef.current.x;
+                                                const dy =
+                                                  e.touches[0].clientY -
+                                                  touchStartRef.current.y;
+                                                const distance = Math.sqrt(
+                                                  dx * dx + dy * dy
+                                                );
+                                                if (distance > 10) {
+                                                  setIsLongPress(true);
                                                 }
-                                              }}
-                                              onTouchStart={(e) => {
-                                                touchStartRef.current = {
-                                                  x: e.touches[0].clientX,
-                                                  y: e.touches[0].clientY,
-                                                };
-                                                setIsLongPress(false);
-                                              }}
-                                              onTouchMove={(e) => {
-                                                if (touchStartRef.current) {
-                                                  const dx =
-                                                    e.touches[0].clientX -
-                                                    touchStartRef.current.x;
-                                                  const dy =
-                                                    e.touches[0].clientY -
-                                                    touchStartRef.current.y;
-                                                  const distance = Math.sqrt(
-                                                    dx * dx + dy * dy
-                                                  );
-                                                  if (distance > 10) {
-                                                    setIsLongPress(true);
-                                                  }
-                                                }
-                                              }}
-                                              onTouchEnd={() => {
-                                                if (!isLongPress) {
-                                                  setSelectedImageUrl(
-                                                    post.file_url
-                                                  );
-                                                  setFileModalOpen(true);
-                                                }
-                                                touchStartRef.current = null;
-                                              }}
-                                            />
-                                          )
-                                        ) : (
+                                              }
+                                            }}
+                                            onTouchEnd={() => {
+                                              if (!isLongPress) {
+                                                setSelectedImageUrl(
+                                                  post.file_url
+                                                );
+                                                setFileModalOpen(true);
+                                              }
+                                              touchStartRef.current = null;
+                                            }}
+                                          />
+                                        )
+                                      ) : (
+                                        <Box
+                                          position="relative"
+                                          border="1px solid"
+                                          borderRadius="6px"
+                                          borderColor={
+                                            colorMode === "light"
+                                              ? "#bfb0a4"
+                                              : "gray.800"
+                                          }
+                                          bg={
+                                            colorMode === "light"
+                                              ? "#f0e4da"
+                                              : "gray.500"
+                                          }
+                                          color={
+                                            colorMode === "light"
+                                              ? "#8d7c6f"
+                                              : "#181a24"
+                                          }
+                                          px="2"
+                                          py="1"
+                                          mt={post.content ? "6px" : "0px"}
+                                        >
+                                          <Text pr="13px">
+                                            {post.original_file_name}
+                                          </Text>
                                           <Box
-                                            position="relative"
+                                            onClick={(e) => {
+                                              handleDownload(
+                                                post.file_url,
+                                                post.original_file_name
+                                              );
+                                            }}
+                                            cursor="pointer"
+                                            position="absolute"
+                                            borderRadius="50%"
                                             border="1px solid"
-                                            borderRadius="6px"
                                             borderColor={
                                               colorMode === "light"
                                                 ? "#bfb0a4"
                                                 : "gray.800"
                                             }
+                                            outline={
+                                              post.content
+                                                ? "1.5px solid"
+                                                : "3px solid"
+                                            }
+                                            outlineColor={
+                                              post.user_uid === currentUserId
+                                                ? "#dbf7c6"
+                                                : "white"
+                                            }
+                                            _hover={{
+                                              bg:
+                                                colorMode === "light"
+                                                  ? "#8d7c6f"
+                                                  : "gray.400",
+                                              color:
+                                                colorMode === "light"
+                                                  ? "#f0e4da"
+                                                  : "#181a24",
+                                              transition:
+                                                "all 0.3s ease-in-out",
+                                            }}
+                                            top="-7px"
+                                            right="-9px"
+                                            p="2px"
+                                            mr="3px"
+                                            w="26px"
+                                            h="26px"
                                             bg={
                                               colorMode === "light"
                                                 ? "#f0e4da"
                                                 : "gray.500"
                                             }
-                                            color={
-                                              colorMode === "light"
-                                                ? "#8d7c6f"
-                                                : "#181a24"
-                                            }
-                                            px="2"
-                                            py="1"
-                                            mt={post.content ? "6px" : "0px"}
+                                            textOverflow="ellipsis"
+                                            display="flex" // displayをflexに変更
+                                            alignItems="center" // 垂直方向の中央揃え
+                                            justifyContent="center" // 水平方向の中央揃え
                                           >
-                                            <Text pr="13px">
-                                              {post.original_file_name}
-                                            </Text>
-                                            <Box
-                                              onClick={(e) => {
-                                                handleDownload(
-                                                  post.file_url,
-                                                  post.original_file_name
-                                                );
-                                              }}
-                                              cursor="pointer"
-                                              position="absolute"
-                                              borderRadius="50%"
-                                              border="1px solid"
-                                              borderColor={
-                                                colorMode === "light"
-                                                  ? "#bfb0a4"
-                                                  : "gray.800"
-                                              }
-                                              outline={
-                                                post.content
-                                                  ? "1.5px solid"
-                                                  : "3px solid"
-                                              }
-                                              outlineColor={
-                                                post.user_uid === currentUserId
-                                                  ? "#dbf7c6"
-                                                  : "white"
-                                              }
-                                              _hover={{
-                                                bg:
-                                                  colorMode === "light"
-                                                    ? "#8d7c6f"
-                                                    : "gray.400",
-                                                color:
-                                                  colorMode === "light"
-                                                    ? "#f0e4da"
-                                                    : "#181a24",
-                                                transition:
-                                                  "all 0.3s ease-in-out",
-                                              }}
-                                              top="-7px"
-                                              right="-9px"
-                                              p="2px"
-                                              mr="3px"
-                                              w="26px"
-                                              h="26px"
-                                              bg={
-                                                colorMode === "light"
-                                                  ? "#f0e4da"
-                                                  : "gray.500"
-                                              }
-                                              textOverflow="ellipsis"
-                                              display="flex" // displayをflexに変更
-                                              alignItems="center" // 垂直方向の中央揃え
-                                              justifyContent="center" // 水平方向の中央揃え
-                                            >
-                                              <FaDownload size={16} />
-                                            </Box>
+                                            <FaDownload size={16} />
                                           </Box>
-                                        )}
-                                      </>
-                                    )}
-                                  </CardBody>
-                                  <Box // 吹き出しの三角
-                                    style={{
-                                      position: "absolute",
-                                      top: "5px",
-                                      left:
-                                        post.user_uid === currentUserId
-                                          ? "auto"
-                                          : "-10px",
-                                      right:
-                                        post.user_uid === currentUserId
-                                          ? "-10px"
-                                          : "auto",
-                                      width: 0,
-                                      height: 0,
-                                      borderStyle: "solid",
-                                      borderWidth:
-                                        post.user_uid === currentUserId
-                                          ? "5px 0 10px 15px"
-                                          : "5px 15px 10px 0",
-                                      borderColor:
-                                        post.user_uid === currentUserId
-                                          ? "transparent transparent transparent #DCF8C6"
-                                          : "transparent #FFFFFF transparent transparent",
-                                      zIndex: 1,
-                                    }}
-                                  />
-                                </Card>
-                                {getTimeStamp(
-                                  formatDate(
-                                    post.created_at,
-                                    prevDateString,
-                                    true
-                                  ),
-                                  true,
-                                  post.user_uid !== currentUserId,
-                                  post.read_by
-                                )}
-                              </Flex>
-                              {/* httpの場合はWEBページを表示 */}
-                              {(() => {
-                                const urls = post.content.match(
-                                  /(http[s]?:\/\/[^\s]+)/g
-                                );
-                                if (!urls) return null;
-                                const url = urls[0];
-                                const isExpanded = expandedUrls[url] || false;
-                                return (
-                                  <Box>
-                                    <Box
-                                      width={isExpanded ? "94%" : "50%"}
-                                      height={isExpanded ? "70vh" : "12vh"}
-                                      mt="8px"
-                                      transition="all 0.3s ease"
-                                      marginLeft={
-                                        post.user_uid === currentUserId
-                                          ? "auto"
-                                          : "44px"
-                                      }
-                                      marginRight={
-                                        post.user_uid === currentUserId
-                                          ? "12px"
-                                          : "auto"
-                                      }
-                                      style={{
-                                        boxShadow:
-                                          "0 4px 8px rgba(0, 0, 0, 0.1)",
-                                        position: "relative",
-                                      }}
-                                      borderRadius="8px"
-                                    >
-                                      <Tooltip
-                                        label={
-                                          isExpanded ? "折りたたむ" : "展開する"
-                                        }
-                                        placement="top"
-                                        hasArrow
-                                      >
-                                        <Box
-                                          display="inline-block"
-                                          position="absolute"
-                                        >
-                                          <Icon
-                                            position="absolute"
-                                            as={LuPanelRightOpen}
-                                            cursor="pointer"
-                                            boxSize="18px"
-                                            right={
-                                              post.user_uid === currentUserId
-                                                ? ""
-                                                : "-22px"
-                                            }
-                                            left={
-                                              post.user_uid === currentUserId
-                                                ? "-22px"
-                                                : ""
-                                            }
-                                            top="6px"
-                                            transform={
-                                              isExpanded
-                                                ? post.user_uid ===
-                                                  currentUserId
-                                                  ? "rotate(180deg)"
-                                                  : "rotate(0deg)"
-                                                : post.user_uid ===
-                                                  currentUserId
-                                                ? "rotate(0deg)"
-                                                : "rotate(180deg)"
-                                            }
-                                            transition="transform 0.3s ease"
-                                            onClick={() => {
-                                              setExpandedUrls((prev) => ({
-                                                ...prev,
-                                                [url]: !prev[url],
-                                              }));
-                                            }}
-                                            _hover={{
-                                              transform: isExpanded
-                                                ? post.user_uid ===
-                                                  currentUserId
-                                                  ? "rotate(180deg) scale(1.2)"
-                                                  : "rotate(0deg) scale(1.2)"
-                                                : post.user_uid ===
-                                                  currentUserId
-                                                ? "rotate(0deg) scale(1.2)"
-                                                : "rotate(180deg) scale(1.2)",
-                                            }}
-                                          />
                                         </Box>
-                                      </Tooltip>
+                                      )}
+                                    </>
+                                  )}
+                                </CardBody>
+                                <Box // 吹き出しの三角
+                                  style={{
+                                    position: "absolute",
+                                    top: "5px",
+                                    left:
+                                      post.user_uid === currentUserId
+                                        ? "auto"
+                                        : "-10px",
+                                    right:
+                                      post.user_uid === currentUserId
+                                        ? "-10px"
+                                        : "auto",
+                                    width: 0,
+                                    height: 0,
+                                    borderStyle: "solid",
+                                    borderWidth:
+                                      post.user_uid === currentUserId
+                                        ? "5px 0 10px 15px"
+                                        : "5px 15px 10px 0",
+                                    borderColor:
+                                      post.user_uid === currentUserId
+                                        ? "transparent transparent transparent #DCF8C6"
+                                        : "transparent #FFFFFF transparent transparent",
+                                    zIndex: 1,
+                                  }}
+                                />
+                              </Card>
+                              {getTimeStamp(
+                                formatDate(
+                                  post.created_at,
+                                  prevDateString,
+                                  true
+                                ),
+                                true,
+                                post.user_uid !== currentUserId,
+                                post.read_by
+                              )}
+                            </Flex>
+                            {/* httpの場合はWEBページを表示 */}
+                            {(() => {
+                              const urls = post.content.match(
+                                /(http[s]?:\/\/[^\s]+)/g
+                              );
+                              if (!urls) return null;
+                              const url = urls[0];
+                              const isExpanded = expandedUrls[url] || false;
+                              return (
+                                <Box>
+                                  <Box
+                                    width={isExpanded ? "94%" : "50%"}
+                                    height={isExpanded ? "70vh" : "12vh"}
+                                    mt="8px"
+                                    transition="all 0.3s ease"
+                                    marginLeft={
+                                      post.user_uid === currentUserId
+                                        ? "auto"
+                                        : "44px"
+                                    }
+                                    marginRight={
+                                      post.user_uid === currentUserId
+                                        ? "12px"
+                                        : "auto"
+                                    }
+                                    style={{
+                                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                                      position: "relative",
+                                    }}
+                                    borderRadius="8px"
+                                  >
+                                    <Tooltip
+                                      label={
+                                        isExpanded ? "折りたたむ" : "展開する"
+                                      }
+                                      placement="top"
+                                      hasArrow
+                                    >
                                       <Box
-                                        position="relative"
-                                        height="100%"
-                                        borderRadius="8px"
-                                        overflow="hidden"
+                                        display="inline-block"
+                                        position="absolute"
                                       >
-                                        <Flex
-                                          bg={
+                                        <Icon
+                                          position="absolute"
+                                          as={LuPanelRightOpen}
+                                          cursor="pointer"
+                                          boxSize="18px"
+                                          right={
                                             post.user_uid === currentUserId
-                                              ? "#DCF8C6"
-                                              : "#FFFFFF"
+                                              ? ""
+                                              : "-22px"
                                           }
-                                          px={2}
-                                          alignItems="center"
-                                          borderBottom="1px solid"
-                                          borderColor="gray.200"
-                                          width="100%"
-                                        >
-                                          <Box
-                                            display="flex"
-                                            alignItems="center"
-                                          >
-                                            <IconButton
-                                              color="#000"
-                                              aria-label="戻る"
-                                              icon={<Icon as={FaArrowLeft} />}
-                                              size="sm"
-                                              variant="ghost"
-                                              mr={1}
-                                              isDisabled={
-                                                !urlHistory[url] ||
-                                                currentUrlIndex[url] === 0
-                                              }
-                                              onClick={(e) => {
-                                                e.stopPropagation();
-                                                const prevUrl = goBack(url);
-                                                if (prevUrl) {
-                                                  const iframe =
-                                                    document.querySelector(
-                                                      `iframe[data-original-url="${url}"]`
-                                                    ) as HTMLIFrameElement;
-                                                  if (iframe) {
-                                                    iframe.src = prevUrl;
-                                                  }
-                                                }
-                                              }}
-                                            />
-                                            <IconButton
-                                              aria-label="リロード"
-                                              icon={<Icon as={FaRedo} />}
-                                              color="#000"
-                                              size="sm"
-                                              variant="ghost"
-                                              mr={2}
-                                              onClick={(e) => {
-                                                e.stopPropagation();
+                                          left={
+                                            post.user_uid === currentUserId
+                                              ? "-22px"
+                                              : ""
+                                          }
+                                          top="6px"
+                                          transform={
+                                            isExpanded
+                                              ? post.user_uid === currentUserId
+                                                ? "rotate(180deg)"
+                                                : "rotate(0deg)"
+                                              : post.user_uid === currentUserId
+                                              ? "rotate(0deg)"
+                                              : "rotate(180deg)"
+                                          }
+                                          transition="transform 0.3s ease"
+                                          onClick={() => {
+                                            setExpandedUrls((prev) => ({
+                                              ...prev,
+                                              [url]: !prev[url],
+                                            }));
+                                          }}
+                                          _hover={{
+                                            transform: isExpanded
+                                              ? post.user_uid === currentUserId
+                                                ? "rotate(180deg) scale(1.2)"
+                                                : "rotate(0deg) scale(1.2)"
+                                              : post.user_uid === currentUserId
+                                              ? "rotate(0deg) scale(1.2)"
+                                              : "rotate(180deg) scale(1.2)",
+                                          }}
+                                        />
+                                      </Box>
+                                    </Tooltip>
+                                    <Box
+                                      position="relative"
+                                      height="100%"
+                                      borderRadius="8px"
+                                      overflow="hidden"
+                                    >
+                                      <Flex
+                                        bg={
+                                          post.user_uid === currentUserId
+                                            ? "#DCF8C6"
+                                            : "#FFFFFF"
+                                        }
+                                        px={2}
+                                        alignItems="center"
+                                        borderBottom="1px solid"
+                                        borderColor="gray.200"
+                                        width="100%"
+                                      >
+                                        <Box display="flex" alignItems="center">
+                                          <IconButton
+                                            color="#000"
+                                            aria-label="戻る"
+                                            icon={<Icon as={FaArrowLeft} />}
+                                            size="sm"
+                                            variant="ghost"
+                                            mr={1}
+                                            isDisabled={
+                                              !urlHistory[url] ||
+                                              currentUrlIndex[url] === 0
+                                            }
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              const prevUrl = goBack(url);
+                                              if (prevUrl) {
                                                 const iframe =
                                                   document.querySelector(
                                                     `iframe[data-original-url="${url}"]`
                                                   ) as HTMLIFrameElement;
                                                 if (iframe) {
-                                                  iframe.src = iframe.src;
+                                                  iframe.src = prevUrl;
                                                 }
-                                              }}
-                                            />
-                                          </Box>
-                                          <Box
-                                            flex="1"
-                                            overflow="hidden"
-                                            whiteSpace="nowrap"
-                                            textOverflow="ellipsis"
-                                            fontSize="xs"
-                                            color="#000"
-                                            alignContent="center"
-                                          >
-                                            {urlTitles[url] ||
-                                              "ページを読み込み中..."}
-                                          </Box>
-                                          <Box flex="1" />
-                                          <IconButton
-                                            color="#000"
-                                            aria-label="新しいタブで開く"
-                                            icon={
-                                              <Icon as={FaExternalLinkAlt} />
-                                            }
-                                            size="sm"
-                                            variant="ghost"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              const currentUrl =
-                                                urlHistory[url]?.[
-                                                  currentUrlIndex[url] || 0
-                                                ] || url;
-                                              window.open(currentUrl, "_blank");
+                                              }
                                             }}
                                           />
-                                        </Flex>
-                                        {isExpanded && (
-                                          <iframe
-                                            src={url}
-                                            data-original-url={url}
-                                            style={{
-                                              position: "relative",
-                                              top: 0,
-                                              left: 0,
-                                              width: "100%",
-                                              height: "calc(100% - 20px)",
-                                              border: "none",
-                                            }}
-                                            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-                                            loading="lazy"
-                                            onLoad={(e) => {
+                                          <IconButton
+                                            aria-label="リロード"
+                                            icon={<Icon as={FaRedo} />}
+                                            color="#000"
+                                            size="sm"
+                                            variant="ghost"
+                                            mr={2}
+                                            onClick={(e) => {
+                                              e.stopPropagation();
                                               const iframe =
-                                                e.target as HTMLIFrameElement;
+                                                document.querySelector(
+                                                  `iframe[data-original-url="${url}"]`
+                                                ) as HTMLIFrameElement;
+                                              if (iframe) {
+                                                iframe.src = iframe.src;
+                                              }
+                                            }}
+                                          />
+                                        </Box>
+                                        <Box
+                                          flex="1"
+                                          overflow="hidden"
+                                          whiteSpace="nowrap"
+                                          textOverflow="ellipsis"
+                                          fontSize="xs"
+                                          color="#000"
+                                          alignContent="center"
+                                        >
+                                          {urlTitles[url] ||
+                                            "ページを読み込み中..."}
+                                        </Box>
+                                        <Box flex="1" />
+                                        <IconButton
+                                          color="#000"
+                                          aria-label="新しいタブで開く"
+                                          icon={<Icon as={FaExternalLinkAlt} />}
+                                          size="sm"
+                                          variant="ghost"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            const currentUrl =
+                                              urlHistory[url]?.[
+                                                currentUrlIndex[url] || 0
+                                              ] || url;
+                                            window.open(currentUrl, "_blank");
+                                          }}
+                                        />
+                                      </Flex>
+                                      {isExpanded && (
+                                        <iframe
+                                          src={url}
+                                          data-original-url={url}
+                                          style={{
+                                            position: "relative",
+                                            top: 0,
+                                            left: 0,
+                                            width: "100%",
+                                            height: "calc(100% - 20px)",
+                                            border: "none",
+                                          }}
+                                          sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                                          loading="lazy"
+                                          onLoad={(e) => {
+                                            const iframe =
+                                              e.target as HTMLIFrameElement;
+                                            try {
+                                              const currentUrl =
+                                                iframe.contentWindow?.location
+                                                  .href;
+                                              if (
+                                                currentUrl &&
+                                                currentUrl !== url &&
+                                                currentUrl !== iframe.src
+                                              ) {
+                                                addToHistory(url, currentUrl);
+                                              }
+                                              // まずURLからドメイン名を取得してタイトルの初期値として設定
+                                              const domain = new URL(url)
+                                                .hostname;
+                                              setUrlTitles((prev) => ({
+                                                ...prev,
+                                                [url]: domain,
+                                              }));
+                                              // タイトルの取得を試みる
+                                              const title =
+                                                iframe?.contentWindow?.document
+                                                  ?.title ||
+                                                iframe?.contentDocument?.title;
+                                              if (title) {
+                                                setUrlTitles((prev) => ({
+                                                  ...prev,
+                                                  [url]: title,
+                                                }));
+                                              }
+                                            } catch (error) {
+                                              // エラーの場合はドメイン名を表示
                                               try {
-                                                const currentUrl =
-                                                  iframe.contentWindow?.location
-                                                    .href;
-                                                if (
-                                                  currentUrl &&
-                                                  currentUrl !== url &&
-                                                  currentUrl !== iframe.src
-                                                ) {
-                                                  addToHistory(url, currentUrl);
-                                                }
-                                                // まずURLからドメイン名を取得してタイトルの初期値として設定
                                                 const domain = new URL(url)
                                                   .hostname;
                                                 setUrlTitles((prev) => ({
                                                   ...prev,
                                                   [url]: domain,
                                                 }));
-                                                // タイトルの取得を試みる
-                                                const title =
-                                                  iframe?.contentWindow
-                                                    ?.document?.title ||
-                                                  iframe?.contentDocument
-                                                    ?.title;
-                                                if (title) {
-                                                  setUrlTitles((prev) => ({
-                                                    ...prev,
-                                                    [url]: title,
-                                                  }));
-                                                }
-                                              } catch (error) {
-                                                // エラーの場合はドメイン名を表示
-                                                try {
-                                                  const domain = new URL(url)
-                                                    .hostname;
-                                                  setUrlTitles((prev) => ({
-                                                    ...prev,
-                                                    [url]: domain,
-                                                  }));
-                                                } catch (e) {
-                                                  setUrlTitles((prev) => ({
-                                                    ...prev,
-                                                    [url]: url,
-                                                  }));
-                                                }
+                                              } catch (e) {
+                                                setUrlTitles((prev) => ({
+                                                  ...prev,
+                                                  [url]: url,
+                                                }));
                                               }
-                                            }}
-                                          />
-                                        )}
-                                      </Box>
+                                            }
+                                          }}
+                                        />
+                                      )}
                                     </Box>
                                   </Box>
-                                );
-                              })()}
-                            </div>
-                          </>
-                        );
-                      })
-                  )}
-                </Stack>
-                <Box mb="20vh" />
-              </Content>
-              <StatusDisplay />
-            </div>
-          </>
-        )}
-      </Box>
-    </ChakraProvider>
+                                </Box>
+                              );
+                            })()}
+                          </div>
+                        </>
+                      );
+                    })
+                )}
+              </Stack>
+              <Box mb="20vh" />
+            </Content>
+            <StatusDisplay />
+          </div>
+        </>
+      )}
+    </Box>
   );
 }
