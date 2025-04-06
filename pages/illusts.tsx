@@ -1,7 +1,8 @@
 import React from "react";
-import Content from "../../components/content";
+import Content from "../components/content";
 
 import {
+  useColorMode,
   Center,
   Image,
   Text,
@@ -19,21 +20,23 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import NextImage from "next/image";
-import styles from "../../styles/home.module.scss";
+import styles from "../styles/home.module.scss";
 
-import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
-import Alagin_wrap from "../../components/3d/alagin_wrap";
-import Table_wrap from "../../components/3d/table_wrap";
-import Speaker_wrap from "../../components/3d/speaker_wrap";
-import Sushi_ebi_wrap from "../../components/3d/sushi_ebi_wrap";
-import Sushi_ika_wrap from "../../components/3d/sushi_ika_wrap";
-import Sushi_ootoro_wrap from "../../components/3d/sushi_ootoro_wrap";
-import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap";
-import Sushi_ikura_wrap from "../../components/3d/sushi_ikura_wrap";
+import { SunderText } from "../components/CustomText";
+import Hippo_001_wrap from "../components/3d/hippo_001_wrap";
+import Alagin_wrap from "../components/3d/alagin_wrap";
+import Table_wrap from "../components/3d/table_wrap";
+import Speaker_wrap from "../components/3d/speaker_wrap";
+import Sushi_ebi_wrap from "../components/3d/sushi_ebi_wrap";
+import Sushi_ika_wrap from "../components/3d/sushi_ika_wrap";
+import Sushi_ootoro_wrap from "../components/3d/sushi_ootoro_wrap";
+import Sushi_tamago_wrap from "../components/3d/sushi_tamago_wrap";
+import Sushi_ikura_wrap from "../components/3d/sushi_ikura_wrap";
 
-import { AnimationImage } from "../../components/CustomImage";
+import { AnimationImage } from "../components/CustomImage";
 
 export default function About() {
+  const { colorMode } = useColorMode();
   const illusts = [
     {
       src: "/images/illust/hippo/hippo_001.png",
@@ -131,16 +134,8 @@ export default function About() {
       <div className={styles.me}>
         <VStack>
           <Flex>
-            <Box mr={3}>
-              <Box className={styles.watercolor} h={100}>
-                <Text p={5} fontSize="32px" fontWeight="700">
-                  イラスト
-                </Text>
-              </Box>
-              <Text className={styles.tool} pl={5}>
-                by InkScape
-              </Text>
-            </Box>
+            <SunderText colorMode={colorMode} text="イラスト" fontSize="40px" />
+
             <Spacer />
             <Box filter="auto" brightness="110%">
               <NextImage
@@ -148,8 +143,8 @@ export default function About() {
                 src="/images/illust/hippo/hippo_001_cir.png"
                 alt="me.jpeg"
                 objectFit="cover"
-                width={92}
-                height={92}
+                width={72}
+                height={72}
               />
             </Box>
           </Flex>

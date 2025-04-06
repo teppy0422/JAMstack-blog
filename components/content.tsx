@@ -64,7 +64,7 @@ export default function Content({
           >
             <Box flex="1">
               {isCustomHeader ? <Header_ /> : <Header />}
-              <Box height="66px" />
+              <Box height="42px" />
               <Container
                 maxWidth={maxWidth}
                 className="container"
@@ -77,7 +77,11 @@ export default function Content({
                   left="0"
                   right="0"
                   bottom="0"
-                  bg="rgba(255,255,255,0.05)"
+                  bg={
+                    colorMode === "light"
+                      ? "rgba(255,255,255,0.05)"
+                      : "rgba(0,0,0,0.05)"
+                  }
                   filter="blur(20px)" // ブラー効果を追加
                   zIndex="-1" // 背景として扱うためにzIndexを設定
                 />
@@ -85,10 +89,23 @@ export default function Content({
               </Container>
             </Box>
           </Flex>
-          <Box className="no-print-page">
+          <Box
+            className="no-print-page"
+            bg={
+              colorMode === "light"
+                ? "custom.theme.light.500"
+                : "custom.theme.dark.500"
+            }
+            // minH="10vh"
+          >
             <Center
-              my="14px"
+              py="14px"
               color={colorMode === "light" ? "black" : "white"}
+              bg={
+                colorMode === "light"
+                  ? "custom.theme.light.500"
+                  : "custom.theme.dark.500"
+              }
               fontSize="14px"
               fontFamily={getMessage({
                 ja: "Noto Sans JP",
@@ -116,7 +133,7 @@ export default function Content({
                 })}
               </NextLink>
             </Center>
-            <Center mb="16px" color={colorMode === "light" ? "black" : "white"}>
+            <Center mb="2px" color={colorMode === "light" ? "black" : "white"}>
               ©︎ 2022-2024 Teppei Kataoka. All rights Reserved.
             </Center>
           </Box>

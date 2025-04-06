@@ -26,6 +26,7 @@ export const theme = extendTheme({
         fontWeight: "200",
         padding: 0,
         margin: 0,
+        bg: props.colorMode === "light" ? "#f0e4da" : "#202024",
       },
       a: {
         // color: props.colorMode === "dark" ? "white" : "gray.600",

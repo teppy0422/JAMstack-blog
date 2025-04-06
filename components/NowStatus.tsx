@@ -231,6 +231,7 @@ export const StatusDisplay = () => {
       setTargetDate(previousWeekDate); // targetDateを更新
     }
   };
+  const [isAnimating, setIsAnimating] = useState(false); // アニメーションの状態を管理
 
   // スケジュールを取得する関数
   const fetchSchedules = async () => {
@@ -349,6 +350,11 @@ export const StatusDisplay = () => {
 
   if (!currentStatus) return null;
   let previousDate = "";
+
+  // 画像が読み込まれたときにアニメーションを開始
+  const handleImageLoad = () => {
+    setIsAnimating(true);
+  };
 
   return (
     <>
@@ -494,13 +500,19 @@ export const StatusDisplay = () => {
                       <style jsx>{`
                         @keyframes upDown {
                           0% {
-                            transform: translateY(100%);
+                            transform: translateY(-10px);
                           }
-                          50% {
-                            transform: translateY(0);
+                          10% {
+                            transform: translateY(-10px);
+                          }
+                          30% {
+                            transform: translateY(calc(100% - 35px));
+                          }
+                          48% {
+                            transform: translateY(calc(100% - 35px));
                           }
                           100% {
-                            transform: translateY(100%);
+                            transform: translateY(-10px);
                           }
                         }
                         @keyframes zoomUp {
@@ -571,7 +583,22 @@ export const StatusDisplay = () => {
               </>
             )}
           </ModalHeader>
-          <ModalCloseButton _focus={{ boxShadow: "none" }} />
+          <ModalCloseButton
+            _focus={{ boxShadow: "none" }}
+            border="1px solid"
+            borderColor={
+              colorMode === "light"
+                ? "custom.theme.light.800"
+                : "custom.theme.dark.300"
+            }
+            color={
+              colorMode === "light"
+                ? "custom.theme.light.800"
+                : "custom.theme.dark.300"
+            }
+            borderRadius="50%"
+            bg="white"
+          />
           <ModalBody pb={3}>
             <Stack spacing={1}>
               <Center mb={3}>
@@ -628,7 +655,6 @@ export const StatusDisplay = () => {
                   };
                   currentDate = date.toLocaleDateString("ja-JP", options);
                 }
-
                 const showDate = currentDate !== previousDate;
                 previousDate = currentDate;
 
@@ -683,12 +709,7 @@ export const StatusDisplay = () => {
                       mt={0}
                       ml={7}
                     >
-                      <Stack
-                        spacing={0}
-                        mb={1}
-                        align="center"
-                        position="relative"
-                      >
+                      <Stack position="relative" mb={0} align="center" gap="0">
                         <Text fontWeight="medium" fontSize="12px">
                           {new Date(schedule.startTime).toLocaleTimeString(
                             "ja-JP",
@@ -719,19 +740,20 @@ export const StatusDisplay = () => {
                         </Text>
                         <Tooltip
                           label={getActivityLabel(schedule.activity)}
-                          placement="top"
+                          placement="left"
                           hasArrow
                         >
                           <Box
-                            w="3px"
+                            w="6px"
+                            left="-9px"
                             h="100%"
                             position="absolute"
                             bg={getActivityColor(schedule.activity)}
-                            left="-6px"
                           />
                         </Tooltip>
                         {isCurrent && (
                           <>
+                            {/* <Box h="100%" w="10px" bg="red" /> */}
                             {/* <Box
                               w="3px"
                               h="100%"
@@ -739,16 +761,27 @@ export const StatusDisplay = () => {
                               bg={colorMode === "light" ? "red" : "#F55"}
                               left="-9px"
                             /> */}
-                            <Image
-                              src="/images/illust/hippo/hippo_023_pixcel.gif"
-                              width="28px"
+                            <Box // Imageを包むBoxを追加
                               position="absolute"
-                              left="-27px"
+                              zIndex="1000"
+                              left="-28px"
                               top="0"
+                              height="100%" // Stackの高さ全体を継承
                               style={{
-                                animation: "upDown 8s ease-in-out infinite",
+                                animation: isAnimating
+                                  ? "upDown 7s ease-in-out infinite"
+                                  : "none",
                               }}
-                            />
+                            >
+                              <Image
+                                src={
+                                  "/images/illust/hippo/hippo_023_pixcel.gif"
+                                }
+                                onLoad={handleImageLoad}
+                                width="36px"
+                                zIndex="1000"
+                              />
+                            </Box>
                           </>
                         )}
                       </Stack>

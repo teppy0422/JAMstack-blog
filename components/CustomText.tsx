@@ -63,9 +63,14 @@ export const ScrollText: React.FC<ScrollTextProps> = ({ colorMode, text }) => {
 // dededede文字
 interface SunderTextProps {
   colorMode: "light" | "dark";
-  text: String;
+  text: string;
+  fontSize?: string;
 }
-export const SunderText: React.FC<SunderTextProps> = ({ colorMode, text }) => {
+export const SunderText: React.FC<SunderTextProps> = ({
+  colorMode,
+  text,
+  fontSize = "84px",
+}) => {
   const [animationStyle, setAnimationStyle] = useState<React.CSSProperties>({
     opacity: 0,
     transform: "translate(0, 0)",
@@ -260,7 +265,7 @@ export const SunderText: React.FC<SunderTextProps> = ({ colorMode, text }) => {
       <Text
         fontFamily="Dela Gothic One"
         fontWeight="400"
-        fontSize="84px"
+        fontSize={fontSize}
         color="white"
         position="relative"
         zIndex={2}
@@ -275,7 +280,7 @@ export const SunderText: React.FC<SunderTextProps> = ({ colorMode, text }) => {
       <Text
         fontFamily="Dela Gothic One"
         fontWeight="400"
-        fontSize="84px"
+        fontSize={fontSize}
         color={colorMode === "light" ? "#F00" : "#000"}
         position="absolute"
         zIndex={1}
@@ -286,7 +291,7 @@ export const SunderText: React.FC<SunderTextProps> = ({ colorMode, text }) => {
       <Text
         fontFamily="Dela Gothic One"
         fontWeight="400"
-        fontSize="84px"
+        fontSize={fontSize}
         color={colorMode === "light" ? "#FFF" : "#000"}
         position="absolute"
         zIndex={3}

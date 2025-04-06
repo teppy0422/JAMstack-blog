@@ -25,7 +25,7 @@ import {
 } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { ImAttachment } from "react-icons/im";
-import { BsSend } from "react-icons/bs";
+import { BsSend, BsFillSendFill } from "react-icons/bs";
 import { supabase } from "../../../utils/supabase/client";
 import { format } from "date-fns";
 import { ja, enUS, zhCN } from "date-fns/locale";
@@ -1250,9 +1250,72 @@ function ThreadContent(): JSX.Element {
                   <Spinner size="sm" />
                 </Flex>
               )}
+              {!isAtBottom && ( // 最下部でない場合にアイコンを表示
+                <Box
+                  onClick={(e) => {
+                    if (unreadPostIds.length > 0) {
+                      const firstUnreadId = unreadPostIds[0];
+                      const element = document.getElementById(
+                        `post-${firstUnreadId}`
+                      );
+                      if (element) {
+                        const offset = 80;
+                        const elementPosition =
+                          element.getBoundingClientRect().top;
+                        const offsetPosition =
+                          elementPosition + window.scrollY - offset;
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      }
+                    } else {
+                      scrollToBottom();
+                    }
+                  }}
+                  className="no-print-page"
+                  position="absolute"
+                  zIndex="1003"
+                  top="-74px"
+                  right="8px"
+                  aria-label="Your Icon"
+                  cursor="pointer"
+                  bg={
+                    colorMode === "light" ? "custom.theme.light.50" : "gray.900"
+                  }
+                  color={
+                    colorMode === "light"
+                      ? unreadPostIds.length > 0
+                        ? "red"
+                        : "custom.theme.light.900"
+                      : unreadPostIds.length > 0
+                      ? "orange"
+                      : "custom.theme.dark.300"
+                  }
+                  _hover={{
+                    bg:
+                      colorMode === "light"
+                        ? "custom.theme.light.700"
+                        : "custom.theme.dark.400",
+                    color:
+                      colorMode === "light" ? "white" : "custom.theme.dark.600",
+                    transition: "all 0.2s ease-in-out",
+                  }}
+                  borderRadius="10%"
+                  width="32px"
+                  height="32px"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Icon size="28px" as={FaArrowDown} />
+                </Box>
+              )}
               <Box
+                id="question"
                 className="no-print-page"
                 position="absolute"
+                zIndex="1003"
                 top="-37px"
                 right="8px"
                 aria-label="Your Icon"
@@ -1267,9 +1330,10 @@ function ThreadContent(): JSX.Element {
                   bg:
                     colorMode === "light"
                       ? "custom.theme.light.700"
-                      : "gray.900",
-                  color: colorMode === "light" ? "white" : "",
-                  transition: "all 0.3s ease-in-out",
+                      : "custom.theme.dark.400",
+                  color:
+                    colorMode === "light" ? "white" : "custom.theme.dark.600",
+                  transition: "all 0.2s ease-in-out",
                 }}
                 borderRadius="10%"
                 width="32px"
@@ -1289,7 +1353,7 @@ function ThreadContent(): JSX.Element {
                     cn: "功能一览",
                     language,
                   })}
-                  size="md"
+                  size="sm"
                   children={
                     <Box>
                       <Text fontWeight={400}>
@@ -1336,55 +1400,6 @@ function ThreadContent(): JSX.Element {
                   }
                 />
               </Box>
-              {!isAtBottom && ( // 最下部でない場合にアイコンを表示
-                <Box
-                  onClick={(e) => {
-                    if (unreadPostIds.length > 0) {
-                      const firstUnreadId = unreadPostIds[0];
-                      const element = document.getElementById(
-                        `post-${firstUnreadId}`
-                      );
-                      if (element) {
-                        const offset = 80;
-                        const elementPosition =
-                          element.getBoundingClientRect().top;
-                        const offsetPosition =
-                          elementPosition + window.scrollY - offset;
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: "smooth",
-                        });
-                      }
-                    } else {
-                      scrollToBottom();
-                    }
-                  }}
-                  className="no-print-page"
-                  position="absolute"
-                  top="-74px"
-                  right="8px"
-                  aria-label="Your Icon"
-                  cursor="pointer"
-                  bg={
-                    colorMode === "light" ? "custom.theme.light.50" : "gray.900"
-                  }
-                  color={
-                    colorMode === "light"
-                      ? unreadPostIds.length > 0
-                        ? "red"
-                        : "custom.theme.light.900"
-                      : "custom.theme.light.900"
-                  }
-                  borderRadius="10%"
-                  width="32px"
-                  height="32px"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Icon size="28px" as={FaArrowDown} />
-                </Box>
-              )}
               {replyToPostId && (
                 <Stack
                   fontSize="sm"
@@ -1583,15 +1598,13 @@ function ThreadContent(): JSX.Element {
                     />
                   </Button>
                 </Tooltip>
-
                 <Input
+                  id="inputValue"
                   position="relative"
                   as="textarea"
-                  id="inputValue"
                   minH="40px"
                   resize="none"
                   overflow="hidden"
-                  // value={inputValue}
                   onChange={(e) => handleInputChange()} // 修正
                   onKeyDown={(e) => {
                     if (e.shiftKey && e.key === "Enter") {
@@ -1611,7 +1624,7 @@ function ThreadContent(): JSX.Element {
                     borderColor:
                       colorMode === "light"
                         ? "custom.theme.light.850"
-                        : "gray.400",
+                        : "custom.theme.dark.300",
                   }}
                   fontWeight="200"
                   fontSize={isMobile ? "16px" : "15px"} //iphone_safariなら16px以下で自動ズームが働く
@@ -1622,8 +1635,7 @@ function ThreadContent(): JSX.Element {
                     language,
                   })}
                   py={2}
-                  pl={10}
-                  pr={0}
+                  px={10}
                   size="md"
                   color={
                     colorMode === "light" ? "custom.theme.light.900" : "white"
@@ -1632,17 +1644,19 @@ function ThreadContent(): JSX.Element {
                   borderColor={
                     colorMode === "light"
                       ? "custom.theme.light.700"
-                      : "gray.800"
+                      : "custom.theme.dark.400"
                   }
                   borderRadius="5px"
                   _placeholder={{
                     color:
                       colorMode === "light"
                         ? "custom.theme.light.600"
-                        : "gray.500",
+                        : "custom.theme.dark.300",
                   }}
                 />
                 <Tooltip
+                  position="absolute"
+                  zIndex="100000"
                   label={getMessage({
                     ja: "送信",
                     us: "send",
@@ -1655,6 +1669,24 @@ function ThreadContent(): JSX.Element {
                 >
                   <IconButton
                     id="sendButton"
+                    bg="none"
+                    border="none"
+                    position="absolute"
+                    zIndex="10000"
+                    top="8px"
+                    right="12px"
+                    color={
+                      colorMode === "light"
+                        ? "custom.theme.light.800"
+                        : "custom.theme.dark.300"
+                    }
+                    _hover={{
+                      color:
+                        colorMode === "light"
+                          ? "custom.theme.light.850"
+                          : "custom.theme.dark.100",
+                      transition: "all 0.2s ease-in-out",
+                    }}
                     onClick={() => {
                       if (isSubmitting) return;
                       const inputValue = document.getElementById("inputValue");
@@ -1679,7 +1711,6 @@ function ThreadContent(): JSX.Element {
                         );
                         return;
                       }
-                      console.log(inputValueElement.value);
                       // setNewPostContent(inputValueElement.value);
                       setIsSubmitting(true); //post開始
                       createPost(inputValueElement.value);
@@ -1693,49 +1724,17 @@ function ThreadContent(): JSX.Element {
                         }
                       }, 2000); // 2秒待機
                     }}
+                    size="30px"
                     icon={
                       isSubmitting ? (
-                        <Spinner
-                          color={
-                            colorMode === "light"
-                              ? "custom.theme.light.800"
-                              : "gray.500"
-                          }
-                        />
+                        <Spinner />
                       ) : (
-                        <BsSend
+                        <BsFillSendFill
                           style={{ transform: "rotate(0deg)" }}
                           size="24px"
                         />
                       )
                     }
-                    bg={
-                      colorMode === "light"
-                        ? "custom.theme.light.500"
-                        : "gray.500"
-                    }
-                    color={
-                      colorMode === "light"
-                        ? "custom.theme.light.800"
-                        : "#181a24"
-                    }
-                    border="1px solid"
-                    borderColor={
-                      colorMode === "light" ? "custom.theme.light.800" : ""
-                    }
-                    _hover={{
-                      bg:
-                        colorMode === "light"
-                          ? "custom.theme.light.400"
-                          : "gray.400",
-                      color:
-                        colorMode === "light"
-                          ? "custom.theme.light.850"
-                          : "#181a24",
-                      transition: "all 0.2s ease-in-out",
-                    }}
-                    top={0}
-                    right={-1}
                     aria-label="送信"
                   />
                 </Tooltip>
