@@ -96,6 +96,7 @@ import { StatusDisplay } from "../../../components/NowStatus";
 import { isatty } from "tty";
 import { useUnread } from "../../../context/UnreadContext";
 import imageCompression from "browser-image-compression";
+import { CustomCloseButton } from "../../../components/custom/CustomCloseButton";
 
 let cachedUsers: any[] | null = null;
 const now = new Date();
@@ -188,6 +189,8 @@ function ThreadContent(): JSX.Element {
   const [threadCompany, setThreadCompany] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [selectedFileSize, setSelectedFileSize] = useState<string | null>(null);
+
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fileModalOpen, setFileModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -884,8 +887,38 @@ function ThreadContent(): JSX.Element {
     window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   };
 
+  const formatFileSize = (sizeInBytes: number): string => {
+    if (sizeInBytes < 1024) {
+      return `${sizeInBytes} B`; // バイト
+    } else if (sizeInBytes < 1024 * 1024) {
+      return `${(sizeInBytes / 1024).toFixed(1)} KB`; // KB
+    } else {
+      return `${(sizeInBytes / (1024 * 1024)).toFixed(1)} MB`; // MB
+    }
+  };
+  const FileSizeDisplay = ({ fileUrl }: { fileUrl: string }) => {
+    const [fileSize, setFileSize] = useState<string>("");
+    useEffect(() => {
+      const fetchFileSize = async () => {
+        try {
+          const response = await fetch(fileUrl, { method: "HEAD" });
+          const size = response.headers.get("Content-Length");
+          if (size) {
+            setFileSize(formatFileSize(Number(size)));
+          }
+        } catch (error) {
+          console.error("Error fetching file size:", error);
+        }
+      };
+      fetchFileSize();
+    }, [fileUrl]);
+    return <span>{fileSize}</span>;
+  };
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFileSize(formatFileSize(file.size));
+    }
     if (file) {
       if (file.size > 30 * 1024 * 1024) {
         toast({
@@ -1742,72 +1775,60 @@ function ThreadContent(): JSX.Element {
               {selectedFile && (
                 <Box mt={2}>
                   {previewUrl ? (
-                    <Box position="relative" display="inline-block">
-                      <Image
-                        src={previewUrl}
-                        alt="Preview"
-                        maxH="64px"
-                        maxW="128px"
-                        objectFit="contain"
-                        borderRadius="md"
-                        border="2px solid"
-                        borderColor={
-                          colorMode === "light"
-                            ? "custom.theme.light.500"
-                            : "gray.500"
-                        }
-                        outline="1px solid"
-                        outlineColor={
-                          colorMode === "light"
-                            ? "custom.theme.light.800"
-                            : "gray.500"
-                        }
-                      />
-                      <IconButton
-                        aria-label="Remove file"
-                        icon={<CloseIcon boxSize="9px" />}
-                        size="xs"
-                        position="absolute"
-                        borderRadius="50%"
-                        border="1px solid"
-                        borderColor={
-                          colorMode === "light"
-                            ? "custom.theme.light.800"
-                            : "#181a24"
-                        }
-                        outline="2px solid"
-                        outlineColor={
-                          colorMode === "light"
-                            ? "custom.theme.light.50"
-                            : "#181a24"
-                        }
-                        top="-4px"
-                        right="-4px"
-                        onClick={clearFileSelection}
-                        bg={
-                          colorMode === "light"
-                            ? "custom.theme.light.500"
-                            : "gray.500"
-                        }
-                        color={
-                          colorMode === "light"
-                            ? "custom.theme.light.800"
-                            : "#181a24"
-                        }
-                        variant="solid"
-                        _hover={{
-                          bg:
+                    <>
+                      <Box position="relative" display="inline-block">
+                        <Tooltip label="aaaa" placement="right" hasArrow>
+                          <Image
+                            src={previewUrl}
+                            alt="Preview"
+                            maxH="64px"
+                            maxW="128px"
+                            objectFit="contain"
+                            borderRadius="md"
+                            border="2px solid"
+                            borderColor={
+                              colorMode === "light"
+                                ? "custom.theme.light.500"
+                                : "custom.theme.dark.500"
+                            }
+                            outline="1px solid"
+                            outlineColor={
+                              colorMode === "light"
+                                ? "custom.theme.light.800"
+                                : "custom.theme.dark.100"
+                            }
+                          />
+                        </Tooltip>
+                        <CustomCloseButton
+                          colorMode={colorMode}
+                          onClick={clearFileSelection}
+                          top="-4px"
+                          right="-6px"
+                        />
+                        <Box
+                          position="absolute"
+                          bottom="-1px"
+                          left="-1px"
+                          py="0"
+                          px="3px"
+                          borderRadius="5px"
+                          border="1px solid"
+                          borderColor={
                             colorMode === "light"
-                              ? "custom.theme.light.800"
-                              : "gray.400",
-                          color:
+                              ? "custom.theme.light.900"
+                              : "custom.theme.dark.100"
+                          }
+                          bg={
                             colorMode === "light"
                               ? "custom.theme.light.500"
-                              : "#181a24",
-                          transition: "all 0.2s ease-in-out",
-                        }}
-                      />
-                    </Box>
+                              : "custom.theme.dark.500"
+                          }
+                          fontSize="12px"
+                        >
+                          {selectedFileSize}
+                        </Box>
+                      </Box>
+                    </>
                   ) : (
                     <Flex align="center" gap={2}>
                       <Box
@@ -1817,17 +1838,17 @@ function ThreadContent(): JSX.Element {
                         borderColor={
                           colorMode === "light"
                             ? "custom.theme.light.800"
-                            : "gray.800"
-                        }
-                        bg={
-                          colorMode === "light"
-                            ? "custom.theme.light.500"
-                            : "gray.500"
+                            : "custom.theme.dark.100"
                         }
                         color={
                           colorMode === "light"
                             ? "custom.theme.light.850"
-                            : "#181a24"
+                            : "custom.theme.dark.100"
+                        }
+                        bg={
+                          colorMode === "light"
+                            ? "custom.theme.light.500"
+                            : "custom.theme.dark.500"
                         }
                         px="2"
                         py="1"
@@ -1835,50 +1856,32 @@ function ThreadContent(): JSX.Element {
                         <Text fontSize="sm" pr="13px">
                           {selectedFileName}
                         </Text>
-                        <IconButton
-                          position="absolute"
-                          aria-label="Remove file"
-                          icon={<CloseIcon boxSize="9px" />}
-                          size="xs"
-                          borderRadius="50%"
+                        <CustomCloseButton
+                          colorMode={colorMode}
+                          onClick={clearFileSelection}
+                          top="-4px"
+                          right="-8px"
+                        />
+                        <Box
+                          py="0"
+                          px="3px"
+                          display="inline"
+                          borderRadius="5px"
                           border="1px solid"
                           borderColor={
                             colorMode === "light"
-                              ? "custom.theme.light.800"
-                              : "gray.800"
+                              ? "custom.theme.light.900"
+                              : "custom.theme.dark.100"
                           }
-                          outline="2px solid"
-                          outlineColor={
-                            colorMode === "light"
-                              ? "custom.theme.light.50"
-                              : "#181a24"
-                          }
-                          top="-6px"
-                          right="-9px"
-                          onClick={clearFileSelection}
                           bg={
                             colorMode === "light"
                               ? "custom.theme.light.500"
-                              : "gray.500"
+                              : "custom.theme.dark.500"
                           }
-                          color={
-                            colorMode === "light"
-                              ? "custom.theme.light.850"
-                              : "#181a24"
-                          }
-                          variant="solid"
-                          _hover={{
-                            bg:
-                              colorMode === "light"
-                                ? "custom.theme.light.800"
-                                : "gray.400",
-                            color:
-                              colorMode === "light"
-                                ? "custom.theme.light.400"
-                                : "#181a24",
-                            transition: "all 0.2s ease-in-out",
-                          }}
-                        />
+                          fontSize="12px"
+                        >
+                          {selectedFileSize}
+                        </Box>
                       </Box>
                     </Flex>
                   )}
@@ -2599,68 +2602,164 @@ function ThreadContent(): JSX.Element {
                                             }}
                                           />
                                         ) : (
-                                          <Image
-                                            src={post.file_url}
-                                            alt="Uploaded image"
-                                            cursor="pointer"
-                                            loading="lazy"
-                                            style={{
-                                              maxWidth: "100%",
-                                              maxHeight: "240px",
-                                              marginTop: "1px",
-                                              backgroundColor: "#f2e9df",
-                                              backgroundImage: `
+                                          <>
+                                            <Box
+                                              position="relative"
+                                              display="inline-block"
+                                              mt="8px"
+                                            >
+                                              <Image
+                                                src={post.file_url}
+                                                borderRadius="5px"
+                                                alt="Uploaded image"
+                                                cursor="pointer"
+                                                loading="lazy"
+                                                style={{
+                                                  maxWidth: "100%",
+                                                  maxHeight: "240px",
+                                                  marginTop: "1px",
+                                                  backgroundColor: "#f2e9df",
+                                                  backgroundImage: `
                                           linear-gradient(45deg, #fff 25%, transparent 25%),
                                           linear-gradient(135deg, #fff 25%, transparent 25%),
                                           linear-gradient(45deg, transparent 75%, #fff 75%),
                                           linear-gradient(135deg, transparent 75%, #fff 75%)
                                         `,
-                                              backgroundSize: "20px 20px",
-                                              backgroundPosition:
-                                                "0 0, 10px 0, 10px -10px, 0px 10px",
-                                              backgroundAttachment: "fixed",
-                                            }}
-                                            onClick={(e) => {
-                                              if (!isLongPress) {
-                                                setSelectedImageUrl(
-                                                  post.file_url
-                                                );
-                                                setFileModalOpen(true);
-                                              }
-                                            }}
-                                            onTouchStart={(e) => {
-                                              touchStartRef.current = {
-                                                x: e.touches[0].clientX,
-                                                y: e.touches[0].clientY,
-                                              };
-                                              setIsLongPress(false);
-                                            }}
-                                            onTouchMove={(e) => {
-                                              if (touchStartRef.current) {
-                                                const dx =
-                                                  e.touches[0].clientX -
-                                                  touchStartRef.current.x;
-                                                const dy =
-                                                  e.touches[0].clientY -
-                                                  touchStartRef.current.y;
-                                                const distance = Math.sqrt(
-                                                  dx * dx + dy * dy
-                                                );
-                                                if (distance > 10) {
-                                                  setIsLongPress(true);
+                                                  backgroundSize: "20px 20px",
+                                                  backgroundPosition:
+                                                    "0 0, 10px 0, 10px -10px, 0px 10px",
+                                                  backgroundAttachment: "fixed",
+                                                }}
+                                                onClick={(e) => {
+                                                  if (!isLongPress) {
+                                                    setSelectedImageUrl(
+                                                      post.file_url
+                                                    );
+                                                    setFileModalOpen(true);
+                                                  }
+                                                }}
+                                                onTouchStart={(e) => {
+                                                  touchStartRef.current = {
+                                                    x: e.touches[0].clientX,
+                                                    y: e.touches[0].clientY,
+                                                  };
+                                                  setIsLongPress(false);
+                                                }}
+                                                onTouchMove={(e) => {
+                                                  if (touchStartRef.current) {
+                                                    const dx =
+                                                      e.touches[0].clientX -
+                                                      touchStartRef.current.x;
+                                                    const dy =
+                                                      e.touches[0].clientY -
+                                                      touchStartRef.current.y;
+                                                    const distance = Math.sqrt(
+                                                      dx * dx + dy * dy
+                                                    );
+                                                    if (distance > 10) {
+                                                      setIsLongPress(true);
+                                                    }
+                                                  }
+                                                }}
+                                                onTouchEnd={() => {
+                                                  if (!isLongPress) {
+                                                    setSelectedImageUrl(
+                                                      post.file_url
+                                                    );
+                                                    setFileModalOpen(true);
+                                                  }
+                                                  touchStartRef.current = null;
+                                                }}
+                                              />
+                                              <Box
+                                                position="absolute"
+                                                bottom="3px"
+                                                left="3px"
+                                                py="0"
+                                                px="3px"
+                                                borderRadius="5px"
+                                                border="1px solid"
+                                                borderColor={
+                                                  colorMode === "light"
+                                                    ? "custom.theme.light.900"
+                                                    : "custom.theme.dark.100"
                                                 }
-                                              }
-                                            }}
-                                            onTouchEnd={() => {
-                                              if (!isLongPress) {
-                                                setSelectedImageUrl(
-                                                  post.file_url
-                                                );
-                                                setFileModalOpen(true);
-                                              }
-                                              touchStartRef.current = null;
-                                            }}
-                                          />
+                                                bg={
+                                                  colorMode === "light"
+                                                    ? "custom.theme.light.500"
+                                                    : "custom.theme.dark.500"
+                                                }
+                                                fontSize="12px"
+                                              >
+                                                <FileSizeDisplay
+                                                  fileUrl={post.file_url}
+                                                />
+                                              </Box>
+                                              <Box
+                                                position="absolute"
+                                                zIndex="5"
+                                                onClick={(e) => {
+                                                  handleDownload(
+                                                    post.file_url,
+                                                    post.original_file_name
+                                                  );
+                                                }}
+                                                cursor="pointer"
+                                                borderRadius="50%"
+                                                color={
+                                                  colorMode === "light"
+                                                    ? "custom.theme.light.900"
+                                                    : "custom.theme.dark.800"
+                                                }
+                                                border="1px solid"
+                                                borderColor={
+                                                  colorMode === "light"
+                                                    ? "#bfb0a4"
+                                                    : "gray.800"
+                                                }
+                                                outline={
+                                                  post.content
+                                                    ? "2px solid"
+                                                    : "3px solid"
+                                                }
+                                                outlineColor={
+                                                  post.user_uid ===
+                                                  currentUserId
+                                                    ? "#dbf7c6"
+                                                    : "white"
+                                                }
+                                                _hover={{
+                                                  bg:
+                                                    colorMode === "light"
+                                                      ? "#8d7c6f"
+                                                      : "gray.400",
+                                                  color:
+                                                    colorMode === "light"
+                                                      ? "#f0e4da"
+                                                      : "#181a24",
+                                                  transition:
+                                                    "all 0.3s ease-in-out",
+                                                }}
+                                                top="-7px"
+                                                right="-9px"
+                                                p="2px"
+                                                mr="3px"
+                                                w="26px"
+                                                h="26px"
+                                                bg={
+                                                  colorMode === "light"
+                                                    ? "#f0e4da"
+                                                    : "custom.theme.dark.100"
+                                                }
+                                                textOverflow="ellipsis"
+                                                display="flex" // displayをflexに変更
+                                                alignItems="center" // 垂直方向の中央揃え
+                                                justifyContent="center" // 水平方向の中央揃え
+                                              >
+                                                <FaDownload size={16} />
+                                              </Box>
+                                            </Box>
+                                          </>
                                         )
                                       ) : (
                                         <Box
@@ -2675,7 +2774,7 @@ function ThreadContent(): JSX.Element {
                                           bg={
                                             colorMode === "light"
                                               ? "#f0e4da"
-                                              : "gray.500"
+                                              : "custom.theme.dark.100"
                                           }
                                           color={
                                             colorMode === "light"
@@ -2690,6 +2789,8 @@ function ThreadContent(): JSX.Element {
                                             {post.original_file_name}
                                           </Text>
                                           <Box
+                                            position="absolute"
+                                            zIndex="5"
                                             onClick={(e) => {
                                               handleDownload(
                                                 post.file_url,
@@ -2697,7 +2798,11 @@ function ThreadContent(): JSX.Element {
                                               );
                                             }}
                                             cursor="pointer"
-                                            position="absolute"
+                                            color={
+                                              colorMode === "light"
+                                                ? "custom.theme.light.900"
+                                                : "custom.theme.dark.800"
+                                            }
                                             borderRadius="50%"
                                             border="1px solid"
                                             borderColor={
@@ -2707,7 +2812,7 @@ function ThreadContent(): JSX.Element {
                                             }
                                             outline={
                                               post.content
-                                                ? "1.5px solid"
+                                                ? "2px solid"
                                                 : "3px solid"
                                             }
                                             outlineColor={
@@ -2736,7 +2841,7 @@ function ThreadContent(): JSX.Element {
                                             bg={
                                               colorMode === "light"
                                                 ? "#f0e4da"
-                                                : "gray.500"
+                                                : "custom.theme.dark.100"
                                             }
                                             textOverflow="ellipsis"
                                             display="flex" // displayをflexに変更

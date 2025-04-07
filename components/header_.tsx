@@ -66,6 +66,7 @@ import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
 import Sidebar from "../components/sidebar";
 import { CustomAvatar } from "../components/CustomAvatar";
+import { CustomModalCloseButton } from "./custom/CustomModalCloseButton";
 
 import { useUserContext } from "../context/useUserContext";
 
@@ -720,14 +721,9 @@ export default function Header() {
           borderWidth="0.5px"
           px={0}
         >
-          {/* <ModalHeader></ModalHeader> */}
-          <ModalCloseButton
-            _focus={{ boxShadow: "none" }}
-            _hover={{
-              _hover: "none",
-              border: "none",
-              backgroundColor: "transparent",
-            }}
+          <CustomModalCloseButton
+            colorMode={colorMode}
+            onClose={() => setLoginModalOpen(false)}
           />
           <ModalBody mb={2}>
             <Auth

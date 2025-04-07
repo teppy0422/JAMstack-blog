@@ -398,7 +398,6 @@ export default function Auth({ userData }: AuthProps) {
                 {calculateDaysSince(userData.created_at)}日)
               </Box>
             </Box>
-
             <Box
               display="flex"
               justifyContent="center"

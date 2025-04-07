@@ -117,6 +117,18 @@ export default function Home({ blog, category, tag, blog2 }) {
           ) : (
             <Box>isLoading is false</Box>
           )}
+          <Box position="relative" h="100px" w="100px" bg="red">
+            <Box
+              position="absolute"
+              borderRadius="50%"
+              h="10px"
+              w="10px"
+              left="50px"
+              top="50px"
+              bg="white"
+              clipPath="circle(5px at 5px 5px)"
+            />
+          </Box>
           <Box display="flex" flexDirection="column" alignItems="center">
             <Box display="flex" flexDirection="column" alignItems="center">
               {positions.map((position, index) => (
@@ -174,18 +186,7 @@ export default function Home({ blog, category, tag, blog2 }) {
                   "rabitJump 10s infinite 7s, waveFall 3s ease-out forwards", // 新しいアニメーションを追加
               }}
             />
-            <img src="/images/illust/hippo/sample.svg" width="200px" />
-            <img
-              src="/images/illust/hippo/sample.svg"
-              width="200px"
-              style={{
-                filter:
-                  "url(#outline-filter) drop-shadow(1px 1px 3px rgba(0, 0, 0, 1))",
-                margin: "10px",
-                animation:
-                  "rabitJump 10s infinite 7s, waveFall 3s ease-out forwards", // 新しいアニメーションを追加
-              }}
-            />
+
             <style jsx>{`
               @keyframes waveFall {
                 0% {

@@ -67,10 +67,13 @@ import { useUserContext } from "../context/useUserContext";
 import getMessage from "./getMessage";
 import { getBoxShadow } from "@chakra-ui/react/dist/types/popper/utils";
 import { AnimationImage } from "./CustomImage";
+
+import { CustomModalCloseButton } from "./custom/CustomModalCloseButton";
 import {
   ProjectLists,
   getProjectOptionsColor,
 } from "../components/CustomBadge";
+import CustomModal from "../pages/skillBlogs/customModal";
 
 const activityOptions = [
   { value: "online", label: "オンライン", color: "#815ad6" },
@@ -459,7 +462,13 @@ export const StatusDisplay = () => {
       {/* スケジュール表示用モーダル */}
       <Modal isOpen={isScheduleModalOpen} onClose={onClose} size="xl">
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent
+          bg={
+            colorMode === "light"
+              ? "custom.theme.light.500"
+              : "custom.theme.dark.500"
+          }
+        >
           <ModalHeader py={2} px={3}>
             {selectedUserId && (
               <>
@@ -583,22 +592,8 @@ export const StatusDisplay = () => {
               </>
             )}
           </ModalHeader>
-          <ModalCloseButton
-            _focus={{ boxShadow: "none" }}
-            border="1px solid"
-            borderColor={
-              colorMode === "light"
-                ? "custom.theme.light.800"
-                : "custom.theme.dark.300"
-            }
-            color={
-              colorMode === "light"
-                ? "custom.theme.light.800"
-                : "custom.theme.dark.300"
-            }
-            borderRadius="50%"
-            bg="white"
-          />
+          <CustomModalCloseButton colorMode={colorMode} onClose={onClose} />
+          {/* <CustomModalCloseButton onClose={onClose} /> */}
           <ModalBody pb={3}>
             <Stack spacing={1}>
               <Center mb={3}>
@@ -674,7 +669,11 @@ export const StatusDisplay = () => {
                         w="100%"
                       >
                         <Text
-                          bg={colorMode === "light" ? "#FFF" : "#2d3747"}
+                          bg={
+                            colorMode === "light"
+                              ? "custom.theme.light.500"
+                              : "custom.theme.dark.500"
+                          }
                           zIndex="2"
                           position="absolute"
                           top="-4px"
