@@ -117,6 +117,43 @@ export default function Home({ blog, category, tag, blog2 }) {
           ) : (
             <Box>isLoading is false</Box>
           )}
+          <Box position="relative" h="200px" w="400px">
+            <svg width="400" height="200" style={{ position: "absolute" }}>
+              <path
+                id="motionPath"
+                d="M10,100 Q50,50 100,100 T400,150"
+                fill="none"
+                stroke="red"
+                strokeWidth="2"
+              />
+            </svg>
+            <Box
+              position="absolute"
+              style={{
+                offsetPath: 'path("M10,100 Q50,50 100,100 T400,150")',
+                animation: "moveAlongPath 4s linear infinite",
+                transformOrigin: "center center",
+              }}
+            >
+              <img
+                src="/images/illust/hippo/hippo_024_temp.png"
+                width="60"
+                style={{
+                  transform: "rotate(0deg)",
+                }}
+              />
+            </Box>
+            <style jsx>{`
+              @keyframes moveAlongPath {
+                0% {
+                  offset-distance: 0%;
+                }
+                100% {
+                  offset-distance: 100%;
+                }
+              }
+            `}</style>
+          </Box>
           <Box position="relative" h="100px" w="100px" bg="red">
             <Box
               position="absolute"
@@ -125,8 +162,12 @@ export default function Home({ blog, category, tag, blog2 }) {
               w="10px"
               left="50px"
               top="50px"
-              bg="white"
-              clipPath="circle(5px at 5px 5px)"
+              bg="green"
+              style={{
+                mask: "radial-gradient(circle at 5px 5px, transparent 5px, black 5px)",
+                WebkitMask:
+                  "radial-gradient(circle at 5px 5px, transparent 5px, black 5px)",
+              }}
             />
           </Box>
           <Box display="flex" flexDirection="column" alignItems="center">

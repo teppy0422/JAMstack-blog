@@ -338,17 +338,47 @@ function ThreadContent(): JSX.Element {
   // 長押しイベント
   const [longPressTimeout, setLongPressTimeout] =
     useState<NodeJS.Timeout | null>(null);
-  const handleLongPressStart = (postId: string) => {
+  const [startX, setStartX] = useState<number | null>(null);
+  const [isLongPressDisabled, setIsLongPressDisabled] = useState(false);
+
+  const handleLongPressStart = (
+    postId: string,
+    e: React.MouseEvent | React.TouchEvent
+  ) => {
+    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+    setStartX(clientX);
+    setIsLongPressDisabled(false);
+
     const timeout = setTimeout(() => {
-      setIsLongPress(true);
-      setLongPressPostId(postId);
+      if (!isLongPressDisabled) {
+        setIsLongPress(true);
+        setLongPressPostId(postId);
+      }
     }, 333);
-    clearTimeout(longPressTimeout!); // 追加: タイマーをクリア
+    clearTimeout(longPressTimeout!);
     setLongPressTimeout(timeout);
   };
+
+  const handleLongPressMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (startX !== null) {
+      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const moveDistance = Math.abs(clientX - startX);
+
+      if (moveDistance > 30) {
+        setIsLongPressDisabled(true);
+        if (longPressTimeout) {
+          clearTimeout(longPressTimeout);
+          setLongPressTimeout(null);
+        }
+      }
+    }
+  };
+
   const handleLongPressEnd = () => {
     setIsLongPress(false);
     setLongPressPostId(null);
+    setStartX(null);
+    setIsLongPressDisabled(false);
   };
   const handleMouseEnter = (buttonType: "delete" | "reply") => {
     setHoveredButton(buttonType);
@@ -648,11 +678,31 @@ function ThreadContent(): JSX.Element {
     if (error) {
       console.error("Error fetching all posts:", error.message);
     } else {
-      setPosts(data.reverse());
+      // ファイルサイズを取得して投稿データに追加
+      const postsWithFileSize = await Promise.all(
+        data.map(async (post) => {
+          if (post.file_url) {
+            try {
+              const response = await fetch(post.file_url, { method: "HEAD" });
+              if (response.ok) {
+                const contentLength = response.headers.get("content-length");
+                if (contentLength) {
+                  return { ...post, file_size: parseInt(contentLength) };
+                }
+              }
+            } catch (err) {
+              console.error("Error fetching file size:", err);
+            }
+          }
+          return post;
+        })
+      );
+
+      setPosts(postsWithFileSize.reverse());
 
       // 未読の投稿IDを収集
       if (currentUserId) {
-        const unreadIds = data
+        const unreadIds = postsWithFileSize
           .filter(
             (post) =>
               !post.read_by?.includes(currentUserId) &&
@@ -726,12 +776,31 @@ function ThreadContent(): JSX.Element {
       .select("*")
       .eq("thread_id", id)
       .order("created_at", { ascending: false })
-      .range(offset, offset + postsPerPage - 1); // オフセットから20件取得
+      .range(offset, offset + postsPerPage - 1);
 
     if (error) {
       console.error("Error fetching posts:", error.message);
     } else {
-      const newPosts = data.reverse(); // 取得した投稿を古い順に並べ替え
+      // ファイルサイズを取得して投稿データに追加
+      const newPosts = await Promise.all(
+        data.map(async (post) => {
+          if (post.file_url) {
+            try {
+              const response = await fetch(post.file_url, { method: "HEAD" });
+              if (response.ok) {
+                const contentLength = response.headers.get("content-length");
+                if (contentLength) {
+                  return { ...post, file_size: parseInt(contentLength) };
+                }
+              }
+            } catch (err) {
+              console.error("Error fetching file size:", err);
+            }
+          }
+          return post;
+        })
+      );
+
       const firstPostTime = newPosts.length > 0 ? newPosts[0].created_at : null;
       const fixedPosts = getFixedPostsByCategory(threadCategory, firstPostTime);
       setPosts((prevPosts) => {
@@ -739,13 +808,12 @@ function ThreadContent(): JSX.Element {
         const uniqueNewPosts = newPosts.filter(
           (post) => !existingPostIds.has(post.id)
         );
-        return [...fixedPosts, ...uniqueNewPosts, ...prevPosts]; // 固定の投稿を先頭に追加
+        return [...fixedPosts, ...uniqueNewPosts, ...prevPosts];
       });
-      setHasMore(newPosts.length === postsPerPage); // 20件取得できた場合はさらに読み込む可能性がある
+      setHasMore(newPosts.length === postsPerPage);
     }
     setLoading(false);
     window.scrollBy(0, 300);
-    // 初回ロードが完了したら下までスクロール
     if (!initialLoadComplete) {
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
       setInitialLoadComplete(true);
@@ -766,6 +834,7 @@ function ThreadContent(): JSX.Element {
   const createPost = async (inputValue: string) => {
     let fileUrl: string = "";
     let originalFileName: string = "";
+
     if (selectedFile) {
       const filePath = await uploadFile(selectedFile);
       if (filePath) {
@@ -773,10 +842,11 @@ function ThreadContent(): JSX.Element {
           .from("uploads")
           .getPublicUrl(filePath);
         fileUrl = data?.publicUrl ?? "";
-        originalFileName = selectedFile.name; // 元のファイル名を保存
+        originalFileName = selectedFile.name;
         console.log("Public URL:", fileUrl);
       }
     }
+
     const { error } = await supabase.from("posts").insert([
       {
         thread_id: id,
@@ -784,8 +854,7 @@ function ThreadContent(): JSX.Element {
         ip_address: ipAddress,
         file_url: fileUrl,
         original_file_name: originalFileName,
-        user_uid: currentUserId, // ログインしているユーザーのUIDを追加
-        //リプライの内容
+        user_uid: currentUserId,
         reply_post_id: replyToPostId,
         reply_content: replyPostContent,
         reply_user_id: replyPostUserId,
@@ -818,16 +887,16 @@ function ThreadContent(): JSX.Element {
     // 画像ファイルの場合、圧縮を実行
     if (file.type.startsWith("image/")) {
       const options = {
-        maxSizeMB: 0.7, // 最大ファイルサイズを0.5MBに制限
-        maxWidthOrHeight: 1200, // 最大幅または高さを1200pxに制限
-        useWebWorker: true, // Web Workerを使用して圧縮
-        fileType: file.type, // 元のファイルタイプを維持
-        initialQuality: 0.7, // 初期品質を70%に設定
-        alwaysKeepResolution: true, // 解像度を維持
-        signal: undefined, // キャンセル用のシグナル
-        maxIteration: 10, // 最大圧縮回数
-        exifOrientation: -1, // EXIF情報を維持
-        onProgress: undefined, // 進捗状況のコールバック
+        maxSizeMB: 0.7,
+        maxWidthOrHeight: 1200,
+        useWebWorker: true,
+        fileType: "image/webp", // WebP形式に変換
+        initialQuality: 0.7,
+        alwaysKeepResolution: true,
+        signal: undefined,
+        maxIteration: 10,
+        exifOrientation: -1,
+        onProgress: undefined,
       };
 
       try {
@@ -896,23 +965,102 @@ function ThreadContent(): JSX.Element {
       return `${(sizeInBytes / (1024 * 1024)).toFixed(1)} MB`; // MB
     }
   };
-  const FileSizeDisplay = ({ fileUrl }: { fileUrl: string }) => {
-    const [fileSize, setFileSize] = useState<string>("");
+  const FileSizeDisplay = ({
+    fileUrl,
+    fileSize: initialFileSize,
+  }: {
+    fileUrl: string;
+    fileSize?: number;
+  }): JSX.Element | null => {
+    const [fileSize, setFileSize] = useState<string | null>(null);
+    const [fileCache] = useState<Map<string, string>>(new Map());
+
     useEffect(() => {
       const fetchFileSize = async () => {
         try {
-          const response = await fetch(fileUrl, { method: "HEAD" });
-          const size = response.headers.get("Content-Length");
-          if (size) {
-            setFileSize(formatFileSize(Number(size)));
+          // キャッシュをチェック
+          if (fileCache.has(fileUrl)) {
+            setFileSize(fileCache.get(fileUrl) || null);
+            return;
           }
-        } catch (error) {
-          console.error("Error fetching file size:", error);
+
+          // 初期値がある場合はそれを使用
+          if (initialFileSize) {
+            const formattedSize = formatFileSize(initialFileSize);
+            fileCache.set(fileUrl, formattedSize);
+            setFileSize(formattedSize);
+            return;
+          }
+
+          // ファイルの拡張子を取得
+          const fileExtension = fileUrl.split(".").pop()?.toLowerCase();
+          const isImage = ["jpg", "jpeg", "png", "gif", "webp"].includes(
+            fileExtension || ""
+          );
+
+          if (isImage) {
+            // 画像ファイルの場合
+            const existingImage = document.querySelector(
+              `img[src="${fileUrl}"]`
+            ) as HTMLImageElement;
+
+            if (existingImage) {
+              const sizeInBytes =
+                existingImage.width * existingImage.height * 4;
+              const formattedSize = formatFileSize(sizeInBytes);
+              fileCache.set(fileUrl, formattedSize);
+              setFileSize(formattedSize);
+              return;
+            }
+
+            const img = document.createElement("img");
+            img.src = fileUrl;
+
+            img.onload = () => {
+              const sizeInBytes = img.width * img.height * 4;
+              const formattedSize = formatFileSize(sizeInBytes);
+              fileCache.set(fileUrl, formattedSize);
+              setFileSize(formattedSize);
+            };
+
+            img.onerror = () => {
+              fetchFileSizeWithHead();
+            };
+          } else {
+            // すべてのファイルでHEADリクエストを使用
+            fetchFileSizeWithHead();
+          }
+        } catch (err) {
+          console.error("Error fetching file size:", err);
+          setFileSize(null);
         }
       };
+
+      const fetchFileSizeWithHead = async () => {
+        try {
+          const response = await fetch(fileUrl, { method: "HEAD" });
+          if (response.ok) {
+            const contentLength = response.headers.get("content-length");
+            if (contentLength) {
+              const formattedSize = formatFileSize(parseInt(contentLength));
+              fileCache.set(fileUrl, formattedSize);
+              setFileSize(formattedSize);
+            } else {
+              setFileSize(null);
+            }
+          } else {
+            setFileSize(null);
+          }
+        } catch (err) {
+          console.error("Error fetching file size with HEAD request:", err);
+          setFileSize(null);
+        }
+      };
+
       fetchFileSize();
-    }, [fileUrl]);
-    return <span>{fileSize}</span>;
+    }, [fileUrl, initialFileSize]);
+
+    return fileSize ? <Text fontSize="xs">{fileSize}</Text> : null;
   };
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -1830,7 +1978,11 @@ function ThreadContent(): JSX.Element {
                       </Box>
                     </>
                   ) : (
-                    <Flex align="center" gap={2}>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="flex-start"
+                    >
                       <Box
                         position="relative"
                         border="1px solid"
@@ -1850,10 +2002,19 @@ function ThreadContent(): JSX.Element {
                             ? "custom.theme.light.500"
                             : "custom.theme.dark.500"
                         }
-                        px="2"
-                        py="1"
+                        px="2px"
+                        py="1px"
+                        mb="3px"
                       >
-                        <Text fontSize="sm" pr="13px">
+                        <Text
+                          fontSize="sm"
+                          pr="16px"
+                          color={
+                            colorMode === "light"
+                              ? "custom.theme.light.850"
+                              : "custom.theme.dark.100"
+                          }
+                        >
                           {selectedFileName}
                         </Text>
                         <CustomCloseButton
@@ -1862,28 +2023,32 @@ function ThreadContent(): JSX.Element {
                           top="-4px"
                           right="-8px"
                         />
-                        <Box
-                          py="0"
-                          px="3px"
-                          display="inline"
-                          borderRadius="5px"
-                          border="1px solid"
-                          borderColor={
-                            colorMode === "light"
-                              ? "custom.theme.light.900"
-                              : "custom.theme.dark.100"
-                          }
-                          bg={
-                            colorMode === "light"
-                              ? "custom.theme.light.500"
-                              : "custom.theme.dark.500"
-                          }
-                          fontSize="12px"
-                        >
-                          {selectedFileSize}
-                        </Box>
                       </Box>
-                    </Flex>
+                      <Box
+                        py="0"
+                        px="3px"
+                        borderRadius="5px"
+                        border="1px solid"
+                        borderColor={
+                          colorMode === "light"
+                            ? "custom.theme.light.850"
+                            : "custom.theme.dark.100"
+                        }
+                        color={
+                          colorMode === "light"
+                            ? "custom.theme.light.850"
+                            : "custom.theme.dark.100"
+                        }
+                        bg={
+                          colorMode === "light"
+                            ? "custom.theme.light.500"
+                            : "custom.theme.dark.500"
+                        }
+                        fontSize="12px"
+                      >
+                        {selectedFileSize}
+                      </Box>
+                    </Box>
                   )}
                 </Box>
               )}
@@ -2213,9 +2378,17 @@ function ThreadContent(): JSX.Element {
                               pl={
                                 post.user_uid === currentUserId ? "10px" : "0px"
                               }
-                              onMouseDown={() => handleLongPressStart(post.id)} // 長押し開始
+                              onMouseDown={(e) =>
+                                handleLongPressStart(post.id, e)
+                              } // 長押し開始
                               onMouseUp={handleMouseUp} // マウスアップで長押し終了
                               onMouseLeave={handleMouseLeave} // マウスが要素から離れたときに長押しを終了
+                              onMouseMove={handleLongPressMove} // マウス移動を追跡
+                              onTouchStart={(e) =>
+                                handleLongPressStart(post.id, e)
+                              } // タッチ開始
+                              onTouchEnd={handleMouseUp} // タッチ終了
+                              onTouchMove={handleLongPressMove} // タッチ移動を追跡
                               onClick={(e) => {
                                 if (
                                   isLongPress &&
@@ -2580,44 +2753,144 @@ function ThreadContent(): JSX.Element {
                                         /\.(jpeg|jpg|gif|png|mp4|bmp|webp)$/i
                                       ) ? (
                                         post.file_url.endsWith(".mp4") ? (
-                                          <video
-                                            src={post.file_url}
-                                            autoPlay
-                                            loop
-                                            muted
-                                            playsInline
-                                            style={{
-                                              maxWidth: "100%",
-                                              maxHeight: "300px",
-                                              marginTop: "1px",
-                                              cursor: "pointer",
-                                            }}
-                                            onClick={(e) => {
-                                              if (!isMobile) {
-                                                setSelectedImageUrl(
-                                                  post.file_url
-                                                );
-                                                setFileModalOpen(true);
+                                          <Box position="relative">
+                                            <Box
+                                              borderRadius="10px"
+                                              overflow="hidden"
+                                            >
+                                              <video
+                                                src={post.file_url}
+                                                autoPlay
+                                                loop
+                                                muted
+                                                playsInline
+                                                style={{
+                                                  maxWidth: "100%",
+                                                  maxHeight: "300px",
+                                                  marginTop: "1px",
+                                                  cursor: "pointer",
+                                                }}
+                                                onClick={(e) => {
+                                                  if (!isMobile) {
+                                                    setSelectedImageUrl(
+                                                      post.file_url
+                                                    );
+                                                    setFileModalOpen(true);
+                                                  }
+                                                }}
+                                              />
+                                            </Box>
+                                            <Box
+                                              position="absolute"
+                                              bottom="3px"
+                                              left="3px"
+                                              py="0"
+                                              px="3px"
+                                              borderRadius="5px"
+                                              border="1px solid"
+                                              borderColor={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.900"
+                                                  : "custom.theme.dark.100"
                                               }
-                                            }}
-                                          />
+                                              bg={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.500"
+                                                  : "custom.theme.dark.500"
+                                              }
+                                              fontSize="12px"
+                                            >
+                                              <FileSizeDisplay
+                                                fileUrl={post.file_url}
+                                                fileSize={post.file_size}
+                                              />
+                                            </Box>
+                                            <Box
+                                              position="absolute"
+                                              zIndex="5"
+                                              onClick={(e) => {
+                                                handleDownload(
+                                                  post.file_url,
+                                                  post.original_file_name
+                                                );
+                                              }}
+                                              cursor="pointer"
+                                              borderRadius="50%"
+                                              color={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.900"
+                                                  : "custom.theme.dark.800"
+                                              }
+                                              border="1px solid"
+                                              borderColor={
+                                                colorMode === "light"
+                                                  ? "#bfb0a4"
+                                                  : "gray.800"
+                                              }
+                                              outline={
+                                                post.content
+                                                  ? "2px solid"
+                                                  : "3px solid"
+                                              }
+                                              outlineColor={
+                                                post.user_uid === currentUserId
+                                                  ? "#dbf7c6"
+                                                  : "white"
+                                              }
+                                              _hover={{
+                                                bg:
+                                                  colorMode === "light"
+                                                    ? "#8d7c6f"
+                                                    : "gray.400",
+                                                color:
+                                                  colorMode === "light"
+                                                    ? "#f0e4da"
+                                                    : "#181a24",
+                                                transition:
+                                                  "all 0.3s ease-in-out",
+                                              }}
+                                              top="-7px"
+                                              right="-9px"
+                                              p="2px"
+                                              mr="3px"
+                                              w="26px"
+                                              h="26px"
+                                              bg={
+                                                colorMode === "light"
+                                                  ? "#f0e4da"
+                                                  : "custom.theme.dark.100"
+                                              }
+                                              textOverflow="ellipsis"
+                                              display="flex" // displayをflexに変更
+                                              alignItems="center" // 垂直方向の中央揃え
+                                              justifyContent="center" // 水平方向の中央揃え
+                                            >
+                                              <FaDownload size={16} />
+                                            </Box>
+                                          </Box>
                                         ) : (
                                           <>
                                             <Box
                                               position="relative"
                                               display="inline-block"
                                               mt="8px"
+                                              borderRadius="5px"
+                                              border="1px solid"
+                                              borderColor={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.800"
+                                                  : "custom.theme.dark.800"
+                                              }
                                             >
                                               <Image
                                                 src={post.file_url}
-                                                borderRadius="5px"
                                                 alt="Uploaded image"
                                                 cursor="pointer"
+                                                borderRadius="5px"
                                                 loading="lazy"
                                                 style={{
                                                   maxWidth: "100%",
                                                   maxHeight: "240px",
-                                                  marginTop: "1px",
                                                   backgroundColor: "#f2e9df",
                                                   backgroundImage: `
                                           linear-gradient(45deg, #fff 25%, transparent 25%),
@@ -2693,6 +2966,7 @@ function ThreadContent(): JSX.Element {
                                               >
                                                 <FileSizeDisplay
                                                   fileUrl={post.file_url}
+                                                  fileSize={post.file_size}
                                                 />
                                               </Box>
                                               <Box
@@ -2762,95 +3036,134 @@ function ThreadContent(): JSX.Element {
                                           </>
                                         )
                                       ) : (
-                                        <Box
-                                          position="relative"
-                                          border="1px solid"
-                                          borderRadius="6px"
-                                          borderColor={
-                                            colorMode === "light"
-                                              ? "#bfb0a4"
-                                              : "gray.800"
-                                          }
-                                          bg={
-                                            colorMode === "light"
-                                              ? "#f0e4da"
-                                              : "custom.theme.dark.100"
-                                          }
-                                          color={
-                                            colorMode === "light"
-                                              ? "#8d7c6f"
-                                              : "#181a24"
-                                          }
-                                          px="2"
-                                          py="1"
-                                          mt={post.content ? "6px" : "0px"}
-                                        >
-                                          <Text pr="13px">
-                                            {post.original_file_name}
-                                          </Text>
+                                        <>
                                           <Box
-                                            position="absolute"
-                                            zIndex="5"
-                                            onClick={(e) => {
-                                              handleDownload(
-                                                post.file_url,
-                                                post.original_file_name
-                                              );
-                                            }}
-                                            cursor="pointer"
-                                            color={
-                                              colorMode === "light"
-                                                ? "custom.theme.light.900"
-                                                : "custom.theme.dark.800"
-                                            }
-                                            borderRadius="50%"
+                                            position="relative"
                                             border="1px solid"
+                                            borderRadius="6px"
                                             borderColor={
                                               colorMode === "light"
                                                 ? "#bfb0a4"
                                                 : "gray.800"
                                             }
-                                            outline={
-                                              post.content
-                                                ? "2px solid"
-                                                : "3px solid"
+                                            color={
+                                              colorMode === "light"
+                                                ? "#8d7c6f"
+                                                : "#181a24"
                                             }
-                                            outlineColor={
-                                              post.user_uid === currentUserId
-                                                ? "#dbf7c6"
-                                                : "white"
-                                            }
-                                            _hover={{
-                                              bg:
-                                                colorMode === "light"
-                                                  ? "#8d7c6f"
-                                                  : "gray.400",
-                                              color:
-                                                colorMode === "light"
-                                                  ? "#f0e4da"
-                                                  : "#181a24",
-                                              transition:
-                                                "all 0.3s ease-in-out",
-                                            }}
-                                            top="-7px"
-                                            right="-9px"
-                                            p="2px"
-                                            mr="3px"
-                                            w="26px"
-                                            h="26px"
                                             bg={
                                               colorMode === "light"
                                                 ? "#f0e4da"
                                                 : "custom.theme.dark.100"
                                             }
-                                            textOverflow="ellipsis"
-                                            display="flex" // displayをflexに変更
-                                            alignItems="center" // 垂直方向の中央揃え
-                                            justifyContent="center" // 水平方向の中央揃え
+                                            px="2"
+                                            py="1"
+                                            mt={post.content ? "6px" : "0px"}
                                           >
-                                            <FaDownload size={16} />
+                                            <Text
+                                              pr="10px"
+                                              color={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.900"
+                                                  : "custom.theme.dark.700"
+                                              }
+                                            >
+                                              {post.original_file_name}
+                                            </Text>
+                                            <Box
+                                              position="absolute"
+                                              zIndex="5"
+                                              onClick={(e) => {
+                                                handleDownload(
+                                                  post.file_url,
+                                                  post.original_file_name
+                                                );
+                                              }}
+                                              cursor="pointer"
+                                              color={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.900"
+                                                  : "custom.theme.dark.800"
+                                              }
+                                              borderRadius="50%"
+                                              border="1px solid"
+                                              borderColor={
+                                                colorMode === "light"
+                                                  ? "#bfb0a4"
+                                                  : "gray.800"
+                                              }
+                                              outline={
+                                                post.content
+                                                  ? "2px solid"
+                                                  : "3px solid"
+                                              }
+                                              outlineColor={
+                                                post.user_uid === currentUserId
+                                                  ? "#dbf7c6"
+                                                  : "white"
+                                              }
+                                              _hover={{
+                                                bg:
+                                                  colorMode === "light"
+                                                    ? "#8d7c6f"
+                                                    : "gray.400",
+                                                color:
+                                                  colorMode === "light"
+                                                    ? "#f0e4da"
+                                                    : "#181a24",
+                                                transition:
+                                                  "all 0.3s ease-in-out",
+                                              }}
+                                              top="-7px"
+                                              right="-9px"
+                                              p="2px"
+                                              mr="3px"
+                                              w="26px"
+                                              h="26px"
+                                              bg={
+                                                colorMode === "light"
+                                                  ? "#f0e4da"
+                                                  : "custom.theme.dark.100"
+                                              }
+                                              textOverflow="ellipsis"
+                                              display="flex" // displayをflexに変更
+                                              alignItems="center" // 垂直方向の中央揃え
+                                              justifyContent="center" // 水平方向の中央揃え
+                                            >
+                                              {/* <FaDownload size={16} /> */}
+                                            </Box>
                                           </Box>
-                                        </Box>
+                                          <Box
+                                            display="inline-block"
+                                            bottom="3px"
+                                            left="3px"
+                                            py="0"
+                                            px="3px"
+                                            borderRadius="5px"
+                                            border="1px solid"
+                                            borderColor={
+                                              colorMode === "light"
+                                                ? "custom.theme.light.900"
+                                                : "custom.theme.dark.100"
+                                            }
+                                            color={
+                                              colorMode === "light"
+                                                ? "custom.theme.light.900"
+                                                : "custom.theme.dark.700"
+                                            }
+                                            bg={
+                                              colorMode === "light"
+                                                ? "custom.theme.light.500"
+                                                : "custom.theme.dark.500"
+                                            }
+                                            fontSize="12px"
+                                          >
+                                            <FileSizeDisplay
+                                              fileUrl={post.file_url}
+                                              fileSize={post.file_size}
+                                            />
+                                          </Box>
+                                        </>
                                       )}
                                     </>
                                   )}

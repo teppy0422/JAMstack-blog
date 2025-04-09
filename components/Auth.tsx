@@ -279,6 +279,8 @@ export default function Auth({ userData }: AuthProps) {
           const MAX_HEIGHT = 200; // 最大高さ
           let width = img.width;
           let height = img.height;
+
+          // アスペクト比を維持しながらリサイズ
           if (width > height) {
             if (width > MAX_WIDTH) {
               height *= MAX_WIDTH / width;
@@ -293,13 +295,21 @@ export default function Auth({ userData }: AuthProps) {
           canvas.width = width;
           canvas.height = height;
           ctx?.drawImage(img, 0, 0, width, height);
-          canvas.toBlob((blob) => {
-            if (blob) {
-              resolve(new File([blob], file.name, { type: file.type }));
-            } else {
-              resolve(file); // 最適化できなかった場合は元のファイルを返す
-            }
-          }, file.type);
+
+          // WebP形式で保存
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                // ファイル名の拡張子を.webpに変更
+                const newFileName = file.name.replace(/\.[^/.]+$/, ".webp");
+                resolve(new File([blob], newFileName, { type: "image/webp" }));
+              } else {
+                resolve(file); // 最適化できなかった場合は元のファイルを返す
+              }
+            },
+            "image/webp",
+            0.8
+          ); // 品質を0.8に設定
         };
       };
       reader.readAsDataURL(file);
