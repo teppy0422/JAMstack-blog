@@ -334,7 +334,13 @@ export default function Header() {
                 </Flex>
                 <Modal isOpen={isOpen} onClose={onClose}>
                   <ModalOverlay />
-                  <ModalContent bg="#FFF">
+                  <ModalContent
+                    bg={
+                      colorMode === "light"
+                        ? "custom.theme.light.500"
+                        : "custom.theme.dark.500"
+                    }
+                  >
                     <ModalHeader py={2} textAlign="center" color="#000">
                       {getMessage({
                         ja: "QR Code",
@@ -343,13 +349,26 @@ export default function Header() {
                         language,
                       })}
                     </ModalHeader>
-                    <ModalCloseButton _focus={{ boxShadow: "none" }} />
+                    <CustomModalCloseButton
+                      onClose={onClose}
+                      colorMode={colorMode}
+                      top="-4px"
+                      right="-4px"
+                      outline="2px solid"
+                      outlineColor={
+                        colorMode === "light"
+                          ? "custom.theme.light.500"
+                          : "custom.theme.dark.500"
+                      }
+                    />
                     <ModalBody>
-                      <Box mt="4" display="flex" justifyContent="center">
-                        {typeof window !== "undefined" && (
-                          <QRCode value={window.location.href} size={80} />
-                        )}
-                      </Box>
+                      <Flex mt="4" alignItems="center" justifyContent="center">
+                        <Box bg="white" p="5px">
+                          {typeof window !== "undefined" && (
+                            <QRCode value={window.location.href} size={80} />
+                          )}
+                        </Box>
+                      </Flex>
                     </ModalBody>
                     <ModalFooter>
                       <Text fontSize="12px" fontWeight={400} color="#000">
@@ -360,9 +379,6 @@ export default function Header() {
                           language,
                         })}
                       </Text>
-                      {/* <Button colorScheme="gray" mr={3} onClick={onClose}>
-                      閉じる
-                    </Button> */}
                     </ModalFooter>
                   </ModalContent>
                 </Modal>
@@ -724,6 +740,14 @@ export default function Header() {
           <CustomModalCloseButton
             colorMode={colorMode}
             onClose={() => setLoginModalOpen(false)}
+            outline="2px solid"
+            outlineColor={
+              colorMode === "light"
+                ? "custom.theme.light.500"
+                : "custom.theme.dark.500"
+            }
+            top="-4px"
+            right="-4px"
           />
           <ModalBody mb={2}>
             <Auth

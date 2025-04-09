@@ -18,20 +18,20 @@ export default function BlogId({ blog, highlightedBody }) {
   return (
     <>
       <main>
-        <Container className={styles.contain}>
-          <h1 className={styles.title}>{blog.title}</h1>
+        <Container className={styles.contain} fontWeight="400">
+          <Box className={styles.title} fontSize="20px">
+            {blog.title}
+          </Box>
           <Divider className={myClass} />
           <RepeatClockIcon marginRight="5px" />
           <Moment format="YYYY/MM/DD" className={styles.publishedAt}>
             {blog.publishedAt}
           </Moment>
           {/* <p className="category">{blog.category && `${blog.category.name}`}</p> */}
-
           <div
             className={styles.post}
             dangerouslySetInnerHTML={{ __html: highlightedBody }}
           ></div>
-          <Box h={10} />
         </Container>
       </main>
       <style jsx>{`
@@ -66,7 +66,6 @@ export const getStaticProps = async (context) => {
       limit: 30,
     },
   });
-
   const $ = load(data.content); // data.contentはmicroCMSから返されるリッチエディタ部分
   $("pre code").each((_, elm) => {
     const result = hljs.highlightAuto($(elm).text());

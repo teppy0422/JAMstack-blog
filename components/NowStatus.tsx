@@ -592,7 +592,18 @@ export const StatusDisplay = () => {
               </>
             )}
           </ModalHeader>
-          <CustomModalCloseButton colorMode={colorMode} onClose={onClose} />
+          <CustomModalCloseButton
+            colorMode={colorMode}
+            onClose={onClose}
+            top="-4px"
+            right="-4px"
+            outline="2px solid"
+            outlineColor={
+              colorMode === "light"
+                ? "custom.theme.light.500"
+                : "custom.theme.dark.500"
+            }
+          />
           {/* <CustomModalCloseButton onClose={onClose} /> */}
           <ModalBody pb={3}>
             <Stack spacing={1}>

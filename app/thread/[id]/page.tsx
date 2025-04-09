@@ -1,5 +1,4 @@
 "use client";
-
 import React, {
   useCallback,
   useEffect,
@@ -64,13 +63,13 @@ import {
   useToast,
   ChakraProvider,
   Center,
-  ModalFooter,
+  Link,
 } from "@chakra-ui/react";
 import { theme } from "../../../libs/theme";
 
 import { ChatIcon } from "@chakra-ui/icons";
-import { FaMicroblog } from "react-icons/fa";
 import { MdBusiness } from "react-icons/md";
+import { FaMicroblog } from "react-icons/fa";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { CloseIcon } from "@chakra-ui/icons";
 
@@ -100,6 +99,7 @@ import { isatty } from "tty";
 import { useUnread } from "../../../context/UnreadContext";
 import imageCompression from "browser-image-compression";
 import { CustomCloseButton } from "../../../components/custom/CustomCloseButton";
+import { CustomModalCloseButton } from "../../../components/custom/CustomModalCloseButton";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
@@ -119,8 +119,6 @@ function ThreadContent(): JSX.Element {
   const { language, setLanguage } = useLanguage();
   const { updateUnreadCount } = useUnread();
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [modalUrl, setModalUrl] = useState("");
   const [expandedUrls, setExpandedUrls] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -486,6 +484,8 @@ function ThreadContent(): JSX.Element {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const fetchIpAddress = async () => {
@@ -2101,7 +2101,11 @@ function ThreadContent(): JSX.Element {
                 </Box>
               )}
             </Stack>
-            <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <Modal
+              isOpen={fileModalOpen}
+              onClose={() => setFileModalOpen(false)}
+              // size="full"
+            >
               <ModalOverlay />
               <ModalContent
                 maxW="100vw"
@@ -2143,9 +2147,9 @@ function ThreadContent(): JSX.Element {
                     <TransformWrapper
                       initialScale={1}
                       minScale={1}
-                      maxScale={3}
+                      maxScale={4}
                       centerOnInit={true}
-                      wheel={{ step: 0.1 }}
+                      wheel={{ step: 0.2 }}
                       doubleClick={{ step: 0.5 }}
                     >
                       {({ zoomIn, zoomOut, resetTransform }) => (
@@ -2289,1487 +2293,11 @@ function ThreadContent(): JSX.Element {
                 </ModalBody>
               </ModalContent>
             </Modal>
-            <SidebarBBS isMain={false} />
-            <Box>
-              <Content isCustomHeader={true}>
-                {isLoading ? (
-                  <Box>Loading...</Box>
-                ) : (
-                  <>
-                    <Box
-                      position="fixed"
-                      zIndex="1000"
-                      cursor={threadBlogUrl ? "pointer" : "default"}
-                      mb={0}
-                      ml={0}
-                      pt={0}
-                      pb={1}
-                      px={1}
-                      top="46px"
-                      border="1px solid #bfb0a4"
-                      borderRadius="md"
-                      display={{
-                        base: "none",
-                        sm: "block",
-                        md: "block",
-                        lg: "block",
-                        xl: "block",
-                      }}
-                      backdropFilter={
-                        colorMode === "light" ? "blur(20px)" : "blur(100px)"
-                      }
-                      _hover={{
-                        bg:
-                          colorMode === "light"
-                            ? "custom.theme.light.50"
-                            : "custom.theme.dark.50",
-                      }}
-                      onClick={
-                        threadBlogUrl
-                          ? () => {
-                              setModalUrl(`/blog/${threadBlogUrl}`);
-                              onOpen();
-                            }
-                          : undefined
-                      }
-                    >
-                      <Box as="span" fontSize={11} fontWeight={400} mr={1}>
-                        {getMessage({
-                          ja: threadCompany,
-                          language,
-                        })}
-                      </Box>
-                      <Box
-                        display="inline-block"
-                        fontFamily="Noto Sans Jp"
-                        fontWeight={400}
-                        fontSize={9}
-                        borderRadius={3}
-                        px={1}
-                        mr={1}
-                        border="transparent"
-                        bg={GetColor(threadProjectName)}
-                        color="#FFF"
-                      >
-                        {threadProjectName}
-                      </Box>
-                      <Box
-                        display="inline-block"
-                        fontFamily="Noto Sans Jp"
-                        fontWeight={400}
-                        fontSize={9}
-                        borderRadius={3}
-                        px={1}
-                        mr={1}
-                        border={"1px solid " + GetColor(threadCategory)}
-                        bg="transparent"
-                        color={GetColor(threadCategory)}
-                      >
-                        {threadCategory}
-                      </Box>
-                      <Box
-                        display="inline-block"
-                        fontSize={10}
-                        fontWeight={400}
-                      >
-                        {ipAddress}
-                      </Box>
-                      <Box>
-                        <Flex
-                          justifyContent="center"
-                          alignItems="center"
-                          fontSize={13}
-                          fontWeight={400}
-                          style={{
-                            letterSpacing: "1px",
-                          }}
-                        >
-                          {getMessage({
-                            ja: threadTitle,
-                            language,
-                          })}
-                          {threadBlogUrl && <FaMicroblog />}
-                        </Flex>
-                      </Box>
-                    </Box>
-                    <Box height="4.5em" />
-                    <Stack
-                      spacing="2"
-                      style={{ padding: "0px", flexDirection: "column" }}
-                    >
-                      {!currentUserName && threadMainCompany !== "開発" ? (
-                        <Text color="red" fontWeight="bold">
-                          {getMessage({
-                            ja: "認証されていません",
-                            us: "Not authenticated.",
-                            cn: "未经授权。",
-                            language,
-                          })}
-                        </Text>
-                      ) : threadMainCompany !== currentUserMainCompany &&
-                        threadMainCompany !== "開発" &&
-                        currentUserMainCompany !== "開発" ? (
-                        <Text color="red" fontWeight="bold">
-                          {getMessage({
-                            ja: "このチャットは ",
-                            us: "This chat is only viewable by ",
-                            cn: "此聊天只能由 ",
-                            language,
-                          })}
-                          {getMessage({
-                            ja: currentUserMainCompany || "",
-                            language,
-                          })}
-                          {getMessage({
-                            ja: " のみ閲覧可能です",
-                            us: "",
-                            cn: " 查看",
-                            language,
-                          })}
-                        </Text>
-                      ) : (
-                        posts
-                          .sort(
-                            // created_atでソート
-                            (a, b) =>
-                              new Date(a.created_at).getTime() -
-                              new Date(b.created_at).getTime()
-                          )
-                          .map((post, index) => {
-                            const prevPost = posts[index - 1];
-                            const prevDateString = prevPost
-                              ? prevPost.created_at
-                              : undefined;
-                            const isNewDay =
-                              index === 0 || // 一番最初の投稿の場合
-                              (prevDateString &&
-                                new Date(post.created_at).toDateString() !==
-                                  new Date(prevDateString).toDateString());
-                            // :で囲んだ文字はタイトル
-                            if (post.content.match(/:(.*?):/)) {
-                              return (
-                                <React.Fragment
-                                  key={`${post.created_at}-${index}`}
-                                >
-                                  {isNewDay && (
-                                    <Flex
-                                      key={`${post.created_at}-${index}`}
-                                      alignItems="center"
-                                      justifyContent="center"
-                                      width="100%"
-                                      mb="1.5"
-                                    >
-                                      <Divider borderColor="gray.500" />
-                                      <Text
-                                        fontSize="15px"
-                                        color="gray.500"
-                                        whiteSpace="nowrap"
-                                        textAlign="center"
-                                        mx="2"
-                                        lineHeight="1.2"
-                                      >
-                                        {formatDate(
-                                          post.created_at,
-                                          prevDateString,
-                                          false
-                                        )}
-                                      </Text>
-                                      <Divider borderColor="gray.500" />
-                                    </Flex>
-                                  )}
-                                  <Flex
-                                    alignItems="center"
-                                    justifyContent="center"
-                                    width="100%"
-                                    mb="1.5"
-                                    color="red"
-                                  >
-                                    <Divider
-                                      borderColor={
-                                        colorMode === "light" ? "red" : "pink"
-                                      }
-                                    />
-                                    <Tag
-                                      colorScheme="red"
-                                      minWidth="fit-content"
-                                      maxWidth="100%"
-                                      display="inline-flex"
-                                      variant="outline"
-                                      mt="1em"
-                                      mb="1em"
-                                    >
-                                      <TagLeftIcon
-                                        as={ChatIcon}
-                                        color={
-                                          colorMode === "light" ? "red" : "pink"
-                                        }
-                                      />
-                                      <TagLabel
-                                        textAlign="center"
-                                        whiteSpace="nowrap"
-                                        width="auto"
-                                        maxWidth="80vw"
-                                        display="inline"
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        color={
-                                          colorMode === "light" ? "red" : "pink"
-                                        }
-                                      >
-                                        {post.content.match(/:(.*?):/)[1]}
-                                      </TagLabel>
-                                      <TagRightIcon
-                                        as={ChatIcon}
-                                        color={
-                                          colorMode === "light" ? "red" : "pink"
-                                        }
-                                      />
-                                    </Tag>
-                                    <Divider
-                                      borderColor={
-                                        colorMode === "light" ? "red" : "pink"
-                                      }
-                                    />
-                                  </Flex>
-                                </React.Fragment>
-                              );
-                            }
-                            return (
-                              <>
-                                <div className="post">
-                                  {isNewDay && ( //日付の区切り線
-                                    <Flex
-                                      alignItems="center"
-                                      justifyContent="center"
-                                      width="100%"
-                                      mb="1.5"
-                                    >
-                                      <Divider borderColor="gray.500" />
-                                      <Text
-                                        fontSize="14px"
-                                        color="gray.500"
-                                        whiteSpace="nowrap"
-                                        textAlign="center"
-                                        mx="2"
-                                        lineHeight="1.2"
-                                      >
-                                        {formatDate(
-                                          post.created_at,
-                                          prevDateString,
-                                          false
-                                        )}
-                                      </Text>
-                                      <Divider borderColor="gray.500" />
-                                    </Flex>
-                                  )}
-                                  <Flex //post内容
-                                    className="post"
-                                    data-post-id={post.id}
-                                    data-user-id={post.user_uid}
-                                    key={post.id}
-                                    id={`post-${post.id}`} // IDを追加
-                                    style={{
-                                      height: post.isDeleting ? 0 : "auto",
-                                      opacity: post.isDeleting ? 0 : 1,
-                                      overflow: "visible", // 内容がはみ出さないようにする
-                                      transition:
-                                        "max-height 1s ease, opacity 1s ease", // 高さと不透明度のトランジション
-                                    }}
-                                    justifyContent={
-                                      post.user_uid === currentUserId
-                                        ? "flex-end"
-                                        : "flex-start"
-                                    }
-                                    maxWidth="98vw"
-                                    pr={
-                                      post.user_uid === currentUserId
-                                        ? "0px"
-                                        : "10px"
-                                    }
-                                    pl={
-                                      post.user_uid === currentUserId
-                                        ? "10px"
-                                        : "0px"
-                                    }
-                                    onMouseDown={(e) =>
-                                      handleLongPressStart(post.id, e)
-                                    } // 長押し開始
-                                    onMouseUp={handleMouseUp} // マウスアップで長押し終了
-                                    onMouseLeave={handleMouseLeave} // マウスが要素から離れたときに長押しを終了
-                                    onMouseMove={handleLongPressMove} // マウス移動を追跡
-                                    onTouchStart={(e) =>
-                                      handleLongPressStart(post.id, e)
-                                    } // タッチ開始
-                                    onTouchEnd={handleMouseUp} // タッチ終了
-                                    onTouchMove={handleLongPressMove} // タッチ移動を追跡
-                                    onClick={(e) => {
-                                      if (
-                                        isLongPress &&
-                                        longPressPostId === post.id
-                                      ) {
-                                        e.stopPropagation();
-                                      }
-                                    }}
-                                  >
-                                    {isLongPress &&
-                                      longPressPostId === post.id && (
-                                        <>
-                                          <Box //オーバーレイ
-                                            position="fixed"
-                                            top="0"
-                                            left="0"
-                                            width="100%"
-                                            height="100%"
-                                            bg="rgba(0, 0, 0, 0.5)" // 半透明の黒
-                                            zIndex="5000" // メニューより下に表示
-                                            onClick={handleLongPressEnd} // 長押しを終了
-                                          />
-                                          <Box //リプライとか削除のメニュー
-                                            position="absolute"
-                                            zIndex="5010"
-                                            bg="white"
-                                            borderRadius="5px"
-                                            boxShadow="md"
-                                            onClick={(e) => e.stopPropagation()} // クリックイベントの伝播を防ぐ
-                                            width="auto"
-                                            height="auto"
-                                          >
-                                            <Button //削除ボタン
-                                              onClick={() =>
-                                                handleDeletePost(
-                                                  longPressPostId!
-                                                )
-                                              }
-                                              onMouseEnter={() =>
-                                                handleMouseEnter("delete")
-                                              }
-                                              onMouseLeave={handleMouseLeave}
-                                              borderRight="1px"
-                                              borderColor="gray.500"
-                                              borderRadius="0"
-                                              bg="transparent"
-                                              _hover={{
-                                                backgroundColor: "transparent",
-                                              }}
-                                              width="3rem"
-                                              isDisabled={
-                                                !(
-                                                  currentUserId && // userIdが存在する場合のみ
-                                                  (post.user_uid ===
-                                                    currentUserId ||
-                                                    currentUserId ===
-                                                      masterUserId)
-                                                )
-                                              }
-                                            >
-                                              <Stack
-                                                alignItems="center"
-                                                spacing="1"
-                                                maxWidth={1.5}
-                                                color="gray.900"
-                                              >
-                                                <Icon
-                                                  as={FaTrashAlt}
-                                                  boxSize={5}
-                                                />
-                                                <Text
-                                                  fontSize="0.5rem"
-                                                  lineHeight="1"
-                                                >
-                                                  {getMessage({
-                                                    ja: "削除",
-                                                    us: "Delete",
-                                                    cn: "删减",
-                                                    language,
-                                                  })}
-                                                </Text>
-                                              </Stack>
-                                            </Button>
-                                            <Button //リプライボタン
-                                              onClick={() => {
-                                                handleReplyPost(
-                                                  longPressPostId!
-                                                );
-                                                handleLongPressEnd();
-                                              }}
-                                              onMouseEnter={() => {
-                                                handleMouseEnter("reply");
-                                              }}
-                                              onMouseLeave={handleMouseLeave}
-                                              borderRight="1px"
-                                              borderColor="gray.500"
-                                              borderRadius="0"
-                                              bg="transparent"
-                                              _hover={{
-                                                backgroundColor: "transparent",
-                                              }}
-                                              width="3rem"
-                                            >
-                                              <Stack
-                                                alignItems="center"
-                                                spacing="1"
-                                                maxWidth={1.5}
-                                                color="gray.900"
-                                              >
-                                                <Icon
-                                                  as={FaReply}
-                                                  boxSize={5}
-                                                />
-                                                <Text
-                                                  fontSize="0.5rem"
-                                                  lineHeight="1"
-                                                  p={0}
-                                                  m={0}
-                                                >
-                                                  {getMessage({
-                                                    ja: "リプライ",
-                                                    us: "reply",
-                                                    cn: "回复",
-                                                    language,
-                                                  })}
-                                                </Text>
-                                              </Stack>
-                                            </Button>
-                                          </Box>
-                                        </>
-                                      )}
-                                    {getTimeStamp(
-                                      formatDate(
-                                        post.created_at,
-                                        prevDateString,
-                                        true
-                                      ),
-                                      false,
-                                      post.user_uid === currentUserId,
-                                      post.read_by
-                                    )}
-                                    {getAvatarProps(
-                                      post.user_uid,
-                                      post.user_uid !== currentUserId,
-                                      "sm"
-                                    )}
-                                    <Card
-                                      id={post.id}
-                                      style={{
-                                        backgroundColor:
-                                          post.user_uid === currentUserId
-                                            ? "#DCF8C6"
-                                            : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
-                                        borderRadius: "10px",
-                                        maxWidth: "86vw",
-                                        padding: "0px",
-                                        margin:
-                                          post.user_uid === currentUserId
-                                            ? "0 12px 0 2px"
-                                            : "0 2px 0 12px",
-                                        boxShadow:
-                                          "0 4px 8px rgba(0, 0, 0, 0.1)",
-                                      }}
-                                    >
-                                      {post.reply_post_id && ( //ポストにリプライを含む場合
-                                        <CardBody
-                                          px="0"
-                                          py="0"
-                                          cursor="pointer"
-                                          onClick={async () => {
-                                            //リプライをクリックしたらポストにスクロール
-                                            const postElement =
-                                              document.getElementById(
-                                                post.reply_post_id
-                                              ); // post.idに基づいて要素を取得
-                                            if (postElement) {
-                                              postElement.scrollIntoView({
-                                                behavior: "smooth",
-                                              });
-                                              // スクロール位置をさらに調整
-                                              const offset = 80; // 調整したいオフセット値
-                                              const elementPosition =
-                                                postElement.getBoundingClientRect()
-                                                  .top; // 要素の位置を取得
-                                              const offsetPosition =
-                                                elementPosition +
-                                                window.scrollY -
-                                                offset; // オフセットを考慮した位置を計算
-                                              window.scrollTo({
-                                                top: offsetPosition,
-                                                behavior: "smooth", // スムーズにスクロール
-                                              });
-                                              // スクロールが完了した後にアニメーションを適用
-                                              setTimeout(() => {
-                                                postElement.classList.add(
-                                                  "shake"
-                                                ); // アニメーションを追加
-                                                setTimeout(() => {
-                                                  postElement.classList.remove(
-                                                    "shake"
-                                                  ); // アニメーションを削除
-                                                }, 500); // アニメーションの持続時間と一致させる
-                                              }, 500); // スクロールのアニメーションが完了するまで待つ
-                                            } else {
-                                              // リプライ先がない場合
-                                              await fetchAllPosts();
-                                              await new Promise((resolve) =>
-                                                setTimeout(resolve, 0)
-                                              ); // レンダリングが完了するのを待つ
-                                              const postElement =
-                                                document.getElementById(
-                                                  post.id
-                                                );
-
-                                              if (postElement) {
-                                                const offset = 80; // 調整したいオフセット値
-                                                const elementPosition =
-                                                  postElement.getBoundingClientRect()
-                                                    .top; // 要素の位置を取得
-                                                const offsetPosition =
-                                                  elementPosition +
-                                                  window.scrollY -
-                                                  offset; // オフセットを考慮した位置を計算
-                                                window.scrollTo({
-                                                  top: offsetPosition,
-                                                  behavior: "smooth", // スムーズにスクロール
-                                                });
-                                              }
-                                            }
-                                          }}
-                                        >
-                                          <Flex alignItems="center">
-                                            {getAvatarProps(
-                                              post.reply_user_id,
-                                              true,
-                                              "xs"
-                                            )}
-                                            <Stack
-                                              mx={2}
-                                              spacing={0}
-                                              maxW="90%"
-                                            >
-                                              <Flex
-                                                alignItems="center"
-                                                mb="0"
-                                                lineHeight="1.4"
-                                                fontFamily="Noto Sans JP"
-                                                fontWeight="300"
-                                              >
-                                                <Text
-                                                  color="black"
-                                                  fontSize="12px"
-                                                  mr="1"
-                                                >
-                                                  {getUserById(
-                                                    post.reply_user_id
-                                                  )?.user_metadata.name ||
-                                                    "未登録"}
-                                                  {post.replay_user_id}
-                                                </Text>
-                                              </Flex>
-                                              <Text
-                                                color="black"
-                                                fontFamily="Noto Sans JP"
-                                                fontWeight="200"
-                                                fontSize="10px"
-                                                noOfLines={1} // 1行まで表示
-                                                isTruncated // 改行が必要な場合は...を表示
-                                                whiteSpace="nowrap"
-                                                lineHeight="1.4"
-                                              >
-                                                <span
-                                                  dangerouslySetInnerHTML={{
-                                                    __html: post.reply_content
-                                                      .replace(/\n/g, "<br />")
-                                                      .replace(
-                                                        /(http[s]?:\/\/[^\s]+)/g,
-                                                        '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;" class="external-link">$1</a>'
-                                                      ),
-                                                  }}
-                                                />
-                                              </Text>
-                                            </Stack>
-                                            {post.reply_file_url && ( // 追加: reply_file_urlが存在する場合
-                                              <Box
-                                                my="0.5"
-                                                display="flex"
-                                                alignItems="center"
-                                                mr="2"
-                                              >
-                                                {post.reply_file_url.match(
-                                                  /\.(jpeg|jpg|gif|png|bmp|webp|mp4)$/i
-                                                ) ? (
-                                                  <Image
-                                                    src={post.reply_file_url}
-                                                    alt="Reply attached file"
-                                                    loading="lazy"
-                                                    maxW="100%"
-                                                    maxH="40px"
-                                                    objectFit="contain"
-                                                  />
-                                                ) : (
-                                                  <>
-                                                    <IconButton
-                                                      icon={<FaPaperclip />}
-                                                      aria-label="添付ファイル"
-                                                      bg="transparent"
-                                                      p={0}
-                                                      m={0}
-                                                      minWidth={0}
-                                                      onMouseLeave={(e) => {
-                                                        const tooltip =
-                                                          e.currentTarget
-                                                            .dataset.tooltip; // データ属性から取得
-                                                        if (tooltip) {
-                                                          const tooltipElement =
-                                                            document.getElementById(
-                                                              tooltip
-                                                            ); // IDから要素を取得
-                                                          if (tooltipElement) {
-                                                            tooltipElement.remove(); // 要素を削除
-                                                            delete e
-                                                              .currentTarget
-                                                              .dataset.tooltip; // データ属性を削除
-                                                          }
-                                                        }
-                                                      }}
-                                                      onMouseOver={(e) => {
-                                                        const existingTooltip =
-                                                          e.currentTarget
-                                                            .dataset.tooltip; // 既存のツールチップIDを取得
-                                                        if (!existingTooltip) {
-                                                          // 既存のツールチップがない場合のみ作成
-                                                          const tooltip =
-                                                            document.createElement(
-                                                              "span"
-                                                            );
-                                                          tooltip.innerText =
-                                                            post.reply_file_url
-                                                              .split("/")
-                                                              .pop() ||
-                                                            "ファイル名";
-                                                          tooltip.id = `tooltip-${post.id}`; // 一意のIDを設定
-                                                          tooltip.style.position =
-                                                            "absolute";
-                                                          tooltip.style.backgroundColor =
-                                                            "white";
-                                                          tooltip.style.border =
-                                                            "1px solid gray";
-                                                          tooltip.style.padding =
-                                                            "5px";
-                                                          tooltip.style.zIndex =
-                                                            "1000";
-                                                          e.currentTarget.appendChild(
-                                                            tooltip
-                                                          );
-                                                          e.currentTarget.dataset.tooltip =
-                                                            tooltip.id; // データ属性にIDを保存
-                                                        }
-                                                      }}
-                                                    />
-                                                  </>
-                                                )}
-                                              </Box>
-                                            )}
-                                          </Flex>
-                                          <Divider borderColor="gray.400" />
-                                        </CardBody>
-                                      )}
-                                      <CardBody px="8px" py="5px">
-                                        <Box
-                                          fontFamily="Noto Sans JP"
-                                          fontWeight="200"
-                                          color="black"
-                                          fontSize="15px"
-                                        >
-                                          <div
-                                            dangerouslySetInnerHTML={{
-                                              __html: post.content
-                                                .replace(/\n/g, "<br />")
-                                                .replace(
-                                                  /(http[s]?:\/\/[^\s]+)/g,
-                                                  '<a href="$1" class="external-link" style="text-decoration: underline;">$1</a>'
-                                                ),
-                                            }}
-                                          />
-                                        </Box>
-                                        {post.file_url && (
-                                          <>
-                                            {post.file_url.match(
-                                              /\.(jpeg|jpg|gif|png|mp4|bmp|webp)$/i
-                                            ) ? (
-                                              post.file_url.endsWith(".mp4") ? (
-                                                <Box position="relative">
-                                                  <Box
-                                                    borderRadius="10px"
-                                                    overflow="hidden"
-                                                  >
-                                                    <video
-                                                      src={post.file_url}
-                                                      autoPlay
-                                                      loop
-                                                      muted
-                                                      playsInline
-                                                      style={{
-                                                        maxWidth: "100%",
-                                                        maxHeight: "300px",
-                                                        marginTop: "1px",
-                                                        cursor: "pointer",
-                                                      }}
-                                                      onClick={(e) => {
-                                                        if (!isMobile) {
-                                                          setSelectedImageUrl(
-                                                            post.file_url
-                                                          );
-                                                          setFileModalOpen(
-                                                            true
-                                                          );
-                                                        }
-                                                      }}
-                                                    />
-                                                  </Box>
-                                                  <Box
-                                                    position="absolute"
-                                                    bottom="3px"
-                                                    left="3px"
-                                                    py="0"
-                                                    px="3px"
-                                                    borderRadius="5px"
-                                                    border="1px solid"
-                                                    borderColor={
-                                                      colorMode === "light"
-                                                        ? "custom.theme.light.900"
-                                                        : "custom.theme.dark.100"
-                                                    }
-                                                    bg={
-                                                      colorMode === "light"
-                                                        ? "custom.theme.light.500"
-                                                        : "custom.theme.dark.500"
-                                                    }
-                                                    fontSize="12px"
-                                                  >
-                                                    <FileSizeDisplay
-                                                      fileUrl={post.file_url}
-                                                      fileSize={post.file_size}
-                                                    />
-                                                  </Box>
-                                                  <Box
-                                                    position="absolute"
-                                                    zIndex="5"
-                                                    onClick={(e) => {
-                                                      handleDownload(
-                                                        post.file_url,
-                                                        post.original_file_name
-                                                      );
-                                                    }}
-                                                    cursor="pointer"
-                                                    borderRadius="50%"
-                                                    color={
-                                                      colorMode === "light"
-                                                        ? "custom.theme.light.900"
-                                                        : "custom.theme.dark.800"
-                                                    }
-                                                    border="1px solid"
-                                                    borderColor={
-                                                      colorMode === "light"
-                                                        ? "#bfb0a4"
-                                                        : "gray.800"
-                                                    }
-                                                    outline={
-                                                      post.content
-                                                        ? "2px solid"
-                                                        : "3px solid"
-                                                    }
-                                                    outlineColor={
-                                                      post.user_uid ===
-                                                      currentUserId
-                                                        ? "#dbf7c6"
-                                                        : "white"
-                                                    }
-                                                    _hover={{
-                                                      bg:
-                                                        colorMode === "light"
-                                                          ? "#8d7c6f"
-                                                          : "gray.400",
-                                                      color:
-                                                        colorMode === "light"
-                                                          ? "#f0e4da"
-                                                          : "#181a24",
-                                                      transition:
-                                                        "all 0.3s ease-in-out",
-                                                    }}
-                                                    top="-7px"
-                                                    right="-9px"
-                                                    p="2px"
-                                                    mr="3px"
-                                                    w="26px"
-                                                    h="26px"
-                                                    bg={
-                                                      colorMode === "light"
-                                                        ? "#f0e4da"
-                                                        : "custom.theme.dark.100"
-                                                    }
-                                                    textOverflow="ellipsis"
-                                                    display="flex" // displayをflexに変更
-                                                    alignItems="center" // 垂直方向の中央揃え
-                                                    justifyContent="center" // 水平方向の中央揃え
-                                                  >
-                                                    <FaDownload size={16} />
-                                                  </Box>
-                                                </Box>
-                                              ) : (
-                                                <>
-                                                  <Box
-                                                    position="relative"
-                                                    display="inline-block"
-                                                    mt="8px"
-                                                    borderRadius="5px"
-                                                    border="1px solid"
-                                                    borderColor={
-                                                      colorMode === "light"
-                                                        ? "custom.theme.light.800"
-                                                        : "custom.theme.dark.800"
-                                                    }
-                                                  >
-                                                    <Image
-                                                      src={post.file_url}
-                                                      alt="Uploaded image"
-                                                      cursor="pointer"
-                                                      borderRadius="5px"
-                                                      loading="lazy"
-                                                      style={{
-                                                        maxWidth: "100%",
-                                                        maxHeight: "240px",
-                                                        backgroundColor:
-                                                          "#f2e9df",
-                                                        backgroundImage: `
-                                          linear-gradient(45deg, #fff 25%, transparent 25%),
-                                          linear-gradient(135deg, #fff 25%, transparent 25%),
-                                          linear-gradient(45deg, transparent 75%, #fff 75%),
-                                          linear-gradient(135deg, transparent 75%, #fff 75%)
-                                        `,
-                                                        backgroundSize:
-                                                          "20px 20px",
-                                                        backgroundPosition:
-                                                          "0 0, 10px 0, 10px -10px, 0px 10px",
-                                                        backgroundAttachment:
-                                                          "fixed",
-                                                      }}
-                                                      onClick={(e) => {
-                                                        if (!isLongPress) {
-                                                          setSelectedImageUrl(
-                                                            post.file_url
-                                                          );
-                                                          setFileModalOpen(
-                                                            true
-                                                          );
-                                                        }
-                                                      }}
-                                                      onTouchStart={(e) => {
-                                                        touchStartRef.current =
-                                                          {
-                                                            x: e.touches[0]
-                                                              .clientX,
-                                                            y: e.touches[0]
-                                                              .clientY,
-                                                          };
-                                                        setIsLongPress(false);
-                                                      }}
-                                                      onTouchMove={(e) => {
-                                                        if (
-                                                          touchStartRef.current
-                                                        ) {
-                                                          const dx =
-                                                            e.touches[0]
-                                                              .clientX -
-                                                            touchStartRef
-                                                              .current.x;
-                                                          const dy =
-                                                            e.touches[0]
-                                                              .clientY -
-                                                            touchStartRef
-                                                              .current.y;
-                                                          const distance =
-                                                            Math.sqrt(
-                                                              dx * dx + dy * dy
-                                                            );
-                                                          if (distance > 10) {
-                                                            setIsLongPress(
-                                                              true
-                                                            );
-                                                          }
-                                                        }
-                                                      }}
-                                                      onTouchEnd={() => {
-                                                        if (!isLongPress) {
-                                                          setSelectedImageUrl(
-                                                            post.file_url
-                                                          );
-                                                          setFileModalOpen(
-                                                            true
-                                                          );
-                                                        }
-                                                        touchStartRef.current =
-                                                          null;
-                                                      }}
-                                                    />
-                                                    <Box
-                                                      position="absolute"
-                                                      bottom="3px"
-                                                      left="3px"
-                                                      py="0"
-                                                      px="3px"
-                                                      borderRadius="5px"
-                                                      border="1px solid"
-                                                      borderColor={
-                                                        colorMode === "light"
-                                                          ? "custom.theme.light.900"
-                                                          : "custom.theme.dark.100"
-                                                      }
-                                                      color={
-                                                        colorMode === "light"
-                                                          ? "custom.theme.light.900"
-                                                          : "custom.theme.dark.100"
-                                                      }
-                                                      bg={
-                                                        colorMode === "light"
-                                                          ? "custom.theme.light.500"
-                                                          : "custom.theme.dark.500"
-                                                      }
-                                                      fontSize="12px"
-                                                    >
-                                                      <FileSizeDisplay
-                                                        fileUrl={post.file_url}
-                                                        fileSize={
-                                                          post.file_size
-                                                        }
-                                                      />
-                                                    </Box>
-                                                    <Box
-                                                      position="absolute"
-                                                      zIndex="5"
-                                                      onClick={(e) => {
-                                                        handleDownload(
-                                                          post.file_url,
-                                                          post.original_file_name
-                                                        );
-                                                      }}
-                                                      cursor="pointer"
-                                                      borderRadius="50%"
-                                                      color={
-                                                        colorMode === "light"
-                                                          ? "custom.theme.light.900"
-                                                          : "custom.theme.dark.800"
-                                                      }
-                                                      border="1px solid"
-                                                      borderColor={
-                                                        colorMode === "light"
-                                                          ? "#bfb0a4"
-                                                          : "gray.800"
-                                                      }
-                                                      outline={
-                                                        post.content
-                                                          ? "2px solid"
-                                                          : "3px solid"
-                                                      }
-                                                      outlineColor={
-                                                        post.user_uid ===
-                                                        currentUserId
-                                                          ? "#dbf7c6"
-                                                          : "white"
-                                                      }
-                                                      _hover={{
-                                                        bg:
-                                                          colorMode === "light"
-                                                            ? "#8d7c6f"
-                                                            : "gray.400",
-                                                        color:
-                                                          colorMode === "light"
-                                                            ? "#f0e4da"
-                                                            : "#181a24",
-                                                        transition:
-                                                          "all 0.3s ease-in-out",
-                                                      }}
-                                                      top="-7px"
-                                                      right="-9px"
-                                                      p="2px"
-                                                      mr="3px"
-                                                      w="26px"
-                                                      h="26px"
-                                                      bg={
-                                                        colorMode === "light"
-                                                          ? "#f0e4da"
-                                                          : "custom.theme.dark.100"
-                                                      }
-                                                      textOverflow="ellipsis"
-                                                      display="flex" // displayをflexに変更
-                                                      alignItems="center" // 垂直方向の中央揃え
-                                                      justifyContent="center" // 水平方向の中央揃え
-                                                    >
-                                                      <FaDownload size={16} />
-                                                    </Box>
-                                                  </Box>
-                                                </>
-                                              )
-                                            ) : (
-                                              <>
-                                                <Box
-                                                  position="relative"
-                                                  border="1px solid"
-                                                  borderRadius="6px"
-                                                  borderColor={
-                                                    colorMode === "light"
-                                                      ? "#bfb0a4"
-                                                      : "gray.800"
-                                                  }
-                                                  color={
-                                                    colorMode === "light"
-                                                      ? "#8d7c6f"
-                                                      : "#181a24"
-                                                  }
-                                                  bg={
-                                                    colorMode === "light"
-                                                      ? "#f0e4da"
-                                                      : "custom.theme.dark.100"
-                                                  }
-                                                  px="2"
-                                                  py="1"
-                                                  mt={
-                                                    post.content ? "6px" : "0px"
-                                                  }
-                                                >
-                                                  <Text
-                                                    pr="10px"
-                                                    color={
-                                                      colorMode === "light"
-                                                        ? "custom.theme.light.900"
-                                                        : "custom.theme.dark.700"
-                                                    }
-                                                  >
-                                                    {post.original_file_name}
-                                                  </Text>
-                                                  <Box
-                                                    position="absolute"
-                                                    zIndex="5"
-                                                    onClick={(e) => {
-                                                      handleDownload(
-                                                        post.file_url,
-                                                        post.original_file_name
-                                                      );
-                                                    }}
-                                                    cursor="pointer"
-                                                    color={
-                                                      colorMode === "light"
-                                                        ? "custom.theme.light.900"
-                                                        : "custom.theme.dark.800"
-                                                    }
-                                                    borderRadius="50%"
-                                                    border="1px solid"
-                                                    borderColor={
-                                                      colorMode === "light"
-                                                        ? "#bfb0a4"
-                                                        : "gray.800"
-                                                    }
-                                                    outline={
-                                                      post.content
-                                                        ? "2px solid"
-                                                        : "3px solid"
-                                                    }
-                                                    outlineColor={
-                                                      post.user_uid ===
-                                                      currentUserId
-                                                        ? "#dbf7c6"
-                                                        : "white"
-                                                    }
-                                                    _hover={{
-                                                      bg:
-                                                        colorMode === "light"
-                                                          ? "#8d7c6f"
-                                                          : "gray.400",
-                                                      color:
-                                                        colorMode === "light"
-                                                          ? "#f0e4da"
-                                                          : "#181a24",
-                                                      transition:
-                                                        "all 0.3s ease-in-out",
-                                                    }}
-                                                    top="-7px"
-                                                    right="-9px"
-                                                    p="2px"
-                                                    mr="3px"
-                                                    w="26px"
-                                                    h="26px"
-                                                    bg={
-                                                      colorMode === "light"
-                                                        ? "#f0e4da"
-                                                        : "custom.theme.dark.100"
-                                                    }
-                                                    textOverflow="ellipsis"
-                                                    display="flex" // displayをflexに変更
-                                                    alignItems="center" // 垂直方向の中央揃え
-                                                    justifyContent="center" // 水平方向の中央揃え
-                                                  >
-                                                    <FaDownload size={16} />
-                                                  </Box>
-                                                </Box>
-                                                <Box
-                                                  display="inline-block"
-                                                  bottom="3px"
-                                                  left="3px"
-                                                  py="0"
-                                                  px="3px"
-                                                  borderRadius="5px"
-                                                  border="1px solid"
-                                                  borderColor={
-                                                    colorMode === "light"
-                                                      ? "custom.theme.light.900"
-                                                      : "custom.theme.dark.100"
-                                                  }
-                                                  color={
-                                                    colorMode === "light"
-                                                      ? "custom.theme.light.900"
-                                                      : "custom.theme.dark.100"
-                                                  }
-                                                  bg={
-                                                    colorMode === "light"
-                                                      ? "custom.theme.light.500"
-                                                      : "custom.theme.dark.500"
-                                                  }
-                                                  fontSize="12px"
-                                                >
-                                                  <FileSizeDisplay
-                                                    fileUrl={post.file_url}
-                                                    fileSize={post.file_size}
-                                                  />
-                                                </Box>
-                                              </>
-                                            )}
-                                          </>
-                                        )}
-                                      </CardBody>
-                                      <Box // 吹き出しの三角
-                                        style={{
-                                          position: "absolute",
-                                          top: "5px",
-                                          left:
-                                            post.user_uid === currentUserId
-                                              ? "auto"
-                                              : "-10px",
-                                          right:
-                                            post.user_uid === currentUserId
-                                              ? "-10px"
-                                              : "auto",
-                                          width: 0,
-                                          height: 0,
-                                          borderStyle: "solid",
-                                          borderWidth:
-                                            post.user_uid === currentUserId
-                                              ? "5px 0 10px 15px"
-                                              : "5px 15px 10px 0",
-                                          borderColor:
-                                            post.user_uid === currentUserId
-                                              ? "transparent transparent transparent #DCF8C6"
-                                              : "transparent #FFFFFF transparent transparent",
-                                          zIndex: 1,
-                                        }}
-                                      />
-                                    </Card>
-                                    {getTimeStamp(
-                                      formatDate(
-                                        post.created_at,
-                                        prevDateString,
-                                        true
-                                      ),
-                                      true,
-                                      post.user_uid !== currentUserId,
-                                      post.read_by
-                                    )}
-                                  </Flex>
-                                  {/* httpの場合はWEBページを表示 */}
-                                  {(() => {
-                                    const urls = post.content.match(
-                                      /(http[s]?:\/\/[^\s]+)/g
-                                    );
-                                    if (!urls) return null;
-                                    const url = urls[0];
-                                    const isExpanded =
-                                      expandedUrls[url] || false;
-                                    return (
-                                      <Box>
-                                        <Box
-                                          width={isExpanded ? "94%" : "50%"}
-                                          height={isExpanded ? "70vh" : "12vh"}
-                                          mt="8px"
-                                          transition="all 0.3s ease"
-                                          marginLeft={
-                                            post.user_uid === currentUserId
-                                              ? "auto"
-                                              : "44px"
-                                          }
-                                          marginRight={
-                                            post.user_uid === currentUserId
-                                              ? "12px"
-                                              : "auto"
-                                          }
-                                          style={{
-                                            boxShadow:
-                                              "0 4px 8px rgba(0, 0, 0, 0.1)",
-                                            position: "relative",
-                                          }}
-                                          borderRadius="8px"
-                                        >
-                                          <Tooltip
-                                            label={
-                                              isExpanded
-                                                ? "折りたたむ"
-                                                : "展開する"
-                                            }
-                                            placement="top"
-                                            hasArrow
-                                          >
-                                            <Box
-                                              display="inline-block"
-                                              position="absolute"
-                                            >
-                                              <Icon
-                                                position="absolute"
-                                                as={LuPanelRightOpen}
-                                                cursor="pointer"
-                                                boxSize="18px"
-                                                right={
-                                                  post.user_uid ===
-                                                  currentUserId
-                                                    ? ""
-                                                    : "-22px"
-                                                }
-                                                left={
-                                                  post.user_uid ===
-                                                  currentUserId
-                                                    ? "-22px"
-                                                    : ""
-                                                }
-                                                top="6px"
-                                                transform={
-                                                  isExpanded
-                                                    ? post.user_uid ===
-                                                      currentUserId
-                                                      ? "rotate(180deg)"
-                                                      : "rotate(0deg)"
-                                                    : post.user_uid ===
-                                                      currentUserId
-                                                    ? "rotate(0deg)"
-                                                    : "rotate(180deg)"
-                                                }
-                                                transition="transform 0.3s ease"
-                                                onClick={() => {
-                                                  setExpandedUrls((prev) => ({
-                                                    ...prev,
-                                                    [url]: !prev[url],
-                                                  }));
-                                                }}
-                                                _hover={{
-                                                  transform: isExpanded
-                                                    ? post.user_uid ===
-                                                      currentUserId
-                                                      ? "rotate(180deg) scale(1.2)"
-                                                      : "rotate(0deg) scale(1.2)"
-                                                    : post.user_uid ===
-                                                      currentUserId
-                                                    ? "rotate(0deg) scale(1.2)"
-                                                    : "rotate(180deg) scale(1.2)",
-                                                }}
-                                              />
-                                            </Box>
-                                          </Tooltip>
-                                          <Box
-                                            position="relative"
-                                            height="100%"
-                                            borderRadius="8px"
-                                            overflow="hidden"
-                                          >
-                                            <Flex
-                                              bg={
-                                                post.user_uid === currentUserId
-                                                  ? "#DCF8C6"
-                                                  : "#FFFFFF"
-                                              }
-                                              px={2}
-                                              alignItems="center"
-                                              borderBottom="1px solid"
-                                              borderColor="gray.200"
-                                              width="100%"
-                                            >
-                                              <Box
-                                                display="flex"
-                                                alignItems="center"
-                                              >
-                                                <IconButton
-                                                  color="#000"
-                                                  aria-label="戻る"
-                                                  icon={
-                                                    <Icon as={FaArrowLeft} />
-                                                  }
-                                                  size="sm"
-                                                  variant="ghost"
-                                                  mr={1}
-                                                  isDisabled={
-                                                    !urlHistory[url] ||
-                                                    currentUrlIndex[url] === 0
-                                                  }
-                                                  onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    const prevUrl = goBack(url);
-                                                    if (prevUrl) {
-                                                      const iframe =
-                                                        document.querySelector(
-                                                          `iframe[data-original-url="${url}"]`
-                                                        ) as HTMLIFrameElement;
-                                                      if (iframe) {
-                                                        iframe.src = prevUrl;
-                                                      }
-                                                    }
-                                                  }}
-                                                />
-                                                <IconButton
-                                                  aria-label="リロード"
-                                                  icon={<Icon as={FaRedo} />}
-                                                  color="#000"
-                                                  size="sm"
-                                                  variant="ghost"
-                                                  mr={2}
-                                                  onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    const iframe =
-                                                      document.querySelector(
-                                                        `iframe[data-original-url="${url}"]`
-                                                      ) as HTMLIFrameElement;
-                                                    if (iframe) {
-                                                      iframe.src = iframe.src;
-                                                    }
-                                                  }}
-                                                />
-                                              </Box>
-                                              <Box
-                                                flex="1"
-                                                overflow="hidden"
-                                                whiteSpace="nowrap"
-                                                textOverflow="ellipsis"
-                                                fontSize="xs"
-                                                color="#000"
-                                                alignContent="center"
-                                              >
-                                                {urlTitles[url] ||
-                                                  "ページを読み込み中..."}
-                                              </Box>
-                                              <Box flex="1" />
-                                              <IconButton
-                                                color="#000"
-                                                aria-label="新しいタブで開く"
-                                                icon={
-                                                  <Icon
-                                                    as={FaExternalLinkAlt}
-                                                  />
-                                                }
-                                                size="sm"
-                                                variant="ghost"
-                                                onClick={(e) => {
-                                                  e.stopPropagation();
-                                                  const currentUrl =
-                                                    urlHistory[url]?.[
-                                                      currentUrlIndex[url] || 0
-                                                    ] || url;
-                                                  window.open(
-                                                    currentUrl,
-                                                    "_blank"
-                                                  );
-                                                }}
-                                              />
-                                            </Flex>
-                                            {isExpanded && (
-                                              <iframe
-                                                src={url}
-                                                data-original-url={url}
-                                                style={{
-                                                  position: "relative",
-                                                  top: 0,
-                                                  left: 0,
-                                                  width: "100%",
-                                                  height: "calc(100% - 20px)",
-                                                  border: "none",
-                                                }}
-                                                sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-                                                loading="lazy"
-                                                onLoad={(e) => {
-                                                  const iframe =
-                                                    e.target as HTMLIFrameElement;
-                                                  try {
-                                                    const currentUrl =
-                                                      iframe.contentWindow
-                                                        ?.location.href;
-                                                    if (
-                                                      currentUrl &&
-                                                      currentUrl !== url &&
-                                                      currentUrl !== iframe.src
-                                                    ) {
-                                                      addToHistory(
-                                                        url,
-                                                        currentUrl
-                                                      );
-                                                    }
-                                                    // まずURLからドメイン名を取得してタイトルの初期値として設定
-                                                    const domain = new URL(url)
-                                                      .hostname;
-                                                    setUrlTitles((prev) => ({
-                                                      ...prev,
-                                                      [url]: domain,
-                                                    }));
-                                                    // タイトルの取得を試みる
-                                                    const title =
-                                                      iframe?.contentWindow
-                                                        ?.document?.title ||
-                                                      iframe?.contentDocument
-                                                        ?.title;
-                                                    if (title) {
-                                                      setUrlTitles((prev) => ({
-                                                        ...prev,
-                                                        [url]: title,
-                                                      }));
-                                                    }
-                                                  } catch (error) {
-                                                    // エラーの場合はドメイン名を表示
-                                                    try {
-                                                      const domain = new URL(
-                                                        url
-                                                      ).hostname;
-                                                      setUrlTitles((prev) => ({
-                                                        ...prev,
-                                                        [url]: domain,
-                                                      }));
-                                                    } catch (e) {
-                                                      setUrlTitles((prev) => ({
-                                                        ...prev,
-                                                        [url]: url,
-                                                      }));
-                                                    }
-                                                  }
-                                                }}
-                                              />
-                                            )}
-                                          </Box>
-                                        </Box>
-                                      </Box>
-                                    );
-                                  })()}
-                                </div>
-                              </>
-                            );
-                          })
-                      )}
-                    </Stack>
-                    <Box mb="20vh" />
-                  </>
-                )}
-              </Content>
-              <StatusDisplay />
-            </Box>
-            {/* モーダル */}
-            <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <Modal
+              isOpen={isOpen && activeDrawer === "blogModal"}
+              onClose={handleClose}
+              size="2xl"
+            >
               <ModalOverlay />
               <ModalContent
                 bg={
@@ -3778,20 +2306,1408 @@ function ThreadContent(): JSX.Element {
                     : "custom.theme.dark.500"
                 }
               >
-                <ModalHeader fontSize="md">{threadTitle}</ModalHeader>
-                <ModalCloseButton />
+                <ModalHeader fontWeight={400} fontSize="md" py={2} px={4}>
+                  <Text>{threadTitle}</Text>
+                </ModalHeader>
+                <CustomModalCloseButton
+                  colorMode={colorMode}
+                  onClose={onClose}
+                  outline="2px solid"
+                  outlineColor={
+                    colorMode === "light"
+                      ? "custom.theme.light.500"
+                      : "custom.theme.dark.500"
+                  }
+                  top="-4px"
+                  right="-4px"
+                />
                 <ModalBody>
-                  <Box width="100%" height="70vh">
-                    <iframe
-                      src={modalUrl}
-                      style={{ width: "100%", height: "100%", border: "none" }}
-                      title="Blog Content"
-                    />
-                  </Box>
+                  <iframe
+                    src={`/blog/${threadBlogUrl}`}
+                    style={{
+                      width: "100%",
+                      height: "80vh",
+                      border: "none",
+                    }}
+                  />
                 </ModalBody>
-                <ModalFooter></ModalFooter>
               </ModalContent>
             </Modal>
+            <SidebarBBS isMain={false} />
+            <Content isCustomHeader={true}>
+              <Link
+                href="#"
+                onClick={(e) => {
+                  if (threadBlogUrl) {
+                    e.preventDefault();
+                    handleOpen("blogModal");
+                  }
+                }}
+              >
+                <Box
+                  position="fixed"
+                  zIndex="1000"
+                  display={{
+                    base: "none",
+                    sm: "block",
+                    md: "block",
+                    lg: "block",
+                    xl: "block",
+                  }}
+                  top="46px"
+                  mb={0}
+                  ml={0}
+                  pt={0}
+                  pb={1}
+                  px={1}
+                  border="1px solid #bfb0a4"
+                  borderRadius="md"
+                  backdropFilter={
+                    colorMode === "light" ? "blur(20px)" : "blur(100px)"
+                  }
+                  cursor={threadBlogUrl ? "pointer" : "default"}
+                  _hover={{
+                    bg: threadBlogUrl
+                      ? colorMode === "light"
+                        ? "custom.theme.light.50"
+                        : "custom.theme.dark.100"
+                      : "",
+                    transition: "all 0.2s ease-in-out",
+                  }}
+                >
+                  <Box as="span" fontSize={11} fontWeight={400} mr={1}>
+                    {getMessage({
+                      ja: threadCompany,
+                      language,
+                    })}
+                  </Box>
+                  <Box
+                    display="inline-block"
+                    fontFamily="Noto Sans Jp"
+                    fontWeight={400}
+                    fontSize={9}
+                    borderRadius={3}
+                    px={1}
+                    mr={1}
+                    border="transparent"
+                    bg={GetColor(threadProjectName)}
+                    color="#FFF"
+                  >
+                    {threadProjectName}
+                  </Box>
+                  <Box
+                    display="inline-block"
+                    fontFamily="Noto Sans Jp"
+                    fontWeight={400}
+                    fontSize={9}
+                    borderRadius={3}
+                    px={1}
+                    mr={1}
+                    border={"1px solid " + GetColor(threadCategory)}
+                    bg="transparent"
+                    color={GetColor(threadCategory)}
+                  >
+                    {threadCategory}
+                  </Box>
+                  <Box display="inline-block" fontSize={10} fontWeight={400}>
+                    {ipAddress}
+                  </Box>
+                  <Box>
+                    <Flex
+                      justifyContent="center"
+                      alignItems="center"
+                      fontSize={13}
+                      fontWeight={400}
+                      style={{
+                        letterSpacing: "1px",
+                      }}
+                    >
+                      {getMessage({
+                        ja: threadTitle,
+                        language,
+                      })}
+                      {threadBlogUrl && <FaMicroblog />}
+                    </Flex>
+                  </Box>
+                </Box>
+              </Link>
+              <Box height="4.5em" />
+              <Stack
+                spacing="2"
+                style={{ padding: "0px", flexDirection: "column" }}
+              >
+                {!currentUserName && threadMainCompany !== "開発" ? (
+                  <Text color="red" fontWeight="bold">
+                    {getMessage({
+                      ja: "認証されていません",
+                      us: "Not authenticated.",
+                      cn: "未经授权。",
+                      language,
+                    })}
+                  </Text>
+                ) : threadMainCompany !== currentUserMainCompany &&
+                  threadMainCompany !== "開発" &&
+                  currentUserMainCompany !== "開発" ? (
+                  <Text color="red" fontWeight="bold">
+                    {getMessage({
+                      ja: "このチャットは ",
+                      us: "This chat is only viewable by ",
+                      cn: "此聊天只能由 ",
+                      language,
+                    })}
+                    {getMessage({
+                      ja: currentUserMainCompany || "",
+                      language,
+                    })}
+                    {getMessage({
+                      ja: " のみ閲覧可能です",
+                      us: "",
+                      cn: " 查看",
+                      language,
+                    })}
+                  </Text>
+                ) : (
+                  posts
+                    .sort(
+                      // created_atでソート
+                      (a, b) =>
+                        new Date(a.created_at).getTime() -
+                        new Date(b.created_at).getTime()
+                    )
+                    .map((post, index) => {
+                      const prevPost = posts[index - 1];
+                      const prevDateString = prevPost
+                        ? prevPost.created_at
+                        : undefined;
+                      const isNewDay =
+                        index === 0 || // 一番最初の投稿の場合
+                        (prevDateString &&
+                          new Date(post.created_at).toDateString() !==
+                            new Date(prevDateString).toDateString());
+                      // :で囲んだ文字はタイトル
+                      if (post.content.match(/:(.*?):/)) {
+                        return (
+                          <React.Fragment key={`${post.created_at}-${index}`}>
+                            {isNewDay && (
+                              <Flex
+                                key={`${post.created_at}-${index}`}
+                                alignItems="center"
+                                justifyContent="center"
+                                width="100%"
+                                mb="1.5"
+                              >
+                                <Divider borderColor="gray.500" />
+                                <Text
+                                  fontSize="15px"
+                                  color="gray.500"
+                                  whiteSpace="nowrap"
+                                  textAlign="center"
+                                  mx="2"
+                                  lineHeight="1.2"
+                                >
+                                  {formatDate(
+                                    post.created_at,
+                                    prevDateString,
+                                    false
+                                  )}
+                                </Text>
+                                <Divider borderColor="gray.500" />
+                              </Flex>
+                            )}
+                            <Flex
+                              alignItems="center"
+                              justifyContent="center"
+                              width="100%"
+                              mb="1.5"
+                              color="red"
+                            >
+                              <Divider
+                                borderColor={
+                                  colorMode === "light" ? "red" : "pink"
+                                }
+                              />
+                              <Tag
+                                colorScheme="red"
+                                minWidth="fit-content"
+                                maxWidth="100%"
+                                display="inline-flex"
+                                variant="outline"
+                                mt="1em"
+                                mb="1em"
+                              >
+                                <TagLeftIcon
+                                  as={ChatIcon}
+                                  color={colorMode === "light" ? "red" : "pink"}
+                                />
+                                <TagLabel
+                                  textAlign="center"
+                                  whiteSpace="nowrap"
+                                  width="auto"
+                                  maxWidth="80vw"
+                                  display="inline"
+                                  overflow="hidden"
+                                  textOverflow="ellipsis"
+                                  color={colorMode === "light" ? "red" : "pink"}
+                                >
+                                  {post.content.match(/:(.*?):/)[1]}
+                                </TagLabel>
+                                <TagRightIcon
+                                  as={ChatIcon}
+                                  color={colorMode === "light" ? "red" : "pink"}
+                                />
+                              </Tag>
+                              <Divider
+                                borderColor={
+                                  colorMode === "light" ? "red" : "pink"
+                                }
+                              />
+                            </Flex>
+                          </React.Fragment>
+                        );
+                      }
+                      return (
+                        <>
+                          <div className="post">
+                            {isNewDay && ( //日付の区切り線
+                              <Flex
+                                alignItems="center"
+                                justifyContent="center"
+                                width="100%"
+                                mb="1.5"
+                              >
+                                <Divider borderColor="gray.500" />
+                                <Text
+                                  fontSize="14px"
+                                  color="gray.500"
+                                  whiteSpace="nowrap"
+                                  textAlign="center"
+                                  mx="2"
+                                  lineHeight="1.2"
+                                >
+                                  {formatDate(
+                                    post.created_at,
+                                    prevDateString,
+                                    false
+                                  )}
+                                </Text>
+                                <Divider borderColor="gray.500" />
+                              </Flex>
+                            )}
+                            <Flex //post内容
+                              className="post"
+                              data-post-id={post.id}
+                              data-user-id={post.user_uid}
+                              key={post.id}
+                              id={`post-${post.id}`} // IDを追加
+                              style={{
+                                height: post.isDeleting ? 0 : "auto",
+                                opacity: post.isDeleting ? 0 : 1,
+                                overflow: "visible", // 内容がはみ出さないようにする
+                                transition:
+                                  "max-height 1s ease, opacity 1s ease", // 高さと不透明度のトランジション
+                              }}
+                              justifyContent={
+                                post.user_uid === currentUserId
+                                  ? "flex-end"
+                                  : "flex-start"
+                              }
+                              maxWidth="98vw"
+                              pr={
+                                post.user_uid === currentUserId ? "0px" : "10px"
+                              }
+                              pl={
+                                post.user_uid === currentUserId ? "10px" : "0px"
+                              }
+                              onMouseDown={(e) =>
+                                handleLongPressStart(post.id, e)
+                              } // 長押し開始
+                              onMouseUp={handleMouseUp} // マウスアップで長押し終了
+                              onMouseLeave={handleMouseLeave} // マウスが要素から離れたときに長押しを終了
+                              onMouseMove={handleLongPressMove} // マウス移動を追跡
+                              onTouchStart={(e) =>
+                                handleLongPressStart(post.id, e)
+                              } // タッチ開始
+                              onTouchEnd={handleMouseUp} // タッチ終了
+                              onTouchMove={handleLongPressMove} // タッチ移動を追跡
+                              onClick={(e) => {
+                                if (
+                                  isLongPress &&
+                                  longPressPostId === post.id
+                                ) {
+                                  e.stopPropagation();
+                                }
+                              }}
+                            >
+                              {isLongPress && longPressPostId === post.id && (
+                                <>
+                                  <Box //オーバーレイ
+                                    position="fixed"
+                                    top="0"
+                                    left="0"
+                                    width="100%"
+                                    height="100%"
+                                    bg="rgba(0, 0, 0, 0.5)" // 半透明の黒
+                                    zIndex="5000" // メニューより下に表示
+                                    onClick={handleLongPressEnd} // 長押しを終了
+                                  />
+                                  <Box //リプライとか削除のメニュー
+                                    position="absolute"
+                                    zIndex="5010"
+                                    bg="white"
+                                    borderRadius="5px"
+                                    boxShadow="md"
+                                    onClick={(e) => e.stopPropagation()} // クリックイベントの伝播を防ぐ
+                                    width="auto"
+                                    height="auto"
+                                  >
+                                    <Button //削除ボタン
+                                      onClick={() =>
+                                        handleDeletePost(longPressPostId!)
+                                      }
+                                      onMouseEnter={() =>
+                                        handleMouseEnter("delete")
+                                      }
+                                      onMouseLeave={handleMouseLeave}
+                                      borderRight="1px"
+                                      borderColor="gray.500"
+                                      borderRadius="0"
+                                      bg="transparent"
+                                      _hover={{
+                                        backgroundColor: "transparent",
+                                      }}
+                                      width="3rem"
+                                      isDisabled={
+                                        !(
+                                          currentUserId && // userIdが存在する場合のみ
+                                          (post.user_uid === currentUserId ||
+                                            currentUserId === masterUserId)
+                                        )
+                                      }
+                                    >
+                                      <Stack
+                                        alignItems="center"
+                                        spacing="1"
+                                        maxWidth={1.5}
+                                        color="gray.900"
+                                      >
+                                        <Icon as={FaTrashAlt} boxSize={5} />
+                                        <Text fontSize="0.5rem" lineHeight="1">
+                                          {getMessage({
+                                            ja: "削除",
+                                            us: "Delete",
+                                            cn: "删减",
+                                            language,
+                                          })}
+                                        </Text>
+                                      </Stack>
+                                    </Button>
+                                    <Button //リプライボタン
+                                      onClick={() => {
+                                        handleReplyPost(longPressPostId!);
+                                        handleLongPressEnd();
+                                      }}
+                                      onMouseEnter={() => {
+                                        handleMouseEnter("reply");
+                                      }}
+                                      onMouseLeave={handleMouseLeave}
+                                      borderRight="1px"
+                                      borderColor="gray.500"
+                                      borderRadius="0"
+                                      bg="transparent"
+                                      _hover={{
+                                        backgroundColor: "transparent",
+                                      }}
+                                      width="3rem"
+                                    >
+                                      <Stack
+                                        alignItems="center"
+                                        spacing="1"
+                                        maxWidth={1.5}
+                                        color="gray.900"
+                                      >
+                                        <Icon as={FaReply} boxSize={5} />
+                                        <Text
+                                          fontSize="0.5rem"
+                                          lineHeight="1"
+                                          p={0}
+                                          m={0}
+                                        >
+                                          {getMessage({
+                                            ja: "リプライ",
+                                            us: "reply",
+                                            cn: "回复",
+                                            language,
+                                          })}
+                                        </Text>
+                                      </Stack>
+                                    </Button>
+                                  </Box>
+                                </>
+                              )}
+                              {getTimeStamp(
+                                formatDate(
+                                  post.created_at,
+                                  prevDateString,
+                                  true
+                                ),
+                                false,
+                                post.user_uid === currentUserId,
+                                post.read_by
+                              )}
+                              {getAvatarProps(
+                                post.user_uid,
+                                post.user_uid !== currentUserId,
+                                "sm"
+                              )}
+                              <Card
+                                id={post.id}
+                                style={{
+                                  backgroundColor:
+                                    post.user_uid === currentUserId
+                                      ? "#DCF8C6"
+                                      : "#FFFFFF", // 自分のメッセージは緑、他人のメッセージは白
+                                  borderRadius: "10px",
+                                  maxWidth: "86vw",
+                                  padding: "0px",
+                                  margin:
+                                    post.user_uid === currentUserId
+                                      ? "0 12px 0 2px"
+                                      : "0 2px 0 12px",
+                                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                                }}
+                              >
+                                {post.reply_post_id && ( //ポストにリプライを含む場合
+                                  <CardBody
+                                    px="0"
+                                    py="0"
+                                    cursor="pointer"
+                                    onClick={async () => {
+                                      //リプライをクリックしたらポストにスクロール
+                                      const postElement =
+                                        document.getElementById(
+                                          post.reply_post_id
+                                        ); // post.idに基づいて要素を取得
+                                      if (postElement) {
+                                        postElement.scrollIntoView({
+                                          behavior: "smooth",
+                                        });
+                                        // スクロール位置をさらに調整
+                                        const offset = 80; // 調整したいオフセット値
+                                        const elementPosition =
+                                          postElement.getBoundingClientRect()
+                                            .top; // 要素の位置を取得
+                                        const offsetPosition =
+                                          elementPosition +
+                                          window.scrollY -
+                                          offset; // オフセットを考慮した位置を計算
+                                        window.scrollTo({
+                                          top: offsetPosition,
+                                          behavior: "smooth", // スムーズにスクロール
+                                        });
+                                        // スクロールが完了した後にアニメーションを適用
+                                        setTimeout(() => {
+                                          postElement.classList.add("shake"); // アニメーションを追加
+                                          setTimeout(() => {
+                                            postElement.classList.remove(
+                                              "shake"
+                                            ); // アニメーションを削除
+                                          }, 500); // アニメーションの持続時間と一致させる
+                                        }, 500); // スクロールのアニメーションが完了するまで待つ
+                                      } else {
+                                        // リプライ先がない場合
+                                        await fetchAllPosts();
+                                        await new Promise((resolve) =>
+                                          setTimeout(resolve, 0)
+                                        ); // レンダリングが完了するのを待つ
+                                        const postElement =
+                                          document.getElementById(post.id);
+
+                                        if (postElement) {
+                                          const offset = 80; // 調整したいオフセット値
+                                          const elementPosition =
+                                            postElement.getBoundingClientRect()
+                                              .top; // 要素の位置を取得
+                                          const offsetPosition =
+                                            elementPosition +
+                                            window.scrollY -
+                                            offset; // オフセットを考慮した位置を計算
+                                          window.scrollTo({
+                                            top: offsetPosition,
+                                            behavior: "smooth", // スムーズにスクロール
+                                          });
+                                        }
+                                      }
+                                    }}
+                                  >
+                                    <Flex alignItems="center">
+                                      {getAvatarProps(
+                                        post.reply_user_id,
+                                        true,
+                                        "xs"
+                                      )}
+                                      <Stack mx={2} spacing={0} maxW="90%">
+                                        <Flex
+                                          alignItems="center"
+                                          mb="0"
+                                          lineHeight="1.4"
+                                          fontFamily="Noto Sans JP"
+                                          fontWeight="300"
+                                        >
+                                          <Text
+                                            color="black"
+                                            fontSize="12px"
+                                            mr="1"
+                                          >
+                                            {getUserById(post.reply_user_id)
+                                              ?.user_metadata.name || "未登録"}
+                                            {post.replay_user_id}
+                                          </Text>
+                                        </Flex>
+                                        <Text
+                                          color="black"
+                                          fontFamily="Noto Sans JP"
+                                          fontWeight="200"
+                                          fontSize="10px"
+                                          noOfLines={1} // 1行まで表示
+                                          isTruncated // 改行が必要な場合は...を表示
+                                          whiteSpace="nowrap"
+                                          lineHeight="1.4"
+                                        >
+                                          <span
+                                            dangerouslySetInnerHTML={{
+                                              __html: post.reply_content
+                                                .replace(/\n/g, "<br />")
+                                                .replace(
+                                                  /(http[s]?:\/\/[^\s]+)/g,
+                                                  '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;" class="external-link">$1</a>'
+                                                ),
+                                            }}
+                                          />
+                                        </Text>
+                                      </Stack>
+                                      {post.reply_file_url && ( // 追加: reply_file_urlが存在する場合
+                                        <Box
+                                          my="0.5"
+                                          display="flex"
+                                          alignItems="center"
+                                          mr="2"
+                                        >
+                                          {post.reply_file_url.match(
+                                            /\.(jpeg|jpg|gif|png|bmp|webp|mp4)$/i
+                                          ) ? (
+                                            <Image
+                                              src={post.reply_file_url}
+                                              alt="Reply attached file"
+                                              loading="lazy"
+                                              maxW="100%"
+                                              maxH="40px"
+                                              objectFit="contain"
+                                            />
+                                          ) : (
+                                            <>
+                                              <IconButton
+                                                icon={<FaPaperclip />}
+                                                aria-label="添付ファイル"
+                                                bg="transparent"
+                                                p={0}
+                                                m={0}
+                                                minWidth={0}
+                                                onMouseLeave={(e) => {
+                                                  const tooltip =
+                                                    e.currentTarget.dataset
+                                                      .tooltip; // データ属性から取得
+                                                  if (tooltip) {
+                                                    const tooltipElement =
+                                                      document.getElementById(
+                                                        tooltip
+                                                      ); // IDから要素を取得
+                                                    if (tooltipElement) {
+                                                      tooltipElement.remove(); // 要素を削除
+                                                      delete e.currentTarget
+                                                        .dataset.tooltip; // データ属性を削除
+                                                    }
+                                                  }
+                                                }}
+                                                onMouseOver={(e) => {
+                                                  const existingTooltip =
+                                                    e.currentTarget.dataset
+                                                      .tooltip; // 既存のツールチップIDを取得
+                                                  if (!existingTooltip) {
+                                                    // 既存のツールチップがない場合のみ作成
+                                                    const tooltip =
+                                                      document.createElement(
+                                                        "span"
+                                                      );
+                                                    tooltip.innerText =
+                                                      post.reply_file_url
+                                                        .split("/")
+                                                        .pop() || "ファイル名";
+                                                    tooltip.id = `tooltip-${post.id}`; // 一意のIDを設定
+                                                    tooltip.style.position =
+                                                      "absolute";
+                                                    tooltip.style.backgroundColor =
+                                                      "white";
+                                                    tooltip.style.border =
+                                                      "1px solid gray";
+                                                    tooltip.style.padding =
+                                                      "5px";
+                                                    tooltip.style.zIndex =
+                                                      "1000";
+                                                    e.currentTarget.appendChild(
+                                                      tooltip
+                                                    );
+                                                    e.currentTarget.dataset.tooltip =
+                                                      tooltip.id; // データ属性にIDを保存
+                                                  }
+                                                }}
+                                              />
+                                            </>
+                                          )}
+                                        </Box>
+                                      )}
+                                    </Flex>
+                                    <Divider borderColor="gray.400" />
+                                  </CardBody>
+                                )}
+                                <CardBody px="8px" py="5px">
+                                  <Box
+                                    fontFamily="Noto Sans JP"
+                                    fontWeight="200"
+                                    color="black"
+                                    fontSize="15px"
+                                  >
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: post.content
+                                          .replace(/\n/g, "<br />")
+                                          .replace(
+                                            /(http[s]?:\/\/[^\s]+)/g,
+                                            '<a href="$1" class="external-link" style="text-decoration: underline;">$1</a>'
+                                          ),
+                                      }}
+                                    />
+                                  </Box>
+                                  {post.file_url && (
+                                    <>
+                                      {post.file_url.match(
+                                        /\.(jpeg|jpg|gif|png|mp4|bmp|webp)$/i
+                                      ) ? (
+                                        post.file_url.endsWith(".mp4") ? (
+                                          <Box position="relative">
+                                            <Box
+                                              borderRadius="10px"
+                                              overflow="hidden"
+                                            >
+                                              <video
+                                                src={post.file_url}
+                                                autoPlay
+                                                loop
+                                                muted
+                                                playsInline
+                                                style={{
+                                                  maxWidth: "100%",
+                                                  maxHeight: "300px",
+                                                  marginTop: "1px",
+                                                  cursor: "pointer",
+                                                }}
+                                                onClick={(e) => {
+                                                  if (!isMobile) {
+                                                    setSelectedImageUrl(
+                                                      post.file_url
+                                                    );
+                                                    setFileModalOpen(true);
+                                                  }
+                                                }}
+                                              />
+                                            </Box>
+                                            <Box
+                                              position="absolute"
+                                              bottom="3px"
+                                              left="3px"
+                                              py="0"
+                                              px="3px"
+                                              borderRadius="5px"
+                                              border="1px solid"
+                                              borderColor={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.900"
+                                                  : "custom.theme.dark.100"
+                                              }
+                                              bg={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.500"
+                                                  : "custom.theme.dark.500"
+                                              }
+                                              fontSize="12px"
+                                            >
+                                              <FileSizeDisplay
+                                                fileUrl={post.file_url}
+                                                fileSize={post.file_size}
+                                              />
+                                            </Box>
+                                            <Box
+                                              position="absolute"
+                                              zIndex="5"
+                                              onClick={(e) => {
+                                                handleDownload(
+                                                  post.file_url,
+                                                  post.original_file_name
+                                                );
+                                              }}
+                                              cursor="pointer"
+                                              borderRadius="50%"
+                                              color={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.900"
+                                                  : "custom.theme.dark.800"
+                                              }
+                                              border="1px solid"
+                                              borderColor={
+                                                colorMode === "light"
+                                                  ? "#bfb0a4"
+                                                  : "gray.800"
+                                              }
+                                              outline={
+                                                post.content
+                                                  ? "2px solid"
+                                                  : "3px solid"
+                                              }
+                                              outlineColor={
+                                                post.user_uid === currentUserId
+                                                  ? "#dbf7c6"
+                                                  : "white"
+                                              }
+                                              _hover={{
+                                                bg:
+                                                  colorMode === "light"
+                                                    ? "#8d7c6f"
+                                                    : "gray.400",
+                                                color:
+                                                  colorMode === "light"
+                                                    ? "#f0e4da"
+                                                    : "#181a24",
+                                                transition:
+                                                  "all 0.3s ease-in-out",
+                                              }}
+                                              top="-7px"
+                                              right="-9px"
+                                              p="2px"
+                                              mr="3px"
+                                              w="26px"
+                                              h="26px"
+                                              bg={
+                                                colorMode === "light"
+                                                  ? "#f0e4da"
+                                                  : "custom.theme.dark.100"
+                                              }
+                                              textOverflow="ellipsis"
+                                              display="flex" // displayをflexに変更
+                                              alignItems="center" // 垂直方向の中央揃え
+                                              justifyContent="center" // 水平方向の中央揃え
+                                            >
+                                              <FaDownload size={16} />
+                                            </Box>
+                                          </Box>
+                                        ) : (
+                                          <>
+                                            <Box
+                                              position="relative"
+                                              display="inline-block"
+                                              mt="8px"
+                                              borderRadius="5px"
+                                              border="1px solid"
+                                              borderColor={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.800"
+                                                  : "custom.theme.dark.800"
+                                              }
+                                            >
+                                              <Image
+                                                src={post.file_url}
+                                                alt="Uploaded image"
+                                                cursor="pointer"
+                                                borderRadius="5px"
+                                                loading="lazy"
+                                                style={{
+                                                  maxWidth: "100%",
+                                                  maxHeight: "240px",
+                                                  backgroundColor: "#f2e9df",
+                                                  backgroundImage: `
+                                          linear-gradient(45deg, #fff 25%, transparent 25%),
+                                          linear-gradient(135deg, #fff 25%, transparent 25%),
+                                          linear-gradient(45deg, transparent 75%, #fff 75%),
+                                          linear-gradient(135deg, transparent 75%, #fff 75%)
+                                        `,
+                                                  backgroundSize: "20px 20px",
+                                                  backgroundPosition:
+                                                    "0 0, 10px 0, 10px -10px, 0px 10px",
+                                                  backgroundAttachment: "fixed",
+                                                }}
+                                                onClick={(e) => {
+                                                  if (!isLongPress) {
+                                                    setSelectedImageUrl(
+                                                      post.file_url
+                                                    );
+                                                    setFileModalOpen(true);
+                                                  }
+                                                }}
+                                                onTouchStart={(e) => {
+                                                  touchStartRef.current = {
+                                                    x: e.touches[0].clientX,
+                                                    y: e.touches[0].clientY,
+                                                  };
+                                                  setIsLongPress(false);
+                                                }}
+                                                onTouchMove={(e) => {
+                                                  if (touchStartRef.current) {
+                                                    const dx =
+                                                      e.touches[0].clientX -
+                                                      touchStartRef.current.x;
+                                                    const dy =
+                                                      e.touches[0].clientY -
+                                                      touchStartRef.current.y;
+                                                    const distance = Math.sqrt(
+                                                      dx * dx + dy * dy
+                                                    );
+                                                    if (distance > 10) {
+                                                      setIsLongPress(true);
+                                                    }
+                                                  }
+                                                }}
+                                                onTouchEnd={() => {
+                                                  if (!isLongPress) {
+                                                    setSelectedImageUrl(
+                                                      post.file_url
+                                                    );
+                                                    setFileModalOpen(true);
+                                                  }
+                                                  touchStartRef.current = null;
+                                                }}
+                                              />
+                                              <Box
+                                                position="absolute"
+                                                bottom="3px"
+                                                left="3px"
+                                                py="0"
+                                                px="3px"
+                                                borderRadius="5px"
+                                                border="1px solid"
+                                                borderColor={
+                                                  colorMode === "light"
+                                                    ? "custom.theme.light.900"
+                                                    : "custom.theme.dark.100"
+                                                }
+                                                color={
+                                                  colorMode === "light"
+                                                    ? "custom.theme.light.900"
+                                                    : "custom.theme.dark.100"
+                                                }
+                                                bg={
+                                                  colorMode === "light"
+                                                    ? "custom.theme.light.500"
+                                                    : "custom.theme.dark.500"
+                                                }
+                                                fontSize="12px"
+                                              >
+                                                <FileSizeDisplay
+                                                  fileUrl={post.file_url}
+                                                  fileSize={post.file_size}
+                                                />
+                                              </Box>
+                                              <Box
+                                                position="absolute"
+                                                zIndex="5"
+                                                onClick={(e) => {
+                                                  handleDownload(
+                                                    post.file_url,
+                                                    post.original_file_name
+                                                  );
+                                                }}
+                                                cursor="pointer"
+                                                borderRadius="50%"
+                                                color={
+                                                  colorMode === "light"
+                                                    ? "custom.theme.light.900"
+                                                    : "custom.theme.dark.800"
+                                                }
+                                                border="1px solid"
+                                                borderColor={
+                                                  colorMode === "light"
+                                                    ? "#bfb0a4"
+                                                    : "gray.800"
+                                                }
+                                                outline={
+                                                  post.content
+                                                    ? "2px solid"
+                                                    : "3px solid"
+                                                }
+                                                outlineColor={
+                                                  post.user_uid ===
+                                                  currentUserId
+                                                    ? "#dbf7c6"
+                                                    : "white"
+                                                }
+                                                _hover={{
+                                                  bg:
+                                                    colorMode === "light"
+                                                      ? "#8d7c6f"
+                                                      : "gray.400",
+                                                  color:
+                                                    colorMode === "light"
+                                                      ? "#f0e4da"
+                                                      : "#181a24",
+                                                  transition:
+                                                    "all 0.3s ease-in-out",
+                                                }}
+                                                top="-7px"
+                                                right="-9px"
+                                                p="2px"
+                                                mr="3px"
+                                                w="26px"
+                                                h="26px"
+                                                bg={
+                                                  colorMode === "light"
+                                                    ? "#f0e4da"
+                                                    : "custom.theme.dark.100"
+                                                }
+                                                textOverflow="ellipsis"
+                                                display="flex" // displayをflexに変更
+                                                alignItems="center" // 垂直方向の中央揃え
+                                                justifyContent="center" // 水平方向の中央揃え
+                                              >
+                                                <FaDownload size={16} />
+                                              </Box>
+                                            </Box>
+                                          </>
+                                        )
+                                      ) : (
+                                        <>
+                                          <Box
+                                            position="relative"
+                                            border="1px solid"
+                                            borderRadius="6px"
+                                            borderColor={
+                                              colorMode === "light"
+                                                ? "#bfb0a4"
+                                                : "gray.800"
+                                            }
+                                            color={
+                                              colorMode === "light"
+                                                ? "#8d7c6f"
+                                                : "#181a24"
+                                            }
+                                            bg={
+                                              colorMode === "light"
+                                                ? "#f0e4da"
+                                                : "custom.theme.dark.100"
+                                            }
+                                            px="2"
+                                            py="1"
+                                            mt={post.content ? "6px" : "0px"}
+                                          >
+                                            <Text
+                                              pr="10px"
+                                              color={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.900"
+                                                  : "custom.theme.dark.700"
+                                              }
+                                            >
+                                              {post.original_file_name}
+                                            </Text>
+                                            <Box
+                                              position="absolute"
+                                              zIndex="5"
+                                              onClick={(e) => {
+                                                handleDownload(
+                                                  post.file_url,
+                                                  post.original_file_name
+                                                );
+                                              }}
+                                              cursor="pointer"
+                                              color={
+                                                colorMode === "light"
+                                                  ? "custom.theme.light.900"
+                                                  : "custom.theme.dark.800"
+                                              }
+                                              borderRadius="50%"
+                                              border="1px solid"
+                                              borderColor={
+                                                colorMode === "light"
+                                                  ? "#bfb0a4"
+                                                  : "gray.800"
+                                              }
+                                              outline={
+                                                post.content
+                                                  ? "2px solid"
+                                                  : "3px solid"
+                                              }
+                                              outlineColor={
+                                                post.user_uid === currentUserId
+                                                  ? "#dbf7c6"
+                                                  : "white"
+                                              }
+                                              _hover={{
+                                                bg:
+                                                  colorMode === "light"
+                                                    ? "#8d7c6f"
+                                                    : "gray.400",
+                                                color:
+                                                  colorMode === "light"
+                                                    ? "#f0e4da"
+                                                    : "#181a24",
+                                                transition:
+                                                  "all 0.3s ease-in-out",
+                                              }}
+                                              top="-7px"
+                                              right="-9px"
+                                              p="2px"
+                                              mr="3px"
+                                              w="26px"
+                                              h="26px"
+                                              bg={
+                                                colorMode === "light"
+                                                  ? "#f0e4da"
+                                                  : "custom.theme.dark.100"
+                                              }
+                                              textOverflow="ellipsis"
+                                              display="flex" // displayをflexに変更
+                                              alignItems="center" // 垂直方向の中央揃え
+                                              justifyContent="center" // 水平方向の中央揃え
+                                            >
+                                              <FaDownload size={16} />
+                                            </Box>
+                                          </Box>
+                                          <Box
+                                            display="inline-block"
+                                            bottom="3px"
+                                            left="3px"
+                                            py="0"
+                                            px="3px"
+                                            borderRadius="5px"
+                                            border="1px solid"
+                                            borderColor={
+                                              colorMode === "light"
+                                                ? "custom.theme.light.900"
+                                                : "custom.theme.dark.100"
+                                            }
+                                            color={
+                                              colorMode === "light"
+                                                ? "custom.theme.light.900"
+                                                : "custom.theme.dark.100"
+                                            }
+                                            bg={
+                                              colorMode === "light"
+                                                ? "custom.theme.light.500"
+                                                : "custom.theme.dark.500"
+                                            }
+                                            fontSize="12px"
+                                          >
+                                            <FileSizeDisplay
+                                              fileUrl={post.file_url}
+                                              fileSize={post.file_size}
+                                            />
+                                          </Box>
+                                        </>
+                                      )}
+                                    </>
+                                  )}
+                                </CardBody>
+                                <Box // 吹き出しの三角
+                                  style={{
+                                    position: "absolute",
+                                    top: "5px",
+                                    left:
+                                      post.user_uid === currentUserId
+                                        ? "auto"
+                                        : "-10px",
+                                    right:
+                                      post.user_uid === currentUserId
+                                        ? "-10px"
+                                        : "auto",
+                                    width: 0,
+                                    height: 0,
+                                    borderStyle: "solid",
+                                    borderWidth:
+                                      post.user_uid === currentUserId
+                                        ? "5px 0 10px 15px"
+                                        : "5px 15px 10px 0",
+                                    borderColor:
+                                      post.user_uid === currentUserId
+                                        ? "transparent transparent transparent #DCF8C6"
+                                        : "transparent #FFFFFF transparent transparent",
+                                    zIndex: 1,
+                                  }}
+                                />
+                              </Card>
+                              {getTimeStamp(
+                                formatDate(
+                                  post.created_at,
+                                  prevDateString,
+                                  true
+                                ),
+                                true,
+                                post.user_uid !== currentUserId,
+                                post.read_by
+                              )}
+                            </Flex>
+                            {/* httpの場合はWEBページを表示 */}
+                            {(() => {
+                              const urls = post.content.match(
+                                /(http[s]?:\/\/[^\s]+)/g
+                              );
+                              if (!urls) return null;
+                              const url = urls[0];
+                              const isExpanded = expandedUrls[url] || false;
+                              return (
+                                <Box>
+                                  <Box
+                                    width={isExpanded ? "94%" : "50%"}
+                                    height={isExpanded ? "70vh" : "12vh"}
+                                    mt="8px"
+                                    transition="all 0.3s ease"
+                                    marginLeft={
+                                      post.user_uid === currentUserId
+                                        ? "auto"
+                                        : "44px"
+                                    }
+                                    marginRight={
+                                      post.user_uid === currentUserId
+                                        ? "12px"
+                                        : "auto"
+                                    }
+                                    style={{
+                                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                                      position: "relative",
+                                    }}
+                                    borderRadius="8px"
+                                  >
+                                    <Tooltip
+                                      label={
+                                        isExpanded ? "折りたたむ" : "展開する"
+                                      }
+                                      placement="top"
+                                      hasArrow
+                                    >
+                                      <Box
+                                        display="inline-block"
+                                        position="absolute"
+                                      >
+                                        <Icon
+                                          position="absolute"
+                                          as={LuPanelRightOpen}
+                                          cursor="pointer"
+                                          boxSize="18px"
+                                          right={
+                                            post.user_uid === currentUserId
+                                              ? ""
+                                              : "-22px"
+                                          }
+                                          left={
+                                            post.user_uid === currentUserId
+                                              ? "-22px"
+                                              : ""
+                                          }
+                                          top="6px"
+                                          transform={
+                                            isExpanded
+                                              ? post.user_uid === currentUserId
+                                                ? "rotate(180deg)"
+                                                : "rotate(0deg)"
+                                              : post.user_uid === currentUserId
+                                              ? "rotate(0deg)"
+                                              : "rotate(180deg)"
+                                          }
+                                          transition="transform 0.3s ease"
+                                          onClick={() => {
+                                            setExpandedUrls((prev) => ({
+                                              ...prev,
+                                              [url]: !prev[url],
+                                            }));
+                                          }}
+                                          _hover={{
+                                            transform: isExpanded
+                                              ? post.user_uid === currentUserId
+                                                ? "rotate(180deg) scale(1.2)"
+                                                : "rotate(0deg) scale(1.2)"
+                                              : post.user_uid === currentUserId
+                                              ? "rotate(0deg) scale(1.2)"
+                                              : "rotate(180deg) scale(1.2)",
+                                          }}
+                                        />
+                                      </Box>
+                                    </Tooltip>
+                                    <Box
+                                      position="relative"
+                                      height="100%"
+                                      borderRadius="8px"
+                                      overflow="hidden"
+                                    >
+                                      <Flex
+                                        bg={
+                                          post.user_uid === currentUserId
+                                            ? "#DCF8C6"
+                                            : "#FFFFFF"
+                                        }
+                                        px={2}
+                                        alignItems="center"
+                                        borderBottom="1px solid"
+                                        borderColor="gray.200"
+                                        width="100%"
+                                      >
+                                        <Box display="flex" alignItems="center">
+                                          <IconButton
+                                            color="#000"
+                                            aria-label="戻る"
+                                            icon={<Icon as={FaArrowLeft} />}
+                                            size="sm"
+                                            variant="ghost"
+                                            mr={1}
+                                            isDisabled={
+                                              !urlHistory[url] ||
+                                              currentUrlIndex[url] === 0
+                                            }
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              const prevUrl = goBack(url);
+                                              if (prevUrl) {
+                                                const iframe =
+                                                  document.querySelector(
+                                                    `iframe[data-original-url="${url}"]`
+                                                  ) as HTMLIFrameElement;
+                                                if (iframe) {
+                                                  iframe.src = prevUrl;
+                                                }
+                                              }
+                                            }}
+                                          />
+                                          <IconButton
+                                            aria-label="リロード"
+                                            icon={<Icon as={FaRedo} />}
+                                            color="#000"
+                                            size="sm"
+                                            variant="ghost"
+                                            mr={2}
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              const iframe =
+                                                document.querySelector(
+                                                  `iframe[data-original-url="${url}"]`
+                                                ) as HTMLIFrameElement;
+                                              if (iframe) {
+                                                iframe.src = iframe.src;
+                                              }
+                                            }}
+                                          />
+                                        </Box>
+                                        <Box
+                                          flex="1"
+                                          overflow="hidden"
+                                          whiteSpace="nowrap"
+                                          textOverflow="ellipsis"
+                                          fontSize="xs"
+                                          color="#000"
+                                          alignContent="center"
+                                        >
+                                          {urlTitles[url] ||
+                                            "ページを読み込み中..."}
+                                        </Box>
+                                        <Box flex="1" />
+                                        <IconButton
+                                          color="#000"
+                                          aria-label="新しいタブで開く"
+                                          icon={<Icon as={FaExternalLinkAlt} />}
+                                          size="sm"
+                                          variant="ghost"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            const currentUrl =
+                                              urlHistory[url]?.[
+                                                currentUrlIndex[url] || 0
+                                              ] || url;
+                                            window.open(currentUrl, "_blank");
+                                          }}
+                                        />
+                                      </Flex>
+                                      {isExpanded && (
+                                        <iframe
+                                          src={url}
+                                          data-original-url={url}
+                                          style={{
+                                            position: "relative",
+                                            top: 0,
+                                            left: 0,
+                                            width: "100%",
+                                            height: "calc(100% - 20px)",
+                                            border: "none",
+                                          }}
+                                          sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                                          loading="lazy"
+                                          onLoad={(e) => {
+                                            const iframe =
+                                              e.target as HTMLIFrameElement;
+                                            try {
+                                              const currentUrl =
+                                                iframe.contentWindow?.location
+                                                  .href;
+                                              if (
+                                                currentUrl &&
+                                                currentUrl !== url &&
+                                                currentUrl !== iframe.src
+                                              ) {
+                                                addToHistory(url, currentUrl);
+                                              }
+                                              // まずURLからドメイン名を取得してタイトルの初期値として設定
+                                              const domain = new URL(url)
+                                                .hostname;
+                                              setUrlTitles((prev) => ({
+                                                ...prev,
+                                                [url]: domain,
+                                              }));
+                                              // タイトルの取得を試みる
+                                              const title =
+                                                iframe?.contentWindow?.document
+                                                  ?.title ||
+                                                iframe?.contentDocument?.title;
+                                              if (title) {
+                                                setUrlTitles((prev) => ({
+                                                  ...prev,
+                                                  [url]: title,
+                                                }));
+                                              }
+                                            } catch (error) {
+                                              // エラーの場合はドメイン名を表示
+                                              try {
+                                                const domain = new URL(url)
+                                                  .hostname;
+                                                setUrlTitles((prev) => ({
+                                                  ...prev,
+                                                  [url]: domain,
+                                                }));
+                                              } catch (e) {
+                                                setUrlTitles((prev) => ({
+                                                  ...prev,
+                                                  [url]: url,
+                                                }));
+                                              }
+                                            }
+                                          }}
+                                        />
+                                      )}
+                                    </Box>
+                                  </Box>
+                                </Box>
+                              );
+                            })()}
+                          </div>
+                        </>
+                      );
+                    })
+                )}
+              </Stack>
+              <Box mb="20vh" />
+            </Content>
+            <StatusDisplay />
           </div>
         </>
       )}
