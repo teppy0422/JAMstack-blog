@@ -22,8 +22,9 @@ import {
   FaArrowRight,
   FaRedo,
   FaExternalLinkAlt,
+  FaPlus,
+  FaMinus,
 } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa6";
 import { ImAttachment } from "react-icons/im";
 import { BsSend, BsFillSendFill } from "react-icons/bs";
 import { supabase } from "../../../utils/supabase/client";
@@ -97,6 +98,9 @@ import { isatty } from "tty";
 import { useUnread } from "../../../context/UnreadContext";
 import imageCompression from "browser-image-compression";
 import { CustomCloseButton } from "../../../components/custom/CustomCloseButton";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { fetchFile } from "@ffmpeg/util";
 
 let cachedUsers: any[] | null = null;
 const now = new Date();
@@ -890,7 +894,7 @@ function ThreadContent(): JSX.Element {
         maxSizeMB: 0.7,
         maxWidthOrHeight: 1200,
         useWebWorker: true,
-        fileType: "image/webp", // WebP形式に変換
+        fileType: "image/webp",
         initialQuality: 0.7,
         alwaysKeepResolution: true,
         signal: undefined,
@@ -905,7 +909,47 @@ function ThreadContent(): JSX.Element {
         console.log("Compressed size:", processedFile.size / 1024 / 1024, "MB");
       } catch (error) {
         console.error("Error compressing image:", error);
-        // 圧縮に失敗した場合は元のファイルを使用
+      }
+    }
+    // 動画ファイルの場合、WebMに変換
+    else if (file.type.startsWith("video/")) {
+      try {
+        const ffmpeg = new FFmpeg();
+        await ffmpeg.load();
+
+        const inputFileName = "input." + file.name.split(".").pop();
+        const outputFileName = "output.webm";
+
+        await ffmpeg.writeFile(inputFileName, await fetchFile(file));
+        await ffmpeg.exec([
+          "-i",
+          inputFileName,
+          "-c:v",
+          "libvpx-vp9",
+          "-crf",
+          "30",
+          "-b:v",
+          "0",
+          "-c:a",
+          "libopus",
+          outputFileName,
+        ]);
+        const data = await ffmpeg.readFile(outputFileName);
+        processedFile = new File(
+          [data],
+          file.name.replace(/\.[^/.]+$/, ".webm"),
+          {
+            type: "video/webm",
+          }
+        );
+        console.log("Original video size:", file.size / 1024 / 1024, "MB");
+        console.log(
+          "Converted video size:",
+          processedFile.size / 1024 / 1024,
+          "MB"
+        );
+      } catch (error) {
+        console.error("Error converting video:", error);
       }
     }
 
@@ -1060,7 +1104,7 @@ function ThreadContent(): JSX.Element {
       fetchFileSize();
     }, [fileUrl, initialFileSize]);
 
-    return fileSize ? <Text fontSize="xs">{fileSize}</Text> : null;
+    return fileSize ? <>{fileSize}</> : null;
   };
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -2056,58 +2100,192 @@ function ThreadContent(): JSX.Element {
             <Modal
               isOpen={fileModalOpen}
               onClose={() => setFileModalOpen(false)}
+              // size="full"
             >
               <ModalOverlay />
-              <ModalContent>
-                {/* <ModalCloseButton position="absolute" top="10px" right="-10px" /> */}
+              <ModalContent
+                maxW="100vw"
+                maxH="100vh"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
                 <ModalBody
                   display="flex"
                   justifyContent="center"
                   alignItems="center"
-                  p={0}
-                  onClick={() => {
-                    if (!isLongPress) {
-                      setIsZoomed(!isZoomed); // クリックでズームイン/アウトを切り替え
-                    }
-                  }}
+                  w="100%"
+                  h="100%"
+                  p="0"
+                  m="0"
                   style={{
-                    backgroundColor: "#f2e9df",
-                    backgroundImage: `
+                    backgroundColor: colorMode === "light" ? "#f2e9df" : "#333",
+                    backgroundImage:
+                      colorMode === "light"
+                        ? `
                     linear-gradient(45deg, #fff 25%, transparent 25%),
                     linear-gradient(135deg, #fff 25%, transparent 25%),
                     linear-gradient(45deg, transparent 75%, #fff 75%),
                     linear-gradient(135deg, transparent 75%, #fff 75%)
+                    `
+                        : `
+                      linear-gradient(45deg, #000 25%, transparent 25%),
+                      linear-gradient(135deg, #000 25%, transparent 25%),
+                      linear-gradient(45deg, transparent 75%, #000 75%),
+                      linear-gradient(135deg, transparent 75%, #000 75%)
                   `,
                     backgroundSize: "20px 20px",
                     backgroundPosition: "0 0, 10px 0, 10px -10px, 0px 10px",
                     backgroundAttachment: "fixed",
                   }}
                 >
-                  {selectedImageUrl &&
-                    (selectedImageUrl.match(/\.mp4$/) ? (
-                      <video
-                        src={selectedImageUrl}
-                        autoPlay
-                        loop
-                        muted
-                        style={{
-                          maxWidth: isZoomed ? "99vw" : "80vw", // ズームイン時は制限なし
-                          maxHeight: isZoomed ? "99vh" : "80vh", // ズームイン時は制限なし
-                          objectFit: "contain", // 動画がモーダルの範囲内に収まるようにする
-                          cursor: isZoomed ? "zoom-out" : "zoom-in", // ズームイン/アウトのカーソルを設定
-                        }}
-                      />
-                    ) : (
-                      <Image
-                        src={selectedImageUrl}
-                        alt="Uploaded image"
-                        loading="lazy"
-                        maxW={isZoomed ? "99vw" : "80vw"} // ズームイン時は制限なし
-                        maxH={isZoomed ? "99vh" : "80vh"} // ズームイン時は制限なし
-                        objectFit="contain" // 画像がモーダルの範囲内に収まるようにする
-                        cursor={isZoomed ? "zoom-out" : "zoom-in"} // ズームイン/アウトのカーソルを設定
-                      />
-                    ))}
+                  {selectedImageUrl && (
+                    <TransformWrapper
+                      initialScale={1}
+                      minScale={1}
+                      maxScale={3}
+                      centerOnInit={true}
+                      wheel={{ step: 0.1 }}
+                      doubleClick={{ step: 0.5 }}
+                    >
+                      {({ zoomIn, zoomOut, resetTransform }) => (
+                        <>
+                          <TransformComponent
+                            wrapperStyle={{
+                              width: "100%",
+                              height: "100%",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                            contentStyle={{
+                              width: "100%",
+                              height: "100%",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            {selectedImageUrl.match(/\.mp4$/) ? (
+                              <video
+                                src={selectedImageUrl}
+                                autoPlay
+                                loop
+                                muted
+                                style={{
+                                  maxWidth: "80vw",
+                                  maxHeight: "80vh",
+                                  objectFit: "contain",
+                                }}
+                              />
+                            ) : (
+                              <Image
+                                src={selectedImageUrl}
+                                alt="Uploaded image"
+                                loading="lazy"
+                                maxW="80vw"
+                                maxH="80vh"
+                                objectFit="contain"
+                              />
+                            )}
+                          </TransformComponent>
+                          <Box
+                            position="absolute"
+                            bottom="20px"
+                            right="20px"
+                            display="flex"
+                            gap="10px"
+                            zIndex="1000"
+                          >
+                            <IconButton
+                              aria-label="Zoom in"
+                              icon={<FaPlus />}
+                              onClick={() => zoomIn()}
+                              size="sm"
+                              color={
+                                colorMode === "light"
+                                  ? "custom.theme.light.850"
+                                  : "custom.theme.dark.800"
+                              }
+                              bg="white"
+                              border="1px solid"
+                              borderColor={
+                                colorMode === "light"
+                                  ? "custom.theme.light.850"
+                                  : "custom.theme.dark.800"
+                              }
+                              _hover={{
+                                bg:
+                                  colorMode === "light"
+                                    ? "custom.theme.light.100"
+                                    : "custom.theme.dark.100",
+                                transition: "all 0.2s ease-in-out",
+                              }}
+                              _focus={{
+                                boxShadow: "none",
+                              }}
+                            />
+                            <IconButton
+                              aria-label="Zoom out"
+                              icon={<FaMinus />}
+                              onClick={() => zoomOut()}
+                              size="sm"
+                              color={
+                                colorMode === "light"
+                                  ? "custom.theme.light.850"
+                                  : "custom.theme.dark.800"
+                              }
+                              bg="white"
+                              border="1px solid"
+                              borderColor={
+                                colorMode === "light"
+                                  ? "custom.theme.light.850"
+                                  : "custom.theme.dark.800"
+                              }
+                              _hover={{
+                                bg:
+                                  colorMode === "light"
+                                    ? "custom.theme.light.100"
+                                    : "custom.theme.dark.100",
+                                transition: "all 0.2s ease-in-out",
+                              }}
+                              _focus={{
+                                boxShadow: "none",
+                              }}
+                            />
+                            <IconButton
+                              aria-label="Reset zoom"
+                              icon={<FaRedo />}
+                              onClick={() => resetTransform()}
+                              size="sm"
+                              color={
+                                colorMode === "light"
+                                  ? "custom.theme.light.850"
+                                  : "custom.theme.dark.800"
+                              }
+                              bg="white"
+                              border="1px solid"
+                              borderColor={
+                                colorMode === "light"
+                                  ? "custom.theme.light.850"
+                                  : "custom.theme.dark.800"
+                              }
+                              _hover={{
+                                bg:
+                                  colorMode === "light"
+                                    ? "custom.theme.light.100"
+                                    : "custom.theme.dark.100",
+                                transition: "all 0.2s ease-in-out",
+                              }}
+                              _focus={{
+                                boxShadow: "none",
+                              }}
+                            />
+                          </Box>
+                        </>
+                      )}
+                    </TransformWrapper>
+                  )}
                 </ModalBody>
               </ModalContent>
             </Modal>
@@ -2957,6 +3135,11 @@ function ThreadContent(): JSX.Element {
                                                     ? "custom.theme.light.900"
                                                     : "custom.theme.dark.100"
                                                 }
+                                                color={
+                                                  colorMode === "light"
+                                                    ? "custom.theme.light.900"
+                                                    : "custom.theme.dark.100"
+                                                }
                                                 bg={
                                                   colorMode === "light"
                                                     ? "custom.theme.light.500"
@@ -3130,7 +3313,7 @@ function ThreadContent(): JSX.Element {
                                               alignItems="center" // 垂直方向の中央揃え
                                               justifyContent="center" // 水平方向の中央揃え
                                             >
-                                              {/* <FaDownload size={16} /> */}
+                                              <FaDownload size={16} />
                                             </Box>
                                           </Box>
                                           <Box
@@ -3149,7 +3332,7 @@ function ThreadContent(): JSX.Element {
                                             color={
                                               colorMode === "light"
                                                 ? "custom.theme.light.900"
-                                                : "custom.theme.dark.700"
+                                                : "custom.theme.dark.100"
                                             }
                                             bg={
                                               colorMode === "light"
