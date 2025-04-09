@@ -15,7 +15,7 @@ interface Sakura {
 }
 
 const MAX_SAKURAS = 10;
-const INITIAL_SAKURAS = 15;
+const INITIAL_SAKURAS = 20;
 
 // SVGのURLを定数として定義
 const SAKURA_SVG_URL = "/images/illust/obj/sakura_pixcel.svg";
@@ -68,7 +68,6 @@ const SakuraAnimation: React.FC = () => {
   // 桜の位置を監視して停止ゾーンとの衝突を検知
   useEffect(() => {
     if (isLoading) return;
-
     const checkCollision = () => {
       setSakuras((prevSakuras) =>
         prevSakuras.map((sakura) => {
