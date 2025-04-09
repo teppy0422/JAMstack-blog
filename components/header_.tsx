@@ -354,7 +354,9 @@ export default function Header() {
                       colorMode={colorMode}
                       top="-4px"
                       right="-4px"
-                      outline="2px solid"
+                      outline={
+                        colorMode === "light" ? "4px solid" : "6px solid"
+                      }
                       outlineColor={
                         colorMode === "light"
                           ? "custom.theme.light.500"
@@ -740,7 +742,7 @@ export default function Header() {
           <CustomModalCloseButton
             colorMode={colorMode}
             onClose={() => setLoginModalOpen(false)}
-            outline="2px solid"
+            outline={colorMode === "light" ? "4px solid" : "6px solid"}
             outlineColor={
               colorMode === "light"
                 ? "custom.theme.light.500"

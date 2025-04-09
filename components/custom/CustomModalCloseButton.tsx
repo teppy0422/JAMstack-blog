@@ -36,14 +36,22 @@ export const CustomModalCloseButton: React.FC<CustomModalCloseButtonProps> = ({
       right={right}
       onClick={handleClick}
       _focus={{ boxShadow: "none" }}
-      color={colorMode === "light" ? "custom.theme.light.900" : "white"}
+      color={
+        colorMode === "light"
+          ? "custom.theme.light.900"
+          : "custom.theme.dark.100"
+      }
       bg={
         colorMode === "light"
           ? "custom.theme.light.400"
           : "custom.theme.dark.500"
       }
       border="1px solid"
-      borderColor={colorMode === "light" ? "custom.theme.light.900" : "white"}
+      borderColor={
+        colorMode === "light"
+          ? "custom.theme.light.900"
+          : "custom.theme.dark.200"
+      }
       outline={outline}
       outlineColor={outlineColor}
       _hover={{

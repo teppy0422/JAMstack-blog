@@ -38,7 +38,11 @@ export const CustomCloseButton: React.FC<CustomCloseButtonProps> = ({
       onClick={handleClick}
       _focus={{ boxShadow: "none" }}
       border="1px solid"
-      borderColor={colorMode === "light" ? "custom.theme.light.900" : "white"}
+      borderColor={
+        colorMode === "light"
+          ? "custom.theme.light.900"
+          : "custom.theme.dark.100"
+      }
       outline="2px solid"
       outlineColor={colorMode === "light" ? "custom.theme.light.50" : "#181a24"}
       color={colorMode === "light" ? "custom.theme.light.900" : "white"}

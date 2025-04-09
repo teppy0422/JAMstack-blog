@@ -2312,7 +2312,7 @@ function ThreadContent(): JSX.Element {
                 <CustomModalCloseButton
                   colorMode={colorMode}
                   onClose={onClose}
-                  outline="2px solid"
+                  outline={colorMode === "light" ? "4px solid" : "6px solid"}
                   outlineColor={
                     colorMode === "light"
                       ? "custom.theme.light.500"

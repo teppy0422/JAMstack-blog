@@ -458,7 +458,6 @@ export const StatusDisplay = () => {
           ))}
         </Stack>
       </Box>
-
       {/* スケジュール表示用モーダル */}
       <Modal isOpen={isScheduleModalOpen} onClose={onClose} size="xl">
         <ModalOverlay />
@@ -597,7 +596,7 @@ export const StatusDisplay = () => {
             onClose={onClose}
             top="-4px"
             right="-4px"
-            outline="2px solid"
+            outline={colorMode === "light" ? "4px solid" : "6px solid"}
             outlineColor={
               colorMode === "light"
                 ? "custom.theme.light.500"
