@@ -18,8 +18,6 @@ export default function BlogId({ blog, highlightedBody }) {
   return (
     <>
       <main>
-        <Header />
-        <div style={{ height: "56px" }}></div>
         <Container className={styles.contain}>
           <h1 className={styles.title}>{blog.title}</h1>
           <Divider className={myClass} />
