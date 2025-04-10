@@ -8,6 +8,8 @@ import React, {
   useLayoutEffect,
 } from "react";
 import { useRouter, useParams } from "next/navigation";
+import dynamic from "next/dynamic";
+
 import {
   FaPaperclip,
   FaDownload,
@@ -89,8 +91,18 @@ import {
   LanguageProvider,
 } from "../../../context/LanguageContext";
 import getMessage from "../../../components/getMessage";
-import SakuraAnimation from "../../../components/SakuraAnimation";
-
+// 季節ごとのアニメーションを管理するマッピング
+const seasonalAnimations = {
+  someiyoshino: dynamic(
+    () => import("../../../components/season/SomeiyoshinoAnimation")
+  ),
+  hachisuka: dynamic(
+    () => import("../../../components/season/HachisukaAnimation")
+  ),
+  yae: dynamic(() => import("../../../components/season/YaeAnimation")),
+  // ochiba: dynamic(() => import("../../../components/OchibaAnimation")), // 落ち葉アニメーションのインポート
+  // 他の季節のアニメーションをここに追加
+};
 import { Global } from "@emotion/react";
 import "@fontsource/noto-sans-jp";
 import { CustomLoading } from "../../../components/CustomText";
@@ -207,8 +219,6 @@ function ThreadContent(): JSX.Element {
   const { colorMode, toggleColorMode } = useColorMode();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [isSakuraActive, setIsSakuraActive] = useState(false);
-
   //PCとスマホ
   //長押し
   const [isLongPress, setIsLongPress] = useState(false);
@@ -259,12 +269,26 @@ function ThreadContent(): JSX.Element {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  //桜ふる判断
+  const [isSomeiyoshinoActive, setIsSomeiyoshinoActive] = useState(false);
+  const [isHachisukaActive, setIsHachisukaActive] = useState(false);
+  const [isYaeActive, setIsYaeActive] = useState(false);
+
+  //season判断
   useEffect(() => {
     const today = new Date();
-    const startDate = new Date(today.getFullYear(), 2, 27); // 3月27日
-    const endDate = new Date(today.getFullYear(), 3, 10); // 4月10日
-    setIsSakuraActive(today >= startDate && today <= endDate);
+    const hachisukaStartDate = new Date(today.getFullYear(), 1, 25); // 2月2５日
+    const hachisukaEndDate = new Date(today.getFullYear(), 2, 10); // 3月10日
+    setIsHachisukaActive(
+      today >= hachisukaStartDate && today <= hachisukaEndDate
+    );
+    const someiyoshinoStartDate = new Date(today.getFullYear(), 2, 27); // 3月27日
+    const someiyoshinoEndDate = new Date(today.getFullYear(), 3, 10); // 4月10日
+    setIsSomeiyoshinoActive(
+      today >= someiyoshinoStartDate && today <= someiyoshinoEndDate
+    );
+    const YaeStartDate = new Date(today.getFullYear(), 3, 15); // 4月15日
+    const YaeEndDate = new Date(today.getFullYear(), 3, 22); // 4月22日
+    setIsYaeActive(today >= YaeStartDate && today <= YaeEndDate);
   }, []);
 
   // isAtBottomがtrueになった時に未読の投稿を既読にする
@@ -1414,7 +1438,7 @@ function ThreadContent(): JSX.Element {
         <>
           <audio ref={audioRef_send} src="/sound/notification.mp3" />
           <audio ref={audioRef_recieving} src="/sound/woodAlert.mp3" />
-          {isSakuraActive && <SakuraAnimation />}
+
           <Global
             styles={{
               "@media print": {
@@ -2335,6 +2359,9 @@ function ThreadContent(): JSX.Element {
             </Modal>
             <SidebarBBS isMain={false} />
             <Content isCustomHeader={true}>
+              {isSomeiyoshinoActive && <seasonalAnimations.someiyoshino />}
+              {isHachisukaActive && <seasonalAnimations.hachisuka />}
+              {isYaeActive && <seasonalAnimations.yae />}
               <Link
                 href="#"
                 onClick={(e) => {

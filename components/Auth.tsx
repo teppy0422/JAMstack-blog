@@ -349,7 +349,11 @@ export default function Auth({ userData }: AuthProps) {
         <>
           <Box textAlign="center" mb={4}>
             <Divider
-              borderColor={colorMode === "light" ? "black" : "white"}
+              borderColor={
+                colorMode === "light"
+                  ? "custom.theme.light.850"
+                  : "custom.theme.dark,800"
+              }
               width="60%"
               mx="auto"
               mt={10}
@@ -361,7 +365,11 @@ export default function Auth({ userData }: AuthProps) {
               position="relative"
               top="-16px"
               px={2}
-              bg={colorMode === "light" ? "#F0E6DB" : "black"}
+              bg={
+                colorMode === "light"
+                  ? "custom.theme.light.500"
+                  : "custom.theme.dark.500"
+              }
               display={"inline-block"}
             >
               {userData.userName || "No Name"}
@@ -755,14 +763,26 @@ export default function Auth({ userData }: AuthProps) {
         </>
       )}
       <Box mt={5} position="relative" borderRadius={8}>
-        <Divider position="relative" border="solid 0.5px" />
+        <Divider
+          position="relative"
+          border="solid 0.5px"
+          color={
+            colorMode === "light"
+              ? "custom.theme.light.850"
+              : "custom.theme.dark.100"
+          }
+        />
         <Text
           textAlign="center"
           mx="auto"
           px="6px"
           position="relative"
           top="-14px"
-          bg={colorMode === "light" ? "#F0E6DB" : "black"}
+          bg={
+            colorMode === "light"
+              ? "custom.theme.light.500"
+              : "custom.theme.dark.500"
+          }
           transform="translateX(-50%)"
           left="50%"
           display="inline-block"

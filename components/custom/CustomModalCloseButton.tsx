@@ -30,6 +30,7 @@ export const CustomModalCloseButton: React.FC<CustomModalCloseButtonProps> = ({
   return (
     <ModalCloseButton
       position="absolute"
+      zIndex="1000"
       h={boxSize}
       w={boxSize}
       top={top}

@@ -1,6 +1,12 @@
 import Moment from "react-moment";
 import { RepeatClockIcon } from "@chakra-ui/icons";
-import { Container, Divider, useColorModeValue, Box } from "@chakra-ui/react";
+import {
+  Container,
+  Divider,
+  useColorModeValue,
+  Box,
+  Image,
+} from "@chakra-ui/react";
 import { client } from "../../libs/client";
 import Header from "../../components/header";
 import styles from "../../styles/home.module.scss";
@@ -15,6 +21,7 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 export default function BlogId({ blog, highlightedBody }) {
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
+  const colorMode = useColorModeValue("light", "dark");
   return (
     <>
       <main>
@@ -27,6 +34,42 @@ export default function BlogId({ blog, highlightedBody }) {
           <Moment format="YYYY/MM/DD" className={styles.publishedAt}>
             {blog.publishedAt}
           </Moment>
+          {blog.tags && blog.tags.length > 0 && (
+            <Box display="flex" flexWrap="wrap" gap="8px" mt="8px" mb="16px">
+              {blog.tags.map((tag) => (
+                <Box
+                  key={tag.id}
+                  bg={
+                    colorMode === "light"
+                      ? "custom.theme.light.100"
+                      : "custom.theme.dark.400"
+                  }
+                  color={
+                    colorMode === "light"
+                      ? "custom.theme.light.900"
+                      : "custom.theme.dark.100"
+                  }
+                  px="8px"
+                  py="2px"
+                  borderRadius="4px"
+                  fontSize="sm"
+                  display="flex"
+                  alignItems="center"
+                  gap="4px"
+                >
+                  {tag.img && (
+                    <Image
+                      src={tag.img.url}
+                      alt={tag.name}
+                      boxSize="16px"
+                      objectFit="contain"
+                    />
+                  )}
+                  {tag.name}
+                </Box>
+              ))}
+            </Box>
+          )}
           {/* <p className="category">{blog.category && `${blog.category.name}`}</p> */}
           <div
             className={styles.post}

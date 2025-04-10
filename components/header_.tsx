@@ -443,9 +443,6 @@ export default function Header() {
           }}
         >
           <Box
-            bgImage="url('/images/common/flower2985.png')"
-            bgSize="cover" // 画像をカバーするように設定
-            bgPosition="center" // 画像の位置を中央に設定
             p={0} // パディングを設定
             filter={colorMode === "light" ? "" : "invert(1)"} // 白黒を入れ替えるフィルターを適用
           >
@@ -734,8 +731,16 @@ export default function Header() {
       <Modal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)}>
         <ModalOverlay />
         <ModalContent
-          bg={colorMode === "light" ? "#F0E6DB" : "black"}
-          borderColor={colorMode === "light" ? "black" : "white"}
+          bg={
+            colorMode === "light"
+              ? "custom.theme.light.500"
+              : "custom.theme.dark.500"
+          }
+          borderColor={
+            colorMode === "light"
+              ? "custom.theme.light.100"
+              : "custom.theme.light.100"
+          }
           borderWidth="0.5px"
           px={0}
         >
@@ -751,7 +756,14 @@ export default function Header() {
             top="-4px"
             right="-4px"
           />
-          <ModalBody mb={2}>
+          <ModalBody
+            mb={2}
+            bg={
+              colorMode === "light"
+                ? "custom.theme.light.500"
+                : "custom.theme.dark.500"
+            }
+          >
             <Auth
               userData={{
                 userName: currentUserName,
