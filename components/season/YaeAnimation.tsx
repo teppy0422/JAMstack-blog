@@ -15,8 +15,8 @@ interface Sakura {
   pausedPosition?: { x: number; y: number };
 }
 
-const MAX_SAKURAS = 10;
-const INITIAL_SAKURAS = 15;
+const MAX_SAKURAS = 4;
+const INITIAL_SAKURAS = 6;
 
 // SVGのURLを定数として定義
 const SAKURA_SVG_URL = "/images/illust/obj/yae_pixcel.svg";
@@ -32,13 +32,16 @@ const YaeAnimation: React.FC = () => {
 
   const createSakura = useCallback((): Sakura => {
     const swayValue = Math.random() * 100 - 50;
+    const size = Math.random() * 8 + 20;
+    const duration = size * 1.5;
+
     return {
       id: Math.random(),
       x: Math.random() * window.innerWidth,
-      size: Math.random() * 8 + 12,
-      opacity: Math.random() * 0.2 + 0.5,
+      size: size,
+      opacity: Math.random() * 0.2 + 0.7,
       sway: swayValue,
-      duration: Math.random() * 10 + 5,
+      duration: duration,
       delay: Math.random() * 0,
       isPaused: false,
     };
@@ -209,16 +212,16 @@ const YaeAnimation: React.FC = () => {
             translateY(5vh);
           }
           40% {
-            transform: translateY(40vh) translateX(-10vw) rotate(144deg);
+            transform: translateY(40vh) translateX(-15vw) rotate(144deg);
           }
           60% {
-            transform: translateY(60vh) translateX(-15vw) rotate(216deg);
+            transform: translateY(60vh) translateX(-22vw) rotate(216deg);
           }
           80% {
-            transform: translateY(80vh) translateX(-25vw) rotate(288deg);
+            transform: translateY(80vh) translateX(-37vw) rotate(288deg);
           }
           100% {
-            transform: translateY(100vh) translateX(-35vw) rotate(360deg);
+            transform: translateY(100vh) translateX(-52vw) rotate(360deg);
           }
         }
         @keyframes slideLeft {
@@ -227,7 +230,7 @@ const YaeAnimation: React.FC = () => {
           }
           50%{
             transform:translateX(-10px);
-            opacity:0.3;
+            opacity:0.5;
           }
           100% {
             transform: translateX(-16px);
