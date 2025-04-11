@@ -62,11 +62,12 @@
   }
 }
 .container {
-  background: #e40909e8;
   backdrop-filter: blur(10px);
   margin-top: 2em;
   margin-bottom: 20px;
-  padding: 16px 0 16px 0;
+  margin-left: 0px;
+  margin-right: 0px;
+  padding: 0;
 }
 .title {
   font-family: "Yusei Magic", sans-serif;
@@ -101,6 +102,7 @@
   }
 
   & > p {
+    font-size: 14px;
     line-height: 1.8;
     letter-spacing: 0.2px;
     margin-bottom: 1.2em;

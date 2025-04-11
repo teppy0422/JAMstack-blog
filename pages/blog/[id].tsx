@@ -25,7 +25,13 @@ export default function BlogId({ blog, highlightedBody }) {
   return (
     <>
       <main>
-        <Container className={styles.contain} fontWeight="400">
+        <Container
+          className={styles.container}
+          fontWeight="400"
+          mx="auto"
+          mt="14px"
+          p="10px"
+        >
           <Box className={styles.title} fontSize="20px">
             {blog.title}
           </Box>
@@ -70,6 +76,12 @@ export default function BlogId({ blog, highlightedBody }) {
               ))}
             </Box>
           )}
+          {/* <Image
+            height={{ base: "", sm: "200px", md: "200px", xl: "200px" }}
+            objectFit="cover"
+            alt={blog.title}
+            src={blog.eyecatch.url}
+          /> */}
           {/* <p className="category">{blog.category && `${blog.category.name}`}</p> */}
           <div
             className={styles.post}

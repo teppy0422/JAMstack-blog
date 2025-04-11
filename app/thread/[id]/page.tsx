@@ -9,6 +9,8 @@ import React, {
 } from "react";
 import { useRouter, useParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import { motion } from "framer-motion"; // framer-motionをインポート
+const MotionBox = motion(Box); // Boxをmotionでラップ
 
 import {
   FaPaperclip,
@@ -30,6 +32,8 @@ import { ImAttachment } from "react-icons/im";
 import { BsSend, BsFillSendFill } from "react-icons/bs";
 import { supabase } from "../../../utils/supabase/client";
 import { format } from "date-fns";
+import { css, keyframes } from "@emotion/react";
+
 import { ja, enUS, zhCN } from "date-fns/locale";
 import "@fontsource/noto-sans-jp";
 import {
@@ -66,6 +70,7 @@ import {
   ChakraProvider,
   Center,
   Link,
+  AspectRatio,
 } from "@chakra-ui/react";
 import { theme } from "../../../libs/theme";
 
@@ -75,6 +80,8 @@ import { FaMicroblog } from "react-icons/fa";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { CloseIcon } from "@chakra-ui/icons";
 
+import ContentDisplay from "./ContextDisplay";
+
 import { useUserContext } from "../../../context/useUserContext";
 
 import Content from "../../../components/content";
@@ -82,10 +89,11 @@ import SidebarBBS from "../../../components/sidebarBBS";
 import { useCustomToast } from "../../../components/customToast";
 import { GetColor } from "../../../components/CustomColor";
 import { AnimationImage } from "../../../components/CustomImage";
-
 import IconWithDrawer from "./IconWithDrawer";
 
+import "../../../styles/home.module.scss";
 // import { AppContext } from "../../../pages/_app";
+
 import {
   useLanguage,
   LanguageProvider,
@@ -141,6 +149,38 @@ function ThreadContent(): JSX.Element {
   }>({});
   const [urlTitles, setUrlTitles] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(true); // ローディング状態を追加
+
+  const [content, setContent] = useState<string | null>(null);
+  const [currentUrl, setCurrentUrl] = useState<string | null>(null);
+
+  const [threadBlogUrl, setThreadBlogUrl] = useState("");
+  useEffect(() => {
+    if (threadBlogUrl && threadBlogUrl !== currentUrl) {
+      const fetchContent = async () => {
+        try {
+          const response = await fetch(`/blog/${threadBlogUrl}`);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.text(); // または response.json() など
+          setContent(data);
+          setCurrentUrl(threadBlogUrl); // 現在のURLを更新
+        } catch (error) {
+          console.error("Fetch error:", error);
+          setContent("<p>Error loading content</p>"); // エラーメッセージを表示
+        }
+      };
+      fetchContent();
+    }
+  }, [threadBlogUrl, currentUrl]); // 依存配列にthreadBlogUrlとcurrentUrlを追加
+  const blink = keyframes`
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+`;
 
   // URLの履歴を追加する関数
   const addToHistory = (originalUrl: string, newUrl: string) => {
@@ -205,7 +245,6 @@ function ThreadContent(): JSX.Element {
   const [threadProjectName, setThreadProjectName] = useState("");
   const [threadMainCompany, setThreadMainCompany] = useState("");
   const [threadCompany, setThreadCompany] = useState("");
-  const [threadBlogUrl, setThreadBlogUrl] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [selectedFileSize, setSelectedFileSize] = useState<string | null>(null);
@@ -2345,15 +2384,22 @@ function ThreadContent(): JSX.Element {
                   top="-4px"
                   right="-4px"
                 />
-                <ModalBody>
-                  <iframe
+                <ModalBody h="100%" m={0} p={0}>
+                  {/* <iframe
                     src={`/blog/${threadBlogUrl}`}
                     style={{
                       width: "100%",
                       height: "80vh",
                       border: "none",
                     }}
-                  />
+                  /> */}
+                  <Box width="100%" height="100%" border="none" m="0" p="0">
+                    {/* <AspectRatio ratio={16 / 9}> */}
+                    <Box width="100%" height="100%">
+                      <ContentDisplay content={content} />
+                    </Box>
+                    {/* </AspectRatio> */}
+                  </Box>
                 </ModalBody>
               </ModalContent>
             </Modal>
@@ -2371,7 +2417,7 @@ function ThreadContent(): JSX.Element {
                   }
                 }}
               >
-                <Box
+                <MotionBox
                   position="fixed"
                   zIndex="1000"
                   display={{
@@ -2401,6 +2447,9 @@ function ThreadContent(): JSX.Element {
                       : "",
                     transition: "all 0.2s ease-in-out",
                   }}
+                  initial={{ opacity: 1 }} // 初期状態
+                  animate={threadBlogUrl ? { opacity: [1, 0, 1, 0, 1] } : {}} // 点滅アニメーション
+                  transition={{ duration: 2, times: [0, 0.5, 1, 1.5, 2] }} // アニメーションの設定
                 >
                   <Box as="span" fontSize={11} fontWeight={400} mr={1}>
                     {getMessage({
@@ -2456,7 +2505,7 @@ function ThreadContent(): JSX.Element {
                       {threadBlogUrl && <FaMicroblog />}
                     </Flex>
                   </Box>
-                </Box>
+                </MotionBox>
               </Link>
               <Box height="4.5em" />
               <Stack
