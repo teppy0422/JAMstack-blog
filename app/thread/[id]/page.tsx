@@ -137,6 +137,8 @@ export default function Thread() {
 
 function ThreadContent(): JSX.Element {
   const { language, setLanguage } = useLanguage();
+  const { colorMode, toggleColorMode } = useColorMode();
+
   const { updateUnreadCount } = useUnread();
   const toast = useToast();
   const [expandedUrls, setExpandedUrls] = useState<{ [key: string]: boolean }>(
@@ -173,12 +175,27 @@ function ThreadContent(): JSX.Element {
       fetchContent();
     }
   }, [threadBlogUrl, currentUrl]); // 依存配列にthreadBlogUrlとcurrentUrlを追加
-  const blink = keyframes`
-  0%, 100% {
-    opacity: 1;
+  const color = colorMode === "light" ? "" : ""; // カラーモードに応じた色を設定
+  const blink = (color: string) => keyframes`
+  0% {
+    background-color:${color};
+        transform: scale(1);
+  }
+  25% {
+    background-color:transparent;
+            transform: scale(0.9);
   }
   50% {
-    opacity: 0;
+    background-color:${color};
+            transform: scale(1);
+  }
+  75% {
+    background-color:transparent;
+            transform: scale(0.9);
+  }
+  100%{
+    background-color:${color};
+            transform: scale(1);
   }
 `;
 
@@ -255,7 +272,6 @@ function ThreadContent(): JSX.Element {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [isZoomed, setIsZoomed] = useState(false); // ズームインの状態を管理
-  const { colorMode, toggleColorMode } = useColorMode();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   //PCとスマホ
@@ -2417,7 +2433,7 @@ function ThreadContent(): JSX.Element {
                   }
                 }}
               >
-                <MotionBox
+                <Box
                   position="fixed"
                   zIndex="1000"
                   display={{
@@ -2431,8 +2447,6 @@ function ThreadContent(): JSX.Element {
                   mb={0}
                   ml={0}
                   pt={0}
-                  pb={1}
-                  px={1}
                   border="1px solid #bfb0a4"
                   borderRadius="md"
                   backdropFilter={
@@ -2447,65 +2461,71 @@ function ThreadContent(): JSX.Element {
                       : "",
                     transition: "all 0.2s ease-in-out",
                   }}
-                  initial={{ opacity: 1 }} // 初期状態
-                  animate={threadBlogUrl ? { opacity: [1, 0, 1, 0, 1] } : {}} // 点滅アニメーション
-                  transition={{ duration: 2, times: [0, 0.5, 1, 1.5, 2] }} // アニメーションの設定
+                  css={
+                    threadBlogUrl
+                      ? css`
+                          animation: ${blink(color)} 2s linear;
+                        `
+                      : "none"
+                  }
                 >
-                  <Box as="span" fontSize={11} fontWeight={400} mr={1}>
-                    {getMessage({
-                      ja: threadCompany,
-                      language,
-                    })}
-                  </Box>
-                  <Box
-                    display="inline-block"
-                    fontFamily="Noto Sans Jp"
-                    fontWeight={400}
-                    fontSize={9}
-                    borderRadius={3}
-                    px={1}
-                    mr={1}
-                    border="transparent"
-                    bg={GetColor(threadProjectName)}
-                    color="#FFF"
-                  >
-                    {threadProjectName}
-                  </Box>
-                  <Box
-                    display="inline-block"
-                    fontFamily="Noto Sans Jp"
-                    fontWeight={400}
-                    fontSize={9}
-                    borderRadius={3}
-                    px={1}
-                    mr={1}
-                    border={"1px solid " + GetColor(threadCategory)}
-                    bg="transparent"
-                    color={GetColor(threadCategory)}
-                  >
-                    {threadCategory}
-                  </Box>
-                  <Box display="inline-block" fontSize={10} fontWeight={400}>
-                    {ipAddress}
-                  </Box>
-                  <Box>
-                    <Flex
-                      justifyContent="center"
-                      alignItems="center"
-                      fontSize={13}
-                      fontWeight={400}
-                      style={{
-                        letterSpacing: "1px",
-                      }}
-                    >
+                  <Box borderRadius="md" pb={1} px={1}>
+                    <Box as="span" fontSize={11} fontWeight={400} mr={1}>
                       {getMessage({
-                        ja: threadTitle,
+                        ja: threadCompany,
                         language,
                       })}
-                      {threadBlogUrl && <FaMicroblog />}
-                    </Flex>
+                    </Box>
+                    <Box
+                      display="inline-block"
+                      fontFamily="Noto Sans Jp"
+                      fontWeight={400}
+                      fontSize={9}
+                      borderRadius={3}
+                      px={1}
+                      mr={1}
+                      border="transparent"
+                      bg={GetColor(threadProjectName)}
+                      color="#FFF"
+                    >
+                      {threadProjectName}
+                    </Box>
+                    <Box
+                      display="inline-block"
+                      fontFamily="Noto Sans Jp"
+                      fontWeight={400}
+                      fontSize={9}
+                      borderRadius={3}
+                      px={1}
+                      mr={1}
+                      border={"1px solid " + GetColor(threadCategory)}
+                      bg="transparent"
+                      color={GetColor(threadCategory)}
+                    >
+                      {threadCategory}
+                    </Box>
+                    <Box display="inline-block" fontSize={10} fontWeight={400}>
+                      {ipAddress}
+                    </Box>
+                    <Box>
+                      <Flex
+                        justifyContent="center"
+                        alignItems="center"
+                        fontSize={13}
+                        fontWeight={400}
+                        style={{
+                          letterSpacing: "1px",
+                        }}
+                      >
+                        {getMessage({
+                          ja: threadTitle,
+                          language,
+                        })}
+                        {threadBlogUrl && <FaMicroblog />}
+                      </Flex>
+                    </Box>
                   </Box>
-                </MotionBox>
+                </Box>
               </Link>
               <Box height="4.5em" />
               <Stack
