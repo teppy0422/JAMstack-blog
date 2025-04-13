@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { UserProvider } from "../context/useUserContext";
 import { UnreadProvider } from "../context/UnreadContext";
+import { LanguageProvider } from "../context/LanguageContext";
 import { theme } from "../libs/theme";
 
 export default function RootLayout({
@@ -23,7 +24,9 @@ export default function RootLayout({
         <SessionProvider>
           <UserProvider>
             <UnreadProvider>
-              <ChakraProvider theme={theme}>{children}</ChakraProvider>
+              <LanguageProvider>
+                <ChakraProvider theme={theme}>{children}</ChakraProvider>
+              </LanguageProvider>
             </UnreadProvider>
           </UserProvider>
         </SessionProvider>

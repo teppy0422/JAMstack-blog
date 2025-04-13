@@ -51,6 +51,7 @@ export default function Home({ blog, category, tag, blog2 }) {
     getUserById,
     isLoading,
   } = useUserContext();
+  const userData = currentUserId ? getUserById(currentUserId) : null;
 
   // 左スライドでメニュー開く
   const [positions, setPositions] = useState([0, 0, 0]); // 各要素の位置を配列で管理
@@ -104,7 +105,6 @@ export default function Home({ blog, category, tag, blog2 }) {
   if (isLoading) {
     return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
   }
-  const userData = currentUserId ? getUserById(currentUserId) : null;
 
   return (
     <>

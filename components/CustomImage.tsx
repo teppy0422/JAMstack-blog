@@ -6,7 +6,8 @@ import styled, { keyframes } from "styled-components";
 interface AnimationImageProps {
   sealSize?: string;
   src: string;
-  width: string;
+  width?: string;
+  height?: string;
   left?: string;
   top?: string;
   right?: string;
@@ -22,6 +23,7 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
   sealSize = "2",
   src,
   width,
+  height,
   left,
   top,
   right,
@@ -56,6 +58,7 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
             position: position,
             cursor: isGif ? "pointer" : "",
             width: width,
+            height: height,
             left: left,
             top: top,
             right: right,

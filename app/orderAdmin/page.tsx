@@ -26,10 +26,14 @@ import {
   ModalCloseButton,
   useDisclosure,
   Checkbox,
+  Avatar,
+  Flex,
 } from "@chakra-ui/react";
 import { supabase } from "../../utils/supabase/client";
 import { VscAccount } from "react-icons/vsc";
 import imageCompression from "browser-image-compression";
+import { useUserContext } from "../../context/useUserContext";
+import Content from "../../components/content";
 
 interface MenuItem {
   id: number;
@@ -43,10 +47,21 @@ interface MenuItem {
 
 interface Order {
   id: number;
-  items: { item: MenuItem; quantity: number }[];
   total: number;
   created_at: string;
   status: "pending" | "completed";
+  user_id: string;
+  order_items: {
+    id: number;
+    menu_item_id: number;
+    quantity: number;
+    price: number;
+    menu_item: {
+      id: number;
+      name: string;
+      image_url: string;
+    };
+  }[];
 }
 
 export default function AdminPage() {
@@ -72,6 +87,16 @@ export default function AdminPage() {
   const [previewImage, setPreviewImage] = useState<string>("");
   const [ingredientInputs, setIngredientInputs] = useState<string[]>([""]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const {
+    currentUserId,
+    currentUserPictureUrl,
+    currentUserEmail,
+    currentUserCreatedAt,
+    getUserById,
+    isLoading,
+  } = useUserContext();
+  const userData = currentUserId ? getUserById(currentUserId) : null;
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const categories = [
     "ドリンク",
@@ -85,7 +110,8 @@ export default function AdminPage() {
   useEffect(() => {
     fetchMenuItems();
     fetchOrders();
-    setupRealtimeSubscription();
+    const cleanup = setupRealtimeSubscription();
+    return () => cleanup();
   }, []);
 
   const fetchMenuItems = async () => {
@@ -118,7 +144,22 @@ export default function AdminPage() {
   const fetchOrders = async () => {
     const { data, error } = await supabase
       .from("orders")
-      .select("*")
+      .select(
+        `
+        *,
+        order_items (
+          id,
+          menu_item_id,
+          quantity,
+          price,
+          menu_item:menu_item_id (
+            id,
+            name,
+            image_url
+          )
+        )
+      `
+      )
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -141,8 +182,31 @@ export default function AdminPage() {
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "orders" },
-        () => {
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            // 新しい注文が追加された時に通知音を再生
+            if (audioRef.current) {
+              audioRef.current.play().catch((error) => {
+                console.error("Error playing sound:", error);
+              });
+            }
+            // トースト通知を表示
+            toast({
+              title: "新しい注文",
+              description: "新しい注文が入りました",
+              status: "info",
+              duration: 5000,
+              isClosable: true,
+            });
+          }
           fetchOrders();
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "order_menu_items" },
+        () => {
+          fetchMenuItems();
         }
       )
       .subscribe();
@@ -475,295 +539,376 @@ export default function AdminPage() {
     );
   };
 
+  const handleDeleteOrderItem = async (orderId: number, itemId: number) => {
+    try {
+      // 注文アイテムを削除
+      const { error: itemError } = await supabase
+        .from("order_items")
+        .delete()
+        .eq("id", itemId);
+
+      if (itemError) throw itemError;
+
+      // 注文の合計金額を再計算
+      const { data: remainingItems, error: remainingError } = await supabase
+        .from("order_items")
+        .select("price, quantity")
+        .eq("order_id", orderId);
+
+      if (remainingError) throw remainingError;
+
+      const newTotal =
+        remainingItems?.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        ) || 0;
+
+      // 注文の合計金額を更新
+      const { error: updateError } = await supabase
+        .from("orders")
+        .update({ total: newTotal })
+        .eq("id", orderId);
+
+      if (updateError) throw updateError;
+
+      // 注文にアイテムが残っていない場合は注文自体を削除
+      if (remainingItems?.length === 0) {
+        const { error: deleteOrderError } = await supabase
+          .from("orders")
+          .delete()
+          .eq("id", orderId);
+
+        if (deleteOrderError) throw deleteOrderError;
+      }
+
+      toast({
+        title: "成功",
+        description: "注文アイテムを削除しました",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      fetchOrders();
+    } catch (error) {
+      console.error("Error deleting order item:", error);
+      toast({
+        title: "エラー",
+        description: "注文アイテムの削除に失敗しました",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
-    <Box p={4}>
-      <Heading mb={6} textAlign="center">
-        管理者ページ
-      </Heading>
-
-      <Box>
-        <HStack spacing={4} mb={4}>
-          <Button colorScheme="blue" onClick={onOpen}>
-            アイテムを追加
-          </Button>
-          <Button colorScheme="green" onClick={onIngredientsModalOpen}>
-            使用材料一覧
-          </Button>
-        </HStack>
-
-        <Heading size="md" mb={4}>
-          注文一覧
+    <Content isCustomHeader={true}>
+      <Box p={4}>
+        <audio ref={audioRef} src="/sound/missed.mp3" preload="auto" />
+        <Heading mb={6} textAlign="center">
+          管理者ページ
         </Heading>
-        <VStack spacing={4} align="stretch" mb={8}>
-          {orders.map((order) => (
-            <Box
-              key={order.id}
-              p={4}
-              bg={colorMode === "light" ? "white" : "gray.700"}
-              borderRadius="md"
-            >
-              <VStack align="stretch" spacing={2}>
-                <HStack justify="space-between">
-                  <Text fontWeight="bold">注文ID: {order.id}</Text>
-                  <Text>
-                    注文日時: {new Date(order.created_at).toLocaleString()}
-                  </Text>
-                </HStack>
-                <Text fontWeight="bold">合計: {order.total}円</Text>
-                <Text>
-                  ステータス: {order.status === "pending" ? "処理中" : "完了"}
-                </Text>
-                <VStack align="stretch" spacing={2}>
-                  {order.items.map((item, index) => (
-                    <HStack key={index} spacing={4}>
+
+        <Box>
+          <HStack spacing={4} mb={4}>
+            <Button colorScheme="blue" onClick={onOpen}>
+              アイテムを追加
+            </Button>
+            <Button colorScheme="green" onClick={onIngredientsModalOpen}>
+              使用材料一覧
+            </Button>
+          </HStack>
+
+          <Heading size="md" mb={4}>
+            注文一覧
+          </Heading>
+          <VStack spacing={4} align="stretch" mb={8}>
+            {orders.flatMap((order) => {
+              const orderUserData = getUserById(order.user_id);
+              return order.order_items.map((item) => (
+                <Box
+                  key={`${order.id}-${item.id}`}
+                  p={4}
+                  bg={colorMode === "light" ? "white" : "gray.700"}
+                  borderRadius="md"
+                >
+                  <VStack align="stretch" spacing={2}>
+                    <HStack justify="space-between">
+                      <Flex align="center" gap={2}>
+                        <Text fontWeight="bold">注文ID: {order.id}</Text>
+                        <Text fontWeight="bold">アイテムID: {item.id}</Text>
+                        <Avatar
+                          src={orderUserData?.picture_url || undefined}
+                          size="sm"
+                        />
+                      </Flex>
+                      <Text>
+                        注文日時: {new Date(order.created_at).toLocaleString()}
+                      </Text>
+                    </HStack>
+                    <HStack spacing={4}>
                       <Image
-                        src={item.item.imageUrl}
-                        alt={item.item.name}
+                        src={item.menu_item.image_url}
+                        alt={item.menu_item.name}
                         boxSize="50px"
                         objectFit="cover"
                         borderRadius="md"
                         fallbackSrc="https://placehold.jp/150x150.png"
                       />
                       <Box>
-                        <Text fontWeight="bold">{item.item.name}</Text>
+                        <Text fontWeight="bold">{item.menu_item.name}</Text>
                         <Text>
-                          {item.quantity}個 × {item.item.price}円
+                          {item.quantity}個 × {item.price}円
                         </Text>
+                        <Text>小計: {item.quantity * item.price}円</Text>
                       </Box>
                     </HStack>
-                  ))}
-                </VStack>
-                <HStack justify="flex-end">
+                    <HStack justify="flex-end" spacing={2}>
+                      <Button
+                        size="sm"
+                        colorScheme={
+                          order.status === "pending" ? "green" : "gray"
+                        }
+                        onClick={() =>
+                          handleOrderStatusChange(order.id, "completed")
+                        }
+                        isDisabled={order.status === "completed"}
+                      >
+                        完了
+                      </Button>
+                      <Button
+                        size="sm"
+                        colorScheme="red"
+                        onClick={() => handleDeleteOrderItem(order.id, item.id)}
+                      >
+                        削除
+                      </Button>
+                    </HStack>
+                  </VStack>
+                </Box>
+              ));
+            })}
+          </VStack>
+
+          <Heading size="md" mb={4}>
+            menu
+          </Heading>
+          <VStack spacing={4} align="stretch">
+            {menuItems.map((item) => (
+              <HStack
+                key={item.id}
+                p={4}
+                bg={colorMode === "light" ? "white" : "gray.700"}
+                borderRadius="md"
+                justify="space-between"
+              >
+                <HStack spacing={4} flex={1}>
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.name}
+                    boxSize="100px"
+                    objectFit="cover"
+                    mb={2}
+                    fallbackSrc="https://placehold.jp/150x150.png"
+                  />
+                  <Box>
+                    <Text fontWeight="bold">{item.name}</Text>
+                    <Text>価格: {item.price}円</Text>
+                    <Text>カテゴリ: {item.category}</Text>
+                    <Text>材料: {item.ingredients.join(", ")}</Text>
+                  </Box>
+                </HStack>
+                <VStack align="flex-end">
+                  <Checkbox
+                    isChecked={item.is_visible}
+                    onChange={(e) =>
+                      handleVisibilityChange(item.id, e.target.checked)
+                    }
+                  >
+                    表示
+                  </Checkbox>
                   <Button
                     size="sm"
-                    colorScheme={order.status === "pending" ? "green" : "gray"}
-                    onClick={() =>
-                      handleOrderStatusChange(order.id, "completed")
-                    }
-                    isDisabled={order.status === "completed"}
+                    colorScheme="blue"
+                    onClick={() => handleEdit(item)}
                   >
-                    完了
+                    編集
                   </Button>
-                </HStack>
-              </VStack>
-            </Box>
-          ))}
-        </VStack>
-
-        <Heading size="md" mb={4}>
-          menu
-        </Heading>
-        <VStack spacing={4} align="stretch">
-          {menuItems.map((item) => (
-            <HStack
-              key={item.id}
-              p={4}
-              bg={colorMode === "light" ? "white" : "gray.700"}
-              borderRadius="md"
-              justify="space-between"
-            >
-              <HStack spacing={4} flex={1}>
-                <Image
-                  src={item.imageUrl}
-                  alt={item.name}
-                  boxSize="100px"
-                  objectFit="cover"
-                  mb={2}
-                  fallbackSrc="https://placehold.jp/150x150.png"
-                />
-                <Box>
-                  <Text fontWeight="bold">{item.name}</Text>
-                  <Text>価格: {item.price}円</Text>
-                  <Text>カテゴリ: {item.category}</Text>
-                  <Text>材料: {item.ingredients.join(", ")}</Text>
-                </Box>
+                  <Button
+                    size="sm"
+                    colorScheme="red"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    削除
+                  </Button>
+                </VStack>
               </HStack>
-              <VStack align="flex-end">
-                <Checkbox
-                  isChecked={item.is_visible}
-                  onChange={(e) =>
-                    handleVisibilityChange(item.id, e.target.checked)
-                  }
-                >
-                  表示
-                </Checkbox>
-                <Button
-                  size="sm"
-                  colorScheme="blue"
-                  onClick={() => handleEdit(item)}
-                >
-                  編集
-                </Button>
-                <Button
-                  size="sm"
-                  colorScheme="red"
-                  onClick={() => handleDelete(item.id)}
-                >
-                  削除
-                </Button>
-              </VStack>
-            </HStack>
-          ))}
-        </VStack>
+            ))}
+          </VStack>
 
-        <Modal isOpen={isOpen} onClose={onClose} size="xl">
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>
-              メニューアイテムの{editingItem ? "編集" : "追加"}
-            </ModalHeader>
-            <ModalCloseButton />
-            <form onSubmit={handleSubmit}>
+          <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>
+                メニューアイテムの{editingItem ? "編集" : "追加"}
+              </ModalHeader>
+              <ModalCloseButton />
+              <form onSubmit={handleSubmit}>
+                <ModalBody>
+                  <VStack spacing={4} align="stretch">
+                    <FormControl>
+                      <FormLabel>商品名</FormLabel>
+                      <Input
+                        value={newItem.name}
+                        onChange={(e) =>
+                          setNewItem({ ...newItem, name: e.target.value })
+                        }
+                        required
+                      />
+                    </FormControl>
+
+                    <FormControl>
+                      <FormLabel>価格</FormLabel>
+                      <Input
+                        type="text"
+                        inputMode="numeric"
+                        value={newItem.price === undefined ? "" : newItem.price}
+                        onChange={handlePriceChange}
+                        placeholder="例: 1000"
+                        required
+                      />
+                    </FormControl>
+
+                    <FormControl>
+                      <FormLabel>カテゴリ</FormLabel>
+                      <Select
+                        value={newItem.category}
+                        onChange={(e) =>
+                          setNewItem({ ...newItem, category: e.target.value })
+                        }
+                        required
+                      >
+                        <option value="">選択してください</option>
+                        {categories.map((category) => (
+                          <option key={category} value={category}>
+                            {category}
+                          </option>
+                        ))}
+                      </Select>
+                    </FormControl>
+
+                    <FormControl>
+                      <FormLabel>画像</FormLabel>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        ref={fileInputRef}
+                        display="none"
+                      />
+                      <Button
+                        onClick={() => fileInputRef.current?.click()}
+                        colorScheme="blue"
+                        variant="outline"
+                        w="full"
+                      >
+                        画像を選択
+                      </Button>
+                      {previewImage && (
+                        <Box mt={2}>
+                          <Image
+                            src={previewImage}
+                            alt="プレビュー"
+                            maxH="200px"
+                            objectFit="contain"
+                          />
+                        </Box>
+                      )}
+                    </FormControl>
+                    <FormControl>
+                      <FormLabel>材料</FormLabel>
+                      <VStack spacing={2} align="stretch">
+                        {ingredientInputs.map((ingredient, index) => (
+                          <Input
+                            key={index}
+                            value={ingredient}
+                            onChange={(e) =>
+                              handleIngredientChange(index, e.target.value)
+                            }
+                            placeholder="材料を入力"
+                            mb={2}
+                          />
+                        ))}
+                      </VStack>
+                    </FormControl>
+
+                    <FormControl>
+                      <Checkbox
+                        isChecked={newItem.is_visible}
+                        onChange={(e) =>
+                          setNewItem({
+                            ...newItem,
+                            is_visible: e.target.checked,
+                          })
+                        }
+                      >
+                        注文ページで表示
+                      </Checkbox>
+                    </FormControl>
+                  </VStack>
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button colorScheme="blue" mr={3} type="submit">
+                    {editingItem ? "更新" : "追加"}
+                  </Button>
+                  <Button variant="ghost" onClick={onClose}>
+                    キャンセル
+                  </Button>
+                </ModalFooter>
+              </form>
+            </ModalContent>
+          </Modal>
+
+          <Modal
+            isOpen={isIngredientsModalOpen}
+            onClose={onIngredientsModalClose}
+            size="md"
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>使用材料一覧</ModalHeader>
+              <ModalCloseButton />
               <ModalBody>
-                <VStack spacing={4} align="stretch">
-                  <FormControl>
-                    <FormLabel>商品名</FormLabel>
-                    <Input
-                      value={newItem.name}
-                      onChange={(e) =>
-                        setNewItem({ ...newItem, name: e.target.value })
-                      }
-                      required
-                    />
-                  </FormControl>
-
-                  <FormControl>
-                    <FormLabel>価格</FormLabel>
-                    <Input
-                      type="text"
-                      inputMode="numeric"
-                      value={newItem.price === undefined ? "" : newItem.price}
-                      onChange={handlePriceChange}
-                      placeholder="例: 1000"
-                      required
-                    />
-                  </FormControl>
-
-                  <FormControl>
-                    <FormLabel>カテゴリ</FormLabel>
-                    <Select
-                      value={newItem.category}
-                      onChange={(e) =>
-                        setNewItem({ ...newItem, category: e.target.value })
-                      }
-                      required
+                <VStack align="stretch" spacing={2}>
+                  {Array.from(
+                    new Set(
+                      menuItems
+                        .filter((item) => item.is_visible)
+                        .flatMap((item) => item.ingredients)
+                    )
+                  ).map((ingredient) => (
+                    <Text
+                      key={ingredient}
+                      p={2}
+                      bg={colorMode === "light" ? "gray.50" : "gray.700"}
+                      borderRadius="md"
                     >
-                      <option value="">選択してください</option>
-                      {categories.map((category) => (
-                        <option key={category} value={category}>
-                          {category}
-                        </option>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  <FormControl>
-                    <FormLabel>画像</FormLabel>
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      ref={fileInputRef}
-                      display="none"
-                    />
-                    <Button
-                      onClick={() => fileInputRef.current?.click()}
-                      colorScheme="blue"
-                      variant="outline"
-                      w="full"
-                    >
-                      画像を選択
-                    </Button>
-                    {previewImage && (
-                      <Box mt={2}>
-                        <Image
-                          src={previewImage}
-                          alt="プレビュー"
-                          maxH="200px"
-                          objectFit="contain"
-                        />
-                      </Box>
-                    )}
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>材料</FormLabel>
-                    <VStack spacing={2} align="stretch">
-                      {ingredientInputs.map((ingredient, index) => (
-                        <Input
-                          key={index}
-                          value={ingredient}
-                          onChange={(e) =>
-                            handleIngredientChange(index, e.target.value)
-                          }
-                          placeholder="材料を入力"
-                          mb={2}
-                        />
-                      ))}
-                    </VStack>
-                  </FormControl>
-
-                  <FormControl>
-                    <Checkbox
-                      isChecked={newItem.is_visible}
-                      onChange={(e) =>
-                        setNewItem({ ...newItem, is_visible: e.target.checked })
-                      }
-                    >
-                      注文ページで表示
-                    </Checkbox>
-                  </FormControl>
+                      {ingredient}
+                    </Text>
+                  ))}
                 </VStack>
               </ModalBody>
-
               <ModalFooter>
-                <Button colorScheme="blue" mr={3} type="submit">
-                  {editingItem ? "更新" : "追加"}
-                </Button>
-                <Button variant="ghost" onClick={onClose}>
-                  キャンセル
+                <Button colorScheme="blue" onClick={onIngredientsModalClose}>
+                  閉じる
                 </Button>
               </ModalFooter>
-            </form>
-          </ModalContent>
-        </Modal>
-
-        <Modal
-          isOpen={isIngredientsModalOpen}
-          onClose={onIngredientsModalClose}
-          size="md"
-        >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>使用材料一覧</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <VStack align="stretch" spacing={2}>
-                {Array.from(
-                  new Set(
-                    menuItems
-                      .filter((item) => item.is_visible)
-                      .flatMap((item) => item.ingredients)
-                  )
-                ).map((ingredient) => (
-                  <Text
-                    key={ingredient}
-                    p={2}
-                    bg={colorMode === "light" ? "gray.50" : "gray.700"}
-                    borderRadius="md"
-                  >
-                    {ingredient}
-                  </Text>
-                ))}
-              </VStack>
-            </ModalBody>
-            <ModalFooter>
-              <Button colorScheme="blue" onClick={onIngredientsModalClose}>
-                閉じる
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
+            </ModalContent>
+          </Modal>
+        </Box>
       </Box>
-    </Box>
+    </Content>
   );
 }

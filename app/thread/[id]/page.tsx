@@ -112,7 +112,6 @@ const seasonalAnimations = {
   // 他の季節のアニメーションをここに追加
 };
 import { Global } from "@emotion/react";
-import "@fontsource/noto-sans-jp";
 import { CustomLoading } from "../../../components/CustomText";
 import { StatusDisplay } from "../../../components/NowStatus";
 import { isatty } from "tty";
