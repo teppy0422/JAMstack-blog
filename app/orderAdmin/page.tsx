@@ -41,8 +41,10 @@ interface MenuItem {
   price: number;
   category: string;
   imageUrl: string;
+  imageUrlSub: string;
   ingredients: string[];
   is_visible: boolean;
+  estimated_time: number;
 }
 
 interface Order {
@@ -68,6 +70,7 @@ export default function AdminPage() {
   const { colorMode } = useColorMode();
   const toast = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputSubRef = useRef<HTMLInputElement>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isIngredientsModalOpen,
@@ -80,11 +83,14 @@ export default function AdminPage() {
     price: undefined,
     category: "",
     imageUrl: "",
+    imageUrlSub: "",
     ingredients: [],
     is_visible: true,
+    estimated_time: 0,
   });
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [previewImage, setPreviewImage] = useState<string>("");
+  const [previewImageSub, setPreviewImageSub] = useState<string>("");
   const [ingredientInputs, setIngredientInputs] = useState<string[]>([""]);
   const [orders, setOrders] = useState<Order[]>([]);
   const {
@@ -99,12 +105,14 @@ export default function AdminPage() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const categories = [
-    "ドリンク",
     "おつまみ",
-    "サラダ",
     "刺身",
     "焼き物",
     "揚げ物",
+    "ご飯もの",
+    "サラダ",
+    "アルコール",
+    "ドリンク",
   ];
 
   useEffect(() => {
@@ -117,7 +125,7 @@ export default function AdminPage() {
   const fetchMenuItems = async () => {
     const { data, error } = await supabase
       .from("order_menu_items")
-      .select("*")
+      .select("*, image_url_sub")
       .order("id", { ascending: true });
 
     if (error) {
@@ -136,6 +144,7 @@ export default function AdminPage() {
       data?.map((item) => ({
         ...item,
         imageUrl: item.image_url, // image_urlからimageUrlに変換
+        imageUrlSub: item.image_url_sub, // image_url_subからimageUrlSubに変換
       })) || [];
 
     setMenuItems(itemsWithCorrectImageUrl);
@@ -239,14 +248,21 @@ export default function AdminPage() {
     fetchOrders();
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    isSubImage: boolean
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     // プレビュー表示
     const reader = new FileReader();
     reader.onloadend = () => {
-      setPreviewImage(reader.result as string);
+      if (isSubImage) {
+        setPreviewImageSub(reader.result as string);
+      } else {
+        setPreviewImage(reader.result as string);
+      }
     };
     reader.readAsDataURL(file);
 
@@ -290,7 +306,11 @@ export default function AdminPage() {
         data: { publicUrl },
       } = supabase.storage.from("menu-image").getPublicUrl(filePath);
 
-      setNewItem({ ...newItem, imageUrl: publicUrl });
+      if (isSubImage) {
+        setNewItem({ ...newItem, imageUrlSub: publicUrl });
+      } else {
+        setNewItem({ ...newItem, imageUrl: publicUrl });
+      }
     } catch (error) {
       console.error("Error compressing image:", error);
       toast({
@@ -345,107 +365,161 @@ export default function AdminPage() {
       .filter((ingredient) => ingredient.trim() !== "")
       .map((ingredient) => ingredient.trim());
 
-    if (editingItem) {
-      const { error } = await supabase
-        .from("order_menu_items")
-        .update({
+    try {
+      if (editingItem) {
+        // 更新前の画像URLを保存
+        const oldImageUrl = editingItem.imageUrl;
+        const oldImageUrlSub = editingItem.imageUrlSub;
+
+        // 更新するデータを準備
+        const updateData: any = {
           name: newItem.name,
           price: newItem.price,
           category: newItem.category,
-          image_url: newItem.imageUrl,
           ingredients: validIngredients,
           is_visible: newItem.is_visible,
-        })
-        .eq("id", editingItem.id);
+          estimated_time: newItem.estimated_time,
+        };
 
-      if (error) {
-        toast({
-          title: "エラー",
-          description: "メニューアイテムの更新に失敗しました",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-        return;
-      }
-    } else {
-      const { error } = await supabase.from("order_menu_items").insert([
-        {
-          name: newItem.name,
-          price: newItem.price,
-          category: newItem.category,
-          image_url: newItem.imageUrl,
-          ingredients: validIngredients,
-          is_visible: newItem.is_visible,
-        },
-      ]);
+        // 画像が変更された場合のみ更新
+        if (newItem.imageUrl && newItem.imageUrl !== oldImageUrl) {
+          updateData.image_url = newItem.imageUrl;
+        }
+        if (newItem.imageUrlSub && newItem.imageUrlSub !== oldImageUrlSub) {
+          updateData.image_url_sub = newItem.imageUrlSub;
+        }
 
-      if (error) {
-        toast({
-          title: "エラー",
-          description: "メニューアイテムの追加に失敗しました",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-        return;
+        const { error } = await supabase
+          .from("order_menu_items")
+          .update(updateData)
+          .eq("id", editingItem.id);
+
+        if (error) {
+          toast({
+            title: "エラー",
+            description: "メニューアイテムの更新に失敗しました",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          return;
+        }
+
+        // 画像が変更された場合、古い画像を削除
+        if (
+          oldImageUrl &&
+          newItem.imageUrl &&
+          oldImageUrl !== newItem.imageUrl
+        ) {
+          const oldImagePath = oldImageUrl.split("/").pop();
+          if (oldImagePath) {
+            const { error: deleteError } = await supabase.storage
+              .from("menu-image")
+              .remove([oldImagePath.split("?")[0]]);
+
+            if (deleteError) {
+              console.error("Error deleting old image:", deleteError);
+            }
+          }
+        }
+
+        if (
+          oldImageUrlSub &&
+          newItem.imageUrlSub &&
+          oldImageUrlSub !== newItem.imageUrlSub
+        ) {
+          const oldImageSubPath = oldImageUrlSub.split("/").pop();
+          if (oldImageSubPath) {
+            const { error: deleteError } = await supabase.storage
+              .from("menu-image")
+              .remove([oldImageSubPath.split("?")[0]]);
+
+            if (deleteError) {
+              console.error("Error deleting old sub image:", deleteError);
+            }
+          }
+        }
+      } else {
+        const { error } = await supabase.from("order_menu_items").insert([
+          {
+            name: newItem.name,
+            price: newItem.price,
+            category: newItem.category,
+            image_url: newItem.imageUrl,
+            image_url_sub: newItem.imageUrlSub,
+            ingredients: validIngredients,
+            is_visible: newItem.is_visible,
+            estimated_time: newItem.estimated_time,
+          },
+        ]);
+
+        if (error) {
+          toast({
+            title: "エラー",
+            description: "メニューアイテムの追加に失敗しました",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          return;
+        }
       }
+
+      toast({
+        title: "成功",
+        description: editingItem
+          ? "メニューアイテムを更新しました"
+          : "メニューアイテムを追加しました",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      // フォームをリセット
+      setNewItem({
+        name: "",
+        price: undefined,
+        category: "",
+        imageUrl: "",
+        imageUrlSub: "",
+        ingredients: [],
+        is_visible: true,
+        estimated_time: 0,
+      });
+      setPreviewImage("");
+      setPreviewImageSub("");
+      setEditingItem(null);
+      setIngredientInputs([""]);
+      onClose();
+
+      // メニューアイテムを再取得
+      fetchMenuItems();
+    } catch (error) {
+      console.error("Error in submit process:", error);
+      toast({
+        title: "エラー",
+        description: "処理中にエラーが発生しました",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
-
-    toast({
-      title: "成功",
-      description: editingItem
-        ? "メニューアイテムを更新しました"
-        : "メニューアイテムを追加しました",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
-
-    setNewItem({
-      name: "",
-      price: undefined,
-      category: "",
-      imageUrl: "",
-      ingredients: [],
-      is_visible: true,
-    });
-    setPreviewImage("");
-    setEditingItem(null);
-    setIngredientInputs([""]);
-    onClose();
-    fetchMenuItems();
   };
 
   const handleEdit = async (item: MenuItem) => {
-    // 既存の画像がある場合、新しい画像が選択されたら古い画像を削除
-    if (item.imageUrl && newItem.imageUrl !== item.imageUrl) {
-      try {
-        const oldImagePath = item.imageUrl.split("/").pop();
-        if (oldImagePath) {
-          const { error: deleteImageError } = await supabase.storage
-            .from("menu-image")
-            .remove([oldImagePath]);
-
-          if (deleteImageError) {
-            console.error("Error deleting old image:", deleteImageError);
-          }
-        }
-      } catch (error) {
-        console.error("Error in image deletion:", error);
-      }
-    }
-
     setEditingItem(item);
     setNewItem({
       name: item.name,
       price: item.price,
       category: item.category,
       imageUrl: item.imageUrl,
+      imageUrlSub: item.imageUrlSub,
       ingredients: item.ingredients,
       is_visible: item.is_visible,
+      estimated_time: item.estimated_time,
     });
     setPreviewImage(item.imageUrl);
+    setPreviewImageSub(item.imageUrlSub);
     setIngredientInputs([...item.ingredients, ""]);
     onOpen();
   };
@@ -456,13 +530,29 @@ export default function AdminPage() {
     if (!itemToDelete) return;
 
     try {
-      // 画像ファイル名を取得
-      const imagePath = itemToDelete.imageUrl.split("/").pop();
+      // 画像1のファイル名を取得
+      const imagePath = itemToDelete.imageUrl?.split("/").pop();
+      // 画像2のファイル名を取得（存在する場合のみ）
+      const imageSubPath = itemToDelete.imageUrlSub?.split("/").pop();
+
+      console.log("imageUrlSub:", itemToDelete.imageUrlSub); // デバッグ用ログ
+      console.log("imageSubPath:", imageSubPath); // デバッグ用ログ
+
+      // Supabase Storageから画像を削除
+      const pathsToDelete: string[] = [];
       if (imagePath) {
-        // Supabase Storageから画像を削除
+        const path = imagePath.split("?")[0]; // クエリパラメータを除去
+        pathsToDelete.push(path);
+      }
+      if (imageSubPath) {
+        const path = imageSubPath.split("?")[0]; // クエリパラメータを除去
+        pathsToDelete.push(path);
+      }
+
+      if (pathsToDelete.length > 0) {
         const { error: deleteImageError } = await supabase.storage
           .from("menu-image")
-          .remove([imagePath]);
+          .remove(pathsToDelete);
 
         if (deleteImageError) {
           console.error("Error deleting image:", deleteImageError);
@@ -799,11 +889,11 @@ export default function AdminPage() {
                     </FormControl>
 
                     <FormControl>
-                      <FormLabel>画像</FormLabel>
+                      <FormLabel>画像1</FormLabel>
                       <Input
                         type="file"
                         accept="image/*"
-                        onChange={handleImageUpload}
+                        onChange={(e) => handleImageUpload(e, false)}
                         ref={fileInputRef}
                         display="none"
                       />
@@ -813,7 +903,7 @@ export default function AdminPage() {
                         variant="outline"
                         w="full"
                       >
-                        画像を選択
+                        画像1を選択
                       </Button>
                       {previewImage && (
                         <Box mt={2}>
@@ -826,6 +916,36 @@ export default function AdminPage() {
                         </Box>
                       )}
                     </FormControl>
+
+                    <FormControl>
+                      <FormLabel>画像2</FormLabel>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e, true)}
+                        ref={fileInputSubRef}
+                        display="none"
+                      />
+                      <Button
+                        onClick={() => fileInputSubRef.current?.click()}
+                        colorScheme="blue"
+                        variant="outline"
+                        w="full"
+                      >
+                        画像2を選択
+                      </Button>
+                      {previewImageSub && (
+                        <Box mt={2}>
+                          <Image
+                            src={previewImageSub}
+                            alt="プレビュー2"
+                            maxH="200px"
+                            objectFit="contain"
+                          />
+                        </Box>
+                      )}
+                    </FormControl>
+
                     <FormControl>
                       <FormLabel>材料</FormLabel>
                       <VStack spacing={2} align="stretch">
@@ -841,6 +961,21 @@ export default function AdminPage() {
                           />
                         ))}
                       </VStack>
+                    </FormControl>
+
+                    <FormControl>
+                      <FormLabel>提供目安時間（分）</FormLabel>
+                      <Input
+                        type="number"
+                        value={newItem.estimated_time}
+                        onChange={(e) =>
+                          setNewItem({
+                            ...newItem,
+                            estimated_time: Number(e.target.value),
+                          })
+                        }
+                        required
+                      />
                     </FormControl>
 
                     <FormControl>

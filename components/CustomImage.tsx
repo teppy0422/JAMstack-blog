@@ -18,6 +18,7 @@ interface AnimationImageProps {
   position?: React.CSSProperties["position"];
   label?: string;
   labelPlacement?: PlacementWithLogical;
+  objectFit?: React.CSSProperties["objectFit"];
 }
 export const AnimationImage: React.FC<AnimationImageProps> = ({
   sealSize = "2",
@@ -34,6 +35,7 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
   position = "absolute",
   label,
   labelPlacement,
+  objectFit = "cover",
 }) => {
   const numericSealSize = Number(sealSize);
   const isGif = src.endsWith(".gif");
@@ -69,6 +71,7 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
               numericSealSize > 0
                 ? "url(#outline-filter) drop-shadow(1px 1px 3px rgba(0, 0, 0, 1))"
                 : "none",
+            objectFit: objectFit,
           }}
           id={id}
         />

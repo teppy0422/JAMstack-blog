@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import {
+  useTheme,
   Box,
   Button,
   Grid,
@@ -18,12 +19,18 @@ import {
   HStack,
   useToast,
   Center,
+  Tooltip,
+  Flex,
+  Divider,
 } from "@chakra-ui/react";
 import { createClient } from "@supabase/supabase-js";
 import { useUserContext } from "../../context/useUserContext";
 import Content from "../../components/content";
 import { AnimationImage } from "../../components/CustomImage";
+import FilteredImage from "../../components/PosterImage";
 import "@fontsource/yomogi";
+import WordCloud from "react-wordcloud";
+import React from "react";
 
 interface MenuItem {
   id: number;
@@ -31,7 +38,10 @@ interface MenuItem {
   price: number;
   category: string;
   imageUrl: string;
+  imageUrlSub: string;
   ingredients: string[];
+  estimated_time: number;
+  nameColor: string;
 }
 
 interface OrderItem {
@@ -46,13 +56,113 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+const searchCategoryColor = (searchTerm: string): string[] => {
+  const categoryColors = {
+    おつまみ: "#f56464",
+    刺身: "#4199e0",
+    焼き物: "#ed8937",
+    揚げ物: "#edca4c",
+    ご飯もの: "#777",
+    サラダ: "#49ba78",
+    アルコール: "#a07aeb",
+    ドリンク: "#2a6bb0",
+  };
+
+  // 部分一致でカテゴリを検索し、対応する色を配列で返す
+  return Object.entries(categoryColors)
+    .filter(([category]) => category.includes(searchTerm))
+    .map(([, color]) => color);
+};
+
+const MemoizedWordCloud = React.memo(WordCloud);
+
+interface Word {
+  text: string;
+  value: number;
+}
+
+interface WordCloudComponentProps {
+  words: Word[];
+  options: {
+    rotations: number;
+    rotationAngles: number[];
+    fontSizes: number[];
+    fontFamily: string;
+    fontWeight: string;
+    padding: number;
+    enableTooltip: boolean;
+    deterministic: boolean;
+    transitionDuration: number;
+  };
+  onWordClick: (word: { text: string }) => void;
+  onWordMouseOver: (
+    word: { text: string; value: number },
+    event: React.MouseEvent
+  ) => void;
+  onWordMouseOut: () => void;
+  findRelatedItem: (text: string) => MenuItem | undefined;
+  size: number[];
+}
+
+const WordCloudComponent: React.FC<WordCloudComponentProps> = React.memo(
+  ({
+    words,
+    options,
+    onWordClick,
+    onWordMouseOver,
+    onWordMouseOut,
+    findRelatedItem,
+    size,
+  }) => {
+    console.log("WordCloudが再描画されました");
+
+    return (
+      <WordCloud
+        words={words}
+        options={{
+          ...options,
+        }}
+        size={size}
+        callbacks={{
+          getWordColor: (word) => {
+            const relatedItem = findRelatedItem(word.text);
+            if (relatedItem) {
+              return relatedItem.nameColor; // 関連するアイテムの色を返す
+            }
+            return "#888888"; // デフォルトの色
+          },
+          onWordClick: onWordClick,
+          onWordMouseOver: onWordMouseOver,
+          onWordMouseOut: onWordMouseOut,
+        }}
+      />
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.words === nextProps.words &&
+      prevProps.options === nextProps.options
+    );
+  }
+);
+
 export default function OrderPage() {
   const { colorMode } = useColorMode();
   const toast = useToast();
   const [cart, setCart] = useState<{ item: MenuItem; quantity: number }[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("すべて");
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const gridColumns = useBreakpointValue({ base: 2, md: 3, lg: 4 });
+  const [positions, setPositions] = useState<{
+    [key: number]: { x: number; y: number; direction: string };
+  }>({});
+  const [shouldReposition, setShouldReposition] = useState(true);
+  const gridColumns = useBreakpointValue({
+    base: 1,
+    sm: 2,
+    md: 4,
+    lg: 4,
+    xl: 6,
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     currentUserId,
@@ -63,42 +173,41 @@ export default function OrderPage() {
     isLoading,
   } = useUserContext();
   const userData = currentUserId ? getUserById(currentUserId) : null;
+  const [imageCache, setImageCache] = useState<{ [key: string]: string }>({});
+  const [elementSizes, setElementSizes] = useState<{
+    [key: number]: { width: number; height: number };
+  }>({});
+  const elementRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  const [isHover, setIsHover] = useState<boolean>(false);
+
+  // ワードクラウドのデータをメモ化
+  const [wordCloudData, setWordCloudData] = useState<
+    { text: string; value: number }[]
+  >([]);
+
+  const [tooltipData, setTooltipData] = useState<{
+    text: string;
+    value: number;
+    mouseX: number;
+    mouseY: number;
+  } | null>(null);
+
   useEffect(() => {
     fetchMenuItems();
   }, []);
+  useEffect(() => {
+    handleReposition();
+  }, [menuItems]);
 
-  const fetchMenuItems = async () => {
-    const { data, error } = await supabase
-      .from("order_menu_items")
-      .select("*")
-      .eq("is_visible", true)
-      .order("id", { ascending: true });
-
-    if (error) {
-      console.error("Error fetching menu items:", error);
-      return;
-    }
-
-    const itemsWithCorrectImageUrl =
-      data?.map((item) => ({
-        ...item,
-        imageUrl: item.image_url,
-      })) || [];
-
-    setMenuItems(itemsWithCorrectImageUrl);
+  // カテゴリ変更時の処理
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    // カテゴリ変更時は再配置しない
   };
 
-  const categories = [
-    "すべて",
-    ...new Set(menuItems.map((item) => item.category)),
-  ];
-
-  const filteredItems =
-    selectedCategory === "すべて"
-      ? menuItems
-      : menuItems.filter((item) => item.category === selectedCategory);
-
-  const addToCart = (item: MenuItem) => {
+  // カートにアイテムを追加したときの処理
+  const addToCart = useCallback((item: MenuItem) => {
+    console.log("カートに追加するアイテム:", item);
     setCart((prevCart) => {
       const existingItem = prevCart.find(
         (cartItem) => cartItem.item.id === item.id
@@ -112,6 +221,13 @@ export default function OrderPage() {
       }
       return [...prevCart, { item, quantity: 1 }];
     });
+  }, []);
+
+  // カートからアイテムを削除する関数
+  const removeFromCart = (itemId: number) => {
+    setCart((prevCart) =>
+      prevCart.filter((cartItem) => cartItem.item.id !== itemId)
+    );
   };
 
   const calculateTotal = () => {
@@ -200,36 +316,227 @@ export default function OrderPage() {
       setIsSubmitting(false);
     }
   };
+
+  const fetchMenuItems = async () => {
+    const { data, error } = await supabase
+      .from("order_menu_items")
+      .select("*, image_url_sub")
+      .eq("is_visible", true)
+      .order("id", { ascending: true });
+
+    if (error) {
+      toast({
+        title: "エラー",
+        description: "メニューアイテムの取得に失敗しました",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    // すべての画像をキャッシュに保存
+    const itemsWithCorrectImageUrl =
+      data?.map((item) => {
+        const imageUrl = item.image_url;
+        const imageUrlSub = item.image_url_sub;
+
+        // 画像をキャッシュに追加
+        if (!imageCache[imageUrl]) {
+          setImageCache((prev) => ({ ...prev, [imageUrl]: imageUrl }));
+        }
+
+        // nameColorの設定を確認
+        const nameColor = searchCategoryColor(item.category);
+        console.log(`カテゴリ: ${item.category}, 色: ${nameColor}`);
+
+        return {
+          ...item,
+          imageUrl: imageUrl, // ここではキャッシュを使わず、元のURLを使用
+          imageUrlSub: imageUrlSub,
+          nameColor: nameColor,
+        };
+      }) || [];
+    console.log("取得したメニューアイテム:", itemsWithCorrectImageUrl); // 取得したデータをログに出力
+    setMenuItems(itemsWithCorrectImageUrl);
+    console.log("menuItemsの状態:", itemsWithCorrectImageUrl); // 状態を確認
+  };
+
+  const categories = [
+    "すべて",
+    ...new Set(menuItems.map((item) => item.category)),
+  ];
+
+  const filteredItems =
+    selectedCategory === "すべて"
+      ? menuItems.map((item) => ({
+          ...item,
+          imageUrl: imageCache[item.imageUrl] || item.imageUrl, // キャッシュから取得
+        }))
+      : menuItems
+          .filter((item) => item.category === selectedCategory)
+          .map((item) => ({
+            ...item,
+            imageUrl: imageCache[item.imageUrl] || item.imageUrl, // キャッシュから取得
+          }));
+
+  // ワードクラウドのオプションをメモ化
+  const wordCloudOptions = useMemo(
+    () => ({
+      rotations: 1,
+      rotationAngles: [0],
+      fontSizes: [36, 120],
+      fontFamily: "sans-serif",
+      fontWeight: "900",
+      padding: 2,
+      enableTooltip: false,
+      deterministic: true,
+      transitionDuration: 2000,
+      scale: "sqrt", // スケーリング方式: linear, log, sqrt
+      spiral: "archimedean", // 'archimedean'（デフォ）か 'rectangular'
+    }),
+    []
+  );
+
+  // wordCloudDataを更新
+  const handleReposition = () => {
+    const data = menuItems.map((item) => ({
+      text: item.name,
+      value: item.estimated_time * 5,
+    }));
+    console.log("wordCloudDataを更新:", data);
+    setWordCloudData(data);
+  };
+
+  // wordCloudへのマウスオーバー
+  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+  const [hoveredWord, setHoveredWord] = useState<{
+    text: string;
+    value: number;
+  } | null>(null); // 新しい状態を追加
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!isHover) {
+        setMousePosition({ x: event.clientX, y: event.clientY });
+      }
+      setTooltipData((prev) => {
+        if (prev) {
+          return {
+            ...prev,
+            mouseX: event.clientX,
+            mouseY: event.clientY,
+          };
+        }
+        return prev; // prevがnullの場合はそのまま返す
+      });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [isHover, hoveredWord]);
+
+  useEffect(() => {
+    console.log("isHover state changed:", isHover);
+  }, [isHover]);
+
+  const handleWordMouseOver = (word: { text: string; value: number }) => {
+    console.log("Mouse over event triggered", word);
+    if (!word) {
+      console.error("Word data is undefined.");
+      return;
+    }
+
+    setIsHover(true);
+    setHoveredWord(word);
+    const value = word.value ?? 0;
+    setTooltipData({
+      text: word.text,
+      value: value,
+      mouseX: mousePosition.x,
+      mouseY: mousePosition.y,
+    });
+    console.log("tooltipdata::::", tooltipData);
+  };
+
+  const handleWordMouseOut = () => {
+    setIsHover(false);
+    setTooltipData((prev) => {
+      if (prev) {
+        return {
+          ...prev,
+          mouseX: mousePosition.x, // ここでmousePositionをそのまま使用
+          mouseY: mousePosition.y, // ここでmousePositionをそのまま使用
+        };
+      }
+      return prev; // prevがnullの場合はそのまま返す
+    });
+  };
+
+  const findRelatedItem = (text: string) => {
+    return menuItems.find((item) => item.name === text);
+  };
+
+  // 画面サイズがmdを超える場合にtrueを返す
+  const isMdOrLarger = useBreakpointValue({ base: false, md: true });
+  const isLgOrLarger = useBreakpointValue({ base: false, lg: true });
+
   return (
-    <Content isCustomHeader={true}>
-      <Box p={4}>
-        <Heading mb={6} textAlign="center" fontFamily="Yomogi" fontWeight="600">
+    <Content isCustomHeader={true} maxWidth="100vw">
+      <Box p={2}>
+        <Heading mb={4} textAlign="center" fontFamily="Yomogi" fontWeight="600">
           居酒屋ぼん
         </Heading>
 
-        <Box mb={2}>
-          <Tabs variant="soft-rounded">
-            <TabList overflowX="auto" pb={2}>
-              {categories.map((category) => (
-                <Tab
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  bg={
-                    selectedCategory === category
-                      ? "custom.theme.light.400"
-                      : undefined
-                  }
-                  color={selectedCategory === category ? "white" : undefined}
-                >
-                  {category}
-                </Tab>
-              ))}
-            </TabList>
-          </Tabs>
-        </Box>
-
-        <Grid templateColumns={{ base: "1fr", md: "3fr 1fr" }} gap={4}>
-          <Box>
+        <Grid
+          templateColumns={{
+            base: "1fr",
+            sm: "2fr",
+            md: "4fr",
+            lg: "1fr 6fr 2fr",
+            xl: "1fr 6fr 2fr",
+          }}
+          gap={4}
+        >
+          <VStack spacing={4} align="center">
+            {isLgOrLarger && (
+              <Box filter="drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.8))" mt={9}>
+                <FilteredImage />
+              </Box>
+            )}
+          </VStack>
+          <Box px={2}>
+            <Tabs variant="soft-rounded">
+              <TabList overflowX="auto" pb={1} ml={4}>
+                {categories.map((category) => (
+                  <Tab
+                    p="2"
+                    key={category}
+                    onClick={() => handleCategoryChange(category)}
+                    bg={
+                      selectedCategory === category
+                        ? "custom.theme.light.400"
+                        : undefined
+                    }
+                    color={selectedCategory === category ? "white" : undefined}
+                  >
+                    <Box textAlign="center" lineHeight={1.1}>
+                      {category}
+                      <Box
+                        width="100%"
+                        height="3px"
+                        bg={searchCategoryColor(category)[0]}
+                        mt={0}
+                      />
+                    </Box>
+                  </Tab>
+                ))}
+              </TabList>
+            </Tabs>
             <SimpleGrid
               columns={gridColumns}
               spacing={4}
@@ -237,102 +544,197 @@ export default function OrderPage() {
               fontWeight="600"
             >
               {filteredItems.map((item) => (
-                <Button
-                  key={item.id}
-                  onClick={() => addToCart(item)}
-                  p={2}
-                  h="auto"
-                  bg={colorMode === "light" ? "white" : "gray.700"}
-                  _hover={{
-                    bg: colorMode === "light" ? "gray.100" : "gray.600",
-                  }}
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="center"
+                <Tooltip
+                  label={
+                    item.imageUrlSub && (
+                      <>
+                        <Box>
+                          <Image src={item.imageUrlSub} />
+                        </Box>
+                      </>
+                    )
+                  }
+                  bg="white"
+                  borderRadius="md"
+                  p="6px"
+                  hasArrow
                 >
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.name}
-                    maxH="100px"
-                    objectFit="cover"
-                    borderRadius="md"
-                    mb={2}
-                    fallbackSrc="https://placehold.jp/150x150.png"
-                  />
-                  <AnimationImage
-                    src={item.imageUrl}
-                    height="100px"
-                    position="static"
-                  />
-                  <Text mt={1}>{item.name}</Text>
-                  <Text fontSize="sm">{item.price}円</Text>
-                </Button>
+                  <Button
+                    key={item.id}
+                    onClick={() => addToCart(item)}
+                    p={0}
+                    h="auto"
+                    bg={colorMode === "light" ? "transparent" : "gray.700"}
+                    _hover={{
+                      transform: "scale(1.05)",
+                      transition: "transform 0.2s ease",
+                    }}
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                  >
+                    <AnimationImage
+                      src={item.imageUrl}
+                      height="120px"
+                      width="180px"
+                      objectFit="cover"
+                      position="static"
+                    />
+                    <Text mt={1}>{item.name}</Text>
+                    <Text fontSize="sm">{item.price}円</Text>
+                    <Text fontSize="xs" color="gray.500">
+                      提供目安: {item.estimated_time}分
+                    </Text>
+                  </Button>
+                </Tooltip>
               ))}
             </SimpleGrid>
           </Box>
 
-          <Box
-            position={{ base: "static", md: "fixed" }}
-            top="64px"
-            right="10px"
-          >
-            <Heading size="sm" mb={1}>
-              <Center>注文内容</Center>
-            </Heading>
-            <VStack spacing={1} align="stretch">
-              {cart.map((cartItem) => (
-                <Box
-                  key={cartItem.item.id}
-                  p={4}
-                  bg={colorMode === "light" ? "white" : "gray.700"}
-                  borderRadius="md"
-                >
-                  <HStack spacing={2}>
-                    <Image
-                      src={cartItem.item.imageUrl}
-                      alt={cartItem.item.name}
-                      boxSize="50px"
-                      objectFit="cover"
+          <Box mt={3}>
+            {cart.length > 0 && (
+              <>
+                <Heading size="sm" mb={1}>
+                  <Center>注文内容</Center>
+                </Heading>
+                <VStack spacing={0} align="stretch">
+                  {cart.map((cartItem) => (
+                    <Box
+                      key={cartItem.item.id}
+                      p={0}
+                      // bg={colorMode === "light" ? "white" : "gray.700"}
                       borderRadius="md"
-                      fallbackSrc="https://placehold.jp/150x150.png"
-                    />
-                    <Box>
-                      <Text fontWeight="bold">{cartItem.item.name}</Text>
-                      <Text>
-                        {cartItem.quantity}個 × {cartItem.item.price}円
-                      </Text>
+                      fontFamily="Yomogi"
+                      fontWeight="600"
+                    >
+                      <HStack justify="space-between">
+                        <HStack spacing={2}>
+                          <Image
+                            src={cartItem.item.imageUrl}
+                            alt={cartItem.item.name}
+                            boxSize="50px"
+                            objectFit="cover"
+                            borderRadius="md"
+                            fallbackSrc="https://placehold.jp/150x150.png"
+                          />
+                          <Box>
+                            <Text>{cartItem.item.name}</Text>
+                            <Text>
+                              {cartItem.quantity}個 × {cartItem.item.price}円
+                            </Text>
+                          </Box>
+                        </HStack>
+                        <Button
+                          size="sm"
+                          colorScheme="red"
+                          onClick={() => removeFromCart(cartItem.item.id)}
+                        >
+                          削除
+                        </Button>
+                      </HStack>
+                      <Divider
+                        border="1px solid"
+                        borderColor="custom.theme.light.800"
+                        m="5px"
+                      />
                     </Box>
-                  </HStack>
-                </Box>
-              ))}
-              <Box
-                mt={1}
-                p={2}
-                bg={
-                  colorMode === "light" ? "custom.theme.light.100" : "gray.800"
-                }
-              >
-                <Text fontWeight="bold">合計: {calculateTotal()}円</Text>
-                <Button
-                  mt={2}
-                  color="custom.theme.light.100"
-                  bg="custom.theme.light.850"
-                  _hover={{
-                    color: "custom.theme.light.200",
-                    bg: "custom.theme.light.800",
-                    transition: "all 0.2s",
-                  }}
-                  onClick={handleSubmitOrder}
-                  isLoading={isSubmitting}
-                  isDisabled={cart.length === 0}
-                  w="full"
-                >
-                  注文を確定
-                </Button>
-              </Box>
-            </VStack>
+                  ))}
+                  <Box mt={1}>
+                    <Center fontWeight={600}>{calculateTotal()}円</Center>
+                    <Center>
+                      <Button
+                        mt={2}
+                        color="custom.theme.light.100"
+                        bg="custom.theme.light.850"
+                        _hover={{
+                          color: "custom.theme.light.200",
+                          bg: "custom.theme.light.800",
+                          transition: "all 0.2s",
+                        }}
+                        onClick={handleSubmitOrder}
+                        isLoading={isSubmitting}
+                        w="auto"
+                      >
+                        注文を確定
+                      </Button>
+                    </Center>
+                  </Box>
+                </VStack>
+              </>
+            )}
           </Box>
         </Grid>
+
+        {/* ダイナミックタイポグラフィ風のメニュー表示を追加 */}
+        <Box mt={8}>
+          <HStack justify="space-between" mb={4}>
+            <Heading size="md">WordCloud:menu</Heading>
+            <Button onClick={handleReposition} colorScheme="blue" size="sm">
+              再配置
+            </Button>
+          </HStack>
+
+          <Box display="flex" justifyContent="center">
+            <WordCloudComponent
+              words={wordCloudData}
+              options={wordCloudOptions}
+              onWordClick={(word) => {
+                const item = menuItems.find((m) => m.name === word.text);
+                if (item) {
+                  addToCart(item);
+                }
+              }}
+              onWordMouseOver={handleWordMouseOver}
+              onWordMouseOut={handleWordMouseOut}
+              findRelatedItem={findRelatedItem}
+              size={[1200, 600]}
+            />
+          </Box>
+          {tooltipData && isHover && (
+            <Box
+              position="fixed"
+              bg="white"
+              borderRadius="md"
+              boxShadow="md"
+              mt="8px"
+              ml="18px"
+              p={2}
+              zIndex={10}
+              left={`${tooltipData.mouseX}px`}
+              top={`${tooltipData.mouseY}px`}
+              textAlign="center"
+            >
+              {(() => {
+                const relatedItem = findRelatedItem(tooltipData.text);
+                if (relatedItem) {
+                  return (
+                    <Flex direction="column">
+                      <Image
+                        src={
+                          relatedItem.imageUrlSub
+                            ? relatedItem.imageUrlSub
+                            : relatedItem.imageUrl
+                        }
+                        alt={relatedItem.name}
+                        height="100px"
+                        objectFit="cover"
+                        borderRadius="md"
+                      />
+                      <Text>{tooltipData.text}</Text>
+                      <Text fontSize="sm">{relatedItem.price}円</Text>
+                      <Text fontSize="sm">
+                        提供目安: {relatedItem.estimated_time}分
+                      </Text>
+
+                      <Text fontSize="sm">{tooltipData.value}</Text>
+                    </Flex>
+                  );
+                }
+                return null;
+              })()}
+            </Box>
+          )}
+        </Box>
       </Box>
     </Content>
   );
