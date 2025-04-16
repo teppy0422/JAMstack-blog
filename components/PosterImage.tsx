@@ -57,6 +57,7 @@ const FilteredImage: React.FC<FilteredImageProps> = () => {
       transition="filter 10s ease-in-out" // フィルター変更時のトランジション
       width="auto"
       onClick={handleImageClick} // クリックイベントを追加
+      cursor="pointer"
     />
   );
 };

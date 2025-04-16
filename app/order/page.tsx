@@ -29,8 +29,9 @@ import Content from "../../components/content";
 import { AnimationImage } from "../../components/CustomImage";
 import FilteredImage from "../../components/PosterImage";
 import "@fontsource/yomogi";
-import WordCloud from "react-wordcloud";
+import * as d3 from "d3";
 import React from "react";
+import cloud from "d3-cloud";
 
 interface MenuItem {
   id: number;
@@ -74,8 +75,6 @@ const searchCategoryColor = (searchTerm: string): string[] => {
     .map(([, color]) => color);
 };
 
-const MemoizedWordCloud = React.memo(WordCloud);
-
 interface Word {
   text: string;
   value: number;
@@ -97,54 +96,23 @@ interface WordCloudComponentProps {
   onWordClick: (word: { text: string }) => void;
   onWordMouseOver: (
     word: { text: string; value: number },
-    event: React.MouseEvent
+    event: React.MouseEvent<Element>
   ) => void;
   onWordMouseOut: () => void;
   findRelatedItem: (text: string) => MenuItem | undefined;
   size: number[];
 }
 
-const WordCloudComponent: React.FC<WordCloudComponentProps> = React.memo(
-  ({
-    words,
-    options,
-    onWordClick,
-    onWordMouseOver,
-    onWordMouseOut,
-    findRelatedItem,
-    size,
-  }) => {
-    console.log("WordCloudが再描画されました");
-
-    return (
-      <WordCloud
-        words={words}
-        options={{
-          ...options,
-        }}
-        size={size}
-        callbacks={{
-          getWordColor: (word) => {
-            const relatedItem = findRelatedItem(word.text);
-            if (relatedItem) {
-              return relatedItem.nameColor; // 関連するアイテムの色を返す
-            }
-            return "#888888"; // デフォルトの色
-          },
-          onWordClick: onWordClick,
-          onWordMouseOver: onWordMouseOver,
-          onWordMouseOut: onWordMouseOut,
-        }}
-      />
-    );
-  },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.words === nextProps.words &&
-      prevProps.options === nextProps.options
-    );
-  }
-);
+const categoryColors: { [key: string]: string } = {
+  おつまみ: "#f56464",
+  刺身: "#4199e0",
+  焼き物: "#ed8937",
+  揚げ物: "#edca4c",
+  ご飯もの: "#777",
+  サラダ: "#49ba78",
+  アルコール: "#a07aeb",
+  ドリンク: "#2a6bb0",
+};
 
 export default function OrderPage() {
   const { colorMode } = useColorMode();
@@ -182,7 +150,7 @@ export default function OrderPage() {
 
   // ワードクラウドのデータをメモ化
   const [wordCloudData, setWordCloudData] = useState<
-    { text: string; value: number }[]
+    { text: string; value: number; category: string }[]
   >([]);
 
   const [tooltipData, setTooltipData] = useState<{
@@ -192,12 +160,20 @@ export default function OrderPage() {
     mouseY: number;
   } | null>(null);
 
+  const svgRef = useRef<SVGSVGElement | null>(null);
+
   useEffect(() => {
     fetchMenuItems();
   }, []);
   useEffect(() => {
     handleReposition();
   }, [menuItems]);
+
+  useEffect(() => {
+    if (svgRef.current) {
+      drawWordCloud(wordCloudData);
+    }
+  }, [wordCloudData]);
 
   // カテゴリ変更時の処理
   const handleCategoryChange = (category: string) => {
@@ -385,15 +361,15 @@ export default function OrderPage() {
     () => ({
       rotations: 1,
       rotationAngles: [0],
-      fontSizes: [36, 120],
+      fontSizes: [36, 120] as [number, number],
       fontFamily: "sans-serif",
       fontWeight: "900",
       padding: 2,
       enableTooltip: false,
       deterministic: true,
       transitionDuration: 2000,
-      scale: "sqrt", // スケーリング方式: linear, log, sqrt
-      spiral: "archimedean", // 'archimedean'（デフォ）か 'rectangular'
+      scale: "sqrt",
+      spiral: "archimedean",
     }),
     []
   );
@@ -403,6 +379,7 @@ export default function OrderPage() {
     const data = menuItems.map((item) => ({
       text: item.name,
       value: item.estimated_time * 5,
+      category: item.category,
     }));
     console.log("wordCloudDataを更新:", data);
     setWordCloudData(data);
@@ -444,7 +421,10 @@ export default function OrderPage() {
     console.log("isHover state changed:", isHover);
   }, [isHover]);
 
-  const handleWordMouseOver = (word: { text: string; value: number }) => {
+  const handleWordMouseOver = (
+    word: { text: string; value: number },
+    event: React.MouseEvent<Element>
+  ) => {
     console.log("Mouse over event triggered", word);
     if (!word) {
       console.error("Word data is undefined.");
@@ -484,6 +464,46 @@ export default function OrderPage() {
   // 画面サイズがmdを超える場合にtrueを返す
   const isMdOrLarger = useBreakpointValue({ base: false, md: true });
   const isLgOrLarger = useBreakpointValue({ base: false, lg: true });
+
+  const drawWordCloud = (
+    words: { text: string; value: number; category: string }[]
+  ) => {
+    const svg = d3.select(svgRef.current);
+    svg.selectAll("*").remove(); // 既存の内容をクリア
+
+    const layout = cloud()
+      .size([800, 600])
+      .words(
+        words.map((d) => ({
+          text: d.text,
+          size: d.value,
+          category: d.category,
+        }))
+      )
+      .padding(5)
+      .rotate(() => (Math.random() > 0 ? 0 : 90))
+      .fontSize((d) => d.size)
+      .on("end", render);
+    layout.start();
+
+    function render(words: any) {
+      svg
+        .append("g")
+        .attr("transform", "translate(300,200)") // 中心に配置
+        .selectAll("text")
+        .data(words)
+        .enter()
+        .append("text")
+        .style("font-size", (d) => d.size + "px")
+        .style("fill", (d) => categoryColors[d.category] || "#000") // カテゴリに応じた色を設定
+        .attr("text-anchor", "middle")
+        .attr(
+          "transform",
+          (d) => `translate(${d.x},${d.y}) rotate(${d.rotate})`
+        )
+        .text((d) => d.text);
+    }
+  };
 
   return (
     <Content isCustomHeader={true} maxWidth="100vw">
@@ -675,20 +695,7 @@ export default function OrderPage() {
           </HStack>
 
           <Box display="flex" justifyContent="center">
-            <WordCloudComponent
-              words={wordCloudData}
-              options={wordCloudOptions}
-              onWordClick={(word) => {
-                const item = menuItems.find((m) => m.name === word.text);
-                if (item) {
-                  addToCart(item);
-                }
-              }}
-              onWordMouseOver={handleWordMouseOver}
-              onWordMouseOut={handleWordMouseOut}
-              findRelatedItem={findRelatedItem}
-              size={[1200, 600]}
-            />
+            <svg ref={svgRef} width="600" height="400"></svg>
           </Box>
           {tooltipData && isHover && (
             <Box
