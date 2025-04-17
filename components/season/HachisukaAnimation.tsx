@@ -74,43 +74,67 @@ const HachisukaAnimation: React.FC = () => {
   // 桜の位置を監視して停止ゾーンとの衝突を検知
   useEffect(() => {
     if (isLoading) return;
+
     const checkCollision = () => {
-      setSakuras((prevSakuras) =>
-        prevSakuras.map((sakura) => {
-          if (sakura.isPaused) return sakura;
+      setSakuras(
+        (prevSakuras) =>
+          prevSakuras
+            .map((sakura) => {
+              if (sakura.isPaused) return sakura;
 
-          const sakuraElement = document.querySelector(
-            `[data-sakura-id="${sakura.id}"]`
-          );
-          if (!sakuraElement) return sakura;
-
-          const rect = sakuraElement.getBoundingClientRect();
-          const sakuraY = rect.top;
-
-          // 固定要素の位置を取得
-          const roofElement = document.querySelector('[data-roof-id="sakura"]');
-          if (!roofElement) return sakura;
-
-          const roofRect = roofElement.getBoundingClientRect();
-          const stopY = roofRect.top;
-
-          // 固定要素の上で停止
-          if (sakuraY >= stopY && stopY > 500 && sakuraY > 500) {
-            // 衝突した桜を5秒後に削除
-            setTimeout(() => {
-              setSakuras((currentSakuras) =>
-                currentSakuras.filter((s) => s.id !== sakura.id)
+              const sakuraElement = document.querySelector(
+                `[data-sakura-id="${sakura.id}"]`
               );
-            }, 2000);
-            return {
-              ...sakura,
-              isPaused: true,
-              pausedPosition: { x: rect.left, y: sakuraY },
-              zIndex: 10000,
-            };
-          }
-          return sakura;
-        })
+              if (!sakuraElement) return sakura;
+
+              const rect = sakuraElement.getBoundingClientRect();
+
+              // 複数のroofを取得
+              const roofElements = document.querySelectorAll(
+                '[data-roof-id="sakura"]'
+              );
+              let hasCollision = false;
+
+              roofElements.forEach((roofElement) => {
+                const roofRect = roofElement.getBoundingClientRect();
+
+                // X・Yの矩形衝突判定
+                const isColliding =
+                  rect.bottom >= roofRect.top + 10 &&
+                  rect.top <= roofRect.bottom &&
+                  rect.right >= roofRect.left &&
+                  rect.left <= roofRect.right;
+
+                if (isColliding && roofRect.top > 100 && rect.top > 100) {
+                  hasCollision = true;
+                }
+              });
+
+              // 画面外に出た桜を削除
+              if (rect.top > window.innerHeight) {
+                return null; // 画面外に出た桜は null を返す
+              }
+
+              if (hasCollision) {
+                // 衝突した桜を2秒後に削除
+                setTimeout(() => {
+                  setSakuras((currentSakuras) =>
+                    currentSakuras.filter((s) => s.id !== sakura.id)
+                  );
+                }, 2000);
+
+                return {
+                  ...sakura,
+                  x: Math.random() * window.innerWidth,
+                  isPaused: true,
+                  pausedPosition: { x: rect.left, y: rect.top },
+                  zIndex: 10000,
+                };
+              }
+
+              return sakura;
+            })
+            .filter((sakura) => sakura !== null) // null をフィルタリング
       );
     };
 

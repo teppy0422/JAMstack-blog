@@ -44,6 +44,7 @@ interface MenuItem {
   imageUrlSub: string;
   ingredients: string[];
   is_visible: boolean;
+  recommendation_level: number;
   estimated_time: number;
 }
 
@@ -86,6 +87,7 @@ export default function AdminPage() {
     imageUrlSub: "",
     ingredients: [],
     is_visible: true,
+    recommendation_level: 0,
     estimated_time: 0,
   });
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
@@ -378,6 +380,7 @@ export default function AdminPage() {
           category: newItem.category,
           ingredients: validIngredients,
           is_visible: newItem.is_visible,
+          recommendation_level: newItem.recommendation_level,
           estimated_time: newItem.estimated_time,
         };
 
@@ -449,6 +452,7 @@ export default function AdminPage() {
             image_url_sub: newItem.imageUrlSub,
             ingredients: validIngredients,
             is_visible: newItem.is_visible,
+            recommendation_level: newItem.recommendation_level,
             estimated_time: newItem.estimated_time,
           },
         ]);
@@ -484,6 +488,7 @@ export default function AdminPage() {
         imageUrlSub: "",
         ingredients: [],
         is_visible: true,
+        recommendation_level: 0,
         estimated_time: 0,
       });
       setPreviewImage("");
@@ -516,6 +521,7 @@ export default function AdminPage() {
       imageUrlSub: item.imageUrlSub,
       ingredients: item.ingredients,
       is_visible: item.is_visible,
+      recommendation_level: item.recommendation_level,
       estimated_time: item.estimated_time,
     });
     setPreviewImage(item.imageUrl);
@@ -807,6 +813,7 @@ export default function AdminPage() {
                     <Text>価格: {item.price}円</Text>
                     <Text>カテゴリ: {item.category}</Text>
                     <Text>材料: {item.ingredients.join(", ")}</Text>
+                    <Text>おすすめ度: {item.recommendation_level}</Text>
                   </Box>
                 </HStack>
                 <VStack align="flex-end">
@@ -990,6 +997,25 @@ export default function AdminPage() {
                       >
                         注文ページで表示
                       </Checkbox>
+                    </FormControl>
+
+                    <FormControl>
+                      <FormLabel>おすすめ度 (0-5)</FormLabel>
+                      <Select
+                        value={newItem.recommendation_level}
+                        onChange={(e) =>
+                          setNewItem({
+                            ...newItem,
+                            recommendation_level: Number(e.target.value),
+                          })
+                        }
+                      >
+                        {[0, 1, 2, 3, 4, 4.5, 5].map((level) => (
+                          <option key={level} value={level}>
+                            {level}
+                          </option>
+                        ))}
+                      </Select>
                     </FormControl>
                   </VStack>
                 </ModalBody>

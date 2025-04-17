@@ -19,6 +19,7 @@ interface AnimationImageProps {
   label?: string;
   labelPlacement?: PlacementWithLogical;
   objectFit?: React.CSSProperties["objectFit"];
+  transformOrigin?: string;
 }
 export const AnimationImage: React.FC<AnimationImageProps> = ({
   sealSize = "2",
@@ -36,9 +37,22 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
   label,
   labelPlacement,
   objectFit = "cover",
+  transformOrigin,
 }) => {
   const numericSealSize = Number(sealSize);
   const isGif = src.endsWith(".gif");
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    if (isGif) {
+      const img = document.getElementById(id || "") as HTMLImageElement;
+      if (img) {
+        img.src = src;
+        setIsPlaying(true);
+      }
+    }
+  }, [src, id, isGif]);
+
   return (
     <>
       {/* #outline-filterはpages/_app.tsxに書いてる。ここに書いたらウィンドウ幅が狭くなった時にfloodColorが効かなくなる */}
@@ -52,9 +66,15 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
       >
         <img
           src={src}
-          onClick={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src = target.src.split("?")[0] + "?" + new Date().getTime(); // クエリパラメータを追加して再読み込み
+          id={id}
+          onClick={() => {
+            if (isGif) {
+              const img = document.getElementById(id || "") as HTMLImageElement;
+              if (img) {
+                img.src = src;
+                setIsPlaying(true);
+              }
+            }
           }}
           style={{
             position: position,
@@ -72,8 +92,8 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
                 ? "url(#outline-filter) drop-shadow(1px 1px 3px rgba(0, 0, 0, 1))"
                 : "none",
             objectFit: objectFit,
+            transformOrigin: transformOrigin,
           }}
-          id={id}
         />
       </Tooltip>
       <svg width="0" height="0">
@@ -107,6 +127,26 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
         </defs>
       </svg>
       <style jsx>{`
+        @keyframes sway {
+          0% {
+            transform: rotate(0deg) translateX(0px);
+          }
+          15% {
+            transform: rotate(2deg) translateX(1px);
+          }
+          30% {
+            transform: rotate(1deg) translateX(0.5px);
+          }
+          50% {
+            transform: rotate(5deg) translateX(2px);
+          }
+          70% {
+            transform: rotate(2.5deg) translateX(1px);
+          }
+          100% {
+            transform: rotate(0deg) translateX(0px);
+          }
+        }
         @keyframes nyoki_rabit {
           0% {
             transform: translateY(100px) translateX(0px) scale(0.1);
