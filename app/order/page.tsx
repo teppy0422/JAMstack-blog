@@ -169,6 +169,10 @@ export default function OrderPage() {
 
   const svgRef = useRef<SVGSVGElement | null>(null);
 
+  const [orderHistory, setOrderHistory] = useState<any[]>([]);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   useEffect(() => {
     fetchMenuItems();
   }, []);
@@ -178,9 +182,65 @@ export default function OrderPage() {
 
   useEffect(() => {
     if (svgRef.current) {
-      drawWordCloud(wordCloudData);
+      drawWordCloud(wordCloudData, menuItems);
     }
-  }, [wordCloudData]);
+  }, [wordCloudData, menuItems]);
+
+  // 初期データの取得
+  const fetchOrderHistory = async () => {
+    const { data, error } = await supabase
+      .from("order_items")
+      .select(
+        `
+          *,
+          orders (
+            total,
+            created_at
+          ),
+          order_menu_items (
+            name,
+            price,
+            image_url
+          )
+        `
+      )
+      .eq("orders.user_id", currentUserId)
+      .order("created_at", { ascending: false });
+    if (error) {
+      console.error("注文履歴の取得に失敗:", error);
+      return;
+    }
+    setOrderHistory(data || []);
+  };
+
+  // 注文履歴をリアルタイムで取得
+  useEffect(() => {
+    if (!currentUserId) return;
+    fetchOrderHistory();
+
+    // リアルタイムサブスクリプションの設定
+    const subscription = supabase
+      .channel("order_items")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "order_items",
+          filter: `user_id=eq.${currentUserId}`,
+        },
+        async (payload) => {
+          console.log("order_itemsテーブルの変更:", payload);
+          await fetchOrderHistory();
+        }
+      )
+      .subscribe();
+
+    // クリーンアップ
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [currentUserId]);
 
   // カテゴリ変更時の処理
   const handleCategoryChange = (category: string) => {
@@ -265,6 +325,7 @@ export default function OrderPage() {
         menu_item_id: item.item.id,
         quantity: item.quantity,
         price: item.item.price,
+        user_id: currentUserId,
         status: "pending",
       }));
 
@@ -286,6 +347,30 @@ export default function OrderPage() {
       });
 
       setCart([]);
+
+      // 注文履歴を即時更新
+      const { data: updatedHistory, error: historyError } = await supabase
+        .from("order_items")
+        .select(
+          `
+          *,
+          orders (
+            total,
+            created_at
+          ),
+          order_menu_items (
+            name,
+            price,
+            image_url
+          )
+        `
+        )
+        .eq("orders.user_id", currentUserId)
+        .order("created_at", { ascending: false });
+
+      if (!historyError) {
+        setOrderHistory(updatedHistory || []);
+      }
     } catch (error) {
       console.error("Error submitting order:", error);
       toast({
@@ -368,7 +453,6 @@ export default function OrderPage() {
             nameColor: nameColor,
           };
         }) || [];
-    console.log("取得したメニューアイテム:", itemsWithCorrectImageUrl); // 取得したデータをログに出力
     setMenuItems(itemsWithCorrectImageUrl);
     console.log("menuItemsの状態:", itemsWithCorrectImageUrl); // 状態を確認
   };
@@ -404,95 +488,9 @@ export default function OrderPage() {
     setWordCloudData(data);
   }, [menuItems]);
 
-  // ワードクラウドのオプションをメモ化
-  const wordCloudOptions = useMemo(
-    () => ({
-      rotations: 1,
-      rotationAngles: [0],
-      fontSizes: [24, 120] as [number, number], // 最小サイズを24に調整
-      fontFamily: "sans-serif",
-      fontWeight: "900",
-      padding: 2,
-      enableTooltip: false,
-      deterministic: true,
-      transitionDuration: 2000,
-      scale: "sqrt",
-      spiral: "archimedean",
-    }),
-    []
-  );
-
-  // wordCloudへのマウスオーバー
-  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
-  const [hoveredWord, setHoveredWord] = useState<{
-    text: string;
-    value: number;
-  } | null>(null); // 新しい状態を追加
-
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      if (!isHover) {
-        setMousePosition({ x: event.clientX, y: event.clientY });
-      }
-      setTooltipData((prev) => {
-        if (prev) {
-          return {
-            ...prev,
-            mouseX: event.clientX,
-            mouseY: event.clientY,
-          };
-        }
-        return prev; // prevがnullの場合はそのまま返す
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [isHover, hoveredWord]);
-
   useEffect(() => {
     console.log("isHover state changed:", isHover);
   }, [isHover]);
-
-  const handleWordMouseOver = (
-    word: { text: string; value: number },
-    event: React.MouseEvent<Element>
-  ) => {
-    console.log("Mouse over event triggered", word);
-    if (!word) {
-      console.error("Word data is undefined.");
-      return;
-    }
-
-    setIsHover(true);
-    setHoveredWord(word);
-    const value = word.value ?? 0;
-    setTooltipData({
-      text: word.text,
-      value: value,
-      mouseX: mousePosition.x,
-      mouseY: mousePosition.y,
-    });
-    console.log("tooltipdata::::", tooltipData);
-  };
-
-  const handleWordMouseOut = () => {
-    setIsHover(false);
-    setTooltipData((prev) => {
-      if (prev) {
-        return {
-          ...prev,
-          mouseX: mousePosition.x, // ここでmousePositionをそのまま使用
-          mouseY: mousePosition.y, // ここでmousePositionをそのまま使用
-        };
-      }
-      return prev; // prevがnullの場合はそのまま返す
-    });
-  };
 
   const findRelatedItem = (text: string) => {
     return menuItems.find((item) => item.name === text);
@@ -503,7 +501,10 @@ export default function OrderPage() {
   const isLgOrLarger = useBreakpointValue({ base: false, lg: true });
 
   const drawWordCloud = useCallback(
-    (words: { text: string; value: number; category: string }[]) => {
+    (
+      words: { text: string; value: number; category: string }[],
+      menuItems: MenuItem[]
+    ) => {
       const svg = d3.select(svgRef.current);
       svg.selectAll("*").remove();
 
@@ -578,6 +579,16 @@ export default function OrderPage() {
                 .style("stroke-width", "1px")
                 .style("pointer-events", "all")
                 .style("cursor", "pointer")
+                .on("click", (event, d) => {
+                  const matched = menuItems.find(
+                    (item) => item.name === d.text
+                  );
+                  if (matched) {
+                    addToCart(matched);
+                  } else {
+                    console.warn("一致するメニューが見つかりません:", d.text);
+                  }
+                })
                 .on("mouseover", function (event) {
                   text
                     .raise() // グループ内のtextを前面へ
@@ -601,6 +612,141 @@ export default function OrderPage() {
     },
     []
   );
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("ja-JP", {
+      style: "currency",
+      currency: "JPY",
+    }).format(amount);
+  };
+
+  // 注文履歴の表示部分
+  const renderOrderHistory = () => {
+    if (!orderHistory.length) return null;
+
+    const calculateTotalAmount = () => {
+      return orderHistory.reduce((total, item) => {
+        const itemPrice = item.order_menu_items.price * item.quantity; // 各アイテムの合計金額
+        return total + itemPrice;
+      }, 0);
+    };
+
+    return (
+      <Box mt={1} fontFamily="Yomogi">
+        <Heading size="sm" mb={1}>
+          <Center>注文履歴</Center>
+        </Heading>
+        <VStack spacing={0} align="stretch">
+          {orderHistory.map((item) => (
+            <Box
+              key={item.id}
+              p={0}
+              borderWidth="1px"
+              borderRadius="md"
+              role="group" // ← これが重要！
+            >
+              <HStack justify="space-between">
+                <HStack>
+                  <Image
+                    src={item.order_menu_items.image_url}
+                    alt={item.order_menu_items.name}
+                    boxSize="50px"
+                    objectFit="cover"
+                    borderRadius="md"
+                    filter={
+                      item.status === "completed"
+                        ? "contrast(40%) brightness(110%) sepia(80%) saturate(30%)"
+                        : "none"
+                    }
+                    _groupHover={{
+                      filter: "none",
+                      transition: "filter 0.2s ease-in-out",
+                    }}
+                  />
+                  <Box>
+                    <Text
+                      fontWeight="600"
+                      color={
+                        item.status === "completed"
+                          ? "custom.theme.light.800"
+                          : "custom.theme.light.900"
+                      }
+                    >
+                      {item.order_menu_items.name}
+                    </Text>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="600"
+                      color={
+                        item.status === "completed"
+                          ? "custom.theme.light.800"
+                          : "custom.theme.light.900"
+                      }
+                    >
+                      {item.quantity}個 × {item.price}円
+                    </Text>
+                  </Box>
+                </HStack>
+                <VStack align="flex-end" spacing={0}>
+                  <Text
+                    fontSize="xs"
+                    fontWeight="600"
+                    color={
+                      item.status === "completed"
+                        ? "custom.theme.light.800"
+                        : "custom.theme.light.900"
+                    }
+                  >
+                    {new Date(item.orders.created_at).toLocaleTimeString(
+                      "ja-JP",
+                      { hour: "2-digit", minute: "2-digit" }
+                    )}
+                  </Text>
+                  <HStack spacing={0}>
+                    <Text
+                      color={
+                        item.status === "completed"
+                          ? "custom.theme.light.800"
+                          : "custom.theme.light.900"
+                      }
+                      fontWeight={900}
+                    >
+                      {item.status === "completed" ? "提供済み" : "準備中"}
+                    </Text>
+                    {item.completed_at && (
+                      <Text fontSize="xs">
+                        (
+                        {Math.floor(
+                          (new Date(item.completed_at).getTime() -
+                            new Date(item.created_at).getTime()) /
+                            60000
+                        )}
+                        分)
+                      </Text>
+                    )}
+                  </HStack>
+                </VStack>
+              </HStack>
+              <Divider
+                border="1px solid"
+                borderColor="custom.theme.light.800"
+                m="5px"
+              />
+            </Box>
+          ))}
+        </VStack>
+        <Text fontSize="md" fontWeight="400" align="right">
+          合計: {formatCurrency(calculateTotalAmount())}
+        </Text>
+      </Box>
+    );
+  };
+
+  // d.text に対応する MenuItem を menuItems の中から探す関数
+  const findMenuItemByName = (name: string): MenuItem | undefined => {
+    console.log(menuItems);
+    return menuItems.find((item) => item.name === name);
+  };
 
   return (
     <>
@@ -965,6 +1111,7 @@ export default function OrderPage() {
                   </VStack>
                 </>
               )}
+              {renderOrderHistory()}
             </Box>
           </Grid>
         </Box>

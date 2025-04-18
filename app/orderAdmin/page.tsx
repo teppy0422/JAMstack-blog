@@ -59,6 +59,7 @@ interface Order {
     menu_item_id: number;
     quantity: number;
     price: number;
+    status: "pending" | "completed";
     menu_item: {
       id: number;
       name: string;
@@ -163,6 +164,7 @@ export default function AdminPage() {
           menu_item_id,
           quantity,
           price,
+          status,
           menu_item:menu_item_id (
             id,
             name,
@@ -192,8 +194,12 @@ export default function AdminPage() {
       .channel("orders")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "orders" },
-        (payload) => {
+        {
+          event: "*",
+          schema: "public",
+          table: "orders",
+        },
+        async (payload) => {
           if (payload.eventType === "INSERT") {
             // 新しい注文が追加された時に通知音を再生
             if (audioRef.current) {
@@ -210,14 +216,18 @@ export default function AdminPage() {
               isClosable: true,
             });
           }
-          fetchOrders();
+          await fetchOrders();
         }
       )
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "order_menu_items" },
-        () => {
-          fetchMenuItems();
+        {
+          event: "*",
+          schema: "public",
+          table: "order_items",
+        },
+        async (payload) => {
+          await fetchOrders();
         }
       )
       .subscribe();
@@ -228,15 +238,41 @@ export default function AdminPage() {
   };
 
   const handleOrderStatusChange = async (
-    orderId: number,
+    itemId: number,
     newStatus: "pending" | "completed"
   ) => {
-    const { error } = await supabase
-      .from("orders")
-      .update({ status: newStatus })
-      .eq("id", orderId);
+    try {
+      // ordersテーブルの更新
+      const { error: orderError } = await supabase
+        .from("orders")
+        .update({ status: newStatus })
+        .eq("id", itemId);
 
-    if (error) {
+      if (orderError) throw orderError;
+
+      // order_itemsテーブルの更新
+      const { error: itemsError } = await supabase
+        .from("order_items")
+        .update({
+          status: newStatus,
+          completed_at: new Date(), // ← 現在の日時をセット
+        })
+
+        .eq("id", itemId);
+
+      if (itemsError) throw itemsError;
+
+      toast({
+        title: "成功",
+        description: "注文ステータスを更新しました",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      await fetchOrders();
+    } catch (error) {
+      console.error("Error updating order status:", error);
       toast({
         title: "エラー",
         description: "注文ステータスの更新に失敗しました",
@@ -244,10 +280,7 @@ export default function AdminPage() {
         duration: 3000,
         isClosable: true,
       });
-      return;
     }
-
-    fetchOrders();
   };
 
   const handleImageUpload = async (
@@ -764,12 +797,12 @@ export default function AdminPage() {
                       <Button
                         size="sm"
                         colorScheme={
-                          order.status === "pending" ? "green" : "gray"
+                          item.status === "pending" ? "green" : "gray"
                         }
                         onClick={() =>
-                          handleOrderStatusChange(order.id, "completed")
+                          handleOrderStatusChange(item.id, "completed")
                         }
-                        isDisabled={order.status === "completed"}
+                        isDisabled={item.status === "completed"}
                       >
                         完了
                       </Button>
