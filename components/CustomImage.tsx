@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Box, PlacementWithLogical, Tooltip } from "@chakra-ui/react";
 
 import styled, { keyframes } from "styled-components";
@@ -41,17 +41,14 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
 }) => {
   const numericSealSize = Number(sealSize);
   const isGif = src.endsWith(".gif");
-  const [isPlaying, setIsPlaying] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    if (isGif) {
-      const img = document.getElementById(id || "") as HTMLImageElement;
-      if (img) {
-        img.src = src;
-        setIsPlaying(true);
-      }
+    if (isGif && imgRef.current) {
+      // GIFの再生を開始
+      imgRef.current.src = src;
     }
-  }, [src, id, isGif]);
+  }, [src, isGif]);
 
   return (
     <>
@@ -65,15 +62,13 @@ export const AnimationImage: React.FC<AnimationImageProps> = ({
         borderRadius="5px"
       >
         <img
+          ref={imgRef}
           src={src}
           id={id}
           onClick={() => {
-            if (isGif) {
-              const img = document.getElementById(id || "") as HTMLImageElement;
-              if (img) {
-                img.src = src;
-                setIsPlaying(true);
-              }
+            if (isGif && imgRef.current) {
+              // GIFを最初から再生
+              imgRef.current.src = src;
             }
           }}
           style={{

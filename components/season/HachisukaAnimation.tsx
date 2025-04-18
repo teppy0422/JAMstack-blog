@@ -134,7 +134,7 @@ const HachisukaAnimation: React.FC = () => {
 
               return sakura;
             })
-            .filter((sakura) => sakura !== null) // null をフィルタリング
+            .filter((sakura): sakura is Sakura => sakura !== null) // nullをフィルタリング
       );
     };
 
