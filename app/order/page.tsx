@@ -30,6 +30,8 @@ import Content from "../../components/content";
 import { AnimationImage } from "../../components/CustomImage";
 import FilteredImage from "../../components/PosterImage";
 import HachisukaAnimation from "../../components/season/HachisukaAnimation";
+import CustomSwitchButton from "../../components/custom/CustomSwitchButton";
+
 import "@fontsource/yomogi";
 import * as d3 from "d3";
 import React from "react";
@@ -172,6 +174,16 @@ export default function OrderPage() {
   const [orderHistory, setOrderHistory] = useState<any[]>([]);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const [isRight, setIsRight] = useState(false);
+
+  const svgSize = useBreakpointValue({
+    base: { width: 300, height: 800 }, // 小さい画面用
+    sm: { width: 600, height: 400 }, // スマートフォン用
+    md: { width: 600, height: 500 }, // 中くらいの画面用
+    lg: { width: 600, height: 600 }, // 大きい画面用
+    xl: { width: 1100, height: 1000 }, // 特大画面用
+  }) || { width: 300, height: 500 }; // デフォルト値を設定
 
   useEffect(() => {
     fetchMenuItems();
@@ -509,7 +521,7 @@ export default function OrderPage() {
       svg.selectAll("*").remove();
 
       const layout = cloud()
-        .size([1200, 600])
+        .size([svgSize.width, svgSize.height])
         .words(
           words
             .sort((a, b) => {
@@ -531,8 +543,8 @@ export default function OrderPage() {
       layout.start();
 
       function render(words: any) {
-        const centerX = 600;
-        const centerY = 300;
+        const centerX = svgSize.width / 2;
+        const centerY = svgSize.height / 2;
 
         const group = svg
           .append("g")
@@ -610,7 +622,7 @@ export default function OrderPage() {
         });
       }
     },
-    []
+    [svgSize]
   );
 
   const formatCurrency = (amount: number) => {
@@ -742,10 +754,14 @@ export default function OrderPage() {
     );
   };
 
-  // d.text に対応する MenuItem を menuItems の中から探す関数
-  const findMenuItemByName = (name: string): MenuItem | undefined => {
-    console.log(menuItems);
-    return menuItems.find((item) => item.name === name);
+  const handleSwitchToggle = () => {
+    setIsRight((prev) => {
+      const newIsRight = !prev; // 新しい状態を計算
+      if (newIsRight) {
+        handleReposition(); // 新しい状態がtrueの場合にhandleRepositionを呼び出す
+      }
+      return newIsRight; // 新しい状態を返す
+    });
   };
 
   return (
@@ -817,227 +833,247 @@ export default function OrderPage() {
             </VStack>
             <Box px={2}>
               <Tabs variant="soft-rounded">
-                <TabList overflowX="auto" pb={1} ml={4}>
-                  {categories.map((category) => (
-                    <Tab
-                      p="2"
-                      key={category}
-                      onClick={() => handleCategoryChange(category)}
-                      bg={
-                        selectedCategory === category
-                          ? "custom.theme.light.400"
-                          : undefined
-                      }
-                      color={
-                        selectedCategory === category ? "white" : undefined
-                      }
-                    >
-                      <Box textAlign="center" lineHeight={1.1}>
-                        {category}
-                        <Box
-                          width="100%"
-                          height="3px"
-                          bg={searchCategoryColor(category)[0]}
-                          mt={0}
-                        />
-                      </Box>
-                    </Tab>
-                  ))}
-                </TabList>
-              </Tabs>
-              <SimpleGrid
-                columns={gridColumns}
-                spacing={4}
-                fontFamily="Yomogi"
-                fontWeight="600"
-              >
-                {filteredItems.map((item) => (
-                  <Tooltip
-                    label={
-                      item.imageUrlSub && (
-                        <>
-                          <Box>
-                            <Image src={item.imageUrlSub} />
-                          </Box>
-                        </>
-                      )
-                    }
-                    bg="white"
-                    borderRadius="md"
-                    p="6px"
-                    hasArrow
-                  >
-                    <Button
-                      key={item.id}
-                      onClick={() => addToCart(item)}
-                      p={0}
-                      m={0}
-                      h="auto"
-                      bg={colorMode === "light" ? "transparent" : "gray.700"}
-                      _hover={{
-                        transform: "scale(1.05)",
-                        transition: "transform 0.2s ease",
-                      }}
-                      display="flex"
-                      flexDirection="column"
-                      alignItems="center"
-                    >
-                      <Box
-                        data-roof-id="sakura"
-                        position="relative"
-                        overflow="hidden"
-                        height="120px"
-                        width="180px"
+                <Flex
+                  alignItems="center"
+                  justifyContent="space-between"
+                  pb={1}
+                  ml={0}
+                >
+                  <TabList overflowX="auto" display="flex" alignItems="center">
+                    {categories.map((category) => (
+                      <Tab
+                        p="1"
+                        key={category}
+                        onClick={() => handleCategoryChange(category)}
+                        bg={
+                          selectedCategory === category
+                            ? "custom.theme.light.400"
+                            : undefined
+                        }
+                        color={
+                          selectedCategory === category ? "white" : undefined
+                        }
                       >
-                        <AnimationImage
-                          src={item.imageUrl}
-                          height="100%"
-                          width="100%"
-                          objectFit="cover"
-                          position="static"
-                        />
-                        {item.recommendation_level >= 4 && (
+                        <Box textAlign="center" lineHeight={1.1}>
+                          {category}
                           <Box
-                            position="absolute"
-                            top="0"
-                            left="0"
-                            transform="rotate(-40deg) translate(-46%, 100%)"
-                            transformOrigin="top left"
-                            bg="red.500"
-                            filter="drop-shadow(0 1px 10px rgba(0, 0, 0, 0.1))"
-                            color="white"
-                            px={5}
-                            py={0.5}
-                            fontSize="10px"
-                            fontWeight="600"
-                            border="1px solid white"
-                            zIndex={1}
-                            boxShadow="md"
-                            width="120px"
-                            textAlign="center"
-                            lineHeight="1"
-                          >
-                            <HStack
-                              spacing={
-                                item.recommendation_level === 4.5 ? 1.5 : 0.5
-                              }
-                              justify="center"
-                            >
-                              {item.recommendation_level >= 4 && (
-                                <Icon as={FaStar} />
-                              )}
-                              {item.recommendation_level >= 4.5 && (
-                                <Icon as={FaStar} />
-                              )}
-                              {item.recommendation_level >= 5 && (
-                                <Icon as={FaStar} />
-                              )}
-                            </HStack>
-                          </Box>
-                        )}
-                      </Box>
-                      <Box
-                        bg={searchCategoryColor(item.category)[0]}
-                        h="3px"
-                        w="180px"
-                      />
-                      <HStack
-                        spacing={0.5}
-                        align="center" // ← 縦方向中央揃え（上下中央）
-                        justify="center" // ← 横方向中央揃え（左右中央）
-                        w="100%"
+                            width="100%"
+                            height="3px"
+                            bg={searchCategoryColor(category)[0]}
+                            mt={0}
+                          />
+                        </Box>
+                      </Tab>
+                    ))}
+                  </TabList>
+                  <CustomSwitchButton
+                    onClick={handleSwitchToggle}
+                    isRight={isRight}
+                  />
+                </Flex>
+              </Tabs>
+              {!isRight ? (
+                <SimpleGrid
+                  columns={gridColumns}
+                  spacing={4}
+                  fontFamily="Yomogi"
+                  fontWeight="600"
+                >
+                  {filteredItems.map((item) => (
+                    <Tooltip
+                      label={
+                        item.imageUrlSub && (
+                          <>
+                            <Box>
+                              <Image src={item.imageUrlSub} />
+                            </Box>
+                          </>
+                        )
+                      }
+                      bg="white"
+                      borderRadius="md"
+                      p="6px"
+                      hasArrow
+                    >
+                      <Button
+                        key={item.id}
+                        onClick={() => addToCart(item)}
+                        p={0}
+                        m={0}
+                        h="auto"
+                        bg={colorMode === "light" ? "transparent" : "gray.700"}
+                        _hover={{
+                          transform: "scale(1.05)",
+                          transition: "transform 0.2s ease",
+                        }}
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
                       >
-                        <Text
-                          textAlign="center"
-                          whiteSpace="nowrap"
+                        <Box
+                          data-roof-id="sakura"
+                          position="relative"
                           overflow="hidden"
-                          textOverflow="ellipsis"
-                          fontSize="clamp(10px, 3vw, 14px)" // ← 文字サイズを自動調整
-                          minW={0} // ← overflowを効かせるために必要
+                          height="120px"
+                          width="180px"
                         >
-                          {item.name}
-                        </Text>
-                      </HStack>
+                          <AnimationImage
+                            src={item.imageUrl}
+                            height="100%"
+                            width="100%"
+                            objectFit="cover"
+                            position="static"
+                          />
+                          {item.recommendation_level >= 4 && (
+                            <Box
+                              position="absolute"
+                              top="0"
+                              left="0"
+                              transform="rotate(-40deg) translate(-46%, 100%)"
+                              transformOrigin="top left"
+                              bg="red.500"
+                              filter="drop-shadow(0 1px 10px rgba(0, 0, 0, 0.1))"
+                              color="white"
+                              px={5}
+                              py={0.5}
+                              fontSize="10px"
+                              fontWeight="600"
+                              border="1px solid white"
+                              zIndex={1}
+                              boxShadow="md"
+                              width="120px"
+                              textAlign="center"
+                              lineHeight="1"
+                            >
+                              <HStack
+                                spacing={
+                                  item.recommendation_level === 4.5 ? 1.5 : 0.5
+                                }
+                                justify="center"
+                              >
+                                {item.recommendation_level >= 4 && (
+                                  <Icon as={FaStar} />
+                                )}
+                                {item.recommendation_level >= 4.5 && (
+                                  <Icon as={FaStar} />
+                                )}
+                                {item.recommendation_level >= 5 && (
+                                  <Icon as={FaStar} />
+                                )}
+                              </HStack>
+                            </Box>
+                          )}
+                        </Box>
+                        <Box
+                          bg={searchCategoryColor(item.category)[0]}
+                          h="3px"
+                          w="180px"
+                        />
+                        <HStack
+                          spacing={0.5}
+                          align="center" // ← 縦方向中央揃え（上下中央）
+                          justify="center" // ← 横方向中央揃え（左右中央）
+                          w="100%"
+                        >
+                          <Text
+                            textAlign="center"
+                            whiteSpace="nowrap"
+                            overflow="hidden"
+                            textOverflow="ellipsis"
+                            fontSize="clamp(10px, 3vw, 14px)" // ← 文字サイズを自動調整
+                            minW={0} // ← overflowを効かせるために必要
+                          >
+                            {item.name}
+                          </Text>
+                        </HStack>
 
-                      <Text fontSize="sm">{item.price}円</Text>
-                      <Text fontSize="xs" color="gray.500">
-                        提供目安: {item.estimated_time}分
-                      </Text>
-                    </Button>
-                  </Tooltip>
-                ))}
-              </SimpleGrid>
-              {/* ダイナミックタイポグラフィ風のメニュー表示を追加 */}
-              <Box mt={8}>
-                <HStack justify="center" mb={4}>
-                  <Heading size="md">WordCloud:menu</Heading>
+                        <Text fontSize="sm">{item.price}円</Text>
+                        <Text fontSize="xs" color="gray.500">
+                          提供目安: {item.estimated_time}分
+                        </Text>
+                      </Button>
+                    </Tooltip>
+                  ))}
+                </SimpleGrid>
+              ) : (
+                <Box mt={0} position="relative">
                   <Button
+                    position="absolute"
+                    top="0"
+                    right="0"
                     onClick={handleReposition}
-                    colorScheme="blue"
+                    bg="transparent"
+                    _hover={{
+                      bg: "transparent",
+                    }}
+                    color="custom.theme.light.600"
                     size="sm"
                   >
                     再配置
                   </Button>
-                </HStack>
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                  border="1px solid #333"
-                >
-                  <svg
-                    ref={svgRef}
-                    width="1200"
-                    height="600"
-                    style={{ overflow: "visible" }}
-                  />
-                </Box>
-                {tooltipData && (
                   <Box
-                    position="fixed"
-                    bg="white"
-                    borderRadius="md"
-                    boxShadow="md"
-                    mt="8px"
-                    ml="18px"
-                    p={2}
-                    zIndex={10}
-                    left={`${tooltipData.mouseX}px`}
-                    top={`${tooltipData.mouseY}px`}
-                    textAlign="center"
+                    display="flex"
+                    justifyContent="center"
+                    border="1px solid"
+                    borderColor="custom.theme.light.600"
+                    maxW={svgSize.width}
+                    maxH={svgSize.height}
                   >
-                    {(() => {
-                      const relatedItem = findRelatedItem(tooltipData.text);
-                      if (relatedItem) {
-                        return (
-                          <Flex direction="column">
-                            <Image
-                              src={
-                                relatedItem.imageUrlSub
-                                  ? relatedItem.imageUrlSub
-                                  : relatedItem.imageUrl
-                              }
-                              alt={relatedItem.name}
-                              width="240px"
-                              height="auto"
-                              objectFit="contain"
-                            />
-                            <Text fontWeight={600}>{tooltipData.text}</Text>
-                            <Text fontSize="sm" fontWeight={400}>
-                              {relatedItem.price}円
-                            </Text>
-                            <Text fontSize="sm" fontWeight={600} color="gray">
-                              提供目安: {relatedItem.estimated_time}分
-                            </Text>
-
-                            <Text fontSize="sm">{tooltipData.value}</Text>
-                          </Flex>
-                        );
-                      }
-                      return null;
-                    })()}
+                    <svg
+                      ref={svgRef}
+                      width={svgSize.width}
+                      height={svgSize.height}
+                      style={{ overflow: "visible" }}
+                    />
                   </Box>
-                )}
-              </Box>
+                  {tooltipData && (
+                    <Box
+                      position="fixed"
+                      bg="white"
+                      borderRadius="md"
+                      boxShadow="md"
+                      mt="8px"
+                      ml="18px"
+                      p={2}
+                      zIndex={10}
+                      left={`${tooltipData.mouseX}px`}
+                      top={`${tooltipData.mouseY}px`}
+                      textAlign="center"
+                    >
+                      {(() => {
+                        const relatedItem = findRelatedItem(tooltipData.text);
+                        if (relatedItem) {
+                          return (
+                            <Flex direction="column">
+                              <Image
+                                src={
+                                  relatedItem.imageUrlSub
+                                    ? relatedItem.imageUrlSub
+                                    : relatedItem.imageUrl
+                                }
+                                alt={relatedItem.name}
+                                width="240px"
+                                height="auto"
+                                objectFit="contain"
+                              />
+                              <Text fontWeight={600}>{tooltipData.text}</Text>
+                              <Text fontSize="sm" fontWeight={400}>
+                                {relatedItem.price}円
+                              </Text>
+                              <Text fontSize="sm" fontWeight={600} color="gray">
+                                提供目安: {relatedItem.estimated_time}分
+                              </Text>
+
+                              <Text fontSize="sm">{tooltipData.value}</Text>
+                            </Flex>
+                          );
+                        }
+                        return null;
+                      })()}
+                    </Box>
+                  )}
+                </Box>
+              )}
             </Box>
 
             <Box mt={3}>

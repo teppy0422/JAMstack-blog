@@ -10,7 +10,8 @@ import React, {
   PropsWithChildren,
 } from "react";
 import { DefaultSeo } from "next-seo";
-import { ChakraProvider, useColorModeValue } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
+
 import Head from "next/head";
 import { theme } from "../libs/theme";
 //プログレスバー
@@ -56,7 +57,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         {/* <script src="//accaii.com/teppy/script.js" async></script> */}
       </Head>
       <UserProvider>
-        <ChakraProvider theme={theme} resetCSS>
+        <ChakraProvider theme={theme}>
           <NextNprogress color="#f88" showOnShallow={false} height={3} />
           <SessionProvider session={session}>
             <svg width="0" height="0">
