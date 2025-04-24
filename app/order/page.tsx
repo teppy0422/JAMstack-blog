@@ -156,6 +156,7 @@ export default function OrderPage() {
   }>({});
   const elementRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const [isHover, setIsHover] = useState<boolean>(false);
+  const [hoveredItem, setHoveredItem] = useState<MenuItem | null>(null);
 
   // ワードクラウドのデータをメモ化
   const [wordCloudData, setWordCloudData] = useState<
@@ -563,7 +564,6 @@ export default function OrderPage() {
             .attr("text-anchor", "middle")
             .attr("transform", `translate(0,0) rotate(0)`)
             .text(d.text);
-
           text
             .transition()
             .duration(600)
@@ -655,7 +655,17 @@ export default function OrderPage() {
               p={0}
               borderWidth="1px"
               borderRadius="md"
+              borderColor="transparent"
               role="group" // ← これが重要！
+              color={
+                item.status === "completed"
+                  ? colorMode === "light"
+                    ? "custom.theme.light.800"
+                    : "custom.theme.light.700"
+                  : colorMode === "light"
+                  ? "custom.theme.light.900"
+                  : "custom.theme.light.100"
+              }
             >
               <HStack justify="space-between">
                 <HStack>
@@ -676,53 +686,21 @@ export default function OrderPage() {
                     }}
                   />
                   <Box>
-                    <Text
-                      fontWeight="600"
-                      color={
-                        item.status === "completed"
-                          ? "custom.theme.light.800"
-                          : "custom.theme.light.900"
-                      }
-                    >
-                      {item.order_menu_items.name}
-                    </Text>
-                    <Text
-                      fontSize="sm"
-                      fontWeight="600"
-                      color={
-                        item.status === "completed"
-                          ? "custom.theme.light.800"
-                          : "custom.theme.light.900"
-                      }
-                    >
+                    <Text fontWeight="600">{item.order_menu_items.name}</Text>
+                    <Text fontSize="sm" fontWeight="600">
                       {item.quantity}個 × {item.price}円
                     </Text>
                   </Box>
                 </HStack>
                 <VStack align="flex-end" spacing={0}>
-                  <Text
-                    fontSize="xs"
-                    fontWeight="600"
-                    color={
-                      item.status === "completed"
-                        ? "custom.theme.light.800"
-                        : "custom.theme.light.900"
-                    }
-                  >
+                  <Text fontSize="xs" fontWeight="600">
                     {new Date(item.orders.created_at).toLocaleTimeString(
                       "ja-JP",
                       { hour: "2-digit", minute: "2-digit" }
                     )}
                   </Text>
                   <HStack spacing={0}>
-                    <Text
-                      color={
-                        item.status === "completed"
-                          ? "custom.theme.light.800"
-                          : "custom.theme.light.900"
-                      }
-                      fontWeight={900}
-                    >
+                    <Text fontWeight={900}>
                       {item.status === "completed" ? "提供済み" : "準備中"}
                     </Text>
                     {item.completed_at && (
@@ -747,7 +725,16 @@ export default function OrderPage() {
             </Box>
           ))}
         </VStack>
-        <Text fontSize="md" fontWeight="400" align="right">
+        <Text
+          fontSize="md"
+          fontWeight="400"
+          align="right"
+          color={
+            colorMode === "light"
+              ? "custom.theme.light.950"
+              : "custom.theme.light.100"
+          }
+        >
           合計: {formatCurrency(calculateTotalAmount())}
         </Text>
       </Box>
@@ -775,12 +762,12 @@ export default function OrderPage() {
             fontFamily="Yomogi"
             fontWeight="600"
           >
-            <HStack justify="center" align="center" spacing={3}>
+            <HStack justify="center" align="center" spacing={2}>
               <AnimationImage
                 src="/images/illust/obj/oden2.gif"
                 position="static"
                 animation="sway 3s ease-in-out infinite"
-                transformOrigin="top center" // ← ここが吊るしポイント！
+                transformOrigin="top center"
                 height="60px"
                 sealSize="10"
               />
@@ -788,7 +775,7 @@ export default function OrderPage() {
                 src="/images/illust/obj/oden2.gif"
                 position="static"
                 animation="sway 3s ease-in-out infinite"
-                transformOrigin="top center" // ← ここが吊るしポイント！
+                transformOrigin="top center"
                 height="60px"
                 sealSize="0"
               />
@@ -802,7 +789,7 @@ export default function OrderPage() {
                 src="/images/illust/obj/oden2.gif"
                 position="static"
                 animation="sway 3s ease-in-out infinite"
-                transformOrigin="top center" // ← ここが吊るしポイント！
+                transformOrigin="top center"
                 height="60px"
                 sealSize="0"
               />
@@ -826,7 +813,13 @@ export default function OrderPage() {
                   mt={9}
                 >
                   <Box data-roof-id="sakura">
-                    <FilteredImage />
+                    <FilteredImage
+                      customImageUrl={
+                        isHover && hoveredItem?.category === "アルコール"
+                          ? hoveredItem?.imageUrlSub
+                          : undefined
+                      }
+                    />
                   </Box>
                 </Box>
               )}
@@ -839,22 +832,44 @@ export default function OrderPage() {
                   pb={1}
                   ml={0}
                 >
-                  <TabList overflowX="auto" display="flex" alignItems="center">
+                  <TabList
+                    overflowX="auto"
+                    display="flex"
+                    alignItems="center"
+                    position="relative"
+                  >
                     {categories.map((category) => (
                       <Tab
                         p="1"
                         key={category}
                         onClick={() => handleCategoryChange(category)}
-                        bg={
-                          selectedCategory === category
-                            ? "custom.theme.light.400"
-                            : undefined
-                        }
-                        color={
-                          selectedCategory === category ? "white" : undefined
-                        }
+                        position="relative"
+                        _selected={{
+                          _after: {
+                            content: '""',
+                            position: "absolute",
+                            top: "0",
+                            width: "calc(100% - 8px)",
+                            height: "3px",
+                            bg:
+                              colorMode === "light"
+                                ? "custom.theme.light.850"
+                                : "custom.theme.light.400",
+                            zIndex: 0,
+                            transition: "all 0.3s ease-in-out !important",
+                          },
+                        }}
                       >
-                        <Box textAlign="center" lineHeight={1.1}>
+                        <Box
+                          zIndex="2"
+                          textAlign="center"
+                          lineHeight={1.1}
+                          color={
+                            colorMode === "light"
+                              ? "custom.theme.light.850"
+                              : "custom.theme.light.400"
+                          }
+                        >
                           {category}
                           <Box
                             width="100%"
@@ -882,7 +897,8 @@ export default function OrderPage() {
                   {filteredItems.map((item) => (
                     <Tooltip
                       label={
-                        item.imageUrlSub && (
+                        item.imageUrlSub &&
+                        item.category !== "アルコール" && (
                           <>
                             <Box>
                               <Image src={item.imageUrlSub} />
@@ -901,10 +917,18 @@ export default function OrderPage() {
                         p={0}
                         m={0}
                         h="auto"
-                        bg={colorMode === "light" ? "transparent" : "gray.700"}
+                        bg="transparent"
                         _hover={{
                           transform: "scale(1.05)",
                           transition: "transform 0.2s ease",
+                        }}
+                        onMouseEnter={() => {
+                          setIsHover(true);
+                          setHoveredItem(item);
+                        }}
+                        onMouseLeave={() => {
+                          setIsHover(false);
+                          setHoveredItem(null);
                         }}
                         display="flex"
                         flexDirection="column"
@@ -966,7 +990,7 @@ export default function OrderPage() {
                         </Box>
                         <Box
                           bg={searchCategoryColor(item.category)[0]}
-                          h="3px"
+                          h="4px"
                           w="180px"
                         />
                         <HStack
@@ -988,7 +1012,12 @@ export default function OrderPage() {
                         </HStack>
 
                         <Text fontSize="sm">{item.price}円</Text>
-                        <Text fontSize="xs" color="gray.500">
+                        <Text
+                          fontSize="xs"
+                          color={
+                            colorMode === "light" ? "gray.500" : "gray.400"
+                          }
+                        >
                           提供目安: {item.estimated_time}分
                         </Text>
                       </Button>
@@ -1015,7 +1044,11 @@ export default function OrderPage() {
                     display="flex"
                     justifyContent="center"
                     border="1px solid"
-                    borderColor="custom.theme.light.600"
+                    borderColor={
+                      colorMode === "light"
+                        ? "custom.theme.light.600"
+                        : "custom.theme.dark.600"
+                    }
                     maxW={svgSize.width}
                     maxH={svgSize.height}
                   >

@@ -10,8 +10,11 @@ const filters = [
   "sepia(0.4)",
 ];
 
-interface FilteredImageProps {}
-const FilteredImage: React.FC<FilteredImageProps> = () => {
+interface FilteredImageProps {
+  customImageUrl?: string;
+}
+
+const FilteredImage: React.FC<FilteredImageProps> = ({ customImageUrl }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const [images, setImages] = useState<string[]>([
     "/images/poster/poster001.webp",
@@ -26,7 +29,6 @@ const FilteredImage: React.FC<FilteredImageProps> = () => {
     "/images/poster/poster010.webp",
     "/images/poster/poster011.webp",
     "/images/poster/poster012.webp",
-    "/images/poster/poster013.webp",
   ]);
 
   useEffect(() => {
@@ -52,7 +54,7 @@ const FilteredImage: React.FC<FilteredImageProps> = () => {
 
   return (
     <Image
-      src={images[imageIndex]}
+      src={customImageUrl || images[imageIndex]}
       filter={filters[filterIndex]}
       transition="filter 10s ease-in-out" // フィルター変更時のトランジション
       width="auto"
