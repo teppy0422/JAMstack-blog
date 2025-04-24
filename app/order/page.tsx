@@ -30,7 +30,7 @@ import Content from "../../components/content";
 import { AnimationImage } from "../../components/CustomImage";
 import FilteredImage from "../../components/PosterImage";
 import HachisukaAnimation from "../../components/season/HachisukaAnimation";
-import CustomSwitchButton from "../../components/custom/CustomSwitchButton";
+import { CustomSwitchButton } from "../../components/custom/CustomSwitchButton";
 
 import "@fontsource/yomogi";
 import * as d3 from "d3";

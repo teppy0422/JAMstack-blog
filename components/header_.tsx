@@ -67,6 +67,7 @@ import getMessage from "../components/getMessage";
 import Sidebar from "../components/sidebar";
 import { CustomAvatar } from "../components/CustomAvatar";
 import { CustomModalCloseButton } from "./custom/CustomModalCloseButton";
+import { CustomSwitchColorModeButton } from "./custom/CustomSwitchButton";
 
 import { useUserContext } from "../context/useUserContext";
 
@@ -99,7 +100,6 @@ export default function Header() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [weatherIcon, setWeatherIcon] = useState(<FaSun />);
-
   useEffect(() => {
     const fetchWeather = async () => {
       const icon = await getWeatherIcon();
@@ -386,7 +386,7 @@ export default function Header() {
                 </Modal>
               </Center>
               <Center>
-                <IconButton
+                {/* <IconButton
                   className={`${styles.modeChange} ${styles.snowTarget}`}
                   style={{
                     transform: "translateX(0rem)",
@@ -408,7 +408,8 @@ export default function Header() {
                       }, 800);
                     }
                   }}
-                />
+                /> */}
+                <CustomSwitchColorModeButton />
               </Center>
               <Center w="54px">
                 <Box

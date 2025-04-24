@@ -3800,7 +3800,7 @@ function ThreadContent(): JSX.Element {
                     })
                 )}
               </Stack>
-              <Box mb="20vh" />
+              <Box mb="60vh" />
             </Content>
             <StatusDisplay />
           </div>
