@@ -15,11 +15,10 @@ const CustomSwitchButton = ({ onClick, isRight }) => {
       >
         <Box
           position="absolute"
-          top="2px"
-          mx="2px"
+          m="2px"
           bg="custom.theme.light.400"
           border="1px solid"
-          borderColor="custom.theme.light.800"
+          borderColor="custom.theme.light.900"
           h="1rem"
           w="1rem"
           borderRadius="full"

@@ -223,6 +223,27 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-04-24T12:54:00+0900"
+              humanHour="0.5H"
+              description1={getMessage({
+                ja: "CAV一覧のWidth,Heightがx,yになっている",
+                us: "Width,Height in CAV list is x,y",
+                cn: "CAV 列表中的宽度和高度分别为 x 和 y。",
+                language,
+              })}
+              description2={getMessage({
+                ja: "Width,Hiehgtに修正。小数点以下を非表示",
+                us: "Corrected to Width,Hiehgt. Hide decimal point.",
+                cn: "更正为 Width,Hiehgt。隐藏小数点。",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Sjp/Sjp3.101.17_.zip"
+              inCharge="高知,王さん"
+              isLatest={true}
+              userName={currentUserName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-02-19T00:56:00+0900"
               humanHour="3.0H"
               description1={getMessage({
@@ -240,7 +261,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Sjp/Sjp3.101.16_.zip"
               inCharge="徳島,山田さん"
-              isLatest={true}
+              isLatest={false}
               userName={currentUserName ?? ""}
             />
             <CustomLinkBox

@@ -182,7 +182,7 @@ export default function OrderPage() {
     sm: { width: 600, height: 400 }, // スマートフォン用
     md: { width: 600, height: 500 }, // 中くらいの画面用
     lg: { width: 600, height: 600 }, // 大きい画面用
-    xl: { width: 1100, height: 1000 }, // 特大画面用
+    xl: { width: 1100, height: 700 }, // 特大画面用
   }) || { width: 300, height: 500 }; // デフォルト値を設定
 
   useEffect(() => {
@@ -191,12 +191,6 @@ export default function OrderPage() {
   useEffect(() => {
     handleReposition();
   }, [menuItems]);
-
-  useEffect(() => {
-    if (svgRef.current) {
-      drawWordCloud(wordCloudData, menuItems);
-    }
-  }, [wordCloudData, menuItems]);
 
   // 初期データの取得
   const fetchOrderHistory = async () => {
@@ -486,6 +480,12 @@ export default function OrderPage() {
             ...item,
             imageUrl: imageCache[item.imageUrl] || item.imageUrl, // キャッシュから取得
           }));
+
+  useEffect(() => {
+    if (svgRef.current) {
+      drawWordCloud(wordCloudData, menuItems);
+    }
+  }, [wordCloudData, menuItems]);
 
   // wordCloudDataを更新
   const handleReposition = useCallback(() => {
