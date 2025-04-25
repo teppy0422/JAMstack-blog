@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Box,
   Button,
@@ -47,6 +47,7 @@ interface MenuItem {
   recommendation_level: number;
   estimated_time: number;
   recipe: string;
+  isSoldOut: boolean;
 }
 
 interface Order {
@@ -80,6 +81,21 @@ export default function AdminPage() {
     onOpen: onIngredientsModalOpen,
     onClose: onIngredientsModalClose,
   } = useDisclosure();
+  const {
+    isOpen: isRecipeModalOpen,
+    onOpen: onRecipeModalOpen,
+    onClose: onRecipeModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isDeleteConfirmModalOpen,
+    onOpen: onDeleteConfirmModalOpen,
+    onClose: onDeleteConfirmModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCompleteConfirmModalOpen,
+    onOpen: onCompleteConfirmModalOpen,
+    onClose: onCompleteConfirmModalClose,
+  } = useDisclosure();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [newItem, setNewItem] = useState<Partial<MenuItem>>({
     name: "",
@@ -92,6 +108,7 @@ export default function AdminPage() {
     recommendation_level: 0,
     estimated_time: 0,
     recipe: "",
+    isSoldOut: false,
   });
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [previewImage, setPreviewImage] = useState<string>("");
@@ -108,6 +125,13 @@ export default function AdminPage() {
   } = useUserContext();
   const userData = currentUserId ? getUserById(currentUserId) : null;
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedRecipe, setSelectedRecipe] = useState<string>("");
+  const [itemToDelete, setItemToDelete] = useState<{ id: number } | null>(null);
+  const [itemToComplete, setItemToComplete] = useState<{
+    id: number;
+    menuItemId: number;
+  } | null>(null);
 
   const categories = [
     "おつまみ",
@@ -119,6 +143,17 @@ export default function AdminPage() {
     "アルコール",
     "ドリンク",
   ];
+
+  const adjustTextareaHeight = useCallback((element: HTMLTextAreaElement) => {
+    element.style.height = "auto";
+    element.style.height = `${element.scrollHeight}px`;
+  }, []);
+
+  useEffect(() => {
+    if (isOpen && textareaRef.current) {
+      adjustTextareaHeight(textareaRef.current);
+    }
+  }, [isOpen, newItem.recipe, adjustTextareaHeight]);
 
   useEffect(() => {
     fetchMenuItems();
@@ -382,6 +417,14 @@ export default function AdminPage() {
     }
   };
 
+  const handleRecipeChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setNewItem((prev) => ({ ...prev, recipe: e.target.value }));
+      adjustTextareaHeight(e.target);
+    },
+    [adjustTextareaHeight]
+  );
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -528,6 +571,7 @@ export default function AdminPage() {
         recommendation_level: 0,
         estimated_time: 0,
         recipe: "",
+        isSoldOut: false,
       });
       setPreviewImage("");
       setPreviewImageSub("");
@@ -562,11 +606,18 @@ export default function AdminPage() {
       recommendation_level: item.recommendation_level,
       estimated_time: item.estimated_time,
       recipe: item.recipe,
+      isSoldOut: item.isSoldOut,
     });
     setPreviewImage(item.imageUrl);
     setPreviewImageSub(item.imageUrlSub);
     setIngredientInputs([...item.ingredients, ""]);
     onOpen();
+    // モーダルを開いた後にテキストエリアの高さを調整
+    setTimeout(() => {
+      if (textareaRef.current) {
+        adjustTextareaHeight(textareaRef.current);
+      }
+    }, 0);
   };
 
   const handleDelete = async (id: number) => {
@@ -674,6 +725,30 @@ export default function AdminPage() {
     );
   };
 
+  const handleSoldOutChange = async (id: number, isSoldOut: boolean) => {
+    const { error } = await supabase
+      .from("order_menu_items")
+      .update({ isSoldOut: isSoldOut })
+      .eq("id", id);
+
+    if (error) {
+      toast({
+        title: "エラー",
+        description: "売り切れ状態の更新に失敗しました",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setMenuItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, isSoldOut: isSoldOut } : item
+      )
+    );
+  };
+
   const handleDeleteOrderItem = async (orderId: number, itemId: number) => {
     try {
       // 注文アイテムを削除
@@ -737,6 +812,42 @@ export default function AdminPage() {
     }
   };
 
+  const handleDeleteConfirm = async () => {
+    if (!itemToDelete) return;
+    await handleDelete(itemToDelete.id);
+    onDeleteConfirmModalClose();
+  };
+
+  const handleCompleteConfirm = async (isSoldOut: boolean = false) => {
+    if (!itemToComplete) return;
+
+    try {
+      // 注文アイテムを完了にする
+      await handleOrderStatusChange(itemToComplete.id, "completed");
+
+      // 売り切れにする場合
+      if (isSoldOut) {
+        const { error } = await supabase
+          .from("order_menu_items")
+          .update({ isSoldOut: true })
+          .eq("id", itemToComplete.menuItemId);
+
+        if (error) throw error;
+      }
+
+      onCompleteConfirmModalClose();
+    } catch (error) {
+      console.error("Error completing order:", error);
+      toast({
+        title: "エラー",
+        description: "処理中にエラーが発生しました",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <Content isCustomHeader={true}>
       <Box p={{ base: "2", sm: "4" }}>
@@ -758,17 +869,17 @@ export default function AdminPage() {
           <Heading size="md" mb={4}>
             注文一覧
           </Heading>
-          <VStack spacing={4} align="stretch" mb={8}>
+          <VStack spacing={1} align="stretch" mb={8}>
             {orders.flatMap((order) => {
               const orderUserData = getUserById(order.user_id);
               return order.order_items.map((item) => (
                 <Box
                   key={`${order.id}-${item.id}`}
-                  p={2}
+                  p={1}
                   bg={colorMode === "light" ? "white" : "gray.700"}
                   borderRadius="md"
                 >
-                  <VStack align="stretch" spacing={2}>
+                  <VStack align="stretch" spacing={1}>
                     <HStack spacing={2} justify="space-between">
                       <Image
                         src={item.menu_item.image_url}
@@ -781,10 +892,7 @@ export default function AdminPage() {
                       />
                       <Box textAlign="left" width="100%">
                         <Text fontWeight="bold">{item.menu_item.name}</Text>
-                        <Text>
-                          {item.quantity}個{/* × {item.price}円 */}
-                        </Text>
-                        {/* <Text>小計: {item.quantity * item.price}円</Text> */}
+                        <Text>{item.quantity}個</Text>
                       </Box>
                       <VStack align="flex-end" gap="1">
                         <Button
@@ -792,9 +900,13 @@ export default function AdminPage() {
                           colorScheme={
                             item.status === "pending" ? "green" : "gray"
                           }
-                          onClick={() =>
-                            handleOrderStatusChange(item.id, "completed")
-                          }
+                          onClick={() => {
+                            setItemToComplete({
+                              id: item.id,
+                              menuItemId: item.menu_item_id,
+                            });
+                            onCompleteConfirmModalOpen();
+                          }}
                           isDisabled={item.status === "completed"}
                         >
                           完了
@@ -802,9 +914,10 @@ export default function AdminPage() {
                         <Button
                           size="sm"
                           colorScheme="red"
-                          onClick={() =>
-                            handleDeleteOrderItem(order.id, item.id)
-                          }
+                          onClick={() => {
+                            setItemToDelete({ id: item.menu_item_id });
+                            onDeleteConfirmModalOpen();
+                          }}
                         >
                           削除
                         </Button>
@@ -826,6 +939,26 @@ export default function AdminPage() {
                         src={orderUserData?.picture_url || undefined}
                         size="xs"
                       />
+                      <Button
+                        size="xs"
+                        colorScheme="blue"
+                        variant="outline"
+                        onClick={() => {
+                          const menuItem = menuItems.find(
+                            (m) => m.id === item.menu_item_id
+                          );
+                          if (menuItem) {
+                            setSelectedRecipe(menuItem.recipe);
+                            onRecipeModalOpen();
+                          }
+                        }}
+                        isDisabled={
+                          !menuItems.find((m) => m.id === item.menu_item_id)
+                            ?.recipe
+                        }
+                      >
+                        レシピ
+                      </Button>
                     </HStack>
                   </VStack>
                 </Box>
@@ -872,6 +1005,15 @@ export default function AdminPage() {
                     >
                       表示
                     </Checkbox>
+                    <Checkbox
+                      isChecked={item.isSoldOut}
+                      onChange={(e) =>
+                        handleSoldOutChange(item.id, e.target.checked)
+                      }
+                      colorScheme="red"
+                    >
+                      売切
+                    </Checkbox>
                     <Button
                       size="sm"
                       colorScheme="blue"
@@ -882,7 +1024,10 @@ export default function AdminPage() {
                     <Button
                       size="sm"
                       colorScheme="red"
-                      onClick={() => handleDelete(item.id)}
+                      onClick={() => {
+                        setItemToDelete({ id: item.id });
+                        onDeleteConfirmModalOpen();
+                      }}
                     >
                       削除
                     </Button>
@@ -1034,14 +1179,24 @@ export default function AdminPage() {
                     </FormControl>
 
                     <FormControl>
-                      <FormLabel>レシピ</FormLabel>
+                      <FormLabel>作り方</FormLabel>
                       <Textarea
+                        ref={textareaRef}
                         value={newItem.recipe}
-                        onChange={(e) =>
-                          setNewItem({ ...newItem, recipe: e.target.value })
-                        }
+                        onChange={handleRecipeChange}
                         placeholder="レシピを入力"
                         mb={2}
+                        resize="none"
+                        _focus={{
+                          borderColor: "custom.theme.light.850",
+                          borderWidth: "1px",
+                          boxShadow: "none",
+                        }}
+                        sx={{
+                          height: "auto",
+                          maxHeight: "none",
+                          overflow: "hidden",
+                        }}
                       />
                     </FormControl>
 
@@ -1124,6 +1279,83 @@ export default function AdminPage() {
               <ModalFooter>
                 <Button colorScheme="blue" onClick={onIngredientsModalClose}>
                   閉じる
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
+          <Modal
+            isOpen={isRecipeModalOpen}
+            onClose={onRecipeModalClose}
+            size="md"
+          >
+            <ModalOverlay />
+            <ModalContent>
+              {/* <ModalHeader>作り方</ModalHeader> */}
+              <ModalCloseButton />
+              <ModalBody>
+                <Text whiteSpace="pre-wrap">{selectedRecipe}</Text>
+              </ModalBody>
+              <ModalFooter>
+                <Button colorScheme="blue" onClick={onRecipeModalClose}>
+                  閉じる
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
+          <Modal
+            isOpen={isDeleteConfirmModalOpen}
+            onClose={onDeleteConfirmModalClose}
+            size="sm"
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>削除の確認</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Text>このメニューアイテムを削除してもよろしいですか？</Text>
+              </ModalBody>
+              <ModalFooter>
+                <Button colorScheme="red" mr={3} onClick={handleDeleteConfirm}>
+                  削除
+                </Button>
+                <Button variant="ghost" onClick={onDeleteConfirmModalClose}>
+                  キャンセル
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
+          <Modal
+            isOpen={isCompleteConfirmModalOpen}
+            onClose={onCompleteConfirmModalClose}
+            size="sm"
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>完了の確認</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Text>この注文を完了しますか？</Text>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  colorScheme="green"
+                  mr={3}
+                  onClick={() => handleCompleteConfirm(false)}
+                >
+                  完了にする
+                </Button>
+                <Button
+                  colorScheme="orange"
+                  mr={3}
+                  onClick={() => handleCompleteConfirm(true)}
+                >
+                  売り切れにして完了
+                </Button>
+                <Button variant="ghost" onClick={onCompleteConfirmModalClose}>
+                  キャンセル
                 </Button>
               </ModalFooter>
             </ModalContent>

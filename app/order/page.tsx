@@ -50,6 +50,7 @@ interface MenuItem {
   estimated_time: number;
   nameColor: string;
   recommendation_level: number;
+  isSoldOut: boolean;
 }
 
 const CATEGORY_CONFIG = {
@@ -189,6 +190,29 @@ export default function OrderPage() {
   useEffect(() => {
     fetchMenuItems();
   }, []);
+
+  // メニューアイテムのリアルタイム更新を設定
+  useEffect(() => {
+    const subscription = supabase
+      .channel("menu_items")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "order_menu_items",
+        },
+        async (payload) => {
+          console.log("メニューアイテムの変更:", payload);
+          await fetchMenuItems();
+        }
+      )
+      .subscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   useEffect(() => {
     handleReposition();
   }, [menuItems]);
@@ -257,6 +281,17 @@ export default function OrderPage() {
 
   // カートにアイテムを追加したときの処理
   const addToCart = useCallback((item: MenuItem) => {
+    if (item.isSoldOut) {
+      toast({
+        title: "エラー",
+        description: "この商品は売り切れです",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     console.log("カートに追加するアイテム:", item);
     setCart((prevCart) => {
       const existingItem = prevCart.find(
@@ -525,6 +560,10 @@ export default function OrderPage() {
         .size([svgSize.width, svgSize.height])
         .words(
           words
+            .filter((d) => {
+              const menuItem = menuItems.find((item) => item.name === d.text);
+              return !menuItem?.isSoldOut;
+            })
             .sort((a, b) => {
               const orderA = CATEGORY_CONFIG[a.category]?.order || 0;
               const orderB = CATEGORY_CONFIG[b.category]?.order || 0;
@@ -919,9 +958,10 @@ export default function OrderPage() {
                         h="auto"
                         bg="transparent"
                         _hover={{
-                          transform: "scale(1.05)",
                           transition: "transform 0.2s ease",
+                          filter: "none",
                         }}
+                        cursor={item.isSoldOut ? "default" : "pointer"}
                         onMouseEnter={() => {
                           setIsHover(true);
                           setHoveredItem(item);
@@ -940,6 +980,9 @@ export default function OrderPage() {
                           overflow="hidden"
                           height="120px"
                           width="180px"
+                          filter={
+                            item.isSoldOut ? "sepia(1) contrast(0.9)" : "none"
+                          }
                         >
                           <AnimationImage
                             src={item.imageUrl}
@@ -955,7 +998,7 @@ export default function OrderPage() {
                               left="0"
                               transform="rotate(-40deg) translate(-46%, 100%)"
                               transformOrigin="top left"
-                              bg="red.500"
+                              bg={searchCategoryColor(item.category)[0]}
                               filter="drop-shadow(0 1px 10px rgba(0, 0, 0, 0.1))"
                               color="white"
                               px={5}
@@ -985,6 +1028,30 @@ export default function OrderPage() {
                                   <Icon as={FaStar} />
                                 )}
                               </HStack>
+                            </Box>
+                          )}
+                          {item.isSoldOut && (
+                            <Box
+                              position="absolute"
+                              top="50%"
+                              left="50%"
+                              transform="translate(-50%, -50%)"
+                              bg="rgba(0, 0, 0, 0.5)"
+                              p={2}
+                              width="100%"
+                              height="100%"
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="center"
+                            >
+                              <Text
+                                fontSize="2xl"
+                                color="white"
+                                fontWeight="800"
+                                textShadow="2px 2px 4px rgba(0, 0, 0, 0.5)"
+                              >
+                                SOLD OUT
+                              </Text>
                             </Box>
                           )}
                         </Box>
@@ -1096,8 +1163,17 @@ export default function OrderPage() {
                               <Text fontSize="sm" fontWeight={600} color="gray">
                                 提供目安: {relatedItem.estimated_time}分
                               </Text>
-
                               <Text fontSize="sm">{tooltipData.value}</Text>
+                              {relatedItem.isSoldOut && (
+                                <Text
+                                  fontSize="sm"
+                                  color="red.500"
+                                  fontWeight="bold"
+                                  mt={1}
+                                >
+                                  売り切れ
+                                </Text>
+                              )}
                             </Flex>
                           );
                         }
