@@ -223,6 +223,27 @@ export default function About() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <CustomLinkBox
+              dateTime="2025-04-25T13:44:00+0900"
+              humanHour="1.0H"
+              description1={getMessage({
+                ja: "82111_Aで検査履歴が作成できない?端末114がネック",
+                us: "Unable to create inspection history in 82111_A? Terminal 114 is the bottleneck",
+                cn: "无法使用 82111_A 创建检查历史记录？114 号航站楼是一个瓶颈。",
+                language,
+              })}
+              description2={getMessage({
+                ja: "114でのstopを削除。まとめて作成する場合に進捗を必ず存在する端末を返すように修正",
+                us: "Removed stop at 114. Fixed progress to always return the existing terminal when creating a batch.",
+                cn: "删除了 114 处的停止。已修正，以便在创建批次时，进度总是返回存在的终端",
+                language,
+              })}
+              descriptionIN=""
+              linkHref="/files/download/html/Sjp/Sjp3.101.18_.zip"
+              inCharge="高知,王さん"
+              isLatest={true}
+              userName={currentUserName ?? ""}
+            />
+            <CustomLinkBox
               dateTime="2025-04-24T12:54:00+0900"
               humanHour="0.5H"
               description1={getMessage({
@@ -240,7 +261,7 @@ export default function About() {
               descriptionIN=""
               linkHref="/files/download/html/Sjp/Sjp3.101.17_.zip"
               inCharge="高知,王さん"
-              isLatest={true}
+              isLatest={false}
               userName={currentUserName ?? ""}
             />
             <CustomLinkBox

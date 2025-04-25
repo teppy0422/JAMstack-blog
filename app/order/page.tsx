@@ -685,7 +685,7 @@ export default function OrderPage() {
                       transition: "filter 0.2s ease-in-out",
                     }}
                   />
-                  <Box>
+                  <Box textAlign="left" width="100%" pl={2}>
                     <Text fontWeight="600">{item.order_menu_items.name}</Text>
                     <Text fontSize="sm" fontWeight="600">
                       {item.quantity}個 × {item.price}円

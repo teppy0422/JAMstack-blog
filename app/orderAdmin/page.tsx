@@ -46,6 +46,7 @@ interface MenuItem {
   is_visible: boolean;
   recommendation_level: number;
   estimated_time: number;
+  recipe: string;
 }
 
 interface Order {
@@ -90,6 +91,7 @@ export default function AdminPage() {
     is_visible: true,
     recommendation_level: 0,
     estimated_time: 0,
+    recipe: "",
   });
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [previewImage, setPreviewImage] = useState<string>("");
@@ -415,6 +417,7 @@ export default function AdminPage() {
           is_visible: newItem.is_visible,
           recommendation_level: newItem.recommendation_level,
           estimated_time: newItem.estimated_time,
+          recipe: newItem.recipe,
         };
 
         // 画像が変更された場合のみ更新
@@ -487,6 +490,7 @@ export default function AdminPage() {
             is_visible: newItem.is_visible,
             recommendation_level: newItem.recommendation_level,
             estimated_time: newItem.estimated_time,
+            recipe: newItem.recipe,
           },
         ]);
 
@@ -523,6 +527,7 @@ export default function AdminPage() {
         is_visible: true,
         recommendation_level: 0,
         estimated_time: 0,
+        recipe: "",
       });
       setPreviewImage("");
       setPreviewImageSub("");
@@ -556,6 +561,7 @@ export default function AdminPage() {
       is_visible: item.is_visible,
       recommendation_level: item.recommendation_level,
       estimated_time: item.estimated_time,
+      recipe: item.recipe,
     });
     setPreviewImage(item.imageUrl);
     setPreviewImageSub(item.imageUrlSub);
@@ -733,7 +739,7 @@ export default function AdminPage() {
 
   return (
     <Content isCustomHeader={true}>
-      <Box p={4}>
+      <Box p={{ base: "2", sm: "4" }}>
         <audio ref={audioRef} src="/sound/missed.mp3" preload="auto" />
         <Heading mb={6} textAlign="center">
           管理者ページ
@@ -758,61 +764,68 @@ export default function AdminPage() {
               return order.order_items.map((item) => (
                 <Box
                   key={`${order.id}-${item.id}`}
-                  p={4}
+                  p={2}
                   bg={colorMode === "light" ? "white" : "gray.700"}
                   borderRadius="md"
                 >
                   <VStack align="stretch" spacing={2}>
-                    <HStack justify="space-between">
-                      <Flex align="center" gap={2}>
-                        <Text fontWeight="bold">注文ID: {order.id}</Text>
-                        <Text fontWeight="bold">アイテムID: {item.id}</Text>
-                        <Avatar
-                          src={orderUserData?.picture_url || undefined}
-                          size="sm"
-                        />
-                      </Flex>
-                      <Text>
-                        注文日時: {new Date(order.created_at).toLocaleString()}
-                      </Text>
-                    </HStack>
-                    <HStack spacing={4}>
+                    <HStack spacing={2} justify="space-between">
                       <Image
                         src={item.menu_item.image_url}
                         alt={item.menu_item.name}
                         boxSize="50px"
+                        minW="50px"
                         objectFit="cover"
                         borderRadius="md"
                         fallbackSrc="https://placehold.jp/150x150.png"
                       />
-                      <Box>
+                      <Box textAlign="left" width="100%">
                         <Text fontWeight="bold">{item.menu_item.name}</Text>
                         <Text>
-                          {item.quantity}個 × {item.price}円
+                          {item.quantity}個{/* × {item.price}円 */}
                         </Text>
-                        <Text>小計: {item.quantity * item.price}円</Text>
+                        {/* <Text>小計: {item.quantity * item.price}円</Text> */}
                       </Box>
+                      <VStack align="flex-end" gap="1">
+                        <Button
+                          size="sm"
+                          colorScheme={
+                            item.status === "pending" ? "green" : "gray"
+                          }
+                          onClick={() =>
+                            handleOrderStatusChange(item.id, "completed")
+                          }
+                          isDisabled={item.status === "completed"}
+                        >
+                          完了
+                        </Button>
+                        <Button
+                          size="sm"
+                          colorScheme="red"
+                          onClick={() =>
+                            handleDeleteOrderItem(order.id, item.id)
+                          }
+                        >
+                          削除
+                        </Button>
+                      </VStack>
                     </HStack>
-                    <HStack justify="flex-end" spacing={2}>
-                      <Button
-                        size="sm"
-                        colorScheme={
-                          item.status === "pending" ? "green" : "gray"
-                        }
-                        onClick={() =>
-                          handleOrderStatusChange(item.id, "completed")
-                        }
-                        isDisabled={item.status === "completed"}
-                      >
-                        完了
-                      </Button>
-                      <Button
-                        size="sm"
-                        colorScheme="red"
-                        onClick={() => handleDeleteOrderItem(order.id, item.id)}
-                      >
-                        削除
-                      </Button>
+                    <HStack>
+                      {/* <Text fontWeight="bold">注文ID: {order.id}</Text>
+                        <Text fontWeight="bold">アイテムID: {item.id}</Text> */}
+                      <Text>
+                        {new Date(order.created_at).toLocaleString("ja-JP", {
+                          // month: "numeric",
+                          // day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          // second: "2-digit",
+                        })}
+                      </Text>
+                      <Avatar
+                        src={orderUserData?.picture_url || undefined}
+                        size="xs"
+                      />
                     </HStack>
                   </VStack>
                 </Box>
@@ -825,55 +838,57 @@ export default function AdminPage() {
           </Heading>
           <VStack spacing={4} align="stretch">
             {menuItems.map((item) => (
-              <HStack
-                key={item.id}
-                p={4}
+              <VStack
+                align="stretch"
+                spacing={1}
                 bg={colorMode === "light" ? "white" : "gray.700"}
+                p={2}
                 borderRadius="md"
-                justify="space-between"
               >
-                <HStack spacing={4} flex={1}>
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.name}
-                    boxSize="100px"
-                    objectFit="cover"
-                    mb={2}
-                    fallbackSrc="https://placehold.jp/150x150.png"
-                  />
-                  <Box>
-                    <Text fontWeight="bold">{item.name}</Text>
-                    <Text>価格: {item.price}円</Text>
-                    <Text>カテゴリ: {item.category}</Text>
-                    <Text>材料: {item.ingredients.join(", ")}</Text>
-                    <Text>おすすめ度: {item.recommendation_level}</Text>
-                  </Box>
+                <Text fontWeight="600">{item.name}</Text>
+                <HStack key={item.id} borderRadius="md" justify="space-between">
+                  <HStack spacing={4} flex={1}>
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.name}
+                      boxSize="100px"
+                      objectFit="cover"
+                      mb={2}
+                      fallbackSrc="https://placehold.jp/150x150.png"
+                    />
+                    <Box>
+                      <Text>価格: {item.price}円</Text>
+                      <Text>カテゴリ: {item.category}</Text>
+                      <Text>材料: {item.ingredients.join(", ")}</Text>
+                      <Text>おすすめ度: {item.recommendation_level}</Text>
+                    </Box>
+                  </HStack>
+                  <VStack align="flex-end">
+                    <Checkbox
+                      isChecked={item.is_visible}
+                      onChange={(e) =>
+                        handleVisibilityChange(item.id, e.target.checked)
+                      }
+                    >
+                      表示
+                    </Checkbox>
+                    <Button
+                      size="sm"
+                      colorScheme="blue"
+                      onClick={() => handleEdit(item)}
+                    >
+                      編集
+                    </Button>
+                    <Button
+                      size="sm"
+                      colorScheme="red"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      削除
+                    </Button>
+                  </VStack>
                 </HStack>
-                <VStack align="flex-end">
-                  <Checkbox
-                    isChecked={item.is_visible}
-                    onChange={(e) =>
-                      handleVisibilityChange(item.id, e.target.checked)
-                    }
-                  >
-                    表示
-                  </Checkbox>
-                  <Button
-                    size="sm"
-                    colorScheme="blue"
-                    onClick={() => handleEdit(item)}
-                  >
-                    編集
-                  </Button>
-                  <Button
-                    size="sm"
-                    colorScheme="red"
-                    onClick={() => handleDelete(item.id)}
-                  >
-                    削除
-                  </Button>
-                </VStack>
-              </HStack>
+              </VStack>
             ))}
           </VStack>
 
@@ -1015,6 +1030,18 @@ export default function AdminPage() {
                           })
                         }
                         required
+                      />
+                    </FormControl>
+
+                    <FormControl>
+                      <FormLabel>レシピ</FormLabel>
+                      <Textarea
+                        value={newItem.recipe}
+                        onChange={(e) =>
+                          setNewItem({ ...newItem, recipe: e.target.value })
+                        }
+                        placeholder="レシピを入力"
+                        mb={2}
                       />
                     </FormControl>
 
