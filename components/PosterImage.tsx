@@ -28,7 +28,6 @@ const FilteredImage: React.FC<FilteredImageProps> = ({ customImageUrl }) => {
     "/images/poster/poster009.webp",
     "/images/poster/poster010.webp",
     "/images/poster/poster011.webp",
-    "/images/poster/poster012.webp",
   ]);
 
   useEffect(() => {

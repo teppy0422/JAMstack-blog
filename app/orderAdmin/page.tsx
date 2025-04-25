@@ -42,7 +42,7 @@ interface MenuItem {
   category: string;
   imageUrl: string;
   imageUrlSub: string;
-  ingredients: string[];
+  ingredients: { name: string; location: string }[];
   is_visible: boolean;
   recommendation_level: number;
   estimated_time: number;
@@ -96,6 +96,16 @@ export default function AdminPage() {
     onOpen: onCompleteConfirmModalOpen,
     onClose: onCompleteConfirmModalClose,
   } = useDisclosure();
+  const {
+    isOpen: isLocationModalOpen,
+    onOpen: onLocationModalOpen,
+    onClose: onLocationModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isApplyConfirmModalOpen,
+    onOpen: onApplyConfirmModalOpen,
+    onClose: onApplyConfirmModalClose,
+  } = useDisclosure();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [newItem, setNewItem] = useState<Partial<MenuItem>>({
     name: "",
@@ -114,6 +124,9 @@ export default function AdminPage() {
   const [previewImage, setPreviewImage] = useState<string>("");
   const [previewImageSub, setPreviewImageSub] = useState<string>("");
   const [ingredientInputs, setIngredientInputs] = useState<string[]>([""]);
+  const [ingredientLocations, setIngredientLocations] = useState<{
+    [key: string]: string;
+  }>({});
   const [orders, setOrders] = useState<Order[]>([]);
   const {
     currentUserId,
@@ -132,6 +145,10 @@ export default function AdminPage() {
     id: number;
     menuItemId: number;
   } | null>(null);
+  const [selectedIngredient, setSelectedIngredient] = useState<string>("");
+  const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
+    {}
+  );
 
   const categories = [
     "おつまみ",
@@ -143,6 +160,46 @@ export default function AdminPage() {
     "アルコール",
     "ドリンク",
   ];
+
+  const locations = [
+    "酒類",
+    "パン類",
+    "乳製品",
+    "精肉",
+    "調味料",
+    "鮮魚",
+    "青果",
+    "お米",
+    "KALDI",
+    "リカオー",
+    "その他",
+  ];
+
+  const locationColors = {
+    酒類: "purple.100",
+    パン類: "orange.100",
+    乳製品: "blue.100",
+    精肉: "red.100",
+    調味料: "orange.100",
+    鮮魚: "cyan.100",
+    青果: "green.100",
+    お米: "yellow.100",
+    KALDI: "pink.100",
+    リカオー: "gray.300",
+    その他: "gray.100",
+  };
+
+  const locationTextColors = {
+    酒類: "purple.800",
+    乳製品: "blue.800",
+    精肉: "red.800",
+    調味料: "orange.800",
+    鮮魚: "cyan.800",
+    青果: "green.800",
+    お米: "yellow.800",
+    KALDI: "pink.800",
+    その他: "gray.800",
+  };
 
   const adjustTextareaHeight = useCallback((element: HTMLTextAreaElement) => {
     element.style.height = "auto";
@@ -181,12 +238,30 @@ export default function AdminPage() {
 
     // 画像URLを修正
     const itemsWithCorrectImageUrl =
-      data?.map((item) => ({
-        ...item,
-        imageUrl: item.image_url, // image_urlからimageUrlに変換
-        imageUrlSub: item.image_url_sub, // image_url_subからimageUrlSubに変換
-      })) || [];
+      data?.map((item) => {
+        // 材料データの処理
+        let parsedIngredients = [];
+        try {
+          parsedIngredients = item.ingredients.map((ing: string) => {
+            if (typeof ing === "string") {
+              return JSON.parse(ing);
+            }
+            return ing;
+          });
+        } catch (e) {
+          console.error("材料データのパースに失敗:", e);
+          parsedIngredients = [];
+        }
 
+        return {
+          ...item,
+          imageUrl: item.image_url,
+          imageUrlSub: item.image_url_sub,
+          ingredients: parsedIngredients,
+        };
+      }) || [];
+
+    console.log("取得したメニューアイテム:", itemsWithCorrectImageUrl);
     setMenuItems(itemsWithCorrectImageUrl);
   };
 
@@ -406,6 +481,14 @@ export default function AdminPage() {
     }
   };
 
+  const handleLocationSelect = (location: string) => {
+    setIngredientLocations((prev) => ({
+      ...prev,
+      [selectedIngredient]: location,
+    }));
+    onLocationModalClose();
+  };
+
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // 空文字列または数値のみを許可
@@ -443,7 +526,10 @@ export default function AdminPage() {
     // 空の材料を除外して保存
     const validIngredients = ingredientInputs
       .filter((ingredient) => ingredient.trim() !== "")
-      .map((ingredient) => ingredient.trim());
+      .map((ingredient) => ({
+        name: ingredient.trim(),
+        location: ingredientLocations[ingredient] || "その他",
+      }));
 
     try {
       if (editingItem) {
@@ -460,7 +546,6 @@ export default function AdminPage() {
           is_visible: newItem.is_visible,
           recommendation_level: newItem.recommendation_level,
           estimated_time: newItem.estimated_time,
-          recipe: newItem.recipe,
         };
 
         // 画像が変更された場合のみ更新
@@ -533,7 +618,6 @@ export default function AdminPage() {
             is_visible: newItem.is_visible,
             recommendation_level: newItem.recommendation_level,
             estimated_time: newItem.estimated_time,
-            recipe: newItem.recipe,
           },
         ]);
 
@@ -610,7 +694,16 @@ export default function AdminPage() {
     });
     setPreviewImage(item.imageUrl);
     setPreviewImageSub(item.imageUrlSub);
-    setIngredientInputs([...item.ingredients, ""]);
+    setIngredientInputs([...item.ingredients.map((ing) => ing.name), ""]);
+    setIngredientLocations(
+      item.ingredients.reduce(
+        (acc, ing) => ({
+          ...acc,
+          [ing.name]: ing.location,
+        }),
+        {}
+      )
+    );
     onOpen();
     // モーダルを開いた後にテキストエリアの高さを調整
     setTimeout(() => {
@@ -848,6 +941,87 @@ export default function AdminPage() {
     }
   };
 
+  // LocalStorageからチェック状態を読み込む
+  useEffect(() => {
+    const savedItems = localStorage.getItem("shoppingList");
+    if (savedItems) {
+      setCheckedItems(JSON.parse(savedItems));
+    }
+  }, []);
+
+  // チェック状態をLocalStorageに保存
+  const saveToLocalStorage = (items: { [key: string]: boolean }) => {
+    localStorage.setItem("shoppingList", JSON.stringify(items));
+  };
+
+  // チェック状態を切り替える
+  const toggleItem = (ingredient: string) => {
+    const newCheckedItems = {
+      ...checkedItems,
+      [ingredient]: !checkedItems[ingredient],
+    };
+    setCheckedItems(newCheckedItems);
+    saveToLocalStorage(newCheckedItems);
+  };
+
+  // チェック状態をリセット
+  const resetCheckedItems = () => {
+    setCheckedItems({});
+    localStorage.removeItem("shoppingList");
+  };
+
+  // 選択した材料で作れるメニューアイテムを表示/非表示にする
+  const applySelectedIngredients = async () => {
+    onApplyConfirmModalClose();
+    // チェックされている材料を取得
+    const selectedIngredients = Object.entries(checkedItems)
+      .filter(([_, isChecked]) => isChecked)
+      .map(([ingredient]) => ingredient);
+
+    // 各メニューアイテムに対して
+    for (const item of menuItems) {
+      // 必要な材料を取得
+      const requiredIngredients = item.ingredients.map((ing) => ing.name);
+
+      // 選択した材料で作れるかチェック
+      const canMake = requiredIngredients.every((ing) =>
+        selectedIngredients.includes(ing)
+      );
+
+      // 表示状態を更新
+      const { error } = await supabase
+        .from("order_menu_items")
+        .update({ is_visible: canMake })
+        .eq("id", item.id);
+
+      if (error) {
+        console.error("メニューアイテムの更新に失敗:", error);
+        continue;
+      }
+
+      // 売り切れ状態を解除
+      const { error: soldOutError } = await supabase
+        .from("order_menu_items")
+        .update({ isSoldOut: false })
+        .eq("id", item.id);
+
+      if (soldOutError) {
+        console.error("売り切れ状態の更新に失敗:", soldOutError);
+      }
+    }
+
+    // メニューアイテムを再取得
+    await fetchMenuItems();
+
+    toast({
+      title: "反映完了",
+      description: "選択した材料で作れるメニューを表示しました",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
   return (
     <Content isCustomHeader={true}>
       <Box p={{ base: "2", sm: "4" }}>
@@ -992,7 +1166,12 @@ export default function AdminPage() {
                     <Box>
                       <Text>価格: {item.price}円</Text>
                       <Text>カテゴリ: {item.category}</Text>
-                      <Text>材料: {item.ingredients.join(", ")}</Text>
+                      <Text>
+                        材料:
+                        {item.ingredients
+                          .map((ing) => `${ing.name}(${ing.location})`)
+                          .join(", ")}
+                      </Text>
                       <Text>おすすめ度: {item.recommendation_level}</Text>
                     </Box>
                   </HStack>
@@ -1150,15 +1329,28 @@ export default function AdminPage() {
                       <FormLabel>材料</FormLabel>
                       <VStack spacing={2} align="stretch">
                         {ingredientInputs.map((ingredient, index) => (
-                          <Input
-                            key={index}
-                            value={ingredient}
-                            onChange={(e) =>
-                              handleIngredientChange(index, e.target.value)
-                            }
-                            placeholder="材料を入力"
-                            mb={2}
-                          />
+                          <HStack key={index} spacing={2}>
+                            <Input
+                              value={ingredient}
+                              onChange={(e) =>
+                                handleIngredientChange(index, e.target.value)
+                              }
+                              placeholder="材料を入力"
+                              mb={2}
+                            />
+                            {ingredient && (
+                              <Button
+                                size="sm"
+                                onClick={() => {
+                                  setSelectedIngredient(ingredient);
+                                  onLocationModalOpen();
+                                }}
+                              >
+                                {ingredientLocations[ingredient] ||
+                                  "売り場を選択"}
+                              </Button>
+                            )}
+                          </HStack>
                         ))}
                       </VStack>
                     </FormControl>
@@ -1257,28 +1449,100 @@ export default function AdminPage() {
               <ModalHeader>使用材料一覧</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <VStack align="stretch" spacing={2}>
-                  {Array.from(
-                    new Set(
-                      menuItems
-                        .filter((item) => item.is_visible)
-                        .flatMap((item) => item.ingredients)
-                    )
-                  ).map((ingredient) => (
-                    <Text
-                      key={ingredient}
-                      p={2}
-                      bg={colorMode === "light" ? "gray.50" : "gray.700"}
-                      borderRadius="md"
-                    >
-                      {ingredient}
-                    </Text>
-                  ))}
+                <VStack align="stretch" spacing={4}>
+                  {locations.map((location) => {
+                    const locationIngredients = Array.from(
+                      new Set(
+                        menuItems
+                          .filter((item) => item.is_visible)
+                          .flatMap((item) => item.ingredients)
+                          .filter((ing) => ing.location === location)
+                          .map((ing) => ing.name)
+                      )
+                    ).sort();
+
+                    if (locationIngredients.length === 0) return null;
+
+                    return (
+                      <Box key={location}>
+                        <Text
+                          fontWeight="bold"
+                          mb={2}
+                          bg={locationColors[location]}
+                          color={locationTextColors[location]}
+                          p={2}
+                          borderRadius="md"
+                        >
+                          {location}
+                        </Text>
+                        <VStack align="stretch" spacing={2}>
+                          {locationIngredients.map((ingredient) => (
+                            <HStack
+                              key={ingredient}
+                              p={2}
+                              userSelect="none"
+                              // bg={
+                              //   colorMode === "light"
+                              //     ? locationColors[location]
+                              //     : "gray.700"
+                              // }
+                              borderRadius="md"
+                              cursor="pointer"
+                              onClick={() => toggleItem(ingredient)}
+                              _hover={{
+                                bg:
+                                  colorMode === "light"
+                                    ? `${locationColors[location]}dd`
+                                    : "gray.600",
+                              }}
+                            >
+                              <Checkbox
+                                isChecked={checkedItems[ingredient] || false}
+                                onChange={() => {}}
+                                pointerEvents="none"
+                                display="none"
+                              />
+                              <Text
+                                textDecoration={
+                                  checkedItems[ingredient]
+                                    ? "line-through"
+                                    : "none"
+                                }
+                                color={
+                                  checkedItems[ingredient]
+                                    ? "gray.500"
+                                    : colorMode === "light"
+                                    ? locationTextColors[location]
+                                    : "white"
+                                }
+                              >
+                                {ingredient}
+                              </Text>
+                            </HStack>
+                          ))}
+                        </VStack>
+                      </Box>
+                    );
+                  })}
                 </VStack>
               </ModalBody>
               <ModalFooter>
-                <Button colorScheme="blue" onClick={onIngredientsModalClose}>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={onIngredientsModalClose}
+                >
                   閉じる
+                </Button>
+                <Button
+                  colorScheme="green"
+                  mr={3}
+                  onClick={onApplyConfirmModalOpen}
+                >
+                  反映
+                </Button>
+                <Button colorScheme="red" onClick={resetCheckedItems}>
+                  リストをクリア
                 </Button>
               </ModalFooter>
             </ModalContent>
@@ -1355,6 +1619,63 @@ export default function AdminPage() {
                   売り切れにして完了
                 </Button>
                 <Button variant="ghost" onClick={onCompleteConfirmModalClose}>
+                  キャンセル
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
+          <Modal
+            isOpen={isLocationModalOpen}
+            onClose={onLocationModalClose}
+            size="sm"
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>売り場を選択</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <VStack spacing={2} align="stretch">
+                  {locations.map((location) => (
+                    <Button
+                      key={location}
+                      onClick={() => handleLocationSelect(location)}
+                      variant="ghost"
+                      justifyContent="flex-start"
+                    >
+                      {location}
+                    </Button>
+                  ))}
+                </VStack>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+
+          <Modal
+            isOpen={isApplyConfirmModalOpen}
+            onClose={onApplyConfirmModalClose}
+            size="sm"
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>確認</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Text>
+                  選択した材料で作れるメニューを表示し、それ以外を非表示にします。
+                  また、全てのメニューの売り切れ状態を解除します。
+                  よろしいですか？
+                </Text>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={applySelectedIngredients}
+                >
+                  反映する
+                </Button>
+                <Button variant="ghost" onClick={onApplyConfirmModalClose}>
                   キャンセル
                 </Button>
               </ModalFooter>
