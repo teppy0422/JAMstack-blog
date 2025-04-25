@@ -28,6 +28,7 @@ import {
   Checkbox,
   Avatar,
   Flex,
+  Center,
 } from "@chakra-ui/react";
 import { supabase } from "../../utils/supabase/client";
 import { VscAccount } from "react-icons/vsc";
@@ -175,22 +176,9 @@ export default function AdminPage() {
     "その他",
   ];
 
-  const locationColors = {
-    酒類: "purple.100",
-    パン類: "orange.100",
-    乳製品: "blue.100",
-    精肉: "red.100",
-    調味料: "orange.100",
-    鮮魚: "cyan.100",
-    青果: "green.100",
-    お米: "yellow.100",
-    KALDI: "pink.100",
-    リカオー: "gray.300",
-    その他: "gray.100",
-  };
-
   const locationTextColors = {
     酒類: "purple.800",
+    パン類: "orange.800",
     乳製品: "blue.800",
     精肉: "red.800",
     調味料: "orange.800",
@@ -1465,36 +1453,43 @@ export default function AdminPage() {
 
                     return (
                       <Box key={location}>
-                        <Text
-                          fontWeight="bold"
-                          mb={2}
-                          bg={locationColors[location]}
-                          color={locationTextColors[location]}
-                          p={2}
-                          borderRadius="md"
-                        >
-                          {location}
-                        </Text>
+                        <Flex justify="center" mb={4}>
+                          <Box
+                            position="relative"
+                            fontWeight="bold"
+                            color={locationTextColors[location]}
+                            p={0}
+                            borderRadius="md"
+                          >
+                            {location}
+                            <Box
+                              position="absolute"
+                              height="3px"
+                              width="100%"
+                              bottom="0"
+                              bg={locationTextColors[location]}
+                            />
+                          </Box>
+                        </Flex>
                         <VStack align="stretch" spacing={2}>
                           {locationIngredients.map((ingredient) => (
                             <HStack
                               key={ingredient}
                               p={2}
                               userSelect="none"
-                              // bg={
-                              //   colorMode === "light"
-                              //     ? locationColors[location]
-                              //     : "gray.700"
-                              // }
+                              border="1px solid"
+                              borderColor="custom.theme.light.800"
+                              bg={
+                                checkedItems[ingredient]
+                                  ? "gray.200"
+                                  : "gray.600"
+                              }
                               borderRadius="md"
                               cursor="pointer"
                               onClick={() => toggleItem(ingredient)}
-                              _hover={{
-                                bg:
-                                  colorMode === "light"
-                                    ? `${locationColors[location]}dd`
-                                    : "gray.600",
-                              }}
+                              textAlign="center"
+                              alignItems="center" // 垂直中央寄せ
+                              justifyContent="center" // 水平中央寄せ
                             >
                               <Checkbox
                                 isChecked={checkedItems[ingredient] || false}
@@ -1510,9 +1505,9 @@ export default function AdminPage() {
                                 }
                                 color={
                                   checkedItems[ingredient]
-                                    ? "gray.500"
+                                    ? "gray.600"
                                     : colorMode === "light"
-                                    ? locationTextColors[location]
+                                    ? "white"
                                     : "white"
                                 }
                               >
