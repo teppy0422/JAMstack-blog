@@ -1076,10 +1076,9 @@ export default function AdminPage() {
                         <Button
                           size="sm"
                           colorScheme="red"
-                          onClick={() => {
-                            setItemToDelete({ id: item.menu_item_id });
-                            onDeleteConfirmModalOpen();
-                          }}
+                          onClick={() =>
+                            handleDeleteOrderItem(order.id, item.id)
+                          }
                         >
                           削除
                         </Button>
