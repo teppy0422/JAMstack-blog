@@ -35,6 +35,7 @@ import { VscAccount } from "react-icons/vsc";
 import imageCompression from "browser-image-compression";
 import { useUserContext } from "../../context/useUserContext";
 import Content from "../../components/content";
+import { FaAnglesDown } from "react-icons/fa6";
 
 interface MenuItem {
   id: number;
@@ -157,9 +158,13 @@ export default function AdminPage() {
     "焼き物",
     "揚げ物",
     "ご飯もの",
+    "麺もの",
     "サラダ",
+    "鍋もの",
     "アルコール",
     "ドリンク",
+    "デザート",
+    "その他",
   ];
 
   const locations = [
@@ -177,16 +182,17 @@ export default function AdminPage() {
   ];
 
   const locationTextColors = {
-    酒類: "purple.800",
-    パン類: "orange.800",
-    乳製品: "blue.800",
-    精肉: "red.800",
-    調味料: "orange.800",
-    鮮魚: "cyan.800",
-    青果: "green.800",
-    お米: "yellow.800",
-    KALDI: "pink.800",
-    その他: "gray.800",
+    酒類: "purple.600",
+    パン類: "orange.600",
+    乳製品: "blue.600",
+    精肉: "red.600",
+    調味料: "orange.600",
+    鮮魚: "cyan.600",
+    青果: "green.600",
+    お米: "yellow.600",
+    KALDI: "pink.600",
+    リカオー: "pink.400",
+    その他: "gray.600",
   };
 
   const adjustTextareaHeight = useCallback((element: HTMLTextAreaElement) => {
@@ -532,6 +538,7 @@ export default function AdminPage() {
           category: newItem.category,
           ingredients: validIngredients,
           is_visible: newItem.is_visible,
+          recipe: newItem.recipe,
           recommendation_level: newItem.recommendation_level,
           estimated_time: newItem.estimated_time,
         };
@@ -604,6 +611,7 @@ export default function AdminPage() {
             image_url_sub: newItem.imageUrlSub,
             ingredients: validIngredients,
             is_visible: newItem.is_visible,
+            recipe: newItem.recipe,
             recommendation_level: newItem.recommendation_level,
             estimated_time: newItem.estimated_time,
           },
@@ -1130,77 +1138,127 @@ export default function AdminPage() {
           <Heading size="md" mb={4}>
             menu
           </Heading>
-          <VStack spacing={4} align="stretch">
-            {menuItems.map((item) => (
-              <VStack
-                align="stretch"
-                spacing={1}
-                bg={colorMode === "light" ? "white" : "gray.700"}
-                p={2}
-                borderRadius="md"
-              >
-                <Text fontWeight="600">{item.name}</Text>
-                <HStack key={item.id} borderRadius="md" justify="space-between">
-                  <HStack spacing={4} flex={1}>
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.name}
-                      boxSize="100px"
-                      objectFit="cover"
-                      mb={2}
-                      fallbackSrc="https://placehold.jp/150x150.png"
-                    />
-                    <Box>
-                      <Text>価格: {item.price}円</Text>
-                      <Text>カテゴリ: {item.category}</Text>
-                      <Text>
-                        材料:
-                        {item.ingredients
-                          .map((ing) => `${ing.name}(${ing.location})`)
-                          .join(", ")}
-                      </Text>
-                      <Text>おすすめ度: {item.recommendation_level}</Text>
-                    </Box>
+          <VStack spacing={2} align="stretch">
+            {menuItems
+              .slice()
+              .sort((a, b) => {
+                const orderA = categories.indexOf(a.category);
+                const orderB = categories.indexOf(b.category);
+                return orderA - orderB;
+              })
+              .map((item) => (
+                <VStack
+                  key={item.id}
+                  align="stretch"
+                  spacing={0.5}
+                  bg={colorMode === "light" ? "white" : "gray.700"}
+                  p={2}
+                  borderRadius="md"
+                >
+                  <HStack justify="space-between">
+                    <Text fontWeight="600">{item.name}</Text>
+                    <Text>おすすめ度: {item.recommendation_level}</Text>
                   </HStack>
-                  <VStack align="flex-end">
-                    <Checkbox
-                      isChecked={item.is_visible}
-                      onChange={(e) =>
-                        handleVisibilityChange(item.id, e.target.checked)
-                      }
-                    >
-                      表示
-                    </Checkbox>
-                    <Checkbox
-                      isChecked={item.isSoldOut}
-                      onChange={(e) =>
-                        handleSoldOutChange(item.id, e.target.checked)
-                      }
-                      colorScheme="red"
-                    >
-                      売切
-                    </Checkbox>
-                    <Button
-                      size="sm"
-                      colorScheme="blue"
-                      onClick={() => handleEdit(item)}
-                    >
-                      編集
-                    </Button>
-                    <Button
-                      size="sm"
-                      colorScheme="red"
-                      onClick={() => {
-                        setItemToDelete({ id: item.id });
-                        onDeleteConfirmModalOpen();
-                      }}
-                    >
-                      削除
-                    </Button>
-                  </VStack>
-                </HStack>
-              </VStack>
-            ))}
+                  <HStack
+                    key={item.id}
+                    borderRadius="md"
+                    justify="space-between"
+                  >
+                    <HStack spacing={4} flex={1}>
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.name}
+                        boxSize="100px"
+                        objectFit="cover"
+                        mb={2}
+                        fallbackSrc="https://placehold.jp/150x150.png"
+                      />
+                      <Box>
+                        {/* <Text>価格: {item.price}円</Text> */}
+                        <Text>カテゴリ: {item.category}</Text>
+                        <Box>
+                          材料:
+                          {item.ingredients
+                            .slice() // 元の順序を壊さないようコピー
+                            .sort((a, b) => {
+                              const orderA = locations.indexOf(a.location);
+                              const orderB = locations.indexOf(b.location);
+                              return orderA - orderB;
+                            })
+                            .map((ing, index) => (
+                              <Box
+                                as="span"
+                                key={index}
+                                position="relative"
+                                fontWeight="bold"
+                                mr="6px"
+                                borderBottom="2px solid"
+                                borderColor={locationTextColors[ing.location]}
+                              >
+                                {ing.name}
+                              </Box>
+                            ))}
+                        </Box>
+                        <Button
+                          size="xs"
+                          colorScheme="blue"
+                          variant="outline"
+                          onClick={() => {
+                            const menuItem = menuItems.find(
+                              (m) => m.id === item.id
+                            );
+                            if (menuItem) {
+                              setSelectedRecipe(menuItem.recipe);
+                              onRecipeModalOpen();
+                            }
+                          }}
+                          isDisabled={
+                            !menuItems.find((m) => m.id === item.id)?.recipe
+                          }
+                        >
+                          レシピ
+                        </Button>
+                      </Box>
+                    </HStack>
+                    <VStack align="flex-end">
+                      <Checkbox
+                        isChecked={item.is_visible}
+                        onChange={(e) =>
+                          handleVisibilityChange(item.id, e.target.checked)
+                        }
+                      >
+                        表示
+                      </Checkbox>
+                      <Checkbox
+                        isChecked={item.isSoldOut}
+                        onChange={(e) =>
+                          handleSoldOutChange(item.id, e.target.checked)
+                        }
+                        colorScheme="red"
+                      >
+                        売切
+                      </Checkbox>
+                      <Button
+                        size="sm"
+                        colorScheme="blue"
+                        onClick={() => handleEdit(item)}
+                      >
+                        編集
+                      </Button>
+                      <Button
+                        size="sm"
+                        colorScheme="red"
+                        onClick={() => {
+                          setItemToDelete({ id: item.id });
+                          onDeleteConfirmModalOpen();
+                        }}
+                      >
+                        削除
+                      </Button>
+                    </VStack>
+                  </HStack>
+                </VStack>
+              ))}
           </VStack>
 
           <Modal isOpen={isOpen} onClose={onClose} size="xl">

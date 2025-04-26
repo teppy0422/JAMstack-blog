@@ -38,6 +38,7 @@ import React from "react";
 import cloud from "d3-cloud";
 import { StarIcon } from "@chakra-ui/icons";
 import { FaStar } from "react-icons/fa";
+import { FaAnglesDown } from "react-icons/fa6";
 
 interface MenuItem {
   id: number;
@@ -58,10 +59,13 @@ const CATEGORY_CONFIG = {
   刺身: { color: "#4199e0", order: 2 },
   焼き物: { color: "#ed8937", order: 3 },
   揚げ物: { color: "#edca4c", order: 4 },
-  ご飯もの: { color: "#777", order: 5 },
-  サラダ: { color: "#49ba78", order: 6 },
-  アルコール: { color: "#a07aeb", order: 7 },
-  ドリンク: { color: "#2a6bb0", order: 8 },
+  ご飯もの: { color: "#f6ad55", order: 5 }, // orange.400
+  麺もの: { color: "#fbd38d", order: 6 }, // orange.200
+  サラダ: { color: "#49ba78", order: 7 },
+  鍋もの: { color: "#4a5568", order: 8 }, // gray.600
+  アルコール: { color: "#a07aeb", order: 9 },
+  ドリンク: { color: "#2a6bb0", order: 10 },
+  デザート: { color: "#fd94c6", order: 11 }, // pink.500
 } as const;
 
 const searchCategoryColor = (searchTerm: string): string[] => {
@@ -109,17 +113,6 @@ interface WordCloudComponentProps {
   findRelatedItem: (text: string) => MenuItem | undefined;
   size: number[];
 }
-
-const categoryColors: { [key: string]: string } = {
-  おつまみ: "#f56464",
-  刺身: "#4199e0",
-  焼き物: "#ed8937",
-  揚げ物: "#edca4c",
-  ご飯もの: "#777",
-  サラダ: "#49ba78",
-  アルコール: "#a07aeb",
-  ドリンク: "#2a6bb0",
-};
 
 export default function OrderPage() {
   const { colorMode } = useColorMode();
@@ -501,21 +494,43 @@ export default function OrderPage() {
 
   const categories = [
     "すべて",
-    ...new Set(menuItems.map((item) => item.category)),
+    ...Array.from(new Set(menuItems.map((item) => item.category))).sort(
+      (a, b) => {
+        const orderA = CATEGORY_CONFIG[a]?.order ?? Infinity;
+        const orderB = CATEGORY_CONFIG[b]?.order ?? Infinity;
+        return orderA - orderB;
+      }
+    ),
   ];
 
   const filteredItems =
     selectedCategory === "すべて"
-      ? menuItems.map((item) => ({
-          ...item,
-          imageUrl: imageCache[item.imageUrl] || item.imageUrl, // キャッシュから取得
-        }))
+      ? menuItems
+          .map((item) => ({
+            ...item,
+            imageUrl: imageCache[item.imageUrl] || item.imageUrl,
+          }))
+          .sort((a, b) => {
+            const orderA = CATEGORY_CONFIG[a.category]?.order ?? Infinity;
+            const orderB = CATEGORY_CONFIG[b.category]?.order ?? Infinity;
+
+            if (orderA !== orderB) {
+              return orderA - orderB;
+            }
+            return (
+              (b.recommendation_level ?? 0) - (a.recommendation_level ?? 0)
+            );
+          })
       : menuItems
           .filter((item) => item.category === selectedCategory)
           .map((item) => ({
             ...item,
-            imageUrl: imageCache[item.imageUrl] || item.imageUrl, // キャッシュから取得
-          }));
+            imageUrl: imageCache[item.imageUrl] || item.imageUrl,
+          }))
+          .sort(
+            (a, b) =>
+              (b.recommendation_level ?? 0) - (a.recommendation_level ?? 0)
+          );
 
   useEffect(() => {
     if (svgRef.current) {
@@ -685,7 +700,43 @@ export default function OrderPage() {
     return (
       <Box mt={1} fontFamily="Yomogi">
         <Heading size="sm" mb={1}>
-          <Center>注文履歴</Center>
+          <Flex align="center" position="relative" w="100%" top="8px">
+            <Box
+              flex="1"
+              h="1px"
+              bg={
+                colorMode === "light"
+                  ? "custom.theme.light.800"
+                  : "custom.theme.dark.200"
+              }
+            />
+            <Text
+              px="4"
+              zIndex="1"
+              color={
+                colorMode === "light"
+                  ? "custom.theme.light.900"
+                  : "custom.theme.dark.200"
+              }
+              bg={
+                colorMode === "light"
+                  ? "custom.theme.light.500"
+                  : "custom.theme.dark.500"
+              }
+              fontWeight="bold"
+            >
+              履歴
+            </Text>
+            <Box
+              flex="1"
+              h="1px"
+              bg={
+                colorMode === "light"
+                  ? "custom.theme.light.800"
+                  : "custom.theme.dark.200"
+              }
+            />
+          </Flex>
         </Heading>
         <VStack spacing={0} align="stretch">
           {orderHistory.map((item) => (
@@ -695,12 +746,12 @@ export default function OrderPage() {
               borderWidth="1px"
               borderRadius="md"
               borderColor="transparent"
-              role="group" // ← これが重要！
+              role="group"
               color={
                 item.status === "completed"
                   ? colorMode === "light"
                     ? "custom.theme.light.800"
-                    : "custom.theme.light.700"
+                    : "custom.theme.dark.400"
                   : colorMode === "light"
                   ? "custom.theme.light.900"
                   : "custom.theme.light.100"
@@ -708,22 +759,43 @@ export default function OrderPage() {
             >
               <HStack justify="space-between">
                 <HStack>
-                  <Image
-                    src={item.order_menu_items.image_url}
-                    alt={item.order_menu_items.name}
-                    boxSize="50px"
-                    objectFit="cover"
-                    borderRadius="md"
-                    filter={
-                      item.status === "completed"
-                        ? "contrast(40%) brightness(110%) sepia(80%) saturate(30%)"
-                        : "none"
-                    }
-                    _groupHover={{
-                      filter: "none",
-                      transition: "filter 0.2s ease-in-out",
-                    }}
-                  />
+                  {item.order_menu_items.image_url ? (
+                    <Image
+                      src={item.order_menu_items.image_url}
+                      alt={item.order_menu_items.name}
+                      boxSize="50px"
+                      objectFit="cover"
+                      borderRadius="md"
+                      filter={
+                        item.status === "completed"
+                          ? "contrast(40%) brightness(110%) sepia(80%) saturate(30%)"
+                          : "none"
+                      }
+                      _groupHover={{
+                        filter: "none",
+                        transition: "filter 0.2s ease-in-out",
+                      }}
+                    />
+                  ) : (
+                    <Center
+                      minW="50px"
+                      h="50px"
+                      borderRadius="md"
+                      fontWeight="600"
+                      fontSize="sm"
+                      color="custom.theme.light.800"
+                      bg={
+                        item.status === "completed"
+                          ? "custom.theme.light.300"
+                          : "custom.theme.light.600"
+                      }
+                      textAlign="center"
+                      lineHeight="1.1"
+                    >
+                      NO <br />
+                      IMAGE
+                    </Center>
+                  )}
                   <Box textAlign="left" width="100%" pl={2}>
                     <Text fontWeight="600">{item.order_menu_items.name}</Text>
                     <Text fontSize="sm" fontWeight="600">
@@ -756,10 +828,16 @@ export default function OrderPage() {
                   </HStack>
                 </VStack>
               </HStack>
-              <Divider
-                border="1px solid"
-                borderColor="custom.theme.light.800"
-                m="5px"
+              <Box
+                h="0.5px"
+                w="98%"
+                mx="auto"
+                my="5px"
+                bg={
+                  colorMode === "light"
+                    ? "custom.theme.light.800"
+                    : "custom.theme.dark.200"
+                }
               />
             </Box>
           ))}
@@ -984,13 +1062,25 @@ export default function OrderPage() {
                             item.isSoldOut ? "sepia(1) contrast(0.9)" : "none"
                           }
                         >
-                          <AnimationImage
-                            src={item.imageUrl}
-                            height="100%"
-                            width="100%"
-                            objectFit="cover"
-                            position="static"
-                          />
+                          {item.imageUrl ? (
+                            <AnimationImage
+                              src={item.imageUrl}
+                              height="100%"
+                              width="100%"
+                              objectFit="cover"
+                              position="static"
+                            />
+                          ) : (
+                            <Center
+                              width="100%"
+                              height="100%"
+                              color="custom.theme.light.850"
+                              bg="custom.theme.light.200"
+                              fontSize={"2xl"}
+                            >
+                              NO IMAGE
+                            </Center>
+                          )}
                           {item.recommendation_level >= 4 && (
                             <Box
                               position="absolute"
@@ -1145,17 +1235,34 @@ export default function OrderPage() {
                         if (relatedItem) {
                           return (
                             <Flex direction="column">
-                              <Image
-                                src={
-                                  relatedItem.imageUrlSub
-                                    ? relatedItem.imageUrlSub
-                                    : relatedItem.imageUrl
-                                }
-                                alt={relatedItem.name}
-                                width="240px"
-                                height="auto"
-                                objectFit="contain"
-                              />
+                              {relatedItem.imageUrl ? (
+                                <Image
+                                  src={
+                                    relatedItem.imageUrlSub
+                                      ? relatedItem.imageUrlSub
+                                      : relatedItem.imageUrl
+                                  }
+                                  alt={relatedItem.name}
+                                  width="240px"
+                                  height="auto"
+                                  objectFit="contain"
+                                />
+                              ) : (
+                                <Center
+                                  minW="80px"
+                                  h="80px"
+                                  borderRadius="md"
+                                  fontWeight="600"
+                                  fontSize="sm"
+                                  color="custom.theme.light.800"
+                                  bg="custom.theme.light.200"
+                                  textAlign="center"
+                                  lineHeight="1.1"
+                                >
+                                  NO <br />
+                                  IMAGE
+                                </Center>
+                              )}
                               <Text fontWeight={600}>{tooltipData.text}</Text>
                               <Text fontSize="sm" fontWeight={400}>
                                 {relatedItem.price}円
@@ -1189,28 +1296,78 @@ export default function OrderPage() {
               {cart.length > 0 && (
                 <>
                   <Heading size="sm" mb={1}>
-                    <Center>注文内容</Center>
+                    <Flex align="center" position="relative" w="100%" top="8px">
+                      <Box
+                        flex="1"
+                        h="1px"
+                        bg={
+                          colorMode === "light"
+                            ? "custom.theme.light.800"
+                            : "custom.theme.dark.200"
+                        }
+                      />
+                      <Text
+                        px="4"
+                        zIndex="1"
+                        color={
+                          colorMode === "light"
+                            ? "custom.theme.light.900"
+                            : "custom.theme.dark.200"
+                        }
+                        bg={
+                          colorMode === "light"
+                            ? "custom.theme.light.500"
+                            : "custom.theme.dark.500"
+                        }
+                        fontWeight="bold"
+                      >
+                        注文内容
+                      </Text>
+                      <Box
+                        flex="1"
+                        h="1px"
+                        bg={
+                          colorMode === "light"
+                            ? "custom.theme.light.800"
+                            : "custom.theme.dark.200"
+                        }
+                      />
+                    </Flex>
                   </Heading>
                   <VStack spacing={0} align="stretch">
                     {cart.map((cartItem) => (
                       <Box
                         key={cartItem.item.id}
                         p={0}
-                        // bg={colorMode === "light" ? "white" : "gray.700"}
                         borderRadius="md"
                         fontFamily="Yomogi"
                         fontWeight="600"
                       >
                         <HStack justify="space-between">
                           <HStack spacing={2}>
-                            <Image
-                              src={cartItem.item.imageUrl}
-                              alt={cartItem.item.name}
-                              boxSize="50px"
-                              objectFit="cover"
-                              borderRadius="md"
-                              fallbackSrc="https://placehold.jp/150x150.png"
-                            />
+                            {cartItem.item.imageUrl ? (
+                              <Image
+                                src={cartItem.item.imageUrl}
+                                alt={cartItem.item.name}
+                                boxSize="50px"
+                                objectFit="cover"
+                                borderRadius="md"
+                              />
+                            ) : (
+                              <Center
+                                w="50px"
+                                h="50px"
+                                fontSize="sm"
+                                overflow="clip"
+                                borderRadius="md"
+                                bg="custom.theme.light.200"
+                                textAlign="center"
+                                lineHeight="1.1"
+                              >
+                                NO <br />
+                                IMAGE
+                              </Center>
+                            )}
                             <Box>
                               <Text>{cartItem.item.name}</Text>
                               <Text>
@@ -1226,10 +1383,16 @@ export default function OrderPage() {
                             削除
                           </Button>
                         </HStack>
-                        <Divider
-                          border="1px solid"
-                          borderColor="custom.theme.light.800"
-                          m="5px"
+                        <Box
+                          h="0.5px"
+                          w="98%"
+                          mx="auto"
+                          my="5px"
+                          bg={
+                            colorMode === "light"
+                              ? "custom.theme.light.800"
+                              : "custom.theme.dark.200"
+                          }
                         />
                       </Box>
                     ))}
@@ -1249,7 +1412,13 @@ export default function OrderPage() {
                           isLoading={isSubmitting}
                           w="auto"
                         >
-                          <Box data-roof-id="sakura">注文を確定</Box>
+                          <Box data-roof-id="sakura">
+                            <HStack>
+                              <FaAnglesDown />
+                              <Text>注文を確定</Text>
+                              <FaAnglesDown />
+                            </HStack>
+                          </Box>
                         </Button>
                       </Center>
                     </Box>
