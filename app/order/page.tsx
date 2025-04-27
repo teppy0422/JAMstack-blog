@@ -31,6 +31,11 @@ import { AnimationImage } from "../../components/CustomImage";
 import FilteredImage from "../../components/PosterImage";
 import HachisukaAnimation from "../../components/season/HachisukaAnimation";
 import { CustomSwitchButton } from "../../components/custom/CustomSwitchButton";
+import {
+  CATEGORY_CONFIG,
+  searchCategoryBg,
+  searchCategoryColor,
+} from "../utils/categoryConfig";
 
 import "@fontsource/yomogi";
 import * as d3 from "d3";
@@ -53,26 +58,6 @@ interface MenuItem {
   recommendation_level: number;
   isSoldOut: boolean;
 }
-
-const CATEGORY_CONFIG = {
-  おつまみ: { color: "#f56464", order: 1 },
-  刺身: { color: "#4199e0", order: 2 },
-  焼き物: { color: "#ed8937", order: 3 },
-  揚げ物: { color: "#edca4c", order: 4 },
-  ご飯もの: { color: "#f6ad55", order: 5 }, // orange.400
-  麺もの: { color: "#fbd38d", order: 6 }, // orange.200
-  サラダ: { color: "#49ba78", order: 7 },
-  鍋もの: { color: "#4a5568", order: 8 }, // gray.600
-  アルコール: { color: "#a07aeb", order: 9 },
-  ドリンク: { color: "#2a6bb0", order: 10 },
-  デザート: { color: "#fd94c6", order: 11 }, // pink.500
-} as const;
-
-const searchCategoryColor = (searchTerm: string): string[] => {
-  return Object.entries(CATEGORY_CONFIG)
-    .filter(([category]) => category.includes(searchTerm))
-    .map(([, config]) => config.color);
-};
 
 interface OrderItem {
   menu_item_id: number;
@@ -129,7 +114,9 @@ export default function OrderPage() {
     sm: 2,
     md: 4,
     lg: 4,
-    xl: 6,
+    xl: 5,
+    "2xl": 6,
+    "3xl": 7,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
@@ -810,7 +797,7 @@ export default function OrderPage() {
                       { hour: "2-digit", minute: "2-digit" }
                     )}
                   </Text>
-                  <HStack spacing={0}>
+                  <HStack spacing={0} fontSize="sm">
                     <Text fontWeight={900}>
                       {item.status === "completed" ? "提供済み" : "準備中"}
                     </Text>
@@ -962,38 +949,45 @@ export default function OrderPage() {
                         onClick={() => handleCategoryChange(category)}
                         position="relative"
                         _selected={{
-                          _after: {
-                            content: '""',
-                            position: "absolute",
-                            top: "0",
-                            width: "calc(100% - 8px)",
-                            height: "3px",
-                            bg:
-                              colorMode === "light"
-                                ? "custom.theme.light.850"
-                                : "custom.theme.light.400",
-                            zIndex: 0,
-                            transition: "all 0.3s ease-in-out !important",
-                          },
+                          bg: "transparent",
                         }}
                       >
                         <Box
-                          zIndex="2"
+                          position="relative"
+                          zIndex={1}
                           textAlign="center"
                           lineHeight={1.1}
                           color={
                             colorMode === "light"
-                              ? "custom.theme.light.850"
+                              ? "custom.theme.light.900"
                               : "custom.theme.light.400"
                           }
                         >
-                          {category}
                           <Box
+                            position="absolute"
                             width="100%"
-                            height="3px"
-                            bg={searchCategoryColor(category)[0]}
+                            bottom="0"
+                            bg={searchCategoryBg(category)[0]}
                             mt={0}
+                            height={
+                              selectedCategory === category ? "105%" : "3px"
+                            }
+                            transition="all 0.3s ease-in-out"
                           />
+                          <Box
+                            zIndex={2}
+                            position="relative"
+                            color={
+                              selectedCategory === category
+                                ? searchCategoryColor(category)[0]
+                                : colorMode === "light"
+                                ? "custom.theme.light.850"
+                                : "custom.theme.light.400"
+                            }
+                            transition="all 0.2s ease-in-out"
+                          >
+                            {category}
+                          </Box>
                         </Box>
                       </Tab>
                     ))}

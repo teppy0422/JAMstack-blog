@@ -29,6 +29,9 @@ import {
   Avatar,
   Flex,
   Center,
+  Tab,
+  Tabs,
+  TabList,
 } from "@chakra-ui/react";
 import { supabase } from "../../utils/supabase/client";
 import { VscAccount } from "react-icons/vsc";
@@ -36,6 +39,11 @@ import imageCompression from "browser-image-compression";
 import { useUserContext } from "../../context/useUserContext";
 import Content from "../../components/content";
 import { FaAnglesDown } from "react-icons/fa6";
+import {
+  CATEGORY_CONFIG,
+  searchCategoryBg,
+  searchCategoryColor,
+} from "../utils/categoryConfig";
 
 interface MenuItem {
   id: number;
@@ -151,22 +159,31 @@ export default function AdminPage() {
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const [imageCache, setImageCache] = useState<{ [key: string]: string }>({});
+  const [preloadedImages, setPreloadedImages] = useState<{
+    [key: string]: HTMLImageElement;
+  }>({});
+  const [showVisibleOnly, setShowVisibleOnly] = useState(false);
+
+  // 画像のプリロード関数
+  const preloadImage = useCallback(
+    (url: string) => {
+      if (!preloadedImages[url]) {
+        const img = document.createElement("img");
+        img.src = url;
+        img.crossOrigin = "anonymous";
+        setPreloadedImages((prev) => ({ ...prev, [url]: img }));
+      }
+    },
+    [preloadedImages]
+  );
 
   const categories = [
-    "おつまみ",
-    "刺身",
-    "焼き物",
-    "揚げ物",
-    "ご飯もの",
-    "麺もの",
-    "サラダ",
-    "鍋もの",
-    "アルコール",
-    "ドリンク",
-    "デザート",
-    "その他",
+    "すべて",
+    ...Object.entries(CATEGORY_CONFIG)
+      .sort((a, b) => a[1].order - b[1].order)
+      .map(([name]) => name),
   ];
-
   const locations = [
     "酒類",
     "パン類",
@@ -194,6 +211,36 @@ export default function AdminPage() {
     リカオー: "pink.400",
     その他: "gray.600",
   };
+
+  const [selectedCategory, setSelectedCategory] = useState<string>("すべて");
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
+  const filteredItems =
+    selectedCategory === "すべて"
+      ? menuItems
+          .map((item) => ({
+            ...item,
+            imageUrl: imageCache[item.imageUrl] || item.imageUrl,
+            imageUrlSub: imageCache[item.imageUrlSub] || item.imageUrlSub,
+          }))
+          .sort((a, b) => {
+            const orderA = categories.indexOf(a.category);
+            const orderB = categories.indexOf(b.category);
+            return orderA - orderB;
+          })
+      : menuItems
+          .filter((item) => item.category === selectedCategory)
+          .map((item) => ({
+            ...item,
+            imageUrl: imageCache[item.imageUrl] || item.imageUrl,
+            imageUrlSub: imageCache[item.imageUrlSub] || item.imageUrlSub,
+          }))
+          .sort((a, b) => {
+            const orderA = categories.indexOf(a.category);
+            const orderB = categories.indexOf(b.category);
+            return orderA - orderB;
+          });
 
   const adjustTextareaHeight = useCallback((element: HTMLTextAreaElement) => {
     element.style.height = "auto";
@@ -230,7 +277,7 @@ export default function AdminPage() {
       return;
     }
 
-    // 画像URLを修正
+    // 画像URLをキャッシュし、プリロード
     const itemsWithCorrectImageUrl =
       data?.map((item) => {
         // 材料データの処理
@@ -247,15 +294,25 @@ export default function AdminPage() {
           parsedIngredients = [];
         }
 
+        const imageUrl = item.image_url;
+        const imageUrlSub = item.image_url_sub;
+        if (imageUrl && !imageCache[imageUrl]) {
+          setImageCache((prev) => ({ ...prev, [imageUrl]: imageUrl }));
+          preloadImage(imageUrl);
+        }
+        if (imageUrlSub && !imageCache[imageUrlSub]) {
+          setImageCache((prev) => ({ ...prev, [imageUrlSub]: imageUrlSub }));
+          preloadImage(imageUrlSub);
+        }
+
         return {
           ...item,
-          imageUrl: item.image_url,
-          imageUrlSub: item.image_url_sub,
+          imageUrl: preloadedImages[imageUrl]?.src || imageUrl,
+          imageUrlSub: preloadedImages[imageUrlSub]?.src || imageUrlSub,
           ingredients: parsedIngredients,
         };
       }) || [];
 
-    console.log("取得したメニューアイテム:", itemsWithCorrectImageUrl);
     setMenuItems(itemsWithCorrectImageUrl);
   };
 
@@ -1138,9 +1195,100 @@ export default function AdminPage() {
           <Heading size="md" mb={4}>
             menu
           </Heading>
+
+          <Tabs variant="soft-rounded">
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              pb={1}
+              ml={0}
+            >
+              <TabList
+                overflowX="auto"
+                display="flex"
+                // alignItems="center"
+                position="relative"
+                sx={{
+                  WebkitTapHighlightColor: "transparent",
+                }}
+              >
+                {categories.map((category) => (
+                  <Tab
+                    p="1"
+                    key={category}
+                    onClick={() => handleCategoryChange(category)}
+                    userSelect="none"
+                    display="flex" // ← 追加
+                    flexDirection="column" // ← 追加
+                    justifyContent="flex-end" // ← 追加
+                    alignItems="center" // （中央寄せつつ下揃えにしたい場合）
+                    _selected={{
+                      bg: "transparent",
+                    }}
+                    _focus={{
+                      boxShadow: "none",
+                      bg: "transparent",
+                    }}
+                    sx={{
+                      WebkitTapHighlightColor: "transparent",
+                    }}
+                  >
+                    <Box
+                      position="relative"
+                      zIndex={1}
+                      textAlign="center"
+                      lineHeight={1.1}
+                      color={
+                        colorMode === "light"
+                          ? "custom.theme.light.900"
+                          : "custom.theme.light.400"
+                      }
+                    >
+                      <Box
+                        position="absolute"
+                        width="100%"
+                        bottom="0"
+                        bg={searchCategoryBg(category)[0]}
+                        mt={0}
+                        height={selectedCategory === category ? "103%" : "3px"}
+                        transition="all 0.3s ease-in-out"
+                      />
+                      <Box
+                        zIndex={2}
+                        position="relative"
+                        color={
+                          selectedCategory === category
+                            ? searchCategoryColor(category)[0]
+                            : colorMode === "light"
+                            ? "custom.theme.light.850"
+                            : "custom.theme.light.400"
+                        }
+                        transition="all 0.3s ease-in-out"
+                      >
+                        {category}
+                      </Box>
+                    </Box>
+                  </Tab>
+                ))}
+              </TabList>
+            </Flex>
+          </Tabs>
+
+          <HStack mb={2} _selected={{ bg: "transparent" }} bg="transparent">
+            <Checkbox
+              borderColor="custom.theme.light.800"
+              isChecked={showVisibleOnly}
+              onChange={(e) => setShowVisibleOnly(e.target.checked)}
+            >
+              表示がオンのアイテムのみ表示
+            </Checkbox>
+          </HStack>
+
           <VStack spacing={2} align="stretch">
-            {menuItems
-              .slice()
+            {(showVisibleOnly
+              ? filteredItems.filter((item) => item.is_visible)
+              : filteredItems
+            )
               .sort((a, b) => {
                 const orderA = categories.indexOf(a.category);
                 const orderB = categories.indexOf(b.category);
@@ -1166,7 +1314,9 @@ export default function AdminPage() {
                   >
                     <HStack spacing={4} flex={1}>
                       <Image
-                        src={item.imageUrl}
+                        src={
+                          preloadedImages[item.imageUrl]?.src || item.imageUrl
+                        }
                         alt={item.name}
                         boxSize="100px"
                         objectFit="cover"
