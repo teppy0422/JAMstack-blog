@@ -1212,64 +1212,103 @@ export default function AdminPage() {
                   WebkitTapHighlightColor: "transparent",
                 }}
               >
-                {categories.map((category) => (
-                  <Tab
-                    p="1"
-                    key={category}
-                    onClick={() => handleCategoryChange(category)}
-                    userSelect="none"
-                    display="flex" // ← 追加
-                    flexDirection="column" // ← 追加
-                    justifyContent="flex-end" // ← 追加
-                    alignItems="center" // （中央寄せつつ下揃えにしたい場合）
-                    _selected={{
-                      bg: "transparent",
-                    }}
-                    _focus={{
-                      boxShadow: "none",
-                      bg: "transparent",
-                    }}
-                    sx={{
-                      WebkitTapHighlightColor: "transparent",
-                    }}
-                  >
-                    <Box
-                      position="relative"
-                      zIndex={1}
-                      textAlign="center"
-                      lineHeight={1.1}
-                      color={
-                        colorMode === "light"
-                          ? "custom.theme.light.900"
-                          : "custom.theme.light.400"
-                      }
+                {categories.map((category) => {
+                  // カテゴリごとのアイテム数を計算
+                  const count =
+                    category === "すべて"
+                      ? menuItems.length
+                      : menuItems.filter((item) => item.category === category)
+                          .length;
+                  return (
+                    <Tab
+                      p="1"
+                      key={category}
+                      onClick={() => handleCategoryChange(category)}
+                      userSelect="none"
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="flex-end"
+                      alignItems="center"
+                      _selected={{
+                        bg: "transparent",
+                      }}
+                      _focus={{
+                        boxShadow: "none",
+                        bg: "transparent",
+                      }}
+                      sx={{
+                        WebkitTapHighlightColor: "transparent",
+                      }}
                     >
                       <Box
-                        position="absolute"
-                        width="100%"
-                        bottom="0"
-                        bg={searchCategoryBg(category)[0]}
-                        mt={0}
-                        height={selectedCategory === category ? "103%" : "3px"}
-                        transition="all 0.3s ease-in-out"
-                      />
-                      <Box
-                        zIndex={2}
                         position="relative"
+                        zIndex={1}
+                        textAlign="center"
+                        lineHeight={1.1}
                         color={
-                          selectedCategory === category
-                            ? searchCategoryColor(category)[0]
-                            : colorMode === "light"
-                            ? "custom.theme.light.850"
+                          colorMode === "light"
+                            ? "custom.theme.light.900"
                             : "custom.theme.light.400"
                         }
-                        transition="all 0.3s ease-in-out"
                       >
-                        {category}
+                        <Box
+                          position="absolute"
+                          width="100%"
+                          bottom="0"
+                          bg={searchCategoryBg(category)[0]}
+                          mt={0}
+                          height={
+                            selectedCategory === category ? "103%" : "3px"
+                          }
+                          transition="all 0.3s ease-in-out"
+                        />
+                        <Box
+                          zIndex={2}
+                          position="relative"
+                          color={
+                            selectedCategory === category
+                              ? searchCategoryColor(category)[0]
+                              : colorMode === "light"
+                              ? "custom.theme.light.850"
+                              : "custom.theme.light.400"
+                          }
+                          transition="all 0.3s ease-in-out"
+                          sx={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            writingMode: {
+                              base: "vertical-rl",
+                              md: "horizontal-tb",
+                            },
+                            whiteSpace: "nowrap",
+                          }}
+                          alignItems="center"
+                        >
+                          <Box as="span" display="inline">
+                            {category}
+                          </Box>
+                          <Box
+                            as="span"
+                            color={
+                              selectedCategory === category
+                                ? searchCategoryColor(category)[0]
+                                : colorMode === "light"
+                                ? "custom.theme.light.850"
+                                : "custom.theme.light.400"
+                            }
+                            sx={{
+                              writingMode: "horizontal-tb",
+                              display: "inline",
+                              fontSize: "0.7em",
+                            }}
+                          >
+                            ({count})
+                          </Box>
+                        </Box>
                       </Box>
-                    </Box>
-                  </Tab>
-                ))}
+                    </Tab>
+                  );
+                })}
               </TabList>
             </Flex>
           </Tabs>
@@ -1297,12 +1336,22 @@ export default function AdminPage() {
               .map((item) => (
                 <VStack
                   key={item.id}
+                  position="relative"
                   align="stretch"
                   spacing={0.5}
                   bg={colorMode === "light" ? "white" : "gray.700"}
                   p={2}
                   borderRadius="md"
+                  overflow="hidden"
                 >
+                  <Box
+                    position="absolute"
+                    h="100%"
+                    w="4px"
+                    top="0"
+                    left="0"
+                    bg={searchCategoryBg(item.category)[0]}
+                  />
                   <HStack justify="space-between">
                     <Text fontWeight="600">{item.name}</Text>
                     <Text>おすすめ度: {item.recommendation_level}</Text>
@@ -1646,15 +1695,29 @@ export default function AdminPage() {
               <ModalBody>
                 <VStack align="stretch" spacing={4}>
                   {locations.map((location) => {
-                    const locationIngredients = Array.from(
-                      new Set(
-                        menuItems
-                          .filter((item) => item.is_visible)
-                          .flatMap((item) => item.ingredients)
+                    // locationごとに材料名と使われているメニュー名リストを作成
+                    const ingredientMap: { [ingredient: string]: Set<string> } =
+                      {};
+
+                    menuItems
+                      .filter((item) => item.is_visible)
+                      .forEach((item) => {
+                        item.ingredients
                           .filter((ing) => ing.location === location)
-                          .map((ing) => ing.name)
-                      )
-                    ).sort();
+                          .forEach((ing) => {
+                            if (!ingredientMap[ing.name]) {
+                              ingredientMap[ing.name] = new Set();
+                            }
+                            ingredientMap[ing.name].add(item.name);
+                          });
+                      });
+
+                    const locationIngredients = Object.entries(ingredientMap)
+                      .map(([name, menuSet]) => ({
+                        name,
+                        menuNames: Array.from(menuSet),
+                      }))
+                      .sort((a, b) => a.name.localeCompare(b.name));
 
                     if (locationIngredients.length === 0) return null;
 
@@ -1681,44 +1744,55 @@ export default function AdminPage() {
                         <VStack align="stretch" spacing={2}>
                           {locationIngredients.map((ingredient) => (
                             <HStack
-                              key={ingredient}
+                              key={ingredient.name}
                               p={2}
                               userSelect="none"
                               border="1px solid"
                               borderColor="custom.theme.light.800"
                               bg={
-                                checkedItems[ingredient]
+                                checkedItems[ingredient.name]
                                   ? "gray.200"
                                   : "gray.600"
                               }
                               borderRadius="md"
                               cursor="pointer"
-                              onClick={() => toggleItem(ingredient)}
+                              onClick={() => toggleItem(ingredient.name)}
                               textAlign="center"
                               alignItems="center" // 垂直中央寄せ
                               justifyContent="center" // 水平中央寄せ
                             >
                               <Checkbox
-                                isChecked={checkedItems[ingredient] || false}
+                                isChecked={
+                                  checkedItems[ingredient.name] || false
+                                }
                                 onChange={() => {}}
                                 pointerEvents="none"
                                 display="none"
                               />
                               <Text
                                 textDecoration={
-                                  checkedItems[ingredient]
+                                  checkedItems[ingredient.name]
                                     ? "line-through"
                                     : "none"
                                 }
                                 color={
-                                  checkedItems[ingredient]
+                                  checkedItems[ingredient.name]
                                     ? "gray.600"
                                     : colorMode === "light"
                                     ? "white"
                                     : "white"
                                 }
                               >
-                                {ingredient}
+                                {ingredient.name}
+                                <span
+                                  style={{
+                                    fontSize: "0.8em",
+                                    color: "#888",
+                                    marginLeft: 8,
+                                  }}
+                                >
+                                  （{ingredient.menuNames.join("/")}）
+                                </span>
                               </Text>
                             </HStack>
                           ))}

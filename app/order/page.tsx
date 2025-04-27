@@ -1082,7 +1082,7 @@ export default function OrderPage() {
                               left="0"
                               transform="rotate(-40deg) translate(-46%, 100%)"
                               transformOrigin="top left"
-                              bg={searchCategoryColor(item.category)[0]}
+                              bg={searchCategoryBg(item.category)[0]}
                               filter="drop-shadow(0 1px 10px rgba(0, 0, 0, 0.1))"
                               color="white"
                               px={5}
@@ -1140,7 +1140,7 @@ export default function OrderPage() {
                           )}
                         </Box>
                         <Box
-                          bg={searchCategoryColor(item.category)[0]}
+                          bg={searchCategoryBg(item.category)[0]}
                           h="4px"
                           w="180px"
                         />
