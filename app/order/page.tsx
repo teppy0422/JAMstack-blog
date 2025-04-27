@@ -1408,9 +1408,31 @@ export default function OrderPage() {
                         >
                           <Box data-roof-id="sakura">
                             <HStack>
-                              <FaAnglesDown />
+                              <Box
+                                as={FaAnglesDown}
+                                fontSize="sm"
+                                animation="moveUpDown 1s ease-in-out infinite"
+                                sx={{
+                                  "@keyframes moveUpDown": {
+                                    "0%": { transform: "translateY(1px)" },
+                                    "50%": { transform: "translateY(-1px)" }, // 上に10px移動
+                                    "100%": { transform: "translateY(1px)" }, // 元の位置に戻る
+                                  },
+                                }}
+                              />
                               <Text>注文を確定</Text>
-                              <FaAnglesDown />
+                              <Box
+                                as={FaAnglesDown}
+                                fontSize="sm"
+                                animation="moveUpDown 1s ease-in-out infinite"
+                                sx={{
+                                  "@keyframes moveUpDown": {
+                                    "0%": { transform: "translateY(1px)" },
+                                    "50%": { transform: "translateY(-1px)" }, // 上に10px移動
+                                    "100%": { transform: "translateY(1px)" }, // 元の位置に戻る
+                                  },
+                                }}
+                              />
                             </HStack>
                           </Box>
                         </Button>

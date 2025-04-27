@@ -1210,6 +1210,14 @@ export default function AdminPage() {
                 position="relative"
                 sx={{
                   WebkitTapHighlightColor: "transparent",
+                  // スクロールバー非表示
+                  "::-webkit-scrollbar": {
+                    display: "none",
+                  },
+                  // Firefox用
+                  scrollbarWidth: "none",
+                  // Edge/IE用
+                  msOverflowStyle: "none",
                 }}
               >
                 {categories.map((category) => {
@@ -1274,15 +1282,15 @@ export default function AdminPage() {
                           }
                           transition="all 0.3s ease-in-out"
                           sx={{
-                            display: "inline-flex",
+                            display: { base: "flex", md: "inline-flex" },
+                            flexDirection: "row",
                             alignItems: "center",
-                            writingMode: {
-                              base: "vertical-rl",
-                              md: "horizontal-tb",
-                            },
                             whiteSpace: "nowrap",
+                            minWidth: "48px",
+                            maxWidth: "100px",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
                           }}
-                          alignItems="center"
                         >
                           <Box as="span" display="inline">
                             {category}
@@ -1788,7 +1796,6 @@ export default function AdminPage() {
                                   style={{
                                     fontSize: "0.8em",
                                     color: "#888",
-                                    marginLeft: 8,
                                   }}
                                 >
                                   （{ingredient.menuNames.join("/")}）
