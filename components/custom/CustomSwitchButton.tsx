@@ -1,7 +1,83 @@
 import React from "react";
-import { Box, useColorMode } from "@chakra-ui/react";
+import { Box, useColorMode, Text } from "@chakra-ui/react";
 import { IoMoonOutline } from "react-icons/io5";
 import { FaCloud, FaMoon, FaSun } from "react-icons/fa";
+
+const labels = ["居酒屋", "バー", "カフェ", "料亭"];
+
+export const CustomSwitchMultiButton = ({ onClick, mode }) => {
+  const { colorMode } = useColorMode();
+  return (
+    <Box
+      position="relative"
+      display="flex"
+      alignItems="center"
+      bg={
+        colorMode === "light"
+          ? "custom.theme.light.100"
+          : "custom.theme.dark.100"
+      }
+      h="1.2rem"
+      w="10rem"
+      borderRadius="2px"
+      border="1px solid"
+      borderColor="custom.theme.light.800"
+      overflow="hidden"
+      boxShadow="sm"
+    >
+      {labels.map((label, idx) => (
+        <React.Fragment key={label}>
+          <Box
+            flex="1"
+            textAlign="center"
+            cursor="pointer"
+            py={0}
+            zIndex={2}
+            color={mode === idx ? "white" : "custom.theme.light.900"}
+            fontWeight="600"
+            fontSize="xs"
+            onClick={() => onClick(idx)}
+            position="relative"
+            transition="color 0.2s"
+          >
+            {label}
+          </Box>
+          {/* 区切り線（最後以外） */}
+          {idx < labels.length - 1 && (
+            <Box
+              w="0.5px"
+              h="60%"
+              bg={
+                colorMode === "light"
+                  ? "custom.theme.light.800"
+                  : "custom.theme.dark.400"
+              }
+              alignSelf="center"
+              zIndex={0}
+            />
+          )}
+        </React.Fragment>
+      ))}
+      {/* インジケーターバー */}
+      <Box
+        position="absolute"
+        bottom="0"
+        left="0"
+        height="100%"
+        width={`${100 / labels.length}%`}
+        bg={
+          colorMode === "light"
+            ? "custom.theme.light.850"
+            : "custom.theme.dark.400"
+        }
+        borderRadius="2px"
+        transform={`translateX(${mode * 100}%)`}
+        transition="transform 0.3s cubic-bezier(.4,1.2,.6,1)"
+        zIndex={1}
+      />
+    </Box>
+  );
+};
 
 export const CustomSwitchButton = ({ onClick, isRight }) => {
   return (
@@ -34,7 +110,6 @@ export const CustomSwitchButton = ({ onClick, isRight }) => {
 };
 export const CustomSwitchColorModeButton = ({}) => {
   const { colorMode, toggleColorMode } = useColorMode();
-
   return (
     <Box cursor="pointer">
       <Box

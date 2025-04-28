@@ -30,7 +30,10 @@ import Content from "../../components/content";
 import { AnimationImage } from "../../components/CustomImage";
 import FilteredImage from "../../components/PosterImage";
 import HachisukaAnimation from "../../components/season/HachisukaAnimation";
-import { CustomSwitchButton } from "../../components/custom/CustomSwitchButton";
+import {
+  CustomSwitchButton,
+  CustomSwitchMultiButton,
+} from "../../components/custom/CustomSwitchButton";
 import {
   CATEGORY_CONFIG,
   searchCategoryBg,
@@ -99,6 +102,64 @@ interface WordCloudComponentProps {
   size: number[];
 }
 
+type NonOverlappingImageProps = {
+  right: number | string;
+  w: string;
+  src: string;
+  style?: React.CSSProperties;
+  zIndex?: string;
+  bottom?: string | number;
+  placedListRef: React.MutableRefObject<{ right: number; w: number }[]>;
+};
+
+const prevRightRef = { current: null as null | number };
+
+export const NonOverlappingImage: React.FC<NonOverlappingImageProps> = ({
+  right,
+  w,
+  src,
+  style,
+  zIndex = "10",
+  bottom = 0,
+  placedListRef,
+}) => {
+  const rightNum =
+    typeof right === "string" ? parseFloat(right.replace("px", "")) : right;
+  const wNum = parseFloat(w);
+  const leftNum = rightNum - wNum;
+
+  // すでに配置済みの画像と重なるか判定（区間で判定）
+  const isOverlapping = placedListRef.current.some((img) => {
+    const imgLeft = img.right - img.w;
+    return !(rightNum < imgLeft || leftNum > img.right);
+  });
+
+  console.log("NonOverlappingImage: rightNum", rightNum, "leftNum", leftNum);
+  console.log(
+    "NonOverlappingImage: placedListRef.current",
+    placedListRef.current
+  );
+  console.log("NonOverlappingImage: isOverlapping", isOverlapping);
+
+  if (isOverlapping) return null;
+
+  // 配置リストに追加
+  placedListRef.current.push({ right: rightNum, w: wNum });
+  console.log("NonOverlappingImage: after push", placedListRef.current);
+
+  return (
+    <Image
+      position="absolute"
+      zIndex={zIndex}
+      bottom={bottom}
+      right={right}
+      w={w}
+      src={src}
+      style={style}
+    />
+  );
+};
+
 export default function OrderPage() {
   const { colorMode } = useColorMode();
   const toast = useToast();
@@ -157,7 +218,7 @@ export default function OrderPage() {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const [isRight, setIsRight] = useState(false);
+  const [mode, setMode] = useState(0); // 4モード用
 
   const svgSize = useBreakpointValue({
     base: { width: 300, height: 800 }, // 小さい画面用
@@ -167,6 +228,26 @@ export default function OrderPage() {
     xl: { width: 1100, height: 700 }, // 特大画面用
   }) || { width: 300, height: 500 }; // デフォルト値を設定
 
+  const [scrollState, setScrollState] = useState({ left: 0, right: 1 });
+  const scrollBoxRef = useRef<HTMLDivElement>(null);
+
+  const soldOutRandomMap = useRef(new Map());
+
+  const colRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
+  const [rightPositions, setRightPositions] = useState<
+    { key: string; right: number }[]
+  >([]);
+
+  const parentRef = useRef<HTMLDivElement | null>(null);
+
+  const placedListRef = useRef<{ right: number; w: number }[]>([]);
+  placedListRef.current = []; // 毎回初期化
+
+  // const [prevRight, setPrevRight] = useState<number | null>(null);
+  // const [prevWidth, setPrevWidth] = useState<number | null>(null);
+  let prevRight: number | null = null;
+  let prevWidth: number | null = null;
   useEffect(() => {
     fetchMenuItems();
   }, []);
@@ -260,14 +341,38 @@ export default function OrderPage() {
   };
 
   // カートにアイテムを追加したときの処理
-  const addToCart = useCallback((item: MenuItem) => {
+  const addToCart = useCallback((item: MenuItem, mode: number) => {
     if (item.isSoldOut) {
       toast({
-        title: "エラー",
-        description: "この商品は売り切れです",
-        status: "error",
         duration: 3000,
         isClosable: true,
+        render: () => (
+          <Box
+            p={3}
+            backgroundImage={
+              colorMode === "light"
+                ? "url('/images/common/paperFFF.webp')"
+                : "url('/images/common/paper181d26.png')"
+            }
+            color="#666" // 文字色
+            fontWeight="600" // フォント太さ
+            fontSize="lg" // フォントサイズ
+            borderRadius="md" // 丸み
+            boxShadow="lg" // 影
+            textAlign="center"
+            sx={{
+              fontFamily: mode === 0 ? "Yomogi" : "'Yuji Syuku'",
+            }}
+          >
+            {mode === 0
+              ? "売り切れちゃいました"
+              : mode === 1
+              ? "品切れとなりました"
+              : mode === 2
+              ? "ごめんなさい☕️ただいま売り切れです"
+              : "品切れでございます"}
+          </Box>
+        ),
       });
       return;
     }
@@ -466,7 +571,6 @@ export default function OrderPage() {
 
           // nameColorの設定を確認
           const nameColor = searchCategoryColor(item.category);
-          console.log(`カテゴリ: ${item.category}, 色: ${nameColor}`);
 
           return {
             ...item,
@@ -489,6 +593,8 @@ export default function OrderPage() {
       }
     ),
   ];
+
+  const displayCategories = categories.filter((c) => c !== "すべて");
 
   const filteredItems =
     selectedCategory === "すべて"
@@ -599,7 +705,7 @@ export default function OrderPage() {
             .append("text")
             .style("font-size", "1px")
             .style("font-weight", "900")
-            .style("fill", CATEGORY_CONFIG[d.category]?.color || "#000")
+            .style("fill", CATEGORY_CONFIG[d.category]?.bg || "#000")
             .style("cursor", "pointer")
             .style("pointer-events", "none")
             .attr("text-anchor", "middle")
@@ -637,7 +743,7 @@ export default function OrderPage() {
                     (item) => item.name === d.text
                   );
                   if (matched) {
-                    addToCart(matched);
+                    addToCart(matched, mode);
                   } else {
                     console.warn("一致するメニューが見つかりません:", d.text);
                   }
@@ -845,15 +951,71 @@ export default function OrderPage() {
     );
   };
 
-  const handleSwitchToggle = () => {
-    setIsRight((prev) => {
-      const newIsRight = !prev; // 新しい状態を計算
-      if (newIsRight) {
-        handleReposition(); // 新しい状態がtrueの場合にhandleRepositionを呼び出す
-      }
-      return newIsRight; // 新しい状態を返す
+  const handleChangeMode = (idx: number) => {
+    setMode(idx);
+    if (idx === 1) handleReposition();
+  };
+
+  const half = Math.ceil(displayCategories.length / 2);
+  const leftCategories = displayCategories.slice(0, half);
+  const rightCategories = displayCategories.slice(half);
+
+  const handleScroll = () => {
+    if (!scrollBoxRef.current) return;
+    const el = scrollBoxRef.current;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 0) {
+      setScrollState({ left: 0, right: 0 });
+      return;
+    }
+    // 残り量 = 端までの距離 / 最大スクロール量
+    const left = (maxScroll + el.scrollLeft) / maxScroll; // 0〜1に丸める
+    const right = -el.scrollLeft / maxScroll; // 0〜1に丸める
+    setScrollState({
+      left,
+      right,
     });
   };
+
+  useEffect(() => {
+    const el = scrollBoxRef.current;
+    if (el) {
+      el.addEventListener("scroll", handleScroll);
+      // 初期値
+      handleScroll();
+    }
+    return () => {
+      if (el) el.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const getSoldOutRandom = (itemId) => {
+    if (!soldOutRandomMap.current.has(itemId)) {
+      const randomTop = `${30 + Math.random() * 30}%`;
+      const randomHeight = `${6 + Math.random() * 10}px`;
+      soldOutRandomMap.current.set(itemId, { randomTop, randomHeight });
+    }
+    return soldOutRandomMap.current.get(itemId);
+  };
+
+  useEffect(() => {
+    const parentRight = parentRef.current
+      ? parentRef.current.getBoundingClientRect().right
+      : 0;
+    const filteredEntries = Object.entries(colRefs.current).filter(([key]) =>
+      key.includes("cat")
+    );
+    const positions = filteredEntries.map(([key, el]) => ({
+      key,
+      right:
+        el && parentRef.current
+          ? parentRight - el.getBoundingClientRect().right
+          : 0,
+    }));
+    console.log(positions);
+    setRightPositions(positions);
+    placedListRef.current = [];
+  }, [mode]);
 
   return (
     <>
@@ -883,7 +1045,21 @@ export default function OrderPage() {
                 height="60px"
                 sealSize="0"
               />
-              <Text>居酒屋ぼん</Text>
+              <VStack gap={1}>
+                {mode === 0 ? (
+                  <Text>居酒屋ぼん</Text>
+                ) : mode === 1 ? (
+                  <Text>バーぼん</Text>
+                ) : mode === 2 ? (
+                  <Text>カフェぼん</Text>
+                ) : (
+                  <Text>料亭ぼん</Text>
+                )}
+                <CustomSwitchMultiButton
+                  onClick={(idx) => handleChangeMode(idx)}
+                  mode={mode}
+                />
+              </VStack>
               <Image
                 src="/images/illust/obj/oden2.gif"
                 height="60px"
@@ -992,13 +1168,10 @@ export default function OrderPage() {
                       </Tab>
                     ))}
                   </TabList>
-                  <CustomSwitchButton
-                    onClick={handleSwitchToggle}
-                    isRight={isRight}
-                  />
                 </Flex>
               </Tabs>
-              {!isRight ? (
+
+              {mode === 0 && (
                 <SimpleGrid
                   columns={gridColumns}
                   spacing={4}
@@ -1024,7 +1197,7 @@ export default function OrderPage() {
                     >
                       <Button
                         key={item.id}
-                        onClick={() => addToCart(item)}
+                        onClick={() => addToCart(item, mode)}
                         p={0}
                         m={0}
                         h="auto"
@@ -1175,114 +1348,414 @@ export default function OrderPage() {
                     </Tooltip>
                   ))}
                 </SimpleGrid>
-              ) : (
-                <Box mt={0} position="relative">
-                  <Button
-                    position="absolute"
-                    top="0"
-                    right="0"
-                    onClick={handleReposition}
-                    bg="transparent"
-                    _hover={{
-                      bg: "transparent",
-                    }}
-                    color="custom.theme.light.600"
-                    size="sm"
-                  >
-                    再配置
-                  </Button>
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    border="1px solid"
-                    borderColor={
-                      colorMode === "light"
-                        ? "custom.theme.light.600"
-                        : "custom.theme.dark.600"
-                    }
-                    maxW={svgSize.width}
-                    maxH={svgSize.height}
-                  >
-                    <svg
-                      ref={svgRef}
-                      width={svgSize.width}
-                      height={svgSize.height}
-                      style={{ overflow: "visible" }}
-                    />
-                  </Box>
-                  {tooltipData && (
-                    <Box
-                      position="fixed"
-                      bg="white"
-                      borderRadius="md"
-                      boxShadow="md"
-                      mt="8px"
-                      ml="18px"
-                      p={2}
-                      zIndex={10}
-                      left={`${tooltipData.mouseX}px`}
-                      top={`${tooltipData.mouseY}px`}
-                      textAlign="center"
+              )}
+              {mode === 1 && (
+                <SimpleGrid columns={1}>
+                  <Box mt={0} position="relative">
+                    <Button
+                      position="absolute"
+                      top="0"
+                      right="0"
+                      onClick={handleReposition}
+                      bg="transparent"
+                      _hover={{
+                        bg: "transparent",
+                      }}
+                      color="custom.theme.light.600"
+                      size="sm"
                     >
-                      {(() => {
-                        const relatedItem = findRelatedItem(tooltipData.text);
-                        if (relatedItem) {
-                          return (
-                            <Flex direction="column">
-                              {relatedItem.imageUrl ? (
-                                <Image
-                                  src={
-                                    relatedItem.imageUrlSub
-                                      ? relatedItem.imageUrlSub
-                                      : relatedItem.imageUrl
-                                  }
-                                  alt={relatedItem.name}
-                                  width="240px"
-                                  height="auto"
-                                  objectFit="contain"
-                                />
-                              ) : (
-                                <Center
-                                  minW="80px"
-                                  h="80px"
-                                  borderRadius="md"
-                                  fontWeight="600"
-                                  fontSize="sm"
-                                  color="custom.theme.light.800"
-                                  bg="custom.theme.light.200"
-                                  textAlign="center"
-                                  lineHeight="1.1"
-                                >
-                                  NO <br />
-                                  IMAGE
-                                </Center>
-                              )}
-                              <Text fontWeight={600}>{tooltipData.text}</Text>
-                              <Text fontSize="sm" fontWeight={400}>
-                                {relatedItem.price}円
-                              </Text>
-                              <Text fontSize="sm" fontWeight={600} color="gray">
-                                提供目安: {relatedItem.estimated_time}分
-                              </Text>
-                              <Text fontSize="sm">{tooltipData.value}</Text>
-                              {relatedItem.isSoldOut && (
+                      再配置
+                    </Button>
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      border="1px solid"
+                      borderColor={
+                        colorMode === "light"
+                          ? "custom.theme.light.600"
+                          : "custom.theme.dark.600"
+                      }
+                      maxW={svgSize.width}
+                      maxH={svgSize.height}
+                    >
+                      <svg
+                        ref={svgRef}
+                        width={svgSize.width}
+                        height={svgSize.height}
+                        style={{ overflow: "visible" }}
+                      />
+                    </Box>
+                    {tooltipData && (
+                      <Box
+                        position="fixed"
+                        bg="white"
+                        borderRadius="md"
+                        boxShadow="md"
+                        mt="8px"
+                        ml="18px"
+                        p={2}
+                        zIndex={10}
+                        left={`${tooltipData.mouseX}px`}
+                        top={`${tooltipData.mouseY}px`}
+                        textAlign="center"
+                      >
+                        {(() => {
+                          const relatedItem = findRelatedItem(tooltipData.text);
+                          if (relatedItem) {
+                            return (
+                              <Flex direction="column">
+                                {relatedItem.imageUrl ? (
+                                  <Image
+                                    src={
+                                      relatedItem.imageUrlSub
+                                        ? relatedItem.imageUrlSub
+                                        : relatedItem.imageUrl
+                                    }
+                                    alt={relatedItem.name}
+                                    width="240px"
+                                    height="auto"
+                                    objectFit="contain"
+                                  />
+                                ) : (
+                                  <Center
+                                    minW="80px"
+                                    h="80px"
+                                    borderRadius="md"
+                                    fontWeight="600"
+                                    fontSize="sm"
+                                    color="custom.theme.light.800"
+                                    bg="custom.theme.light.200"
+                                    textAlign="center"
+                                    lineHeight="1.1"
+                                  >
+                                    NO <br />
+                                    IMAGE
+                                  </Center>
+                                )}
+                                <Text fontWeight={600}>{tooltipData.text}</Text>
+                                <Text fontSize="sm" fontWeight={400}>
+                                  {relatedItem.price}円
+                                </Text>
                                 <Text
                                   fontSize="sm"
-                                  color="red.500"
-                                  fontWeight="bold"
-                                  mt={1}
+                                  fontWeight={600}
+                                  color="gray"
                                 >
-                                  売り切れ
+                                  提供目安: {relatedItem.estimated_time}分
                                 </Text>
-                              )}
-                            </Flex>
-                          );
+                                <Text fontSize="sm">{tooltipData.value}</Text>
+                                {relatedItem.isSoldOut && (
+                                  <Text
+                                    fontSize="sm"
+                                    color="red.500"
+                                    fontWeight="bold"
+                                    mt={1}
+                                  >
+                                    売り切れ
+                                  </Text>
+                                )}
+                              </Flex>
+                            );
+                          }
+                          return null;
+                        })()}
+                      </Box>
+                    )}
+                  </Box>
+                </SimpleGrid>
+              )}
+
+              {mode === 2 && (
+                <Flex direction={{ base: "column", md: "row" }} gap={4} mt={4}>
+                  {/* 左カラム */}
+                  <Box flex={1} bg="custom.theme.light.300" p={4}>
+                    {leftCategories.map((category) => (
+                      <Box key={category} mb={4}>
+                        <Text
+                          fontWeight="600"
+                          fontSize="30px"
+                          mb={2}
+                          fontFamily="yomogi"
+                        >
+                          {category}
+                        </Text>
+                        <Flex direction="column" gap={1}>
+                          {menuItems
+                            .filter((item) => item.category === category)
+                            .map((item) => (
+                              <Box key={item.id} p={2} fontWeight="400">
+                                {item.name}
+                              </Box>
+                            ))}
+                        </Flex>
+                      </Box>
+                    ))}
+                  </Box>
+                  {/* 右カラム */}
+                  <Box flex={1} bg="green.100" p={4}>
+                    {rightCategories.map((category) => (
+                      <Box key={category} mb={4} fontFamily="Yomogi">
+                        <Text fontWeight="bold" mb={2}>
+                          {category}
+                        </Text>
+                        <Flex direction="column" gap={2}>
+                          {menuItems
+                            .filter((item) => item.category === category)
+                            .map((item) => (
+                              <Box
+                                key={item.id}
+                                bg="white"
+                                p={2}
+                                borderRadius="md"
+                              >
+                                {item.name}
+                              </Box>
+                            ))}
+                        </Flex>
+                      </Box>
+                    ))}
+                  </Box>
+                </Flex>
+              )}
+              {mode === 3 && (
+                <SimpleGrid columns={1}>
+                  <Box position="relative" userSelect="none">
+                    {/* 中央のスクロールエリア */}
+                    <Box ref={parentRef}>
+                      <Box
+                        position="absolute"
+                        left="0"
+                        top="0"
+                        width={`${100 * scrollState.left}px`}
+                        height="100%"
+                        pointerEvents="none"
+                        zIndex="20"
+                        background={
+                          colorMode === "light"
+                            ? "linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 40%, rgba(255,255,255,1) 100%)"
+                            : "linear-gradient(to left, rgba(27,35,41,0) 0%, rgba(27,35,41,0.5) 40%, rgba(27,35,41,1) 100%)"
                         }
-                        return null;
-                      })()}
+                      />
+                      <Box
+                        position="absolute"
+                        right="0"
+                        top="0"
+                        width={`${100 * scrollState.right}px`}
+                        height="100%"
+                        pointerEvents="none"
+                        zIndex="20"
+                        background={
+                          colorMode === "light"
+                            ? "linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 40%, rgba(255,255,255,1) 100%)"
+                            : "linear-gradient(to right, rgba(27,35,41,0) 0%, rgba(27,35,41,0.5) 40%, rgba(27,35,41,1) 100%)"
+                        }
+                      />
+                      <Box
+                        ref={scrollBoxRef}
+                        position="relative"
+                        display="flex"
+                        flexDirection="row-reverse"
+                        alignItems="flex-start"
+                        w="100%"
+                        overflowX="auto"
+                        sx={{
+                          scrollbarWidth: "none",
+                          "&::-webkit-scrollbar": { display: "none" },
+                        }}
+                        onScroll={handleScroll}
+                        p={4}
+                        bg="custom.theme.light.100"
+                        minH="400px"
+                        backgroundImage={
+                          colorMode === "light"
+                            ? "url('/images/common/paperFFF.webp')"
+                            : "url('/images/common/paper181d26.png')"
+                        }
+                        backgroundRepeat="repeat"
+                        backgroundSize="cover"
+                        backgroundPosition="center"
+                        onWheel={(e) => {
+                          if (e.deltaY !== 0) {
+                            e.currentTarget.scrollLeft += e.deltaY;
+                            e.preventDefault();
+                          }
+                        }}
+                      >
+                        {(placedListRef.current = [])}
+                        {displayCategories
+                          .flatMap((category) => [
+                            // カテゴリー名
+                            {
+                              type: "category" as const,
+                              key: `cat-${category}`,
+                              content: category,
+                            },
+                            // そのカテゴリーの商品
+                            ...menuItems
+                              .filter((item) => item.category === category)
+                              .map((item) => ({
+                                type: "item" as const,
+                                key: `item-${item.id}`,
+                                content: item,
+                              })),
+                          ])
+
+                          .map((col) => {
+                            if (col.type === "category") {
+                              const rightStr = rightPositions.find(
+                                (pos) => pos.key === col.key
+                              )
+                                ? `${
+                                    rightPositions.find(
+                                      (pos) => pos.key === col.key
+                                    )!.right
+                                  }px`
+                                : "100px";
+                              const currentRight = parseInt(
+                                rightStr.replace("px", "")
+                              );
+                              const w =
+                                col.content === "アルコール"
+                                  ? 200
+                                  : col.content === "刺身"
+                                  ? 180
+                                  : 150;
+                              const src =
+                                col.content === "アルコール"
+                                  ? "/images/illust/obj/ochoshi.svg"
+                                  : col.content === "刺身"
+                                  ? "/images/illust/obj/osashimi.svg"
+                                  : "";
+                              const cutomBottom =
+                                col.content === "アルコール"
+                                  ? "5px"
+                                  : col.content === "刺身"
+                                  ? "20px"
+                                  : "2px";
+                              let overlaps = false;
+                              if (prevRight !== null && prevWidth !== null) {
+                                const leftB = prevRight + prevWidth;
+                                overlaps = !(
+                                  leftB < currentRight && src !== ""
+                                );
+                              }
+
+                              // 前回値を更新
+                              if (!overlaps) {
+                                prevRight = currentRight;
+                                prevWidth = w;
+                              }
+                              return (
+                                <>
+                                  <Box
+                                    key={col.key}
+                                    ref={(el) => {
+                                      colRefs.current[col.key] = el;
+                                    }}
+                                    display="flex"
+                                    flexDirection="column"
+                                    alignItems="center"
+                                    mx={2}
+                                    height="100%"
+                                  >
+                                    <Text
+                                      fontFamily="'Yuji Syuku', serif"
+                                      fontWeight="800"
+                                      fontSize="2xl"
+                                      color={
+                                        colorMode === "light"
+                                          ? "custom.theme.light.850"
+                                          : "custom.theme.dark.150"
+                                      }
+                                      sx={{ writingMode: "vertical-rl" }}
+                                      textAlign="center"
+                                    >
+                                      {col.content}
+                                    </Text>
+                                  </Box>
+                                  {!overlaps && (
+                                    <Image
+                                      position="absolute"
+                                      // border="1px solid red"
+                                      zIndex="10"
+                                      bottom={cutomBottom}
+                                      right={rightStr}
+                                      w={`${w}px`}
+                                      src={src}
+                                      style={{
+                                        filter:
+                                          colorMode === "light"
+                                            ? "contrast(0.9)"
+                                            : "invert(1)",
+                                      }}
+                                    />
+                                  )}
+                                </>
+                              );
+                            } else {
+                              // contentはMenuItem
+                              const item = col.content;
+                              // ランダム値を生成
+                              const { randomTop, randomHeight } = item.isSoldOut
+                                ? getSoldOutRandom(item.id)
+                                : { randomTop: "50%", randomHeight: "10px" };
+                              return (
+                                <Box
+                                  key={col.key}
+                                  ref={(el) => {
+                                    colRefs.current[col.key] = el;
+                                  }}
+                                  fontFamily="'Yuji Syuku', serif"
+                                  fontSize="20px"
+                                  fontWeight="400"
+                                  color={
+                                    colorMode === "light"
+                                      ? "custom.theme.light.900"
+                                      : "custom.theme.dark.100"
+                                  }
+                                  sx={{
+                                    writingMode: "vertical-rl",
+                                    position: "relative",
+                                    "&::after": item.isSoldOut
+                                      ? {
+                                          content: '""',
+                                          position: "absolute",
+                                          left: "50%",
+                                          top: randomTop,
+                                          width: "120%",
+                                          height: randomHeight,
+                                          background:
+                                            "linear-gradient(120deg, transparent 10%, #d32f2f 50%, transparent 90%)",
+                                          transform:
+                                            "translate(-50%, -50%) rotate(-10deg)",
+                                          borderRadius: "8px",
+                                          opacity: 0.8,
+                                          pointerEvents: "none",
+                                          zIndex: 2,
+                                        }
+                                      : {},
+                                  }}
+                                  textAlign="center"
+                                  mt={5}
+                                  cursor={
+                                    item.isSoldOut ? "not-allowed" : "pointer"
+                                  }
+                                  opacity={item.isSoldOut ? 0.8 : 1}
+                                  onClick={() => addToCart(item, mode)}
+                                  _hover={{
+                                    transform: !item.isSoldOut && "scale(1.1)",
+                                    transition: "all 0.2s ease-in-out",
+                                  }}
+                                >
+                                  {item.name}
+                                </Box>
+                              );
+                            }
+                          })}
+                      </Box>
                     </Box>
-                  )}
-                </Box>
+                  </Box>
+                </SimpleGrid>
               )}
             </Box>
 
