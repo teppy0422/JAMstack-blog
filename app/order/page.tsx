@@ -102,64 +102,6 @@ interface WordCloudComponentProps {
   size: number[];
 }
 
-type NonOverlappingImageProps = {
-  right: number | string;
-  w: string;
-  src: string;
-  style?: React.CSSProperties;
-  zIndex?: string;
-  bottom?: string | number;
-  placedListRef: React.MutableRefObject<{ right: number; w: number }[]>;
-};
-
-const prevRightRef = { current: null as null | number };
-
-export const NonOverlappingImage: React.FC<NonOverlappingImageProps> = ({
-  right,
-  w,
-  src,
-  style,
-  zIndex = "10",
-  bottom = 0,
-  placedListRef,
-}) => {
-  const rightNum =
-    typeof right === "string" ? parseFloat(right.replace("px", "")) : right;
-  const wNum = parseFloat(w);
-  const leftNum = rightNum - wNum;
-
-  // すでに配置済みの画像と重なるか判定（区間で判定）
-  const isOverlapping = placedListRef.current.some((img) => {
-    const imgLeft = img.right - img.w;
-    return !(rightNum < imgLeft || leftNum > img.right);
-  });
-
-  console.log("NonOverlappingImage: rightNum", rightNum, "leftNum", leftNum);
-  console.log(
-    "NonOverlappingImage: placedListRef.current",
-    placedListRef.current
-  );
-  console.log("NonOverlappingImage: isOverlapping", isOverlapping);
-
-  if (isOverlapping) return null;
-
-  // 配置リストに追加
-  placedListRef.current.push({ right: rightNum, w: wNum });
-  console.log("NonOverlappingImage: after push", placedListRef.current);
-
-  return (
-    <Image
-      position="absolute"
-      zIndex={zIndex}
-      bottom={bottom}
-      right={right}
-      w={w}
-      src={src}
-      style={style}
-    />
-  );
-};
-
 export default function OrderPage() {
   const { colorMode } = useColorMode();
   const toast = useToast();
