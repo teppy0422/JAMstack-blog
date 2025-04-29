@@ -173,8 +173,6 @@ export default function OrderPage() {
   const [scrollState, setScrollState] = useState({ left: 0, right: 1 });
   const scrollBoxRef = useRef<HTMLDivElement>(null);
 
-  const soldOutRandomMap = useRef(new Map());
-
   const colRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   const [rightPositions, setRightPositions] = useState<
@@ -931,6 +929,7 @@ export default function OrderPage() {
     };
   }, []);
 
+  const soldOutRandomMap = useRef(new Map());
   const getSoldOutRandom = (itemId) => {
     if (!soldOutRandomMap.current.has(itemId)) {
       const randomTop = `${30 + Math.random() * 30}%`;
@@ -938,6 +937,23 @@ export default function OrderPage() {
       soldOutRandomMap.current.set(itemId, { randomTop, randomHeight });
     }
     return soldOutRandomMap.current.get(itemId);
+  };
+
+  // カテゴリごとのランダム値（bottom, scale）を一括で管理
+  const customCategoryRandomMap = useRef(new Map());
+  const getCustomCategoryRandoms = (category) => {
+    if (!customCategoryRandomMap.current.has(category)) {
+      let categoryBottom, categoryScale, categoryRotation;
+      categoryBottom = 5 + Math.floor(Math.random() * 20);
+      categoryScale = 0.8 + Math.random() * 0.2; // 1以下になるようにする
+      categoryRotation = -1 + Math.random() * 2;
+      customCategoryRandomMap.current.set(category, {
+        categoryBottom,
+        categoryScale,
+        categoryRotation,
+      });
+    }
+    return customCategoryRandomMap.current.get(category);
   };
 
   useEffect(() => {
@@ -1047,71 +1063,73 @@ export default function OrderPage() {
               )}
             </VStack>
             <Box px={2}>
-              <Tabs variant="soft-rounded">
-                <Flex
-                  alignItems="center"
-                  justifyContent="space-between"
-                  pb={1}
-                  ml={0}
-                >
-                  <TabList
-                    overflowX="auto"
-                    display="flex"
+              {(mode === 0 || mode === 1) && (
+                <Tabs variant="soft-rounded">
+                  <Flex
                     alignItems="center"
-                    position="relative"
+                    justifyContent="space-between"
+                    pb={1}
+                    ml={0}
                   >
-                    {categories.map((category) => (
-                      <Tab
-                        p="1"
-                        key={category}
-                        onClick={() => handleCategoryChange(category)}
-                        position="relative"
-                        _selected={{
-                          bg: "transparent",
-                        }}
-                      >
-                        <Box
+                    <TabList
+                      overflowX="auto"
+                      display="flex"
+                      alignItems="center"
+                      position="relative"
+                    >
+                      {categories.map((category) => (
+                        <Tab
+                          p="1"
+                          key={category}
+                          onClick={() => handleCategoryChange(category)}
                           position="relative"
-                          zIndex={1}
-                          textAlign="center"
-                          lineHeight={1.1}
-                          color={
-                            colorMode === "light"
-                              ? "custom.theme.light.900"
-                              : "custom.theme.light.400"
-                          }
+                          _selected={{
+                            bg: "transparent",
+                          }}
                         >
                           <Box
-                            position="absolute"
-                            width="100%"
-                            bottom="0"
-                            bg={searchCategoryBg(category)[0]}
-                            mt={0}
-                            height={
-                              selectedCategory === category ? "105%" : "3px"
-                            }
-                            transition="all 0.3s ease-in-out"
-                          />
-                          <Box
-                            zIndex={2}
                             position="relative"
+                            zIndex={1}
+                            textAlign="center"
+                            lineHeight={1.1}
                             color={
-                              selectedCategory === category
-                                ? searchCategoryColor(category)[0]
-                                : colorMode === "light"
-                                ? "custom.theme.light.850"
+                              colorMode === "light"
+                                ? "custom.theme.light.900"
                                 : "custom.theme.light.400"
                             }
-                            transition="all 0.2s ease-in-out"
                           >
-                            {category}
+                            <Box
+                              position="absolute"
+                              width="100%"
+                              bottom="0"
+                              bg={searchCategoryBg(category)[0]}
+                              mt={0}
+                              height={
+                                selectedCategory === category ? "105%" : "3px"
+                              }
+                              transition="all 0.3s ease-in-out"
+                            />
+                            <Box
+                              zIndex={2}
+                              position="relative"
+                              color={
+                                selectedCategory === category
+                                  ? searchCategoryColor(category)[0]
+                                  : colorMode === "light"
+                                  ? "custom.theme.light.850"
+                                  : "custom.theme.light.400"
+                              }
+                              transition="all 0.2s ease-in-out"
+                            >
+                              {category}
+                            </Box>
                           </Box>
-                        </Box>
-                      </Tab>
-                    ))}
-                  </TabList>
-                </Flex>
-              </Tabs>
+                        </Tab>
+                      ))}
+                    </TabList>
+                  </Flex>
+                </Tabs>
+              )}
 
               {mode === 0 && (
                 <SimpleGrid
@@ -1561,19 +1579,39 @@ export default function OrderPage() {
                                   ? 200
                                   : col.content === "刺身"
                                   ? 180
+                                  : col.content === "やさい"
+                                  ? 160
+                                  : col.content === "デザート"
+                                  ? 60
                                   : 150;
                               const src =
                                 col.content === "アルコール"
                                   ? "/images/illust/obj/ochoshi.svg"
                                   : col.content === "刺身"
                                   ? "/images/illust/obj/osashimi.svg"
+                                  : col.content === "やさい"
+                                  ? "/images/illust/obj/yasai1.svg"
+                                  : col.content === "デザート"
+                                  ? "/images/illust/obj/dessert.svg"
                                   : "";
-                              const cutomBottom =
+
+                              const categoryOpacity =
                                 col.content === "アルコール"
-                                  ? "5px"
+                                  ? "0.8"
                                   : col.content === "刺身"
-                                  ? "20px"
-                                  : "2px";
+                                  ? "0.7"
+                                  : col.content === "やさい"
+                                  ? "0.5"
+                                  : col.content === "デザート"
+                                  ? "0.5"
+                                  : "1";
+
+                              const {
+                                categoryBottom,
+                                categoryScale,
+                                categoryRotation,
+                              } = getCustomCategoryRandoms(col.content);
+
                               let overlaps = false;
                               if (prevRight !== null && prevWidth !== null) {
                                 const leftB = prevRight + prevWidth;
@@ -1581,7 +1619,6 @@ export default function OrderPage() {
                                   leftB < currentRight && src !== ""
                                 );
                               }
-
                               // 前回値を更新
                               if (!overlaps) {
                                 prevRight = currentRight;
@@ -1620,15 +1657,17 @@ export default function OrderPage() {
                                       position="absolute"
                                       // border="1px solid red"
                                       zIndex="10"
-                                      bottom={cutomBottom}
+                                      bottom={`${categoryBottom}px`}
                                       right={rightStr}
                                       w={`${w}px`}
                                       src={src}
                                       style={{
                                         filter:
                                           colorMode === "light"
-                                            ? "contrast(0.9)"
+                                            ? "sepia(0.3) contrast(0.9)"
                                             : "invert(1)",
+                                        transform: `scale(${categoryScale}) rotate(${categoryRotation}deg)`,
+                                        opacity: categoryOpacity,
                                       }}
                                     />
                                   )}
@@ -1680,7 +1719,7 @@ export default function OrderPage() {
                                   textAlign="center"
                                   mt={5}
                                   cursor={
-                                    item.isSoldOut ? "not-allowed" : "pointer"
+                                    item.isSoldOut ? "default" : "pointer"
                                   }
                                   opacity={item.isSoldOut ? 0.8 : 1}
                                   onClick={() => addToCart(item, mode)}
@@ -1780,7 +1819,7 @@ export default function OrderPage() {
                             <Box>
                               <Text>{cartItem.item.name}</Text>
                               <Text>
-                                {cartItem.quantity}個 × {cartItem.item.price}円
+                                {cartItem.quantity}個・{cartItem.item.price}円
                               </Text>
                             </Box>
                           </HStack>
