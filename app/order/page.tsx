@@ -170,7 +170,7 @@ export default function OrderPage() {
     xl: { width: 1100, height: 700 }, // 特大画面用
   }) || { width: 300, height: 500 }; // デフォルト値を設定
 
-  const [scrollState, setScrollState] = useState({ left: 0, right: 1 });
+  const [scrollState, setScrollState] = useState({ left: 0, right: 0 });
   const scrollBoxRef = useRef<HTMLDivElement>(null);
 
   const colRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -944,9 +944,9 @@ export default function OrderPage() {
   const getCustomCategoryRandoms = (category) => {
     if (!customCategoryRandomMap.current.has(category)) {
       let categoryBottom, categoryScale, categoryRotation;
-      categoryBottom = 5 + Math.floor(Math.random() * 20);
+      categoryBottom = 5 + Math.floor(Math.random() * 50);
       categoryScale = 0.8 + Math.random() * 0.2; // 1以下になるようにする
-      categoryRotation = -1 + Math.random() * 2;
+      categoryRotation = 2 - Math.random() * 4;
       customCategoryRandomMap.current.set(category, {
         categoryBottom,
         categoryScale,
@@ -986,7 +986,11 @@ export default function OrderPage() {
             fontFamily="Yomogi"
             fontWeight="600"
           >
-            <HStack justify="center" align="center" spacing={2}>
+            <HStack
+              justify="center"
+              align="center"
+              spacing={{ base: 0, sm: 1, md: 3 }}
+            >
               <AnimationImage
                 src="/images/illust/obj/oden2.gif"
                 position="static"
@@ -1048,7 +1052,7 @@ export default function OrderPage() {
               {isLgOrLarger && (
                 <Box
                   filter="drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.8))"
-                  mt={9}
+                  mt={mode === 0 || mode === 1 ? 7 : 4}
                 >
                   <Box data-roof-id="sakura">
                     <FilteredImage
@@ -1740,7 +1744,7 @@ export default function OrderPage() {
               )}
             </Box>
 
-            <Box mt={3}>
+            <Box mt={mode === 0 || mode === 1 ? 3 : 0}>
               {cart.length > 0 && (
                 <>
                   <Heading size="sm" mb={1}>

@@ -57,7 +57,9 @@ interface MenuItem {
   recommendation_level: number;
   estimated_time: number;
   recipe: string;
+  created_at: string;
   isSoldOut: boolean;
+  user_id: string;
 }
 
 interface Order {
@@ -138,6 +140,7 @@ export default function AdminPage() {
     [key: string]: string;
   }>({});
   const [orders, setOrders] = useState<Order[]>([]);
+
   const {
     currentUserId,
     currentUserPictureUrl,
@@ -146,6 +149,7 @@ export default function AdminPage() {
     getUserById,
     isLoading,
   } = useUserContext();
+
   const userData = currentUserId ? getUserById(currentUserId) : null;
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -559,6 +563,28 @@ export default function AdminPage() {
     [adjustTextareaHeight]
   );
 
+  const resetNewItemForm = () => {
+    // フォームをリセット
+    setNewItem({
+      name: "",
+      price: undefined,
+      category: "",
+      imageUrl: "",
+      imageUrlSub: "",
+      ingredients: [],
+      is_visible: true,
+      recommendation_level: 0,
+      estimated_time: 0,
+      recipe: "",
+      isSoldOut: false,
+    });
+    setPreviewImage("");
+    setPreviewImageSub("");
+    setEditingItem(null);
+    setIngredientInputs([""]);
+    onClose();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -598,6 +624,8 @@ export default function AdminPage() {
           recipe: newItem.recipe,
           recommendation_level: newItem.recommendation_level,
           estimated_time: newItem.estimated_time,
+          created_at: new Date(),
+          user_id: currentUserId,
         };
 
         // 画像が変更された場合のみ更新
@@ -696,25 +724,7 @@ export default function AdminPage() {
         isClosable: true,
       });
 
-      // フォームをリセット
-      setNewItem({
-        name: "",
-        price: undefined,
-        category: "",
-        imageUrl: "",
-        imageUrlSub: "",
-        ingredients: [],
-        is_visible: true,
-        recommendation_level: 0,
-        estimated_time: 0,
-        recipe: "",
-        isSoldOut: false,
-      });
-      setPreviewImage("");
-      setPreviewImageSub("");
-      setEditingItem(null);
-      setIngredientInputs([""]);
-      onClose();
+      resetNewItemForm();
 
       // メニューアイテムを再取得
       fetchMenuItems();
@@ -1075,9 +1085,13 @@ export default function AdminPage() {
     });
   };
 
+  const handleAddItemClick = () => {
+    resetNewItemForm(); // リセット実行
+    onOpen(); // モーダルなどを開く
+  };
   return (
     <Content isCustomHeader={true}>
-      <Box p={{ base: "2", sm: "4" }}>
+      <Box p={{ base: "1", sm: "4" }}>
         <audio ref={audioRef} src="/sound/missed.mp3" preload="auto" />
         <Heading mb={6} textAlign="center">
           管理者ページ
@@ -1085,7 +1099,7 @@ export default function AdminPage() {
 
         <Box>
           <HStack spacing={4} mb={4}>
-            <Button colorScheme="blue" onClick={onOpen}>
+            <Button colorScheme="blue" onClick={handleAddItemClick}>
               アイテムを追加
             </Button>
             <Button colorScheme="green" onClick={onIngredientsModalOpen}>
@@ -1406,6 +1420,17 @@ export default function AdminPage() {
                               </Box>
                             ))}
                         </Box>
+                        <Text>
+                          更新日:
+                          {new Date(item.created_at).toLocaleDateString(
+                            "ja-JP",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
+                        </Text>
                         <Button
                           size="xs"
                           colorScheme="blue"
@@ -1419,12 +1444,21 @@ export default function AdminPage() {
                               onRecipeModalOpen();
                             }
                           }}
-                          isDisabled={
+                          opacity={
                             !menuItems.find((m) => m.id === item.id)?.recipe
+                              ? "0"
+                              : "1"
                           }
                         >
                           レシピ
                         </Button>
+                        {item.user_id && (
+                          <Avatar
+                            src={getUserById(item.user_id)?.picture_url}
+                            size="xs"
+                            ml={1}
+                          />
+                        )}
                       </Box>
                     </HStack>
                     <VStack align="flex-end">
