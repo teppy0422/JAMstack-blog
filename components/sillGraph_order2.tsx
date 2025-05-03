@@ -104,6 +104,25 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
       const average = label ? NUTRIENTS_CONFIG_[label]?.average || null : null; // labelがundefinedの場合はnullを返す
       const max = label ? NUTRIENTS_CONFIG_[label]?.max || null : null; // 該当するaverageがない場合はnullを返す
       const unit = label ? NUTRIENTS_CONFIG_[label]?.unit || "" : ""; // 単位を取得
+      const getMatchingData = (
+        visibleData: ChartDataItem[],
+        label: string,
+        itemName: string
+      ) => {
+        const matchingItem = visibleData.find((item) => item.name === itemName);
+
+        if (matchingItem) {
+          const nutrient = matchingItem.nutrients.find((n) =>
+            n.startsWith(label)
+          );
+          if (nutrient) {
+            const [, value] = nutrient.split(":");
+            return { name: matchingItem.name, value: parseFloat(value) };
+          }
+        }
+        return null;
+      };
+
       return (
         <div
           style={{
@@ -121,7 +140,8 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
           </p>
           {payload.map((item, index) => (
             <p key={index} style={{ margin: 0, color: item.color }}>
-              {item.name}: {Math.round(item.payload[item.name])}
+              {item.name}:{/* {Math.round(item.payload[item.name])} */}
+              {label && getMatchingData(visibleData, label, item.name)?.value}
               {unit}
             </p>
           ))}
@@ -203,6 +223,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
           fill={getColorByIndex(index)}
           isAnimationActive={true} // アニメーションを有効化
           animationDuration={300} // アニメーションの長さを0.3秒に設定
+          animationEasing="ease-in-out" // イージングを設定
         >
           <LabelList
             content={(props) => <CustomLabel {...props} dataKey={item.name} />}
