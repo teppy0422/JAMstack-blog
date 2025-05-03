@@ -428,6 +428,7 @@ const BusinessCard: React.FC = () => {
         <ModalContent
           maxWidth={["90%", "80%", "70%", "60%"]}
           bg={colorMode === "light" ? "#f2e9df" : "#000"}
+          zIndex="100000"
         >
           <ModalHeader color={colorMode === "light" ? "#000" : "#FFF"}>
             片岡 哲兵

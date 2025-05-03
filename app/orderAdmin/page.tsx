@@ -32,6 +32,10 @@ import {
   Tab,
   Tabs,
   TabList,
+  InputGroup,
+  NumberInput,
+  NumberInputField,
+  InputRightAddon,
 } from "@chakra-ui/react";
 import { supabase } from "../../utils/supabase/client";
 import { VscAccount } from "react-icons/vsc";
@@ -39,8 +43,10 @@ import imageCompression from "browser-image-compression";
 import { useUserContext } from "../../context/useUserContext";
 import Content from "../../components/content";
 import { FaAnglesDown } from "react-icons/fa6";
+import { MyBarChart } from "../../components/sillGraph_order2";
 import {
   CATEGORY_CONFIG,
+  NUTRIENTS_CONFIG_,
   searchCategoryBg,
   searchCategoryColor,
 } from "../utils/categoryConfig";
@@ -53,6 +59,7 @@ interface MenuItem {
   imageUrl: string;
   imageUrlSub: string;
   ingredients: { name: string; location: string }[];
+  nutrients: string[];
   is_visible: boolean;
   recommendation_level: number;
   estimated_time: number;
@@ -131,6 +138,7 @@ export default function AdminPage() {
     estimated_time: 0,
     recipe: "",
     isSoldOut: false,
+    nutrients: [],
   });
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [previewImage, setPreviewImage] = useState<string>("");
@@ -140,7 +148,14 @@ export default function AdminPage() {
     [key: string]: string;
   }>({});
   const [orders, setOrders] = useState<Order[]>([]);
+  const [formValues, setFormValues] = useState<{ [key: string]: number }>({});
 
+  const handleChange = (label: string, value: number) => {
+    setNutrientValues((prev) => ({
+      ...prev,
+      [label]: value,
+    }));
+  };
   const {
     currentUserId,
     currentUserPictureUrl,
@@ -168,6 +183,9 @@ export default function AdminPage() {
     [key: string]: HTMLImageElement;
   }>({});
   const [showVisibleOnly, setShowVisibleOnly] = useState(false);
+  const [nutrientValues, setNutrientValues] = useState<Record<string, number>>(
+    {}
+  );
 
   // 画像のプリロード関数
   const preloadImage = useCallback(
@@ -264,6 +282,24 @@ export default function AdminPage() {
     return () => cleanup();
   }, []);
 
+  useEffect(() => {
+    const nutrientMap: Record<string, number> = {};
+    menuItems
+      .filter((item) => item.is_visible)
+      .forEach((item) => {
+        if (Array.isArray(item.nutrients)) {
+          item.nutrients.forEach((n) => {
+            const [name, value] = n.split(":");
+            const num = parseFloat(value);
+            if (!isNaN(num)) {
+              nutrientMap[name] = (nutrientMap[name] || 0) + num;
+            }
+          });
+        }
+      });
+    setNutrientValues(nutrientMap);
+  }, [menuItems]);
+
   const fetchMenuItems = async () => {
     const { data, error } = await supabase
       .from("order_menu_items")
@@ -352,7 +388,6 @@ export default function AdminPage() {
       });
       return;
     }
-
     setOrders(data || []);
   };
 
@@ -577,9 +612,11 @@ export default function AdminPage() {
       estimated_time: 0,
       recipe: "",
       isSoldOut: false,
+      nutrients: [],
     });
     setPreviewImage("");
     setPreviewImageSub("");
+    setNutrientValues({});
     setEditingItem(null);
     setIngredientInputs([""]);
     onClose();
@@ -608,6 +645,11 @@ export default function AdminPage() {
         location: ingredientLocations[ingredient] || "その他",
       }));
 
+    const formattedNutrients = Object.entries(nutrientValues)
+      .filter(([_, value]) => value != null && !isNaN(value))
+
+      .map(([key, value]) => `${key}:${value}`);
+
     try {
       if (editingItem) {
         // 更新前の画像URLを保存
@@ -626,6 +668,7 @@ export default function AdminPage() {
           estimated_time: newItem.estimated_time,
           created_at: new Date(),
           user_id: currentUserId,
+          nutrients: formattedNutrients,
         };
 
         // 画像が変更された場合のみ更新
@@ -699,6 +742,7 @@ export default function AdminPage() {
             recipe: newItem.recipe,
             recommendation_level: newItem.recommendation_level,
             estimated_time: newItem.estimated_time,
+            nutrients: formattedNutrients,
           },
         ]);
 
@@ -742,6 +786,11 @@ export default function AdminPage() {
 
   const handleEdit = async (item: MenuItem) => {
     setEditingItem(item);
+    const formattedNutrients = Object.entries(nutrientValues)
+      .filter(([_, value]) => value != null && !isNaN(value))
+
+      .map(([key, value]) => `${key}:${value}`);
+
     setNewItem({
       name: item.name,
       price: item.price,
@@ -754,6 +803,7 @@ export default function AdminPage() {
       estimated_time: item.estimated_time,
       recipe: item.recipe,
       isSoldOut: item.isSoldOut,
+      nutrients: formattedNutrients,
     });
     setPreviewImage(item.imageUrl);
     setPreviewImageSub(item.imageUrlSub);
@@ -767,6 +817,13 @@ export default function AdminPage() {
         {}
       )
     );
+    const nutrientObj = item.nutrients.reduce((acc, cur) => {
+      const [key, val] = cur.split(":");
+      const num = parseFloat(val);
+      if (!isNaN(num)) acc[key] = num;
+      return acc;
+    }, {} as Record<string, number>);
+    setNutrientValues(nutrientObj);
     onOpen();
     // モーダルを開いた後にテキストエリアの高さを調整
     setTimeout(() => {
@@ -1089,6 +1146,7 @@ export default function AdminPage() {
     resetNewItemForm(); // リセット実行
     onOpen(); // モーダルなどを開く
   };
+
   return (
     <Content isCustomHeader={true}>
       <Box p={{ base: "1", sm: "4" }}>
@@ -1192,9 +1250,11 @@ export default function AdminPage() {
                             onRecipeModalOpen();
                           }
                         }}
-                        isDisabled={
+                        display={
                           !menuItems.find((m) => m.id === item.menu_item_id)
                             ?.recipe
+                            ? "none"
+                            : "inline-block"
                         }
                       >
                         レシピ
@@ -1209,6 +1269,9 @@ export default function AdminPage() {
           <Heading size="md" mb={4}>
             menu
           </Heading>
+
+          {/* <MyBarChart data={filteredItems} /> */}
+          <MyBarChart data2={filteredItems} />
 
           <Tabs variant="soft-rounded">
             <Flex
@@ -1365,6 +1428,7 @@ export default function AdminPage() {
                   p={2}
                   borderRadius="md"
                   overflow="hidden"
+                  opacity={item.is_visible ? "1" : "0.6"}
                 >
                   <Box
                     position="absolute"
@@ -1393,6 +1457,7 @@ export default function AdminPage() {
                         objectFit="cover"
                         mb={2}
                         fallbackSrc="https://placehold.jp/150x150.png"
+                        filter={item.is_visible ? "none" : "sepia(1)"}
                       />
                       <Box>
                         {/* <Text>価格: {item.price}円</Text> */}
@@ -1431,8 +1496,16 @@ export default function AdminPage() {
                             }
                           )}
                         </Text>
+                        {item.user_id && (
+                          <Avatar
+                            src={getUserById(item.user_id)?.picture_url}
+                            size="xs"
+                            ml={1}
+                          />
+                        )}
                         <Button
                           size="xs"
+                          ml={1}
                           colorScheme="blue"
                           variant="outline"
                           onClick={() => {
@@ -1444,21 +1517,14 @@ export default function AdminPage() {
                               onRecipeModalOpen();
                             }
                           }}
-                          opacity={
+                          display={
                             !menuItems.find((m) => m.id === item.id)?.recipe
-                              ? "0"
-                              : "1"
+                              ? "none"
+                              : "inline-block"
                           }
                         >
                           レシピ
                         </Button>
-                        {item.user_id && (
-                          <Avatar
-                            src={getUserById(item.user_id)?.picture_url}
-                            size="xs"
-                            ml={1}
-                          />
-                        )}
                       </Box>
                     </HStack>
                     <VStack align="flex-end">
@@ -1640,7 +1706,45 @@ export default function AdminPage() {
                         ))}
                       </VStack>
                     </FormControl>
-
+                    <FormControl>
+                      <Box>
+                        栄養素
+                        {Object.entries(NUTRIENTS_CONFIG_).map(
+                          ([label, { unit, average }]) => (
+                            <FormControl key={label}>
+                              <FormLabel>{label}</FormLabel>
+                              <InputGroup>
+                                <NumberInput
+                                  value={nutrientValues[label]}
+                                  onChange={(_, value) =>
+                                    handleChange(label, value)
+                                  }
+                                  min={0}
+                                  step={
+                                    label === "植物繊維" || "ビタミンB群"
+                                      ? 0.1
+                                      : 1
+                                  }
+                                  precision={
+                                    label === "植物繊維" || "ビタミンB群"
+                                      ? 1
+                                      : 0
+                                  }
+                                  clampValueOnBlur={false} // ← 入力中の制限を緩和
+                                >
+                                  <NumberInputField
+                                    // placeholder={`${average}`}
+                                    borderTopRightRadius={0}
+                                    borderBottomRightRadius={0}
+                                  />
+                                </NumberInput>
+                                <InputRightAddon children={unit} />
+                              </InputGroup>
+                            </FormControl>
+                          )
+                        )}
+                      </Box>
+                    </FormControl>
                     <FormControl>
                       <FormLabel>提供目安時間（分）</FormLabel>
                       <Input

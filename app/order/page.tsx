@@ -34,6 +34,7 @@ import {
   CustomSwitchButton,
   CustomSwitchMultiButton,
 } from "../../components/custom/CustomSwitchButton";
+import { PieChart } from "../../components/sillGraph_order";
 import {
   CATEGORY_CONFIG,
   searchCategoryBg,
@@ -55,11 +56,15 @@ interface MenuItem {
   category: string;
   imageUrl: string;
   imageUrlSub: string;
-  ingredients: string[];
-  estimated_time: number;
-  nameColor: string;
+  ingredients: { name: string; location: string }[];
+  nutrients: string[];
+  is_visible: boolean;
   recommendation_level: number;
+  estimated_time: number;
+  recipe: string;
+  created_at: string;
   isSoldOut: boolean;
+  user_id: string;
 }
 
 interface OrderItem {
@@ -77,29 +82,6 @@ const supabase = createClient(
 interface Word {
   text: string;
   value: number;
-}
-
-interface WordCloudComponentProps {
-  words: Word[];
-  options: {
-    rotations: number;
-    rotationAngles: number[];
-    fontSizes: number[];
-    fontFamily: string;
-    fontWeight: string;
-    padding: number;
-    enableTooltip: boolean;
-    deterministic: boolean;
-    transitionDuration: number;
-  };
-  onWordClick: (word: { text: string }) => void;
-  onWordMouseOver: (
-    word: { text: string; value: number },
-    event: React.MouseEvent<Element>
-  ) => void;
-  onWordMouseOut: () => void;
-  findRelatedItem: (text: string) => MenuItem | undefined;
-  size: number[];
 }
 
 export default function OrderPage() {
@@ -799,6 +781,7 @@ export default function OrderPage() {
                       boxSize="50px"
                       objectFit="cover"
                       borderRadius="md"
+                      zIndex={0}
                       filter={
                         item.status === "completed"
                           ? "contrast(40%) brightness(110%) sepia(80%) saturate(30%)"
@@ -909,11 +892,15 @@ export default function OrderPage() {
       return;
     }
     // 残り量 = 端までの距離 / 最大スクロール量
-    const left = (maxScroll + el.scrollLeft) / maxScroll; // 0〜1に丸める
-    const right = -el.scrollLeft / maxScroll; // 0〜1に丸める
+    const left = (maxScroll + el.scrollLeft) / maxScroll;
+    const right = -el.scrollLeft / maxScroll;
+
+    const adjustedLeft = left >= 0.05 && left <= 0.5 ? 0.5 : left;
+    const adjustedRight = right >= 0.05 && right <= 0.5 ? 0.5 : right;
+
     setScrollState({
-      left,
-      right,
+      left: adjustedLeft,
+      right: adjustedRight,
     });
   };
 
@@ -944,7 +931,7 @@ export default function OrderPage() {
   const getCustomCategoryRandoms = (category) => {
     if (!customCategoryRandomMap.current.has(category)) {
       let categoryBottom, categoryScale, categoryRotation;
-      categoryBottom = 5 + Math.floor(Math.random() * 50);
+      categoryBottom = 5 + Math.floor(Math.random() * 100);
       categoryScale = 0.8 + Math.random() * 0.2; // 1以下になるようにする
       categoryRotation = 2 - Math.random() * 4;
       customCategoryRandomMap.current.set(category, {
@@ -1011,11 +998,11 @@ export default function OrderPage() {
                 {mode === 0 ? (
                   <Text>居酒屋ぼん</Text>
                 ) : mode === 1 ? (
-                  <Text>バーぼん</Text>
+                  <Text fontFamily="ab-countryroad">バーぼん</Text>
                 ) : mode === 2 ? (
                   <Text>カフェぼん</Text>
                 ) : (
-                  <Text>料亭ぼん</Text>
+                  <Text fontFamily="kokuryu">料亭ぼん</Text>
                 )}
                 <CustomSwitchMultiButton
                   onClick={(idx) => handleChangeMode(idx)}
@@ -1070,6 +1057,7 @@ export default function OrderPage() {
               {(mode === 0 || mode === 1) && (
                 <Tabs variant="soft-rounded">
                   <Flex
+                    fontFamily="'Yuji Shuku'"
                     alignItems="center"
                     justifyContent="space-between"
                     pb={1}
@@ -1315,7 +1303,7 @@ export default function OrderPage() {
               )}
               {mode === 1 && (
                 <SimpleGrid columns={1}>
-                  <Box mt={0} position="relative">
+                  <Box mt={0} position="relative" fontFamily="'Yuji Shuku'">
                     <Button
                       position="absolute"
                       top="0"
@@ -1346,7 +1334,7 @@ export default function OrderPage() {
                         ref={svgRef}
                         width={svgSize.width}
                         height={svgSize.height}
-                        style={{ overflow: "visible" }}
+                        style={{ overflow: "visible", zIndex: "1" }}
                       />
                     </Box>
                     {tooltipData && (
@@ -1485,12 +1473,24 @@ export default function OrderPage() {
                 <SimpleGrid columns={1}>
                   <Box position="relative" userSelect="none">
                     {/* 中央のスクロールエリア */}
+                    <Box
+                      position="absolute"
+                      zIndex="0"
+                      bottom="0"
+                      h="100%"
+                      width={`${120 * scrollState.left}px`}
+                      boxShadow={
+                        colorMode === "light"
+                          ? "0 6px 12px -6px rgba(0, 0, 0, 0.5)"
+                          : "0 6px 12px -6px rgba(255, 255, 255, 0.5)"
+                      }
+                    />
                     <Box ref={parentRef}>
                       <Box
                         position="absolute"
                         left="0"
                         top="0"
-                        width={`${100 * scrollState.left}px`}
+                        width={`${120 * scrollState.left}px`}
                         height="100%"
                         pointerEvents="none"
                         zIndex="20"
@@ -1529,7 +1529,7 @@ export default function OrderPage() {
                         onScroll={handleScroll}
                         p={4}
                         bg="custom.theme.light.100"
-                        minH="400px"
+                        minH="500px"
                         backgroundImage={
                           colorMode === "light"
                             ? "url('/images/common/paperFFF.webp')"
@@ -1563,7 +1563,6 @@ export default function OrderPage() {
                                 content: item,
                               })),
                           ])
-
                           .map((col) => {
                             if (col.type === "category") {
                               const rightStr = rightPositions.find(
@@ -1580,13 +1579,13 @@ export default function OrderPage() {
                               );
                               const w =
                                 col.content === "アルコール"
-                                  ? 200
+                                  ? 230
                                   : col.content === "刺身"
-                                  ? 180
+                                  ? 250
                                   : col.content === "やさい"
-                                  ? 160
+                                  ? 200
                                   : col.content === "デザート"
-                                  ? 60
+                                  ? 70
                                   : 150;
                               const src =
                                 col.content === "アルコール"
@@ -1601,7 +1600,7 @@ export default function OrderPage() {
 
                               const categoryOpacity =
                                 col.content === "アルコール"
-                                  ? "0.8"
+                                  ? "0.6"
                                   : col.content === "刺身"
                                   ? "0.7"
                                   : col.content === "やさい"
@@ -1642,15 +1641,17 @@ export default function OrderPage() {
                                     height="100%"
                                   >
                                     <Text
-                                      fontFamily="'Yuji Syuku', serif"
-                                      fontWeight="800"
-                                      fontSize="2xl"
+                                      fontFamily="kokuryu ,'Yuji Shuku'"
+                                      fontSize="28px"
+                                      fontWeight="400"
                                       color={
                                         colorMode === "light"
-                                          ? "custom.theme.light.850"
+                                          ? "custom.theme.light.900"
                                           : "custom.theme.dark.150"
                                       }
-                                      sx={{ writingMode: "vertical-rl" }}
+                                      sx={{
+                                        writingMode: "vertical-rl",
+                                      }}
                                       textAlign="center"
                                     >
                                       {col.content}
@@ -1690,8 +1691,8 @@ export default function OrderPage() {
                                   ref={(el) => {
                                     colRefs.current[col.key] = el;
                                   }}
-                                  fontFamily="'Yuji Syuku', serif"
-                                  fontSize="20px"
+                                  fontFamily="kokuryu,'Yuji Syuku', serif"
+                                  fontSize="22px"
                                   fontWeight="400"
                                   color={
                                     colorMode === "light"
@@ -1745,6 +1746,7 @@ export default function OrderPage() {
             </Box>
 
             <Box mt={mode === 0 || mode === 1 ? 3 : 0}>
+              <PieChart data={menuItems} />
               {cart.length > 0 && (
                 <>
                   <Heading size="sm" mb={1}>
