@@ -36,6 +36,9 @@ import {
   NumberInput,
   NumberInputField,
   InputRightAddon,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from "@chakra-ui/react";
 import { supabase } from "../../utils/supabase/client";
 import { VscAccount } from "react-icons/vsc";
@@ -49,25 +52,8 @@ import {
   NUTRIENTS_CONFIG_,
   searchCategoryBg,
   searchCategoryColor,
+  MenuItem,
 } from "../utils/categoryConfig";
-
-interface MenuItem {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  imageUrl: string;
-  imageUrlSub: string;
-  ingredients: { name: string; location: string }[];
-  nutrients: string[];
-  is_visible: boolean;
-  recommendation_level: number;
-  estimated_time: number;
-  recipe: string;
-  created_at: string;
-  isSoldOut: boolean;
-  user_id: string;
-}
 
 interface Order {
   id: number;
@@ -187,6 +173,94 @@ export default function AdminPage() {
     {}
   );
 
+  const handleCopyToClipboardNutrients = () => {
+    const nutrients = Object.entries(NUTRIENTS_CONFIG_).map(
+      ([key, value]) => `${key} (${value.unit})`
+    );
+    const name = newItem.name;
+    const recipe = newItem.recipe;
+    const textToCopy =
+      name +
+      "\n" +
+      recipe +
+      "\n\n" +
+      "このレシピの1人前の場合の" +
+      nutrients.join(", ") +
+      "を教えて。スープが有るは飲み干さない。" +
+      "\n\n";
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        toast({
+          title: "コピー成功",
+          description: "栄養素がクリップボードにコピーされました。",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        console.error("クリップボードへのコピーに失敗しました:", err);
+        toast({
+          title: "コピー失敗",
+          description: "クリップボードへのコピーに失敗しました。",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      });
+  };
+
+  const handleCopyToClipboardRecipe = () => {
+    const ingredient = Object.entries(ingredientInputs).map(
+      ([key, value]) => `${value}`
+    );
+
+    const textToCopy =
+      "材料に、" +
+      ingredient.join(", ") +
+      "を使った" +
+      newItem.name +
+      "のレシピを教えて" +
+      "\n\n" +
+      "そのままテキストエリアに貼り付けたいからフォーマットは必ず次のようにして。余計なメッセージは含めないで。\n" +
+      "以下はガーリックポテトサラダのレシピの例ね\n\n" +
+      "🥦 材料(2-3人前)\n" +
+      "じゃがいも:2個\n玉ねぎ:1/4個\nベーコン:60g\nにんにく:2片\nパセリ:適量\n\n" +
+      "🍳 作り方\n" +
+      "1. A: にんにくをスライスし、玉ねぎをスライス、じゃがいもを親指くらいにカット\n\n" +
+      "2. Aを電子レンジで6分600wで加熱\n\n" +
+      "3. B: ベーコンをみじん切りにし、オリーブオイルで焼く\n\n" +
+      "4. AにBを加え、崩しながら混ぜ、温度を下げる\n\n" +
+      "5. 人肌になるまで放置\n\n" +
+      "6. マヨネーズを大さじ3.5入れて混ぜる\n\n" +
+      "7. C: 黒胡椒（多め）、塩（小さじ1/3）、砂糖（小さじ1）、味の素（6振り）を加えて混ぜる\n\n" +
+      "💡 ポイント\n" +
+      "ガーリックの香りが効いた、コクのあるポテトサラダ。ベーコンの旨味がアクセントに！";
+
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        toast({
+          title: "コピー成功",
+          description: "レシピ提案がクリップボードにコピーされました。",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        console.error("クリップボードへのコピーに失敗しました:", err);
+        toast({
+          title: "コピー失敗",
+          description: "クリップボードへのコピーに失敗しました。",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      });
+  };
+
   // 画像のプリロード関数
   const preloadImage = useCallback(
     (url: string) => {
@@ -245,6 +319,7 @@ export default function AdminPage() {
             ...item,
             imageUrl: imageCache[item.imageUrl] || item.imageUrl,
             imageUrlSub: imageCache[item.imageUrlSub] || item.imageUrlSub,
+            quantity: 1,
           }))
           .sort((a, b) => {
             const orderA = categories.indexOf(a.category);
@@ -257,6 +332,7 @@ export default function AdminPage() {
             ...item,
             imageUrl: imageCache[item.imageUrl] || item.imageUrl,
             imageUrlSub: imageCache[item.imageUrlSub] || item.imageUrlSub,
+            quantity: 1, // quantity を 1 に設定
           }))
           .sort((a, b) => {
             const orderA = categories.indexOf(a.category);
@@ -1270,7 +1346,6 @@ export default function AdminPage() {
             menu
           </Heading>
 
-          {/* <MyBarChart data={filteredItems} /> */}
           <MyBarChart data2={filteredItems} />
 
           <Tabs variant="soft-rounded">
@@ -1707,36 +1782,84 @@ export default function AdminPage() {
                       </VStack>
                     </FormControl>
                     <FormControl>
+                      <FormLabel>作り方</FormLabel>
+                      <Box>
+                        <Button
+                          colorScheme="blue"
+                          onClick={handleCopyToClipboardRecipe}
+                        >
+                          レシピ定型分
+                        </Button>
+                      </Box>
+                      <Textarea
+                        ref={textareaRef}
+                        value={newItem.recipe}
+                        onChange={handleRecipeChange}
+                        placeholder="レシピを入力"
+                        mb={2}
+                        resize="none"
+                        _focus={{
+                          borderColor: "custom.theme.light.850",
+                          borderWidth: "1px",
+                          boxShadow: "none",
+                        }}
+                        sx={{
+                          height: "auto",
+                          maxHeight: "none",
+                          overflow: "hidden",
+                        }}
+                      />
+                    </FormControl>
+                    <FormControl>
                       <Box>
                         栄養素
+                        <Box>
+                          <Button
+                            colorScheme="blue"
+                            onClick={handleCopyToClipboardNutrients}
+                          >
+                            栄養素定型分
+                          </Button>
+                        </Box>
                         {Object.entries(NUTRIENTS_CONFIG_).map(
-                          ([label, { unit, average }]) => (
+                          ([label, { unit }]) => (
                             <FormControl key={label}>
                               <FormLabel>{label}</FormLabel>
                               <InputGroup>
                                 <NumberInput
-                                  value={nutrientValues[label]}
+                                  value={
+                                    isNaN(nutrientValues[label])
+                                      ? 0
+                                      : nutrientValues[label]
+                                  } // NaNの場合は0を表示
                                   onChange={(_, value) =>
                                     handleChange(label, value)
                                   }
                                   min={0}
-                                  step={
-                                    label === "植物繊維" || "ビタミンB群"
-                                      ? 0.1
-                                      : 1
-                                  }
-                                  precision={
-                                    label === "植物繊維" || "ビタミンB群"
-                                      ? 1
-                                      : 0
-                                  }
-                                  clampValueOnBlur={false} // ← 入力中の制限を緩和
+                                  step={0.1}
+                                  precision={1}
+                                  clampValueOnBlur={false} // 入力中の制限を緩和
+                                  allowMouseWheel // マウスホイールでの値変更を許可
                                 >
                                   <NumberInputField
-                                    // placeholder={`${average}`}
-                                    borderTopRightRadius={0}
-                                    borderBottomRightRadius={0}
+                                    onChange={(e) => {
+                                      const inputValue = e.target.value;
+                                      // 数値と小数点のみを許可
+                                      if (
+                                        /^[0-9]*[.]?[0-9]*$/.test(inputValue) ||
+                                        inputValue === ""
+                                      ) {
+                                        handleChange(
+                                          label,
+                                          parseFloat(inputValue) || 0
+                                        );
+                                      }
+                                    }}
                                   />
+                                  <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                  </NumberInputStepper>
                                 </NumberInput>
                                 <InputRightAddon children={unit} />
                               </InputGroup>
@@ -1757,28 +1880,6 @@ export default function AdminPage() {
                           })
                         }
                         required
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>作り方</FormLabel>
-                      <Textarea
-                        ref={textareaRef}
-                        value={newItem.recipe}
-                        onChange={handleRecipeChange}
-                        placeholder="レシピを入力"
-                        mb={2}
-                        resize="none"
-                        _focus={{
-                          borderColor: "custom.theme.light.850",
-                          borderWidth: "1px",
-                          boxShadow: "none",
-                        }}
-                        sx={{
-                          height: "auto",
-                          maxHeight: "none",
-                          overflow: "hidden",
-                        }}
                       />
                     </FormControl>
 

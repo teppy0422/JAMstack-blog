@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { Button, ButtonGroup, Box, Badge } from "@chakra-ui/react";
+
 import {
   BarChart,
   Bar,
@@ -10,81 +12,55 @@ import {
   ReferenceLine,
   ResponsiveContainer,
   TooltipProps,
+  ReferenceArea,
 } from "recharts";
 import {
-  CATEGORY_CONFIG,
   NUTRIENTS_CONFIG_,
+  NUTRIENTS_CONFIG_1_2Y,
+  NUTRIENTS_CONFIG_3_5Y,
+  NUTRIENTS_CONFIG_6_11Y,
+  NUTRIENTS_CONFIG_12_17Y,
+  NUTRIENTS_CONFIG_ADULT,
+  NUTRIENTS_CONFIG_SENIOR,
+  NUTRIENTS_CONFIG_PREGNANT,
+  NUTRIENTS_CONFIG_6M_1Y,
+  NUTRIENTS_CONFIG_4CANCER,
+  NUTRIENTS_CONFIG_PANCREATITIS,
+  transformData,
+  MenuItem,
 } from "../app/utils/categoryConfig";
+import { text } from "stream/consumers";
 
 const data = [
   { name: "カロリー", 砂肝: 170, ローストビーフ: 190, ニラ豚: 350 },
   { name: "タンパク質", 砂肝: 22, ローストビーフ: 20, ニラ豚: 11 },
   { name: "脂質", 砂肝: 6.5, ローストビーフ: 10, ニラ豚: 33 },
 ];
-type ChartDataItem = {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  imageUrl: string;
-  imageUrlSub: string;
-  ingredients: { name: string; location: string }[];
-  nutrients: string[];
-  is_visible: boolean;
-  recommendation_level: number;
-  estimated_time: number;
-  recipe: string;
-  created_at: string;
-  isSoldOut: boolean;
-  user_id: string;
-};
+
 interface PieChartProps {
-  data2: ChartDataItem[];
+  data2: MenuItem[];
 }
 export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
   data2,
 }) => {
   const [isClient, setIsClient] = useState(false);
+  const [currentConfig, setCurrentConfig] = useState(NUTRIENTS_CONFIG_ADULT);
+  const [activeConfig, setActiveConfig] = useState("成人"); // アクティブなBadgeを管理
 
+  let transformedData: any = [];
+  const handleConfigChange = (config: any, label: string) => {
+    setCurrentConfig(config);
+    setActiveConfig(label); // アクティブなBadgeを更新
+  };
   useEffect(() => {
     setIsClient(true); // クライアントサイドでのみ表示
   }, []);
   if (!isClient) return null;
 
-  console.log("data2", data2);
-
-  const visibleData = data2.filter((item) => item.is_visible);
-  console.log("visibleData", visibleData);
-
-  const visibleData2 = visibleData.map((item) => {
-    const normalizedNutrients = item.nutrients.reduce((acc, nutrient) => {
-      const [key, value] = nutrient.split(":");
-      const average = NUTRIENTS_CONFIG_[key]?.average || 1; // averageが存在しない場合は1を使用
-      const normalizedValue = (parseFloat(value || "0") / average) * 100; // averageで割る
-      return { ...acc, [key]: normalizedValue };
-    }, {});
-    return { ...item, normalizedNutrients }; // 正規化されたnutrientsを追加
-  });
-  console.log("visibleData2", visibleData2);
-
-  // visibleDataを指定された形に変換し、数値をaverageで割る
-  const transformedData = Object.keys(NUTRIENTS_CONFIG_).map((nutrient) => {
-    const average = NUTRIENTS_CONFIG_[nutrient].average; // averageを取得
-    return {
-      name: nutrient,
-      ...visibleData.reduce((acc, item) => {
-        const nutrientValue = item.nutrients
-          .find((n) => n.startsWith(nutrient))
-          ?.split(":")[1];
-        const value = parseFloat(nutrientValue || "0");
-        return {
-          ...acc,
-          [item.name]: (value / average) * 100, // averageで割る
-        };
-      }, {}),
-    };
-  });
-  console.log("transformedData", transformedData);
+  const visibleData = data2
+    .filter((item) => item.is_visible) // 表示可能なアイテムをフィルタリング
+    .filter((item) => item.quantity > 0); // quantity が 0 を超えるアイテムだけを残す
+  transformedData = transformData(visibleData, currentConfig);
   interface CustomTooltipProps {
     active?: boolean;
     payload?: Array<{
@@ -101,11 +77,11 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
     label,
   }) => {
     if (active && payload && payload.length) {
-      const average = label ? NUTRIENTS_CONFIG_[label]?.average || null : null; // labelがundefinedの場合はnullを返す
-      const max = label ? NUTRIENTS_CONFIG_[label]?.max || null : null; // 該当するaverageがない場合はnullを返す
+      const average = label ? currentConfig[label]?.average || null : null; // labelがundefinedの場合はnullを返す
+      const max = label ? currentConfig[label]?.max || null : null; // 該当するaverageがない場合はnullを返す
       const unit = label ? NUTRIENTS_CONFIG_[label]?.unit || "" : ""; // 単位を取得
       const getMatchingData = (
-        visibleData: ChartDataItem[],
+        visibleData: MenuItem[],
         label: string,
         itemName: string
       ) => {
@@ -117,12 +93,14 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
           );
           if (nutrient) {
             const [, value] = nutrient.split(":");
-            return { name: matchingItem.name, value: parseFloat(value) };
+            return {
+              name: matchingItem.name,
+              value: parseFloat(value) * matchingItem.quantity,
+            }; // 栄養素の値を取得
           }
         }
         return null;
       };
-
       return (
         <div
           style={{
@@ -134,17 +112,40 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
         >
           <p style={{ margin: 0, fontWeight: "bold" }}>{label}</p>
           <p style={{ margin: 0, color: "#666" }}>
+            {label
+              ? currentConfig[label]?.comment
+                  .split("。")
+                  .map((sentence: string, index: number) => (
+                    <span key={index}>
+                      {sentence}
+                      {sentence ? "。" : ""}
+                      <br />
+                    </span>
+                  ))
+              : ""}
+          </p>
+          <p style={{ margin: 0, color: "#666" }}>
             {average}
             {unit}
             {max ? ` / 最大:${max}${unit}` : ""}
           </p>
-          {payload.map((item, index) => (
-            <p key={index} style={{ margin: 0, color: item.color }}>
-              {item.name}:{/* {Math.round(item.payload[item.name])} */}
-              {label && getMatchingData(visibleData, label, item.name)?.value}
-              {unit}
-            </p>
-          ))}
+          {payload.map((item, index) => {
+            const matchingData =
+              label && getMatchingData(visibleData, label, item.name);
+            if (
+              !matchingData ||
+              matchingData.value === 0 ||
+              matchingData.value == null
+            ) {
+              return null; // 値が0または空欄の場合は何も表示しない
+            }
+            return (
+              <p key={index} style={{ margin: 0, color: item.color }}>
+                {item.name}: {matchingData.value}
+                {unit}
+              </p>
+            );
+          })}
         </div>
       );
     }
@@ -153,8 +154,8 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
   // カスタムラベルコンポーネント
   const CustomLabel = ({ x, y, width, height, value, index, dataKey }: any) => {
     const textLen = dataKey.length; // テキストの長さを取得
-    const textWidth = textLen * 6; // テキストの幅を計算（1文字あたり6pxと仮定）
-    if (textWidth > 30 || width < 20) return null; // 値が10未満の場合は何も描画しない
+    const textWidth = textLen * 12; // テキストの幅を計算（1文字あたり6pxと仮定）
+    if (textWidth > width) return null; // 値が10未満の場合は何も描画しない
     value = Math.round(value); // 値を整数に丸める
 
     const centerX = x + width / 2;
@@ -200,36 +201,92 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
     ]; // 20色の配列
     return colors[index % colors.length]; // インデックスに応じて色を循環させる
   };
+  const CustomBadge = (text: string, color: string, config: any) => {
+    return (
+      <Badge
+        variant={activeConfig === text ? "solid" : "outline"} // アクティブなBadgeはsolidにする
+        colorScheme={color}
+        onClick={() => handleConfigChange(config, text)} // クリック時にhandleConfigChangeを呼び出す
+        mr={1}
+        cursor="pointer"
+      >
+        {text}
+      </Badge>
+    );
+  };
   return (
-    <BarChart
-      key={JSON.stringify(transformedData)} // データが変更されるたびに再描画をトリガー
-      width={600}
-      height={500}
-      data={transformedData}
-      layout="vertical" // 横向きの棒グラフに設定
-    >
-      <XAxis type="number" domain={[0, 200]} />
-      <YAxis type="category" dataKey="name" fontSize="12px" />
-      {/* カテゴリ軸 */}
-      <Tooltip content={<CustomTooltip />} /> {/* カスタムツールチップを指定 */}
-      <Legend />
-      <ReferenceLine x={100} stroke="red" strokeDasharray="3 3" />
-      {visibleData.map((item, index) => (
-        <Bar
-          key={item.name}
-          dataKey={item.name} // ここで指定されたキーに基づいて値が取得される
-          stackId="a"
-          // fill={CATEGORY_CONFIG[item.category]?.bg || "#ccc"} // 色を設定（デフォルトはグレー）
-          fill={getColorByIndex(index)}
-          isAnimationActive={true} // アニメーションを有効化
-          animationDuration={300} // アニメーションの長さを0.3秒に設定
-          animationEasing="ease-in-out" // イージングを設定
-        >
-          <LabelList
-            content={(props) => <CustomLabel {...props} dataKey={item.name} />}
-          />
-        </Bar>
-      ))}
-    </BarChart>
+    <Box>
+      {CustomBadge("成人", "teal", NUTRIENTS_CONFIG_ADULT)}
+      {CustomBadge("6ヶ月〜1歳", "blue", NUTRIENTS_CONFIG_6M_1Y)}
+      {CustomBadge("1〜2歳", "blue", NUTRIENTS_CONFIG_1_2Y)}
+      {CustomBadge("3〜5歳", "green", NUTRIENTS_CONFIG_3_5Y)}
+      {CustomBadge("6〜11歳", "orange", NUTRIENTS_CONFIG_6_11Y)}
+      {CustomBadge("12〜17歳", "orange", NUTRIENTS_CONFIG_12_17Y)}
+      {CustomBadge("妊婦", "orange", NUTRIENTS_CONFIG_PREGNANT)}
+      {CustomBadge("抗がん剤", "purple", NUTRIENTS_CONFIG_4CANCER)}
+      {CustomBadge("膵炎", "purple", NUTRIENTS_CONFIG_PANCREATITIS)}
+
+      <BarChart
+        key={JSON.stringify(transformedData)} // データが変更されるたびに再描画をトリガー
+        width={600}
+        height={500}
+        data={transformedData}
+        layout="vertical" // 横向きの棒グラフに設定
+      >
+        <XAxis type="number" domain={[0, 200]} />
+        <YAxis type="category" dataKey="name" fontSize="12px" />
+        {/* カテゴリ軸 */}
+        <Tooltip content={<CustomTooltip />} />
+        {/* カスタムツールチップを指定 */}
+        <Legend />
+        <ReferenceLine x={100} stroke="red" strokeDasharray="3 3" />
+        {/* 範囲を示すReferenceArea */}
+        {Object.keys(currentConfig).map((nutrient, index) => {
+          const average = currentConfig[nutrient]?.average || 0;
+          const max = currentConfig[nutrient]?.max || 0;
+          const averageArea = 100;
+          const maxArea = max / average < 5 ? (max / average) * 100 : 500;
+          const fillColor = NUTRIENTS_CONFIG_[nutrient]?.color || "#888"; // 色を取得
+          // 範囲が正しい場合のみ描画
+          if (average > 0 && max > 0 && average < max && maxArea < 500) {
+            return (
+              <>
+                <ReferenceArea
+                  key={index}
+                  x1={averageArea}
+                  x2={maxArea}
+                  y1={nutrient} // 棒の範囲を調整
+                  y2={nutrient} // 棒の範囲を調整
+                  // stroke="red" // 範囲の枠線の色
+                  // strokeWidth={1} // 枠線の太さ
+                  fill={fillColor} // 範囲の背景色
+                  fillOpacity={0.3} // 背景色の透明度
+                />
+              </>
+            );
+          }
+          return null; // 範囲が不正な場合は描画しない
+        })}
+        {visibleData.map((item, index) => (
+          <Bar
+            key={item.name}
+            dataKey={item.name} // ここで指定されたキーに基づいて値が取得される
+            stackId="a"
+            // fill={CATEGORY_CONFIG[item.category]?.bg || "#ccc"} // 色を設定（デフォルトはグレー）
+            fill={getColorByIndex(index)}
+            isAnimationActive={true} // アニメーションを有効化
+            animationDuration={300} // アニメーションの長さを0.3秒に設定
+            animationEasing="ease-in-out" // イージングを設定
+            barSize={20} // 棒の太さを指定
+          >
+            <LabelList
+              content={(props) => (
+                <CustomLabel {...props} dataKey={item.name} />
+              )}
+            />
+          </Bar>
+        ))}
+      </BarChart>
+    </Box>
   );
 };

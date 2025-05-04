@@ -34,11 +34,13 @@ import {
   CustomSwitchButton,
   CustomSwitchMultiButton,
 } from "../../components/custom/CustomSwitchButton";
-import { PieChart } from "../../components/sillGraph_order";
+import { MyBarChart } from "../../components/sillGraph_order2";
 import {
   CATEGORY_CONFIG,
   searchCategoryBg,
   searchCategoryColor,
+  transformData,
+  MenuItem,
 } from "../utils/categoryConfig";
 
 import "@fontsource/yomogi";
@@ -48,24 +50,6 @@ import cloud from "d3-cloud";
 import { StarIcon } from "@chakra-ui/icons";
 import { FaStar } from "react-icons/fa";
 import { FaAnglesDown } from "react-icons/fa6";
-
-interface MenuItem {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  imageUrl: string;
-  imageUrlSub: string;
-  ingredients: { name: string; location: string }[];
-  nutrients: string[];
-  is_visible: boolean;
-  recommendation_level: number;
-  estimated_time: number;
-  recipe: string;
-  created_at: string;
-  isSoldOut: boolean;
-  user_id: string;
-}
 
 interface OrderItem {
   menu_item_id: number;
@@ -88,6 +72,10 @@ export default function OrderPage() {
   const { colorMode } = useColorMode();
   const toast = useToast();
   const [cart, setCart] = useState<{ item: MenuItem; quantity: number }[]>([]);
+
+  const [orderHistory, setOrderHistory] = useState<any[]>([]);
+  const [combinedData, setCombinedData] = useState<any[]>([]);
+
   const [selectedCategory, setSelectedCategory] = useState<string>("すべて");
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [positions, setPositions] = useState<{
@@ -138,8 +126,6 @@ export default function OrderPage() {
 
   const svgRef = useRef<SVGSVGElement | null>(null);
 
-  const [orderHistory, setOrderHistory] = useState<any[]>([]);
-
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [mode, setMode] = useState(0); // 4モード用
@@ -186,7 +172,6 @@ export default function OrderPage() {
           table: "order_menu_items",
         },
         async (payload) => {
-          console.log("メニューアイテムの変更:", payload);
           await fetchMenuItems();
         }
       )
@@ -244,7 +229,6 @@ export default function OrderPage() {
           filter: `user_id=eq.${currentUserId}`,
         },
         async (payload) => {
-          console.log("order_itemsテーブルの変更:", payload);
           await fetchOrderHistory();
         }
       )
@@ -298,8 +282,6 @@ export default function OrderPage() {
       });
       return;
     }
-
-    console.log("カートに追加するアイテム:", item);
     setCart((prevCart) => {
       const existingItem = prevCart.find(
         (cartItem) => cartItem.item.id === item.id
@@ -502,7 +484,6 @@ export default function OrderPage() {
           };
         }) || [];
     setMenuItems(itemsWithCorrectImageUrl);
-    console.log("menuItemsの状態:", itemsWithCorrectImageUrl); // 状態を確認
   };
 
   const categories = [
@@ -524,6 +505,7 @@ export default function OrderPage() {
           .map((item) => ({
             ...item,
             imageUrl: imageCache[item.imageUrl] || item.imageUrl,
+            quantity: item.quantity ?? 0, // quantity が無い場合は 0 を設定
           }))
           .sort((a, b) => {
             const orderA = CATEGORY_CONFIG[a.category]?.order ?? Infinity;
@@ -541,12 +523,12 @@ export default function OrderPage() {
           .map((item) => ({
             ...item,
             imageUrl: imageCache[item.imageUrl] || item.imageUrl,
+            quantity: item.quantity ?? 0, // quantity が無い場合は 0 を設定
           }))
           .sort(
             (a, b) =>
               (b.recommendation_level ?? 0) - (a.recommendation_level ?? 0)
           );
-
   useEffect(() => {
     if (svgRef.current) {
       drawWordCloud(wordCloudData, menuItems);
@@ -562,13 +544,8 @@ export default function OrderPage() {
         value: Math.max(item.recommendation_level * 20, 10), // 最小サイズを10に設定
         category: item.category,
       }));
-    console.log("wordCloudDataを更新:", data);
     setWordCloudData(data);
   }, [menuItems]);
-
-  useEffect(() => {
-    console.log("isHover state changed:", isHover);
-  }, [isHover]);
 
   const findRelatedItem = (text: string) => {
     return menuItems.find((item) => item.name === text);
@@ -957,10 +934,43 @@ export default function OrderPage() {
           ? parentRight - el.getBoundingClientRect().right
           : 0,
     }));
-    console.log(positions);
     setRightPositions(positions);
     placedListRef.current = [];
   }, [mode]);
+
+  // cart と orderHistory を統合
+  // combined を更新する関数
+  useEffect(() => {
+    const updateCombinedData = () => {
+      const combined: MenuItem[] = menuItems.map((item) => {
+        // カート内の該当アイテムの数量を取得
+        const cartItem = cart.find((cartItem) => cartItem.item.id === item.id);
+        const cartQuantity = cartItem ? cartItem.quantity : 0;
+
+        // 注文履歴内の該当アイテムの数量を取得
+        const historyItem = orderHistory.find(
+          (historyItem) => historyItem.menu_item_id === item.id // 修正: menu_item_id を使用
+        );
+        const historyQuantity = historyItem ? historyItem.quantity : 0;
+
+        // 合計数量を計算
+        const totalQuantity = cartQuantity + historyQuantity;
+
+        return {
+          ...item,
+          quantity: totalQuantity, // 合計数量を設定
+        };
+      });
+
+      setCombinedData(combined);
+      console.log("Combined Data:", combined);
+      console.log("menuItems:", menuItems);
+      console.log("filteredItems:", filteredItems);
+      console.log("cart:", cart);
+      console.log("orderHistory:", orderHistory);
+    };
+    updateCombinedData();
+  }, [orderHistory, cart, menuItems]);
 
   return (
     <>
@@ -1746,7 +1756,7 @@ export default function OrderPage() {
             </Box>
 
             <Box mt={mode === 0 || mode === 1 ? 3 : 0}>
-              <PieChart data={menuItems} />
+              <MyBarChart data2={combinedData} />
               {cart.length > 0 && (
                 <>
                   <Heading size="sm" mb={1}>
