@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { Button, ButtonGroup, Box, Badge } from "@chakra-ui/react";
+import {
+  Button,
+  ButtonGroup,
+  Box,
+  Badge,
+  useColorMode,
+} from "@chakra-ui/react";
 
 import {
   BarChart,
@@ -13,6 +19,7 @@ import {
   ResponsiveContainer,
   TooltipProps,
   ReferenceArea,
+  LegendProps,
 } from "recharts";
 import {
   NUTRIENTS_CONFIG_,
@@ -46,7 +53,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
   const [isClient, setIsClient] = useState(false);
   const [currentConfig, setCurrentConfig] = useState(NUTRIENTS_CONFIG_ADULT);
   const [activeConfig, setActiveConfig] = useState("成人"); // アクティブなBadgeを管理
-
+  const { colorMode } = useColorMode();
   let transformedData: any = [];
   const handleConfigChange = (config: any, label: string) => {
     setCurrentConfig(config);
@@ -102,16 +109,32 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
         return null;
       };
       return (
-        <div
+        <Box
           style={{
             backgroundColor: "#fff",
-            padding: "10px",
+            padding: "8px",
             border: "1px solid #ccc",
             borderRadius: "5px",
           }}
+          fontSize="12px"
+          fontWeight="400"
         >
-          <p style={{ margin: 0, fontWeight: "bold" }}>{label}</p>
-          <p style={{ margin: 0, color: "#666" }}>
+          <p style={{ margin: 0, fontWeight: "bold" }}>
+            {label}{" "}
+            <span style={{ margin: 0, color: "#777", fontSize: "11px" }}>
+              ({average}
+              {unit}
+              {max ? ` : 最大:${max}${unit}` : ""})
+            </span>
+          </p>
+          <p
+            style={{
+              margin: 0,
+              color: "#666",
+              fontSize: "13px",
+              marginBottom: "6px",
+            }}
+          >
             {label
               ? currentConfig[label]?.comment
                   .split("。")
@@ -123,11 +146,6 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
                     </span>
                   ))
               : ""}
-          </p>
-          <p style={{ margin: 0, color: "#666" }}>
-            {average}
-            {unit}
-            {max ? ` / 最大:${max}${unit}` : ""}
           </p>
           {payload.map((item, index) => {
             const matchingData =
@@ -146,7 +164,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
               </p>
             );
           })}
-        </div>
+        </Box>
       );
     }
     return null;
@@ -173,6 +191,36 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
         {/* {value} */}
         {/* {average} */}
       </text>
+    );
+  };
+  // カスタムLegendコンポーネント
+  const CustomLegend: React.FC<LegendProps> = (props) => {
+    const { payload } = props;
+    return (
+      <Box
+        style={{
+          // listStyleType: "none",
+          display: "flex", // 横並びにする
+          flexWrap: "wrap", // 必要に応じて折り返し
+          margin: 0,
+          padding: 0,
+          fontSize: "12px",
+          fontWeight: "600",
+          color: colorMode === "light" ? "#333" : "#eee",
+        }}
+      >
+        {payload?.map((entry, index) => (
+          <Box
+            key={`item-${index}`}
+            style={{ color: entry.color, marginBottom: "4px" }}
+            display="inline-block"
+            mr={1}
+            mb={1}
+          >
+            ■{entry.value}
+          </Box>
+        ))}
+      </Box>
     );
   };
   // インデックスに応じた色を決定する関数
@@ -225,68 +273,79 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
       {CustomBadge("妊婦", "orange", NUTRIENTS_CONFIG_PREGNANT)}
       {CustomBadge("抗がん剤", "purple", NUTRIENTS_CONFIG_4CANCER)}
       {CustomBadge("膵炎", "purple", NUTRIENTS_CONFIG_PANCREATITIS)}
-
-      <BarChart
-        key={JSON.stringify(transformedData)} // データが変更されるたびに再描画をトリガー
-        width={600}
-        height={500}
-        data={transformedData}
-        layout="vertical" // 横向きの棒グラフに設定
-      >
-        <XAxis type="number" domain={[0, 200]} />
-        <YAxis type="category" dataKey="name" fontSize="12px" />
-        {/* カテゴリ軸 */}
-        <Tooltip content={<CustomTooltip />} />
-        {/* カスタムツールチップを指定 */}
-        <Legend />
-        <ReferenceLine x={100} stroke="red" strokeDasharray="3 3" />
-        {/* 範囲を示すReferenceArea */}
-        {Object.keys(currentConfig).map((nutrient, index) => {
-          const average = currentConfig[nutrient]?.average || 0;
-          const max = currentConfig[nutrient]?.max || 0;
-          const averageArea = 100;
-          const maxArea = max / average < 5 ? (max / average) * 100 : 500;
-          const fillColor = NUTRIENTS_CONFIG_[nutrient]?.color || "#888"; // 色を取得
-          // 範囲が正しい場合のみ描画
-          if (average > 0 && max > 0 && average < max && maxArea < 500) {
-            return (
-              <>
-                <ReferenceArea
-                  key={index}
-                  x1={averageArea}
-                  x2={maxArea}
-                  y1={nutrient} // 棒の範囲を調整
-                  y2={nutrient} // 棒の範囲を調整
-                  // stroke="red" // 範囲の枠線の色
-                  // strokeWidth={1} // 枠線の太さ
-                  fill={fillColor} // 範囲の背景色
-                  fillOpacity={0.3} // 背景色の透明度
-                />
-              </>
-            );
-          }
-          return null; // 範囲が不正な場合は描画しない
-        })}
-        {visibleData.map((item, index) => (
-          <Bar
-            key={item.name}
-            dataKey={item.name} // ここで指定されたキーに基づいて値が取得される
-            stackId="a"
-            // fill={CATEGORY_CONFIG[item.category]?.bg || "#ccc"} // 色を設定（デフォルトはグレー）
-            fill={getColorByIndex(index)}
-            isAnimationActive={true} // アニメーションを有効化
-            animationDuration={300} // アニメーションの長さを0.3秒に設定
-            animationEasing="ease-in-out" // イージングを設定
-            barSize={20} // 棒の太さを指定
-          >
-            <LabelList
-              content={(props) => (
-                <CustomLabel {...props} dataKey={item.name} />
-              )}
-            />
-          </Bar>
-        ))}
-      </BarChart>
+      <ResponsiveContainer width="100%" height={450}>
+        <BarChart
+          key={JSON.stringify(transformedData)} // データが変更されるたびに再描画をトリガー
+          data={transformedData}
+          layout="vertical" // 横向きの棒グラフに設定
+        >
+          <XAxis
+            type="number"
+            domain={[0, 200]}
+            fontSize="12px"
+            fontWeight="400"
+            tick={{ fill: colorMode === "light" ? "#333" : "#eee" }}
+          />
+          <YAxis
+            type="category"
+            dataKey="name"
+            fontSize="12px"
+            fontWeight="400"
+            tick={{ fill: colorMode === "light" ? "#333" : "#eee" }}
+          />
+          {/* カテゴリ軸 */}
+          <Tooltip content={<CustomTooltip />} />
+          {/* カスタムツールチップを指定 */}
+          <Legend content={<CustomLegend />} />
+          <ReferenceLine x={100} stroke="red" strokeDasharray="3 3" />
+          {/* 範囲を示すReferenceArea */}
+          {Object.keys(currentConfig).map((nutrient, index) => {
+            const average = currentConfig[nutrient]?.average || 0;
+            const max = currentConfig[nutrient]?.max || 0;
+            const averageArea = 100;
+            const maxArea = max / average < 5 ? (max / average) * 100 : 500;
+            const fillColor = NUTRIENTS_CONFIG_[nutrient]?.color || "#888"; // 色を取得
+            // 範囲が正しい場合のみ描画
+            if (average > 0 && max > 0 && average < max && maxArea < 500) {
+              return (
+                <>
+                  <ReferenceArea
+                    key={index}
+                    x1={averageArea}
+                    x2={maxArea}
+                    y1={nutrient} // 棒の範囲を調整
+                    y2={nutrient} // 棒の範囲を調整
+                    // stroke="red" // 範囲の枠線の色
+                    // strokeWidth={1} // 枠線の太さ
+                    fill={fillColor} // 範囲の背景色
+                    fillOpacity={0.3} // 背景色の透明度
+                  />
+                </>
+              );
+            }
+            return null; // 範囲が不正な場合は描画しない
+          })}
+          {visibleData.map((item, index) => (
+            <Bar
+              key={item.name}
+              dataKey={item.name} // ここで指定されたキーに基づいて値が取得される
+              stackId="a"
+              // fill={CATEGORY_CONFIG[item.category]?.bg || "#ccc"} // 色を設定（デフォルトはグレー）
+              fill={getColorByIndex(index)}
+              isAnimationActive={true} // アニメーションを有効化
+              animationDuration={300} // アニメーションの長さを0.3秒に設定
+              animationEasing="ease-in-out" // イージングを設定
+              barSize={15} // 棒の太さを指定
+            >
+              <LabelList
+                content={(props) => (
+                  <CustomLabel {...props} dataKey={item.name} />
+                )}
+              />
+            </Bar>
+          ))}
+        </BarChart>
+      </ResponsiveContainer>
     </Box>
   );
 };

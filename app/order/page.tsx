@@ -87,9 +87,9 @@ export default function OrderPage() {
     sm: 2,
     md: 4,
     lg: 4,
-    xl: 5,
-    "2xl": 6,
-    "3xl": 7,
+    xl: 4,
+    "2xl": 5,
+    "3xl": 6,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
@@ -538,10 +538,10 @@ export default function OrderPage() {
   // wordCloudDataを更新
   const handleReposition = useCallback(() => {
     const data = menuItems
-      .filter((item) => item.recommendation_level > 0) // おすすめ度が0より大きいものだけを表示
+      // .filter((item) => item.recommendation_level > 0) // おすすめ度が0より大きいものだけを表示
       .map((item) => ({
         text: item.name,
-        value: Math.max(item.recommendation_level * 20, 10), // 最小サイズを10に設定
+        value: Math.max(item.recommendation_level * 20, 16), // 最小サイズを10に設定
         category: item.category,
       }));
     setWordCloudData(data);
