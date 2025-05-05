@@ -1,3 +1,22 @@
+export interface MenuItem {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+  imageUrl: string;
+  imageUrlSub: string;
+  ingredients: { name: string; location: string }[];
+  nutrients: string[];
+  is_visible: boolean;
+  recommendation_level: number;
+  estimated_time: number;
+  recipe: string;
+  created_at: string;
+  isSoldOut: boolean;
+  user_id: string;
+  quantity: number;
+}
+
 export const CATEGORY_CONFIG = {
   おつまみ: { bg: "#f56464", color: "#fff", order: 1 },
   刺身: { bg: "#4199e0", color: "#fff", order: 2 },
@@ -31,7 +50,52 @@ export const NUTRIENTS_CONFIG_ = {
   ナトリウム: { unit: "mg", color: "#90a4ae" },
   葉酸: { unit: "μg", color: "#8d6e63" },
 };
-// 6か月〜1歳
+
+export const searchCategoryBg = (searchTerm: string): string[] => {
+  return Object.entries(CATEGORY_CONFIG)
+    .filter(([category]) => category.includes(searchTerm))
+    .map(([, config]) => config.bg);
+};
+
+export const searchCategoryColor = (searchTerm: string): string[] => {
+  return Object.entries(CATEGORY_CONFIG)
+    .filter(([category]) => category.includes(searchTerm))
+    .map(([, config]) => config.color);
+};
+
+export const getTotalByName = (name: string, transformedData: any): number => {
+  // `transformedData` から `name` が一致するオブジェクトを取得
+  const matchingData = transformedData.find((item: any) => item.name === name);
+  if (!matchingData) return 0; // 一致するデータがない場合は 0 を返す
+  // オブジェクト内の値を合計（`name` プロパティを除外）
+  return Object.entries(matchingData)
+    .filter(([key]) => key !== "name") // "name" プロパティを除外
+    .reduce(
+      (sum, [, value]) => sum + (typeof value === "number" ? value : 0),
+      0
+    ); // 数値のみを合計
+};
+
+// visibleDataを指定された形に変換し、数値をaverageで割る
+export const transformData = (visibleData: MenuItem[], config: any) => {
+  return Object.keys(config).map((nutrient) => {
+    const average = config[nutrient].average; // averageを取得
+    return {
+      name: nutrient,
+      ...visibleData.reduce((acc, item) => {
+        const nutrientValue = item.nutrients
+          .find((n) => n.startsWith(nutrient))
+          ?.split(":")[1];
+        const value = parseFloat(nutrientValue || "0") * item.quantity; // quantityを考慮
+        return {
+          ...acc,
+          [item.name]: Math.round((value / average) * 100), // averageで割る
+        };
+      }, {}),
+    };
+  });
+};
+
 // 6か月〜1歳（離乳期後半）
 export const NUTRIENTS_CONFIG_6M_1Y = {
   カロリー: {
@@ -688,54 +752,3 @@ export const NUTRIENTS_CONFIG_PANCREATITIS = {
     comment: "浮腫や高血圧のリスクを考慮し、控えめに設定",
   },
 };
-
-export const searchCategoryBg = (searchTerm: string): string[] => {
-  return Object.entries(CATEGORY_CONFIG)
-    .filter(([category]) => category.includes(searchTerm))
-    .map(([, config]) => config.bg);
-};
-
-export const searchCategoryColor = (searchTerm: string): string[] => {
-  return Object.entries(CATEGORY_CONFIG)
-    .filter(([category]) => category.includes(searchTerm))
-    .map(([, config]) => config.color);
-};
-
-// visibleDataを指定された形に変換し、数値をaverageで割る
-export const transformData = (visibleData: MenuItem[], config: any) => {
-  return Object.keys(config).map((nutrient) => {
-    const average = config[nutrient].average; // averageを取得
-    return {
-      name: nutrient,
-      ...visibleData.reduce((acc, item) => {
-        const nutrientValue = item.nutrients
-          .find((n) => n.startsWith(nutrient))
-          ?.split(":")[1];
-        const value = parseFloat(nutrientValue || "0") * item.quantity; // quantityを考慮
-        return {
-          ...acc,
-          [item.name]: Math.round((value / average) * 100), // averageで割る
-        };
-      }, {}),
-    };
-  });
-};
-
-export interface MenuItem {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  imageUrl: string;
-  imageUrlSub: string;
-  ingredients: { name: string; location: string }[];
-  nutrients: string[];
-  is_visible: boolean;
-  recommendation_level: number;
-  estimated_time: number;
-  recipe: string;
-  created_at: string;
-  isSoldOut: boolean;
-  user_id: string;
-  quantity: number;
-}

@@ -34,7 +34,9 @@ import {
   NUTRIENTS_CONFIG_4CANCER,
   NUTRIENTS_CONFIG_PANCREATITIS,
   transformData,
+  getTotalByName,
   MenuItem,
+  searchCategoryColor,
 } from "../app/utils/categoryConfig";
 import { text } from "stream/consumers";
 
@@ -50,7 +52,6 @@ interface PieChartProps {
 export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
   data2,
 }) => {
-  const [isClient, setIsClient] = useState(false);
   const [currentConfig, setCurrentConfig] = useState(NUTRIENTS_CONFIG_ADULT);
   const [activeConfig, setActiveConfig] = useState("成人"); // アクティブなBadgeを管理
   const { colorMode } = useColorMode();
@@ -59,6 +60,43 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
     setCurrentConfig(config);
     setActiveConfig(label); // アクティブなBadgeを更新
   };
+
+  const [blinkingItems, setBlinkingItems] = useState<Record<string, boolean>>(
+    {}
+  );
+  const blinkingStyle = {
+    animation: "blinking 0.7s 3",
+  };
+  const styles = `
+    @keyframes blinking {
+      0% { opacity: 1; }
+      50% { opacity: 0.1; }
+      100% { opacity: 1; }
+    }
+  `;
+  useEffect(() => {
+    const blinkingTimeouts: NodeJS.Timeout[] = [];
+    const newBlinkingItems: Record<string, boolean> = {};
+    transformedData.forEach((item) => {
+      const total = getTotalByName(item.name, transformedData);
+      const average = currentConfig[item.name]?.average || 100;
+      const max = currentConfig[item.name]?.max || 100;
+      const isOver = total > (max / average) * 100;
+      if (isOver) {
+        newBlinkingItems[item.name] = true; // 点滅を開始
+        const timeout = setTimeout(() => {
+          setBlinkingItems((prev) => ({ ...prev, [item.name]: false })); // 3秒後に停止
+        }, 3000);
+        blinkingTimeouts.push(timeout);
+      }
+    });
+    setBlinkingItems(newBlinkingItems); // 点滅対象を更新
+    return () => {
+      blinkingTimeouts.forEach((timeout) => clearTimeout(timeout)); // クリーンアップ
+    };
+  }, [transformedData, currentConfig]);
+
+  const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true); // クライアントサイドでのみ表示
   }, []);
@@ -68,6 +106,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
     .filter((item) => item.is_visible) // 表示可能なアイテムをフィルタリング
     .filter((item) => item.quantity > 0); // quantity が 0 を超えるアイテムだけを残す
   transformedData = transformData(visibleData, currentConfig);
+
   interface CustomTooltipProps {
     active?: boolean;
     payload?: Array<{
@@ -291,7 +330,46 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
             dataKey="name"
             fontSize="12px"
             fontWeight="400"
-            tick={{ fill: colorMode === "light" ? "#333" : "#eee" }}
+            // tick={{ fill: colorMode === "light" ? "#333" : "#eee" }}
+            tick={(props) => {
+              const { payload, x, y, textAnchor } = props;
+              const isBlinking = blinkingItems[payload.value]; // 点滅状態を参照
+
+              const total = getTotalByName(payload.value, transformedData);
+              const average = currentConfig[payload.value]?.average || 100;
+              const max = currentConfig[payload.value]?.max || 100;
+              const isOverMax = total > (max / average) * 100;
+              const isSufficient = total >= 100 && !isOverMax;
+              const fillColor = isOverMax
+                ? "#f00"
+                : isSufficient
+                ? NUTRIENTS_CONFIG_[payload.value]?.color
+                : "#333"; // 色を設定
+              ("#333"); // 点滅中は赤色
+              return (
+                <>
+                  <style>{styles}</style>
+                  <text
+                    x={x}
+                    y={y}
+                    textAnchor={textAnchor}
+                    fill={fillColor} // テキストの色を設定
+                    fontSize="11px"
+                    fontWeight="600"
+                    dominantBaseline="middle"
+                    style={
+                      isBlinking
+                        ? blinkingStyle
+                        : isSufficient
+                        ? { opacity: 0.4 }
+                        : undefined
+                    }
+                  >
+                    {payload.value}
+                  </text>
+                </>
+              );
+            }}
           />
           {/* カテゴリ軸 */}
           <Tooltip content={<CustomTooltip />} />
@@ -318,7 +396,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
                     // stroke="red" // 範囲の枠線の色
                     // strokeWidth={1} // 枠線の太さ
                     fill={fillColor} // 範囲の背景色
-                    fillOpacity={0.3} // 背景色の透明度
+                    fillOpacity={0.4} // 背景色の透明度
                   />
                 </>
               );
