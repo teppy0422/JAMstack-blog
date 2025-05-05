@@ -15,6 +15,9 @@ export interface MenuItem {
   isSoldOut: boolean;
   user_id: string;
   quantity: number;
+  createdAt?: Date | null;
+  addedAt?: Date | null;
+  hoveredAt?: Date | null;
 }
 
 export const CATEGORY_CONFIG = {
@@ -154,9 +157,10 @@ export const NUTRIENTS_CONFIG_6M_1Y = {
     comment: "成長や免疫に必要。肉や魚を離乳食で少しずつ",
   },
   ナトリウム: {
-    average: 500,
-    max: 1000,
-    comment: "塩分控えめが基本。素材の味を活かす調理で",
+    average: 200,
+    max: 300,
+    comment:
+      "塩分控えめが基本。不足すると電解質バランスが崩れ食欲不振、活動の低下。過剰摂取で腎臓への負担、脱水症状、将来的な高血圧と生活習慣病と味覚への悪影響",
   },
 };
 
@@ -220,7 +224,7 @@ export const NUTRIENTS_CONFIG_1_2Y = {
   ナトリウム: {
     average: 1000,
     max: 1500,
-    comment: "塩分控えめを基本に。加工品の摂取に注意",
+    comment: "不足で食欲不振",
   },
 };
 

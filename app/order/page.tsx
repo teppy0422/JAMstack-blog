@@ -71,7 +71,12 @@ interface Word {
 export default function OrderPage() {
   const { colorMode } = useColorMode();
   const toast = useToast();
-  const [cart, setCart] = useState<{ item: MenuItem; quantity: number }[]>([]);
+  const [cart, setCart] = useState<
+    { item: MenuItem; quantity: number; addedAt: Date }[]
+  >([]);
+  const [hoveredData, setHoveredData] = useState<
+    { item: MenuItem; quantity: number; hoveredAt: Date }[]
+  >([]);
 
   const [orderHistory, setOrderHistory] = useState<any[]>([]);
   const [combinedData, setCombinedData] = useState<any[]>([]);
@@ -293,7 +298,8 @@ export default function OrderPage() {
             : cartItem
         );
       }
-      return [...prevCart, { item, quantity: 1 }];
+      removeFromHoveredData(item.id);
+      return [...prevCart, { item, quantity: 1, addedAt: new Date() }];
     });
   }, []);
 
@@ -310,6 +316,27 @@ export default function OrderPage() {
       0
     );
   };
+
+  const addToHoveredData = useCallback((item: MenuItem) => {
+    setHoveredData((prevHoveredData) => {
+      const existingItem = prevHoveredData.find(
+        (hoveredItem) => hoveredItem.item.id === item.id
+      );
+      if (existingItem) {
+        return prevHoveredData.map((hoveredItem) =>
+          hoveredItem.item.id === item.id
+            ? { ...hoveredItem, quantity: hoveredItem.quantity + 1 }
+            : hoveredItem
+        );
+      }
+      return [...prevHoveredData, { item, quantity: 1, hoveredAt: new Date() }];
+    });
+  }, []);
+  const removeFromHoveredData = useCallback((itemId: number) => {
+    setHoveredData((prevHoveredData) =>
+      prevHoveredData.filter((hoveredItem) => hoveredItem.item.id !== itemId)
+    );
+  }, []);
 
   const handleSubmitOrder = async () => {
     if (cart.length === 0) {
@@ -756,6 +783,7 @@ export default function OrderPage() {
                       src={item.order_menu_items.image_url}
                       alt={item.order_menu_items.name}
                       boxSize="50px"
+                      minW="50px"
                       objectFit="cover"
                       borderRadius="md"
                       zIndex={0}
@@ -952,25 +980,56 @@ export default function OrderPage() {
           (historyItem) => historyItem.menu_item_id === item.id // 修正: menu_item_id を使用
         );
         const historyQuantity = historyItem ? historyItem.quantity : 0;
+        // ホバー中の該当アイテムの数量を取得
+        const hoveredItem = hoveredData.find(
+          (hoveredItem) => hoveredItem.item.id === item.id
+        );
+        const hoveredQuantity = hoveredItem ? hoveredItem.quantity : 0;
 
         // 合計数量を計算
-        const totalQuantity = cartQuantity + historyQuantity;
-
+        const totalQuantity = cartQuantity + historyQuantity + hoveredQuantity;
         return {
           ...item,
           quantity: totalQuantity, // 合計数量を設定
+          createdAt: historyItem?.orders?.created_at || null, // 注文履歴の作成日時
+          addedAt: cartItem?.addedAt || null, // カートに追加された時刻
+          hoveredAt: hoveredItem?.hoveredAt || null, // ホバーされた時刻
         };
       });
+      // 並べ替え
+      const sortedCombined = combined.sort((a, b) => {
+        // 1. 注文履歴の作成日時で昇順
+        if (a.createdAt && b.createdAt) {
+          return (
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
+        }
+        if (a.createdAt) return -1;
+        if (b.createdAt) return 1;
 
-      setCombinedData(combined);
-      console.log("Combined Data:", combined);
-      console.log("menuItems:", menuItems);
-      console.log("filteredItems:", filteredItems);
-      console.log("cart:", cart);
-      console.log("orderHistory:", orderHistory);
+        // 2. カートに追加された時刻で昇順
+        if (a.addedAt && b.addedAt) {
+          return new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
+        }
+        if (a.addedAt) return -1;
+        if (b.addedAt) return 1;
+
+        // 3. ホバーされた時刻で昇順
+        if (a.hoveredAt && b.hoveredAt) {
+          return (
+            new Date(a.hoveredAt).getTime() - new Date(b.hoveredAt).getTime()
+          );
+        }
+        if (a.hoveredAt) return -1;
+        if (b.hoveredAt) return 1;
+
+        return 0; // すべての条件が同じ場合は順序を変更しない
+      });
+
+      setCombinedData(sortedCombined);
     };
     updateCombinedData();
-  }, [orderHistory, cart, menuItems]);
+  }, [orderHistory, cart, hoveredData, menuItems]);
 
   return (
     <>
@@ -1165,18 +1224,25 @@ export default function OrderPage() {
                         h="auto"
                         bg="transparent"
                         _hover={{
-                          transition: "transform 0.2s ease",
+                          transform: "scale(1.1)", // ホバー時に拡大
+                          transition: "transform 0.2s ease-in-out", // スムーズなアニメーション
                           filter: "none",
                         }}
                         cursor={item.isSoldOut ? "default" : "pointer"}
-                        onMouseEnter={() => {
-                          setIsHover(true);
-                          setHoveredItem(item);
-                        }}
-                        onMouseLeave={() => {
-                          setIsHover(false);
-                          setHoveredItem(null);
-                        }}
+                        onMouseEnter={
+                          () => {
+                            setIsHover(true);
+                            setHoveredItem(item);
+                            addToHoveredData(item);
+                          } // ホバー時にデータを追加
+                        }
+                        onMouseLeave={
+                          () => {
+                            setIsHover(false);
+                            setHoveredItem(null);
+                            removeFromHoveredData(item.id);
+                          } // ホバー解除時にデータを削除
+                        }
                         display="flex"
                         flexDirection="column"
                         alignItems="center"

@@ -211,7 +211,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
   // カスタムラベルコンポーネント
   const CustomLabel = ({ x, y, width, height, value, index, dataKey }: any) => {
     const textLen = dataKey.length; // テキストの長さを取得
-    const textWidth = textLen * 12; // テキストの幅を計算（1文字あたり6pxと仮定）
+    const textWidth = textLen * 10; // テキストの幅を計算（1文字あたり6pxと仮定）
     if (textWidth > width) return null; // 値が10未満の場合は何も描画しない
     value = Math.round(value); // 値を整数に丸める
 
@@ -224,7 +224,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
         fill="#fff"
         textAnchor="middle"
         dominantBaseline="middle"
-        fontSize={12}
+        fontSize={10}
       >
         {dataKey}
         {/* {value} */}
@@ -243,7 +243,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
           flexWrap: "wrap", // 必要に応じて折り返し
           margin: 0,
           padding: 0,
-          fontSize: "12px",
+          fontSize: "10px",
           fontWeight: "600",
           color: colorMode === "light" ? "#333" : "#eee",
         }}
@@ -251,10 +251,10 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
         {payload?.map((entry, index) => (
           <Box
             key={`item-${index}`}
-            style={{ color: entry.color, marginBottom: "4px" }}
+            color={entry.color}
             display="inline-block"
             mr={1}
-            mb={1}
+            mb={0}
           >
             ■{entry.value}
           </Box>
@@ -265,27 +265,24 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
   // インデックスに応じた色を決定する関数
   const getColorByIndex = (index: number): string => {
     const colors = [
-      "#f56464",
-      "#4199e0",
-      "#ed8937",
-      "#edca4c",
-      "#49ba78",
-      "#a07aeb",
-      "#fd94c6",
-      "#2a6bb0",
-      "#fbd38d",
-      "#4a5568",
-      "#f6ad55",
-      "#99ba78",
-      "#888",
-      "#ff7f50",
-      "#87ceeb",
-      "#6a5acd",
-      "#ff69b4",
-      "#4682b4",
-      "#d2691e",
-      "#32cd32",
-    ]; // 20色の配列
+      "#f56464", // 赤
+      "#4199e0", // 青
+      "#ed8937", // オレンジ
+      "#49ba78", // 緑
+      "#a07aeb", // 紫
+      "#fd94c6", // ピンク
+      "#7daa4c", // 濃い緑
+      "#2a6bb0", // 濃い青
+      "#4a5568", // グレー
+      "#888", // 灰色 -> 見えづらいので変更
+      "#ff7f50", // コーラル
+      "#87ceeb", // スカイブルー
+      "#6a5acd", // 濃い紫
+      "#ff69b4", // ホットピンク
+      "#4682b4", // スチールブルー
+      "#d2691e", // チョコレート
+      "#32cd32", // ライムグリーン
+    ];
     return colors[index % colors.length]; // インデックスに応じて色を循環させる
   };
   const CustomBadge = (text: string, color: string, config: any) => {
@@ -309,7 +306,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
       {CustomBadge("3〜5歳", "green", NUTRIENTS_CONFIG_3_5Y)}
       {CustomBadge("6〜11歳", "orange", NUTRIENTS_CONFIG_6_11Y)}
       {CustomBadge("12〜17歳", "orange", NUTRIENTS_CONFIG_12_17Y)}
-      {CustomBadge("妊婦", "orange", NUTRIENTS_CONFIG_PREGNANT)}
+      {CustomBadge("妊婦", "purple", NUTRIENTS_CONFIG_PREGNANT)}
       {CustomBadge("抗がん剤", "purple", NUTRIENTS_CONFIG_4CANCER)}
       {CustomBadge("膵炎", "purple", NUTRIENTS_CONFIG_PANCREATITIS)}
       <ResponsiveContainer width="100%" height={450}>
@@ -321,7 +318,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
           <XAxis
             type="number"
             domain={[0, 200]}
-            fontSize="12px"
+            fontSize="10px"
             fontWeight="400"
             tick={{ fill: colorMode === "light" ? "#333" : "#eee" }}
           />
@@ -344,8 +341,9 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
                 ? "#f00"
                 : isSufficient
                 ? NUTRIENTS_CONFIG_[payload.value]?.color
-                : "#333"; // 色を設定
-              ("#333"); // 点滅中は赤色
+                : colorMode === "light"
+                ? "#333"
+                : "#eee"; // 色を設定
               return (
                 <>
                   <style>{styles}</style>

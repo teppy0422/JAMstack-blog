@@ -591,8 +591,6 @@ export default function AdminPage() {
       };
 
       const compressedFile = await imageCompression(file, options);
-      console.log("Original size:", file.size / 1024 / 1024, "MB");
-      console.log("Compressed size:", compressedFile.size / 1024 / 1024, "MB");
 
       // ファイル名を生成（タイムスタンプ + .webp）
       const fileName = `${Date.now()}.webp`;
@@ -919,9 +917,6 @@ export default function AdminPage() {
       const imagePath = itemToDelete.imageUrl?.split("/").pop();
       // 画像2のファイル名を取得（存在する場合のみ）
       const imageSubPath = itemToDelete.imageUrlSub?.split("/").pop();
-
-      console.log("imageUrlSub:", itemToDelete.imageUrlSub); // デバッグ用ログ
-      console.log("imageSubPath:", imageSubPath); // デバッグ用ログ
 
       // Supabase Storageから画像を削除
       const pathsToDelete: string[] = [];
