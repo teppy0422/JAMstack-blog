@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Button,
   ButtonGroup,
@@ -55,7 +55,6 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
   const [currentConfig, setCurrentConfig] = useState(NUTRIENTS_CONFIG_ADULT);
   const [activeConfig, setActiveConfig] = useState("成人"); // アクティブなBadgeを管理
   const { colorMode } = useColorMode();
-  let transformedData: any = [];
   const handleConfigChange = (config: any, label: string) => {
     setCurrentConfig(config);
     setActiveConfig(label); // アクティブなBadgeを更新
@@ -74,6 +73,13 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
       100% { opacity: 1; }
     }
   `;
+  const transformedData = useMemo(() => {
+    const visibleData = data2
+      .filter((item) => item.is_visible) // 表示可能なアイテムをフィルタリング
+      .filter((item) => item.quantity > 0); // quantity が 0 を超えるアイテムだけを残す
+    return transformData(visibleData, currentConfig);
+  }, [data2, currentConfig]); // 依存関係を指定
+
   useEffect(() => {
     const blinkingTimeouts: NodeJS.Timeout[] = [];
     const newBlinkingItems: Record<string, boolean> = {};
@@ -105,7 +111,6 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
   const visibleData = data2
     .filter((item) => item.is_visible) // 表示可能なアイテムをフィルタリング
     .filter((item) => item.quantity > 0); // quantity が 0 を超えるアイテムだけを残す
-  transformedData = transformData(visibleData, currentConfig);
 
   interface CustomTooltipProps {
     active?: boolean;
@@ -309,25 +314,57 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
       {CustomBadge("妊婦", "purple", NUTRIENTS_CONFIG_PREGNANT)}
       {CustomBadge("抗がん剤", "purple", NUTRIENTS_CONFIG_4CANCER)}
       {CustomBadge("膵炎", "purple", NUTRIENTS_CONFIG_PANCREATITIS)}
-      <ResponsiveContainer width="100%" height={450}>
+      <ResponsiveContainer
+        width="100%"
+        height={400}
+        style={{
+          marginBottom: 0,
+          paddingBottom: 0,
+        }} // 余白を削除
+      >
         <BarChart
           key={JSON.stringify(transformedData)} // データが変更されるたびに再描画をトリガー
           data={transformedData}
           layout="vertical" // 横向きの棒グラフに設定
+          margin={{ top: 0, right: 0, bottom: -10, left: 0 }} // マイナスで圧縮する
         >
           <XAxis
             type="number"
             domain={[0, 200]}
             fontSize="10px"
             fontWeight="400"
-            tick={{ fill: colorMode === "light" ? "#333" : "#eee" }}
+            tickLine={false} // タグの線を非表示
+            tickMargin={2} // タグの余白を設定
+            tick={(props) => {
+              const { payload, x, y, textAnchor } = props;
+              const isTargetValue = payload.value === 100; // 値が100かどうかを判定
+              const fillColor = isTargetValue
+                ? "red"
+                : colorMode === "light"
+                ? "#333"
+                : "#eee"; // 100の場合は赤、それ以外は通常の色
+              return (
+                <text
+                  x={x}
+                  y={y}
+                  textAnchor={textAnchor}
+                  fill={fillColor} // 色を設定
+                  fontSize="10px"
+                  fontWeight="400"
+                  dominantBaseline="middle"
+                >
+                  {payload.value}
+                </text>
+              );
+            }}
           />
           <YAxis
             type="category"
             dataKey="name"
             fontSize="12px"
             fontWeight="400"
-            // tick={{ fill: colorMode === "light" ? "#333" : "#eee" }}
+            tickLine={false} // タグの線を非表示
+            tickMargin={0} // タグの余白を設定
             tick={(props) => {
               const { payload, x, y, textAnchor } = props;
               const isBlinking = blinkingItems[payload.value]; // 点滅状態を参照
@@ -369,11 +406,8 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
               );
             }}
           />
-          {/* カテゴリ軸 */}
           <Tooltip content={<CustomTooltip />} />
-          {/* カスタムツールチップを指定 */}
-          <Legend content={<CustomLegend />} />
-          <ReferenceLine x={100} stroke="red" strokeDasharray="3 3" />
+
           {/* 範囲を示すReferenceArea */}
           {Object.keys(currentConfig).map((nutrient, index) => {
             const average = currentConfig[nutrient]?.average || 0;
@@ -408,8 +442,8 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
               stackId="a"
               // fill={CATEGORY_CONFIG[item.category]?.bg || "#ccc"} // 色を設定（デフォルトはグレー）
               fill={getColorByIndex(index)}
-              isAnimationActive={true} // アニメーションを有効化
-              animationDuration={300} // アニメーションの長さを0.3秒に設定
+              isAnimationActive={false} // アニメーションを有効化
+              animationDuration={0} // アニメーションの長さを0.3秒に設定
               animationEasing="ease-in-out" // イージングを設定
               barSize={15} // 棒の太さを指定
             >
@@ -420,8 +454,34 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
               />
             </Bar>
           ))}
+          <ReferenceLine x={100} stroke="red" strokeDasharray="3 3" />
         </BarChart>
       </ResponsiveContainer>
+      {/* カスタムLegend */}
+      <Box
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          marginTop: "10px",
+          fontSize: "10px",
+          fontWeight: "600",
+        }}
+      >
+        {transformedData
+          .filter((item) => item.name === "カロリー") // name が "カロリー" のオブジェクトをフィルタリング
+          .flatMap((item) => Object.keys(item).filter((key) => key !== "name")) // 商品名を取得
+          .map((productName, index) => (
+            <Box
+              key={index}
+              style={{
+                marginRight: "10px",
+                color: getColorByIndex(index),
+              }}
+            >
+              ■ {productName}
+            </Box>
+          ))}
+      </Box>
     </Box>
   );
 };
