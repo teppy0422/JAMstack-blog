@@ -67,6 +67,43 @@ interface Word {
   text: string;
   value: number;
 }
+const toKanjiNumberNatural = (num: number): string => {
+  const kanjiDigits = ["", "十", "百", "千"];
+  const kanjiNumbers = [
+    "",
+    "一",
+    "二",
+    "三",
+    "四",
+    "五",
+    "六",
+    "七",
+    "八",
+    "九",
+  ];
+
+  if (num === 0) return "零";
+  const digits = num.toString().split("").reverse();
+  const result: string[] = [];
+
+  for (let i = digits.length - 1; i >= 0; i--) {
+    const n = parseInt(digits[i], 10);
+    if (n === 0) continue;
+    const digitStr = n === 1 && i > 0 ? "" : kanjiNumbers[n];
+    result.push(digitStr + kanjiDigits[i]);
+  }
+
+  return result.join("");
+};
+
+const getTodayInKanji = (): string => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+
+  return `${toKanjiNumberNatural(month)}月${toKanjiNumberNatural(day)}日`;
+};
 
 export default function OrderPage() {
   const { colorMode } = useColorMode();
@@ -1547,7 +1584,11 @@ export default function OrderPage() {
               )}
               {mode === 3 && (
                 <SimpleGrid columns={1}>
-                  <Box position="relative" userSelect="none">
+                  <Box
+                    position="relative"
+                    userSelect="none"
+                    fontFamily="kokuryu ,'Yuji Shuku'"
+                  >
                     {/* 中央のスクロールエリア */}
                     <Box
                       position="absolute"
@@ -1621,6 +1662,26 @@ export default function OrderPage() {
                           }
                         }}
                       >
+                        <Box
+                          fontSize="26px"
+                          mt="14px"
+                          mr="4px"
+                          ml="8px"
+                          lineHeight={1.3}
+                          fontWeight={600}
+                          textAlign="center"
+                        >
+                          おしながき
+                          <Box
+                            as="span"
+                            fontSize="20px"
+                            pt="40px"
+                            lineHeight={1.4}
+                            display="inline-block" // 必要に応じてブロック要素に変更
+                          >
+                            {getTodayInKanji()}
+                          </Box>
+                        </Box>
                         {(placedListRef.current = [])}
                         {displayCategories
                           .flatMap((category) => [
@@ -1717,8 +1778,7 @@ export default function OrderPage() {
                                     height="100%"
                                   >
                                     <Text
-                                      fontFamily="kokuryu ,'Yuji Shuku'"
-                                      fontSize="28px"
+                                      fontSize="22px"
                                       fontWeight="400"
                                       color={
                                         colorMode === "light"
@@ -1767,8 +1827,7 @@ export default function OrderPage() {
                                   ref={(el) => {
                                     colRefs.current[col.key] = el;
                                   }}
-                                  fontFamily="kokuryu,'Yuji Syuku', serif"
-                                  fontSize="22px"
+                                  fontSize="28px"
                                   fontWeight="400"
                                   color={
                                     colorMode === "light"

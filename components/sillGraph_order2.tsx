@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import {
   Button,
   ButtonGroup,
@@ -64,7 +64,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
     {}
   );
   const blinkingStyle = {
-    animation: "blinking 0.7s 3",
+    animation: "blinking 0.4s 4",
   };
   const styles = `
     @keyframes blinking {
@@ -80,21 +80,25 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
     return transformData(visibleData, currentConfig);
   }, [data2, currentConfig]); // 依存関係を指定
 
+  const previousIsOverStates = useRef<Record<string, boolean>>({}); // 前回の isOver 状態を保持
   useEffect(() => {
     const blinkingTimeouts: NodeJS.Timeout[] = [];
     const newBlinkingItems: Record<string, boolean> = {};
+
     transformedData.forEach((item) => {
       const total = getTotalByName(item.name, transformedData);
       const average = currentConfig[item.name]?.average || 100;
       const max = currentConfig[item.name]?.max || 100;
       const isOver = total > (max / average) * 100;
-      if (isOver) {
+
+      if (isOver && !previousIsOverStates.current[item.name]) {
         newBlinkingItems[item.name] = true; // 点滅を開始
         const timeout = setTimeout(() => {
           setBlinkingItems((prev) => ({ ...prev, [item.name]: false })); // 3秒後に停止
         }, 3000);
         blinkingTimeouts.push(timeout);
       }
+      previousIsOverStates.current[item.name] = isOver;
     });
     setBlinkingItems(newBlinkingItems); // 点滅対象を更新
     return () => {
@@ -368,7 +372,6 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
             tick={(props) => {
               const { payload, x, y, textAnchor } = props;
               const isBlinking = blinkingItems[payload.value]; // 点滅状態を参照
-
               const total = getTotalByName(payload.value, transformedData);
               const average = currentConfig[payload.value]?.average || 100;
               const max = currentConfig[payload.value]?.max || 100;
@@ -380,7 +383,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
                 ? NUTRIENTS_CONFIG_[payload.value]?.color
                 : colorMode === "light"
                 ? "#333"
-                : "#eee"; // 色を設定
+                : "#eee";
               return (
                 <>
                   <style>{styles}</style>
@@ -388,7 +391,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
                     x={x}
                     y={y}
                     textAnchor={textAnchor}
-                    fill={fillColor} // テキストの色を設定
+                    fill={fillColor}
                     fontSize="11px"
                     fontWeight="600"
                     dominantBaseline="middle"
@@ -415,6 +418,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
             const averageArea = 100;
             const maxArea = max / average < 5 ? (max / average) * 100 : 500;
             const fillColor = NUTRIENTS_CONFIG_[nutrient]?.color || "#888"; // 色を取得
+
             // 範囲が正しい場合のみ描画
             if (average > 0 && max > 0 && average < max && maxArea < 500) {
               return (
