@@ -1670,6 +1670,14 @@ export default function OrderPage() {
                           lineHeight={1.3}
                           fontWeight={600}
                           textAlign="center"
+                          sx={{
+                            backgroundImage:
+                              "url('/images/common/paperRed.jpeg')", // テクスチャ画像のパスを指定
+                            backgroundClip: "text", // テキストに背景を適用
+                            textFillColor: "transparent", // テキストの塗りを透明に
+                            WebkitBackgroundClip: "text", // Webkit対応
+                            WebkitTextFillColor: "transparent", // Webkit対応
+                          }}
                         >
                           おしながき
                           <Box
