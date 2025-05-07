@@ -1663,7 +1663,7 @@ export default function OrderPage() {
                         }}
                       >
                         <Box
-                          fontSize="26px"
+                          fontSize="18px"
                           mt="14px"
                           mr="4px"
                           ml="8px"
@@ -1677,6 +1677,7 @@ export default function OrderPage() {
                             textFillColor: "transparent", // テキストの塗りを透明に
                             WebkitBackgroundClip: "text", // Webkit対応
                             WebkitTextFillColor: "transparent", // Webkit対応
+                            writingMode: "vertical-rl",
                           }}
                         >
                           おしながき
