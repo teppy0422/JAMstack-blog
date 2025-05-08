@@ -96,6 +96,7 @@
     "use-sound": "^4.0.1"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@types/node": "^18.0.3",
     "next-sitemap": "^2.5.28",
     "prisma": "^4.0.0",

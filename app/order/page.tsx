@@ -1,6 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+  Fragment,
+} from "react";
 import {
   useTheme,
   Box,
@@ -29,7 +36,7 @@ import { useUserContext } from "../../context/useUserContext";
 import Content from "../../components/content";
 import { AnimationImage } from "../../components/CustomImage";
 import FilteredImage from "../../components/PosterImage";
-import HachisukaAnimation from "../../components/season/HachisukaAnimation";
+// import HachisukaAnimation from "../../components/season/HachisukaAnimation";
 import {
   CustomSwitchButton,
   CustomSwitchMultiButton,
@@ -50,6 +57,7 @@ import cloud from "d3-cloud";
 import { StarIcon } from "@chakra-ui/icons";
 import { FaStar } from "react-icons/fa";
 import { FaAnglesDown } from "react-icons/fa6";
+import RyouteiBon from "../../public/images/etc/ryouteiBon.svg";
 
 interface OrderItem {
   menu_item_id: number;
@@ -397,6 +405,16 @@ export default function OrderPage() {
       });
       return;
     }
+    if (userData?.user_company !== "開発") {
+      toast({
+        title: "エラー",
+        description: "この機能はサブスク契約者のみ使用できます",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -711,7 +729,7 @@ export default function OrderPage() {
                     console.warn("一致するメニューが見つかりません:", d.text);
                   }
                 })
-                .on("mouseover", function (event) {
+                .on("mouseover", function (event, d) {
                   text
                     .raise() // グループ内のtextを前面へ
                     .transition()
@@ -723,10 +741,18 @@ export default function OrderPage() {
                     mouseX: event.clientX,
                     mouseY: event.clientY,
                   });
+                  const matched = menuItems.find(
+                    (item) => item.name === d.text
+                  );
+                  if (matched) addToHoveredData(matched);
                 })
                 .on("mouseout", function () {
                   text.transition().duration(100).attr("transform", transform);
                   setTooltipData(null);
+                  const matched = menuItems.find(
+                    (item) => item.name === d.text
+                  );
+                  if (matched) removeFromHoveredData(matched.id);
                 });
             });
         });
@@ -863,10 +889,12 @@ export default function OrderPage() {
                 </HStack>
                 <VStack align="flex-end" spacing={0}>
                   <Text fontSize="xs" fontWeight="600">
-                    {new Date(item.orders.created_at).toLocaleTimeString(
-                      "ja-JP",
-                      { hour: "2-digit", minute: "2-digit" }
-                    )}
+                    {item.orders?.created_at
+                      ? new Date(item.orders.created_at).toLocaleTimeString(
+                          "ja-JP",
+                          { hour: "2-digit", minute: "2-digit" }
+                        )
+                      : ""}
                   </Text>
                   <HStack spacing={0} fontSize="sm">
                     <Text fontWeight={900}>
@@ -1071,7 +1099,7 @@ export default function OrderPage() {
   return (
     <>
       <Content isCustomHeader={true} maxWidth="100vw">
-        <HachisukaAnimation />
+        {/* <HachisukaAnimation /> */}
         <Box p={2}>
           <Heading
             mb={4}
@@ -1084,23 +1112,23 @@ export default function OrderPage() {
               align="center"
               spacing={{ base: 0, sm: 1, md: 3 }}
             >
-              <AnimationImage
-                src="/images/illust/obj/oden2.gif"
-                position="static"
-                animation="sway 3s ease-in-out infinite"
-                transformOrigin="top center"
-                height="60px"
-                sealSize="10"
-              />
-              <AnimationImage
-                src="/images/illust/obj/oden2.gif"
-                position="static"
-                animation="sway 3s ease-in-out infinite"
-                transformOrigin="top center"
-                height="60px"
-                sealSize="0"
-              />
-              <VStack gap={1}>
+              {mode === 0 || mode === 2 ? (
+                <Image
+                  src="/images/illust/obj/oden2.gif"
+                  height="60px"
+                  alt="おでん"
+                />
+              ) : (
+                ""
+              )}
+              <VStack
+                gap={1}
+                color={
+                  colorMode === "light"
+                    ? "custom.theme.light.850"
+                    : "custom.theme.dark.200"
+                }
+              >
                 {mode === 0 ? (
                   <Text>居酒屋ぼん</Text>
                 ) : mode === 1 ? (
@@ -1115,19 +1143,27 @@ export default function OrderPage() {
                   mode={mode}
                 />
               </VStack>
-              <Image
-                src="/images/illust/obj/oden2.gif"
-                height="60px"
-                alt="おでん"
-              />
-              <AnimationImage
-                src="/images/illust/obj/oden2.gif"
-                position="static"
-                animation="sway 3s ease-in-out infinite"
-                transformOrigin="top center"
-                height="60px"
-                sealSize="0"
-              />
+              {mode === 0 || mode === 2 ? (
+                <Image
+                  src="/images/illust/obj/oden2.gif"
+                  height="60px"
+                  alt="おでん"
+                />
+              ) : mode === 1 ? (
+                <Image
+                  src="/images/illust/obj/cocktail.webp"
+                  height="50px"
+                  alt="カクテル"
+                />
+              ) : (
+                mode === 3 && (
+                  <Image
+                    src="/images/illust/obj/ryoutei_logo.webp"
+                    height="40px"
+                    alt="水彩"
+                  />
+                )
+              )}
             </HStack>
           </Heading>
 
@@ -1602,6 +1638,19 @@ export default function OrderPage() {
                           : "0 6px 12px -6px rgba(255, 255, 255, 0.5)"
                       }
                     />
+                    <Box
+                      position="absolute"
+                      right="0"
+                      zIndex="0"
+                      bottom="0"
+                      h="100%"
+                      width={`${120 * scrollState.right}px`}
+                      boxShadow={
+                        colorMode === "light"
+                          ? "0 6px 12px -6px rgba(0, 0, 0, 0.5)"
+                          : "0 6px 12px -6px rgba(255, 255, 255, 0.5)"
+                      }
+                    />
                     <Box ref={parentRef}>
                       <Box
                         position="absolute"
@@ -1621,7 +1670,7 @@ export default function OrderPage() {
                         position="absolute"
                         right="0"
                         top="0"
-                        width={`${100 * scrollState.right}px`}
+                        width={`${120 * scrollState.right}px`}
                         height="100%"
                         pointerEvents="none"
                         zIndex="20"
@@ -1663,27 +1712,30 @@ export default function OrderPage() {
                         }}
                       >
                         <Box
-                          fontSize="18px"
+                          fontSize="20px"
                           mt="14px"
                           mr="4px"
                           ml="8px"
-                          lineHeight={1.3}
+                          lineHeight={1.2}
                           fontWeight={600}
                           textAlign="center"
+                          color="blue"
                           sx={{
                             backgroundImage:
-                              "url('/images/common/paperRed.jpeg')", // テクスチャ画像のパスを指定
+                              "url('/images/common/paperRedSmall.jpeg')", // テクスチャ画像のパスを指定
                             backgroundClip: "text", // テキストに背景を適用
                             textFillColor: "transparent", // テキストの塗りを透明に
                             WebkitBackgroundClip: "text", // Webkit対応
                             WebkitTextFillColor: "transparent", // Webkit対応
                             writingMode: "vertical-rl",
+                            filter:
+                              "brightness(1.2) contrast(1.5) saturate(0.8) opacity(1)", // 色調整と透明度
                           }}
                         >
                           おしながき
                           <Box
                             as="span"
-                            fontSize="20px"
+                            fontSize="17px"
                             pt="40px"
                             lineHeight={1.4}
                             display="inline-block" // 必要に応じてブロック要素に変更
@@ -1709,7 +1761,9 @@ export default function OrderPage() {
                                 content: item,
                               })),
                           ])
-                          .map((col) => {
+                          .map((col, idx, arr) => {
+                            const isLast = idx === arr.length - 1;
+                            console.log(isLast);
                             if (col.type === "category") {
                               const rightStr = rightPositions.find(
                                 (pos) => pos.key === col.key
@@ -1831,54 +1885,91 @@ export default function OrderPage() {
                                 ? getSoldOutRandom(item.id)
                                 : { randomTop: "50%", randomHeight: "10px" };
                               return (
-                                <Box
-                                  key={col.key}
-                                  ref={(el) => {
-                                    colRefs.current[col.key] = el;
-                                  }}
-                                  fontSize="28px"
-                                  fontWeight="400"
-                                  color={
-                                    colorMode === "light"
-                                      ? "custom.theme.light.900"
-                                      : "custom.theme.dark.100"
-                                  }
-                                  sx={{
-                                    writingMode: "vertical-rl",
-                                    position: "relative",
-                                    "&::after": item.isSoldOut
-                                      ? {
-                                          content: '""',
-                                          position: "absolute",
-                                          left: "50%",
-                                          top: randomTop,
-                                          width: "120%",
-                                          height: randomHeight,
-                                          background:
-                                            "linear-gradient(120deg, transparent 10%, #d32f2f 50%, transparent 90%)",
-                                          transform:
-                                            "translate(-50%, -50%) rotate(-10deg)",
-                                          borderRadius: "8px",
-                                          opacity: 0.8,
-                                          pointerEvents: "none",
-                                          zIndex: 2,
-                                        }
-                                      : {},
-                                  }}
-                                  textAlign="center"
-                                  mt={5}
-                                  cursor={
-                                    item.isSoldOut ? "default" : "pointer"
-                                  }
-                                  opacity={item.isSoldOut ? 0.8 : 1}
-                                  onClick={() => addToCart(item, mode)}
-                                  _hover={{
-                                    transform: !item.isSoldOut && "scale(1.1)",
-                                    transition: "all 0.2s ease-in-out",
-                                  }}
-                                >
-                                  {item.name}
-                                </Box>
+                                <>
+                                  <Box
+                                    key={col.key}
+                                    ref={(el) => {
+                                      colRefs.current[col.key] = el;
+                                    }}
+                                    fontSize="28px"
+                                    fontWeight="400"
+                                    color={
+                                      colorMode === "light"
+                                        ? "custom.theme.light.900"
+                                        : "custom.theme.dark.100"
+                                    }
+                                    sx={{
+                                      writingMode: "vertical-rl",
+                                      position: "relative",
+                                      "&::after": item.isSoldOut
+                                        ? {
+                                            content: '""',
+                                            position: "absolute",
+                                            left: "50%",
+                                            top: randomTop,
+                                            width: "120%",
+                                            height: randomHeight,
+                                            background:
+                                              "linear-gradient(120deg, transparent 10%, #d32f2f 50%, transparent 90%)",
+                                            transform:
+                                              "translate(-50%, -50%) rotate(-10deg)",
+                                            borderRadius: "8px",
+                                            opacity: 0.8,
+                                            pointerEvents: "none",
+                                            zIndex: 2,
+                                          }
+                                        : {},
+                                    }}
+                                    textAlign="center"
+                                    mt={5}
+                                    cursor={
+                                      item.isSoldOut ? "default" : "pointer"
+                                    }
+                                    opacity={item.isSoldOut ? 0.8 : 1}
+                                    onClick={() => addToCart(item, mode)}
+                                    _hover={{
+                                      transform:
+                                        !item.isSoldOut && "scale(1.1)",
+                                      transition: "all 0.2s ease-in-out",
+                                    }}
+                                    onMouseEnter={
+                                      () => {
+                                        setIsHover(true);
+                                        setHoveredItem(item);
+                                        addToHoveredData(item);
+                                      } // ホバー時にデータを追加
+                                    }
+                                    onMouseLeave={
+                                      () => {
+                                        setIsHover(false);
+                                        setHoveredItem(null);
+                                        removeFromHoveredData(item.id);
+                                      } // ホバー解除時にデータを削除
+                                    }
+                                  >
+                                    {item.name}
+                                  </Box>
+                                  {isLast && (
+                                    <Box
+                                      mt="auto" //再下段に表示
+                                      justifyContent="center"
+                                      display="flex"
+                                      alignItems="center"
+                                      color={
+                                        colorMode === "light"
+                                          ? "#D13030"
+                                          : "#F89173"
+                                      }
+                                      w="36px"
+                                      minW="36px"
+                                      mr="0"
+                                      ml="0"
+                                      bottom="4px"
+                                    >
+                                      <RyouteiBon />
+                                    </Box>
+                                  )}
+                                </>
                               );
                             }
                           })}

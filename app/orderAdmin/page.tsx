@@ -698,7 +698,16 @@ export default function AdminPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    if (!userData?.user_metadata?.name) {
+      toast({
+        title: "エラー",
+        description: "認証されているユーザーのみ使用できます",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     // 価格が未入力の場合はエラー
     if (newItem.price === undefined) {
       toast({
@@ -859,6 +868,16 @@ export default function AdminPage() {
   };
 
   const handleEdit = async (item: MenuItem) => {
+    if (userData?.user_company !== "開発") {
+      toast({
+        title: "エラー",
+        description: "この機能はサブスク契約者のみ使用できます",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     setEditingItem(item);
     const formattedNutrients = Object.entries(nutrientValues)
       .filter(([_, value]) => value != null && !isNaN(value))
@@ -986,6 +1005,17 @@ export default function AdminPage() {
   };
 
   const handleVisibilityChange = async (id: number, isVisible: boolean) => {
+    if (userData?.user_company !== "開発") {
+      toast({
+        title: "エラー",
+        description: "この機能はサブスク契約者のみ使用できます",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const { error } = await supabase
       .from("order_menu_items")
       .update({ is_visible: isVisible })
@@ -1010,6 +1040,16 @@ export default function AdminPage() {
   };
 
   const handleSoldOutChange = async (id: number, isSoldOut: boolean) => {
+    if (userData?.user_company !== "開発") {
+      toast({
+        title: "エラー",
+        description: "この機能はサブスク契約者のみ使用できます",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     const { error } = await supabase
       .from("order_menu_items")
       .update({ isSoldOut: isSoldOut })
@@ -1034,6 +1074,17 @@ export default function AdminPage() {
   };
 
   const handleDeleteOrderItem = async (orderId: number, itemId: number) => {
+    if (userData?.user_company !== "開発") {
+      toast({
+        title: "エラー",
+        description: "この機能はサブスク契約者のみ使用できます",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     try {
       // 注文アイテムを削除
       const { error: itemError } = await supabase
@@ -1271,6 +1322,17 @@ export default function AdminPage() {
                             item.status === "pending" ? "green" : "gray"
                           }
                           onClick={() => {
+                            if (userData?.user_company !== "開発") {
+                              toast({
+                                title: "エラー",
+                                description:
+                                  "この機能はサブスク契約者のみ使用できます",
+                                status: "error",
+                                duration: 3000,
+                                isClosable: true,
+                              });
+                              return;
+                            }
                             setItemToComplete({
                               id: item.id,
                               menuItemId: item.menu_item_id,
@@ -1626,6 +1688,17 @@ export default function AdminPage() {
                         size="sm"
                         colorScheme="red"
                         onClick={() => {
+                          if (userData?.user_company !== "開発") {
+                            toast({
+                              title: "エラー",
+                              description:
+                                "この機能はサブスク契約者のみ使用できます",
+                              status: "error",
+                              duration: 3000,
+                              isClosable: true,
+                            });
+                            return;
+                          }
                           setItemToDelete({ id: item.id });
                           onDeleteConfirmModalOpen();
                         }}

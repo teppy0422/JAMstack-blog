@@ -73,6 +73,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
       100% { opacity: 1; }
     }
   `;
+
   const transformedData = useMemo(() => {
     const visibleData = data2
       .filter((item) => item.is_visible) // 表示可能なアイテムをフィルタリング
@@ -327,7 +328,7 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
         }} // 余白を削除
       >
         <BarChart
-          key={JSON.stringify(transformedData)} // データが変更されるたびに再描画をトリガー
+          // key={JSON.stringify(transformedData)} // データが変更されるたびに再描画をトリガー
           data={transformedData}
           layout="vertical" // 横向きの棒グラフに設定
           margin={{ top: 0, right: 0, bottom: -10, left: 0 }} // マイナスで圧縮する
@@ -444,7 +445,6 @@ export const MyBarChart: React.FunctionComponent<PieChartProps> = ({
               key={item.name}
               dataKey={item.name} // ここで指定されたキーに基づいて値が取得される
               stackId="a"
-              // fill={CATEGORY_CONFIG[item.category]?.bg || "#ccc"} // 色を設定（デフォルトはグレー）
               fill={getColorByIndex(index)}
               isAnimationActive={false} // アニメーションを有効化
               animationDuration={0} // アニメーションの長さを0.3秒に設定

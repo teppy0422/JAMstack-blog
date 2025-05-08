@@ -34,7 +34,8 @@
     "pages/api/typing_.js",
     "pages/api/typing.ts",
     ".next/types/**/*.ts",
-    "libs/.blog-post.ts"
+    "libs/.blog-post.ts",
+    "pages/app/typing.jsx"
   ],
   "exclude": ["node_modules", "public/files"]
 }

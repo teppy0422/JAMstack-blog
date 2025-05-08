@@ -26,6 +26,7 @@ import { MdEditRoad } from "react-icons/md";
 import { FaKeyboard, FaRoad } from "react-icons/fa";
 import { IoTicketOutline, IoTicketSharp } from "react-icons/io5";
 import { AiOutlineWechat } from "react-icons/ai";
+import { IoApps } from "react-icons/io5";
 
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
@@ -158,15 +159,15 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
             </>
           )}
           {menuItem(
-            "/app/typing",
+            "/appList",
             getMessage({
-              ja: "タイピング練習",
-              us: "Typing Practice",
-              cn: "打字练习",
+              ja: "WEBアプリ一覧",
+              us: "List of WEB Apps",
+              cn: "網路應用程式清單",
               language,
             }),
             true,
-            <FaKeyboard size={21} />
+            <IoApps size={21} />
           )}
           {menuItem(
             "/download",

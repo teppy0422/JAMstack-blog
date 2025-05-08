@@ -603,7 +603,7 @@ export default function Header() {
                     w="100%"
                     h="100%"
                     style={{
-                      animation: "feedOut 5s forwards",
+                      animation: "feedOut 2s forwards",
                     }}
                   />
                   <style jsx>{`
@@ -633,19 +633,20 @@ export default function Header() {
                       fontSize="md"
                       fontWeight="400"
                       color={colorMode === "light" ? "#000" : "#000"}
-                      // bg={colorMode === "light" ? "#f2e9df" : "#000"}
                       mt={-3}
                       mb={1}
                       display="inline-block"
                     >
-                      ・1/15 中国語(簡体字)と米英語に対応
-                      <br />
                       ・3/10 チャット内容を分類
                       <br />
                       ・3/13 チャット追加機能の追加
                       <br />
                       ・3/20 開発メンバーの状態表示を追加
                       <br />
+                      <br />
+                      ・5/8 注文システムの公開
+                      <br />
+                      ・5/8 タイピングをアプリ一覧に移動
                     </Text>
                   </Box>
                 </Box>
