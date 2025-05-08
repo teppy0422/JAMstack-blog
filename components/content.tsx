@@ -91,6 +91,7 @@ export default function Content({
           </Flex>
           <Box
             className="no-print-page"
+            zIndex={10}
             bg={
               colorMode === "light"
                 ? "custom.theme.light.500"

@@ -158,17 +158,7 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
               </Box>
             </>
           )}
-          {menuItem(
-            "/appList",
-            getMessage({
-              ja: "WEBアプリ一覧",
-              us: "List of WEB Apps",
-              cn: "網路應用程式清單",
-              language,
-            }),
-            true,
-            <IoApps size={21} />
-          )}
+
           {menuItem(
             "/download",
             getMessage({
@@ -200,6 +190,17 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
             }),
             true,
             <AiOutlineWechat size={22} />
+          )}
+          {menuItem(
+            "/appList",
+            getMessage({
+              ja: "WEBアプリ一覧",
+              us: "List of WEB Apps",
+              cn: "網路應用程式清單",
+              language,
+            }),
+            true,
+            <IoApps size={21} />
           )}
         </VStack>
       </Box>
