@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "../../utils/supabase/client.js";
+import { supabase } from "../../utils/supabase/client.ts";
 
 import { DefaultSeo } from "next-seo";
 import styles from "../../styles/home.module.scss";
@@ -24,7 +24,7 @@ import { IoVolumeHighOutline, IoVolumeMuteOutline } from "react-icons/io5";
 
 import Snowfall from "react-snowfall";
 
-import Content from "../../components/content.js";
+import Content from "../../components/content";
 import ResponseCache from "next/dist/server/response-cache";
 import { isMobileDevice, isIOSDevice } from "../../utils/device.js";
 import {
@@ -38,19 +38,19 @@ import {
 } from "../../libs/romaji.js";
 
 import Voucher from "../../components/typing/voucher.jsx";
-import Menu from "../../components/typing/menu.js";
+import Menu from "../../components/typing/menu";
 import Ranking from "../../components/typing/ranking.jsx";
 import { getQuiz } from "../../libs/romaji_quiz.js";
-import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2.js";
-import Sushi_menu from "../../components/typing/sushi_menu.js";
+import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
+import Sushi_menu from "../../components/typing/sushi_menu";
 
-import Keyboard from "../../components/typing/keyboard.js";
+import Keyboard from "../../components/typing/keyboard";
 import GraphTemp from "../../components/typing/graphTemp.jsx";
 import { useContext } from "react";
 
-import { myContext } from "../_app.js";
-import { useLanguage } from "../../context/LanguageContext.js";
-import getMessage from "../../components/getMessage.js";
+import { myContext } from "../_app";
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 
 export const typing = () => {
   const [session, setSession] = useState(null);
