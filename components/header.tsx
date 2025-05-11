@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
+// import { useSession, signIn, signOut } from "next-auth/react";
 import NextLink from "next/link";
 
 import {
@@ -44,7 +44,6 @@ import { myContext } from "../pages/_app";
 
 export default function Header() {
   const myState = useContext(myContext);
-  const { data: session } = useSession();
 
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("red.500", "red.200");
