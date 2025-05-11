@@ -34,6 +34,7 @@ yarn-error.log*
 # ゴミ
 /.trash/
 
+# メディア
 *.webp
 *.png
 *.jpeg
