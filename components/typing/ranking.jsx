@@ -1,5 +1,3 @@
-"use client";
-
 import React, {
   useState,
   useRef,
@@ -7,6 +5,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useReducer,
+  useContext,
 } from "react";
 import {
   useColorMode,
@@ -31,15 +30,13 @@ import {
 } from "@chakra-ui/react";
 import { PiCrown } from "react-icons/pi";
 import { FaTrophy, FaCrown } from "react-icons/fa";
-import { supabase } from "@/utils/supabase/client";
-import styles from "@/styles/home.module.scss";
+import { supabase } from "../../src/utils/supabase/client";
+import styles from "../../src/styles/home.module.scss";
 import PropTypes from "prop-types";
-// import GraphTemp from "./graphTemp";
-import getMessage from "../../../components/getMessage";
-import {
-  useLanguage,
-  LanguageProvider,
-} from "../../../context/LanguageContext";
+import GraphTemp from "./graphTemp";
+
+import getMessage from "../getMessage";
+import { AppContext } from "../../pages/_app";
 
 const Ranking = forwardRef((props, ref) => {
   const { user } = props;
@@ -59,7 +56,7 @@ const Ranking = forwardRef((props, ref) => {
       created_at: null,
     },
   ]);
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage } = useContext(AppContext);
 
   useEffect(() => {
     if (user && user.id) {
@@ -276,18 +273,17 @@ const Ranking = forwardRef((props, ref) => {
       </Modal>
       {Array.isArray(ranking) &&
         ranking.map((user) => (
-          // <GraphTemp
-          //   key={user.user_id}
-          //   ref={(el) => (graphTempRefs.current[user.user_id] = el)}
-          //   totalCost={0}
-          //   missedCount={0}
-          //   typePerSocund={0}
-          //   times={0}
-          //   user={user}
-          //   userID={user.user_id} // userIDを渡す
-          //   visible={false}
-          // />
-          <></>
+          <GraphTemp
+            key={user.user_id}
+            ref={(el) => (graphTempRefs.current[user.user_id] = el)}
+            totalCost={0}
+            missedCount={0}
+            typePerSocund={0}
+            times={0}
+            user={user}
+            userID={user.user_id} // userIDを渡す
+            visible={false}
+          />
         ))}
       {/* <h5>{hoverData}</h5> */}
     </>

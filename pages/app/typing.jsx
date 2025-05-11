@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { useRouter, usePathname } from "next/navigation";
-
-import { supabase } from "@/utils/supabase/client";
+import { useRouter } from "next/router";
+import { supabase } from "../../src/utils/supabase/client";
 
 import { DefaultSeo } from "next-seo";
-import styles from "@/styles/home.module.scss";
+import styles from "../../src/styles/home.module.scss";
 import {
   Center,
   VStack,
@@ -22,10 +21,13 @@ import {
   Spacer,
   Progress,
 } from "@chakra-ui/react";
+import { FaVolumeUp, FaVolumeMute } from "react-icons/fa"; // 追加
 import { IoVolumeHighOutline, IoVolumeMuteOutline } from "react-icons/io5";
 
 import Snowfall from "react-snowfall";
+
 import Content from "../../components/content";
+import ResponseCache from "next/dist/server/response-cache";
 import { isMobileDevice, isIOSDevice } from "@/utils/device.js";
 import {
   getRomaji,
@@ -35,21 +37,24 @@ import {
   changeColor,
   getRomajiForecast,
   makeSpan,
-} from "./parts/romaji.js";
+} from "../../libs/romaji.js";
 
-import Voucher from "./parts/voucher.jsx";
-import Menu from "./parts/menu";
-import Ranking from "./parts/ranking.jsx";
-import { getQuiz } from "./parts/romaji_quiz.js";
-import Sushi_menu from "./parts/sushi_menu";
+import Voucher from "../../components/typing/voucher.jsx";
+import Menu from "../../components/typing/menu";
+import Ranking from "../../components/typing/ranking.jsx";
+import { getQuiz } from "../../libs/romaji_quiz.js";
+import Sushi_menu from "../../components/typing/sushi_menu";
 
-import Keyboard from "./parts/keyboard";
-// import GraphTemp from "./parts/graphTemp.jsx";
+import Keyboard from "../../components/typing/keyboard";
+import GraphTemp from "../../components/typing/graphTemp.jsx";
+import { useContext } from "react";
 
+// import { myContext } from "../_app";
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
+import { useUserContext } from "../../context/useUserContext";
 
-export default function Typing() {
+export const typing = () => {
   const [session, setSession] = useState(null);
   const [userID, setUserID] = useState(null);
   // デバイスの種類を検出
@@ -59,6 +64,15 @@ export default function Typing() {
 
   const { colorMode } = useColorMode();
   const { language, setLanguage } = useLanguage();
+  const {
+    currentUserId,
+    currentUserPictureUrl,
+    currentUserEmail,
+    currentUserCreatedAt,
+    getUserById,
+    isLoading,
+  } = useUserContext();
+  const userData = currentUserId ? getUserById(currentUserId) : null;
 
   const RANDOM_SENTENCE_URL_API = "https://api.quotable.io/random";
   const inputText = useRef(""); //入力文字
@@ -83,13 +97,13 @@ export default function Typing() {
   const totalTime_origin = useRef(50); //トータルタイムの値
   const typeCountRef = useRef(0); //タイプ数
   const [typePerSocund, setTypePerSocund] = useState(0); //タイプ速度の値
-  const sound_BGM = useRef(null); //BGM
+  const sound_BGM = useRef(null);
+
   const gameMode = useRef("menu"); //モードの状態
   const Q_used = useRef(""); //出題済みの問題の番号
   const suggestKeyRef = useRef(""); //入力候補の着色用
 
-  const pathname = usePathname();
-
+  // const myState = useContext(myContext);
   const keyboardRef = useRef(null);
   const voucherCloseRef = useRef(null);
 
@@ -102,16 +116,15 @@ export default function Typing() {
   // BGMの管理
   const [isBgmOn, setIsBgmOn] = useState(true); // BGMの状態を管理するステート
   const toggleBgm = () => {
-    if (isBgmOn) {
+    if (sound_BGM.current && isBgmOn) {
       sound_BGM.current.muted = true;
-    } else {
-      sound_BGM.current.muted = false;
+      setIsBgmOn(!isBgmOn);
     }
-    setIsBgmOn(!isBgmOn);
   };
 
   const [clearedProblemsCount, setClearedProblemsCount] = useState(0); // 初期値を0に設定
   const clearedProblemsCountRef = useRef(clearedProblemsCount);
+
   function clearProblem() {
     setClearedProblemsCount((prevCount) => {
       const newCount = prevCount + 1;
@@ -119,11 +132,13 @@ export default function Typing() {
       return newCount;
     });
   }
-
+  // useEffect(() => {
+  //   // myState.colorModeにcolorModeをセット
+  //   myState.colorMode = colorMode;
+  // }, [colorMode, myState]);
   useEffect(() => {
     clearedProblemsCountRef.current = clearedProblemsCount;
   }, [clearedProblemsCount]);
-
   useEffect(() => {
     //レンダー初回時だけ実行
     console.log("初回だけ");
@@ -136,28 +151,6 @@ export default function Typing() {
     setIsIOS(isIOSDevice());
   }, []);
 
-  useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        console.log("Fetching user session..."); // デバッグ用ログ
-        const {
-          data: { user },
-          error,
-        } = await supabase.auth.getUser();
-        if (error) {
-          console.error("Error fetching user:", error);
-        } else {
-          console.log("User fetched successfully:", user); // デバッグ用ログ
-          setSession(user);
-          setUserID(user.id);
-        }
-      } catch (err) {
-        console.error("Unexpected error:", err);
-      }
-    };
-    fetchSession();
-  }, []);
-
   //ページ遷移時にイベントとかをオフ
   const router = useRouter();
   const pageChangeHandler = () => {
@@ -168,12 +161,12 @@ export default function Typing() {
     sound_BGM.current.pause();
     gameMode.current = "menu";
   };
-  // useEffect(() => {
-  //   router.events.on("routeChangeStart", pageChangeHandler);
-  //   return () => {
-  //     router.events.off("routeChangeStart", pageChangeHandler);
-  //   };
-  // }, []);
+  useEffect(() => {
+    router.events.on("routeChangeStart", pageChangeHandler);
+    return () => {
+      router.events.off("routeChangeStart", pageChangeHandler);
+    };
+  }, []);
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -572,17 +565,7 @@ export default function Typing() {
           }}
         />
       </Box>
-      <Content
-        isCustomHeader={true}
-        style={{
-          fontFamily: getMessage({
-            ja: "Noto Sans JP",
-            us: "Noto Sans JP",
-            cn: "Noto Sans SC",
-            language,
-          }),
-        }}
-      >
+      <Content isCustomHeader={true}>
         {isMobile || isIOS ? (
           <Box
             style={{
@@ -806,16 +789,16 @@ export default function Typing() {
 
                 <Center>
                   <Flex w={["100%", "90%", "80%", "70%"]} h="40px">
-                    {/* <GraphTemp
+                    <GraphTemp
                       ref={graphTempRef}
                       totalCost={totalCost.current}
                       missedCount={missedCount}
                       typePerSocund={typePerSocund}
                       times={totalTime_origin.current}
-                      user={session}
-                      userID={userID}
+                      user={userData}
+                      userID={currentUserId}
                       visible={true}
-                    /> */}
+                    />
                     <Spacer />
                     <Text mt="4px" id="timer">
                       {getMessage({
@@ -827,7 +810,7 @@ export default function Typing() {
                     </Text>
                     <Spacer />
 
-                    <Ranking user={session} />
+                    <Ranking user={userData} />
                   </Flex>
                 </Center>
 
@@ -948,4 +931,6 @@ export default function Typing() {
       </Content>
     </>
   );
-}
+};
+
+export default typing;

@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Text, Center, StylesProvider } from "@chakra-ui/react";
 import styles from "./keyboard.module.scss";

@@ -1,11 +1,11 @@
-"use client";
-
 import React, {
   useState,
   useRef,
+  useEffect,
   forwardRef,
   useImperativeHandle,
   useReducer,
+  useContext,
 } from "react";
 import {
   useColorMode,
@@ -24,7 +24,7 @@ import {
   Badge,
   Box,
 } from "@chakra-ui/react";
-import { supabase } from "@/utils/supabase/client";
+import { supabase } from "../../src/utils/supabase/client";
 
 import Highcharts from "highcharts/highcharts";
 // import Highcharts from "highcharts/highstock"; //上記との違いわからん
@@ -32,14 +32,11 @@ import HighchartsReact from "highcharts-react-official";
 import highchartsAccessibility from "highcharts/modules/accessibility";
 import AnnotationsFactory from "highcharts/modules/annotations";
 
-// import { useSession, signIn, signOut } from "next-auth/react";
-import styles from "@/styles/home.module.scss";
+import { useSession, signIn, signOut } from "next-auth/react";
+import styles from "../../src/styles/home.module.scss";
 
-import getMessage from "../../../components/getMessage";
-import {
-  useLanguage,
-  LanguageProvider,
-} from "../../../context/LanguageContext";
+import getMessage from "../getMessage";
+import { AppContext } from "../../pages/_app";
 
 const GraphTemp = forwardRef((props, ref) => {
   const {
@@ -58,7 +55,7 @@ const GraphTemp = forwardRef((props, ref) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const [chartOptions, setChartOptions] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage } = useContext(AppContext);
 
   if (typeof window !== `undefined`) {
     AnnotationsFactory(Highcharts);

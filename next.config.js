@@ -1,10 +1,13 @@
 module.exports = {
   trailingSlash: true,
   experimental: {
-    // optimizeFonts: true,
     // appDir: true,
+    // optimizeFonts: true,
+    // optimizeCss: true, // CSSの最適化を有効化
   },
   webpack: (config, options) => {
+    config.resolve.alias["@"] = path.resolve(__dirname); // ← これを追加
+
     // glb/gltf/mp3用のloader
     config.module.rules.push({
       test: /\.(glb|gltf|mp3)$/,
@@ -22,3 +25,5 @@ module.exports = {
     return config;
   },
 };
+
+const path = require("path");

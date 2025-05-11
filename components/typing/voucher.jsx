@@ -1,10 +1,9 @@
-"use client";
-
 import React, {
   useRef,
   forwardRef,
   useImperativeHandle,
   useState,
+  useContext,
 } from "react";
 import {
   Button,
@@ -27,34 +26,35 @@ import {
   VStack,
   Divider,
 } from "@chakra-ui/react";
-import { supabase } from "@/utils/supabase/client";
+import { supabase } from "../../src/utils/supabase/client";
 
-// import { useSession, signIn, signOut } from "next-auth/react";
-// import GraphTemp from "./graphTemp";
+import { useSession, signIn, signOut } from "next-auth/react";
+import GraphTemp from "../../components/typing/graphTemp";
 
-import Sushi_tamago_wrap3 from "../../../components/3d/sushi_tamago_wrap3";
-import Gari from "../../../components/3d/sushi_gari";
-import Tukemono from "../../../components/3d/sushi_tukemono";
-import Umeboshi from "../../../components/3d/sushi_umeboshi";
-import Tamago from "../../../components/3d/sushi_tamago";
-import Ika from "../../../components/3d/sushi_ika";
-import Iwashi from "../../../components/3d/sushi_iwashi";
-import Tekka from "../../../components/3d/sushi_tekka";
-import Amaebi from "../../../components/3d/sushi_amaebi";
-import Samon from "../../../components/3d/sushi_samon";
-import Ebi from "../../../components/3d/sushi_ebi";
-import Ootoro from "../../../components/3d/sushi_ootoro";
-import SanmaYaki from "../../../components/3d/sushi_sanma_yaki";
-import Ikura from "../../../components/3d/sushi_ikura";
+import styles from "../../src/styles/home.module.scss";
+import { RGBADepthPacking } from "three";
 
-import getMessage from "../../../components/getMessage";
-import {
-  useLanguage,
-  LanguageProvider,
-} from "../../../context/LanguageContext";
+import Sushi_tamago_wrap3 from "../../components/3d/sushi_tamago_wrap3";
+
+import Gari from "../3d/sushi_gari";
+import Tukemono from "../3d/sushi_tukemono";
+import Umeboshi from "../3d/sushi_umeboshi";
+import Tamago from "../3d/sushi_tamago";
+import Ika from "../3d/sushi_ika";
+import Iwashi from "../3d/sushi_iwashi";
+import Tekka from "../3d/sushi_tekka";
+import Amaebi from "../3d/sushi_amaebi";
+import Samon from "../3d/sushi_samon";
+import Ebi from "../3d/sushi_ebi";
+import Ootoro from "../3d/sushi_ootoro";
+import SanmaYaki from "../3d/sushi_sanma_yaki";
+import Ikura from "../3d/sushi_ikura";
+
+import getMessage from "../getMessage";
+import { AppContext } from "../../pages/_app";
 
 const Voucher = forwardRef((props, ref) => {
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage } = useContext(AppContext);
 
   const {
     totalCost,
@@ -81,7 +81,7 @@ const Voucher = forwardRef((props, ref) => {
   );
   const [overlay, setOverlay] = React.useState(<OverlayTwo />);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const { data: session } = useSession();
+  const { data: session } = useSession();
   const [isFlagTrue, setIsFlagTrue] = useState(false); // flagの状態を追加
 
   const Sushi = [
@@ -363,13 +363,13 @@ const Voucher = forwardRef((props, ref) => {
                   })}
                 </Button>
                 <div style={{ display: "none" }}>
-                  {/* <GraphTemp
+                  <GraphTemp
                     ref={graphTempRef}
                     totalCost={totalCost}
                     missedCount={missedCount}
                     typePerSocund={typePerSocund}
                     times={time}
-                  /> */}
+                  />
                 </div>
               </>
             ) : (
