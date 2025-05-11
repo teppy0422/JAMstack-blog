@@ -33,3 +33,17 @@ yarn-error.log*
 
 # ゴミ
 /.trash/
+
+*.webp
+*.png
+*.jpeg
+*.jpg
+*.svg
+*.mp4
+*.mov
+*.mp3
+*.glb
+*.zip
+*.xlsm
+*.xlsx
+*.xls
