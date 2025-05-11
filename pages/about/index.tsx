@@ -23,7 +23,7 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import NextImage from "next/image";
-import styles from "../../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 import { theme } from "highcharts";
 import AOS from "aos";
 import "aos/dist/aos.css";

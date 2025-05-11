@@ -41,7 +41,7 @@ import SkillGraph from "../../components/sillGraph";
 import SkillCircle from "../../components/skillCircle";
 import BusinessCard from "../../components/BusinessCard";
 import ICT from "./ICT";
-import styles from "../../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 import { useUserContext } from "../../context/useUserContext";
 import { useReadCount } from "../../hooks/useReadCount";
 

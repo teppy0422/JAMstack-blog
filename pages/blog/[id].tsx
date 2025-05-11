@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { client } from "../../libs/client";
 import Header from "../../components/header";
-import styles from "../../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 
 //シンタックスハイライト用
 import { load } from "cheerio";

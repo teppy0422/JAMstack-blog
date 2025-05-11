@@ -17,7 +17,7 @@ import { theme } from "../libs/theme";
 //プログレスバー
 import NextNprogress from "nextjs-progressbar";
 //リセット用
-import "../styles/globals.css";
+import "@/styles/globals.css";
 //ログイン認証
 import { SessionProvider } from "next-auth/react";
 //状態管理

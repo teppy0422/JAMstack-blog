@@ -23,7 +23,7 @@ import {
 } from "@chakra-ui/react";
 import { CheckCircleIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import { FaGithub } from "react-icons/fa"; // react-iconsからGitHubアイコンをインポート
-import styles from "../../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
 
 import SkillCircle from "../../components/skillCircle";

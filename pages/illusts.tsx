@@ -20,7 +20,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import NextImage from "next/image";
-import styles from "../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 
 import { SunderText } from "../components/CustomText";
 import Hippo_001_wrap from "../components/3d/hippo_001_wrap";

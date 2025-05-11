@@ -44,7 +44,7 @@ import Detail03 from "../../components/worksDetail/03";
 import { useUserContext } from "../../context/useUserContext";
 import { useReadCount } from "../../hooks/useReadCount";
 
-import styles from "../../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";

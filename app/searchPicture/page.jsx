@@ -1,9 +1,11 @@
+"use client";
+
 import React, { useRef, useState, Link as Scroll } from "react";
 import Content from "../../components/content";
 import InfiniteScroll from "react-infinite-scroller";
 
-import ImageGalley from "../../script/imageGalley";
-import styles from "../../styles/home.module.scss";
+import ImageGalley from "./parts/imageGalley";
+import styles from "@/styles/home.module.scss";
 import {
   Center,
   Text,
@@ -18,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { Search2Icon, ChevronUpIcon } from "@chakra-ui/icons";
 
-function searchPicture() {
+export default function SearchPicture() {
   const [fetchData, setFetchData] = useState([]); //表示するデータ
   const [hasMore, setHasMore] = useState(true); //再読み込み判定
   const [hasPixabay, setHasPixabay] = useState(false);
@@ -140,7 +142,7 @@ function searchPicture() {
   };
 
   return (
-    <Content isCustomHeader={false}>
+    <Content isCustomHeader={true}>
       <Box h={8} />
       <Stack style={{ textAlign: "center" }}>
         <Text className={styles.mPlus} style={{ fontSize: "24px" }}>
@@ -215,5 +217,3 @@ function searchPicture() {
     </Content>
   );
 }
-
-export default searchPicture;

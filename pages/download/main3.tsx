@@ -17,7 +17,7 @@ import { JdssIcon } from "../../components/icons";
 import NextImage from "next/image";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 
-import styles from "../../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 
 import CustomLinkBox from "../../components/customLinkBox";
 import CustomPopver from "../../components/popver";

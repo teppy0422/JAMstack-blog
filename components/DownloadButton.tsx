@@ -3,7 +3,7 @@ import { css, keyframes } from "@emotion/react";
 import { Box, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useCustomToast } from "../components/customToast";
-import "../styles/globals.css";
+import "@/styles/globals.css";
 const shake = keyframes`
   0% { transform: translateX(0); }
   25% { transform: translateX(-0.5px); }

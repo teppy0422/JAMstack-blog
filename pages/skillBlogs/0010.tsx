@@ -60,7 +60,7 @@ import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemN
 import ImageSliderModal from "./ImageSliderModal"; // モーダルコンポーネントをインポート
 import ReferenceSettingModal from "./referenceSettingModal";
 import { useUserContext } from "../../context/useUserContext";
-import { supabase } from "../../utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 import { useReadCount } from "../../hooks/useReadCount";
 
 import { BsFiletypeExe } from "react-icons/bs";

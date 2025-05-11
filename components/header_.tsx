@@ -4,7 +4,7 @@ import NextAuth from "next-auth";
 import { useState, useContext } from "react";
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import { supabase } from "../utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 import NextLink from "next/link";
 import QRCode from "qrcode.react";
 import {
@@ -51,7 +51,7 @@ import { PiGithubLogoFill } from "react-icons/pi";
 import { MdEditRoad } from "react-icons/md";
 import { IoTicketOutline } from "react-icons/io5";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import styles from "../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 import React, { useEffect } from "react";
 import { WiDaySunny, WiCloudyGusts, WiRainMix } from "react-icons/wi";
 

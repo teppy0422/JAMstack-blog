@@ -5,7 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import { supabase } from "../utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 
 interface DataContextType {
   data: any[];

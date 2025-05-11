@@ -24,7 +24,7 @@ import {
   Badge,
   Box,
 } from "@chakra-ui/react";
-import { supabase } from "../../utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 
 import Highcharts from "highcharts/highcharts";
 // import Highcharts from "highcharts/highstock"; //上記との違いわからん
@@ -33,10 +33,13 @@ import highchartsAccessibility from "highcharts/modules/accessibility";
 import AnnotationsFactory from "highcharts/modules/annotations";
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import styles from "../../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 
-import getMessage from "../getMessage";
-import { AppContext } from "../../pages/_app";
+import getMessage from "../../../components/getMessage";
+import {
+  useLanguage,
+  LanguageProvider,
+} from "../../../context/LanguageContext";
 
 const GraphTemp = forwardRef((props, ref) => {
   const {
@@ -55,7 +58,7 @@ const GraphTemp = forwardRef((props, ref) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const [chartOptions, setChartOptions] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
 
   if (typeof window !== `undefined`) {
     AnnotationsFactory(Highcharts);

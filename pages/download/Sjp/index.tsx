@@ -26,7 +26,7 @@ import { MdSettings, MdCheckCircle, MdHelpOutline } from "react-icons/md";
 import NextImage from "next/image";
 import { FileSystemNode } from "../../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import { SjpIcon } from "../../../components/icons";
-import styles from "../../../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 
 import CustomLinkBox from "../../../components/customLinkBox";
 import CustomPopver from "../../../components/popver";

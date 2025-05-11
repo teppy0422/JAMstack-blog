@@ -30,7 +30,7 @@ import {
 } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
 import { BsSend, BsFillSendFill } from "react-icons/bs";
-import { supabase } from "../../../utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 import { format } from "date-fns";
 import { css, keyframes } from "@emotion/react";
 
@@ -91,7 +91,7 @@ import { GetColor } from "../../../components/CustomColor";
 import { AnimationImage } from "../../../components/CustomImage";
 import IconWithDrawer from "./IconWithDrawer";
 
-import "../../../styles/home.module.scss";
+import "@/styles/home.module.scss";
 // import { AppContext } from "../../../pages/_app";
 
 import {

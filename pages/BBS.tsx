@@ -28,7 +28,7 @@ import { AiOutlineWechat } from "react-icons/ai";
 import Sidebar from "../components/sidebar";
 import Content from "../components/content";
 import { Global } from "@emotion/react";
-import { supabase } from "../utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 import { UnreadProvider } from "../context/UnreadContext";
 
 import SidebarBBS from "../components/sidebarBBS";

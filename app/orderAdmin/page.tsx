@@ -40,7 +40,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from "@chakra-ui/react";
-import { supabase } from "../../utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 import { VscAccount } from "react-icons/vsc";
 import imageCompression from "browser-image-compression";
 import { useUserContext } from "../../context/useUserContext";

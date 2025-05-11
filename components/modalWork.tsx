@@ -16,7 +16,7 @@ import {
 import Image from "next/image";
 
 import ImageCard from "./imageCard";
-import styles from "../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 
 export default function ModalWork(pops) {
   const { isOpen, onOpen, onClose } = useDisclosure();

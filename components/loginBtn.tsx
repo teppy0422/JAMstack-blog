@@ -13,7 +13,7 @@ import {
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import Styles from "../styles/home.module.scss";
+import Styles from "@/styles/home.module.scss";
 
 export default function Component() {
   const { data: session } = useSession();

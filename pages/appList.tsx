@@ -23,7 +23,7 @@ const MotionBox = motion(Box);
 const apps = [
   {
     title: "タイピング練習",
-    href: "/app/typing",
+    href: "/typing",
     description:
       "速度に応じて雪が降るエフェクト付きのタイピング練習。ランキング機能あり。",
     src: "/images/illust/obj/typingLogo.webp",

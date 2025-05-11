@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import { supabase } from "../utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 import {
   Flex,
   Box,

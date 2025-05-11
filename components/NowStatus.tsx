@@ -57,7 +57,7 @@ import {
   MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
 } from "react-icons/md";
-import { supabase } from "../utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 import "@fontsource/noto-sans-jp";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";

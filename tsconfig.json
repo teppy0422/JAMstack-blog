@@ -15,6 +15,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "plugins": [
       {
         "name": "next"
@@ -22,20 +26,15 @@
     ],
     "strictNullChecks": true
   },
+  //型チェックの対象
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "pages/api/auth/[...nextauth].ts",
-    ".trash/_app copy.tsx",
-    "components/3d/Hippo_001.jsx",
-    "**/*.mp3", //わからん
     "**/*.d.ts",
-    "pages/api/typing_.js",
-    "pages/api/typing.ts",
     ".next/types/**/*.ts",
-    "libs/.blog-post.ts",
-    "pages/app/typing.jsx"
+    "libs/.blog-post.ts"
   ],
   "exclude": ["node_modules", "public/files"]
 }

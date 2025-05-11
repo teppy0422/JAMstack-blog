@@ -18,7 +18,7 @@ import { PhoneIcon, AddIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faPalette } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import styles from "../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 import { SizeProp } from "@fortawesome/fontawesome-svg-core";
 
 const icon = ({

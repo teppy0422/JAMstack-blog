@@ -5,7 +5,7 @@ import Highcharts from "highcharts";
 import HighchartsMore from "highcharts/modules/variable-pie";
 import HighchartsReact from "highcharts-react-official";
 
-import styles from "../../../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 
 import GetWindowSize, { getWindowSize } from "../../../script/GetWindowSize";
 import getMessage from "../../../components/getMessage";

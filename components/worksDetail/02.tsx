@@ -11,7 +11,7 @@ import {
   VStack,
   Center,
 } from "@chakra-ui/react";
-import styles from "../../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
 

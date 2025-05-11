@@ -1,9 +1,12 @@
+"use client";
+
 import React, { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/router";
-import { supabase } from "../../utils/supabase/client.ts";
+import { useRouter, usePathname } from "next/navigation";
+
+import { supabase } from "@/utils/supabase/client";
 
 import { DefaultSeo } from "next-seo";
-import styles from "../../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 import {
   Center,
   VStack,
@@ -19,14 +22,12 @@ import {
   Spacer,
   Progress,
 } from "@chakra-ui/react";
-import { FaVolumeUp, FaVolumeMute } from "react-icons/fa"; // 追加
 import { IoVolumeHighOutline, IoVolumeMuteOutline } from "react-icons/io5";
 
 import Snowfall from "react-snowfall";
 
 import Content from "../../components/content";
-import ResponseCache from "next/dist/server/response-cache";
-import { isMobileDevice, isIOSDevice } from "../../utils/device.js";
+import { isMobileDevice, isIOSDevice } from "@/utils/device.js";
 import {
   getRomaji,
   getHiragana,
@@ -35,24 +36,21 @@ import {
   changeColor,
   getRomajiForecast,
   makeSpan,
-} from "../../libs/romaji.js";
+} from "./parts/romaji.js";
 
-import Voucher from "../../components/typing/voucher.jsx";
-import Menu from "../../components/typing/menu";
-import Ranking from "../../components/typing/ranking.jsx";
-import { getQuiz } from "../../libs/romaji_quiz.js";
-import Sushi_tamago_wrap from "../../components/3d/sushi_tamago_wrap2";
-import Sushi_menu from "../../components/typing/sushi_menu";
+import Voucher from "./parts/voucher.jsx";
+import Menu from "./parts/menu";
+import Ranking from "./parts/ranking.jsx";
+import { getQuiz } from "./parts/romaji_quiz.js";
+import Sushi_menu from "./parts/sushi_menu";
 
-import Keyboard from "../../components/typing/keyboard";
-import GraphTemp from "../../components/typing/graphTemp.jsx";
-import { useContext } from "react";
+import Keyboard from "./parts/keyboard";
+import GraphTemp from "./parts/graphTemp.jsx";
 
-import { myContext } from "../_app";
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
 
-export const typing = () => {
+export default function TypingPage() {
   const [session, setSession] = useState(null);
   const [userID, setUserID] = useState(null);
   // デバイスの種類を検出
@@ -91,7 +89,9 @@ export const typing = () => {
   const Q_used = useRef(""); //出題済みの問題の番号
   const suggestKeyRef = useRef(""); //入力候補の着色用
 
-  const myState = useContext(myContext);
+  const pathname = usePathname();
+
+  // const myState = useContext(myContext);
   const keyboardRef = useRef(null);
   const voucherCloseRef = useRef(null);
 
@@ -121,10 +121,7 @@ export const typing = () => {
       return newCount;
     });
   }
-  useEffect(() => {
-    // myState.colorModeにcolorModeをセット
-    myState.colorMode = colorMode;
-  }, [colorMode, myState]);
+
   useEffect(() => {
     clearedProblemsCountRef.current = clearedProblemsCount;
   }, [clearedProblemsCount]);
@@ -172,12 +169,12 @@ export const typing = () => {
     sound_BGM.current.pause();
     gameMode.current = "menu";
   };
-  useEffect(() => {
-    router.events.on("routeChangeStart", pageChangeHandler);
-    return () => {
-      router.events.off("routeChangeStart", pageChangeHandler);
-    };
-  }, []);
+  // useEffect(() => {
+  //   router.events.on("routeChangeStart", pageChangeHandler);
+  //   return () => {
+  //     router.events.off("routeChangeStart", pageChangeHandler);
+  //   };
+  // }, []);
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -289,7 +286,7 @@ export const typing = () => {
             changeColor(
               "type-display-romaji",
               inputTextTempA.length,
-              myState.colorMode
+              colorMode
             );
             //入力文字オーバーの更新_ひらがな
             const inputSuggestHiragana = getHiragana(newTemp[0]);
@@ -323,7 +320,7 @@ export const typing = () => {
             let last = changeColor(
               "type-display-hiragana",
               correctCount.current,
-              myState.colorMode
+              colorMode
             );
             if (last === 0) {
               complete = true;
@@ -370,7 +367,7 @@ export const typing = () => {
           setMissedCount((missedCount) => {
             return missedCount;
           });
-          changeColor("type-display-romaji", 0, myState.colorMode);
+          changeColor("type-display-romaji", 0, colorMode);
           // 入力アシストの表示
           suggestKeyRef.current = temp[0].charAt(0);
         }
@@ -952,6 +949,4 @@ export const typing = () => {
       </Content>
     </>
   );
-};
-
-export default typing;
+}

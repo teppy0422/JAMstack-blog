@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 
 export const useReadCount = (userId: string | null) => {
   const [readByCount, setReadByCount] = useState(0);

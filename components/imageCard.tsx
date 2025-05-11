@@ -2,7 +2,7 @@ import { Box, Badge, StylesProvider, VStack } from "@chakra-ui/react";
 import NextImage from "next/image";
 import { StarIcon } from "@chakra-ui/icons";
 
-import styles from "../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 
 export default function imageCard(pops) {
   const property = {

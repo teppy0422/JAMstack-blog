@@ -13,7 +13,7 @@ import {
   Text,
   Badge,
 } from "@chakra-ui/react";
-import styles from "../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 
 const imageGalley = ({ fetchData }) => {
   return (

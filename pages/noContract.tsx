@@ -16,7 +16,7 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 import { RepeatClockIcon } from "@chakra-ui/icons";
-import styles from "../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 import Moment from "react-moment";
 
 export default function Home({ blog, category, tag, blog2 }) {

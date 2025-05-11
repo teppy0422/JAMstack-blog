@@ -34,7 +34,7 @@ import {
   faKeyboard,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import styles from "../styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 
 import LoginBtn from "./loginBtn";
 import AwesomIcon from "./awesomIcon";
