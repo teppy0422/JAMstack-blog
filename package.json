@@ -52,7 +52,6 @@
     "d3-cloud": "^1.2.7",
     "date-fns": "^3.6.0",
     "file-loader": "^6.2.0",
-    "firebase": "^11.1.0",
     "framer-motion": "^6.3.2",
     "highcharts": "^10.1.0",
     "highcharts-react-official": "^3.1.0",
