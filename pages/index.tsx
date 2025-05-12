@@ -1700,7 +1700,7 @@ const Welcome = ({ isNewCreated }) => {
                     language,
                   })}
                 </Text>,
-                "/app/typing"
+                "/typing"
               )}
             </Flex>
           </Center>

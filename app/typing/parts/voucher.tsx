@@ -1,10 +1,13 @@
+"use client";
+
 import React, {
   useRef,
   forwardRef,
   useImperativeHandle,
   useState,
-  useContext,
 } from "react";
+import dynamic from "next/dynamic";
+
 import {
   Button,
   Modal,
@@ -28,12 +31,17 @@ import {
 } from "@chakra-ui/react";
 import { supabase } from "@/utils/supabase/client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
+// import { useSession, signIn, signOut } from "next-auth/react";
 import GraphTemp, { GraphTempHandle } from "./graphTemp";
 
 import styles from "@/styles/home.module.scss";
 import { RGBADepthPacking } from "three";
-
+const SushiTamagoWrap3 = dynamic(
+  () => import("../../../components/3d/sushi_tamago_wrap3"),
+  {
+    ssr: false,
+  }
+);
 import Sushi_tamago_wrap3 from "../../../components/3d/sushi_tamago_wrap3";
 
 import Gari from "../../../components/3d/sushi_gari";
@@ -100,7 +108,6 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
   );
   const [overlay, setOverlay] = React.useState(<OverlayTwo />);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { data: session } = useSession();
   const [isFlagTrue, setIsFlagTrue] = useState(false); // flagの状態を追加
 
   const Sushi = [

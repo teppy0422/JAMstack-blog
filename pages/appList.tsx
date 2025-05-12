@@ -30,7 +30,7 @@ const apps = [
   },
   {
     title: "画像検索",
-    href: "/app/searchPicture",
+    href: "/searchPicture",
     description: "商用利用可能な画像のみを検索できるツール。",
     src: "/images/illust/obj/searchPictureLogo.webp",
   },

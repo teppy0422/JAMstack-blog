@@ -167,7 +167,7 @@ export default function Header() {
                     </Link>
                   </NextLink>
 
-                  <NextLink href="/app/typing" legacyBehavior>
+                  <NextLink href="/typing" legacyBehavior>
                     <Link
                       className={styles.noDecoration}
                       _focus={{ _focus: "none" }} //周りの青いアウトラインが気になる場合に消す

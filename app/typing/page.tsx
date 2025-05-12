@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@//utils/supabase/client";
 
-import { DefaultSeo } from "next-seo";
+import { NextSeo } from "next-seo";
 import styles from "@/styles/home.module.scss";
 import {
   Center,
@@ -22,13 +22,11 @@ import {
   Spacer,
   Progress,
 } from "@chakra-ui/react";
-import { FaVolumeUp, FaVolumeMute } from "react-icons/fa"; // 追加
 import { IoVolumeHighOutline, IoVolumeMuteOutline } from "react-icons/io5";
 
 import Snowfall from "react-snowfall";
 
 import Content from "../../components/content";
-import ResponseCache from "next/dist/server/response-cache";
 import { isMobileDevice, isIOSDevice } from "@/utils/device.js";
 import {
   getRomaji,
@@ -60,7 +58,7 @@ import ControllableAudioPlayer, {
 import { is } from "cheerio/dist/commonjs/api/traversing";
 import { interval } from "date-fns";
 
-export const typing = () => {
+const TypingPage = () => {
   const [session, setSession] = useState(null);
   const [userID, setUserID] = useState(null);
   // デバイスの種類を検出
@@ -532,7 +530,7 @@ export const typing = () => {
   };
   return (
     <>
-      <DefaultSeo
+      {/* <NextSeo
         defaultTitle="teppy-Blog"
         description="afadadフォリオ"
         openGraph={{
@@ -556,7 +554,7 @@ export const typing = () => {
           site: "@",
           cardType: "summary_large_image",
         }}
-      />
+      /> */}
       <div
         style={{
           position: "absolute",
@@ -615,7 +613,7 @@ export const typing = () => {
                   left: "0%",
                   height: "2px",
                   width: "50%",
-                  zIndex: 10000,
+                  zIndex: 1000,
                 }}
               />
               <Box
@@ -627,7 +625,7 @@ export const typing = () => {
                   left: "50%",
                   height: "2px",
                   width: "50%",
-                  zIndex: 10000,
+                  zIndex: 1000,
                 }}
               />
               <Box
@@ -822,7 +820,8 @@ export const typing = () => {
                 </Center>
 
                 <Sushi_menu
-                  count={clearedProblemsCount}
+                  count={14}
+                  // count={clearedProblemsCount}
                   voucherRef={voucherRef}
                   session={session}
                   snowflakeCount={snowflakeCount}
@@ -931,5 +930,4 @@ export const typing = () => {
     </>
   );
 };
-
-export default typing;
+export default TypingPage;

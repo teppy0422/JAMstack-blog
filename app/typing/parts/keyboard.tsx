@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useImperativeHandle, forwardRef, useRef } from "react";
 
 import { Box, useColorMode, Center } from "@chakra-ui/react";

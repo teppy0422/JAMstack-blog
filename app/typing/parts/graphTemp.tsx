@@ -1,3 +1,5 @@
+"use client";
+
 import React, {
   useState,
   useRef,
@@ -5,7 +7,6 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useReducer,
-  useContext,
 } from "react";
 import {
   useColorMode,

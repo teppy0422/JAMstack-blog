@@ -7,7 +7,7 @@ import { Box } from "@chakra-ui/react";
 
 import styles from "@/styles/home.module.scss";
 
-import GetWindowSize, { getWindowSize } from "../script/GetWindowSize";
+import { GetWindowSize } from "@/hooks/GetWindowSize";
 
 import { useLanguage } from "../context/LanguageContext";
 import getMessage from "../components/getMessage";
