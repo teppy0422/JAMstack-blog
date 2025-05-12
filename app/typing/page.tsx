@@ -821,8 +821,7 @@ const TypingPage = () => {
                 </Center>
 
                 <Sushi_menu
-                  count={14}
-                  // count={clearedProblemsCount}
+                  count={clearedProblemsCount}
                   voucherRef={voucherRef}
                   session={session}
                   snowflakeCount={snowflakeCount}
