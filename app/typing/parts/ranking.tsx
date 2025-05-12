@@ -35,9 +35,9 @@ import styles from "@/styles/home.module.scss";
 import PropTypes, { string } from "prop-types";
 import GraphTemp, { GraphTempHandle } from "./graphTemp";
 
-import getMessage from "../getMessage";
-import { useLanguage } from "../../context/LanguageContext";
-import { UserData } from "../../context/useUserContext";
+import getMessage from "../../../components/getMessage";
+import { useLanguage } from "../../../context/LanguageContext";
+import { UserData } from "../../../context/useUserContext";
 
 type RankingProps = {
   user: UserData | null;

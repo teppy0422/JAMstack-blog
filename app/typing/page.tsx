@@ -38,15 +38,15 @@ import {
   changeColor,
   getRomajiForecast,
   makeSpan,
-} from "../../libs/romaji.js";
+} from "./parts/romaji.js";
 
-import { Voucher, VoucherRef } from "../../components/typing/voucher";
-import Ranking from "../../components/typing/ranking";
-import { getQuiz } from "../../libs/romaji_quiz.js";
-import Sushi_menu from "../../components/typing/sushi_menu";
+import { Voucher, VoucherRef } from "./parts/voucher";
+import Ranking from "./parts/ranking";
+import { getQuiz } from "./parts/romaji_quiz.js";
+import Sushi_menu from "./parts/sushi_menu";
 
-import Keyboard from "../../components/typing/keyboard";
-import GraphTemp from "../../components/typing/graphTemp";
+import Keyboard from "./parts/keyboard";
+import GraphTemp from "./parts/graphTemp";
 // import { useContext } from "react";
 
 // import { myContext } from "../_app";
@@ -162,23 +162,23 @@ export const typing = () => {
     setIsMobile(isMobileDevice());
     setIsIOS(isIOSDevice());
   }, []);
-
   //ページ遷移時にイベントとかをオフ
-  const router = useRouter();
-  const pageChangeHandler = () => {
-    document.removeEventListener("keypress", keypress_ivent);
-    document.removeEventListener("keyup", keyup_ivent);
-    timerIDref.current && clearInterval(timerIDref.current);
-    clearInterval(totalTimerIDref.current);
-    audioBgmRef.current?.stop();
-    gameMode.current = "menu";
-  };
   useEffect(() => {
-    router.events.on("routeChangeStart", pageChangeHandler);
+    // イベント登録
+    document.addEventListener("keypress", keypress_ivent);
+    document.addEventListener("keyup", keyup_ivent);
+
     return () => {
-      router.events.off("routeChangeStart", pageChangeHandler);
+      // アンマウント時にクリーンアップ
+      document.removeEventListener("keypress", keypress_ivent);
+      document.removeEventListener("keyup", keyup_ivent);
+      if (timerIDref.current) clearInterval(timerIDref.current);
+      if (totalTimerIDref.current) clearInterval(totalTimerIDref.current);
+      audioBgmRef.current?.stop();
+      gameMode.current = "menu";
     };
   }, []);
+
   // 非同期処理
   function GetRandomSentence() {
     return fetch(RANDOM_SENTENCE_URL_API)
@@ -540,10 +540,10 @@ export const typing = () => {
           title: "teppy-Blog",
           description: "typing_line_test",
           site_name: "teppy-Blog",
-          url: "https://www.teppy.link/app/typing",
+          url: "https://www.teppy.link/typing",
           images: [
             {
-              url: "https://www.teppy.link/app/typing",
+              url: "https://www.teppy.link/typing",
               width: 800,
               height: 600,
               alt: "Og Image Alt",
@@ -823,7 +823,6 @@ export const typing = () => {
 
                 <Sushi_menu
                   count={clearedProblemsCount}
-                  // count={12}
                   voucherRef={voucherRef}
                   session={session}
                   snowflakeCount={snowflakeCount}

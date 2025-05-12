@@ -7,7 +7,7 @@ import AnnotationsFactory from "highcharts/modules/annotations";
 
 import styles from "../../styles/home.module.scss";
 
-import GetWindowSize, { getWindowSize } from "../../script/GetWindowSize";
+import GetWindowSize, { getWindowSize } from "../../../script/GetWindowSize";
 
 const Skillchart: React.FunctionComponent = (): JSX.Element => {
   var elevationData = [
