@@ -528,6 +528,7 @@ const TypingPage = () => {
       }
     }, 100);
   };
+
   return (
     <>
       {/* <NextSeo

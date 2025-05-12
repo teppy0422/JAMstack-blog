@@ -34,6 +34,7 @@ import {
 import { createClient } from "@supabase/supabase-js";
 import { useUserContext } from "../../context/useUserContext";
 import Content from "../../components/content";
+import CustomHead from "../head";
 import { AnimationImage } from "../../components/CustomImage";
 import FilteredImage from "../../components/PosterImage";
 // import HachisukaAnimation from "../../components/season/HachisukaAnimation";
@@ -1098,6 +1099,7 @@ export default function OrderPage() {
 
   return (
     <>
+      <CustomHead />
       <Content isCustomHeader={true} maxWidth="100vw">
         {/* <HachisukaAnimation /> */}
         <Box p={2}>
