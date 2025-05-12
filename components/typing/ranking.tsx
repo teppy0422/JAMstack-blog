@@ -30,21 +30,28 @@ import {
 } from "@chakra-ui/react";
 import { PiCrown } from "react-icons/pi";
 import { FaTrophy, FaCrown } from "react-icons/fa";
-import { supabase } from "../../src/utils/supabase/client";
-import styles from "../../src/styles/home.module.scss";
-import PropTypes from "prop-types";
-import GraphTemp from "./graphTemp";
+import { supabase } from "@/utils/supabase/client";
+import styles from "@/styles/home.module.scss";
+import PropTypes, { string } from "prop-types";
+import GraphTemp, { GraphTempHandle } from "./graphTemp";
 
 import getMessage from "../getMessage";
-import { AppContext } from "../../pages/_app";
+import { useLanguage } from "../../context/LanguageContext";
+import { UserData } from "../../context/useUserContext";
 
-const Ranking = forwardRef((props, ref) => {
+type RankingProps = {
+  user: UserData | null;
+};
+type RankingRefHandle = {
+  childClick: () => void;
+};
+const Ranking = forwardRef<RankingRefHandle, RankingProps>((props, ref) => {
   const { user } = props;
   const [hoverData, setHoverData] = useState(null);
   const { colorMode, toggleColorMode } = useColorMode();
   const [chartOptions, setChartOptions] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [userID, setUserID] = useState(null);
+  const [userID, setUserID] = useState<String | null>(null);
   const [ranking, setRanking] = useState([
     {
       user_id: null,
@@ -56,7 +63,8 @@ const Ranking = forwardRef((props, ref) => {
       created_at: null,
     },
   ]);
-  const { language, setLanguage } = useContext(AppContext);
+  // const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
     if (user && user.id) {
@@ -64,7 +72,7 @@ const Ranking = forwardRef((props, ref) => {
     }
   }, [user]);
   //それぞれのボタン
-  const openRef = useRef(null);
+  const openRef = useRef<HTMLDivElement | null>(null);
 
   async function getRanking() {
     // 全てのuser_idとresultを取得
@@ -145,10 +153,18 @@ const Ranking = forwardRef((props, ref) => {
       console.log("クリックされたchild");
     },
   }));
-  const graphTempRefs = useRef({});
-  const handleBoxClick = (user_id) => {
-    if (graphTempRefs.current[user_id]) {
-      graphTempRefs.current[user_id].childClick();
+  // const graphTempRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  // const handleBoxClick = (user_id) => {
+  //   if (graphTempRefs.current[user_id]) {
+  //     graphTempRefs.current[user_id].childClick();
+  //   }
+  // };
+  const graphTempRefs = useRef<Record<string, GraphTempHandle | null>>({});
+
+  const handleBoxClick = (user_id: string) => {
+    const ref = graphTempRefs.current[user_id];
+    if (ref) {
+      ref.childClick(); // ← OK!
     }
   };
   return (
@@ -208,7 +224,9 @@ const Ranking = forwardRef((props, ref) => {
                   overflow="hidden"
                   cursor="pointer"
                   borderColor={userID === user.user_id ? "black" : "gray.300"}
-                  onClick={() => handleBoxClick(user.user_id)}
+                  onClick={() =>
+                    user.user_id !== null && handleBoxClick(user.user_id)
+                  }
                 >
                   <Stack direction="row" align="center" spacing={4}>
                     <Text fontSize="xl" fontWeight="bold">
@@ -248,8 +266,10 @@ const Ranking = forwardRef((props, ref) => {
                       <Box display="flex" justifyContent="flex-end">
                         <Badge colorScheme="red">miss:{user?.missed}</Badge>
                         <Badge ml="4px" colorScheme="gray">
-                          {user?.created_at
-                            ? user.created_at.slice(0, 10)
+                          {typeof user?.created_at === "string"
+                            ? new Date(user.created_at)
+                                .toISOString()
+                                .split("T")[0]
                             : "N/A"}
                         </Badge>
                       </Box>
@@ -272,20 +292,24 @@ const Ranking = forwardRef((props, ref) => {
         </ModalContent>
       </Modal>
       {Array.isArray(ranking) &&
-        ranking.map((user) => (
-          <GraphTemp
-            key={user.user_id}
-            ref={(el) => (graphTempRefs.current[user.user_id] = el)}
-            totalCost={0}
-            missedCount={0}
-            typePerSocund={0}
-            times={0}
-            user={user}
-            userID={user.user_id} // userIDを渡す
-            visible={false}
-          />
-        ))}
-      {/* <h5>{hoverData}</h5> */}
+        ranking.map((user) => {
+          const id = user.user_id;
+          if (id == null) return null; // null または undefined のチェック
+          return (
+            <GraphTemp
+              key={id}
+              ref={(el) => {
+                if (el) graphTempRefs.current[id] = el;
+              }}
+              totalCost={0}
+              missedCount={0}
+              typePerSocund={0}
+              times={0}
+              userID={id}
+              visible={false}
+            />
+          );
+        })}
     </>
   );
 });

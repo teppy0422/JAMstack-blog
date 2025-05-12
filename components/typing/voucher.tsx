@@ -26,15 +26,15 @@ import {
   VStack,
   Divider,
 } from "@chakra-ui/react";
-import { supabase } from "../../src/utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import GraphTemp from "../../components/typing/graphTemp";
+import GraphTemp, { GraphTempHandle } from "./graphTemp";
 
 import styles from "../../src/styles/home.module.scss";
 import { RGBADepthPacking } from "three";
 
-import Sushi_tamago_wrap3 from "../../components/3d/sushi_tamago_wrap3";
+import Sushi_tamago_wrap3 from "../3d/sushi_tamago_wrap3";
 
 import Gari from "../3d/sushi_gari";
 import Tukemono from "../3d/sushi_tukemono";
@@ -51,10 +51,29 @@ import SanmaYaki from "../3d/sushi_sanma_yaki";
 import Ikura from "../3d/sushi_ikura";
 
 import getMessage from "../getMessage";
-import { AppContext } from "../../pages/_app";
+// import { AppContext } from "../../pages/_app";
+import { useLanguage } from "../../context/LanguageContext";
+import { UserData } from "../../context/useUserContext";
+export interface VoucherProps {
+  totalCost: number;
+  missedCount: number;
+  typePerSocund: number;
+  gameReplay?: () => void;
+  time: number;
+  user: UserData | null;
+  flag?: boolean;
+}
 
-const Voucher = forwardRef((props, ref) => {
-  const { language, setLanguage } = useContext(AppContext);
+export interface VoucherRef {
+  clickChildOpen: (
+    clearedProblemsCount: number,
+    session: unknown,
+    flag: boolean
+  ) => void;
+}
+export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
+  // const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
 
   const {
     totalCost,
@@ -65,11 +84,11 @@ const Voucher = forwardRef((props, ref) => {
     user,
     flag,
   } = props;
-  const graphTempRef = useRef(null); //履歴グラフ
+  const graphTempRef = useRef<GraphTempHandle>(null); // ✅ 修正
   const voucherOpenRef = useRef(null); //伝票を開くボタン
-  const voucherCloseRef = useRef(null); //伝票を閉じるボタン
-  const voucherPostRef = useRef(null); //登録ボタン
-  const sushiRef = useRef(null); //寿司アドレス
+  const voucherCloseRef = useRef<HTMLButtonElement | null>(null); //伝票を閉じるボタン
+  const voucherPostRef = useRef<HTMLButtonElement | null>(null); //登録ボタン
+  const sushiRef = useRef<JSX.Element | null>(null);
   const sushiCommentRef = useRef(""); //寿司なまえ
   const OverlayTwo = () => (
     <ModalOverlay
@@ -216,8 +235,6 @@ const Voucher = forwardRef((props, ref) => {
   }));
   //DBに登録
   const handleClick = async () => {
-    console.log("user", user);
-    console.log("user.id", user.id);
     if (!user) return; // セッションが存在しない場合は処理を終了
     const data = {
       user_id: user.id,
@@ -324,7 +341,7 @@ const Voucher = forwardRef((props, ref) => {
                 if (voucherCloseRef.current instanceof HTMLButtonElement) {
                   voucherCloseRef.current.click();
                 }
-                setTimeout(property.gameReplay, 500);
+                // setTimeout(property.gameReplay, 500);
               }}
             >
               {getMessage({
@@ -347,7 +364,7 @@ const Voucher = forwardRef((props, ref) => {
                         graphTempRef.current &&
                         "click" in graphTempRef.current
                       ) {
-                        graphTempRef.current.click();
+                        (graphTempRef.current as { click: Function }).click();
                       }
                     });
                     if (voucherPostRef.current) {
@@ -369,6 +386,8 @@ const Voucher = forwardRef((props, ref) => {
                     missedCount={missedCount}
                     typePerSocund={typePerSocund}
                     times={time}
+                    userID={user.id}
+                    visible={true}
                   />
                 </div>
               </>
@@ -395,4 +414,3 @@ const Voucher = forwardRef((props, ref) => {
     </>
   );
 });
-export default Voucher;

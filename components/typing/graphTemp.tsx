@@ -24,73 +24,101 @@ import {
   Badge,
   Box,
 } from "@chakra-ui/react";
-import { supabase } from "../../src/utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 
 import Highcharts from "highcharts/highcharts";
 // import Highcharts from "highcharts/highstock"; //上記との違いわからん
 import HighchartsReact from "highcharts-react-official";
 import highchartsAccessibility from "highcharts/modules/accessibility";
 import AnnotationsFactory from "highcharts/modules/annotations";
-
+import { UserData } from "../../context/useUserContext";
 import { useSession, signIn, signOut } from "next-auth/react";
-import styles from "../../src/styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
+import { useLanguage } from "../../context/LanguageContext";
 
 import getMessage from "../getMessage";
 import { AppContext } from "../../pages/_app";
-
-const GraphTemp = forwardRef((props, ref) => {
-  const {
-    totalCost,
-    missedCount,
-    typePerSocund,
-    gameReplay,
-    voucherCloseRef,
-    times,
-    user,
-    userID,
-    visible,
-  } = props;
+export type GraphTempHandle = {
+  childClick: () => void;
+};
+type GraphTempProps = {
+  totalCost: number;
+  missedCount: number;
+  typePerSocund: number;
+  times: number;
+  userID: string | null;
+  visible: boolean;
+};
+const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
+  const { totalCost, missedCount, typePerSocund, times, userID, visible } =
+    props;
   // const { data: session } = useSession();
   const [hoverData, setHoverData] = useState(null);
   const { colorMode, toggleColorMode } = useColorMode();
   const [chartOptions, setChartOptions] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { language, setLanguage } = useContext(AppContext);
+  // const { language, setLanguage } = useContext(AppContext);
+  const { language, setLanguage } = useLanguage();
 
   if (typeof window !== `undefined`) {
     AnnotationsFactory(Highcharts);
     highchartsAccessibility(Highcharts);
   }
   //それぞれのボタン
-  const openRef = useRef(null);
+  const openRef = useRef<HTMLButtonElement>(null);
+  useImperativeHandle(ref, () => ({
+    childClick() {
+      if (openRef.current) {
+        openRef.current.click();
+      }
+      console.log("クリックされたchild");
+    },
+  }));
+
   const closeRef = useRef(null);
   //保存データ
-  const valueRef = useRef(0);
-  const timesRef = useRef(0);
-  const missedRef = useRef(0);
-  const datesRef = useRef("");
-  const idRef = useRef(0);
-  const costsRef = useRef(0);
-  const getIDRef = useRef("");
-  const createdAtsRef = useRef("");
+  const valueRef = useRef<number[]>([]);
+  const timesRef = useRef<number[]>([]);
+  const missedRef = useRef<number[]>([]);
+  const costsRef = useRef<number[]>([]);
+  const idRef = useRef<String[]>([]);
+  const datesRef = useRef<DateLabel[]>([]);
+  const createdAtsRef = useRef<String[]>([]);
   function makeChart() {
     getResult().then((value) => {
       updateSeries();
     });
   }
 
+  type DateLabel = {
+    point: {
+      xAxis: number;
+      yAxis: number;
+      x: number;
+      y: number;
+    };
+    text: string;
+  };
   const getResult = async () => {
-    let values = [];
-    let times = [];
-    let dates = [];
-    let ids = [];
-    let misseds = [];
-    let costs = [];
-    let count = 0;
-    let mdBak = ""; //日付変化の確認
-    let createdAts = []; // created_atを保存
+    type DataItem = {
+      id: string;
+      result: number;
+      cost: number;
+      missed: number;
+      created_at: string | Date;
+    };
 
-    if (user !== undefined) {
+    let values: number[] = [];
+    let times: number[] = [];
+    let dates: DateLabel[] = [];
+    let ids: String[] = [];
+    let misseds: number[] = [];
+    let costs: number[] = [];
+    let createdAts: string[] = []; // created_atを保存
+    let mdBak = ""; //日付変化の確認
+    let count: number = 0;
+
+    if (userID !== undefined) {
       const { data, error } = await supabase
         .from("typing_results")
         .select("*")
@@ -100,21 +128,22 @@ const GraphTemp = forwardRef((props, ref) => {
         console.error("Error fetching data:", error.message);
         return;
       }
-      data.forEach((item) => {
+
+      data.forEach((item: DataItem) => {
         count++;
         values.push(item.result);
         times.push(count);
         ids.push(item.id);
         costs.push(item.cost);
         if (item.missed === 0) {
-          misseds.push(null);
+          misseds.push(0);
         } else {
           misseds.push(item.missed);
         }
         const dd = new Date(item.created_at);
         let md = dd.getMonth() + 1 + "/" + dd.getDate();
         if (md !== mdBak) {
-          let obj = {
+          const obj: DateLabel = {
             point: {
               xAxis: 0,
               yAxis: 0,
@@ -129,9 +158,9 @@ const GraphTemp = forwardRef((props, ref) => {
       });
       valueRef.current = values;
       timesRef.current = times;
-      idRef.current = ids;
       missedRef.current = misseds;
       costsRef.current = costs;
+      idRef.current = ids;
       datesRef.current = dates;
       createdAtsRef.current = createdAts;
     } else {
@@ -439,14 +468,18 @@ const GraphTemp = forwardRef((props, ref) => {
   // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
   useImperativeHandle(ref, () => ({
     childClick() {
-      openRef.current.click();
+      openRef.current && openRef.current.click();
       console.log("クリックされたchild");
     },
   }));
+
   return (
     <>
-      {user !== null ? (
+      {userID !== null ? (
         <Box
+          as="button"
+          // ref={ref}
+          ref={openRef}
           className={
             visible
               ? `${styles.graphTemp} ${styles.snowTarget}`
@@ -470,7 +503,6 @@ const GraphTemp = forwardRef((props, ref) => {
             makeChart();
             console.log("クリックされた");
           }}
-          ref={openRef}
           display={visible ? "" : "none"}
         >
           {visible
@@ -496,7 +528,6 @@ const GraphTemp = forwardRef((props, ref) => {
           <Box
             className={styles.graphTemp}
             w="56px"
-            disabled
             style={{
               fontFamily: getMessage({
                 ja: "Noto Sans JP",
@@ -515,21 +546,22 @@ const GraphTemp = forwardRef((props, ref) => {
           </Box>
         </Tooltip>
       )}
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        style={{
-          fontFamily: getMessage({
-            ja: "Noto Sans JP",
-            us: "Noto Sans,Noto Sans JP",
-            cn: "Noto Sans SC",
-            language,
-          }),
-        }}
-      >
+      <Modal isOpen={isOpen} onClose={onClose}>
         {overlay}
         <ModalOverlay />
-        <ModalContent top="60px" w="100%" maxWidth="100%">
+        <ModalContent
+          top="60px"
+          w="100%"
+          maxWidth="100%"
+          style={{
+            fontFamily: getMessage({
+              ja: "Noto Sans JP",
+              us: "Noto Sans,Noto Sans JP",
+              cn: "Noto Sans SC",
+              language,
+            }),
+          }}
+        >
           <ModalHeader fontSize="16px">
             {getMessage({
               ja: "タイピング履歴",

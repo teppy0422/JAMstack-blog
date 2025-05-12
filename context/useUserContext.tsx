@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { supabase } from "@/utils/supabase/client";
 
-interface UserData {
+export interface UserData {
   id: string;
   picture_url: string | undefined;
   user_metadata: {

@@ -9,17 +9,17 @@ const keyValues3 = ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"];
 
 let keyboard = (pops, ref) => {
   const { colorMode, toggleColorMode } = useColorMode();
-  const keyboardRef = useRef(null);
+  const keyboardRef = useRef<HTMLDivElement | null>(null);
   // 親コンポーネントの ref.current から実行できる関数を定義したオブジェクトを返す
   useImperativeHandle(ref, () => ({
     Open() {
       if (keyboardRef.current) {
-        (keyboardRef.current as HTMLElement).style.visibility = "visible";
+        keyboardRef.current.style.visibility = "visible";
       }
     },
     Close() {
       if (keyboardRef.current) {
-        (keyboardRef.current as HTMLElement).style.visibility = "hidden";
+        keyboardRef.current.style.visibility = "hidden";
       }
     },
   }));

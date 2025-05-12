@@ -2,13 +2,14 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "../../src/utils/supabase/client";
+import { supabase } from "@//utils/supabase/client";
 
 import { DefaultSeo } from "next-seo";
-import styles from "../../src/styles/home.module.scss";
+import styles from "@/styles/home.module.scss";
 import {
   Center,
   VStack,
+  HStack,
   Box,
   Button,
   Grid,
@@ -39,20 +40,25 @@ import {
   makeSpan,
 } from "../../libs/romaji.js";
 
-import Voucher from "../../components/typing/voucher.jsx";
-import Menu from "../../components/typing/menu";
-import Ranking from "../../components/typing/ranking.jsx";
+import { Voucher, VoucherRef } from "../../components/typing/voucher";
+import Ranking from "../../components/typing/ranking";
 import { getQuiz } from "../../libs/romaji_quiz.js";
 import Sushi_menu from "../../components/typing/sushi_menu";
 
 import Keyboard from "../../components/typing/keyboard";
-import GraphTemp from "../../components/typing/graphTemp.jsx";
-import { useContext } from "react";
+import GraphTemp from "../../components/typing/graphTemp";
+// import { useContext } from "react";
 
 // import { myContext } from "../_app";
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
 import { useUserContext } from "../../context/useUserContext";
+
+import ControllableAudioPlayer, {
+  ControllableAudioPlayerHandle,
+} from "@/components/ControllableAudioPlayer";
+import { is } from "cheerio/dist/commonjs/api/traversing";
+import { interval } from "date-fns";
 
 export const typing = () => {
   const [session, setSession] = useState(null);
@@ -83,44 +89,55 @@ export const typing = () => {
   const [typeDisplayRomaji_1, setTypeDisplayRomaji_1] = useState("");
   const [typeDisplayRomaji_2, setTypeDisplayRomaji_2] = useState("");
   const renderFlgRef = useRef(false); //useEffectを初回走らせないフラグ
-  const timerIDref = useRef(""); //タイマーリセット用のID
+  const timerIDref = useRef<ReturnType<typeof setInterval> | null>(null);
   const totalTimerIDref = useRef(""); //トータルタイマーリセット用のID
   const [totalTime, setTotalTime] = useState(50); //トータルタイムの値
   const totalTimeRef = useRef(null); //トータルタイム
+  const [itemTime, setItemTime] = useState(15);
   const [missedCount, setMissedCount] = useState(0); //タイプミス回数
   const totalCost = useRef(0); //トータル金額
   const [cost, setCost] = useState(0); //金額
   const inputTextRef = useRef(null); //入力欄
-  const menuRef = useRef(null); //menu
-  const voucherRef = useRef(null); //伝票
+
+  const voucherRef = useRef<VoucherRef>(null); //伝票
 
   const totalTime_origin = useRef(50); //トータルタイムの値
   const typeCountRef = useRef(0); //タイプ数
   const [typePerSocund, setTypePerSocund] = useState(0); //タイプ速度の値
-  const sound_BGM = useRef(null);
 
   const gameMode = useRef("menu"); //モードの状態
   const Q_used = useRef(""); //出題済みの問題の番号
   const suggestKeyRef = useRef(""); //入力候補の着色用
 
   // const myState = useContext(myContext);
-  const keyboardRef = useRef(null);
+  const keyboardRef = useRef<{
+    Open: () => void;
+    Close: () => void;
+  } | null>(null);
   const voucherCloseRef = useRef(null);
 
   // タイプ数を監視して雪のエフェクトを制御
   const [snowflakeCount, setSnowflakeCount] = useState(0);
-  const [snowSpeed, setSnowSpeed] = useState([0.5, 2]);
-  const [snowWind, setSnowWind] = useState([0.4, 0.5]);
-  const intervalRef = useRef(null); // intervalを保持するためのref
+  const [snowSpeed, setSnowSpeed] = useState<[number, number]>([0.5, 2]);
+  const [snowWind, setSnowWind] = useState<[number, number]>([0.4, 0.5]);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // BGMの管理
-  const [isBgmOn, setIsBgmOn] = useState(true); // BGMの状態を管理するステート
+  // BGM
+  const audioBgmRef = useRef<ControllableAudioPlayerHandle>(null);
+  const [isBgmOn, setIsBgmOn] = useState(true);
   const toggleBgm = () => {
-    if (sound_BGM.current && isBgmOn) {
-      sound_BGM.current.muted = true;
-      setIsBgmOn(!isBgmOn);
+    if (isBgmOn) {
+      audioBgmRef.current?.setVolume(0);
+    } else {
+      audioBgmRef.current?.setVolume(0.3);
     }
+    setIsBgmOn(!isBgmOn);
   };
+
+  // SE
+  const audioMissedRef = useRef<ControllableAudioPlayerHandle>(null);
+  const audioSuccessRef = useRef<ControllableAudioPlayerHandle>(null);
+  const audioFinishRef = useRef<ControllableAudioPlayerHandle>(null);
 
   const [clearedProblemsCount, setClearedProblemsCount] = useState(0); // 初期値を0に設定
   const clearedProblemsCountRef = useRef(clearedProblemsCount);
@@ -128,21 +145,16 @@ export const typing = () => {
   function clearProblem() {
     setClearedProblemsCount((prevCount) => {
       const newCount = prevCount + 1;
-      console.log("Updated clearedProblemsCount inside setState:", newCount); // デバッグ用ログ
       return newCount;
     });
   }
-  // useEffect(() => {
-  //   // myState.colorModeにcolorModeをセット
-  //   myState.colorMode = colorMode;
-  // }, [colorMode, myState]);
   useEffect(() => {
     clearedProblemsCountRef.current = clearedProblemsCount;
   }, [clearedProblemsCount]);
+
   useEffect(() => {
     //レンダー初回時だけ実行
-    console.log("初回だけ");
-    // renderFlgRef.current = true;
+    renderFlgRef.current = true;
     //入力イベントをオン
     document.addEventListener("keypress", keypress_ivent);
     document.addEventListener("keyup", keyup_ivent);
@@ -156,9 +168,9 @@ export const typing = () => {
   const pageChangeHandler = () => {
     document.removeEventListener("keypress", keypress_ivent);
     document.removeEventListener("keyup", keyup_ivent);
-    clearInterval(timerIDref.current);
+    timerIDref.current && clearInterval(timerIDref.current);
     clearInterval(totalTimerIDref.current);
-    sound_BGM.current.pause();
+    audioBgmRef.current?.stop();
     gameMode.current = "menu";
   };
   useEffect(() => {
@@ -173,21 +185,14 @@ export const typing = () => {
       .then((response) => response.json())
       .then((data) => data.content);
   }
-  function sound(id) {
-    const sound = document.getElementById(id);
-    sound.volume = 0.6;
-    sound.pause();
-    sound.currentTime = 0;
-    sound.play();
-  }
 
   // レンダー時に実行
   useEffect(() => {
     if (totalTime <= 15) {
-      sound_BGM.current.playbackRate = 1.1;
+      audioBgmRef.current?.setPlaybackRate(1.1);
     }
     if (totalTime <= 10) {
-      sound_BGM.current.playbackRate = 1.2;
+      audioBgmRef.current?.setPlaybackRate(1.2);
     }
   }, [totalTime]);
 
@@ -235,7 +240,10 @@ export const typing = () => {
     ];
     {
       id.map((item, index) => {
-        document.getElementById(item).style.background = null;
+        const key = document.getElementById(item);
+        if (key !== null) {
+          key.style.background = "none";
+        }
       });
     }
   }
@@ -247,13 +255,12 @@ export const typing = () => {
     //入力したキーを着色
     const inputKeyID = document.getElementById(eKey);
     if (inputKeyID !== null) {
-      document.getElementById(eKey).style.background = "pink";
+      inputKeyID.style.background = "pink";
     }
     switch (gameMode.current) {
       case "menu":
         if (e.code === "Space") {
           gameReplay();
-          menuRef.current.style.display = "none";
         }
         break;
       case "play":
@@ -327,7 +334,7 @@ export const typing = () => {
 
             //一つの文章が終了
             if (complete === true) {
-              sound("success");
+              audioSuccessRef.current?.play();
               totalCost.current = totalCost.current + Q_cost.current;
               clearProblem();
               TimeUp();
@@ -354,7 +361,7 @@ export const typing = () => {
         //もう一致しない
         if (matchCount === 0) {
           inputText.current = "";
-          sound("missed");
+          audioMissedRef.current?.play();
           setMissedCount((missedCount) => missedCount + 1);
           setMissedCount((missedCount) => {
             return missedCount;
@@ -404,37 +411,45 @@ export const typing = () => {
     suggestKeyRef.current = inputSuggest[0].charAt(0);
   }
 
-  let itemTime = 15;
   function StartTimer() {
     const timer = document.getElementById("timer");
-    timer.innerText = itemTime;
-    let startTime = new Date();
-    clearInterval(timerIDref.current);
+    if (!timer) return;
+    timer.innerText = String(itemTime);
+    const startTime = new Date();
+    if (timerIDref.current !== null) {
+      clearInterval(timerIDref.current);
+    }
+
     const timerID_ = setInterval(() => {
-      timer.innerText = itemTime - getTimerTime(startTime);
-      if (timer.innerText <= 0) TimeUp();
+      const remaining = itemTime - getTimerTime(startTime);
+      timer.innerText = String(remaining);
+      if (remaining <= 0) {
+        clearInterval(timerID_);
+        TimeUp();
+      }
     }, 500);
+
     timerIDref.current = timerID_;
   }
+
   function TimeUp() {
     clearSuggest();
     RenderNextSentence();
     StartTimer();
   }
 
-  function getTimerTime(t) {
-    return Math.floor((new Date() - t) / 1000);
+  function getTimerTime(t: Date): number {
+    return Math.floor((new Date().getTime() - t.getTime()) / 1000);
   }
 
   //タイマー_トータル
   function StartTotalTimer() {
-    keyboardRef.current.Close();
+    keyboardRef.current?.Close();
     let totalStartTime;
-    sound_BGM.current.pause();
-    sound_BGM.current.currentTime = 0;
-    sound_BGM.current.playbackRate = 1;
-    sound_BGM.current.volume = 0.08;
-    sound_BGM.current.play();
+    if (isBgmOn) {
+      audioBgmRef.current?.setPlaybackRate(1);
+      audioBgmRef.current?.play();
+    }
 
     setTotalTime(totalTime_origin.current);
     totalStartTime = new Date();
@@ -442,28 +457,39 @@ export const typing = () => {
 
     const totalTimerID_ = setInterval(() => {
       setTotalTime(totalTime_origin.current - getTimerTime(totalStartTime));
-      if (totalTimeRef.current.innerText <= 0) {
+      if (totalTimeRef.current === null) return;
+      const totalTimeInt = parseInt(
+        (totalTimeRef.current as HTMLElement).innerText
+      );
+
+      if (totalTimeInt <= 0) {
         clearInterval(totalTimerIDref.current);
         gameOver(clearedProblemsCount);
       }
     }, 200);
-    totalTimerIDref.current = totalTimerID_;
+    if (totalTimeRef.current !== null) {
+      totalTimerIDref.current = String(totalTimerID_);
+    }
   }
   //ゲームオーバー
   function gameOver(clearedProblemsCount) {
-    keyboardRef.current.Open();
-    clearInterval(timerIDref.current);
+    audioFinishRef.current?.play();
+    audioBgmRef.current?.stop();
+    keyboardRef.current?.Open();
+    if (timerIDref.current !== null) {
+      clearInterval(timerIDref.current);
+    }
     clearInterval(totalTimerIDref.current);
     setTypePerSocund(
       Math.floor((typeCountRef.current / totalTime_origin.current) * 60)
     );
-    voucherRef.current.clickChildOpen(
-      clearedProblemsCountRef.current,
-      session,
-      true
-    );
-    sound_BGM.current.pause();
-    sound("finish");
+    if (voucherRef.current !== null) {
+      voucherRef.current.clickChildOpen(
+        clearedProblemsCountRef.current,
+        session,
+        true
+      );
+    }
     setSnowWind([0, 0.1]);
     setSnowSpeed([0.1, 0.2]);
     stopSnowfall(typeCountRef.current * 20);
@@ -486,12 +512,16 @@ export const typing = () => {
   const stopSnowfall = (count) => {
     typeCountRef.current = count;
     setSnowflakeCount(count);
+
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
+
     intervalRef.current = setInterval(() => {
       if (typeCountRef.current <= 0) {
-        clearInterval(intervalRef.current);
+        if (intervalRef.current !== null) {
+          clearInterval(intervalRef.current);
+        }
         intervalRef.current = null;
         setSnowflakeCount(0);
       } else {
@@ -500,20 +530,6 @@ export const typing = () => {
       }
     }, 100);
   };
-  // ランキング更新
-  useEffect(() => {
-    const handleGameOver = () => {
-      // 新しいランキングデータを取得して設定する
-      const newRanking = getNewRankingData(); // データを取得する関数
-      setRanking(newRanking);
-    };
-    // gameoverイベントをリッスン
-    window.addEventListener("gameover", handleGameOver);
-    // クリーンアップ
-    return () => {
-      window.removeEventListener("gameover", handleGameOver);
-    };
-  }, []);
   return (
     <>
       <DefaultSeo
@@ -558,13 +574,6 @@ export const typing = () => {
           speed={snowSpeed}
         />
       </div>
-      <Box ref={menuRef} style={{ display: "none" }}>
-        <Menu
-          gameReplay={() => {
-            gameReplay();
-          }}
-        />
-      </Box>
       <Content isCustomHeader={true}>
         {isMobile || isIOS ? (
           <Box
@@ -795,7 +804,6 @@ export const typing = () => {
                       missedCount={missedCount}
                       typePerSocund={typePerSocund}
                       times={totalTime_origin.current}
-                      user={userData}
                       userID={currentUserId}
                       visible={true}
                     />
@@ -809,7 +817,6 @@ export const typing = () => {
                       })}
                     </Text>
                     <Spacer />
-
                     <Ranking user={userData} />
                   </Flex>
                 </Center>
@@ -878,56 +885,49 @@ export const typing = () => {
                 missedCount={missedCount}
                 typePerSocund={typePerSocund}
                 time={totalTime_origin.current}
-                user={session}
+                user={userData}
               />
             </Box>
           </>
         )}
-        <Flex display="none">
-          <audio
-            controls
-            id="missed"
-            style={{ display: "inline-block", width: "100px" }}
-          >
-            <source
-              src="https://soundeffect-lab.info/sound/button/mp3/beep4.mp3"
-              type="audio/mp3"
-            />
-          </audio>
-          <audio
-            controls
-            id="success"
-            style={{ display: "inline-block", width: "100px" }}
-          >
-            <source
-              src="https://soundeffect-lab.info/sound/button/mp3/decision40.mp3"
-              type="audio/mp3"
-            />
-          </audio>
-          <audio
-            controls
-            id="finish"
-            style={{ display: "inline-block", width: "100px" }}
-          >
-            <source
-              // src="https://soundeffect-lab.info/sound/anime/mp3/roll-finish1.mp3"
-              src="https://soundeffect-lab.info/sound/anime/mp3/drum-japanese-kaka1.mp3"
-              type="audio/mp3"
-            />
-          </audio>
-          <audio
-            controls
-            id="bgm"
-            ref={sound_BGM}
-            style={{ display: "inline-block", width: "100px" }}
-          >
-            <source
-              src="https://music.storyinvention.com/wp-content/uploads/kutsurogi-koto.mp3"
-              // src="https://wwww.teppy.link/sound/%E6%B4%A5%E8%BB%BD%E4%B8%89%E5%91%B3%E7%B7%9A%E4%B9%B1%E8%88%9E.mp3"
-              type="audio/mp3"
-            />
-          </audio>
-        </Flex>
+
+        {/* <HStack mt={4}>
+          <Button onClick={() => audioFinishRef.current?.play()}>再生</Button>
+          <Button onClick={() => audioFinishRef.current?.stop()}>停止</Button>
+          <Button onClick={() => audioFinishRef.current?.setVolume(0.2)}>
+            音量20%
+          </Button>
+          <Button onClick={() => audioFinishRef.current?.setPlaybackRate(2)}>
+            倍速
+          </Button>
+          <Button onClick={() => audioFinishRef.current?.setPlaybackRate(0.5)}>
+            半速
+          </Button>
+        </HStack> */}
+        <ControllableAudioPlayer
+          ref={audioBgmRef}
+          src="https://music.storyinvention.com/wp-content/uploads/kutsurogi-koto.mp3"
+          initialVolume={0.3}
+          initialPlaybackRate={1.0}
+        />
+        <ControllableAudioPlayer
+          ref={audioMissedRef}
+          src="/sound/missed2.mp3"
+          initialVolume={0.9}
+          initialPlaybackRate={1.0}
+        />
+        <ControllableAudioPlayer
+          ref={audioSuccessRef}
+          src="/sound/success.mp3"
+          initialVolume={1.0}
+          initialPlaybackRate={1.0}
+        />
+        <ControllableAudioPlayer
+          ref={audioFinishRef}
+          src="/sound/finish.mp3"
+          initialVolume={0.8}
+          initialPlaybackRate={1.0}
+        />
       </Content>
     </>
   );
