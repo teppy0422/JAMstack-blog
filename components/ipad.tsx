@@ -11,15 +11,17 @@ const IpadFrame: React.FC<IpadFrameProps> = ({ children }) => {
       alignItems="center"
       justifyContent="center"
       height="100vh"
+      bg="transparent"
     >
       <Box
         border="16px solid"
-        borderColor="#333"
+        borderColor="#332"
         borderRadius="36px"
-        mx={10}
-        boxShadow="0 0 20px rgba(0, 0, 0, 0.5)"
+        mx={{ base: 0, md: 10 }}
+        boxShadow="0 0 2px rgba(0, 0, 0, 0.5)"
         overflow="hidden"
         position="relative"
+        bg="#eee"
       >
         {children}
       </Box>

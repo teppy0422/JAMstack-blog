@@ -130,6 +130,7 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
   );
   const downloadPathMatch = props.linkHref.match(/^(.*\/)/);
   const downloadPath = downloadPathMatch ? downloadPathMatch[1] : "";
+  const htmlPath = downloadPath.replace("download", "html");
 
   const inChargeList = props.inCharge.split(",").map((item) => item.trim());
   const inChargeColors = inChargeList.map((inCharge) => {
@@ -292,7 +293,7 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
                   >
                     <iframe
                       height="100%"
-                      src={`${downloadPath}${ver}_/index.html`} // フォルダ内のindex.htmlを指定
+                      src={`${htmlPath}${ver}_/index.html`} // フォルダ内のindex.htmlを指定
                       style={{
                         width: "100%",
                         height: "100%",
@@ -307,7 +308,7 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
                       width="100%"
                       height="100%"
                       onClick={() =>
-                        handleBoxClick(`${downloadPath}${ver}_/index.html`)
+                        handleBoxClick(`${htmlPath}${ver}_/index.html`)
                       }
                       style={{
                         cursor: "pointer",
@@ -338,7 +339,7 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
                   >
                     <iframe
                       height="100%"
-                      src={`${downloadPath}${ver}/index.html`} // フォルダ内のindex.htmlを指定
+                      src={`${htmlPath}${ver}/index.html`} // フォルダ内のindex.htmlを指定
                       style={{
                         width: "100%",
                         height: "100%",
@@ -353,7 +354,7 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
                       width="100%"
                       height="100%"
                       onClick={() =>
-                        handleBoxClick(`${downloadPath}${ver}/index.html`)
+                        handleBoxClick(`${htmlPath}${ver}/index.html`)
                       } // クリックでモーダルを開く
                       style={{
                         cursor: "pointer",

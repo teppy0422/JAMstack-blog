@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { css, keyframes } from "@emotion/react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, useColorMode } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useCustomToast } from "../components/customToast";
 import "@/styles/globals.css";
@@ -29,14 +29,16 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
   const showToast = useCustomToast();
+  const { colorMode } = useColorMode();
   return (
     <>
       <Box
-        position="absolute"
-        top={0}
-        left={0}
-        bottom={0}
-        width="1.4rem"
+        position={isClicked ? "fixed" : "absolute"}
+        zIndex={1}
+        top={isClicked ? "0" : "0"}
+        left={isClicked ? "0" : "0"}
+        width={isClicked ? "100vw" : "1.4rem"}
+        height={isClicked ? "100vh" : "100%"}
         opacity={0.8}
         backgroundColor={backGroundColor}
         display="flex"
@@ -47,8 +49,8 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
         borderRight="2px dotted"
         borderColor="white"
         borderBottomLeftRadius={borderBottomLeftRadius}
-        transition="transform 1s ease, clip-path 1s ease"
-        transform={isClicked ? "translateX(-100%)" : "translateX(0)"}
+        transition="all 1s ease-in-out, clip-path 0.8s ease-in-out"
+        // transform={isClicked ? "translateX(-100%)" : "translateX(0)"}
         clipPath={
           isHovered
             ? "polygon(0 0, 100% 0, 100% 100%, 0 100%)"
@@ -65,7 +67,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
             setIsClicked(true);
             setTimeout(() => {
               router.push(path);
-            }, 500);
+            }, 1100);
           }
         }}
         _hover={{
@@ -74,6 +76,37 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
               ? "none"
               : `${shake} 0.6s ease-in-out infinite`,
         }}
+      >
+        <Text
+          transform={isClicked ? "rotate(0deg)" : "rotate(270deg)"}
+          letterSpacing="0.2em"
+          marginLeft="-0.1rem"
+          color="white"
+          fontFamily="'Archivo Black', 'M PLUS Rounded 1c'"
+          fontSize="16px"
+          userSelect="none"
+        >
+          DOWNLOAD
+        </Text>
+      </Box>
+      <Box
+        position="absolute"
+        zIndex={0}
+        top={0}
+        left={0}
+        bottom={0}
+        width="1.4rem"
+        opacity={0.5}
+        backgroundColor="gray"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        textAlign="center"
+        cursor="pointer"
+        borderRight="2px dotted"
+        borderColor="white"
+        borderBottomLeftRadius={borderBottomLeftRadius}
+        clipPath="polygon(0 0, 100% 0, 100% 100%, 0 100%)"
       >
         <Text
           transform="rotate(270deg)"
@@ -87,17 +120,6 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           DOWNLOAD
         </Text>
       </Box>
-      <Box
-        position="absolute"
-        zIndex={-1}
-        top={0}
-        left={0}
-        bottom={0}
-        width="1.4rem"
-        backgroundColor="transparent"
-        borderRight="2px dotted"
-        borderColor="gray.500"
-      />
     </>
   );
 };

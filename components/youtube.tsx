@@ -17,6 +17,7 @@ import {
   SliderTrack,
   SliderFilledTrack,
   SliderThumb,
+  Grid,
 } from "@chakra-ui/react";
 
 import { useLanguage } from "../context/LanguageContext";
@@ -121,14 +122,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       video.addEventListener("play", () => {
         pauseOverlay.style.display = "none";
       });
-
-      // クリーンアップ関数
-      // return () => {
-      //   video.removeEventListener("timeupdate", updateProgressBar);
-      //   video.removeEventListener("click", togglePlayPause);
-      //   progressContainer.removeEventListener("click", handleProgressClick);
-      //   document.removeEventListener("keydown", handleKeyDown);
-      // };
     }
   }, []);
 
@@ -233,11 +226,10 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     .trim();
 
   return (
-    <HStack
-      align="start"
+    <Grid
       mt={3}
       p={3}
-      overflowY="auto" // 縦方向にスクロール可能にする
+      overflowY="auto"
       maxHeight="90vh"
       fontFamily={getMessage({
         ja: "Noto Sans JP",
@@ -245,6 +237,8 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         cn: "Noto Sans SC",
         language,
       })}
+      templateColumns={{ base: "1fr", md: "5fr 2fr" }}
+      gap={6}
     >
       <VStack flex="5">
         <Box
@@ -479,7 +473,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
           </Box>
         </Card>
       </VStack>
-    </HStack>
+    </Grid>
   );
 };
 

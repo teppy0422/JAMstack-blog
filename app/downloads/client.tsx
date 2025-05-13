@@ -116,6 +116,7 @@ export default function Ui({
   const truncatedText = (text: string, maxLength: number) => {
     return text.length > 20 ? text.slice(0, maxLength) + "..." : text;
   };
+  const [hoverdId, setHoveredId] = useState<string | null>(null);
   return (
     <>
       <Global
@@ -335,6 +336,7 @@ export default function Ui({
               <Divider borderColor="gray.500" />
               <CardBody p={0}>
                 <Box
+                  key="01"
                   position="relative"
                   px={2}
                   pl={7}
@@ -342,11 +344,11 @@ export default function Ui({
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
-                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseEnter={() => setHoveredId("01")}
                 >
                   <DownloadButton
                     path="./pages/sjp"
-                    isHovered={isHovered}
+                    isHovered={hoverdId === "01"}
                     backGroundColor="green"
                     userName={currentUserName}
                   />
@@ -447,7 +449,7 @@ export default function Ui({
                         }
                       />
                       <CustomBadge
-                        path="/download/Sjp/40/"
+                        path="./tabs/40/"
                         media="html"
                         text={
                           "40." +
@@ -458,7 +460,7 @@ export default function Ui({
                         }
                       />
                       <CustomBadge
-                        path="/youtube/41"
+                        path="./tabs/41/"
                         media="movie"
                         text={
                           "41." +
@@ -469,7 +471,7 @@ export default function Ui({
                         }
                       />
                       <CustomBadge
-                        path="/56v3.1"
+                        path="./tabs/56"
                         media="html"
                         text={
                           "56." +
@@ -480,10 +482,10 @@ export default function Ui({
                         }
                       />
                       <CustomBadge
-                        path="/download/Sjp/70/"
+                        path="./tabs/70/"
                         media="html"
                         text={
-                          "70+" +
+                          "70." +
                           getMessage({
                             ja: "ポイント点滅",
                             language,
@@ -495,6 +497,7 @@ export default function Ui({
                 </Box>
                 <Divider borderColor="gray.500" />
                 <Box
+                  key="02"
                   position="relative"
                   px={2}
                   pl={7}
@@ -502,11 +505,11 @@ export default function Ui({
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
-                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseEnter={() => setHoveredId("02")}
                 >
                   <DownloadButton
-                    path="/download/camera"
-                    isHovered={isHovered}
+                    path="./pages/camera"
+                    isHovered={hoverdId === "02"}
                     backGroundColor="#6C277D"
                     userName={currentUserName}
                     borderBottomLeftRadius="5px"
@@ -777,7 +780,7 @@ export default function Ui({
                         </Text>
                       </Flex>
                       <CustomBadge
-                        path="/youtube/56.net"
+                        path="./tabs/56.net"
                         media="movie"
                         text={getMessage({
                           ja: "ディスプレイ移動",
@@ -935,10 +938,18 @@ export default function Ui({
               </CardHeader>
               <Divider borderColor="gray.500" />
               <CardBody p={0}>
-                <Box position="relative" px={4} pl={8} py={2} minH={140}>
+                <Box
+                  key="03"
+                  position="relative"
+                  px={4}
+                  pl={8}
+                  py={2}
+                  minH={140}
+                  onMouseEnter={() => setHoveredId("03")}
+                >
                   <DownloadButton
-                    path="/download/Bip"
-                    isHovered={isHovered}
+                    path="./pages/bip"
+                    isHovered={hoverdId === "03"}
                     backGroundColor="green"
                     userName={currentUserName}
                   />
@@ -1007,6 +1018,7 @@ export default function Ui({
 
               <CardBody p={0}>
                 <Box
+                  key="04"
                   position="relative"
                   px={2}
                   pl={7}
@@ -1014,11 +1026,11 @@ export default function Ui({
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
-                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseEnter={() => setHoveredId("04")}
                 >
                   <DownloadButton
-                    path="/download/main"
-                    isHovered={isHovered}
+                    path="./pages/main"
+                    isHovered={hoverdId === "04"}
                     backGroundColor="#B02334"
                     userName={currentUserName}
                   />
@@ -1101,13 +1113,13 @@ export default function Ui({
                         }
                       />
                       <CustomBadge
-                        path="/youtube/main2"
+                        path="./tabs/main2"
                         media="movie"
                         text="main2.SSC"
                       />
                       <CustomBadge path="" media="" text="main3.CB" />
                       <CustomBadge
-                        path="/youtube/main3.plc"
+                        path="./tabs/main3plc"
                         media="movie"
                         text="main3.PLC"
                       />
@@ -1116,6 +1128,7 @@ export default function Ui({
                 </Box>
                 <Divider borderColor="gray.500" />
                 <Box
+                  key="05"
                   position="relative"
                   px={2}
                   pl={7}
@@ -1123,11 +1136,11 @@ export default function Ui({
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
-                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseEnter={() => setHoveredId("05")}
                 >
                   <DownloadButton
-                    path="/download/main3"
-                    isHovered={isHovered}
+                    path="./pages/main3"
+                    isHovered={hoverdId === "05"}
                     backGroundColor="#005cb3"
                     userName={currentUserName}
                   />
@@ -1335,20 +1348,18 @@ export default function Ui({
               </CardHeader>
               <Divider borderColor="gray.500" />
               <CardBody p={0}>
-                <Box position="relative" px={4} pl={8} py={2} minH={"9em"}>
-                  <Box
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    bottom={0}
-                    width="1.4rem"
-                    backgroundColor="transparent"
-                    borderRight="2px dotted"
-                    borderColor="gray.500"
-                  />
+                <Box
+                  key="06"
+                  position="relative"
+                  px={4}
+                  pl={8}
+                  py={2}
+                  minH={"9em"}
+                  onMouseEnter={() => setHoveredId("06")}
+                >
                   <DownloadButton
-                    path="/download/library"
-                    isHovered={isHovered}
+                    path="./pages/library"
+                    isHovered={hoverdId === "06"}
                     backGroundColor="#333"
                     userName={currentUserName}
                     borderBottomLeftRadius="5px"
@@ -1415,22 +1426,30 @@ export default function Ui({
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent
-              maxW="90vw"
-              maxH="95%"
-              bg={colorMode === "light" ? "#f2e9df" : "black"}
+              maxW={{ base: "100vw", md: "90vw" }}
+              bg={
+                colorMode === "light"
+                  ? "custom.theme.light.500"
+                  : "custom.theme.dark.500"
+              }
             >
               <ModalCloseButton right="3px" _focus={{ boxShadow: "none" }} />
               {/* <ModalHeader></ModalHeader> */}
-              <ModalBody mx={0}>
+              <ModalBody mx={0} px={{ base: 2, sm: 5, md: 10 }}>
                 <Box
                   width="99%"
                   height={{ base: "70vh", sm: "75vh", md: "75vh", lg: "85vh" }}
                   border="none"
-                  maxW="90vw"
+                  maxW="100vw"
                 >
                   <iframe
                     src={modalPath}
-                    style={{ width: "100%", height: "100%", border: "none" }} // iframeのサイズを100%に設定
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      border: "none",
+                      backgroundColor: "transparent",
+                    }}
                     title="Embedded Content"
                   />
                 </Box>

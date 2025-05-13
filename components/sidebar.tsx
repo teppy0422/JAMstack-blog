@@ -161,7 +161,7 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
           )}
 
           {menuItem(
-            "/download",
+            "/downloads",
             getMessage({
               ja: "ダウンロード",
               us: "Download",
