@@ -72,7 +72,7 @@ import {
   Link,
   AspectRatio,
 } from "@chakra-ui/react";
-import { theme } from "../../../libs/theme";
+import { theme } from "@/theme/theme";
 
 import { ChatIcon } from "@chakra-ui/icons";
 import { MdBusiness } from "react-icons/md";

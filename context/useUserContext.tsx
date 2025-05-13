@@ -1,3 +1,5 @@
+"use client";
+
 // context/UserContext.tsx
 import React, {
   createContext,

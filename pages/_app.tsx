@@ -13,7 +13,7 @@ import { DefaultSeo } from "next-seo";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import Head from "next/head";
-import { theme } from "../libs/theme";
+import { theme } from "@/theme/theme";
 //プログレスバー
 import NextNprogress from "nextjs-progressbar";
 //リセット用

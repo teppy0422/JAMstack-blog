@@ -1,3 +1,6 @@
+"use client";
+import { useEffect, useState, useContext } from "react";
+import NextLink from "next/link";
 import {
   Box,
   VStack,
@@ -18,9 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HamburgerIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
-import { useEffect, useState, useContext } from "react";
 import { PiGithubLogoFill } from "react-icons/pi";
 import { MdEditRoad } from "react-icons/md";
 import { FaKeyboard, FaRoad } from "react-icons/fa";

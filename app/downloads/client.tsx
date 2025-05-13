@@ -1,9 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
-import { useRouter } from "next/router";
 import Content from "../../components/content";
-import fs from "fs";
-import path from "path";
-import { GetServerSideProps } from "next";
 
 import {
   Image,
@@ -46,56 +44,7 @@ import { Global } from "@emotion/react";
 import { useLanguage } from "../../context/LanguageContext";
 import getMessage from "../../components/getMessage";
 
-// ファイル名から最大の数字を取得する関数
-function getMaxVersionNumber(directory: string): {
-  maxVersionString: string;
-  lastModified: Date;
-} {
-  try {
-    const files = fs.readdirSync(directory);
-    let maxNumber = 0;
-    let maxVersionString = "";
-    let lastModified = new Date(0); // 初期値を設定
-
-    files.forEach((file) => {
-      // 'Sjp'で始まり、'_.zip'で終わるファイル名から数字を抽出
-      const match = file.match(/^Sjp([\d.]+)_\.zip$/);
-      if (match) {
-        const versionString = match[1];
-        const number = match[1].replace(/\./g, "");
-        if (Number(number) > maxNumber) {
-          maxNumber = Number(number);
-          maxVersionString = versionString; // ドットを含む元の形式を保持
-          const filePath = path.join(directory, file);
-          const stats = fs.statSync(filePath);
-          lastModified = stats.mtime; // 更新日時を取得
-        }
-      }
-    });
-    return { maxVersionString, lastModified };
-  } catch (error) {
-    console.error("Error reading directory:", error);
-    return { maxVersionString: "0", lastModified: new Date(0) }; // デフォルト値を返す
-  }
-}
-// サーバーサイドでデータを取得
-export const getServerSideProps: GetServerSideProps = async () => {
-  const directoryPath = path.join(
-    process.cwd(),
-    "/public/files/download/html/Sjp/"
-  );
-  const { maxVersionString, lastModified: originalLastModified } =
-    getMaxVersionNumber(directoryPath);
-  const lastModified = new Date().toISOString(); // DateオブジェクトをISO文字列に変換
-  return {
-    props: {
-      maxVersionString,
-      lastModified,
-    },
-  };
-};
-
-export default function About({
+export default function Ui({
   maxVersionString,
   lastModified,
 }: {
@@ -103,7 +52,6 @@ export default function About({
   lastModified: Date;
 }) {
   const { colorMode } = useColorMode();
-  const router = useRouter();
   const { currentUserId, currentUserName } = useUserContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalPath, setModalPath] = useState("");
@@ -111,7 +59,6 @@ export default function About({
     setModalPath(path);
     onOpen();
   };
-  const [isClicked, setIsClicked] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const CustomBadge: React.FC<{
@@ -398,7 +345,7 @@ export default function About({
                   onMouseEnter={() => setIsHovered(true)}
                 >
                   <DownloadButton
-                    path="/download/Sjp"
+                    path="./pages/sjp"
                     isHovered={isHovered}
                     backGroundColor="green"
                     userName={currentUserName}
