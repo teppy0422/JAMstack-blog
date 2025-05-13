@@ -76,12 +76,12 @@ export default function BlogId({ blog, highlightedBody }) {
               ))}
             </Box>
           )}
-          {/* <Image
+          <Image
             height={{ base: "", sm: "200px", md: "200px", xl: "200px" }}
             objectFit="cover"
             alt={blog.title}
             src={blog.eyecatch.url}
-          /> */}
+          />
           {/* <p className="category">{blog.category && `${blog.category.name}`}</p> */}
           <div
             className={styles.post}
