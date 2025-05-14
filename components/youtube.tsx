@@ -59,7 +59,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       if (isMuted) {
         videoRef.current.volume = 1; // Set volume to 100%
       } else {
-        videoRef.current.volume = 0; // Set volume to 0%
+        videoRef.current.volume = 0; // Set volume to 0%k
       }
       setIsMuted(!isMuted);
     }
