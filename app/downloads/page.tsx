@@ -40,10 +40,7 @@ function getMaxVersionNumber(directory: string): {
 }
 
 const Downloads = async () => {
-  const directoryPath = path.join(
-    process.cwd(),
-    "public/files/download/html/Sjp/"
-  );
+  const directoryPath = path.join(process.cwd(), "public/html/Sjp/");
   const { maxVersionString, lastModified } = getMaxVersionNumber(directoryPath);
 
   return (

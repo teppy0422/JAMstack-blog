@@ -5,6 +5,15 @@ module.exports = {
     // optimizeFonts: true,
     // optimizeCss: true, // CSSの最適化を有効化
   },
+  async redirects() {
+    return [
+      {
+        source: "/blog/:id",
+        destination: "/blogs/:id",
+        permanent: true, // 308 Redirect
+      },
+    ];
+  },
   webpack: (config, options) => {
     config.resolve.alias["@"] = path.resolve(__dirname); // ← これを追加
 
