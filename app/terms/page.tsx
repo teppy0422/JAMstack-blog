@@ -1,6 +1,8 @@
+"use client";
+
 import NextLink from "next/link";
 import { useState, useEffect } from "react";
-import Content from "../components/content";
+import Content from "../../components/content";
 import {
   Container,
   Tag,
@@ -19,12 +21,10 @@ import {
 import { RepeatClockIcon } from "@chakra-ui/icons";
 import styles from "@/styles/home.module.scss";
 import Moment from "react-moment";
-import { useLanguage } from "../context/LanguageContext";
-import getMessage from "../components/getMessage";
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
 
-export default function Home({ blog, category, tag, blog2 }) {
-  const [showBlogs, setShowBlogs] = useState(blog);
-
+export default function Home() {
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("gray.100", "pink.100");
   const color = useColorModeValue("#111111", "#111111");
