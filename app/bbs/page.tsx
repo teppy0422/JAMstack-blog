@@ -1,3 +1,6 @@
+// app/bbs/page.tsx
+"use client";
+
 import React, { useEffect, useRef, useState, useContext } from "react";
 import {
   Box,
@@ -25,25 +28,23 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { AiOutlineWechat } from "react-icons/ai";
-import Sidebar from "../components/sidebar";
-import Content from "../components/content";
+import Sidebar from "../../components/sidebar";
+import Content from "../../components/content";
 import { Global } from "@emotion/react";
 import { supabase } from "@/utils/supabase/client";
-import { UnreadProvider } from "../context/UnreadContext";
+import { UnreadProvider } from "../../context/UnreadContext";
 
-import SidebarBBS from "../components/sidebarBBS";
-import { ScrollText } from "../components/CustomText";
-import { ProjectLists, CategoryLists } from "../components/CustomBadge";
-import { AnimationImage } from "../components/CustomImage";
-import { StatusDisplay } from "../components/NowStatus";
+import SidebarBBS from "./parts/bbsSidebar";
+import { ScrollText } from "../../components/CustomText";
+import { ProjectLists, CategoryLists } from "../../components/CustomBadge";
+import { AnimationImage } from "../../components/CustomImage";
+import { StatusDisplay } from "../../components/NowStatus";
 
-import { useLanguage } from "../context/LanguageContext";
-import getMessage from "../components/getMessage";
-import { useUserContext } from "../context/useUserContext";
+import { useLanguage } from "../../context/LanguageContext";
+import getMessage from "../../components/getMessage";
+import { useUserContext } from "../../context/useUserContext";
 
-const BBS = () => {
-  const roadmapRefs = useRef<(HTMLDivElement | null)[]>([]);
-
+export default function BBS() {
   const {
     currentUserId,
     currentUserName,
@@ -372,6 +373,4 @@ const BBS = () => {
       </Content>
     </UnreadProvider>
   );
-};
-
-export default BBS;
+}

@@ -82,13 +82,13 @@ import { CloseIcon } from "@chakra-ui/icons";
 
 import ContentDisplay from "./ContextDisplay";
 
-import { useUserContext } from "../../../context/useUserContext";
+import { useUserContext } from "../../../../context/useUserContext";
 
-import Content from "../../../components/content";
-import SidebarBBS from "../../../components/sidebarBBS";
-import { useCustomToast } from "../../../components/customToast";
-import { GetColor } from "../../../components/CustomColor";
-import { AnimationImage } from "../../../components/CustomImage";
+import Content from "../../../../components/content";
+import SidebarBBS from "../../parts/bbsSidebar";
+import { useCustomToast } from "../../../../components/customToast";
+import { GetColor } from "../../../../components/CustomColor";
+import { AnimationImage } from "../../../../components/CustomImage";
 import IconWithDrawer from "./IconWithDrawer";
 
 import "@/styles/home.module.scss";
@@ -97,28 +97,28 @@ import "@/styles/home.module.scss";
 import {
   useLanguage,
   LanguageProvider,
-} from "../../../context/LanguageContext";
-import getMessage from "../../../components/getMessage";
+} from "../../../../context/LanguageContext";
+import getMessage from "../../../../components/getMessage";
 // 季節ごとのアニメーションを管理するマッピング
 const seasonalAnimations = {
   someiyoshino: dynamic(
-    () => import("../../../components/season/SomeiyoshinoAnimation")
+    () => import("../../../../components/season/SomeiyoshinoAnimation")
   ),
   hachisuka: dynamic(
-    () => import("../../../components/season/HachisukaAnimation")
+    () => import("../../../../components/season/HachisukaAnimation")
   ),
-  yae: dynamic(() => import("../../../components/season/YaeAnimation")),
+  yae: dynamic(() => import("../../../../components/season/YaeAnimation")),
   // ochiba: dynamic(() => import("../../../components/OchibaAnimation")), // 落ち葉アニメーションのインポート
   // 他の季節のアニメーションをここに追加
 };
 import { Global } from "@emotion/react";
-import { CustomLoading } from "../../../components/CustomText";
-import { StatusDisplay } from "../../../components/NowStatus";
+import { CustomLoading } from "../../../../components/CustomText";
+import { StatusDisplay } from "../../../../components/NowStatus";
 import { isatty } from "tty";
-import { useUnread } from "../../../context/UnreadContext";
+import { useUnread } from "../../../../context/UnreadContext";
 import imageCompression from "browser-image-compression";
-import { CustomCloseButton } from "../../../components/custom/CustomCloseButton";
-import { CustomModalCloseButton } from "../../../components/custom/CustomModalCloseButton";
+import { CustomCloseButton } from "../../../../components/custom/CustomCloseButton";
+import { CustomModalCloseButton } from "../../../../components/custom/CustomModalCloseButton";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";

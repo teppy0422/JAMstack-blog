@@ -1,3 +1,5 @@
+// pages/api/auth/callback.ts
+
 import { NextApiRequest, NextApiResponse } from "next";
 import { supabase } from "@/utils/supabase/client";
 

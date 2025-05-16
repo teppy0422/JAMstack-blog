@@ -43,5 +43,11 @@ function hello() {
 #### 2025/05/16. README.md に履歴を残す
 
 pages/skillBlogs/0000.tsx を app/skillBlogs/pages.tsx に移動
+silleBlogs を全て移動
 
-0002.tsx を移動前
+privacy と terms を移動
+pages/BBS.tsx を移動
+
+##### metadata を各ページに記載
+
+illust/

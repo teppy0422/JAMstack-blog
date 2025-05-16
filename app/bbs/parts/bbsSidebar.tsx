@@ -1,9 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
 import { MdBusiness, MdChat } from "react-icons/md";
-import { useCustomToast } from "../components/customToast";
-import { GetColor } from "../components/CustomColor";
-import { useUnread } from "../context/UnreadContext";
+import { useCustomToast } from "../../../components/customToast";
+import { GetColor } from "../../../components/CustomColor";
+import { useUnread } from "../../../context/UnreadContext";
 import {
   Box,
   Text,
@@ -29,12 +29,12 @@ import { MdCheckBoxOutlineBlank } from "react-icons/md";
 
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
-import getMessage from "../components/getMessage";
-import { CustomAccordionIcon } from "../components/CustomText";
-import { CustomAvatar } from "../components/CustomAvatar";
+import getMessage from "../../../components/getMessage";
+import { CustomAccordionIcon } from "../../../components/CustomText";
+import { CustomAvatar } from "../../../components/CustomAvatar";
 
-import { useUserContext } from "../context/useUserContext";
-import { useLanguage } from "../context/LanguageContext";
+import { useUserContext } from "../../../context/useUserContext";
+import { useLanguage } from "../../../context/LanguageContext";
 
 // import { AppContext } from "../pages/_app";
 
@@ -171,7 +171,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
       }, {} as Record<string, typeof threads>)
     ).forEach(([company, companyThreads], index) => {
       const isCurrentPageCompany = companyThreads.some(
-        (thread) => currentPath === `/thread/${thread.id}/`
+        (thread) => currentPath === `/bbs/thread/${thread.id}/`
       );
 
       if (
@@ -599,7 +599,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
               0
             );
             const isCurrentPage = companyThreads.some(
-              (thread) => currentPath === `/thread/${thread.id}/`
+              (thread) => currentPath === `/bbs/thread/${thread.id}/`
             );
 
             return (
@@ -703,7 +703,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                         )
                         .map((thread) => {
                           const isCurrentPage =
-                            currentPath === `/thread/${thread.id}/`;
+                            currentPath === `/bbs/thread/${thread.id}/`;
 
                           const isDifferentCompany =
                             thread.mainCompany !== "開発" &&
@@ -730,7 +730,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                           return (
                             <Box ml={isMain ? "5" : "1"} key={thread.id}>
                               {menuItem(
-                                `/thread/${thread.id}`,
+                                `/bbs/thread/${thread.id}`,
                                 thread.projectName,
                                 thread.category,
                                 thread.title,
