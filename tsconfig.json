@@ -2,7 +2,11 @@
   "compilerOptions": {
     // "target": "ES5",
     "target": "es2015",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -17,7 +21,9 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
     "plugins": [
       {
@@ -33,8 +39,12 @@
     "**/*.tsx",
     "pages/api/auth/[...nextauth].ts",
     "**/*.d.ts",
-    ".next/types/**/*.ts",
-    "libs/.blog-post.ts"
+    // ".next/types/**/*.ts",
+    "libs/.blog-post.ts",
+    ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "public/files"]
+  "exclude": [
+    "node_modules",
+    "public/files"
+  ]
 }
