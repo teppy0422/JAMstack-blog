@@ -73,7 +73,7 @@ import {
   ProjectLists,
   getProjectOptionsColor,
 } from "../components/CustomBadge";
-import CustomModal from "../pages/skillBlogs/customModal";
+import CustomModal from "../app/skillBlogs/components/customModal";
 
 const activityOptions = [
   { value: "online", label: "オンライン", color: "#815ad6" },

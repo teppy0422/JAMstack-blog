@@ -5,6 +5,8 @@ module.exports = {
     // optimizeFonts: true,
     // optimizeCss: true, // CSSの最適化を有効化
   },
+  // pages/blog/[id].tsxからapp/blogs/[id]/page.tsxに変更したから一時的に変換
+  // blog/からのリダイレクトが必要なくなったら削除してOK。たぶん2025年末までくらい
   async redirects() {
     return [
       {
@@ -16,7 +18,6 @@ module.exports = {
   },
   webpack: (config, options) => {
     config.resolve.alias["@"] = path.resolve(__dirname); // ← これを追加
-
     // glb/gltf/mp3用のloader
     config.module.rules.push({
       test: /\.(glb|gltf|mp3)$/,
@@ -24,7 +25,6 @@ module.exports = {
         loader: "file-loader",
       },
     });
-
     // SVGをReactコンポーネントとして使えるようにする
     config.module.rules.push({
       test: /\.svg$/,

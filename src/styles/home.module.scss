@@ -689,3 +689,129 @@ element.style {
 .spinAnimation {
   animation: spin infinite 20s linear;
 }
+.markdown {
+  :global {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-weight: 600;
+      line-height: 1.25;
+      margin-top: 2em;
+      margin-bottom: 1em;
+    }
+
+    h1 {
+      font-size: 2rem;
+      border-bottom: 2px solid #eaecef;
+      padding-bottom: 0.3em;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 0.3em;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+    }
+
+    p {
+      margin: 1em 0;
+      line-height: 1.7;
+      color: #24292f;
+    }
+
+    a {
+      color: #0366d6;
+      text-decoration: underline;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    pre {
+      background-color: #f6f8fa;
+      padding: 1em;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.9em;
+      line-height: 1.5;
+      margin: 1em 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      color: #e83e8c;
+      font-size: inherit;
+      line-height: inherit;
+      white-space: pre-wrap; /* 折り返し対応 */
+    }
+
+    code {
+      background-color: #f6f8fa;
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+      color: #e83e8c;
+    }
+
+    blockquote {
+      margin: 1.5em 0;
+      padding: 0.8em 1em;
+      background-color: #f0f0f0;
+      border-left: 4px solid #dfe2e5;
+      color: #6a737d;
+      font-style: italic;
+    }
+
+    ul,
+    ol {
+      margin: 1em 0;
+      padding-left: 2em;
+    }
+
+    li + li {
+      margin-top: 0.3em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5em 0;
+      font-size: 0.95em;
+    }
+
+    th,
+    td {
+      border: 1px solid #dfe2e5;
+      padding: 0.6em 1em;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f6f8fa;
+      font-weight: 600;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: #eaecef;
+      margin: 2em 0;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 1em 0;
+    }
+  }
+}

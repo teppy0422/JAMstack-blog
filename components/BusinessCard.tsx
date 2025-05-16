@@ -34,7 +34,6 @@ import getMessage from "./getMessage";
 import { useLanguage } from "../context/LanguageContext";
 import SkillGraph from "../components/sillGraph";
 import SkillCircle from "../components/skillCircle";
-import ICT from "../pages/skillBlogs/ICT";
 import styles from "@/styles/home.module.scss";
 
 const BusinessCard: React.FC = () => {
