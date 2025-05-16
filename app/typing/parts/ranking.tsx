@@ -37,8 +37,8 @@ import PropTypes, { string } from "prop-types";
 import GraphTemp, { GraphTempHandle } from "./graphTemp";
 
 import getMessage from "../../../components/getMessage";
-import { useLanguage } from "../../../context/LanguageContext";
-import { UserData } from "../../../context/useUserContext";
+import { useLanguage } from "../../../src/contexts/LanguageContext";
+import { UserData } from "@/contexts/useUserContext";
 
 type RankingProps = {
   user: UserData | null;

@@ -27,8 +27,8 @@ const myState = {
 export const myContext = createContext(myState);
 export { myContext as AppContext };
 import { AppProps } from "next/app";
-import { LanguageProvider } from "../context/LanguageContext";
-import { UserProvider } from "../context/useUserContext";
+import { LanguageProvider } from "../src/contexts/LanguageContext";
+import { UserProvider } from "@/contexts/useUserContext";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (

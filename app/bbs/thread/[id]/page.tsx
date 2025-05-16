@@ -82,7 +82,7 @@ import { CloseIcon } from "@chakra-ui/icons";
 
 import ContentDisplay from "./ContextDisplay";
 
-import { useUserContext } from "../../../../context/useUserContext";
+import { useUserContext } from "@/contexts/useUserContext";
 
 import Content from "../../../../components/content";
 import SidebarBBS from "../../parts/bbsSidebar";
@@ -94,10 +94,7 @@ import IconWithDrawer from "./IconWithDrawer";
 import "@/styles/home.module.scss";
 // import { AppContext } from "../../../pages/_app";
 
-import {
-  useLanguage,
-  LanguageProvider,
-} from "../../../../context/LanguageContext";
+import { useLanguage, LanguageProvider } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 // 季節ごとのアニメーションを管理するマッピング
 const seasonalAnimations = {
@@ -115,7 +112,7 @@ import { Global } from "@emotion/react";
 import { CustomLoading } from "../../../../components/CustomText";
 import { StatusDisplay } from "../../../../components/NowStatus";
 import { isatty } from "tty";
-import { useUnread } from "../../../../context/UnreadContext";
+import { useUnread } from "@/contexts/UnreadContext";
 import imageCompression from "browser-image-compression";
 import { CustomCloseButton } from "../../../../components/custom/CustomCloseButton";
 import { CustomModalCloseButton } from "../../../../components/custom/CustomModalCloseButton";

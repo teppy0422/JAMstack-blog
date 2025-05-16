@@ -20,7 +20,7 @@ import {
   Grid,
 } from "@chakra-ui/react";
 
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../src/contexts/LanguageContext";
 import getMessage from "../components/getMessage";
 
 interface YouTubePlayerProps {

@@ -34,8 +34,8 @@ import { useColorMode } from "@chakra-ui/react";
 import { useCustomToast } from "../../../components/customToast";
 import { useDisclosure } from "@chakra-ui/react";
 
-import { useReadCount } from "../../../hooks/useReadCount";
-import { useUserContext } from "../../../context/useUserContext";
+import { useReadCount } from "@/hooks/useReadCount";
+import { useUserContext } from "@/contexts/useUserContext";
 
 import { CustomAccordionIcon } from "../../../components/CustomText";
 import { CustomLoading } from "../../../components/CustomText";
@@ -43,7 +43,7 @@ import { CustomLoading } from "../../../components/CustomText";
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";
 
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from "../../../src/contexts/LanguageContext";
 import getMessage from "../../../components/getMessage";
 
 const customTheme = extendTheme({

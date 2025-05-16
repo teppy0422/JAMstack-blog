@@ -33,7 +33,7 @@ import NextImage from "next/image";
 import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import DownloadButton from "../../components/DownloadButton";
 import styles from "@/styles/home.module.scss";
-import { useUserContext } from "../../context/useUserContext";
+import { useUserContext } from "@/contexts/useUserContext";
 // import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 import { AnimationImage } from "../../components/CustomImage";
 import CustomLinkBox from "../../components/customLinkBox";
@@ -41,7 +41,7 @@ import CustomPopver from "../../components/popver";
 import Sidebar from "../../components/sidebar";
 import { Global } from "@emotion/react";
 
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../components/getMessage";
 
 export default function Ui({

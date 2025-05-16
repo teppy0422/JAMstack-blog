@@ -6,7 +6,7 @@ import { FaSyncAlt } from "react-icons/fa";
 import IpadFrame from "../../../../components/ipad";
 import YouTubePlayer from "../../../../components/youtube";
 
-import { useLanguage } from "../../../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 
 const Home = () => {

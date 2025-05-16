@@ -59,7 +59,7 @@ import { FaEarthAsia } from "react-icons/fa6";
 import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
 import Content from "../../components/content"; // Content コンポーネントをインポート
 
-import { useUserContext } from "../../context/useUserContext";
+import { useUserContext } from "@/contexts/useUserContext";
 
 import { useColorMode } from "@chakra-ui/react";
 
@@ -81,7 +81,7 @@ import "@fontsource/rampart-one";
 // };
 
 import getMessage from "../../components/getMessage";
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from "../../src/contexts/LanguageContext";
 
 // ↓ あなたの Welcome の中身をここに移動
 export default function WelcomeClient() {

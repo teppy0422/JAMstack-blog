@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import { MdBusiness, MdChat } from "react-icons/md";
 import { useCustomToast } from "../../../components/customToast";
 import { GetColor } from "../../../components/CustomColor";
-import { useUnread } from "../../../context/UnreadContext";
+import { useUnread } from "@/contexts/UnreadContext";
 import {
   Box,
   Text,
@@ -33,8 +33,8 @@ import getMessage from "../../../components/getMessage";
 import { CustomAccordionIcon } from "../../../components/CustomText";
 import { CustomAvatar } from "../../../components/CustomAvatar";
 
-import { useUserContext } from "../../../context/useUserContext";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useUserContext } from "@/contexts/useUserContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // import { AppContext } from "../pages/_app";
 

@@ -4,8 +4,7 @@
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "clean": "rm -rf .next",
     "build": "next build && next-sitemap --config sitemap.config.js",
-    "start": "next start",
-    "migrate:deploy": "prisma migrate deploy"
+    "start": "next start"
   },
   "author": {
     "name": "teppeikataoka",

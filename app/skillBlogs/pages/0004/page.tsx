@@ -44,10 +44,10 @@ import SkillCircle from "../../../../components/skillCircle";
 import BusinessCard from "../../../../components/BusinessCard";
 import ICT from "../../components/ICT/page";
 import styles from "@/styles/home.module.scss";
-import { useUserContext } from "../../../../context/useUserContext";
-import { useReadCount } from "../../../../hooks/useReadCount";
+import { useUserContext } from "@/contexts/useUserContext";
+import { useReadCount } from "@/hooks/useReadCount";
 
-import { useLanguage } from "../../../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 
 const customTheme = extendTheme({

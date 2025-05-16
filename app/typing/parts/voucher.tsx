@@ -60,8 +60,8 @@ import Ikura from "../../../components/3d/sushi_ikura";
 
 import getMessage from "../../../components/getMessage";
 // import { AppContext } from "../../pages/_app";
-import { useLanguage } from "../../../context/LanguageContext";
-import { UserData } from "../../../context/useUserContext";
+import { useLanguage } from "../../../src/contexts/LanguageContext";
+import { UserData } from "@/contexts/useUserContext";
 export interface VoucherProps {
   totalCost: number;
   missedCount: number;

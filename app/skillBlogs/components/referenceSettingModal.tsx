@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { FaRegEdit } from "react-icons/fa";
 
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from "../../../src/contexts/LanguageContext";
 import getMessage from "../../../components/getMessage";
 
 //Kbdのスタイル

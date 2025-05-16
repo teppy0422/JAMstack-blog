@@ -35,9 +35,9 @@ import styles from "@/styles/home.module.scss";
 import CustomLinkBox from "../../../../components/customLinkBox";
 import CustomPopver from "../../../../components/popver";
 import Sidebar from "../../../../components/sidebar";
-import { useUserContext } from "../../../../context/useUserContext";
+import { useUserContext } from "@/contexts/useUserContext";
 
-import { useLanguage } from "../../../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 
 function TransitionExample() {

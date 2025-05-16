@@ -41,7 +41,7 @@ import {
 
 import { keyframes } from "@emotion/react";
 
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../src/contexts/LanguageContext";
 import getMessage from "../components/getMessage";
 
 const shake = keyframes`

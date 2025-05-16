@@ -32,7 +32,7 @@ import Sidebar from "../../components/sidebar";
 import Content from "../../components/content";
 import { Global } from "@emotion/react";
 import { supabase } from "@/utils/supabase/client";
-import { UnreadProvider } from "../../context/UnreadContext";
+import { UnreadProvider } from "@/contexts/UnreadContext";
 
 import SidebarBBS from "./parts/bbsSidebar";
 import { ScrollText } from "../../components/CustomText";
@@ -40,9 +40,9 @@ import { ProjectLists, CategoryLists } from "../../components/CustomBadge";
 import { AnimationImage } from "../../components/CustomImage";
 import { StatusDisplay } from "../../components/NowStatus";
 
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../components/getMessage";
-import { useUserContext } from "../../context/useUserContext";
+import { useUserContext } from "@/contexts/useUserContext";
 
 export default function BBS() {
   const {

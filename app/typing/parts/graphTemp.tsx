@@ -32,10 +32,10 @@ import Highcharts from "highcharts/highcharts";
 import HighchartsReact from "highcharts-react-official";
 import highchartsAccessibility from "highcharts/modules/accessibility";
 import AnnotationsFactory from "highcharts/modules/annotations";
-import { UserData } from "../../../context/useUserContext";
+import { UserData } from "@/contexts/useUserContext";
 import { useSession, signIn, signOut } from "next-auth/react";
 import styles from "@/styles/home.module.scss";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from "../../../src/contexts/LanguageContext";
 
 import getMessage from "../../../components/getMessage";
 import { AppContext } from "../../../pages/_app";

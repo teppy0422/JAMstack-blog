@@ -29,7 +29,7 @@ import { IoTicketOutline, IoTicketSharp } from "react-icons/io5";
 import { AiOutlineWechat } from "react-icons/ai";
 import { IoApps } from "react-icons/io5";
 
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../src/contexts/LanguageContext";
 import getMessage from "../components/getMessage";
 import { AnimationImage } from "../components/CustomImage";
 

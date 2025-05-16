@@ -20,7 +20,7 @@ import {
 import { RepeatClockIcon } from "@chakra-ui/icons";
 import styles from "@/styles/home.module.scss";
 import Moment from "react-moment";
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from "../../src/contexts/LanguageContext";
 import getMessage from "../../components/getMessage";
 
 export default function Home() {

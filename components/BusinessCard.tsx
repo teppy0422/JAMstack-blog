@@ -31,7 +31,7 @@ import { IoMdPhonePortrait, IoMdMail } from "react-icons/io";
 import { MdWeb } from "react-icons/md";
 
 import getMessage from "./getMessage";
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../src/contexts/LanguageContext";
 import SkillGraph from "../components/sillGraph";
 import SkillCircle from "../components/skillCircle";
 import styles from "@/styles/home.module.scss";

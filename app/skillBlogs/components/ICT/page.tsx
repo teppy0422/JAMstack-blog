@@ -5,7 +5,7 @@ import React, { useEffect, useContext } from "react";
 import "./style.css";
 import "@fontsource/rock-salt";
 
-import { useLanguage } from "../../../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 
 const ICT: React.FC = () => {

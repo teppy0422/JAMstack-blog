@@ -48,9 +48,9 @@ import GraphTemp from "./parts/graphTemp";
 // import { useContext } from "react";
 
 // import { myContext } from "../_app";
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from "../../src/contexts/LanguageContext";
 import getMessage from "../../components/getMessage";
-import { useUserContext } from "../../context/useUserContext";
+import { useUserContext } from "@/contexts/useUserContext";
 
 import ControllableAudioPlayer, {
   ControllableAudioPlayerHandle,

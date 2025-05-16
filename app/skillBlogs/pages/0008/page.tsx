@@ -57,10 +57,10 @@ import { FileSystemNode } from "../../../../components/fileSystemNode"; // FileS
 import ImageSliderModal from "../../components/ImageSliderModal"; // モーダルコンポーネントをインポート
 import OptionalBox from "../../components/OptionalBox";
 import ReferenceSettingModal from "../../components/referenceSettingModal";
-import { useUserContext } from "../../../../context/useUserContext";
-import { useReadCount } from "../../../../hooks/useReadCount";
+import { useUserContext } from "@/contexts/useUserContext";
+import { useReadCount } from "@/hooks/useReadCount";
 
-import { useLanguage } from "../../../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 
 const CustomIcon = createIcon({

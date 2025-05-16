@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Box, Text, Button, IconButton, useColorMode } from "@chakra-ui/react";
 import { FaSyncAlt } from "react-icons/fa";
 
-import { useLanguage } from "../../../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 
 const Home = () => {

@@ -25,7 +25,7 @@ import Sidebar from "../../components/sidebar";
 import Content from "../../components/content";
 import { Global } from "@emotion/react";
 
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from "../../src/contexts/LanguageContext";
 import getMessage from "../../components/getMessage";
 
 interface RoadmapItem {

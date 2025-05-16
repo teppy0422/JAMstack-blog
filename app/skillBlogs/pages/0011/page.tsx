@@ -60,11 +60,11 @@ import ExternalLink from "../../components/ExternalLink";
 import { FileSystemNode } from "../../../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import ImageSliderModal from "../../components/ImageSliderModal"; // モーダルコンポーネントをインポート
 import ReferenceSettingModal from "../../components/referenceSettingModal";
-import { useUserContext } from "../../../../context/useUserContext";
+import { useUserContext } from "@/contexts/useUserContext";
 import { supabase } from "@/utils/supabase/client";
-import { useReadCount } from "../../../../hooks/useReadCount";
+import { useReadCount } from "@/hooks/useReadCount";
 
-import { useLanguage } from "../../../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 
 const CustomIcon = createIcon({

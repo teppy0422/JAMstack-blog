@@ -35,8 +35,8 @@ import CustomLinkBox from "../../../../components/customLinkBox";
 import CustomPopver from "../../../../components/popver";
 import Sidebar from "../../../../components/sidebar";
 
-import { useUserContext } from "../../../../context/useUserContext";
-import { useLanguage } from "../../../../context/LanguageContext";
+import { useUserContext } from "@/contexts/useUserContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 
 export default function About() {

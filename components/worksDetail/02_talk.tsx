@@ -13,7 +13,7 @@ import styles from "@/styles/home.module.scss";
 import SjpChart01 from "./01_chart_1";
 import Talk from "./talk";
 
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from "../../src/contexts/LanguageContext";
 import getMessage from "../../components/getMessage";
 
 export default function CheckResultDetail_talk() {

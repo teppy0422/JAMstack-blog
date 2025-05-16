@@ -43,12 +43,12 @@ import Detail02 from "../../../../components/worksDetail/02";
 import Detail02talk from "../../../../components/worksDetail/02_talk";
 import Detail03 from "../../../../components/worksDetail/03";
 
-import { useUserContext } from "../../../../context/useUserContext";
-import { useReadCount } from "../../../../hooks/useReadCount";
+import { useUserContext } from "@/contexts/useUserContext";
+import { useReadCount } from "@/hooks/useReadCount";
 
 import styles from "@/styles/home.module.scss";
 
-import { useLanguage } from "../../../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 //テキストジャンプアニメーション
 const jumpAnimation = keyframes`

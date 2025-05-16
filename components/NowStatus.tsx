@@ -62,8 +62,8 @@ import "@fontsource/noto-sans-jp";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-import { useLanguage } from "../context/LanguageContext";
-import { useUserContext } from "../context/useUserContext";
+import { useLanguage } from "../src/contexts/LanguageContext";
+import { useUserContext } from "@/contexts/useUserContext";
 import getMessage from "./getMessage";
 import { getBoxShadow } from "@chakra-ui/react/dist/types/popper/utils";
 import { AnimationImage } from "./CustomImage";

@@ -62,14 +62,14 @@ import AwesomIcon from "./awesomIcon";
 import Auth from "./Auth";
 import { Global } from "@emotion/react";
 
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../src/contexts/LanguageContext";
 import getMessage from "../components/getMessage";
 import Sidebar from "../components/sidebar";
 import { CustomAvatar } from "../components/CustomAvatar";
 import { CustomModalCloseButton } from "./custom/CustomModalCloseButton";
 import { CustomSwitchColorModeButton } from "./custom/CustomSwitchButton";
 
-import { useUserContext } from "../context/useUserContext";
+import { useUserContext } from "@/contexts/useUserContext";
 
 import "@fontsource/dela-gothic-one";
 

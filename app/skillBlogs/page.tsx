@@ -38,9 +38,9 @@ import Frame from "./components/frame";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./components/customBadge";
 import Sidebar from "../../components/sidebar";
-import { useUserContext } from "../../context/useUserContext";
-import { useReadCount } from "../../hooks/useReadCount";
-import { useLanguage } from "../../context/LanguageContext";
+import { useUserContext } from "@/contexts/useUserContext";
+import { useReadCount } from "@/hooks/useReadCount";
+import { useLanguage } from "../../src/contexts/LanguageContext";
 import getMessage from "../../components/getMessage";
 import { createIcon } from "@chakra-ui/react";
 

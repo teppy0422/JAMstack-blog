@@ -43,7 +43,7 @@ import {
 import { supabase } from "@/utils/supabase/client";
 import { VscAccount } from "react-icons/vsc";
 import imageCompression from "browser-image-compression";
-import { useUserContext } from "../../context/useUserContext";
+import { useUserContext } from "@/contexts/useUserContext";
 import Content from "../../components/content";
 import { FaAnglesDown } from "react-icons/fa6";
 import { MyBarChart } from "../../components/sillGraph_order2";

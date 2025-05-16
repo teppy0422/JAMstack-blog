@@ -2,9 +2,9 @@
 
 import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { UserProvider } from "../context/useUserContext";
-import { UnreadProvider } from "../context/UnreadContext";
-import { LanguageProvider } from "../context/LanguageContext";
+import { UserProvider } from "@/contexts/useUserContext";
+import { UnreadProvider } from "@/contexts/UnreadContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { theme } from "@/theme/theme";
 
 export default function Providers({ children }: { children: React.ReactNode }) {

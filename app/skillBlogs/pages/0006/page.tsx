@@ -40,10 +40,10 @@ import { keyframes } from "@emotion/react";
 import { CustomBadge } from "../../components/customBadge";
 import UnderlinedTextWithDrawer from "../../components/UnderlinedTextWithDrawer";
 import IframeDisplay from "../../components/IframeDisplay";
-import { useUserContext } from "../../../../context/useUserContext";
-import { useReadCount } from "../../../../hooks/useReadCount";
+import { useUserContext } from "@/contexts/useUserContext";
+import { useReadCount } from "@/hooks/useReadCount";
 
-import { useLanguage } from "../../../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 import { AnimationImage } from "../../../../components/CustomImage";
 

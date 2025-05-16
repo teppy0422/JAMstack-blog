@@ -22,7 +22,7 @@ import {
 import { signIn } from "next-auth/react";
 import { MdBusiness, MdEmail, MdHistory } from "react-icons/md";
 
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../src/contexts/LanguageContext";
 import { CustomAvatar } from "./CustomAvatar";
 
 import getMessage from "./getMessage";

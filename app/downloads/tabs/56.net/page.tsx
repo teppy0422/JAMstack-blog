@@ -4,7 +4,7 @@ import React from "react";
 import YouTubePlayer from "../../../../components/youtube";
 import IpadFrame from "../../../../components/ipad";
 
-import { useLanguage } from "../../../../context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "../../../../components/getMessage";
 
 const HomePage: React.FC = () => {
