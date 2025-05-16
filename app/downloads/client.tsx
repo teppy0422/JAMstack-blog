@@ -42,7 +42,7 @@ import Sidebar from "../../components/sidebar";
 import { Global } from "@emotion/react";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import getMessage from "../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 export default function Ui({
   maxVersionString,

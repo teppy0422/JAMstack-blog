@@ -26,7 +26,7 @@ import Content from "../../components/content";
 import { Global } from "@emotion/react";
 
 import { useLanguage } from "../../src/contexts/LanguageContext";
-import getMessage from "../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 interface RoadmapItem {
   year?: string;

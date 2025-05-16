@@ -8,7 +8,7 @@ import Header_ from "./header_";
 import { Global } from "@emotion/react";
 
 import { useLanguage } from "../src/contexts/LanguageContext";
-import getMessage from "./getMessage";
+import getMessage from "@/utils/getMessage";
 // import { AppContext } from "../pages/_app";
 
 import {

@@ -13,15 +13,12 @@ import {
   Heading,
   Text,
   Avatar,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
   Grid,
 } from "@chakra-ui/react";
 
-import { useLanguage } from "../src/contexts/LanguageContext";
-import getMessage from "../components/getMessage";
+import { useLanguage } from "../contexts/LanguageContext";
+import getMessage from "../utils/getMessage";
+import { isMobile } from "react-device-detect";
 
 interface YouTubePlayerProps {
   src: string;
@@ -37,8 +34,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   date,
   autoPlay,
 }) => {
-  const [currentSrc, setCurrentSrc] = useState(src);
-
   const [showFullText, setShowFullText] = useState(false);
   const { language, setLanguage } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -75,58 +70,61 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   const handleToggleText = () => {
     setShowFullText(!showFullText);
   };
+
   useEffect(() => {
-    setCurrentSrc(src);
     const video = document.querySelector<HTMLVideoElement>(".box1");
     const progressBar = document.getElementById("progress-bar");
     const progressContainer = document.getElementById("progress-container");
     const pauseOverlay = document.getElementById("pause-overlay");
 
-    if (video && progressBar && progressContainer && pauseOverlay) {
-      const updateProgressBar = () => {
-        const percentage = (video.currentTime / video.duration) * 100;
-        progressBar.style.width = percentage + "%";
-      };
+    if (!video || !progressBar || !progressContainer || !pauseOverlay) return;
 
-      const handleProgressClick = (e: MouseEvent) => {
-        const rect = progressContainer.getBoundingClientRect();
-        const offsetX = e.clientX - rect.left;
-        const newTime =
-          (offsetX / progressContainer.offsetWidth) * video.duration;
-        video.currentTime = newTime;
-        video.play();
-      };
+    const updateProgressBar = () => {
+      const percentage = (video.currentTime / video.duration) * 100;
+      progressBar.style.width = `${percentage}%`;
+    };
 
-      const handleKeyDown = (e: KeyboardEvent) => {
-        switch (e.code) {
-          case "ArrowLeft":
-            video.currentTime = Math.max(0, video.currentTime - 5);
-            break;
-          case "ArrowRight":
-            video.currentTime = Math.min(video.duration, video.currentTime + 5);
-            break;
-          case "Space":
-            togglePlayPause();
-            break;
-        }
-      };
+    const handleProgressClick = (e: MouseEvent) => {
+      const rect = progressContainer.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      const newTime =
+        (offsetX / progressContainer.offsetWidth) * video.duration;
+      video.currentTime = newTime;
+      video.play();
+    };
 
-      video.addEventListener("timeupdate", updateProgressBar);
-      // video.addEventListener("click", togglePlayPause);
-      progressContainer.addEventListener("click", handleProgressClick);
-      document.addEventListener("keydown", handleKeyDown);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === "ArrowLeft")
+        video.currentTime = Math.max(0, video.currentTime - 5);
+      if (e.code === "ArrowRight")
+        video.currentTime = Math.min(video.duration, video.currentTime + 5);
+      if (e.code === "Space") {
+        e.preventDefault(); // ページスクロール防止
+        togglePlayPause();
+      }
+    };
 
-      video.addEventListener("pause", () => {
-        pauseOverlay.style.display = "flex";
-      });
-      video.addEventListener("play", () => {
-        pauseOverlay.style.display = "none";
-      });
-    }
-  }, []);
+    video.addEventListener("timeupdate", updateProgressBar);
+    progressContainer.addEventListener("click", handleProgressClick);
+    document.addEventListener("keydown", handleKeyDown);
+
+    video.addEventListener(
+      "pause",
+      () => (pauseOverlay.style.display = "flex")
+    );
+    video.addEventListener("play", () => (pauseOverlay.style.display = "none"));
+
+    return () => {
+      video.removeEventListener("timeupdate", updateProgressBar);
+      progressContainer.removeEventListener("click", handleProgressClick);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [src]);
 
   const changeVideoSource = (newSrc: string) => {
-    window.location.href = newSrc; // newSrcのページに遷移
+    const fullPath = "/" + newSrc.replace(/^\/+/, ""); // 先頭のスラッシュを除去してから追加
+    console.log(fullPath);
+    window.location.href = fullPath;
   };
 
   interface CustomCardProps {
@@ -225,6 +223,33 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     }, "")
     .trim();
 
+  const [visible, setVisible] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const handleMouseEnter = () => {
+    if (!isMobile) {
+      setVisible(true);
+    }
+  };
+  const handleMouseLeave = () => {
+    if (!isMobile) {
+      setVisible(false);
+    }
+  };
+  const handleTouch = () => {
+    if (isMobile) {
+      setVisible(true);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        setVisible(false);
+      }, 5000); // 5秒後に非表示
+    }
+  };
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   return (
     <Grid
       mt={3}
@@ -297,8 +322,20 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             alignItems="center"
             cursor="pointer"
             onClick={togglePlayPause}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onTouchStart={handleTouch}
           >
-            <HStack position="absolute" bottom={0} left="0" spacing={6} m={4}>
+            <HStack
+              position="absolute"
+              bottom={0}
+              left="0"
+              spacing={6}
+              m={4}
+              opacity={visible ? 1 : 0}
+              pointerEvents={visible ? "auto" : "none"}
+              transition="opacity 0.5s ease"
+            >
               <Box
                 as="svg"
                 stroke="currentColor"
@@ -354,7 +391,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                 width="24px"
                 xmlns="http://www.w3.org/2000/svg"
                 _hover={{ fill: "red", stroke: "red" }} // マウスオーバーで色を青に変更
-                // onClick={handleRewind} // クリックで先頭に戻る
                 cursor="pointer"
                 onClick={toggleVolume} // クリックでボリュームを切り替える
               >
@@ -437,7 +473,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                 language,
               })}
               name={"41." + getMessage({ ja: "先ハメ誘導", language })}
-              src="/youtube/41"
+              src="downloads/tabs/41"
               thumbnail="/images/thumbnail/41.png"
             />
             <CustomCard
@@ -448,7 +484,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                 language,
               })}
               name="56.net"
-              src="/youtube/56.net"
+              src="downloads/tabs/56.net"
               thumbnail="/images/thumbnail/56.net.png"
             />
             <CustomCard
@@ -457,7 +493,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                 ja: "順立生産システム",
                 language,
               })}
-              src="/youtube/main2"
+              src="downloads/tabs/main2"
               thumbnail="/images/thumbnail/main2.png"
             />
             <CustomCard
@@ -466,7 +502,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                 ja: "順立生産システム",
                 language,
               })}
-              src="/youtube/main3.plc"
+              src="downloads/tabs/main3plc"
               thumbnail="/images/thumbnail/main3.png"
             />
             <Box height="100vh" />

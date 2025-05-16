@@ -49,7 +49,7 @@ import { useReadCount } from "@/hooks/useReadCount";
 import styles from "@/styles/home.module.scss";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import getMessage from "../../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 //テキストジャンプアニメーション
 const jumpAnimation = keyframes`
   0%, 20%, 50%, 80%, 100% { transform: translateY(0); }

@@ -18,7 +18,7 @@ import {
 import { FaRegEdit } from "react-icons/fa";
 
 import { useLanguage } from "../../../src/contexts/LanguageContext";
-import getMessage from "../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 //Kbdのスタイル
 const kbdStyle = {

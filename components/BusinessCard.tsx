@@ -30,7 +30,7 @@ import { CiBeerMugFull } from "react-icons/ci";
 import { IoMdPhonePortrait, IoMdMail } from "react-icons/io";
 import { MdWeb } from "react-icons/md";
 
-import getMessage from "./getMessage";
+import getMessage from "@/utils/getMessage";
 import { useLanguage } from "../src/contexts/LanguageContext";
 import SkillGraph from "../components/sillGraph";
 import SkillCircle from "../components/skillCircle";

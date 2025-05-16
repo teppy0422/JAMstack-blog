@@ -58,7 +58,7 @@ import Ootoro from "../../../components/3d/sushi_ootoro";
 import SanmaYaki from "../../../components/3d/sushi_sanma_yaki";
 import Ikura from "../../../components/3d/sushi_ikura";
 
-import getMessage from "../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 // import { AppContext } from "../../pages/_app";
 import { useLanguage } from "../../../src/contexts/LanguageContext";
 import { UserData } from "@/contexts/useUserContext";

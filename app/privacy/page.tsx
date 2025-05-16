@@ -21,7 +21,7 @@ import { RepeatClockIcon } from "@chakra-ui/icons";
 import styles from "@/styles/home.module.scss";
 import Moment from "react-moment";
 import { useLanguage } from "../../src/contexts/LanguageContext";
-import getMessage from "../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 export default function Home() {
   const { language, setLanguage } = useLanguage();

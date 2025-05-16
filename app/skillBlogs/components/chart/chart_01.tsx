@@ -8,7 +8,7 @@ import HighchartsReact from "highcharts-react-official";
 import styles from "@/styles/home.module.scss";
 
 import { GetWindowSize } from "@/hooks/GetWindowSize";
-import getMessage from "../../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 interface SjpChart01Props {
   language: string;

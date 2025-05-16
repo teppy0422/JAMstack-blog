@@ -14,7 +14,7 @@ import SjpChart01 from "./01_chart_1";
 import Talk from "./talk";
 
 import { useLanguage } from "../../src/contexts/LanguageContext";
-import getMessage from "../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 export default function CheckResultDetail_talk() {
   const { language, setLanguage } = useLanguage();

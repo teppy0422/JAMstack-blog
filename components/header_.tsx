@@ -59,11 +59,11 @@ import { SunderText, ScrollText } from "./CustomText";
 import { AnimationImage } from "./CustomImage";
 
 import AwesomIcon from "./awesomIcon";
-import Auth from "./Auth";
+import Auth from "@/components/Auth";
 import { Global } from "@emotion/react";
 
 import { useLanguage } from "../src/contexts/LanguageContext";
-import getMessage from "../components/getMessage";
+import getMessage from "@/utils/getMessage";
 import Sidebar from "../components/sidebar";
 import { CustomAvatar } from "../components/CustomAvatar";
 import { CustomModalCloseButton } from "./custom/CustomModalCloseButton";

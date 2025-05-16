@@ -10,7 +10,7 @@ import styles from "@/styles/home.module.scss";
 import { GetWindowSize } from "@/hooks/GetWindowSize";
 
 import { useLanguage } from "../src/contexts/LanguageContext";
-import getMessage from "../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 const Skillchart: React.FunctionComponent = (): JSX.Element => {
   const WindowSize = GetWindowSize();

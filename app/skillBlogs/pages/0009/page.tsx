@@ -68,7 +68,7 @@ import SjpChart01 from "../../components/chart/chart_0009_01";
 import SjpChart02 from "../../components//chart/chart_0009_02";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import getMessage from "../../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 //テキストジャンプアニメーション
 const jumpAnimation = keyframes`

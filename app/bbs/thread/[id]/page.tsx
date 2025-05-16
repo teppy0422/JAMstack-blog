@@ -95,7 +95,7 @@ import "@/styles/home.module.scss";
 // import { AppContext } from "../../../pages/_app";
 
 import { useLanguage, LanguageProvider } from "@/contexts/LanguageContext";
-import getMessage from "../../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 // 季節ごとのアニメーションを管理するマッピング
 const seasonalAnimations = {
   someiyoshino: dynamic(

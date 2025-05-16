@@ -36,7 +36,7 @@ import Sidebar from "../../../../components/sidebar"; // Sidebar コンポーネ
 
 import { useUserContext } from "@/contexts/useUserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import getMessage from "../../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 function TransitionExample() {
   const { isOpen, onOpen, onClose } = useDisclosure();

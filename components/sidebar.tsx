@@ -30,7 +30,7 @@ import { AiOutlineWechat } from "react-icons/ai";
 import { IoApps } from "react-icons/io5";
 
 import { useLanguage } from "../src/contexts/LanguageContext";
-import getMessage from "../components/getMessage";
+import getMessage from "@/utils/getMessage";
 import { AnimationImage } from "../components/CustomImage";
 
 function Sidebar({ isDrawer }: { isDrawer: boolean }) {

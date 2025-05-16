@@ -80,7 +80,7 @@ import "@fontsource/rampart-one";
 //   };
 // };
 
-import getMessage from "../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 import { useLanguage } from "../../src/contexts/LanguageContext";
 
 // ↓ あなたの Welcome の中身をここに移動

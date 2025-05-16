@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useLanguage, LanguageProvider } from "../src/contexts/LanguageContext";
+import { useLanguage, LanguageProvider } from "../contexts/LanguageContext";
 
 type MessageDisplayProps = {
   ja: string;

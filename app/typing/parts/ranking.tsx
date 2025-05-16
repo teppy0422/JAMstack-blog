@@ -36,7 +36,7 @@ import styles from "@/styles/home.module.scss";
 import PropTypes, { string } from "prop-types";
 import GraphTemp, { GraphTempHandle } from "./graphTemp";
 
-import getMessage from "../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 import { useLanguage } from "../../../src/contexts/LanguageContext";
 import { UserData } from "@/contexts/useUserContext";
 

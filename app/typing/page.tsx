@@ -49,7 +49,7 @@ import GraphTemp from "./parts/graphTemp";
 
 // import { myContext } from "../_app";
 import { useLanguage } from "../../src/contexts/LanguageContext";
-import getMessage from "../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 import { useUserContext } from "@/contexts/useUserContext";
 
 import ControllableAudioPlayer, {

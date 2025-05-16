@@ -37,7 +37,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import styles from "@/styles/home.module.scss";
 import { useLanguage } from "../../../src/contexts/LanguageContext";
 
-import getMessage from "../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 import { AppContext } from "../../../pages/_app";
 export type GraphTempHandle = {
   childClick: () => void;

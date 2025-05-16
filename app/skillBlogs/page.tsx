@@ -41,7 +41,7 @@ import Sidebar from "../../components/sidebar";
 import { useUserContext } from "@/contexts/useUserContext";
 import { useReadCount } from "@/hooks/useReadCount";
 import { useLanguage } from "../../src/contexts/LanguageContext";
-import getMessage from "../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 import { createIcon } from "@chakra-ui/react";
 
 const CustomIcon = createIcon({

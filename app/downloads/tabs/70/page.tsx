@@ -4,10 +4,10 @@ import React from "react";
 import { Box, Heading, Text, Image } from "@chakra-ui/react";
 import "./style.css";
 
-import IpadFrame from "../../../../components/ipad";
+import IpadFrame from "@/components/ipad";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import getMessage from "../../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 const ScrollableContent: React.FC = () => {
   const { language, setLanguage } = useLanguage();

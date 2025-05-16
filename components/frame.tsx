@@ -44,7 +44,7 @@ import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";
 
 import { useLanguage } from "../src/contexts/LanguageContext";
-import getMessage from "../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 const customTheme = extendTheme({
   fonts: {

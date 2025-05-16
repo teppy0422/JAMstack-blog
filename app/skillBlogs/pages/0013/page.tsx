@@ -66,7 +66,7 @@ import { useReadCount } from "@/hooks/useReadCount";
 
 import { BsFiletypeExe } from "react-icons/bs";
 import { useLanguage } from "@/contexts/LanguageContext";
-import getMessage from "../../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",

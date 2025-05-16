@@ -29,7 +29,7 @@ import { MdCheckBoxOutlineBlank } from "react-icons/md";
 
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
-import getMessage from "../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 import { CustomAccordionIcon } from "../../../components/CustomText";
 import { CustomAvatar } from "../../../components/CustomAvatar";
 

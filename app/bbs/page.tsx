@@ -41,7 +41,7 @@ import { AnimationImage } from "../../components/CustomImage";
 import { StatusDisplay } from "../../components/NowStatus";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import getMessage from "../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 import { useUserContext } from "@/contexts/useUserContext";
 
 export default function BBS() {

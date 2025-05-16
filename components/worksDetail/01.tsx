@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import styles from "@/styles/home.module.scss";
 import { useLanguage } from "../../src/contexts/LanguageContext";
-import getMessage from "../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 export default function SjpDetail() {
   const { language, setLanguage } = useLanguage();

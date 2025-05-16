@@ -5,10 +5,10 @@ import Head from "next/head";
 import { Box, Image } from "@chakra-ui/react";
 import "./style.css";
 
-import IpadFrame from "../../../../components/ipad";
+import IpadFrame from "@/components/ipad";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import getMessage from "../../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 const Index: React.FC = () => {
   const { language, setLanguage } = useLanguage();

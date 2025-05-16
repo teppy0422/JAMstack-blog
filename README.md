@@ -53,3 +53,13 @@ pages/BBS.tsx を移動
 illust/
 
 ##### pages/api/auth/を app に移動は Edge と supabase が対応してないから断念して残しておく
+
+contexts に移動済み
+
+#### 05/17.
+
+components を src に移動開始
+youtube の menu を編集
+youtube の遷移先を修正
+ipad を components に移動
+getMessage を utils に移動

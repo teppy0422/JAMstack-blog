@@ -6,7 +6,7 @@ import "./style.css";
 import "@fontsource/rock-salt";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import getMessage from "../../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 const ICT: React.FC = () => {
   const { language, setLanguage } = useLanguage();

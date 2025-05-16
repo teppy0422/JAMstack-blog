@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 
-import YouTubePlayer from "../../../../components/youtube";
-import IpadFrame from "../../../../components/ipad";
+import YouTubePlayer from "@/components/youtube";
+import IpadFrame from "@/components/ipad";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import getMessage from "../../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 const HomePage: React.FC = () => {
   const { language, setLanguage } = useLanguage();

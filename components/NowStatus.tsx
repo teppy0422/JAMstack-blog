@@ -64,7 +64,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { useLanguage } from "../src/contexts/LanguageContext";
 import { useUserContext } from "@/contexts/useUserContext";
-import getMessage from "./getMessage";
+import getMessage from "@/utils/getMessage";
 import { getBoxShadow } from "@chakra-ui/react/dist/types/popper/utils";
 import { AnimationImage } from "./CustomImage";
 

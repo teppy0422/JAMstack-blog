@@ -42,7 +42,7 @@ import {
 import { keyframes } from "@emotion/react";
 
 import { useLanguage } from "../src/contexts/LanguageContext";
-import getMessage from "../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 const shake = keyframes`
   0% { transform: rotate(0deg); }

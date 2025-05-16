@@ -61,7 +61,7 @@ import { useUserContext } from "@/contexts/useUserContext";
 import { useReadCount } from "@/hooks/useReadCount";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import getMessage from "../../../../components/getMessage";
+import getMessage from "@/utils/getMessage";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
