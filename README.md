@@ -51,3 +51,5 @@ pages/BBS.tsx を移動
 ##### metadata を各ページに記載
 
 illust/
+
+##### pages/api/auth/を app に移動は Edge と supabase が対応してないから断念して残しておく
