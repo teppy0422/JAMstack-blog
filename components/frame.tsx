@@ -337,7 +337,7 @@ const Frame: React.FC<{
                 color={colorMode === "light" ? "black" : "white"}
               >
                 {!isMain && (
-                  <Link href="/skillBlogs/0000/">
+                  <Link href="/skillBlogs">
                     <Flex alignItems="center" gap="3px">
                       <Text fontWeight="bold" textAlign="left" m={1}>
                         {getMessage({

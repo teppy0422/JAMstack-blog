@@ -627,7 +627,7 @@ export default function WelcomeClient() {
                       modalBody=<>
                         <Center>
                           <Image
-                            src="images/welcome/subscription.svg"
+                            src="/images/welcome/subscription.svg"
                             width="100px"
                             height="100px"
                           />
@@ -699,7 +699,7 @@ export default function WelcomeClient() {
                       modalBody=<>
                         <Center>
                           <Image
-                            src="images/welcome/subscription.svg"
+                            src="/images/welcome/subscription.svg"
                             width="100px"
                             height="100px"
                           />
@@ -1647,7 +1647,7 @@ export default function WelcomeClient() {
                     language,
                   })}
                 </Text>,
-                "/skillBlogs/0000"
+                "/skillBlogs"
               )}
               {renderCard(
                 getMessage({

@@ -63,3 +63,14 @@ youtube の menu を編集
 youtube の遷移先を修正
 ipad を components に移動
 getMessage を utils に移動
+
+デプロイ 0001
+
+skillBlogs のトップリンクを修正
+posterImage を order/parts に移動
+
+デプロイ 0002
+
+#### 予定
+
+全てのリンクをクリックして動作確認

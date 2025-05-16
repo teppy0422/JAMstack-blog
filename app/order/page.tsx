@@ -36,7 +36,7 @@ import { useUserContext } from "@/contexts/useUserContext";
 import Content from "../../components/content";
 import CustomHead from "../head";
 import { AnimationImage } from "../../components/CustomImage";
-import FilteredImage from "../../components/PosterImage";
+import FilteredImage from "./parts/PosterImage";
 // import HachisukaAnimation from "../../components/season/HachisukaAnimation";
 import {
   CustomSwitchButton,

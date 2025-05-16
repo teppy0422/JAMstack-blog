@@ -40,7 +40,6 @@ import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "../../components/customBadge";
 import SkillGraph from "../../../../components/sillGraph";
-import SkillCircle from "../../../../components/skillCircle";
 import BusinessCard from "../../../../components/BusinessCard";
 import ICT from "../../components/ICT/page";
 import styles from "@/styles/home.module.scss";
@@ -124,86 +123,7 @@ const BlogPage: React.FC = () => {
     setActiveDrawer(null);
     onClose();
   };
-  const skillCircles = [
-    {
-      value: 90,
-      cirText: "EXCEL-vba\n15年",
-      color: "#1f9b60",
-      img: "/images/brandIcons/logo_excel.svg",
-    },
-    {
-      value: 65,
-      cirText: "ACCESS-vba\n3年",
-      color: "#1f9b60",
-      img: "/images/brandIcons/logo_access.svg",
-    },
-    {
-      value: 30,
-      cirText: "vb.net\n半年",
-      color: "#9A4F96",
-      img: "/images/brandIcons/logo_dotNet.svg",
-    },
-    {
-      value: 60,
-      cirText: "HTML\n4年",
-      color: "#F1652A",
-      img: "/images/brandIcons/logo_html5.svg",
-    },
-    {
-      value: 65,
-      cirText: "CSS\n+SCSS\n4年",
-      color: "#F1652A",
-      img: "/images/brandIcons/logo_css.svg",
-    },
-    {
-      value: 40,
-      cirText: "JavaScript\n4年",
-      color: "#F1652A",
-      img: "/images/brandIcons/logo_javascript.svg",
-    },
-    {
-      value: 45,
-      cirText: "Next\n3年",
-      color: "#F1652A",
-      img: "/images/brandIcons/logo_next.svg",
-    },
-    {
-      value: 30,
-      cirText: "PHP\n半年",
-      color: "#4E5B92",
-      img: "/images/brandIcons/logo_php.svg",
-    },
-    {
-      value: 20,
-      cirText: "Python",
-      color: "#4E5B92",
-      img: "/images/brandIcons/logo_python.svg",
-    },
-    {
-      value: 60,
-      cirText: "Arduino",
-      color: "#12999F",
-      img: "/images/brandIcons/logo_arduino.svg",
-    },
-    {
-      value: 30,
-      cirText: "Davinci Resolve",
-      color: "#888888",
-      img: "/images/brandIcons/logo_davinci.svg",
-    },
-    {
-      value: 30,
-      cirText: "InkScape\n1年",
-      color: "#333333",
-      img: "/images/brandIcons/logo_inkscape.svg",
-    },
-    {
-      value: 30,
-      cirText: "Premiere Pro",
-      color: "#00005c",
-      img: "/images/brandIcons/logo_Premiere.svg",
-    },
-  ];
+
   //右リストの読み込みをlanguage取得後にする
   if (!isLanguageLoaded) {
     return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー

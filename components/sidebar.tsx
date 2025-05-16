@@ -139,7 +139,7 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
             <FaRoad size={21} />
           )}
           {menuItem(
-            "/skillBlogs/0000",
+            "/skillBlogs",
             getMessage({
               ja: "技術ブログ",
               us: "Skills Blog",
