@@ -21,8 +21,8 @@ import {
   MdOutlineCheckBox,
   MdEditRoad,
 } from "react-icons/md";
-import Sidebar from "../../components/sidebar";
-import Content from "../../components/content";
+import Sidebar from "@/components/sidebar";
+import Content from "@/components/content";
 import { Global } from "@emotion/react";
 
 import { useLanguage } from "../../src/contexts/LanguageContext";
@@ -1091,7 +1091,7 @@ const Roadmap = () => {
         }}
       />
       <Sidebar isDrawer={false} />
-      <Content isCustomHeader={true}>
+      <Content>
         <Button
           onClick={() => moveThisMonth()}
           position="fixed"

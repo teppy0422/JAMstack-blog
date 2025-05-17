@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Badge } from "@chakra-ui/react";
 
 const projectOptions = [
   { value: "生産準備+", color: "custom.excel" },
@@ -129,4 +129,33 @@ export const CategoryLists: React.FC<CategoryListsProps> = ({
       )}
     </Box>
   );
+};
+export const CustomBadge: React.FC<{ text: string }> = ({ text }) => {
+  switch (text) {
+    case "生準+":
+      return (
+        <Badge variant="outline" bg="green.500" color="white" mr={1}>
+          生準+
+        </Badge>
+      );
+    case "開発":
+      return (
+        <Badge bg="red.500" color="white" mr={1}>
+          開発
+        </Badge>
+      );
+    case "作成途中":
+      return (
+        <Badge bg="red.500" color="white" mr={1}>
+          作成途中
+        </Badge>
+      );
+    // 他のケースを追加
+    default:
+      return (
+        <Badge bg="gray.500" color="white" mr={1}>
+          {text}
+        </Badge>
+      );
+  }
 };

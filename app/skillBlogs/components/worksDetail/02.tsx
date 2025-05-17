@@ -12,7 +12,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import styles from "@/styles/home.module.scss";
-import { useLanguage } from "../../src/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 
 export default function SjpDetail() {
@@ -29,8 +29,15 @@ export default function SjpDetail() {
     >
       <Stack direction="row" mt={3}>
         <Badge colorScheme="green">Excel-vba</Badge>
+        <Badge colorScheme="orange">HTML</Badge>
+        <Badge colorScheme="blue">css</Badge>
+        <Badge colorScheme="yellow">JavaScript</Badge>
       </Stack>
-      <Stack direction={["column", "row"]} spacing="16px">
+      <Stack
+        direction={["column", "row"]}
+        spacing="16px"
+        className={styles.simple}
+      >
         <Box
           w={["320px", "340px", "360px", "380px"]}
           p={3}
@@ -49,9 +56,9 @@ export default function SjpDetail() {
             style={{ fontSize: "14px", marginTop: "20px" }}
           >
             {getMessage({
-              ja: "メーカーから送られてくるテキストデータを読み込んで、生産に必要な画像データを自動作成するシステムを作成。従来は手動で作成していたので時間がかかり、深夜残業が多く離職の原因になっていた。他の工場でも使う事を想定して作成。",
-              us: "Created a system that reads text data sent from manufacturers and automatically creates image data needed for production. Previously, the data was created manually, which was time-consuming and resulted in a lot of late-night overtime work, which was a cause of employee turnover. The system was created with the assumption that it would be used at other factories as well.",
-              cn: "我们创建了一个系统，用于读取制造商发送的文本数据，并自动创建生产所需的图像数据。在此之前，这些数据都是手工创建的，不仅耗时，而且需要在深夜加班，这也是造成人员流失的一个原因。创建该系统的前提是，其他工厂也将使用该系统。",
+              ja: "配線ミスがあった場合、間違い箇所と正常な状態が分かる画像を自動表示させました。それまではエラー番号(0-2000番)を図面から探していました。",
+              us: "In the event of a wiring error, an image showing the wrong part and the normal state is automatically displayed. Until then, the error number (0-2000) was searched from the drawing.",
+              cn: "如果出现接线错误，则会自动显示错误部件和正常状态的图像。在此之前，必须从图纸中查找错误编号（0-2000）。",
               language,
             })}
           </Text>
@@ -65,9 +72,9 @@ export default function SjpDetail() {
           </Text>
           <Text className={styles.text} style={{ fontSize: "14px" }}>
             {getMessage({
-              ja: "エクセルのブックにバージョンアップ機能を追加",
-              us: "Upgrade function added to Excel book.",
-              cn: "Excel 电子书中增加了版本功能。",
+              ja: "Windows7でも点滅箇所がズレないようJavaScriptで点滅させる事に苦労しました。",
+              us: "Even in Windows 7, we had trouble making the blinking points blink with JavaScript so that they would not be misaligned.",
+              cn: "即使在 Windows 7 中，也很难通过 JavaScript 使闪烁点闪烁，从而使其不会移动。",
               language,
             })}
           </Text>
@@ -80,9 +87,8 @@ export default function SjpDetail() {
               onClick={(e) => changeImage(e)}
               boxSize="80px"
               overflow="hidden"
-              cursor="pointer"
             >
-              <Image src="/images/sjp_menu.png" />
+              <Image src="/images/check_302.gif" w="100%" />
             </Box>
             <Box
               boxShadow="lg"
@@ -90,9 +96,8 @@ export default function SjpDetail() {
               onClick={(e) => changeImage(e)}
               boxSize="80px"
               overflow="hidden"
-              cursor="pointer"
             >
-              <Image src="/images/sjp_terminal_520.png" />
+              <Image src="/images/check_401.gif" w="100%" />
             </Box>
             <Box
               boxShadow="lg"
@@ -100,20 +105,26 @@ export default function SjpDetail() {
               onClick={(e) => changeImage(e)}
               boxSize="80px"
               overflow="hidden"
-              cursor="pointer"
             >
-              <Image src="/images/sjp_pannel.png" />
+              <video
+                src="/images/check_movie.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
             </Box>
           </HStack>
           <Box boxShadow="dark-lg" id="mainImage">
             <Image
               my={0}
-              src="/images/sjp_menu.png"
+              src="/images/check_302.gif"
               w="100%"
               objectFit="contain"
             />
           </Box>
         </VStack>
+        <Box h={[300, 250, 200, 50]} />
       </Stack>
     </Container>
   );
@@ -124,6 +135,7 @@ function changeImage(e) {
   let parent = e.currentTarget.parentNode;
   let children = parent.children[0];
   //取得するクラス名が分からん
+  // document.querySelector(".css-sim8z3").setAttribute("src", changeSrc);
   let myid = document.getElementById("mainImage");
 
   if (myid) {

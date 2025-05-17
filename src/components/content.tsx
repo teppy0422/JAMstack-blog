@@ -3,11 +3,10 @@ import { useContext } from "react";
 import { Container, Center, Box, Flex, useColorMode } from "@chakra-ui/react";
 import NextLink from "next/link";
 
-import Header from "./header";
-import Header_ from "./header_";
+import Header from "@/components/header";
 import { Global } from "@emotion/react";
 
-import { useLanguage } from "../src/contexts/LanguageContext";
+import { useLanguage } from "../contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 // import { AppContext } from "../pages/_app";
 
@@ -19,7 +18,6 @@ import {
 
 export default function Content({
   children,
-  isCustomHeader = false,
   maxWidth = "900px",
   isUse = true,
 }) {
@@ -27,7 +25,14 @@ export default function Content({
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <Box id="content">
+    <Box
+      id="content"
+      bg={
+        colorMode === "light"
+          ? "custom.theme.light.500"
+          : "custom.theme.dark.500"
+      }
+    >
       <Global
         styles={{
           "@media print": {
@@ -63,7 +68,7 @@ export default function Content({
             }
           >
             <Box flex="1">
-              {isCustomHeader ? <Header_ /> : <Header />}
+              <Header />
               <Box height="42px" />
               <Container
                 maxWidth={maxWidth}
@@ -97,16 +102,11 @@ export default function Content({
                 ? "custom.theme.light.500"
                 : "custom.theme.dark.500"
             }
-            // minH="10vh"
+            minH="10vh"
           >
             <Center
               py="14px"
               color={colorMode === "light" ? "black" : "white"}
-              bg={
-                colorMode === "light"
-                  ? "custom.theme.light.500"
-                  : "custom.theme.dark.500"
-              }
               fontSize="14px"
               fontFamily={getMessage({
                 ja: "Noto Sans JP",

@@ -26,7 +26,7 @@ import { IoVolumeHighOutline, IoVolumeMuteOutline } from "react-icons/io5";
 
 import Snowfall from "react-snowfall";
 
-import Content from "../../components/content";
+import Content from "@/components/content";
 import { isMobileDevice, isIOSDevice } from "@/utils/device.js";
 import {
   getRomaji,
@@ -573,7 +573,7 @@ const TypingPage = () => {
           speed={snowSpeed}
         />
       </div>
-      <Content isCustomHeader={true}>
+      <Content>
         {isMobile || isIOS ? (
           <Box
             style={{

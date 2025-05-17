@@ -17,12 +17,12 @@ import {
 } from "@chakra-ui/react";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "../../../../components/customToast";
-import SectionBox from "../../../../components/SectionBox";
+import { useCustomToast } from "@/components/customToast";
+import SectionBox from "../../components/SectionBox";
 import Frame from "../../components/frame";
 import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import { CustomBadge } from "../../components/customBadge";
+import { CustomBadge } from "@/components/CustomBadge";
 import UnderlinedTextWithDrawer from "../../components/UnderlinedTextWithDrawer";
 import ExternalLink from "../../components/ExternalLink";
 import { useUserContext } from "@/contexts/useUserContext";

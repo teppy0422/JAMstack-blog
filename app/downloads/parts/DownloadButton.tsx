@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { css, keyframes } from "@emotion/react";
 import { Box, Text, useColorMode } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useCustomToast } from "../components/customToast";
+import { useCustomToast } from "@/components/customToast";
 import "@/styles/globals.css";
 const shake = keyframes`
   0% { transform: translateX(0); }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, Link as Scroll } from "react";
-import Content from "../../components/content";
+import Content from "@/components/content";
 import InfiniteScroll from "react-infinite-scroller";
 
 import ImageGalley from "./parts/imageGalley";
@@ -142,7 +142,7 @@ export default function SearchPicture() {
   };
 
   return (
-    <Content isCustomHeader={true}>
+    <Content>
       <Box h={8} />
       <Stack style={{ textAlign: "center" }}>
         <Text className={styles.mPlus} style={{ fontSize: "24px" }}>

@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
 import { MdBusiness, MdChat } from "react-icons/md";
-import { useCustomToast } from "../../../components/customToast";
-import { GetColor } from "../../../components/CustomColor";
+import { useCustomToast } from "@/components/customToast";
+import { GetColor } from "@/components/CustomColor";
 import { useUnread } from "@/contexts/UnreadContext";
 import {
   Box,
@@ -30,8 +30,8 @@ import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
 import getMessage from "@/utils/getMessage";
-import { CustomAccordionIcon } from "../../../components/CustomText";
-import { CustomAvatar } from "../../../components/CustomAvatar";
+import { CustomAccordionIcon } from "@/components/CustomText";
+import { CustomAvatar } from "@/components/CustomAvatar";
 
 import { useUserContext } from "@/contexts/useUserContext";
 import { useLanguage } from "@/contexts/LanguageContext";

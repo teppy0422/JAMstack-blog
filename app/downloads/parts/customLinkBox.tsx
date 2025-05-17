@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { isValidUrl } from "@/utils/urlValidator"; // URLのバリデーション関数をインポート
-import { useCustomToast } from "../components/customToast";
+import { useCustomToast } from "@/components/customToast";
 
 import {
   LinkBox,
@@ -41,7 +41,7 @@ import {
 
 import { keyframes } from "@emotion/react";
 
-import { useLanguage } from "../src/contexts/LanguageContext";
+import { useLanguage } from "../../../src/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 
 const shake = keyframes`

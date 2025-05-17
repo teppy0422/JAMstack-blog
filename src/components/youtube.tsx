@@ -28,7 +28,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import getMessage from "../utils/getMessage";
 import { isMobile } from "react-device-detect";
 
-import { CustomAvatar } from "../../components/CustomAvatar";
+import { CustomAvatar } from "./CustomAvatar";
 import YoutubeLike from "../../public/images/etc/youtubeLike.svg";
 
 interface YouTubePlayerProps {

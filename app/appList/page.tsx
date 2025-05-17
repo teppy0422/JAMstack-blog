@@ -17,8 +17,8 @@ import { useRouter } from "next/navigation";
 
 import NextLink from "next/link";
 import { motion } from "framer-motion";
-import Content from "../../components/content";
-import Sidebar from "../../components/sidebar";
+import Content from "@/components/content";
+import Sidebar from "@/components/sidebar";
 import { sr } from "date-fns/locale";
 import { useUserContext } from "@/contexts/useUserContext";
 
@@ -88,7 +88,7 @@ export default function AppList() {
   return (
     <>
       <Sidebar isDrawer={false} />
-      <Content isCustomHeader={true}>
+      <Content>
         <Box p={8}>
           <Heading mb={6}>WEBアプリ一覧</Heading>
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>

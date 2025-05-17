@@ -29,15 +29,15 @@ import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { PiGithubLogoFill } from "react-icons/pi";
 
-import Content from "../../components/content";
-import { useCustomToast } from "../../components/customToast";
-import { AnimationImage } from "../../components/CustomImage";
-import SectionBox from "../../components/SectionBox";
-import BasicDrawer from "../../components/BasicDrawer";
+import Content from "@/components/content";
+import { useCustomToast } from "@/components/customToast";
+import { AnimationImage } from "@/components/CustomImage";
+import SectionBox from "./components/SectionBox";
+import BasicDrawer from "@/components/BasicDrawer";
 import Frame from "./components/frame";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./components/customBadge";
-import Sidebar from "../../components/sidebar";
+import Sidebar from "@/components/sidebar";
 import { useUserContext } from "@/contexts/useUserContext";
 import { useReadCount } from "@/hooks/useReadCount";
 import { useLanguage } from "../../src/contexts/LanguageContext";
@@ -93,7 +93,7 @@ const SkillBlogTopPage: React.FC = () => {
   }
 
   return (
-    <Content isCustomHeader={true}>
+    <Content>
       <Sidebar isDrawer={false} />
       <Stack mb={4} direction="row" justify="center">
         <Box

@@ -29,9 +29,9 @@ import { IoTicketOutline, IoTicketSharp } from "react-icons/io5";
 import { AiOutlineWechat } from "react-icons/ai";
 import { IoApps } from "react-icons/io5";
 
-import { useLanguage } from "../src/contexts/LanguageContext";
+import { useLanguage } from "../contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
-import { AnimationImage } from "../components/CustomImage";
+import { AnimationImage } from "./CustomImage";
 
 function Sidebar({ isDrawer }: { isDrawer: boolean }) {
   const [currentPath, setCurrentPath] = useState("");

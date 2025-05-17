@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Content from "../../../../components/content";
+import Content from "@/components/content";
 import Link from "next/link";
 import {
   Image,
@@ -15,15 +15,15 @@ import {
 import { FocusableElement } from "@chakra-ui/utils"; // FocusableElement をインポート
 
 import { MdSettings, MdCheckCircle, MdHelpOutline } from "react-icons/md";
-import { JdssIcon } from "../../../../components/icons";
+import { JdssIcon } from "@/components/icons";
 import NextImage from "next/image";
-import { FileSystemNode } from "../../../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
+import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 
 import styles from "@/styles/home.module.scss";
 
-import CustomLinkBox from "../../../../components/customLinkBox";
-import CustomPopver from "../../../../components/popver";
-import Sidebar from "../../../../components/sidebar"; // Sidebar コンポーネントをインポート
+import CustomLinkBox from "../../parts/customLinkBox";
+import CustomPopver from "@/components/popver";
+import Sidebar from "@/components/sidebar"; // Sidebar コンポーネントをインポート
 
 import { useUserContext } from "@/contexts/useUserContext";
 
@@ -38,7 +38,7 @@ export default function About() {
   return (
     <>
       <Sidebar isDrawer={false} />
-      <Content isCustomHeader={true}>
+      <Content>
         <div
           className={styles.me}
           style={{ paddingTop: "10px", fontFamily: "Noto Sans JP" }}

@@ -41,19 +41,19 @@ import { PiAppWindowFill } from "react-icons/pi";
 import { BsRecordCircle, BsCircle } from "react-icons/bs";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { FaDownload } from "react-icons/fa6";
-import Content from "../../../../components/content";
+import Content from "@/components/content";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "../../../../components/customToast";
-import SectionBox from "../../../../components/SectionBox";
-import BasicDrawer from "../../../../components/BasicDrawer";
-import Frame from "../../../../components/frame";
+import { useCustomToast } from "@/components/customToast";
+import SectionBox from "../../components/SectionBox";
+import BasicDrawer from "@/components/BasicDrawer";
+import Frame from "../../components/frame";
 import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import { CustomBadge } from "../../components/customBadge";
+import { CustomBadge } from "@/components/CustomBadge";
 import DownloadLink from "../../components/DownloadLink";
 import UnderlinedTextWithDrawer from "../../components/UnderlinedTextWithDrawer";
 import ExternalLink from "../../components/ExternalLink";
-import { FileSystemNode } from "../../../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
+import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import ImageSliderModal from "../../components/ImageSliderModal"; // モーダルコンポーネントをインポート
 import OptionalBox from "../../components/OptionalBox";
 import ReferenceSettingModal from "../../components/referenceSettingModal";

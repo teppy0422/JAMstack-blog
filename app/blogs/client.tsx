@@ -16,7 +16,7 @@ import { RepeatClockIcon } from "@chakra-ui/icons";
 import Moment from "react-moment";
 import styles from "@/styles/home.module.scss";
 
-import Content from "../../components/content";
+import Content from "@/components/content";
 
 interface Blog {
   id: string;
@@ -74,7 +74,7 @@ export default function ClientPage({ blog, category, tag }: Props) {
 
   return (
     <>
-      <Content isCustomHeader={true}>
+      <Content>
         <ul>
           {!tag.length && <Text>There are no posts...</Text>}
           {tag.map((t) => (

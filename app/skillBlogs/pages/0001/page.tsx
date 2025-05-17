@@ -29,16 +29,16 @@ import {
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { FaBan, FaObjectGroup } from "react-icons/fa";
-import Content from "../../../../components/content";
+import Content from "@/components/content";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "../../../../components/customToast";
-import SectionBox from "../../../../components/SectionBox";
-import BasicDrawer from "../../../../components/BasicDrawer";
-import Frame from "../../../../components/frame";
+import { useCustomToast } from "@/components/customToast";
+import SectionBox from "../../components/SectionBox";
+import BasicDrawer from "@/components/BasicDrawer";
+import Frame from "../../components/frame";
 import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import { CustomBadge } from "../../components/customBadge";
-import { FileSystemNode } from "../../../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
+import { CustomBadge } from "@/components/CustomBadge";
+import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 
 import { useUserContext } from "@/contexts/useUserContext";
 import { useReadCount } from "@/hooks/useReadCount";

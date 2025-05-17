@@ -27,18 +27,17 @@ import {
   useDisclosure,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import { AiOutlineWechat } from "react-icons/ai";
-import Sidebar from "../../components/sidebar";
-import Content from "../../components/content";
+import Sidebar from "@/components/sidebar";
+import Content from "@/components/content";
 import { Global } from "@emotion/react";
 import { supabase } from "@/utils/supabase/client";
 import { UnreadProvider } from "@/contexts/UnreadContext";
 
 import SidebarBBS from "./parts/bbsSidebar";
-import { ScrollText } from "../../components/CustomText";
-import { ProjectLists, CategoryLists } from "../../components/CustomBadge";
-import { AnimationImage } from "../../components/CustomImage";
-import { StatusDisplay } from "../../components/NowStatus";
+import { ScrollText } from "@/components/CustomText";
+import { ProjectLists, CategoryLists } from "@/components/CustomBadge";
+import { AnimationImage } from "@/components/CustomImage";
+import { StatusDisplay } from "@/components/NowStatus";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
@@ -148,7 +147,7 @@ export default function BBS() {
         }}
       />
       <Sidebar isDrawer={false} />
-      <Content isCustomHeader={true}>
+      <Content>
         <Text ml={4} className="print-only">
           {getMessage({
             ja: "※別紙1",

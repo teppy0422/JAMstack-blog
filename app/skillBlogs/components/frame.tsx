@@ -29,16 +29,15 @@ import {
 import { CiHeart } from "react-icons/ci";
 import { PiGithubLogoFill } from "react-icons/pi";
 import { LuPanelRightOpen } from "react-icons/lu";
-import Content from "../../../components/content";
+import Content from "@/components/content";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "../../../components/customToast";
+import { useCustomToast } from "@/components/customToast";
 import { useDisclosure } from "@chakra-ui/react";
 
 import { useReadCount } from "@/hooks/useReadCount";
 import { useUserContext } from "@/contexts/useUserContext";
 
-import { CustomAccordionIcon } from "../../../components/CustomText";
-import { CustomLoading } from "../../../components/CustomText";
+import { CustomAccordionIcon, CustomLoading } from "@/components/CustomText";
 
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";
@@ -269,7 +268,7 @@ const Frame: React.FC<{
 
   return (
     <>
-      <Content isCustomHeader={true} maxWidth="1280px" isUse={!isMain}>
+      <Content maxWidth="1280px" isUse={!isMain}>
         <ChakraProvider theme={customTheme}>
           {isLoading ? (
             <Box

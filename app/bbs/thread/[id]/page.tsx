@@ -84,11 +84,11 @@ import ContentDisplay from "./ContextDisplay";
 
 import { useUserContext } from "@/contexts/useUserContext";
 
-import Content from "../../../../components/content";
+import Content from "@/components/content";
 import SidebarBBS from "../../parts/bbsSidebar";
-import { useCustomToast } from "../../../../components/customToast";
-import { GetColor } from "../../../../components/CustomColor";
-import { AnimationImage } from "../../../../components/CustomImage";
+import { useCustomToast } from "@/components/customToast";
+import { GetColor } from "@/components/CustomColor";
+import { AnimationImage } from "@/components/CustomImage";
 import IconWithDrawer from "./IconWithDrawer";
 
 import "@/styles/home.module.scss";
@@ -99,23 +99,21 @@ import getMessage from "@/utils/getMessage";
 // 季節ごとのアニメーションを管理するマッピング
 const seasonalAnimations = {
   someiyoshino: dynamic(
-    () => import("../../../../components/season/SomeiyoshinoAnimation")
+    () => import("@/components/season/SomeiyoshinoAnimation")
   ),
-  hachisuka: dynamic(
-    () => import("../../../../components/season/HachisukaAnimation")
-  ),
-  yae: dynamic(() => import("../../../../components/season/YaeAnimation")),
+  hachisuka: dynamic(() => import("@/components/season/HachisukaAnimation")),
+  yae: dynamic(() => import("@/components/season/YaeAnimation")),
   // ochiba: dynamic(() => import("../../../components/OchibaAnimation")), // 落ち葉アニメーションのインポート
   // 他の季節のアニメーションをここに追加
 };
 import { Global } from "@emotion/react";
-import { CustomLoading } from "../../../../components/CustomText";
-import { StatusDisplay } from "../../../../components/NowStatus";
+import { CustomLoading } from "@/components/CustomText";
+import { StatusDisplay } from "@/components/NowStatus";
 import { isatty } from "tty";
 import { useUnread } from "@/contexts/UnreadContext";
 import imageCompression from "browser-image-compression";
-import { CustomCloseButton } from "../../../../components/custom/CustomCloseButton";
-import { CustomModalCloseButton } from "../../../../components/custom/CustomModalCloseButton";
+import { CustomCloseButton } from "../../../../src/components/CustomCloseButton";
+import { CustomModalCloseButton } from "../../../../src/components/CustomModalCloseButton";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
@@ -2416,7 +2414,7 @@ function ThreadContent(): JSX.Element {
               </ModalContent>
             </Modal>
             <SidebarBBS isMain={false} />
-            <Content isCustomHeader={true}>
+            <Content>
               {isSomeiyoshinoActive && <seasonalAnimations.someiyoshino />}
               {isHachisukaActive && <seasonalAnimations.hachisuka />}
               {isYaeActive && <seasonalAnimations.yae />}

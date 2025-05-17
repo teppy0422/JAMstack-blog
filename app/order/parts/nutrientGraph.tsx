@@ -37,7 +37,7 @@ import {
   getTotalByName,
   MenuItem,
   searchCategoryColor,
-} from "../app/utils/categoryConfig";
+} from "../../utils/categoryConfig";
 import { text } from "stream/consumers";
 
 const data = [

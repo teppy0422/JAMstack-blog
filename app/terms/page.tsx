@@ -2,7 +2,7 @@
 
 import NextLink from "next/link";
 import { useState, useEffect } from "react";
-import Content from "../../components/content";
+import Content from "@/components/content";
 import {
   Container,
   Tag,
@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <>
-      <Content isCustomHeader={true}>
+      <Content>
         <Box mx={[0, 0, 8, 20]} my={[1, 1, 2, 4]}>
           <Box h="10px" />
           <ul className={styles.privacy} style={{ lineHeight: "1.5rem" }}>

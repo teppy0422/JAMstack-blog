@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 
-import ImageCard from "./imageCard";
+import ImageCard from "../../app/skillBlogs/components/imageCard";
 import styles from "@/styles/home.module.scss";
 
 export default function ModalWork(pops) {

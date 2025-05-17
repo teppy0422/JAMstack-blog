@@ -81,6 +81,11 @@ sidebar のリンク変更 BBS -> bbs
 
 デプロイ 0003
 
+過去の header を削除してリネーム
+season を移動
+不要っぽい components を削除
+pmponents を全て@に移動
+
 #### 予定
 
 全てのリンクをクリックして動作確認

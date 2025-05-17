@@ -17,7 +17,7 @@ import styles from "@/styles/home.module.scss";
 import SjpChart01 from "./01_chart_1";
 import Talk from "./talk";
 
-import { useLanguage } from "../../src/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 
 export default function SjpDetail_talk() {

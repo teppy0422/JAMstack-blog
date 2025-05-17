@@ -31,9 +31,9 @@ import { IoMdPhonePortrait, IoMdMail } from "react-icons/io";
 import { MdWeb } from "react-icons/md";
 
 import getMessage from "@/utils/getMessage";
-import { useLanguage } from "../src/contexts/LanguageContext";
-import SkillGraph from "../components/sillGraph";
-import SkillCircle from "../components/skillCircle";
+import { useLanguage } from "@/contexts/LanguageContext";
+import SkillGraph from "./sillGraph";
+import SkillCircle from "./skillCircle";
 import styles from "@/styles/home.module.scss";
 
 const BusinessCard: React.FC = () => {

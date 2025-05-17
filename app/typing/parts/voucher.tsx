@@ -37,26 +37,26 @@ import GraphTemp, { GraphTempHandle } from "./graphTemp";
 import styles from "@/styles/home.module.scss";
 import { RGBADepthPacking } from "three";
 const SushiTamagoWrap3 = dynamic(
-  () => import("../../../components/3d/sushi_tamago_wrap3"),
+  () => import("@/components/3d/sushi_tamago_wrap3"),
   {
     ssr: false,
   }
 );
-import Sushi_tamago_wrap3 from "../../../components/3d/sushi_tamago_wrap3";
+import Sushi_tamago_wrap3 from "@/components/3d/sushi_tamago_wrap3";
 
-import Gari from "../../../components/3d/sushi_gari";
-import Tukemono from "../../../components/3d/sushi_tukemono";
-import Umeboshi from "../../../components/3d/sushi_umeboshi";
-import Tamago from "../../../components/3d/sushi_tamago";
-import Ika from "../../../components/3d/sushi_ika";
-import Iwashi from "../../../components/3d/sushi_iwashi";
-import Tekka from "../../../components/3d/sushi_tekka";
-import Amaebi from "../../../components/3d/sushi_amaebi";
-import Samon from "../../../components/3d/sushi_samon";
-import Ebi from "../../../components/3d/sushi_ebi";
-import Ootoro from "../../../components/3d/sushi_ootoro";
-import SanmaYaki from "../../../components/3d/sushi_sanma_yaki";
-import Ikura from "../../../components/3d/sushi_ikura";
+import Gari from "@/components/3d/sushi_gari";
+import Tukemono from "@/components/3d/sushi_tukemono";
+import Umeboshi from "@/components/3d/sushi_umeboshi";
+import Tamago from "@/components/3d/sushi_tamago";
+import Ika from "@/components/3d/sushi_ika";
+import Iwashi from "@/components/3d/sushi_iwashi";
+import Tekka from "@/components/3d/sushi_tekka";
+import Amaebi from "@/components/3d/sushi_amaebi";
+import Samon from "@/components/3d/sushi_samon";
+import Ebi from "@/components/3d/sushi_ebi";
+import Ootoro from "@/components/3d/sushi_ootoro";
+import SanmaYaki from "@/components/3d/sushi_sanma_yaki";
+import Ikura from "@/components/3d/sushi_ikura";
 
 import getMessage from "@/utils/getMessage";
 // import { AppContext } from "../../pages/_app";

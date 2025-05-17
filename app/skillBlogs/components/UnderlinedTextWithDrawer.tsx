@@ -2,7 +2,7 @@ import React from "react";
 import { HStack, Box } from "@chakra-ui/react";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { useColorMode } from "@chakra-ui/react";
-import BasicDrawer from "../../../components/BasicDrawer";
+import BasicDrawer from "@/components/BasicDrawer";
 
 interface UnderlinedTextWithDrawerProps {
   text: React.ReactNode;

@@ -9,7 +9,7 @@ import styles from "@/styles/home.module.scss";
 
 import { GetWindowSize } from "@/hooks/GetWindowSize";
 
-import { useLanguage } from "../src/contexts/LanguageContext";
+import { useLanguage } from "../../../src/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 
 const Skillchart: React.FunctionComponent = (): JSX.Element => {

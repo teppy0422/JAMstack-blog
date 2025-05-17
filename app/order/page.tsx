@@ -33,16 +33,16 @@ import {
 } from "@chakra-ui/react";
 import { createClient } from "@supabase/supabase-js";
 import { useUserContext } from "@/contexts/useUserContext";
-import Content from "../../components/content";
+import Content from "@/components/content";
 import CustomHead from "../head";
-import { AnimationImage } from "../../components/CustomImage";
+import { AnimationImage } from "@/components/CustomImage";
 import FilteredImage from "./parts/PosterImage";
 // import HachisukaAnimation from "../../components/season/HachisukaAnimation";
 import {
   CustomSwitchButton,
   CustomSwitchMultiButton,
-} from "../../components/custom/CustomSwitchButton";
-import { MyBarChart } from "../../components/sillGraph_order2";
+} from "../../src/components/CustomSwitchButton";
+import { MyBarChart } from "./parts/nutrientGraph";
 import {
   CATEGORY_CONFIG,
   searchCategoryBg,
@@ -1100,7 +1100,7 @@ export default function OrderPage() {
   return (
     <>
       <CustomHead />
-      <Content isCustomHeader={true} maxWidth="100vw">
+      <Content maxWidth="100vw">
         {/* <HachisukaAnimation /> */}
         <Box p={2}>
           <Heading

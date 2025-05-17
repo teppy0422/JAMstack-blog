@@ -56,8 +56,8 @@ import {
 } from "react-icons/pi";
 import { AiOutlineWechat } from "react-icons/ai";
 import { FaEarthAsia } from "react-icons/fa6";
-import Sidebar from "../../components/sidebar"; // Sidebar コンポーネントをインポート
-import Content from "../../components/content"; // Content コンポーネントをインポート
+import Sidebar from "@/components/sidebar"; // Sidebar コンポーネントをインポート
+import Content from "@/components/content"; // Content コンポーネントをインポート
 
 import { useUserContext } from "@/contexts/useUserContext";
 
@@ -358,7 +358,7 @@ export default function WelcomeClient() {
   return (
     <>
       <Sidebar isDrawer={false} />
-      <Content isCustomHeader={true} maxWidth="1200px">
+      <Content maxWidth="1200px">
         <Box
           paddingTop="30px"
           fontFamily={getMessage({

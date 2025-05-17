@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Content from "../../components/content";
+import Content from "@/components/content";
 
 import {
   Image,
@@ -30,15 +30,15 @@ import {
 import { FocusableElement } from "@chakra-ui/utils"; // FocusableElement をインポート
 import { MdSettings, MdCheckCircle, MdHelpOutline } from "react-icons/md";
 import NextImage from "next/image";
-import { FileSystemNode } from "../../components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
-import DownloadButton from "../../components/DownloadButton";
+import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
+import DownloadButton from "./parts/DownloadButton";
 import styles from "@/styles/home.module.scss";
 import { useUserContext } from "@/contexts/useUserContext";
 // import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
-import { AnimationImage } from "../../components/CustomImage";
-import CustomLinkBox from "../../components/customLinkBox";
-import CustomPopver from "../../components/popver";
-import Sidebar from "../../components/sidebar";
+import { AnimationImage } from "@/components/CustomImage";
+import CustomLinkBox from "./parts/customLinkBox";
+import CustomPopver from "@/components/popver";
+import Sidebar from "@/components/sidebar";
 import { Global } from "@emotion/react";
 
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -152,7 +152,7 @@ export default function Ui({
         ※別紙3
       </Text>
       <Sidebar isDrawer={false} />
-      <Content isCustomHeader={true}>
+      <Content>
         <Box
           className={styles.me}
           sx={{
