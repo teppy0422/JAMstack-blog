@@ -43,6 +43,7 @@ import { Global } from "@emotion/react";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
+import ResponsiveModal from "@/components/responsiveModal";
 
 export default function Ui({
   maxVersionString,
@@ -1423,39 +1424,11 @@ export default function Ui({
             </HStack>
           </SimpleGrid>
 
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent
-              maxW={{ base: "100vw", md: "90vw" }}
-              bg={
-                colorMode === "light"
-                  ? "custom.theme.light.500"
-                  : "custom.theme.dark.500"
-              }
-            >
-              <ModalCloseButton right="3px" _focus={{ boxShadow: "none" }} />
-              {/* <ModalHeader></ModalHeader> */}
-              <ModalBody mx={0} px={{ base: 2, sm: 5, md: 10 }}>
-                <Box
-                  width="99%"
-                  height={{ base: "70vh", sm: "75vh", md: "75vh", lg: "85vh" }}
-                  border="none"
-                  maxW="100vw"
-                >
-                  <iframe
-                    src={modalPath}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      border: "none",
-                      backgroundColor: "transparent",
-                    }}
-                    title="Embedded Content"
-                  />
-                </Box>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
+          <ResponsiveModal
+            isOpen={isOpen}
+            onClose={onClose}
+            modalPath={modalPath}
+          />
         </Box>
         <Box mb={10} />
       </Content>

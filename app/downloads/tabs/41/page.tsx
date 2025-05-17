@@ -28,11 +28,7 @@ const HomePage: React.FC = () => {
         autoPlay={true}
         src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018145058.mp4"
         textContent={getMessage({
-          ja: `先ハメ初心者でも最適な順番で作業が行えます。
-                製造指示書にサブナンバーと作業順を印刷してその順番で作業を行います。
-                            
-                ※先ハメ順を都度考える補給品工程で特に有効です
-                ※生産準備+で自動立案したサブ形態のみ対応`,
+          ja: `先ハメ初心者でも最適な順番で作業が行えます。\n製造指示書にサブナンバーと作業順を印刷してその順番で作業を行います。\n\n※先ハメ順を都度考える補給品工程で特に有効です\n※生産準備+で自動立案したサブ形態のみ対応`,
           us: `Even beginners can work in the best order.
                 Sub-numbers and work order are printed on the manufacturing instructions and the work is performed in that order.
 

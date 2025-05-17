@@ -71,6 +71,10 @@ posterImage を order/parts に移動
 
 デプロイ 0002
 
+youtube のデザイン修正
+modal サイズの調整
+youtube のデザイン修正
+
 #### 予定
 
 全てのリンクをクリックして動作確認

@@ -18,8 +18,8 @@ const Index: React.FC = () => {
       <IpadFrame>
         <div
           style={{
-            width: "100vw",
-            height: "90vh",
+            width: "90vw",
+            height: "100vh",
             overflowX: "hidden",
           }}
           className="body_"
@@ -262,7 +262,7 @@ const Index: React.FC = () => {
           </ul>
           <div
             style={{
-              height: "90vh",
+              height: "100vh",
               backgroundImage:
                 "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
               backgroundSize: "cover",

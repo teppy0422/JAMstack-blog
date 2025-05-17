@@ -8,6 +8,7 @@ body {
   /* Chrome, Safari, Opera */
   -moz-osx-font-smoothing: grayscale;
   /* Firefox */
+  background-color: transparent !important;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap');
