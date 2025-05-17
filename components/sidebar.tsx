@@ -182,7 +182,7 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
             </>
           )}
           {menuItem(
-            "/BBS",
+            "/bbs",
             getMessage({
               ja: "問い合わせ",
               us: "Inquiry",
