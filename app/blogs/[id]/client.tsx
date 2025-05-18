@@ -9,6 +9,7 @@ import {
   Divider,
   Image,
   useColorModeValue,
+  useColorMode,
 } from "@chakra-ui/react";
 import Moment from "react-moment";
 import hljs from "highlight.js";
@@ -17,7 +18,7 @@ import styles from "@/styles/home.module.scss";
 
 export default function BlogContent({ blog }: any) {
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
-  const colorMode = useColorModeValue("light", "dark");
+  const { colorMode } = useColorMode();
 
   // クライアント側でのみハイライト実行
   useEffect(() => {
@@ -28,7 +29,13 @@ export default function BlogContent({ blog }: any) {
   }, []);
 
   return (
-    <main>
+    <main
+      style={
+        colorMode === "light"
+          ? { backgroundColor: "#f0e4da" }
+          : { backgroundColor: "#202024" }
+      }
+    >
       <Container
         className={styles.container}
         fontWeight="400"
