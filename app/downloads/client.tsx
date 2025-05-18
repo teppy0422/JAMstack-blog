@@ -28,7 +28,6 @@ import {
 } from "@chakra-ui/react";
 
 import { FocusableElement } from "@chakra-ui/utils"; // FocusableElement をインポート
-import { MdSettings, MdCheckCircle, MdHelpOutline } from "react-icons/md";
 import NextImage from "next/image";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import DownloadButton from "./parts/DownloadButton";
@@ -45,13 +44,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import ResponsiveModal from "@/components/responsiveModal";
 
-export default function Ui({
-  maxVersionString,
-  lastModified,
-}: {
-  maxVersionString: string;
-  lastModified: Date;
-}) {
+import { LatestUpdateDate } from "@/components/LatestUpdateDate";
+
+export default function Ui() {
   const { colorMode } = useColorMode();
   const { currentUserId, currentUserName } = useUserContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -427,16 +422,12 @@ export default function Ui({
                       alignItems="flex-start"
                     >
                       <Flex justifyContent="flex-end" width="100%">
-                        <Text fontSize="xs" textAlign="right">
-                          #
-                          {new Date(lastModified).toLocaleString("ja-JP", {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                          })}
-                          <br />
-                          {maxVersionString}
-                        </Text>
+                        <Box fontSize="xs" textAlign="right">
+                          <LatestUpdateDate
+                            folderPath="./download/sjp/"
+                            removeStrings={["Sjp", ".zip", "_"]}
+                          />
+                        </Box>
                       </Flex>
                       <CustomBadge
                         path=""
@@ -954,50 +945,63 @@ export default function Ui({
                     backGroundColor="green"
                     userName={currentUserName}
                   />
-                  <Flex justifyContent="space-between" alignItems="center">
-                    <Heading size="sm">Bip+</Heading>
-                    <Flex justifyContent="flex-end" alignItems="center">
-                      <Text
-                        fontSize="xs"
-                        margin="auto"
-                        textAlign="right"
-                      ></Text>
+                  <Flex justifyContent="space-between" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start" flex={1}>
+                      <Heading size="sm" mb={1.5}>
+                        Bip+
+                      </Heading>
+                      <Flex justifyContent="flex-end" alignItems="center">
+                        <Badge
+                          variant="solid"
+                          backgroundColor="green"
+                          mr={2}
+                          opacity={0.8}
+                        >
+                          EXCEL2010
+                        </Badge>
+                        <Badge
+                          variant="solid"
+                          backgroundColor="green"
+                          mr={2}
+                          opacity={0.8}
+                        >
+                          2013
+                        </Badge>
+                        <Badge variant="outline" colorScheme="gray" mr={2}>
+                          365
+                        </Badge>
+                      </Flex>
+                      <Text pt="2" fontSize="sm">
+                        {getMessage({
+                          ja: "全製品品番の使用部品リストの一覧表を作成",
+                          us: "Create a list of parts used for all product part numbers",
+                          cn: "编制所有产品部件号所用部件清单",
+                          language,
+                        })}
+                        <br />
+                        {getMessage({
+                          ja: "EXTESを自動制御して手入力の手間とミスを無くせます",
+                          us: "Automatically control EXTES to eliminate manual input and errors.",
+                          cn: "自动控制 EXTES，消除手动输入和错误。",
+                          language,
+                        })}
+                      </Text>
                     </Flex>
+                    <Stack
+                      spacing={1}
+                      direction="column"
+                      alignItems="flex-start"
+                    >
+                      <Flex justifyContent="flex-end" width="100%">
+                        <Box fontSize="xs" textAlign="right">
+                          <LatestUpdateDate
+                            folderPath="./download/bip/"
+                            removeStrings={["Bip", ".zip", "_"]}
+                          />
+                        </Box>
+                      </Flex>
+                    </Stack>
                   </Flex>
-                  <Badge
-                    variant="solid"
-                    backgroundColor="green"
-                    mr={2}
-                    opacity={0.8}
-                  >
-                    EXCEL2010
-                  </Badge>
-                  <Badge
-                    variant="solid"
-                    backgroundColor="green"
-                    mr={2}
-                    opacity={0.8}
-                  >
-                    2013
-                  </Badge>
-                  <Badge variant="outline" colorScheme="gray" mr={2}>
-                    365
-                  </Badge>
-                  <Text pt="2" fontSize="sm">
-                    {getMessage({
-                      ja: "全製品品番の使用部品リストの一覧表を作成",
-                      us: "Create a list of parts used for all product part numbers",
-                      cn: "编制所有产品部件号所用部件清单",
-                      language,
-                    })}
-                    <br />
-                    {getMessage({
-                      ja: "EXTESを自動制御して手入力の手間とミスを無くせます",
-                      us: "Automatically control EXTES to eliminate manual input and errors.",
-                      cn: "自动控制 EXTES，消除手动输入和错误。",
-                      language,
-                    })}
-                  </Text>
                 </Box>
               </CardBody>
             </Card>
@@ -1094,11 +1098,12 @@ export default function Ui({
                       alignItems="flex-start"
                     >
                       <Flex justifyContent="flex-end" width="100%">
-                        <Text fontSize="xs" textAlign="right">
-                          #2025/01/22
-                          <br />
-                          136
-                        </Text>
+                        <Box fontSize="xs" textAlign="right">
+                          <LatestUpdateDate
+                            folderPath="./download/Jdss/main"
+                            removeStrings={["main", ".zip", "_"]}
+                          />
+                        </Box>
                       </Flex>
                       <CustomBadge
                         path=""
@@ -1201,11 +1206,12 @@ export default function Ui({
                       alignItems="flex-start"
                     >
                       <Flex justifyContent="flex-end" width="100%">
-                        <Text fontSize="xs" textAlign="right">
-                          #2024/03/13
-                          <br />
-                          17
-                        </Text>
+                        <Box fontSize="xs" textAlign="right">
+                          <LatestUpdateDate
+                            folderPath="./download/Jdss/main3/"
+                            removeStrings={["main3", ".zip", "_"]}
+                          />
+                        </Box>
                       </Flex>
                       <Flex>
                         <Flex direction="column" mr={2}></Flex>
@@ -1365,51 +1371,67 @@ export default function Ui({
                     userName={currentUserName}
                     borderBottomLeftRadius="5px"
                   />
-                  <Flex justifyContent="space-between" alignItems="center">
-                    <Heading size="sm">
-                      {getMessage({
-                        ja: "Windowsライブラリ",
-                        us: "Windows Library",
-                        cn: "视窗图书馆",
-                        language,
-                      })}
-                    </Heading>
-                    <Flex justifyContent="flex-end" alignItems="center">
-                      <Text
-                        fontSize="xs"
-                        margin="auto"
-                        textAlign="right"
-                      ></Text>
+                  <Flex justifyContent="space-between" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start" flex={1}>
+                      <Heading size="sm" mb={1.5}>
+                        {getMessage({
+                          ja: "Windowsライブラリ",
+                          us: "Windows Library",
+                          cn: "视窗图书馆",
+                          language,
+                        })}
+                      </Heading>
+                      <Flex justifyContent="flex-end" alignItems="center">
+                        <Text
+                          fontSize="xs"
+                          margin="auto"
+                          textAlign="right"
+                        ></Text>
+                        <Badge
+                          variant="solid"
+                          color="white"
+                          backgroundColor="#333"
+                          mr={2}
+                          opacity={0.8}
+                        >
+                          .OCX
+                        </Badge>
+                        <Badge
+                          variant="solid"
+                          color="white"
+                          backgroundColor="#333"
+                          mr={2}
+                          opacity={0.8}
+                        >
+                          .DLL
+                        </Badge>
+                      </Flex>
+                      <Text pt="2" fontSize="sm">
+                        {getMessage({
+                          ja: "WindowsOSが新しくなった場合にライブラリが削除される事があります。ライブラリが不足している場合はここからダウンロードして使用してください。",
+                          us: "The library may be deleted when the Windows OS is newer. If the library is missing, download it from here and use it.",
+                          cn: "Windows 操作系统更新后，程序库可能会被删除。如果缺少库，请从此处下载并使用。",
+                          language,
+                        })}
+                        <br />
+                        <br />
+                      </Text>
                     </Flex>
+                    <Stack
+                      spacing={1}
+                      direction="column"
+                      alignItems="flex-start"
+                    >
+                      <Flex justifyContent="flex-end" width="100%">
+                        <Box fontSize="xs" textAlign="right">
+                          <LatestUpdateDate
+                            folderPath="./download/Library_/"
+                            removeStrings={["Bip", ".zip", "_"]}
+                          />
+                        </Box>
+                      </Flex>
+                    </Stack>
                   </Flex>
-                  <Badge
-                    variant="solid"
-                    color="white"
-                    backgroundColor="#333"
-                    mr={2}
-                    opacity={0.8}
-                  >
-                    .OCX
-                  </Badge>
-                  <Badge
-                    variant="solid"
-                    color="white"
-                    backgroundColor="#333"
-                    mr={2}
-                    opacity={0.8}
-                  >
-                    .DLL
-                  </Badge>
-                  <Text pt="2" fontSize="sm">
-                    {getMessage({
-                      ja: "WindowsOSが新しくなった場合にライブラリが削除される事があります。ライブラリが不足している場合はここからダウンロードして使用してください。",
-                      us: "The library may be deleted when the Windows OS is newer. If the library is missing, download it from here and use it.",
-                      cn: "Windows 操作系统更新后，程序库可能会被删除。如果缺少库，请从此处下载并使用。",
-                      language,
-                    })}
-                    <br />
-                    <br />
-                  </Text>
                 </Box>
               </CardBody>
             </Card>

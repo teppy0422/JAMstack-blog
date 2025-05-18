@@ -220,7 +220,7 @@ export default function About() {
                 language,
               })}
               descriptionIN=""
-              linkHref="/download/Jdss/main_165.zip"
+              linkHref="/download/Jdss/main/main_165.zip"
               inCharge="徳島,小松さん,不具合,Win10zip"
               isLatest={true}
               userName={currentUserName ?? ""}

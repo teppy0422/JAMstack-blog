@@ -86,6 +86,27 @@ season を移動
 不要っぽい components を削除
 pmponents を全て@に移動
 
+デプロイ 0004
+
+components/common を追加して移動
+
+コピー
+
+CustomCloseButton を押したら Modal が閉じるように修正
+ダウンロードページのファイル名と更新日の取得を更新
+
+#### chakra-v3 に更新
+
+useColorMode が使えない ->自作コンテキストに変更
+Dvider が
+Motion が
+Modal が
+Progress が
+extendTheme が
+Modal が Dialog
+Accordion
+npx @chakra-ui/cli snippet add tooltip
+
 #### 予定
 
 全てのリンクをクリックして動作確認

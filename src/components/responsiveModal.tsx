@@ -23,7 +23,6 @@ const ResponsiveModal: React.FC<ModalProps> = ({
   modalPath,
 }) => {
   const { colorMode } = useColorMode();
-  const clearFileSelection = () => {};
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
@@ -61,7 +60,7 @@ const ResponsiveModal: React.FC<ModalProps> = ({
             />
             <CustomCloseButton
               colorMode={colorMode}
-              onClick={clearFileSelection}
+              onClick={onClose}
               top="-0px"
               right="-0px"
             />

@@ -6,15 +6,9 @@ import NextLink from "next/link";
 import Header from "@/components/header";
 import { Global } from "@emotion/react";
 
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 // import { AppContext } from "../pages/_app";
-
-import {
-  ChakraProvider,
-  useColorModeValue,
-  ColorModeScript,
-} from "@chakra-ui/react";
 
 export default function Content({
   children,
@@ -25,14 +19,7 @@ export default function Content({
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <Box
-      id="content"
-      bg={
-        colorMode === "light"
-          ? "custom.theme.light.500"
-          : "custom.theme.dark.500"
-      }
-    >
+    <Box id="content">
       <Global
         styles={{
           "@media print": {

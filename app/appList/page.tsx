@@ -39,13 +39,6 @@ const apps = [
     src: "/images/illust/obj/searchPictureLogo.webp",
   },
   {
-    title: "ブログ（JAMStack）",
-    href: "/blogs",
-    description: "microCMSを使用した高速・静的配信のJAMStackブログ。",
-    src: "/images/illust/obj/blogLogo.webp",
-    onlyDeveloper: true,
-  },
-  {
     title: "居酒屋注文システム(注文)",
     href: "/order",
     description: "栄養バランス可視化。注文確定で受注側にデータ送信",
@@ -57,6 +50,13 @@ const apps = [
     description:
       "メニューの選択で、食材をToDoリストで確認。GPTを利用して約1分で新しいメニューを追加可能。",
     src: "/images/illust/obj/orderLogo.webp",
+  },
+  {
+    title: "ブログ（JAMStack）",
+    href: "/blogs",
+    description: "microCMSを使用した高速・静的配信のJAMStackブログ。",
+    src: "/images/illust/obj/blogLogo.webp",
+    onlyDeveloper: true,
   },
 ];
 

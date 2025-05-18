@@ -22,10 +22,10 @@ import {
 import { signIn } from "next-auth/react";
 import { MdBusiness, MdEmail, MdHistory } from "react-icons/md";
 
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { CustomAvatar } from "./CustomAvatar";
 
-import getMessage from "../utils/getMessage";
+import getMessage from "@/utils/getMessage";
 
 interface AuthProps {
   userData: {

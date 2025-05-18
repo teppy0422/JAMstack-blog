@@ -180,13 +180,13 @@ const SkillBlogTopPage: React.FC = () => {
 
           <Box
             w="100%"
+            h="300px"
             borderRadius={10}
             style={{
               backgroundImage:
                 "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
               backgroundSize: "cover",
               backgroundPosition: "center",
-              color: "#fff",
               position: "relative",
             }}
           >
@@ -195,7 +195,6 @@ const SkillBlogTopPage: React.FC = () => {
                 padding: "13px",
                 paddingTop: "20px",
                 textAlign: "left",
-                color: "#fff",
                 textShadow: "none",
                 fontFamily: "'Yomogi', sans-serif",
                 fontWeight: "200",
