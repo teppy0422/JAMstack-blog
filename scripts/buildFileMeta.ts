@@ -1,40 +1,48 @@
-// scripts/buildFileMeta.ts
 import fs from "fs";
 import path from "path";
 
 const downloadDir = path.resolve("public/download");
-const folderNames = fs
-  .readdirSync(downloadDir)
-  .filter((name) => fs.statSync(path.join(downloadDir, name)).isDirectory());
 
 const result: Record<
   string,
   { latestFile: string | null; latestUpdated: string | null }
 > = {};
 
-for (const folderName of folderNames) {
-  const folderPath = path.join(downloadDir, folderName);
-  const files = fs.readdirSync(folderPath);
+// 再帰的に処理する関数
+function processFolderRecursively(folderPath: string, relativePath: string) {
+  const entries = fs.readdirSync(folderPath, { withFileTypes: true });
 
   let latestFile: string | null = null;
   let latestDate: Date | null = null;
 
-  for (const file of files) {
-    const filePath = path.join(folderPath, file);
-    const stat = fs.statSync(filePath);
-    if (!latestDate || stat.mtime > latestDate) {
-      latestDate = stat.mtime;
-      latestFile = file;
+  for (const entry of entries) {
+    const fullPath = path.join(folderPath, entry.name);
+    const relPath = path.join(relativePath, entry.name);
+
+    if (entry.isDirectory()) {
+      processFolderRecursively(fullPath, relPath); // 再帰処理
+    } else if (entry.isFile()) {
+      const stat = fs.statSync(fullPath);
+      if (!latestDate || stat.mtime > latestDate) {
+        latestDate = stat.mtime;
+        latestFile = entry.name;
+      }
     }
   }
 
-  result[folderName] = {
-    latestFile,
-    latestUpdated: latestDate ? latestDate.toISOString() : null,
-  };
+  // ファイルが存在する場合のみ記録
+  if (latestFile) {
+    result[relativePath] = {
+      latestFile,
+      latestUpdated: latestDate ? latestDate.toISOString() : null,
+    };
+  }
 }
 
+// download直下から開始
+processFolderRecursively(downloadDir, ".");
+
 fs.writeFileSync(
-  path.resolve("public/download/download-meta.json"),
+  path.resolve(downloadDir, "download-meta.json"),
   JSON.stringify(result, null, 2)
 );

@@ -336,7 +336,7 @@ export default function Ui() {
                   position="relative"
                   px={2}
                   pl={7}
-                  py={2}
+                  py={1}
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
@@ -493,7 +493,7 @@ export default function Ui() {
                   position="relative"
                   px={2}
                   pl={7}
-                  py={2}
+                  py={1}
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
@@ -611,7 +611,7 @@ export default function Ui() {
                   position="relative"
                   px={2}
                   pl={7}
-                  py={2}
+                  py={1}
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
@@ -706,7 +706,7 @@ export default function Ui() {
                   position="relative"
                   px={2}
                   pl={7}
-                  py={2}
+                  py={1}
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
@@ -811,7 +811,7 @@ export default function Ui() {
                   position="relative"
                   px={2}
                   pl={7}
-                  py={2}
+                  py={1}
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
@@ -933,9 +933,9 @@ export default function Ui() {
                 <Box
                   key="03"
                   position="relative"
-                  px={4}
-                  pl={8}
-                  py={2}
+                  px={2}
+                  pl={7}
+                  py={1}
                   minH={140}
                   onMouseEnter={() => setHoveredId("03")}
                 >
@@ -1027,7 +1027,7 @@ export default function Ui() {
                   position="relative"
                   px={2}
                   pl={7}
-                  py={2}
+                  py={1}
                   _hover={{
                     boxShadow: "dark-lg",
                   }}
@@ -1138,7 +1138,7 @@ export default function Ui() {
                   position="relative"
                   px={2}
                   pl={7}
-                  py={2}
+                  py={1}
                   _hover={{
                     boxShadow: "dark-lg",
                   }}

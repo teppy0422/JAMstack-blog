@@ -3,30 +3,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// scripts/buildFileMeta.ts
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const downloadDir = path_1.default.resolve("public/download");
-const folderNames = fs_1.default
-    .readdirSync(downloadDir)
-    .filter((name) => fs_1.default.statSync(path_1.default.join(downloadDir, name)).isDirectory());
 const result = {};
-for (const folderName of folderNames) {
-    const folderPath = path_1.default.join(downloadDir, folderName);
-    const files = fs_1.default.readdirSync(folderPath);
+// 再帰的に処理する関数
+function processFolderRecursively(folderPath, relativePath) {
+    const entries = fs_1.default.readdirSync(folderPath, { withFileTypes: true });
     let latestFile = null;
     let latestDate = null;
-    for (const file of files) {
-        const filePath = path_1.default.join(folderPath, file);
-        const stat = fs_1.default.statSync(filePath);
-        if (!latestDate || stat.mtime > latestDate) {
-            latestDate = stat.mtime;
-            latestFile = file;
+    for (const entry of entries) {
+        const fullPath = path_1.default.join(folderPath, entry.name);
+        const relPath = path_1.default.join(relativePath, entry.name);
+        if (entry.isDirectory()) {
+            processFolderRecursively(fullPath, relPath); // 再帰処理
+        }
+        else if (entry.isFile()) {
+            const stat = fs_1.default.statSync(fullPath);
+            if (!latestDate || stat.mtime > latestDate) {
+                latestDate = stat.mtime;
+                latestFile = entry.name;
+            }
         }
     }
-    result[folderName] = {
-        latestFile,
-        latestUpdated: latestDate ? latestDate.toISOString() : null,
-    };
+    // ファイルが存在する場合のみ記録
+    if (latestFile) {
+        result[relativePath] = {
+            latestFile,
+            latestUpdated: latestDate ? latestDate.toISOString() : null,
+        };
+    }
 }
-fs_1.default.writeFileSync(path_1.default.resolve("public/download/download-meta.json"), JSON.stringify(result, null, 2));
+// download直下から開始
+processFolderRecursively(downloadDir, ".");
+fs_1.default.writeFileSync(path_1.default.resolve(downloadDir, "download-meta.json"), JSON.stringify(result, null, 2));

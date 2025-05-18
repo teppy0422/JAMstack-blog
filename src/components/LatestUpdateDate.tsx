@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { getLatestFileMeta } from "@/lib/getLatestFileMeta";
 
 type Props = {
-  folderPath: string; // 例: "./download/sjp/"
-  removeStrings?: string[]; // ["Sjp", ".zip", "_"] など
+  folderPath: string; // e.g., "./download/sjp/nested/"
+  removeStrings?: string[]; // ["Sjp", ".zip", "_"]
 };
 
 export default function LatestUpdateDate({
@@ -16,15 +16,19 @@ export default function LatestUpdateDate({
   const [fileName, setFileName] = useState<string>("");
 
   useEffect(() => {
-    const folderName = folderPath.split("/").filter(Boolean).pop(); // "sjp"
-    if (!folderName) return;
+    // public/download/ 以下の相対パスに変換（例: "sjp/nested"）
+    const relativePath = folderPath
+      .replace(/^\.?\/?download\/?/, "") // remove leading ./download/
+      .replace(/\/+$/, ""); // remove trailing slash
 
-    getLatestFileMeta(folderName).then((meta) => {
+    if (!relativePath) return;
+
+    getLatestFileMeta(relativePath).then((meta) => {
       if (!meta) return;
 
       if (meta.latestUpdated) {
         const date = new Date(meta.latestUpdated);
-        const formatted = date.toLocaleDateString(); // "2025/5/18" など
+        const formatted = date.toLocaleDateString();
         setDateStr(formatted);
       }
 
@@ -42,7 +46,7 @@ export default function LatestUpdateDate({
 
   return (
     <span>
-      {dateStr}
+      '{dateStr}
       <br />
       {fileName}
     </span>

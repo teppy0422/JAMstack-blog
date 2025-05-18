@@ -1,4 +1,12 @@
 {
+  "Jdss/main": {
+    "latestFile": "main_165.zip",
+    "latestUpdated": "2025-03-18T02:03:06.908Z"
+  },
+  "Jdss/main3": {
+    "latestFile": "main3_17.zip",
+    "latestUpdated": "2024-10-11T15:35:55.225Z"
+  },
   "Jdss": {
     "latestFile": ".DS_Store",
     "latestUpdated": "2025-05-18T12:17:38.547Z"
@@ -14,5 +22,9 @@
   "sjp": {
     "latestFile": "Sjp3.101.18_.zip",
     "latestUpdated": "2025-04-25T04:43:32.000Z"
+  },
+  ".": {
+    "latestFile": "download-meta.json",
+    "latestUpdated": "2025-05-18T14:18:37.071Z"
   }
 }
