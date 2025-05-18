@@ -1,61 +1,50 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { getLatestFileMeta } from "@/lib/getLatestFileMeta";
 
 type Props = {
-  folderPath: string;
-  removeStrings?: string[];
+  folderPath: string; // 例: "./download/sjp/"
+  removeStrings?: string[]; // ["Sjp", ".zip", "_"] など
 };
 
-export const LatestUpdateDate: React.FC<Props> = ({
+export default function LatestUpdateDate({
   folderPath,
-  removeStrings,
-}) => {
-  const [latestDate, setLatestDate] = useState<string | null>(null);
-  const [latestFileName, setLatestFileName] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  removeStrings = [],
+}: Props) {
+  const [dateStr, setDateStr] = useState<string>("");
+  const [fileName, setFileName] = useState<string>("");
 
   useEffect(() => {
-    const fetchLatestDate = async () => {
-      try {
-        const res = await fetch(
-          `/api/ip/get-latest-updated?path=${encodeURIComponent(folderPath)}`
-        );
-        const data = await res.json();
-        if (res.ok) {
-          setLatestDate(formatDate(new Date(data.latestUpdated)));
-          setLatestFileName(cleanFileName(data.latestFileName, removeStrings));
-        } else {
-          setError(data.error || "An unknown error occurred");
-        }
-      } catch (err: any) {
-        setError(err.message || "Failed to fetch the latest update date");
+    const folderName = folderPath.split("/").filter(Boolean).pop(); // "sjp"
+    if (!folderName) return;
+
+    getLatestFileMeta(folderName).then((meta) => {
+      if (!meta) return;
+
+      if (meta.latestUpdated) {
+        const date = new Date(meta.latestUpdated);
+        const formatted = date.toLocaleDateString(); // "2025/5/18" など
+        setDateStr(formatted);
       }
-    };
-    fetchLatestDate();
-  }, [folderPath]);
 
-  const cleanFileName = (fileName: string, removeStrings?: string[]) => {
-    if (!removeStrings) return fileName;
-    return removeStrings.reduce(
-      (acc, str) => acc.replaceAll(str, ""),
-      fileName
-    );
-  };
+      if (meta.latestFile) {
+        let name = meta.latestFile;
+        for (const str of removeStrings) {
+          name = name.replaceAll(str, "");
+        }
+        setFileName(name);
+      }
+    });
+  }, [folderPath, removeStrings]);
 
-  const formatDate = (date: Date) => {
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-    return `${yyyy}/${mm}/${dd}`;
-  };
-
-  if (error) return <div style={{ color: "red" }}>Error: {error}</div>;
+  if (!dateStr && !fileName) return null;
 
   return (
-    <div>
-      <div> {latestDate ?? "読み込み中..."}</div>
-      <div>{latestFileName ?? "読み込み中..."}</div>
-    </div>
+    <span>
+      {dateStr}
+      <br />
+      {fileName}
+    </span>
   );
-};
+}

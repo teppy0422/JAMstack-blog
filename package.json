@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "clean": "rm -rf .next",
-    "build": "next build && next-sitemap --config sitemap.config.js",
+    "build:meta": "tsc -p tsconfig.scripts.json && node dist-scripts/buildFileMeta.js",
+    "build": "npm run build:meta && next build && next-sitemap --config sitemap.config.js",
     "start": "next start"
   },
   "author": {
@@ -38,7 +39,6 @@
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.45.0",
     "@types/jest": "^27.4.1",
-    "@types/node": "^20.14.2",
     "@types/react": "^18.3.3",
     "@types/react-datepicker": "^7.0.0",
     "@types/react-dom": "^18.0.0",
@@ -90,16 +90,27 @@
     "styled-components": "^6.1.15",
     "three": "^0.165.0",
     "typeface-noto-sans-sc": "^1.1.13",
-    "typescript": "^5.4.5",
     "url-loader": "^4.1.1",
     "use-sound": "^4.0.1"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
-    "@types/node": "^18.0.3",
+    "@types/node": "^18.19.100",
     "next-sitemap": "^2.5.28",
     "react-infinite-scroller": "^1.2.6",
-    "ts-node": "^10.8.2",
-    "typescript": "^4.7.4"
-  }
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
+  },
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "outDir": "dist-scripts",
+    "rootDir": "scripts",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "scripts"
+  ]
 }

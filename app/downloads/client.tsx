@@ -44,7 +44,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import ResponsiveModal from "@/components/responsiveModal";
 
-import { LatestUpdateDate } from "@/components/LatestUpdateDate";
+import LatestUpdateDate from "@/components/LatestUpdateDate";
 
 export default function Ui() {
   const { colorMode } = useColorMode();
