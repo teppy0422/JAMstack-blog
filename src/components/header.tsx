@@ -637,6 +637,8 @@ export default function Header() {
                       ・5/8 注文システムの公開
                       <br />
                       ・5/8 タイピングをアプリ一覧に移動
+                      <br />
+                      ・5/18 より現代的なフォルダ構成に変更
                     </Text>
                   </Box>
                 </Box>

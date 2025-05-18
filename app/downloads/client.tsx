@@ -1358,9 +1358,9 @@ export default function Ui() {
                 <Box
                   key="06"
                   position="relative"
-                  px={4}
-                  pl={8}
-                  py={2}
+                  px={2}
+                  pl={7}
+                  py={1}
                   minH={"9em"}
                   onMouseEnter={() => setHoveredId("06")}
                 >

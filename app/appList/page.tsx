@@ -12,8 +12,17 @@ import {
   Flex,
   useToast,
   Badge,
+  Stack,
+  Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardFooter,
+  Divider,
+  useColorMode,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import { StarIcon } from "@chakra-ui/icons";
 
 import NextLink from "next/link";
 import { motion } from "framer-motion";
@@ -31,12 +40,14 @@ const apps = [
     description:
       "速度に応じて雪が降るエフェクト付きのタイピング練習。ランキング機能あり。",
     src: "/images/illust/obj/typingLogo.webp",
+    rate: 5,
   },
   {
     title: "画像検索",
     href: "/searchPicture",
     description: "商用利用可能な画像のみを検索できるツール。",
     src: "/images/illust/obj/searchPictureLogo.webp",
+    rate: 2,
   },
   {
     title: "ブログ（JAMStack）",
@@ -44,12 +55,14 @@ const apps = [
     description: "microCMSを使用した高速・静的配信のJAMStackブログ。",
     src: "/images/illust/obj/blogLogo.webp",
     onlyDeveloper: true,
+    rate: 3,
   },
   {
     title: "居酒屋注文システム(注文)",
     href: "/order",
     description: "栄養バランス可視化。注文確定で受注側にデータ送信",
     src: "/images/illust/obj/orderLogo.webp",
+    rate: 4,
   },
   {
     title: "居酒屋注文システム(受注)",
@@ -57,6 +70,7 @@ const apps = [
     description:
       "メニューの選択で、食材をToDoリストで確認。GPTを利用して約1分で新しいメニューを追加可能。",
     src: "/images/illust/obj/orderLogo.webp",
+    rate: 5,
   },
 ];
 
@@ -72,7 +86,7 @@ export default function AppList() {
   const userData = currentUserId ? getUserById(currentUserId) : null;
   const router = useRouter(); // ← これが必要！
   const toast = useToast();
-
+  const { colorMode } = useColorMode();
   const [direction, setDirection] = useState<"right" | "left">("right");
 
   const handleComplete = () => {
@@ -89,9 +103,11 @@ export default function AppList() {
     <>
       <Sidebar isDrawer={false} />
       <Content>
-        <Box p={8}>
-          <Heading mb={6}>WEBアプリ一覧</Heading>
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+        <Box p={4}>
+          <Heading mb={8} fontWeight="600" textAlign="center">
+            WEBアプリ一覧
+          </Heading>
+          <SimpleGrid columns={{ base: 2, sm: 2, md: 3, lg: 4 }} spacing={2}>
             {apps.map((app) => (
               <Link
                 as="div"
@@ -116,25 +132,51 @@ export default function AppList() {
                   }
                 }}
                 _hover={{ textDecoration: "none", cursor: "pointer" }}
+                display="flex"
+                justifyContent="center"
               >
-                <Box
-                  p={6}
-                  borderWidth="1px"
-                  borderRadius="2xl"
-                  boxShadow="md"
-                  _hover={{ boxShadow: "xl", bg: "gray.50" }}
-                  transition="all 0.2s"
+                <Card
+                  maxW="200px"
+                  bg="transparent"
+                  _hover={{ boxShadow: "xl", bg: "gray.50", color: "#000" }}
+                  display="flex"
+                  flexDirection="column"
+                  mb={6}
                 >
-                  <VStack align="start" spacing={2}>
-                    <Flex align="center" gap={2}>
-                      <Image src={app.src} w="30px" />
-                      <Heading size="md">{app.title}</Heading>
-                    </Flex>
-                    <Text fontSize="sm" color="gray.600">
-                      {app.description}
-                    </Text>
-                  </VStack>
-                </Box>
+                  <CardBody p={2}>
+                    <Box display="flex" justifyContent="center">
+                      <Image
+                        src={app.src}
+                        alt="Green double couch with wooden legs"
+                        borderRadius="lg"
+                        width="140px"
+                        height="120px"
+                      />
+                    </Box>
+                    <Stack mt="4" spacing="3">
+                      <Heading size="sm">{app.title}</Heading>
+                      <Box display="flex" alignItems="center">
+                        {Array(5)
+                          .fill("")
+                          .map((_, i) => (
+                            <StarIcon
+                              key={i}
+                              color={i < app.rate ? "orange.400" : "gray.300"}
+                            />
+                          ))}
+                      </Box>
+                    </Stack>
+                  </CardBody>
+                  <Divider />
+                  <CardFooter
+                    p={2}
+                    flex="1"
+                    display="flex"
+                    alignItems="flex-end"
+                  >
+                    <Text fontSize="12px">{app.description}</Text>
+                  </CardFooter>
+                </Card>
               </Link>
             ))}
           </SimpleGrid>
