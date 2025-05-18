@@ -94,6 +94,9 @@ components/common を追加して移動
 
 CustomCloseButton を押したら Modal が閉じるように修正
 ダウンロードページのファイル名と更新日の取得を更新
+applList のデザイン修正
+
+デプロイ 0005
 
 #### chakra-v3 に更新
 

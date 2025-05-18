@@ -41,6 +41,7 @@ const apps = [
       "速度に応じて雪が降るエフェクト付きのタイピング練習。ランキング機能あり。",
     src: "/images/illust/obj/typingLogo.webp",
     rate: 5,
+    limitTag: "",
   },
   {
     title: "画像検索",
@@ -48,6 +49,7 @@ const apps = [
     description: "商用利用可能な画像のみを検索できるツール。",
     src: "/images/illust/obj/searchPictureLogo.webp",
     rate: 2,
+    limitTag: "",
   },
   {
     title: "ブログ（JAMStack）",
@@ -56,6 +58,7 @@ const apps = [
     src: "/images/illust/obj/blogLogo.webp",
     onlyDeveloper: true,
     rate: 3,
+    limitTag: "閲覧",
   },
   {
     title: "居酒屋注文システム(注文)",
@@ -63,6 +66,7 @@ const apps = [
     description: "栄養バランス可視化。注文確定で受注側にデータ送信",
     src: "/images/illust/obj/orderLogo.webp",
     rate: 4,
+    limitTag: "使用",
   },
   {
     title: "居酒屋注文システム(受注)",
@@ -71,6 +75,7 @@ const apps = [
       "メニューの選択で、食材をToDoリストで確認。GPTを利用して約1分で新しいメニューを追加可能。",
     src: "/images/illust/obj/orderLogo.webp",
     rate: 5,
+    limitTag: "使用",
   },
 ];
 
@@ -153,9 +158,9 @@ export default function AppList() {
                         height="120px"
                       />
                     </Box>
-                    <Stack mt="4" spacing="3">
-                      <Heading size="sm">{app.title}</Heading>
-                      <Box display="flex" alignItems="center">
+                    <Stack mt="3" spacing="1">
+                      <Heading fontSize="15px">{app.title}</Heading>
+                      <Box display="flex" fontSize="13px" alignItems="center">
                         {Array(5)
                           .fill("")
                           .map((_, i) => (
@@ -164,15 +169,36 @@ export default function AppList() {
                               color={i < app.rate ? "orange.400" : "gray.300"}
                             />
                           ))}
+                        {app.limitTag === "閲覧" && (
+                          <Badge
+                            colorScheme="red"
+                            variant="outline"
+                            fontSize="0.8em"
+                            ml="4px"
+                          >
+                            閲覧制限
+                          </Badge>
+                        )}
+                        {app.limitTag === "使用" && (
+                          <Badge
+                            colorScheme="orange"
+                            variant="outline"
+                            fontSize="0.8em"
+                            ml="4px"
+                          >
+                            使用制限
+                          </Badge>
+                        )}
                       </Box>
                     </Stack>
                   </CardBody>
                   <Divider />
                   <CardFooter
-                    p={2}
+                    p={1}
                     flex="1"
                     display="flex"
-                    alignItems="flex-end"
+                    flexDirection="column"
+                    alignItems="flex-start"
                   >
                     <Text fontSize="12px">{app.description}</Text>
                   </CardFooter>

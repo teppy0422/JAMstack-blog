@@ -122,7 +122,7 @@ export default function Content({
               </NextLink>
             </Center>
             <Center mb="2px" color={colorMode === "light" ? "black" : "white"}>
-              ©︎ 2022-2024 Teppei Kataoka. All rights Reserved.
+              ©︎ 2022-2025 Teppei Kataoka. All rights Reserved.
             </Center>
           </Box>
         </>

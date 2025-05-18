@@ -154,12 +154,6 @@ const Ranking = forwardRef<RankingRefHandle, RankingProps>((props, ref) => {
       console.log("クリックされたchild");
     },
   }));
-  // const graphTempRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  // const handleBoxClick = (user_id) => {
-  //   if (graphTempRefs.current[user_id]) {
-  //     graphTempRefs.current[user_id].childClick();
-  //   }
-  // };
   const graphTempRefs = useRef<Record<string, GraphTempHandle | null>>({});
 
   const handleBoxClick = (user_id: string) => {
@@ -194,7 +188,7 @@ const Ranking = forwardRef<RankingRefHandle, RankingProps>((props, ref) => {
         <ModalOverlay />
         <ModalContent
           top="60px"
-          w={["260px", "300px", "350px", "400px"]}
+          w={["400px", "400px", "400px", "400px"]}
           style={{
             fontFamily: getMessage({
               ja: "Noto Sans JP",
@@ -215,11 +209,11 @@ const Ranking = forwardRef<RankingRefHandle, RankingProps>((props, ref) => {
 
           <ModalCloseButton _focus={{ boxShadow: "none" }} />
           <ModalBody>
-            <Stack direction="column" margin="auto" spacing={4}>
+            <Stack direction="column" margin="auto" spacing={6}>
               {ranking.map((user, index) => (
                 <Box
                   key={index}
-                  p={4}
+                  p={2}
                   borderWidth="1px"
                   borderRadius="lg"
                   overflow="hidden"
@@ -229,7 +223,7 @@ const Ranking = forwardRef<RankingRefHandle, RankingProps>((props, ref) => {
                     user.user_id !== null && handleBoxClick(user.user_id)
                   }
                 >
-                  <Stack direction="row" align="center" spacing={4}>
+                  <Stack direction="row" align="center" spacing={2}>
                     <Text fontSize="xl" fontWeight="bold">
                       <Box
                         position="relative"
@@ -275,7 +269,7 @@ const Ranking = forwardRef<RankingRefHandle, RankingProps>((props, ref) => {
                         </Badge>
                       </Box>
                       <Text textAlign="right">
-                        <span style={{ fontSize: "1.4rem" }}>
+                        <span style={{ fontSize: "1rem" }}>
                           {user?.max_kpm}
                         </span>
                         /KPM
