@@ -22,7 +22,7 @@ import styles from "@/styles/home.module.scss";
 import Hippo_001_wrap from "@/components/3d/hippo_001_wrap";
 
 import CustomLinkBox from "../../parts/customLinkBox";
-import CustomPopver from "@/components/popver";
+import CustomPopver from "@/components/ui/popver";
 import Sidebar from "@/components/sidebar";
 
 import { useUserContext } from "@/contexts/useUserContext";

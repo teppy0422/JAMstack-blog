@@ -31,13 +31,13 @@ import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
 import Content from "@/components/content";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "@/components/customToast";
+import { useCustomToast } from "@/components/ui/customToast";
 import SectionBox from "../../components/SectionBox";
-import BasicDrawer from "@/components/BasicDrawer";
+import BasicDrawer from "@/components/ui/BasicDrawer";
 import Frame from "../../components/frame";
 import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import { CustomBadge } from "@/components/CustomBadge";
+import { CustomBadge } from "@/components/ui/CustomBadge";
 import UnderlinedTextWithDrawer from "../../components/UnderlinedTextWithDrawer";
 import IframeDisplay from "../../components/IframeDisplay";
 import { useUserContext } from "@/contexts/useUserContext";
@@ -45,7 +45,7 @@ import { useReadCount } from "@/hooks/useReadCount";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
-import { AnimationImage } from "@/components/CustomImage";
+import { AnimationImage } from "@/components/ui/CustomImage";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",

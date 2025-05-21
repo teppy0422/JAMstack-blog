@@ -28,7 +28,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import getMessage from "../utils/getMessage";
 import { isMobile } from "react-device-detect";
 
-import { CustomAvatar } from "./CustomAvatar";
+import { CustomAvatar } from "./ui/CustomAvatar";
 import YoutubeLike from "../../public/images/etc/youtubeLike.svg";
 
 interface YouTubePlayerProps {
@@ -274,9 +274,13 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       <HStack
         px={2}
         py={1}
-        bg="white"
+        bg={
+          colorMode === "light"
+            ? "custom.theme.light.50"
+            : "custom.theme.dark.700"
+        }
         borderBottom="1px"
-        borderColor="gray.200"
+        borderColor="gray.300"
         spacing={3}
       >
         {/* 左：ロゴ */}
@@ -305,12 +309,21 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
           flex="3"
           display={{ base: "none", sm: "block" }}
         >
-          <Input placeholder="検索" bg="gray.100" borderRadius="3xl" h="32px" />
+          <Input
+            placeholder="検索"
+            bg={colorMode === "light" ? "gray.100" : "gray.800"}
+            borderRadius="3xl"
+            h="28px"
+            fontSize="xs"
+            focusBorderColor="gray.400" // ★ これが一番確実！
+          />
           <InputRightElement
-            bg="gray.200"
             borderRightRadius="3xl"
-            w="4rem"
-            h="32px"
+            border="1px solid"
+            borderColor={colorMode === "light" ? "gray.500" : "gray.600"}
+            bg={colorMode === "light" ? "gray.100" : "gray.800"}
+            w={{ base: "3rem", md: "4rem" }}
+            h="28px"
           >
             <IconButton
               aria-label="Search"
@@ -355,6 +368,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         <VStack flex="5">
           <Box
             border="1px solid "
+            borderColor={colorMode === "light" ? "gray.200" : "gray.400"}
             borderRadius="0px"
             width="100%"
             // maxWidth="800px"
@@ -537,6 +551,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             maxH="80vh"
             width="100%"
             bg="transparent"
+            mb="20px"
           >
             <Box width="100%" bg="rgba(255, 255, 255, 0.3)">
               <Heading size="xs" mx={3} mt={1.5}>

@@ -3,7 +3,7 @@ import { HStack, Box, Icon } from "@chakra-ui/react";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { FaQuestion } from "react-icons/fa";
 import { useColorMode } from "@chakra-ui/react";
-import BasicDrawer from "@/components/BasicDrawer";
+import BasicDrawer from "@/components/ui/BasicDrawer";
 
 interface UnderlinedTextWithDrawerProps {
   text: string;

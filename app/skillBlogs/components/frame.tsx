@@ -31,13 +31,13 @@ import { PiGithubLogoFill } from "react-icons/pi";
 import { LuPanelRightOpen } from "react-icons/lu";
 import Content from "@/components/content";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "@/components/customToast";
+import { useCustomToast } from "@/components/ui/customToast";
 import { useDisclosure } from "@chakra-ui/react";
 
 import { useReadCount } from "@/hooks/useReadCount";
 import { useUserContext } from "@/contexts/useUserContext";
 
-import { CustomAccordionIcon, CustomLoading } from "@/components/CustomText";
+import { CustomAccordionIcon, CustomLoading } from "@/components/ui/CustomText";
 
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";

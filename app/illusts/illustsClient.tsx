@@ -24,7 +24,7 @@ import {
 import NextImage from "next/image";
 import styles from "@/styles/home.module.scss";
 
-import { SunderText } from "@/components/CustomText";
+import { SunderText } from "@/components/ui/CustomText";
 import Hippo_001_wrap from "@/components/3d/hippo_001_wrap";
 import Alagin_wrap from "@/components/3d/alagin_wrap";
 import Table_wrap from "@/components/3d/table_wrap";
@@ -35,7 +35,7 @@ import Sushi_ootoro_wrap from "@/components/3d/sushi_ootoro_wrap";
 import Sushi_tamago_wrap from "@/components/3d/sushi_tamago_wrap";
 import Sushi_ikura_wrap from "@/components/3d/sushi_ikura_wrap";
 
-import { AnimationImage } from "@/components/CustomImage";
+import { AnimationImage } from "@/components/ui/CustomImage";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {

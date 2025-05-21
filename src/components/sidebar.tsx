@@ -31,7 +31,7 @@ import { IoApps } from "react-icons/io5";
 
 import { useLanguage } from "../contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
-import { AnimationImage } from "./CustomImage";
+import { AnimationImage } from "./ui/CustomImage";
 
 function Sidebar({ isDrawer }: { isDrawer: boolean }) {
   const [currentPath, setCurrentPath] = useState("");

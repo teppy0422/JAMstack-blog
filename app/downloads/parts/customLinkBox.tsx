@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { isValidUrl } from "@/utils/urlValidator"; // URLのバリデーション関数をインポート
-import { useCustomToast } from "@/components/customToast";
+import { useCustomToast } from "@/components/ui/customToast";
 
 import {
   LinkBox,

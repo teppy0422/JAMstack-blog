@@ -12,7 +12,7 @@ import {
   ColorMode,
 } from "@chakra-ui/react";
 
-import { CustomModalCloseButton } from "../CustomModalCloseButton";
+import { CustomModalCloseButton } from "../ui/CustomModalCloseButton";
 
 interface CustomModalProps {
   isOpen: boolean;

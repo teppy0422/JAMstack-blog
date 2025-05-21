@@ -35,13 +35,13 @@ import { createClient } from "@supabase/supabase-js";
 import { useUserContext } from "@/contexts/useUserContext";
 import Content from "@/components/content";
 import CustomHead from "../head";
-import { AnimationImage } from "@/components/CustomImage";
+import { AnimationImage } from "@/components/ui/CustomImage";
 import FilteredImage from "./parts/PosterImage";
 // import HachisukaAnimation from "../../components/season/HachisukaAnimation";
 import {
   CustomSwitchButton,
   CustomSwitchMultiButton,
-} from "../../src/components/CustomSwitchButton";
+} from "../../src/components/ui/CustomSwitchButton";
 import { MyBarChart } from "./parts/nutrientGraph";
 import {
   CATEGORY_CONFIG,
@@ -1625,7 +1625,7 @@ export default function OrderPage() {
                   <Box
                     position="relative"
                     userSelect="none"
-                    fontFamily="kokuryu ,'Yuji Shuku'"
+                    fontFamily="kokuryu,'Yuji Shuku'"
                   >
                     {/* 中央のスクロールエリア */}
                     <Box

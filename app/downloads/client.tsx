@@ -34,9 +34,9 @@ import DownloadButton from "./parts/DownloadButton";
 import styles from "@/styles/home.module.scss";
 import { useUserContext } from "@/contexts/useUserContext";
 // import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
-import { AnimationImage } from "@/components/CustomImage";
+import { AnimationImage } from "@/components/ui/CustomImage";
 import CustomLinkBox from "./parts/customLinkBox";
-import CustomPopver from "@/components/popver";
+import CustomPopver from "@/components/ui/popver";
 import Sidebar from "@/components/sidebar";
 import { Global } from "@emotion/react";
 
@@ -44,7 +44,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import ResponsiveModal from "@/components/responsiveModal";
 
-import LatestUpdateDate from "@/components/LatestUpdateDate";
+import LatestUpdateDate from "./parts/LatestUpdateDate";
 
 export default function Ui() {
   const { colorMode } = useColorMode();

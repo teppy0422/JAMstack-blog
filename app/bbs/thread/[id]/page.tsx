@@ -86,9 +86,9 @@ import { useUserContext } from "@/contexts/useUserContext";
 
 import Content from "@/components/content";
 import SidebarBBS from "../../parts/bbsSidebar";
-import { useCustomToast } from "@/components/customToast";
+import { useCustomToast } from "@/components/ui/customToast";
 import { GetColor } from "@/components/CustomColor";
-import { AnimationImage } from "@/components/CustomImage";
+import { AnimationImage } from "@/components/ui/CustomImage";
 import IconWithDrawer from "./IconWithDrawer";
 
 import "@/styles/home.module.scss";
@@ -107,13 +107,13 @@ const seasonalAnimations = {
   // 他の季節のアニメーションをここに追加
 };
 import { Global } from "@emotion/react";
-import { CustomLoading } from "@/components/CustomText";
+import { CustomLoading } from "@/components/ui/CustomText";
 import { StatusDisplay } from "@/components/NowStatus";
 import { isatty } from "tty";
 import { useUnread } from "@/contexts/UnreadContext";
 import imageCompression from "browser-image-compression";
-import { CustomCloseButton } from "../../../../src/components/CustomCloseButton";
-import { CustomModalCloseButton } from "../../../../src/components/CustomModalCloseButton";
+import { CustomCloseButton } from "../../../../src/components/ui/CustomCloseButton";
+import { CustomModalCloseButton } from "../../../../src/components/ui/CustomModalCloseButton";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";

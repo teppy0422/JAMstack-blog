@@ -66,10 +66,13 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useUserContext } from "@/contexts/useUserContext";
 import getMessage from "@/utils/getMessage";
 import { getBoxShadow } from "@chakra-ui/react/dist/types/popper/utils";
-import { AnimationImage } from "@/components/CustomImage";
+import { AnimationImage } from "@/components/ui/CustomImage";
 
-import { CustomModalCloseButton } from "./CustomModalCloseButton";
-import { ProjectLists, getProjectOptionsColor } from "@/components/CustomBadge";
+import { CustomModalCloseButton } from "./ui/CustomModalCloseButton";
+import {
+  ProjectLists,
+  getProjectOptionsColor,
+} from "@/components/ui/CustomBadge";
 import CustomModal from "../../app/skillBlogs/components/customModal";
 
 const activityOptions = [

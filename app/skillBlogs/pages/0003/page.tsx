@@ -28,13 +28,13 @@ import {
 } from "@chakra-ui/react";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "@/components/customToast";
+import { useCustomToast } from "@/components/ui/customToast";
 import SectionBox from "../../components/SectionBox";
-import BasicDrawer from "@/components/BasicDrawer";
+import BasicDrawer from "@/components/ui/BasicDrawer";
 import Frame from "../../components/frame";
 import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import { CustomBadge } from "@/components/CustomBadge";
+import { CustomBadge } from "@/components/ui/CustomBadge";
 import ModalWork from "@/components/modalWork";
 import ImageCard from "../../components/imageCard";
 import Detail01 from "../../components/worksDetail/01";

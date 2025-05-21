@@ -30,10 +30,10 @@ import { LuPanelRightOpen } from "react-icons/lu";
 import { PiGithubLogoFill } from "react-icons/pi";
 
 import Content from "@/components/content";
-import { useCustomToast } from "@/components/customToast";
-import { AnimationImage } from "@/components/CustomImage";
+import { useCustomToast } from "@/components/ui/customToast";
+import { AnimationImage } from "@/components/ui/CustomImage";
 import SectionBox from "./components/SectionBox";
-import BasicDrawer from "@/components/BasicDrawer";
+import BasicDrawer from "@/components/ui/BasicDrawer";
 import Frame from "./components/frame";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./components/customBadge";
@@ -180,7 +180,6 @@ const SkillBlogTopPage: React.FC = () => {
 
           <Box
             w="100%"
-            h="300px"
             borderRadius={10}
             style={{
               backgroundImage:

@@ -57,8 +57,8 @@ import styles from "@/styles/home.module.scss";
 import React, { useEffect } from "react";
 import { WiDaySunny, WiCloudyGusts, WiRainMix } from "react-icons/wi";
 
-import { SunderText, ScrollText } from "./CustomText";
-import { AnimationImage } from "./CustomImage";
+import { SunderText, ScrollText } from "./ui/CustomText";
+import { AnimationImage } from "./ui/CustomImage";
 
 import Auth from "@/components/Auth";
 import { Global } from "@emotion/react";
@@ -66,9 +66,9 @@ import { Global } from "@emotion/react";
 import { useLanguage } from "../contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import Sidebar from "./sidebar";
-import { CustomAvatar } from "./CustomAvatar";
-import { CustomModalCloseButton } from "./CustomModalCloseButton";
-import { CustomSwitchColorModeButton } from "./CustomSwitchButton";
+import { CustomAvatar } from "./ui/CustomAvatar";
+import { CustomModalCloseButton } from "./ui/CustomModalCloseButton";
+import { CustomSwitchColorModeButton } from "./ui/CustomSwitchButton";
 
 import { useUserContext } from "@/contexts/useUserContext";
 

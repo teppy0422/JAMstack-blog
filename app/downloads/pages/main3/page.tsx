@@ -22,7 +22,7 @@ import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode 
 import styles from "@/styles/home.module.scss";
 
 import CustomLinkBox from "../../parts/customLinkBox";
-import CustomPopver from "@/components/popver";
+import CustomPopver from "@/components/ui/popver";
 import Sidebar from "@/components/sidebar"; // Sidebar コンポーネントをインポート
 
 import { useUserContext } from "@/contexts/useUserContext";

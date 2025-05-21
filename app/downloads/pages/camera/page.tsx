@@ -32,7 +32,7 @@ import { SjpIcon } from "@/components/icons";
 import styles from "@/styles/home.module.scss";
 
 import CustomLinkBox from "../../parts/customLinkBox";
-import CustomPopver from "@/components/popver";
+import CustomPopver from "@/components/ui/popver";
 import Sidebar from "@/components/sidebar";
 
 import { useUserContext } from "@/contexts/useUserContext";

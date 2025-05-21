@@ -63,7 +63,7 @@ const apps = [
   {
     title: "居酒屋注文システム(注文)",
     href: "/order",
-    description: "栄養バランス可視化。注文確定で受注側にデータ送信",
+    description: "栄養バランス表示。リアルタイム注文。",
     src: "/images/illust/obj/orderLogo.webp",
     rate: 4,
     limitTag: "使用",
@@ -71,8 +71,7 @@ const apps = [
   {
     title: "居酒屋注文システム(受注)",
     href: "/orderAdmin",
-    description:
-      "メニューの選択で、食材をToDoリストで確認。GPTを利用して約1分で新しいメニューを追加可能。",
+    description: "食材ToDoリストで買い物。レシピ登録/編集。栄養バランス表示。",
     src: "/images/illust/obj/orderLogo.webp",
     rate: 5,
     limitTag: "使用",

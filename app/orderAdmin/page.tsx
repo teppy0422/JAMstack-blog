@@ -1291,112 +1291,119 @@ export default function AdminPage() {
             注文一覧
           </Heading>
           <VStack spacing={1} align="stretch" mb={8}>
-            {orders.flatMap((order) => {
-              const orderUserData = getUserById(order.user_id);
-              return order.order_items.map((item) => (
-                <Box
-                  key={`${order.id}-${item.id}`}
-                  p={1}
-                  bg={colorMode === "light" ? "white" : "gray.700"}
-                  borderRadius="md"
-                >
-                  <VStack align="stretch" spacing={1}>
-                    <HStack spacing={2} justify="space-between">
-                      <Image
-                        src={item.menu_item.image_url}
-                        alt={item.menu_item.name}
-                        boxSize="50px"
-                        minW="50px"
-                        objectFit="cover"
-                        borderRadius="md"
-                        fallbackSrc="https://placehold.jp/150x150.png"
-                      />
-                      <Box textAlign="left" width="100%">
-                        <Text fontWeight="bold">{item.menu_item.name}</Text>
-                        <Text>{item.quantity}個</Text>
-                      </Box>
-                      <VStack align="flex-end" gap="1">
-                        <Button
-                          size="sm"
-                          colorScheme={
-                            item.status === "pending" ? "green" : "gray"
-                          }
-                          onClick={() => {
-                            if (userData?.user_company !== "開発") {
-                              toast({
-                                title: "エラー",
-                                description:
-                                  "この機能はサブスク契約者のみ使用できます",
-                                status: "error",
-                                duration: 3000,
-                                isClosable: true,
-                              });
-                              return;
+            {orders.length === 0 ||
+            orders.every((order) => order.order_items.length === 0) ? (
+              <Text color="gray.500" textAlign="center" py={2}>
+                現在、注文はありません。
+              </Text>
+            ) : (
+              orders.flatMap((order) => {
+                const orderUserData = getUserById(order.user_id);
+                return order.order_items.map((item) => (
+                  <Box
+                    key={`${order.id}-${item.id}`}
+                    p={1}
+                    bg={colorMode === "light" ? "white" : "gray.700"}
+                    borderRadius="md"
+                  >
+                    <VStack align="stretch" spacing={1}>
+                      <HStack spacing={2} justify="space-between">
+                        <Image
+                          src={item.menu_item.image_url}
+                          alt={item.menu_item.name}
+                          boxSize="50px"
+                          minW="50px"
+                          objectFit="cover"
+                          borderRadius="md"
+                          fallbackSrc="https://placehold.jp/150x150.png"
+                        />
+                        <Box textAlign="left" width="100%">
+                          <Text fontWeight="bold">{item.menu_item.name}</Text>
+                          <Text>{item.quantity}個</Text>
+                        </Box>
+                        <VStack align="flex-end" gap="1">
+                          <Button
+                            size="sm"
+                            colorScheme={
+                              item.status === "pending" ? "green" : "gray"
                             }
-                            setItemToComplete({
-                              id: item.id,
-                              menuItemId: item.menu_item_id,
-                            });
-                            onCompleteConfirmModalOpen();
-                          }}
-                          isDisabled={item.status === "completed"}
-                        >
-                          完了
-                        </Button>
-                        <Button
-                          size="sm"
-                          colorScheme="red"
-                          onClick={() =>
-                            handleDeleteOrderItem(order.id, item.id)
-                          }
-                        >
-                          削除
-                        </Button>
-                      </VStack>
-                    </HStack>
-                    <HStack>
-                      {/* <Text fontWeight="bold">注文ID: {order.id}</Text>
+                            onClick={() => {
+                              if (userData?.user_company !== "開発") {
+                                toast({
+                                  title: "エラー",
+                                  description:
+                                    "この機能はサブスク契約者のみ使用できます",
+                                  status: "error",
+                                  duration: 3000,
+                                  isClosable: true,
+                                });
+                                return;
+                              }
+                              setItemToComplete({
+                                id: item.id,
+                                menuItemId: item.menu_item_id,
+                              });
+                              onCompleteConfirmModalOpen();
+                            }}
+                            isDisabled={item.status === "completed"}
+                          >
+                            完了
+                          </Button>
+                          <Button
+                            size="sm"
+                            colorScheme="red"
+                            onClick={() =>
+                              handleDeleteOrderItem(order.id, item.id)
+                            }
+                          >
+                            削除
+                          </Button>
+                        </VStack>
+                      </HStack>
+                      <HStack>
+                        {/* <Text fontWeight="bold">注文ID: {order.id}</Text>
                         <Text fontWeight="bold">アイテムID: {item.id}</Text> */}
-                      <Text>
-                        {new Date(order.created_at).toLocaleString("ja-JP", {
-                          // month: "numeric",
-                          // day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          // second: "2-digit",
-                        })}
-                      </Text>
-                      <Avatar
-                        src={orderUserData?.picture_url || undefined}
-                        size="xs"
-                      />
-                      <Button
-                        size="xs"
-                        colorScheme="blue"
-                        variant="outline"
-                        onClick={() => {
-                          const menuItem = menuItems.find(
-                            (m) => m.id === item.menu_item_id
-                          );
-                          if (menuItem) {
-                            setSelectedRecipe(menuItem.recipe);
-                            onRecipeModalOpen();
+                        <Text>
+                          {new Date(order.created_at).toLocaleString("ja-JP", {
+                            // month: "numeric",
+                            // day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            // second: "2-digit",
+                          })}
+                        </Text>
+                        <Avatar
+                          src={orderUserData?.picture_url || undefined}
+                          size="xs"
+                        />
+                        <Button
+                          size="xs"
+                          colorScheme="blue"
+                          variant="outline"
+                          onClick={() => {
+                            const menuItem = menuItems.find(
+                              (m) => m.id === item.menu_item_id
+                            );
+                            if (menuItem) {
+                              setSelectedRecipe(menuItem.recipe);
+                              onRecipeModalOpen();
+                            }
+                          }}
+                          display={
+                            !menuItems.find((m) => m.id === item.menu_item_id)
+                              ?.recipe
+                              ? "none"
+                              : "inline-block"
                           }
-                        }}
-                        display={
-                          !menuItems.find((m) => m.id === item.menu_item_id)
-                            ?.recipe
-                            ? "none"
-                            : "inline-block"
-                        }
-                      >
-                        レシピ
-                      </Button>
-                    </HStack>
-                  </VStack>
-                </Box>
-              ));
-            })}
+                        >
+                          レシピ
+                        </Button>
+                      </HStack>
+                    </VStack>
+                  </Box>
+                ));
+              })
+            )}
           </VStack>
 
           <Heading size="md" mb={4}>

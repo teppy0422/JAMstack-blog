@@ -34,9 +34,9 @@ import { supabase } from "@/utils/supabase/client";
 import { UnreadProvider } from "@/contexts/UnreadContext";
 
 import SidebarBBS from "./parts/bbsSidebar";
-import { ScrollText } from "@/components/CustomText";
-import { ProjectLists, CategoryLists } from "@/components/CustomBadge";
-import { AnimationImage } from "@/components/CustomImage";
+import { ScrollText } from "@/components/ui/CustomText";
+import { ProjectLists, CategoryLists } from "@/components/ui/CustomBadge";
+import { AnimationImage } from "@/components/ui/CustomImage";
 import { StatusDisplay } from "@/components/NowStatus";
 
 import { useLanguage } from "@/contexts/LanguageContext";
