@@ -1138,7 +1138,7 @@ export default function OrderPage() {
                 ) : mode === 2 ? (
                   <Text>カフェぼん</Text>
                 ) : (
-                  <Text fontFamily="kokuryu">料亭ぼん</Text>
+                  <Text fontFamily="Kokuryu">料亭ぼん</Text>
                 )}
                 <CustomSwitchMultiButton
                   onClick={(idx) => handleChangeMode(idx)}
@@ -1625,7 +1625,7 @@ export default function OrderPage() {
                   <Box
                     position="relative"
                     userSelect="none"
-                    fontFamily="kokuryu,'Yuji Shuku'"
+                    fontFamily="Kokuryu,'Yuji Shuku'"
                   >
                     {/* 中央のスクロールエリア */}
                     <Box

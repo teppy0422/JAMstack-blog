@@ -240,7 +240,7 @@ export default function About() {
                 language,
               })}
               descriptionIN=""
-              linkHref="/download/Sjp/Sjp3.101.18_.zip"
+              linkHref="/download/sjp/Sjp3.101.18_.zip"
               inCharge="高知,王さん"
               isLatest={true}
               userName={currentUserName ?? ""}
@@ -261,7 +261,7 @@ export default function About() {
                 language,
               })}
               descriptionIN=""
-              linkHref="/download/Sjp/Sjp3.101.17_.zip"
+              linkHref="/download/sjp/Sjp3.101.17_.zip"
               inCharge="高知,王さん"
               isLatest={false}
               userName={currentUserName ?? ""}
