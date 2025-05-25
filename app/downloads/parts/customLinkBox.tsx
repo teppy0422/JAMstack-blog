@@ -30,6 +30,7 @@ import {
   ModalHeader,
   ModalBody,
   useColorMode,
+  Flex,
 } from "@chakra-ui/react";
 import {
   CheckCircleIcon,
@@ -224,15 +225,32 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
               )}
             </Box>
             <Heading size="md" my="1">
-              <LinkOverlay>{ver}</LinkOverlay>
+              <Flex justify="space-between" align="center">
+                <LinkOverlay>{ver}</LinkOverlay>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="flex-end"
+                >
+                  <Box as="span" fontSize="xs">
+                    {formattedDateTime}
+                  </Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    fontSize="xs"
+                    mt="1px"
+                  >
+                    <TimeIcon boxSize={3} mt="-0" fontWeight={600} />
+                    <Box as="span" fontWeight={600}>
+                      {props.humanHour}
+                    </Box>
+                  </Box>
+                </Box>
+              </Flex>
             </Heading>
             <Divider />
-            <TimeIcon boxSize={4} paddingRight={1} mt="-0.5" />
-            {formattedDateTime}
-            <Box as="span" fontSize="12px" fontWeight={600} px={1}>
-              {props.humanHour}
-            </Box>
-            <br />
+
             {inChargeList.map((inCharge, index) => (
               <Badge
                 key={index}

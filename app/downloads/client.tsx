@@ -1275,69 +1275,87 @@ export default function Ui() {
                 </Heading>
               </CardHeader>
               <Divider borderColor="gray.500" />
+
               <CardBody p={0}>
-                <Box position="relative" px={4} pl={8} py={2}>
-                  <Box
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    bottom={0}
-                    width="1.4rem"
-                    backgroundColor="transparent"
-                    borderRight="2px dotted"
-                    borderColor="gray.500"
+                <Box
+                  key="07"
+                  position="relative"
+                  px={2}
+                  pl={7}
+                  py={1}
+                  minH={"9em"}
+                  onMouseEnter={() => setHoveredId("07")}
+                >
+                  <DownloadButton
+                    path="./pages/yps"
+                    isHovered={hoverdId === "07"}
+                    backGroundColor="green"
+                    userName={currentUserName}
+                    borderBottomLeftRadius="5px"
                   />
-                  <Flex justifyContent="space-between" alignItems="center">
-                    <Heading size="sm">
-                      {getMessage({
-                        ja: "誘導ポイント設定一覧表",
-                        language,
-                      })}
-                    </Heading>
-                    <Flex justifyContent="flex-end" alignItems="center">
-                      <Text
-                        fontSize="xs"
-                        margin="auto"
-                        textAlign="right"
-                      ></Text>
+                  <Flex justifyContent="space-between" alignItems="flex-start">
+                    <Flex direction="column" alignItems="flex-start" flex={1}>
+                      <Heading size="sm">
+                        {getMessage({
+                          ja: "誘導ポイント設定一覧表",
+                          language,
+                        })}
+                      </Heading>
+                      <Flex justifyContent="flex-end" alignItems="center">
+                        <Badge
+                          variant="outline"
+                          colorScheme="gray"
+                          mr={2}
+                          opacity={0.8}
+                        >
+                          EXCEL2010
+                        </Badge>
+                        <Badge variant="solid" bg="green" mr={2} opacity={0.8}>
+                          2013
+                        </Badge>
+                        <Badge
+                          variant="outline"
+                          colorScheme="gray"
+                          mr={2}
+                          opacity={0.8}
+                        >
+                          365
+                        </Badge>
+                      </Flex>
+                      <Text pt="2" fontSize="sm">
+                        {getMessage({
+                          ja: "誘導ポイント設定一覧表(作業内容とインラインNo./忘れん棒番号/製品品番の使い分けを記した作業手順書)",
+                          us: "Induction point setting list (work procedure document describing the work and the use of inline No./forgotten bar number/product part number)",
+                          cn: "上岗点设置清单（附有工作描述的工作程序以及内联编号/遗忘的条形码/产品部件编号的使用）。",
+                          language,
+                        })}
+                        {getMessage({
+                          ja: "からYICの書き込み器にデータ転送を行います。作業効率化/入力ミス削減が図れます。",
+                          us: "The data is transferred from the YIC to the writer of the YIC. This improves work efficiency and reduces input errors.",
+                          cn: "数据从 YIC 传输到 YIC 写入器。提高工作效率/减少输入错误。",
+                          language,
+                        })}
+                      </Text>
                     </Flex>
+                    <Stack
+                      spacing={1}
+                      direction="column"
+                      alignItems="flex-start"
+                    >
+                      <Flex justifyContent="flex-end" width="100%">
+                        <Box fontSize="xs" textAlign="right">
+                          <LatestUpdateDate
+                            folderPath="./download/yps/"
+                            removeStrings={["Yps", ".zip", "_"]}
+                          />
+                        </Box>
+                      </Flex>
+                    </Stack>
                   </Flex>
-                  <Badge
-                    variant="solid"
-                    backgroundColor="green"
-                    mr={2}
-                    opacity={0.8}
-                  >
-                    EXCEL2010
-                  </Badge>
-                  <Badge
-                    variant="solid"
-                    backgroundColor="green"
-                    mr={2}
-                    opacity={0.8}
-                  >
-                    2013
-                  </Badge>
-                  <Badge variant="outline" colorScheme="gray" mr={2}>
-                    365
-                  </Badge>
-                  <Text pt="2" fontSize="sm">
-                    {getMessage({
-                      ja: "誘導ポイント設定一覧表(作業内容とインラインNo./忘れん棒番号/製品品番の使い分けを記した作業手順書)",
-                      us: "Induction point setting list (work procedure document describing the work and the use of inline No./forgotten bar number/product part number)",
-                      cn: "上岗点设置清单（附有工作描述的工作程序以及内联编号/遗忘的条形码/产品部件编号的使用）。",
-                      language,
-                    })}
-                    {getMessage({
-                      ja: "からYICの書き込み器にデータ転送を行います。作業効率化/入力ミス削減が図れます。",
-                      us: "The data is transferred from the YIC to the writer of the YIC. This improves work efficiency and reduces input errors.",
-                      cn: "数据从 YIC 传输到 YIC 写入器。提高工作效率/减少输入错误。",
-                      language,
-                    })}
-                  </Text>
                 </Box>
               </CardBody>
             </Card>
+
             <Card
               backgroundColor="transparent"
               border="1px solid"
