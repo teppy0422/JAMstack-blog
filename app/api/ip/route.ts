@@ -1,5 +1,5 @@
 // app/api/ip/route.ts
-
+// ip アドレスを取得するAPIエンドポイント
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

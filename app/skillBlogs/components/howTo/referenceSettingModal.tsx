@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { FaRegEdit } from "react-icons/fa";
 
-import { useLanguage } from "../../../src/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 
 //Kbdのスタイル
@@ -51,7 +51,7 @@ const referenceSettingModal: React.FC = () => {
         borderColor={color}
       >
         {getMessage({
-          ja: "エクセル参照設定の確認",
+          ja: "参照設定の確認",
           us: "Check Excel reference settings",
           cn: "检查 Excel 参考设置。",
           language,
@@ -63,7 +63,7 @@ const referenceSettingModal: React.FC = () => {
         <ModalContent>
           <ModalHeader>
             {getMessage({
-              ja: "エクセルの参照設定の確認方法",
+              ja: "参照設定の確認方法",
               us: "How to check reference settings in Excel",
               cn: "如何检查 Excel 中的引用设置",
               language,
@@ -114,7 +114,7 @@ const referenceSettingModal: React.FC = () => {
                   language,
                 })}
             </Text>
-            <Image src="/images/0010/unReference.png" w="90%" mt={2} />
+            <Image src="/images/howTo/unReference.webp" w="90%" mt={2} />
             <Text mt={2}>
               {getMessage({
                 ja: "参照不可がある場合は、参照不可を解除する操作が必要になります",

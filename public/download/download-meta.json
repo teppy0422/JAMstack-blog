@@ -19,20 +19,28 @@
     "latestFile": "MSCOMM32.OCX",
     "latestUpdated": "2007-11-29T09:06:24.000Z"
   },
+  "library/code39": {
+    "latestFile": "code39.zip",
+    "latestUpdated": "2025-05-25T23:58:44.394Z"
+  },
   "sjp": {
     "latestFile": "Sjp3.101.18_.zip",
     "latestUpdated": "2025-04-25T04:43:32.000Z"
   },
   "yps/verup": {
     "latestFile": "VerUp.zip",
-    "latestUpdated": "2025-05-25T05:36:07.239Z"
+    "latestUpdated": "2025-05-26T04:33:42.333Z"
   },
   "yps/yps": {
-    "latestFile": "Yps0.43_.zip",
-    "latestUpdated": "2025-05-24T14:15:52.000Z"
+    "latestFile": "Yps0.51_.zip",
+    "latestUpdated": "2025-05-26T04:31:52.000Z"
+  },
+  "yps": {
+    "latestFile": ".DS_Store",
+    "latestUpdated": "2025-05-26T13:46:47.445Z"
   },
   ".": {
     "latestFile": "download-meta.json",
-    "latestUpdated": "2025-05-25T12:03:26.985Z"
+    "latestUpdated": "2025-05-26T15:28:11.635Z"
   }
 }

@@ -86,6 +86,9 @@ export const theme = extendTheme({
       arduino: "#12999F",
       davinci: "#888888",
       inkscape: "#333333",
+      windows: "#0078D7",
+      mac: "#BFC1C2",
+      linux: "#F47E00",
     },
   },
 });

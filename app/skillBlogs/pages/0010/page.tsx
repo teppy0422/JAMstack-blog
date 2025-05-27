@@ -60,15 +60,17 @@ import UnderlinedTextWithDrawer from "../../components/UnderlinedTextWithDrawer"
 import ExternalLink from "../../components/ExternalLink";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import ImageSliderModal from "../../components/ImageSliderModal"; // モーダルコンポーネントをインポート
-import ReferenceSettingModal from "../../components/referenceSettingModal";
+import ReferenceSettingModal from "../../components/howTo/referenceSettingModal";
 import { useUserContext } from "@/contexts/useUserContext";
 import { supabase } from "@/utils/supabase/client";
 import { useReadCount } from "@/hooks/useReadCount";
-
+import { getIpAddress } from "@/lib/getIpAddress";
 import { BsFiletypeExe } from "react-icons/bs";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
+import DownloadButton from "@/components/ui/DownloadButton";
+import UnzipModal from "app/skillBlogs/components/howTo/UnzipModal";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
@@ -95,6 +97,8 @@ const BlogPage: React.FC = () => {
       setIsLanguageLoaded(true);
     }
   }, [language]);
+  const [ipAddress, setIpAddress] = useState("");
+
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
   const sections = useRef<{ id: string; title: string }[]>([]);
@@ -112,6 +116,14 @@ const BlogPage: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
 
   const showToast = useCustomToast();
+  useEffect(() => {
+    const fetchIpAddress = async () => {
+      const ip = await getIpAddress();
+      setIpAddress(ip);
+    };
+    fetchIpAddress();
+  }, []);
+
   //右リストの読み込みをlanguage取得後にする
   if (!isLanguageLoaded) {
     return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
@@ -174,7 +186,7 @@ const BlogPage: React.FC = () => {
               ja: "更新日",
               language,
             })}
-            :2024-11-30
+            :2025-05-26
           </Text>
         </Box>
         <SectionBox
@@ -202,12 +214,126 @@ const BlogPage: React.FC = () => {
                 language,
               })}
             </Text>
+            <br />
+            <Text>
+              <Link
+                href="/downloads/pages/yps"
+                isExternal
+                color="blue.500"
+                fontWeight="bold"
+              >
+                {getMessage({
+                  ja: "誘導ポイント設定一覧表のダウンロードページ",
+                  us: "Download page for induction point setting list",
+                  cn: "感应点设置列表下载页面",
+                  language,
+                })}
+              </Link>
+            </Text>
           </Box>
         </SectionBox>
         <SectionBox
           id="section2"
           title={
             "2." +
+            getMessage({
+              ja: "本体のダウンロード",
+              us: "Download the main unit",
+              cn: "下载主机",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text fontWeight="bold">
+            {getMessage({
+              ja: "下記のクリックで最新バージョンがダウンロードされます",
+              us: "If it does not work correctly, do ",
+              cn: "如果不能正常工作，请执行 ",
+              language,
+            })}
+          </Text>
+          <Box
+            mt={2}
+            w="5.5em"
+            height="24px"
+            border="1px solid"
+            borderRadius="md"
+            borderColor={
+              colorMode === "light"
+                ? "custom.theme.light.800"
+                : "custom.theme.dark.100"
+            }
+            lineHeight="1"
+            fontSize="inherit"
+          >
+            <DownloadButton
+              currentUserName="a"
+              url="/download/yps/yps"
+              bg="custom.excel"
+              color={colorMode === "light" ? "custom.theme.light.900" : "white"}
+            />
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section3"
+          title={
+            "3." +
+            getMessage({
+              ja: "ファイルの展開(解凍)",
+              us: "File decompression (unzip)",
+              cn: "提取（解压）文件",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text fontWeight="bold">
+            {getMessage({
+              ja: "ダウンロードした.zipファイルを",
+              us: "",
+              cn: "",
+              language,
+            })}
+            <UnzipModal />
+            {getMessage({
+              ja: "をしてください。",
+              us: ".",
+              cn: "。",
+              language,
+            })}
+          </Text>
+
+          <Text mt={6}>
+            {getMessage({
+              ja: "この解凍したファイルを利用する場所(通常はNASサーバー)に設置してください。",
+              us: "",
+              cn: "",
+              language,
+            })}
+            <br />
+            {getMessage({
+              ja: "ファイル名を変更する場合は、先頭のYps*.**_は変更しないでください。バージョンアップ/アップロードができなくなります。",
+              us: "",
+              cn: "",
+              language,
+            })}
+          </Text>
+        </SectionBox>
+        <SectionBox
+          id="section4"
+          title={
+            "4." +
             getMessage({
               ja: "参照設定の確認",
               us: "Check reference settings",
@@ -224,7 +350,7 @@ const BlogPage: React.FC = () => {
           />
           <Text fontWeight="bold">
             {getMessage({
-              ja: "正しく動作しない場合は",
+              ja: "ファイルを開いて",
               us: "If it does not work correctly, do ",
               cn: "如果不能正常工作，请执行 ",
               language,
@@ -240,50 +366,28 @@ const BlogPage: React.FC = () => {
 
           <Text mt={6}>
             {getMessage({
-              ja: "WindowsのOSによっては参照不可が発生すると思います。",
-              us: "I believe that depending on the Windows operating system, the reference will not be available.",
-              cn: "根据 Windows 操作系统的不同，将无法进行引用。",
-              language,
-            })}
-            <br />
-            {getMessage({
-              ja: "例えばWindows7で利用する場合は、制御器にデータ送信を行うためにMicroSoft社のMsComm32.ocxが参照不可になったと思います。",
-              us: "For example, when using Windows 7, I believe MicroSoft's MsComm32.ocx is now unreferenced in order to send data to the controller.",
-              cn: "例如，在使用 Windows 7 时, MicroSoft 的 MsComm32.ocx 将无法向控制器发送数据。",
-              language,
-            })}
-            <br />
-            {getMessage({
-              ja: "スクリーンショットが撮れないのではっきりしません。",
-              us: "I can't take a screenshot so it's not clear.",
-              cn: "由于无法截图，所以不清楚。",
-              language,
-            })}
-            <br />
-            {getMessage({
-              ja: "参照不可になってる場合はその画面を「問い合わせ」チャットから送ってください。",
+              ja: "参照不可がある場合はその画面を「問い合わせ」から連絡をください。",
               us: 'If it is unreferenced, please send us the screen from the "Contact" chat.',
               cn: '如果屏幕没有参考资料，请通过 "联系" 聊天将其发送给我们。',
               language,
             })}
             <br />
-
             {getMessage({
-              ja: "その場合の対応方法をここに追記します。",
-              us: "We will add here how to handle such cases.",
-              cn: "这里补充了如何处理这种情况。",
+              ja: "誘導ポイント設定一覧表では標準ライブラリしか使ってないので通常は参照不可は無いはずです。",
+              us: "The induction point setting list uses only the standard library, so the unreferenced should not occur.",
+              cn: "感应点设置列表只使用标准库，因此不应出现不引用的情况。",
               language,
             })}
           </Text>
         </SectionBox>
         <SectionBox
-          id="section3"
+          id="section5"
           title={
-            "3." +
+            "5." +
             getMessage({
-              ja: "シリアルポートの準備",
-              us: "Serial port preparation",
-              cn: "准备串行端口",
+              ja: "設定",
+              us: "",
+              cn: "",
               language,
             })
           }
@@ -294,51 +398,19 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text fontWeight="bold">
-            {getMessage({
-              ja: "シリアルポートの準備を以下で行います。",
-              us: "Prepare the serial port as follows",
-              cn: "按如下步骤准备串行端口",
-              language,
-            })}
+          <Text mt={2}>
+            使用する為の設定を行います。これは初回だけで以降は必要ありません。
           </Text>
-        </SectionBox>
-        <Text mt={6} mx="auto">
-          {getMessage({
-            ja: "作成途中",
-            language,
-          })}
-        </Text>
-        <SectionBox
-          id="section4"
-          title={
-            "4." +
-            getMessage({
-              ja: "データ入力",
-              us: "data entry",
-              cn: "数据输入",
-              language,
-            })
-          }
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <Text fontWeight="bold"></Text>
-          <Text mt={6}></Text>
         </SectionBox>
         <Box ml={2}>
           <SectionBox
-            id="section4_1"
+            id="section5_1"
             title={
-              "4-1." +
+              "5-1." +
               getMessage({
-                ja: "列の指定",
-                us: "Specify columns",
-                cn: "栏目名称",
+                ja: "サーバーの設定",
+                us: "",
+                cn: "",
                 language,
               })
             }
@@ -348,16 +420,17 @@ const BlogPage: React.FC = () => {
             mt="0"
           >
             <Divider
-              mt={2}
+              my={2}
               borderColor={colorMode === "light" ? "black" : "white"}
             />
             <Text fontWeight="bold">
               {getMessage({
-                ja: "下記の3項目を以下のルールで配置してください。それ以外は自由に編集が可能です。",
-                us: "Please place the following three items according to the following rules. The rest can be freely edited.",
-                cn: "以下三项应按以下规则放置。其余可自由编辑。",
+                ja: "バージョンアップ/アップロード用のサーバーを設定します。",
+                us: "",
+                cn: "",
                 language,
               })}
+              {ipAddress}
             </Text>
             <Image src="/images/0010/0001.png" w="100%" mb={6} />
             <Text>
@@ -397,9 +470,9 @@ const BlogPage: React.FC = () => {
             </Text>
           </SectionBox>
           <SectionBox
-            id="section4_2"
+            id="section5_2"
             title={
-              "4-2." +
+              "5-2." +
               getMessage({
                 ja: "値の入力",
                 us: "Enter a value",
@@ -469,9 +542,168 @@ const BlogPage: React.FC = () => {
           </SectionBox>
         </Box>
         <SectionBox
-          id="section5"
+          id="section6"
           title={
-            "5." +
+            "6." +
+            getMessage({
+              ja: "データ入力",
+              us: "data entry",
+              cn: "数据输入",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text fontWeight="bold"></Text>
+          <Text mt={6}></Text>
+        </SectionBox>
+        <Box ml={2}>
+          <SectionBox
+            id="section6_1"
+            title={
+              "6-1." +
+              getMessage({
+                ja: "列の指定",
+                us: "Specify columns",
+                cn: "栏目名称",
+                language,
+              })
+            }
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+            mt="0"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text fontWeight="bold">
+              {getMessage({
+                ja: "下記の3項目を以下のルールで配置してください。それ以外は自由に編集が可能です。",
+                us: "Please place the following three items according to the following rules. The rest can be freely edited.",
+                cn: "以下三项应按以下规则放置。其余可自由编辑。",
+                language,
+              })}
+            </Text>
+            <Image src="/images/0010/0001.png" w="100%" mb={6} />
+            <Text>
+              {"1.ｲﾝﾗｲﾝ = " +
+                getMessage({
+                  ja: "作業に対応するLED番号を入力する列を指定",
+                  us: "Specify the column to enter the LED number corresponding to the work",
+                  cn: "指定在哪一列输入与任务相对应的 LED 编号",
+                  language,
+                })}
+            </Text>
+            <Text>
+              {"2.start_ = " +
+                getMessage({
+                  ja: "製品品番の左端の列を指定",
+                  us: "Specify the left-most column of the product part number",
+                  cn: "指定产品部件编号的最左一列",
+                  language,
+                })}
+            </Text>
+            <Text>
+              {"3.end_ = " +
+                getMessage({
+                  ja: "製品品番の右端の列を指定",
+                  us: "Specify the rightmost column of the product part number",
+                  cn: "指定产品部件号最右边一列",
+                  language,
+                })}
+            </Text>
+            <Text mt={2}>
+              {getMessage({
+                ja: "※実際には原紙を使うと思うので編集時に以上のルールを守るだけになると思います",
+                us: "*I think I'll actually use the original paper, so I'll just follow the above rules when editing.",
+                cn: "*我认为我们实际上会使用原稿，所以我们在编辑时只需遵循上述规则即可。",
+                language,
+              })}
+            </Text>
+          </SectionBox>
+          <SectionBox
+            id="section6_2"
+            title={
+              "6-2." +
+              getMessage({
+                ja: "値の入力",
+                us: "Enter a value",
+                cn: "输入数值",
+                language,
+              })
+            }
+            sectionRefs={sectionRefs}
+            sections={sections}
+            size="sm"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text fontWeight="bold">
+              {getMessage({
+                ja: "入力ルールは以下のようになります。",
+                us: "The input rules are as follows",
+                cn: "输入规则如下",
+                language,
+              })}
+              <br />
+              {getMessage({
+                ja: "入力箇所のセル結合はしないてください。結合範囲のセルは左上しか認識できないので不具合の原因になります。",
+                us: "Do not merge cells in the input area. The cells in the merged range can only be recognized in the upper left corner, which can cause problems.",
+                cn: "不要合并输入区域中的单元格。合并范围内的单元格只能在左上角识别，这可能会造成问题。",
+                language,
+              })}
+            </Text>
+            <Image src="/images/0010/0002.png" w="100%" mb={6} />
+            <Text>
+              {"4." +
+                getMessage({
+                  ja: "ｲﾝﾗｲﾝ番号の入力 = 作業に対し光らせたいLED番号の入力",
+                  us: "Enter inline number = enter the LED number you want to light up for your work",
+                  cn: "输入内联编号 = 输入任务要点亮的 LED 编号。",
+                  language,
+                })}
+              <br />
+              {"4." +
+                getMessage({
+                  ja: "ｲﾝﾗｲﾝ色 = 複数のYICで作業をする場合は背景色を変える事で背景色毎の出力が可能",
+                  us: "Inline color = If you are working with multiple YICs, you can change the background color to output each background color.",
+                  cn: "内联颜色 = 使用多个 YIC 时，可更改背景颜色，以允许输出每种背景颜色。",
+                  language,
+                })}
+            </Text>
+            <Text>
+              {"5." +
+                getMessage({
+                  ja: "YICの呼び出し番号 = 空欄の場合は出力しない",
+                  us: "YIC call number = if blank, no output",
+                  cn: "YIC 呼叫编号 = 空白时无输出",
+                  language,
+                })}
+            </Text>
+            <Text>
+              {"6." +
+                getMessage({
+                  ja: "作業の有無 = 空欄の場合はLEDが光らない",
+                  us: "Work = If left blank, LED will not light up",
+                  cn: "工作 = 如果留空, LED 不亮。",
+                  language,
+                })}
+            </Text>
+          </SectionBox>
+        </Box>
+        <SectionBox
+          id="section7"
+          title={
+            "7." +
             getMessage({
               ja: "YICへの出力",
               us: "Output to YIC",
@@ -577,9 +809,9 @@ const BlogPage: React.FC = () => {
           </Text>
         </SectionBox>
         <SectionBox
-          id="section6"
+          id="section7"
           title={
-            "6." +
+            "7." +
             getMessage({
               ja: "まとめ",
               language,

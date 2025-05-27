@@ -87,6 +87,7 @@ import { useUserContext } from "@/contexts/useUserContext";
 import Content from "@/components/content";
 import SidebarBBS from "../../parts/bbsSidebar";
 import { useCustomToast } from "@/components/ui/customToast";
+import { getIpAddress } from "@/lib/getIpAddress";
 import { GetColor } from "@/components/CustomColor";
 import { AnimationImage } from "@/components/ui/CustomImage";
 import IconWithDrawer from "./IconWithDrawer";
@@ -562,9 +563,8 @@ function ThreadContent(): JSX.Element {
 
   useEffect(() => {
     const fetchIpAddress = async () => {
-      const ipResponse = await fetch("/api/ip");
-      const ipData = await ipResponse.json();
-      setIpAddress(ipData.ip);
+      const ip = await getIpAddress();
+      setIpAddress(ip);
     };
     const fetchThreadTitle = async () => {
       setIsLoading(true); // ローディング開始

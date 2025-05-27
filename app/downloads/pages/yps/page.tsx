@@ -34,6 +34,11 @@ import {
   List,
   ListItem,
   ListIcon,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import { FocusableElement } from "@chakra-ui/utils"; // FocusableElement をインポート
 import { SiSemanticuireact } from "react-icons/si";
@@ -52,7 +57,9 @@ import { useUserContext } from "@/contexts/useUserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import LatestUpdateDate from "../../parts/LatestUpdateDate";
+import { ChangelogAccordion } from "../../parts/ChangelogAccordion";
 
+import DownloadButton from "@/components/ui/DownloadButton";
 function formatDateTime(input: string): string {
   const date = new Date(input);
 
@@ -204,22 +211,6 @@ export default function Page() {
               })}
               <br />
               {getMessage({
-                ja: "通常は最新版",
-                us: "Usually select the latest version ",
-                cn: "通常选择最新版本 ",
-                language,
-              })}
-              <Badge colorScheme="teal" margin={1}>
-                LATEST
-              </Badge>
-              {getMessage({
-                ja: "を選択します",
-                us: ".",
-                cn: "。",
-                language,
-              })}
-              <br />
-              {getMessage({
                 ja: "最新版には以前の更新が全て含まれています",
                 us: "The latest version includes all previous updates",
                 cn: "最新版本包括之前的所有更新",
@@ -251,15 +242,17 @@ export default function Page() {
             mx={{ base: 2, md: 20, lg: 40, xl: 50 }}
           >
             <Card
-              maxW="xl"
+              maxW="2xl"
+              w="100%"
               mt="10px"
               mx="auto"
               bg="transparent"
               border="1px solid"
               borderColor="gray.500"
+              overflow="hidden"
             >
               <CardBody p="2">
-                <Stack mt="0" spacing="2">
+                <Stack mt="0" spacing="1">
                   <Box>
                     <Heading size="md">
                       <Flex justify="space-between" align="center">
@@ -271,7 +264,6 @@ export default function Page() {
                           />
                         </Box>
                       </Flex>
-                      <Divider borderColor="gray.500" />
                     </Heading>
                     <Badge bg="custom.excel" color="white" marginRight={2}>
                       Excel 2010
@@ -279,6 +271,7 @@ export default function Page() {
                     <Badge bg="custom.excel" color="white" marginRight={2}>
                       Excel 2013
                     </Badge>
+                    <Divider borderColor="gray.500" my={2} />
                   </Box>
                   <List spacing={1} styleType="disc" pl={3}>
                     <ListItem>
@@ -288,50 +281,43 @@ export default function Page() {
                     <ListItem>複数のYICを使った生産に対応(4台まで)</ListItem>
                     <ListItem>従来の設定一覧表を作成可能</ListItem>
                   </List>
+                  <ChangelogAccordion
+                    changelog={[
+                      {
+                        version: "1.00",
+                        date: "2025/05/26",
+                        description: "リリース",
+                      },
+                    ]}
+                  />
                 </Stack>
               </CardBody>
               <Divider />
-              <Button
-                as="a"
-                w="100%"
-                h="100%"
-                borderRadius="0"
-                colorScheme="teal"
-                href="/download/yps/yps/Yps0.43_.zip"
-                marginLeft="auto"
-                bg={colorMode === "light" ? "teal.500" : "gray.500"} // isLatestがtrueじゃない場合は灰色
-                _hover={{
-                  bg: colorMode === "light" ? "teal.600" : "gray.600", // マウスオーバー時の背景色
-                }}
-                onClick={(e) => {
-                  if (!currentUserName) {
-                    e.preventDefault(); // デフォルトのリンク動作を防ぐ
-                    toast({
-                      title: "ダウンロードできません",
-                      description:
-                        "ダウンロードするにはログインと開発による認証が必要です",
-                      status: "error",
-                    });
-                  }
-                }}
-              >
-                Download
-              </Button>
+              <DownloadButton
+                currentUserName={currentUserName}
+                url="/download/yps/yps/Yps0.51_.zip"
+                bg={"custom.excel"}
+                color={
+                  colorMode === "light" ? "custom.theme.light.900" : "white"
+                }
+              />
             </Card>
             <Box h="20px" w="1px" bg="gray.500" ml="50%" />
             <Card
-              w="lg"
+              maxW="xl"
+              w="100%"
               mx="auto"
               bg="transparent"
               border="1px solid"
               borderColor="gray.500"
+              overflow="hidden"
             >
               <CardBody p="2">
-                <Stack mt="0" spacing="2">
+                <Stack mt="0" spacing="1">
                   <Box>
                     <Heading size="md">
                       <Flex justify="space-between" align="center">
-                        <Box>VerUp</Box>
+                        <Box>バージョンアップ</Box>
                         <Box fontSize="xs" textAlign="right">
                           <LatestUpdateDate
                             folderPath="./download/yps/verup/"
@@ -339,7 +325,6 @@ export default function Page() {
                           />
                         </Box>
                       </Flex>
-                      <Divider borderColor="gray.500" />
                     </Heading>
                     <Badge bg="custom.excel" color="white" marginRight={2}>
                       Excel 2010
@@ -347,6 +332,7 @@ export default function Page() {
                     <Badge bg="custom.excel" color="white" marginRight={2}>
                       Excel 2013
                     </Badge>
+                    <Divider borderColor="gray.500" my={2} />
                   </Box>
                   <List spacing={1} styleType="disc" pl={3}>
                     <ListItem>
@@ -354,46 +340,91 @@ export default function Page() {
                     </ListItem>
                     <ListItem>設置場所はサーバーのルートパス</ListItem>
                   </List>
+                  <ChangelogAccordion
+                    changelog={[
+                      {
+                        version: "1.00",
+                        date: "2025/05/26",
+                        description: "リリース",
+                      },
+                    ]}
+                  />
                 </Stack>
               </CardBody>
               <Divider />
-              <Button
-                as="a"
-                w="100%"
-                h="100%"
-                borderRadius="0"
-                colorScheme="teal"
-                href="/download/yps/verup/VerUp.zip"
-                marginLeft="auto"
-                bg={colorMode === "light" ? "teal.500" : "gray.500"} // isLatestがtrueじゃない場合は灰色
-                _hover={{
-                  bg: colorMode === "light" ? "teal.600" : "gray.600", // マウスオーバー時の背景色
-                }}
-                onClick={(e) => {
-                  if (!currentUserName) {
-                    e.preventDefault(); // デフォルトのリンク動作を防ぐ
-                    toast({
-                      title: "ダウンロードできません",
-                      description:
-                        "ダウンロードするにはログインと開発による認証が必要です",
-                      status: "error",
-                    });
-                  }
-                }}
-              >
-                Download
-              </Button>
+              <DownloadButton
+                currentUserName={currentUserName}
+                url="/download/yps/verup/"
+                bg="custom.excel"
+                color={
+                  colorMode === "light" ? "custom.theme.light.900" : "white"
+                }
+              />
             </Card>
-            <Box h="20px" w="1px" bg="gray.500" ml="50%" />
+            <Box h="20px" w="1px" bg="gray.500" ml="50%" />{" "}
             <Card
-              w="md"
+              maxW="lg"
+              w="100%"
               mx="auto"
               bg="transparent"
               border="1px solid"
               borderColor="gray.500"
+              overflow="hidden"
             >
               <CardBody p="2">
-                <Stack mt="0" spacing="2">
+                <Stack mt="0" spacing="1">
+                  <Box>
+                    <Heading size="md">
+                      <Flex justify="space-between" align="center">
+                        <Box>バーコードフォント</Box>
+                        <Box fontSize="xs" textAlign="right">
+                          <LatestUpdateDate
+                            folderPath="./download/library/code39/"
+                            removeStrings={[]}
+                          />
+                        </Box>
+                      </Flex>
+                    </Heading>
+                    <Badge bg="custom.windows" color="white" marginRight={2}>
+                      Windows
+                    </Badge>
+                    <Badge bg="custom.mac" color="white" marginRight={2}>
+                      Mac
+                    </Badge>
+                    <Badge bg="custom.linux" color="white" marginRight={2}>
+                      Linux
+                    </Badge>
+                    <Divider borderColor="gray.500" my={2} />
+                  </Box>
+                  <List spacing={1} styleType="disc" pl={3}>
+                    <ListItem>
+                      YICから呼び出すバーコードを設定一覧表に表示するために使用
+                    </ListItem>
+                  </List>
+                </Stack>
+              </CardBody>
+              <Divider />
+              <DownloadButton
+                currentUserName={currentUserName}
+                url="/download/library/code39"
+                bg="custom.windows"
+                color={
+                  colorMode === "light" ? "custom.theme.light.900" : "white"
+                }
+              />
+            </Card>
+            <Box h="20px" w="1px" bg="gray.500" ml="50%" />
+            <Card
+              maxW="lg"
+              w="100%"
+              mx="auto"
+              bg="transparent"
+              border="1px solid"
+              borderColor="gray.500"
+              overflow="hidden"
+            >
+              <CardBody p="2">
+                <Stack mt="0" spacing="1">
                   <Box>
                     <Heading size="md">
                       <Flex justify="space-between" align="center">
@@ -405,11 +436,11 @@ export default function Page() {
                           />
                         </Box>
                       </Flex>
-                      <Divider borderColor="gray.500" />
                     </Heading>
-                    <Badge bg="gray.600" color="white" marginRight={2}>
-                      Windows
+                    <Badge bg="custom.windows" color="white" marginRight={2}>
+                      Windows+VB6
                     </Badge>
+                    <Divider borderColor="gray.500" my={2} />
                   </Box>
                   <List spacing={1} styleType="disc" pl={3}>
                     <ListItem>
@@ -418,33 +449,15 @@ export default function Page() {
                   </List>
                 </Stack>
               </CardBody>
-              <Divider />
-              <Button
-                as="a"
-                w="100%"
-                h="100%"
-                borderRadius="0"
-                colorScheme="teal"
-                href="/download/library/MSCOMM32/MSCOMM32.OCX"
-                marginLeft="auto"
-                bg={colorMode === "light" ? "teal.500" : "gray.500"} // isLatestがtrueじゃない場合は灰色
-                _hover={{
-                  bg: colorMode === "light" ? "teal.600" : "gray.600", // マウスオーバー時の背景色
-                }}
-                onClick={(e) => {
-                  if (!currentUserName) {
-                    e.preventDefault(); // デフォルトのリンク動作を防ぐ
-                    toast({
-                      title: "ダウンロードできません",
-                      description:
-                        "ダウンロードするにはログインと開発による認証が必要です",
-                      status: "error",
-                    });
-                  }
-                }}
-              >
-                Download
-              </Button>
+              <Divider m="0" p="0" />
+              <DownloadButton
+                currentUserName={currentUserName}
+                url="/download/library/MSCOMM32"
+                bg="custom.windows"
+                color={
+                  colorMode === "light" ? "custom.theme.light.900" : "white"
+                }
+              />
             </Card>
           </SimpleGrid>
         </div>
