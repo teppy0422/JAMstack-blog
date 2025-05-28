@@ -825,7 +825,7 @@ const BlogPage: React.FC = () => {
   };
   //右リストの読み込みをlanguage取得後にする
   if (!isLanguageLoaded) {
-    return <div>Loading...あああ</div>; // 言語がロードされるまでのプレースホルダー
+    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
   }
   return (
     <>

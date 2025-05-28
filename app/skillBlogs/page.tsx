@@ -43,6 +43,7 @@ import { useReadCount } from "@/hooks/useReadCount";
 import { useLanguage } from "../../src/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import { createIcon } from "@chakra-ui/react";
+import { CustomLoading } from "@/components/ui/CustomLoading";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
@@ -89,7 +90,24 @@ const SkillBlogTopPage: React.FC = () => {
   }, [language]);
 
   if (!isLanguageLoaded) {
-    return <div>Loadingあああ...</div>;
+    return (
+      <Box
+        h="30vh"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <CustomLoading
+          text="LOADING LOADING LOADING "
+          radius={40}
+          fontSize={11}
+          imageUrl="/images/illust/hippo/hippo_014.svg"
+          imageSize={40}
+          color="#FFF"
+        />
+      </Box>
+    );
   }
 
   return (

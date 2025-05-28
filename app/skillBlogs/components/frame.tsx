@@ -634,7 +634,7 @@ const Frame: React.FC<{
                       {createLinkPanel(
                         "/skillBlogs/pages/0012/",
                         getMessage({
-                          ja: "WEBサイト/アプリ",
+                          ja: "WEBサイト/WEBアプリ",
                           us: "Website/Application",
                           cn: "网站/应用程序",
                           language,

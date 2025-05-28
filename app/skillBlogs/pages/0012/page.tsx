@@ -367,6 +367,21 @@ const BlogPage: React.FC = () => {
                 })}
               />
             </ListItem>
+            <ListItem>
+              <FaviconLinkItem
+                href="https://fontawesome.com/"
+                mainText={getMessage({
+                  ja: "Font Awesome",
+                  language,
+                })}
+                subText={getMessage({
+                  ja: "フォントのように使えるアイコン集。デザインパターンは豊富。通常のアイコンと使い方が違うから注意。",
+                  us: "Google Fonts. Many types are available for PC and web.",
+                  cn: "谷歌字体。可用于个人电脑和网络，种类繁多。",
+                  language,
+                })}
+              />
+            </ListItem>
           </List>
         </SectionBox>
         <SectionBox
@@ -441,6 +456,36 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <List spacing={1} mb={6} styleType="decimal" pl={5}>
+            <ListItem>
+              <FaviconLinkItem
+                href="https://nextjs.org/"
+                mainText={getMessage({
+                  ja: "Next.js",
+                  language,
+                })}
+                subText={getMessage({
+                  ja: "Reactをもっと便利にしてくれるツールの詰め合わせ。",
+                  us: "An assortment of tools to make React more useful.",
+                  cn: "让 React 更有用的各种工具。",
+                  language,
+                })}
+              />
+            </ListItem>
+            <ListItem>
+              <FaviconLinkItem
+                href="https://chakra-ui.com/"
+                mainText={getMessage({
+                  ja: "Chakra",
+                  language,
+                })}
+                subText={getMessage({
+                  ja: "Next.jsなどで使える コンポーネントライブラリ のひとつです。",
+                  us: "It is one of the component libraries that can be used with Next.js and others.",
+                  cn: "例如，它是可与 Next.js 一起使用的组件库之一。",
+                  language,
+                })}
+              />
+            </ListItem>
             <ListItem>
               <FaviconLinkItem
                 href="https://supabase.com/"
