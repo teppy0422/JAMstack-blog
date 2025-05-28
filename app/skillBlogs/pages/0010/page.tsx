@@ -11,6 +11,7 @@ import {
   Link,
   List,
   ListItem,
+  ListIcon,
   Divider,
   ChakraProvider,
   extendTheme,
@@ -33,6 +34,7 @@ import {
   Icon,
   createIcon,
   Spacer,
+  Center,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import {
@@ -71,6 +73,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import DownloadButton from "@/components/ui/DownloadButton";
 import UnzipModal from "app/skillBlogs/components/howTo/UnzipModal";
+import FontInstallModal from "app/skillBlogs/components/howTo/FontInstall";
+import { getLocalIp } from "../../components/getLocalIp";
+import { Key } from "@/components/ui/Key";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
@@ -87,7 +92,16 @@ const CustomIcon = createIcon({
   ),
 });
 const BlogPage: React.FC = () => {
-  const { currentUserId } = useUserContext();
+  const {
+    currentUserId,
+    currentUserName,
+    currentUserMainCompany,
+    currentUserCompany,
+    currentUserCreatedAt,
+    getUserById,
+    isLoading: isLoadingContext,
+  } = useUserContext();
+
   const { readByCount } = useReadCount(currentUserId);
   const { language, setLanguage } = useLanguage();
   //右リストの読み込みをlanguage取得後にする
@@ -97,7 +111,6 @@ const BlogPage: React.FC = () => {
       setIsLanguageLoaded(true);
     }
   }, [language]);
-  const [ipAddress, setIpAddress] = useState("");
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const sectionRefs = useRef<HTMLElement[]>([]);
@@ -116,18 +129,19 @@ const BlogPage: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
 
   const showToast = useCustomToast();
-  useEffect(() => {
-    const fetchIpAddress = async () => {
-      const ip = await getIpAddress();
-      setIpAddress(ip);
-    };
-    fetchIpAddress();
-  }, []);
+  // 点滅アニメーションを定義
+  const blink = keyframes`
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  `;
 
+  const blinkAnimation = `${blink} 0.8s infinite`;
   //右リストの読み込みをlanguage取得後にする
   if (!isLanguageLoaded) {
     return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
   }
+
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs}>
@@ -186,7 +200,7 @@ const BlogPage: React.FC = () => {
               ja: "更新日",
               language,
             })}
-            :2025-05-26
+            :2025-05-28
           </Text>
         </Box>
         <SectionBox
@@ -423,50 +437,73 @@ const BlogPage: React.FC = () => {
               my={2}
               borderColor={colorMode === "light" ? "black" : "white"}
             />
-            <Text fontWeight="bold">
+            <Text fontWeight="bold" mb={6}>
               {getMessage({
                 ja: "バージョンアップ/アップロード用のサーバーを設定します。",
                 us: "",
                 cn: "",
                 language,
               })}
-              {ipAddress}
             </Text>
-            <Image src="/images/0010/0001.png" w="100%" mb={6} />
-            <Text>
-              {"1.ｲﾝﾗｲﾝ = " +
-                getMessage({
-                  ja: "作業に対応するLED番号を入力する列を指定",
-                  us: "Specify the column to enter the LED number corresponding to the work",
-                  cn: "指定在哪一列输入与任务相对应的 LED 编号",
-                  language,
-                })}
+            <Text>1.VerUpに使用する場所のアドレスをコピーする。</Text>
+            <Text ml={4}>
+              フォルダを表示して使用場所まで移動。アドレスバー内の右空きスペースをクリックします。
             </Text>
-            <Text>
-              {"2.start_ = " +
-                getMessage({
-                  ja: "製品品番の左端の列を指定",
-                  us: "Specify the left-most column of the product part number",
-                  cn: "指定产品部件编号的最左一列",
-                  language,
-                })}
+            <Box w="100%" mb={6}>
+              <Box position="relative">
+                <Image src="/images/0010/folder-selectPath.webp" w="100%" />
+                <Box
+                  position="absolute"
+                  top="27%"
+                  left="92%"
+                  w="8%"
+                  h="25%"
+                  bg="transparent"
+                  borderRadius="10px"
+                  border="2px solid red"
+                />
+              </Box>
+              <Center>※フォルダ(Explorer)</Center>
+            </Box>
+            <Text ml={4}>
+              クリックするとアドレスを選択した状態になるのでコピーします。
             </Text>
-            <Text>
-              {"3.end_ = " +
-                getMessage({
-                  ja: "製品品番の右端の列を指定",
-                  us: "Specify the rightmost column of the product part number",
-                  cn: "指定产品部件号最右边一列",
-                  language,
-                })}
+            <Box position="relative" w="100%" mb={6}>
+              <Image src="/images/0010/folder-selectPath2.webp" w="100%" />
+              <Center>※フォルダ(Explorer)</Center>
+            </Box>
+            <Text>2.[設定]の赤枠にアドレスを入力します。</Text>
+            <Text ml={4}>
+              {currentUserCompany}の場合は setting_
+              {getLocalIp(currentUserCompany)} の右セルに入力します。
             </Text>
-            <Text mt={2}>
-              {getMessage({
-                ja: "※実際には原紙を使うと思うので編集時に以上のルールを守るだけになると思います",
-                us: "*I think I'll actually use the original paper, so I'll just follow the above rules when editing.",
-                cn: "*我认为我们实际上会使用原稿，所以我们在编辑时只需遵循上述规则即可。",
-                language,
-              })}
+            <Box w="100%" mb={6}>
+              <Box position="relative">
+                <Image src="/images/0010/sheet-setting.webp" w="100%" />
+                <Box
+                  position="absolute"
+                  top="27%"
+                  left="5%"
+                  w="80%"
+                  h="28%"
+                  bg="transparent"
+                  borderRadius="10px"
+                  border="2px solid red"
+                />
+              </Box>
+              <Center>※シート[設定]</Center>
+            </Box>
+            <Text>3.接続テスト</Text>
+            <Text ml={4}>
+              シート[設定]を選択した状態で
+              <Key>Ctrl</Key> + <Key>Shift</Key> + <Key>Enter</Key>
+              を押す。以下が表示されたらサーバーの設定は完了です。
+            </Text>
+            <Center position="relative" flexDirection="column" w="100%" my={6}>
+              <Image src="/images/0010/successcomplete.webp" />
+            </Center>
+            <Text ml={4}>
+              ※もし接続出来ない場合は、ネットワークドライブになっている可能性が高いです。その場合は連絡ください。IPアドレスの調べ方をここに追記します。
             </Text>
           </SectionBox>
           <SectionBox
@@ -474,71 +511,51 @@ const BlogPage: React.FC = () => {
             title={
               "5-2." +
               getMessage({
-                ja: "値の入力",
-                us: "Enter a value",
-                cn: "输入数值",
+                ja: "印鑑の設定",
+                us: "",
+                cn: "",
                 language,
               })
             }
             sectionRefs={sectionRefs}
             sections={sections}
             size="sm"
+            mt="16px"
           >
             <Divider
-              mt={2}
+              my={2}
               borderColor={colorMode === "light" ? "black" : "white"}
             />
-            <Text fontWeight="bold">
+            <Text fontWeight="bold" mb={6}>
               {getMessage({
-                ja: "入力ルールは以下のようになります。",
-                us: "The input rules are as follows",
-                cn: "输入规则如下",
-                language,
-              })}
-              <br />
-              {getMessage({
-                ja: "入力箇所のセル結合はしないてください。結合範囲のセルは左上しか認識できないので不具合の原因になります。",
-                us: "Do not merge cells in the input area. The cells in the merged range can only be recognized in the upper left corner, which can cause problems.",
-                cn: "不要合并输入区域中的单元格。合并范围内的单元格只能在左上角识别，这可能会造成问题。",
+                ja: "シート[入力原紙]を作成した時の印鑑を設定します。",
+                us: "",
+                cn: "",
                 language,
               })}
             </Text>
-            <Image src="/images/0010/0002.png" w="100%" mb={6} />
-            <Text>
-              {"4." +
-                getMessage({
-                  ja: "ｲﾝﾗｲﾝ番号の入力 = 作業に対し光らせたいLED番号の入力",
-                  us: "Enter inline number = enter the LED number you want to light up for your work",
-                  cn: "输入内联编号 = 输入任务要点亮的 LED 编号。",
-                  language,
-                })}
-              <br />
-              {"4." +
-                getMessage({
-                  ja: "ｲﾝﾗｲﾝ色 = 複数のYICで作業をする場合は背景色を変える事で背景色毎の出力が可能",
-                  us: "Inline color = If you are working with multiple YICs, you can change the background color to output each background color.",
-                  cn: "内联颜色 = 使用多个 YIC 时，可更改背景颜色，以允许输出每种背景颜色。",
-                  language,
-                })}
+            <Text>1.[設定]の赤枠に印鑑に使用する名前を入力します。</Text>
+            <Text ml={4}>
+              {currentUserCompany}の場合は stump_
+              {getLocalIp(currentUserCompany)} の右セルに入力します。
             </Text>
-            <Text>
-              {"5." +
-                getMessage({
-                  ja: "YICの呼び出し番号 = 空欄の場合は出力しない",
-                  us: "YIC call number = if blank, no output",
-                  cn: "YIC 呼叫编号 = 空白时无输出",
-                  language,
-                })}
-            </Text>
-            <Text>
-              {"6." +
-                getMessage({
-                  ja: "作業の有無 = 空欄の場合はLEDが光らない",
-                  us: "Work = If left blank, LED will not light up",
-                  cn: "工作 = 如果留空, LED 不亮。",
-                  language,
-                })}
-            </Text>
+            <Box w="100%" mb={6}>
+              <Box position="relative">
+                <Image src="/images/0010/sheet-setting.webp" w="100%" />
+                <Box
+                  position="absolute"
+                  top="60%"
+                  left="5%"
+                  w="68%"
+                  h="28%"
+                  bg="transparent"
+                  borderRadius="10px"
+                  border="2px solid red"
+                />
+              </Box>
+              <Center>※シート[設定]</Center>
+            </Box>
+            <Text>使用しない場合は空欄のままにしてください。</Text>
           </SectionBox>
         </Box>
         <SectionBox
@@ -546,166 +563,827 @@ const BlogPage: React.FC = () => {
           title={
             "6." +
             getMessage({
-              ja: "データ入力",
-              us: "data entry",
-              cn: "数据输入",
+              ja: "アップロード",
+              us: "",
+              cn: "",
               language,
             })
           }
           sectionRefs={sectionRefs}
           sections={sections}
+          mt="16px"
         >
           <Divider
-            mt={2}
+            my={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text fontWeight="bold"></Text>
-          <Text mt={6}></Text>
+          <Text fontWeight="bold" mb={6}>
+            {getMessage({
+              ja: "他のファイルがバージョンアップ出来るようにアップロードします。",
+              us: "",
+              cn: "",
+              language,
+            })}
+          </Text>
+          <Text>
+            1.シート[設定]を選択した状態で<Key>Ctrl</Key> + <Key>Enter</Key>
+            を押すとシート[入力原紙]が作成されます。
+          </Text>
+          <Box w="100%" mb={6}>
+            <Box position="relative">
+              <Image src="/images/0010/sheet-input.webp" w="100%" />
+              <Box
+                position="absolute"
+                top="92%"
+                left="21%"
+                w="12%"
+                h="8%"
+                bg="transparent"
+                borderRadius="7px"
+                border="2px solid red"
+              />
+            </Box>
+          </Box>
+          <Center>※シート[入力原紙]</Center>
+          <Text>
+            2.右上の<Key>MENU</Key>をクリックします。
+          </Text>
+          <Box w="100%" my={6}>
+            <Box position="relative">
+              <Image src="/images/0010/sheet-input.webp" w="100%" />
+              <Box
+                position="absolute"
+                top="3%"
+                left="94%"
+                w="7%"
+                h="8%"
+                bg="transparent"
+                borderRadius="7px"
+                border="2px solid red"
+              />
+            </Box>
+            <Center>※シート[入力原紙]</Center>
+          </Box>
+          <Text>3.MENUが開いたらVerUpをクリック</Text>
+          <Center w="100%" my={6} flexDirection="column">
+            <Box position="relative">
+              <Box h="200px" overflow="hidden">
+                <Image src="/images/0010/yps-menu.webp" w="200px" />
+                <Box
+                  position="absolute"
+                  bottom="0"
+                  left="0"
+                  right="0"
+                  height="30%"
+                  bgGradient="linear(to-t, rgba(255,255,255,1), transparent)"
+                  pointerEvents="none"
+                />
+              </Box>
+              <Box
+                position="absolute"
+                top="-0.5%"
+                left="48%"
+                w="26%"
+                h="12%"
+                bg="transparent"
+                borderRadius="7px"
+                border="2px solid red"
+              />
+            </Box>
+            <Box>※フォーム[MENU]</Box>
+          </Center>
+          <Text>
+            4.[このVerのアップロード]を<Key>Shift</Key>
+            を押したままクリックします。
+          </Text>
+          <Center w="100%" my={6} flexDirection="column">
+            <Box position="relative">
+              <Image src="/images/0010/yps-verup.webp" w="300px" />
+              <Box
+                position="absolute"
+                top="40%"
+                left="2%"
+                w="55%"
+                h="12.5%"
+                bg="transparent"
+                borderRadius="7px"
+                border="2px solid red"
+              />
+            </Box>
+            <Box>※フォーム[VerUp]</Box>
+          </Center>
+          <Text>5秒程度でアップロードが完了します。</Text>
         </SectionBox>
-        <Box ml={2}>
-          <SectionBox
-            id="section6_1"
-            title={
-              "6-1." +
-              getMessage({
-                ja: "列の指定",
-                us: "Specify columns",
-                cn: "栏目名称",
-                language,
-              })
-            }
-            sectionRefs={sectionRefs}
-            sections={sections}
-            size="sm"
-            mt="0"
-          >
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <Text fontWeight="bold">
-              {getMessage({
-                ja: "下記の3項目を以下のルールで配置してください。それ以外は自由に編集が可能です。",
-                us: "Please place the following three items according to the following rules. The rest can be freely edited.",
-                cn: "以下三项应按以下规则放置。其余可自由编辑。",
-                language,
-              })}
-            </Text>
-            <Image src="/images/0010/0001.png" w="100%" mb={6} />
-            <Text>
-              {"1.ｲﾝﾗｲﾝ = " +
-                getMessage({
-                  ja: "作業に対応するLED番号を入力する列を指定",
-                  us: "Specify the column to enter the LED number corresponding to the work",
-                  cn: "指定在哪一列输入与任务相对应的 LED 编号",
-                  language,
-                })}
-            </Text>
-            <Text>
-              {"2.start_ = " +
-                getMessage({
-                  ja: "製品品番の左端の列を指定",
-                  us: "Specify the left-most column of the product part number",
-                  cn: "指定产品部件编号的最左一列",
-                  language,
-                })}
-            </Text>
-            <Text>
-              {"3.end_ = " +
-                getMessage({
-                  ja: "製品品番の右端の列を指定",
-                  us: "Specify the rightmost column of the product part number",
-                  cn: "指定产品部件号最右边一列",
-                  language,
-                })}
-            </Text>
-            <Text mt={2}>
-              {getMessage({
-                ja: "※実際には原紙を使うと思うので編集時に以上のルールを守るだけになると思います",
-                us: "*I think I'll actually use the original paper, so I'll just follow the above rules when editing.",
-                cn: "*我认为我们实际上会使用原稿，所以我们在编辑时只需遵循上述规则即可。",
-                language,
-              })}
-            </Text>
-          </SectionBox>
-          <SectionBox
-            id="section6_2"
-            title={
-              "6-2." +
-              getMessage({
-                ja: "値の入力",
-                us: "Enter a value",
-                cn: "输入数值",
-                language,
-              })
-            }
-            sectionRefs={sectionRefs}
-            sections={sections}
-            size="sm"
-          >
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <Text fontWeight="bold">
-              {getMessage({
-                ja: "入力ルールは以下のようになります。",
-                us: "The input rules are as follows",
-                cn: "输入规则如下",
-                language,
-              })}
-              <br />
-              {getMessage({
-                ja: "入力箇所のセル結合はしないてください。結合範囲のセルは左上しか認識できないので不具合の原因になります。",
-                us: "Do not merge cells in the input area. The cells in the merged range can only be recognized in the upper left corner, which can cause problems.",
-                cn: "不要合并输入区域中的单元格。合并范围内的单元格只能在左上角识别，这可能会造成问题。",
-                language,
-              })}
-            </Text>
-            <Image src="/images/0010/0002.png" w="100%" mb={6} />
-            <Text>
-              {"4." +
-                getMessage({
-                  ja: "ｲﾝﾗｲﾝ番号の入力 = 作業に対し光らせたいLED番号の入力",
-                  us: "Enter inline number = enter the LED number you want to light up for your work",
-                  cn: "输入内联编号 = 输入任务要点亮的 LED 编号。",
-                  language,
-                })}
-              <br />
-              {"4." +
-                getMessage({
-                  ja: "ｲﾝﾗｲﾝ色 = 複数のYICで作業をする場合は背景色を変える事で背景色毎の出力が可能",
-                  us: "Inline color = If you are working with multiple YICs, you can change the background color to output each background color.",
-                  cn: "内联颜色 = 使用多个 YIC 时，可更改背景颜色，以允许输出每种背景颜色。",
-                  language,
-                })}
-            </Text>
-            <Text>
-              {"5." +
-                getMessage({
-                  ja: "YICの呼び出し番号 = 空欄の場合は出力しない",
-                  us: "YIC call number = if blank, no output",
-                  cn: "YIC 呼叫编号 = 空白时无输出",
-                  language,
-                })}
-            </Text>
-            <Text>
-              {"6." +
-                getMessage({
-                  ja: "作業の有無 = 空欄の場合はLEDが光らない",
-                  us: "Work = If left blank, LED will not light up",
-                  cn: "工作 = 如果留空, LED 不亮。",
-                  language,
-                })}
-            </Text>
-          </SectionBox>
-        </Box>
         <SectionBox
           id="section7"
           title={
             "7." +
             getMessage({
-              ja: "YICへの出力",
+              ja: "バージョンアップファイルの設置",
+              us: "",
+              cn: "",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+          mt="16px"
+        >
+          <Divider
+            my={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text fontWeight="bold" mb={6}>
+            {getMessage({
+              ja: "他のファイルがバージョンアップ出来るようにVerUp.xlsmを準備します。",
+              us: "",
+              cn: "",
+              language,
+            })}
+            この操作は初回だけで以降は必要ありません。
+          </Text>
+          <Text>
+            以下のDownloadをクリックしてVerUp.zipをダウンロードしてください。
+          </Text>
+          <Box
+            mt={2}
+            w="5.5em"
+            height="24px"
+            border="1px solid"
+            borderRadius="md"
+            borderColor={
+              colorMode === "light"
+                ? "custom.theme.light.800"
+                : "custom.theme.dark.100"
+            }
+            lineHeight="1"
+            fontSize="inherit"
+          >
+            <DownloadButton
+              currentUserName="a"
+              url="/download/yps/verup"
+              bg="custom.excel"
+              color={colorMode === "light" ? "custom.theme.light.900" : "white"}
+            />
+          </Box>
+          <Text fontWeight="bold">
+            {getMessage({
+              ja: "ダウンロードした.zipファイルを",
+              us: "",
+              cn: "",
+              language,
+            })}
+            <UnzipModal />
+            {getMessage({
+              ja: "をしてください。",
+              us: ".",
+              cn: "。",
+              language,
+            })}
+          </Text>
+          <Text>
+            展開したVerUp.xlsmを[設定]のsetting_{getLocalIp(currentUserCompany)}
+            のアドレスに設置します。
+          </Text>
+          <Center w="100%" my={6} flexDirection="column">
+            <Box position="relative">
+              <Image src="/images/0010/yps-masterfolder.webp" />
+              <Box
+                position="absolute"
+                top="68%"
+                left="2%"
+                w="30%"
+                h="14%"
+                bg="transparent"
+                borderRadius="7px"
+                border="2px solid red"
+              />
+            </Box>
+            <Box>※Explorer[setting_の場所]</Box>
+          </Center>
+          <Text>以上でバージョンアップが可能になります。</Text>
+        </SectionBox>
+        <SectionBox
+          id="section8"
+          title={
+            "8." +
+            getMessage({
+              ja: "データ入力",
+              us: "",
+              cn: "",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+          mt="16px"
+        >
+          <Divider
+            my={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text fontWeight="bold" mb={6}>
+            {getMessage({
+              ja: "誘導ポイント設定一覧表を作成していきます。",
+              us: "",
+              cn: "",
+              language,
+            })}
+          </Text>
+          <Text>
+            シート[入力原紙]に入力していきます。
+            <br />
+            ※シート名は自由に変更して構いません。
+          </Text>
+        </SectionBox>
+        <SectionBox
+          id="section8_1"
+          title={
+            "8-1." +
+            getMessage({
+              ja: "システム予約と役割",
+              us: "",
+              cn: "",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+          mt="16px"
+          size="sm"
+        >
+          <Divider
+            my={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text fontWeight="bold" mb={6}>
+            {getMessage({
+              ja: "システムが利用している箇所を解説します。",
+              us: "",
+              cn: "",
+              language,
+            })}
+          </Text>
+
+          <Center w="100%" my={6} flexDirection="column">
+            <Box position="relative">
+              <Image src="/images/0010/yps-sheet.webp" />
+              <Box
+                position="absolute"
+                top="68%"
+                left="5%"
+                w="4%"
+                h="14%"
+                bg="transparent"
+                borderRadius="7px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="-28%" // Boxの中央
+                  left="50%" // Boxの中央
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  1.
+                </Box>
+              </Box>
+              <Box
+                position="absolute"
+                top="50%"
+                left="74.5%"
+                w="4%"
+                h="5%"
+                bg="transparent"
+                borderRadius="7px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="30%" // Boxの中央
+                  left="-40%" // Boxの中央
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  2.
+                </Box>
+              </Box>
+              <Box
+                position="absolute"
+                top="50%"
+                left="97%"
+                w="4%"
+                h="5%"
+                bg="transparent"
+                borderRadius="7px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="30%" // Boxの中央
+                  left="-40%" // Boxの中央
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  3.
+                </Box>
+              </Box>
+              <Box
+                position="absolute"
+                top="68.5%"
+                left="75%"
+                w="25%"
+                h="13%"
+                bg="transparent"
+                borderRadius="7px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="30%"
+                  left="-6%"
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  4.
+                </Box>
+              </Box>
+              <Box
+                position="absolute"
+                top="64%"
+                left="75%"
+                w="25%"
+                h="5%"
+                bg="transparent"
+                borderRadius="4px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="30%"
+                  left="-6%"
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  5.
+                </Box>
+              </Box>
+            </Box>
+            <Box>※Explorer[setting_の場所]</Box>
+          </Center>
+          <List spacing={1} mb={6} styleType="none" pl={0}>
+            <ListItem>
+              <Box as="span" color="red">
+                1.
+              </Box>
+              [ｲﾝﾗｲﾝ]この列をインラインナンバーとして認識します。
+            </ListItem>
+            <ListItem>
+              <Box as="span" color="red">
+                2.
+              </Box>
+              [start_]から右を製品品番として認識します。
+            </ListItem>
+            <ListItem>
+              <Box as="span" color="red">
+                3.
+              </Box>
+              [end_]から左を製品品番として認識します。
+            </ListItem>
+            <ListItem>
+              <Box as="span" color="red">
+                4.
+              </Box>
+              [ｲﾝﾗｲﾝ]がある行で[start_]から[end_]までの列を製品品番として認識します。
+            </ListItem>
+            <ListItem>
+              <Box as="span" color="red">
+                5.
+              </Box>
+              書き込み器への設定ナンバーとして使用されます。この行は必ず
+              <Box as="span" color="red">
+                4.
+              </Box>
+              の1セル上にある必要があります。
+            </ListItem>
+          </List>
+          <Text>
+            上記の理由により
+            <Box as="span" color="red">
+              1.-3.
+            </Box>
+            のセルは文字を変更/削除しないで下さい。それ以外は自由に変更して大丈夫です。
+          </Text>
+        </SectionBox>
+        <SectionBox
+          id="section8_2"
+          title={
+            "8-2." +
+            getMessage({
+              ja: "入力サンプル",
+              us: "",
+              cn: "",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+          mt="16px"
+          size="sm"
+        >
+          <Divider
+            my={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text fontWeight="bold" mb={6}>
+            {getMessage({
+              ja: "このように自由に編集可能です。",
+              us: "",
+              cn: "",
+              language,
+            })}
+          </Text>
+          <Center w="100%" my={6} flexDirection="column">
+            <Box position="relative">
+              <Image src="/images/0010/yps-sample.webp" />
+              <Box
+                position="absolute"
+                top="51%"
+                left="3%"
+                w="4.2%"
+                h="49%"
+                bg="rgba(255,0,0,0.1)"
+                borderRadius="4px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="-5%" // Boxの中央
+                  left="50%" // Boxの中央
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  1.
+                </Box>
+              </Box>
+              <Box
+                position="absolute"
+                top="40%"
+                left="73.5%"
+                w="26.5%"
+                h="3%"
+                bg="rgba(255,0,0,0.1)"
+                borderRadius="3px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="-3%"
+                  left="-5%"
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  2.
+                </Box>
+              </Box>
+              <Box
+                position="absolute"
+                top="50.5%"
+                left="73.5%"
+                w="26.5%"
+                h="50%"
+                bg="rgba(255,0,0,0.1)"
+                borderRadius="7px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="-3%"
+                  left="-5%"
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  3.
+                </Box>
+              </Box>
+            </Box>
+            <Box>※シート[入力原紙]</Box>
+          </Center>
+          <List spacing={1} mb={6} styleType="none" pl={0}>
+            <ListItem>
+              <Box as="span" color="red">
+                1.
+              </Box>
+              制御器のLED番号。背景色を変える事で複数台での作業に対応。
+            </ListItem>
+            <ListItem>
+              <Box as="span" color="red">
+                2.
+              </Box>
+              制御器の設定番号。制御器のプロジェクト番号。空欄で出力しない。
+            </ListItem>
+            <ListItem>
+              <Box as="span" color="red">
+                3.
+              </Box>
+              作業項目の有無。空欄じゃない場合は作業有りとして認識。
+            </ListItem>
+          </List>
+          <Text>
+            作業項目の入力が特に手間が掛かると思いますが、これらは生産準備+からデータ取得できる可能性があります。
+          </Text>
+        </SectionBox>
+        <SectionBox
+          id="section9"
+          title={
+            "9." +
+            getMessage({
+              ja: "MENU画面",
+              us: "",
+              cn: "",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+          mt="16px"
+          size="sm"
+        >
+          <Divider
+            my={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Center w="100%" my={6} flexDirection="column">
+            <Box position="relative">
+              <Image src="/images/0010/yps-menu.webp" w="200px" />
+              <Box
+                position="absolute"
+                top="9%"
+                left="7.5%"
+                w="82.5%"
+                h="14%"
+                bg="rgba(255,0,0,0.1)"
+                borderRadius="4px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="3%"
+                  left="-6%"
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  1.
+                </Box>
+              </Box>
+              <Box
+                position="absolute"
+                top="28%"
+                left="7.5%"
+                w="82.5%"
+                h="28%"
+                bg="rgba(255,0,0,0.1)"
+                borderRadius="3px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="3%"
+                  left="-6%"
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  2.
+                </Box>
+              </Box>
+              <Box
+                position="absolute"
+                top="75%"
+                left="7.5%"
+                w="82.5%"
+                h="14.5%"
+                bg="rgba(255,0,0,0.1)"
+                borderRadius="7px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="3%"
+                  left="-6%"
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  3.
+                </Box>
+              </Box>
+            </Box>
+            <Box>フォーム[MENU]</Box>
+          </Center>
+          <List spacing={1} mb={6} styleType="none" pl={0}>
+            <ListItem>
+              <Box as="span" color="red">
+                1.
+              </Box>
+              8-2.1の背景色ごとにボタンが表示されます。最大4台。
+            </ListItem>
+            <ListItem>
+              <Box as="span" color="red">
+                2.
+              </Box>
+              YIC機種:異なる場合に変更。
+            </ListItem>
+            <ListItem ml={3}>出力ポート:YICに対する出力ポートを指定。</ListItem>
+            <ListItem ml={3}>
+              72と73を入れ替える:制御器によって反転する場合があります。徳島工場の保有は反転してる為、チェックが必要。
+            </ListItem>
+            <ListItem>
+              <Box as="span" color="red">
+                3.
+              </Box>
+              YICに転送:転送設定を元にYICにシリアル送信します。
+            </ListItem>
+            <ListItem ml={3}>設定一覧表を作成:作成します。</ListItem>
+          </List>
+        </SectionBox>
+        <SectionBox
+          id="section10"
+          title={
+            "10." +
+            getMessage({
+              ja: "設定一覧表",
+              us: "",
+              cn: "",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+          mt="16px"
+          size="sm"
+        >
+          <Divider
+            my={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Text>
+            9.の設定一覧を作成をオンで作成されます。LEDベースでの確認が容易です。
+          </Text>
+          <Center w="100%" my={6} flexDirection="column">
+            <Box position="relative">
+              <Image src="/images/0010/yps-inlineClipSheet.webp" />
+              <Box
+                position="absolute"
+                top="31%"
+                left="90%"
+                w="7.7%"
+                h="16%"
+                bg="rgba(255,0,0,0.1)"
+                borderRadius="4px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="3%"
+                  left="-12%"
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  1.
+                </Box>
+              </Box>
+              <Box
+                position="absolute"
+                top="66%"
+                left="13%"
+                w="5%"
+                h="34%"
+                bg="rgba(255,0,0,0.1)"
+                borderRadius="4px"
+                border="2px solid red"
+                color="red"
+                fontSize="xs"
+                animation={blinkAnimation}
+              >
+                <Box
+                  position="absolute"
+                  top="6%"
+                  left="-33%"
+                  transform="translate(-50%, -50%)"
+                  color="red"
+                  fontSize="xs"
+                >
+                  2.
+                </Box>
+              </Box>
+            </Box>
+            <Box>シート[出力]</Box>
+          </Center>
+          <List spacing={1} mb={6} styleType="decimal" pl={4}>
+            <ListItem
+              sx={{
+                "&::marker": {
+                  color: "red",
+                },
+              }}
+            >
+              <Key>MENU</Key>
+              をクリックしてYICへの書込みを行います。9.MENU画面と同じなので説明は割愛します。
+            </ListItem>
+            <ListItem
+              sx={{
+                "&::marker": {
+                  color: "red",
+                },
+              }}
+            >
+              ここにバーコードが表示されていない場合はバーコードフォントがインストールされていません。下記からダウンロードしてください。
+            </ListItem>
+            <Box
+              mt={2}
+              w="5.5em"
+              height="24px"
+              border="1px solid"
+              borderRadius="md"
+              borderColor={
+                colorMode === "light"
+                  ? "custom.theme.light.800"
+                  : "custom.theme.dark.100"
+              }
+              lineHeight="1"
+              fontSize="inherit"
+            >
+              <DownloadButton
+                currentUserName="a"
+                url="/download/library/code39"
+                bg="custom.windows"
+                color={
+                  colorMode === "light" ? "custom.theme.light.900" : "white"
+                }
+              />
+            </Box>
+            <Text>
+              ダウンロードしたら <UnzipModal />
+              して、
+              <FontInstallModal />
+              を実行してください。このバーコードからYICに接続したリーダーから設定番号を呼び出し出来るようになります。
+            </Text>
+          </List>
+        </SectionBox>
+
+        <SectionBox
+          id="section11"
+          title={
+            "11." +
+            getMessage({
+              ja: "YICへの出力手順",
               us: "Output to YIC",
               cn: "输出至 YIC",
               language,
@@ -720,100 +1398,30 @@ const BlogPage: React.FC = () => {
           />
           <Text fontWeight="bold">
             {getMessage({
-              ja: "MENUの説明",
-              us: "Explanation of MENU",
-              cn: "MENU 说明。",
+              ja: "以下の順番で書込みを行ってください。",
+              us: "",
+              cn: "",
               language,
             })}
           </Text>
-          <Image src="/images/0010/0003.png" w="45%" mb={6} />
-
-          <Text lineHeight={1.6}>
-            {"①" +
-              getMessage({
-                ja: "48P、100P、200Pを選択",
-                us: "Select 48P, 100P, or 200P",
-                cn: "选择 48p、100p 或 200p",
-                language,
-              })}
-            <br />
-            {getMessage({
-              ja: "※200Pは動作未確認です。不具合がある場合は連絡をお願いします。",
-              us: "*200P has not been tested. Please contact us if there are any problems.",
-              cn: "*200P 未经运行测试。如有任何问题，请联系我们。",
-              language,
-            })}
-            <br />
-            {"②" +
-              getMessage({
-                ja: "YICと接続したシリアルポート番号を選択。背景色が白になったら接続完了です。",
-                us: "Select the serial port number connected to the YIC. When the background color turns white, the connection is complete.",
-                cn: "选择与 YIC 连接的串行端口号。当背景颜色变白时，连接完成。",
-                language,
-              })}
-            <br />
-            {"③" +
-              getMessage({
-                ja: "ｲﾝﾗｲﾝ色の選択。",
-                us: "Inline color selection.",
-                cn: "内联颜色选择。",
-                language,
-              })}
-            <br />
-            {"④" +
-              getMessage({
-                ja: "チェックオンでYICに直接転送する。",
-                us: "Check on to transfer directly to YIC.",
-                cn: "接通后直接转入青年信息中心。",
-                language,
-              })}
-            <br />
-            {"⑤" +
-              getMessage({
-                ja: "チェックオンでインラインクリップ設定一覧表のシートを作成する。",
-                us: "Check on to create an inline clip settings list sheet.",
-                cn: "选中以创建内联剪辑设置列表表。",
-                language,
-              })}
-            <br />
-            {getMessage({
-              ja: "※作成したシートからも出力可能です。",
-              us: "*Output is also possible from sheets that have been created.",
-              cn: "*也可从已创建的工作表中输出。",
-              language,
-            })}
-            <br />
-            {"⑥" +
-              getMessage({
-                ja: "④または⑤を実行します。",
-                us: "Perform ④ or ⑤.",
-                cn: "④ 或 ⑤。",
-                language,
-              })}
-            <br />
-            {"⑦" +
-              getMessage({
-                ja: "このブックに含まれるバージョンをアップロード。",
-                us: "Upload the version contained in this book.",
-                cn: "本书包含的上传版本。",
-                language,
-              })}
-            <br />
-            {"⑧" +
-              getMessage({
-                ja: "カレントディレクトリ以下のサブディレクトリのファイル名が「誘導ポイント設定一覧表」を含むブックに対して⑦のプログラムを与えます",
-                us: 'Give the program ⑦ to the book whose file name contains "Guidance Point Setting List" in the subdirectory under the current directory',
-                cn: '程序 ⑦ 给出的是一本书，其当前目录下子目录中的文件名包含 "引导点设置列表"。',
-                language,
-              })}
-          </Text>
+          <List spacing={1} my={4} styleType="decimal" pl={4}>
+            <ListItem>書込器の電源を入れる</ListItem>
+            <ListItem>PCと書込器をUSBシリアル変換で接続</ListItem>
+            <ListItem>Yps*.**_.xlsmのMENUを開く</ListItem>
+            <ListItem>YIC機種を設定</ListItem>
+            <ListItem>出力ポートの設定</ListItem>
+            <ListItem>YICに転送をオン</ListItem>
+            <ListItem>実行を押す</ListItem>
+          </List>
         </SectionBox>
         <SectionBox
-          id="section7"
+          id="section12"
           title={
-            "7." +
+            "12." +
             getMessage({
-              ja: "まとめ",
+              ja: "バージョンアップ",
+              us: "",
+              cn: "",
               language,
             })
           }
@@ -824,8 +1432,51 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
+          <Text fontWeight="bold">
+            {getMessage({
+              ja: "以下の手順で新しいバージョンに更新できます。",
+              us: "",
+              cn: "",
+              language,
+            })}
+          </Text>
+          <Center w="100%" my={6} flexDirection="column">
+            <Box position="relative">
+              <Image src="/images/0010/yps-verup-select.webp" />
+            </Box>
+            <Box>フォーム[VerUp]</Box>
+          </Center>
+
+          <List spacing={1} my={4} styleType="decimal" pl={4}>
+            <ListItem>入力原紙のMENUからVerUpを選択</ListItem>
+            <ListItem>更新したいバージョンを選択。通常は最新を選択。</ListItem>
+            <ListItem>このバージョンを選択をクリック</ListItem>
+            <ListItem>
+              VerUp.xlsmが開くので<Key baseColor="red">VerUp</Key>をクリック
+            </ListItem>
+
+            <ListItem>
+              数秒後に更新が完了。シート[Ver]と[設定]そしてプログラムコードが更新されます。
+            </ListItem>
+          </List>
+        </SectionBox>
+        <SectionBox
+          id="section13"
+          title={
+            "13." +
+            getMessage({
+              ja: "まとめ",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            my={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
           <Box
-            height="80vh"
             style={{
               backgroundImage:
                 "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
@@ -834,11 +1485,12 @@ const BlogPage: React.FC = () => {
               color: "#fff",
               position: "relative",
             }}
+            borderRadius="10px"
           >
             <Text
+              px="13px"
+              py="20px"
               style={{
-                padding: "13px",
-                paddingTop: "20px",
                 textAlign: "left",
                 color: "#fff",
                 textShadow: "none",
@@ -848,7 +1500,7 @@ const BlogPage: React.FC = () => {
               lineHeight={1.6}
             >
               {getMessage({
-                ja: "このシステムは実際に運用中ですが、未完成で以下の問題を含んでいます。",
+                ja: "このシステムは以下の問題を含んでいる可能性があります。",
                 us: "This system is actually in operation, but it is incomplete and contains the following problems",
                 cn: "该系统已实际运行，但并不完整，存在以下问题",
                 language,
@@ -857,40 +1509,26 @@ const BlogPage: React.FC = () => {
               <br />
               {"1." +
                 getMessage({
-                  ja: "200Pは運用中の工場での保有が無いので動作は未確認です。",
+                  ja: "200Pでの動作テストは未確認。実際に使用して不具合がある場合は連絡ください。",
                   us: "The 200P has not been held at the factory in operation, so its operation has not been tested.",
                   cn: "由于 200P 出厂时未进行运行测试。",
                   language,
                 })}
               <br />
-              {"2." +
-                getMessage({
-                  ja: "ポイント72と73が反対になる(LED72を指示をしても73が光る)不具合が発生しています。",
-                  us: "There is a problem with points 72 and 73 being opposite (LED 72 is indicated but 73 glows).",
-                  cn: "有一个问题是 72 和 73 点相反（LED 72 指示灯亮，但 73 点亮）。",
-                  language,
-                })}
-              <br />
-              {getMessage({
-                ja: "※おそらく書き込み器側の不具合なのですが解決する方法が無いのでオプションで「入れ替える」機能の追加を予定しています。",
-                us: '*This is probably a glitch on the burner side, but there is no way to solve it, so we are planning to add an optional "replace" function.',
-                cn: '*这可能是刻录机方面的故障，但没有办法解决，因此我们计划添加一个可选的 "替换" 功能。',
-                language,
-              })}
             </Text>
             <Image
               src="/images/hippo.gif"
               alt="Hippo"
               style={{
                 position: "absolute",
-                bottom: "10px",
+                top: "105%",
                 right: "10px",
                 width: "50px",
               }}
             />
           </Box>
         </SectionBox>
-        <Box h="3vh" />
+        <Box h="5vh" />
       </Frame>
     </>
   );

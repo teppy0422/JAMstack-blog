@@ -351,8 +351,6 @@ export const CustomLoading = ({
         <Box
           position="absolute"
           width={`${imageSize}px`}
-          // borderRadius="50%"
-          // overflow="hidden"
           zIndex={1}
           animation={`${scaleUp} 0.5s ease-out, ${float} 3s ease-in-out infinite`}
         >
@@ -393,7 +391,6 @@ export const CustomLoading = ({
               transform={`translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${angle}deg)`}
               fontSize={`${fontSize}px`}
               fontWeight={800}
-              // boxShadow="0 0 4px #000"
               style={{
                 transformOrigin: "center",
                 WebkitTextStroke: "0.5px #111", // アウトラインを黒にする

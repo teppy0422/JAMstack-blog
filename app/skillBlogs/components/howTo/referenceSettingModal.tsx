@@ -20,7 +20,6 @@ import { FaRegEdit } from "react-icons/fa";
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 
-//Kbdのスタイル
 const kbdStyle = {
   border: "1px solid",
   fontSize: "16px",
