@@ -608,6 +608,42 @@ const Frame: React.FC<{
                     </>
                   )}
                 </AccordionItem>
+                <AccordionItem border="0">
+                  {({ isExpanded }) => (
+                    <>
+                      <AccordionButton m={1} p={0}>
+                        <CustomAccordionIcon
+                          isExpanded={isExpanded}
+                          color_={isMain ? "#FFF" : ""}
+                        />
+                        <Box
+                          flex="1"
+                          textAlign="left"
+                          fontSize="13px"
+                          color={isMain ? "#FFF" : ""}
+                        >
+                          6.
+                          {getMessage({
+                            ja: "ツール",
+                            us: "tool (esp. software, etc.)",
+                            cn: "工具",
+                            language,
+                          })}
+                        </Box>
+                      </AccordionButton>
+                      {createLinkPanel(
+                        "/skillBlogs/pages/0012/",
+                        getMessage({
+                          ja: "WEBサイト/アプリ",
+                          us: "Website/Application",
+                          cn: "网站/应用程序",
+                          language,
+                        }),
+                        isMain
+                      )}
+                    </>
+                  )}
+                </AccordionItem>
               </Accordion>
             </VStack>
             {!isMain && (
