@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Text } from "@chakra-ui/react";
+import { CustomLoading } from "@/components/ui/CustomLoading";
 import styles from "@/styles/home.module.scss";
 
 interface ContentDisplayProps {
@@ -32,7 +33,22 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({ content }) => {
           }}
         />
       ) : (
-        <Text>Loading...</Text>
+        <Box
+          h="30vh"
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CustomLoading
+            text="LOADING LOADING LOADING "
+            radius={40}
+            fontSize={11}
+            imageUrl="/images/illust/hippo/hippo_014.svg"
+            imageSize={40}
+            color="#FFF"
+          />
+        </Box>
       )}
     </>
   );

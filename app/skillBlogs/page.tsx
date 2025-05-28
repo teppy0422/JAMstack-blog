@@ -89,7 +89,7 @@ const SkillBlogTopPage: React.FC = () => {
   }, [language]);
 
   if (!isLanguageLoaded) {
-    return <div>Loading...</div>;
+    return <div>Loadingあああ...</div>;
   }
 
   return (

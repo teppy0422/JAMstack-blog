@@ -37,7 +37,8 @@ import { useDisclosure } from "@chakra-ui/react";
 import { useReadCount } from "@/hooks/useReadCount";
 import { useUserContext } from "@/contexts/useUserContext";
 
-import { CustomAccordionIcon, CustomLoading } from "@/components/ui/CustomText";
+import { CustomAccordionIcon } from "@/components/ui/CustomText";
+import { CustomLoading } from "@/components/ui/CustomLoading";
 
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";

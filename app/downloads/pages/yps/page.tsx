@@ -2,7 +2,6 @@
 
 import React from "react";
 import Content from "@/components/content";
-import Link from "next/link";
 import {
   Image,
   Text,
@@ -39,6 +38,8 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Link,
+  Icon,
 } from "@chakra-ui/react";
 import { FocusableElement } from "@chakra-ui/utils"; // FocusableElement をインポート
 import { SiSemanticuireact } from "react-icons/si";
@@ -47,6 +48,7 @@ import NextImage from "next/image";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import { SjpIcon } from "@/components/icons";
 import styles from "@/styles/home.module.scss";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 import CustomLinkBox from "../../parts/customLinkBox";
 import CustomPopver from "@/components/ui/popver";
@@ -70,108 +72,6 @@ function formatDateTime(input: string): string {
   const min = String(date.getMinutes()).padStart(2, "0");
 
   return `${yyyy}/${mm}/${dd} ${hh}:${min}`;
-}
-function TransitionExample() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef = React.useRef<FocusableElement>(null); // 型を明示的に指定
-  const { language, setLanguage } = useLanguage();
-
-  return (
-    <>
-      <Box onClick={onOpen} cursor="pointer">
-        <MdHelpOutline />
-      </Box>
-      <AlertDialog
-        motionPreset="slideInBottom"
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-        isOpen={isOpen}
-        isCentered
-      >
-        <AlertDialogOverlay />
-
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            {getMessage({
-              ja: "アップロードの手順",
-              us: "Upload Procedure",
-              cn: "上传程序",
-              language,
-            })}
-          </AlertDialogHeader>
-          <AlertDialogCloseButton _focus={{ boxShadow: "none" }} />
-          <AlertDialogBody p={4}>
-            <Box
-              fontFamily={getMessage({
-                ja: "Noto Sans JP",
-                us: "Noto Sans,Noto Sans JP",
-                cn: "Noto Sans SC,Noto Sans JP",
-                language,
-              })}
-              fontWeight={400}
-            >
-              <Box as="p" textAlign="center" mb={4}>
-                {"1." +
-                  getMessage({
-                    ja: "ダウンロードしたエクセルブックを開く",
-                    us: "Open the downloaded Excel book.",
-                    cn: "打开下载的 Excel 电子书。",
-                    language,
-                  })}
-                <br />
-                {"2." +
-                  getMessage({
-                    ja: "Menuを開いてVerupを押す",
-                    us: "Open Menu and press Verup.",
-                    cn: "打开菜单并按下 Verup。",
-                    language,
-                  })}
-                <br />
-                {"3." +
-                  getMessage({
-                    ja: "",
-                    us: "Click [このVerのアップロード] while holding down ",
-                    cn: "按住 ",
-                    language,
-                  })}
-                <span>
-                  <Kbd>Shift</Kbd>
-                </span>
-                {getMessage({
-                  ja: "を押しながら[このVerのアップロード]をクリック",
-                  us: "",
-                  cn: " 单击 [上传此 Ver]",
-                  language,
-                })}
-              </Box>
-              <Box textAlign="center" mb={4}>
-                <video
-                  src="/images/sjpUpload.mp4"
-                  autoPlay
-                  muted
-                  loop
-                  width="100%"
-                />
-              </Box>
-              <Box as="p" textAlign="center" mb={1}>
-                {getMessage({
-                  ja: "以上で全ての生産準備+からこのバージョンへの更新が可能になります",
-                  us: "This is all you need to do to update from Production Preparation+ to this version!",
-                  cn: "这将使所有生产准备+ 更新到该版本",
-                  language,
-                })}
-              </Box>
-            </Box>
-          </AlertDialogBody>
-          <AlertDialogFooter>
-            <Button colorScheme="red" ml={3} onClick={onClose}>
-              OK
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
-  );
 }
 
 export default function Page() {
@@ -222,17 +122,22 @@ export default function Page() {
                 alignItems="center"
                 justifyContent="center"
                 width="auto"
+                fontSize="sm"
                 mt={2}
               >
-                <Box fontSize="sm" mr={1}>
+                <Link
+                  href="/skillBlogs/pages/0010"
+                  isExternal
+                  fontWeight="bold"
+                >
+                  <Icon as={ExternalLinkIcon} mr={1} />
                   {getMessage({
-                    ja: "アップロードの手順",
+                    ja: "使い方のページ",
                     us: "Upload Procedure",
                     cn: "上传程序",
                     language,
                   })}
-                </Box>
-                <TransitionExample />
+                </Link>
               </Box>
             </Box>
           </Box>

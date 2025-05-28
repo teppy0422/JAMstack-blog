@@ -22,6 +22,7 @@ import styles from "@/styles/home.module.scss";
 import Moment from "react-moment";
 import { useLanguage } from "../../src/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
+import { CustomLoading } from "@/components/ui/CustomLoading";
 
 export default function Home() {
   const { language, setLanguage } = useLanguage();
@@ -38,7 +39,24 @@ export default function Home() {
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   //右リストの読み込みをlanguage取得後にする
   if (!isLanguageLoaded) {
-    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
+    return (
+      <Box
+        h="30vh"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <CustomLoading
+          text="LOADING LOADING LOADING "
+          radius={40}
+          fontSize={11}
+          imageUrl="/images/illust/hippo/hippo_014.svg"
+          imageSize={40}
+          color="#FFF"
+        />
+      </Box>
+    ); // 言語がロードされるまでのプレースホルダー
   }
   return (
     <>

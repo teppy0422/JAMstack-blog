@@ -1486,6 +1486,7 @@ const BlogPage: React.FC = () => {
               position: "relative",
             }}
             borderRadius="10px"
+            pb="10vh"
           >
             <Text
               px="13px"
@@ -1521,7 +1522,7 @@ const BlogPage: React.FC = () => {
               alt="Hippo"
               style={{
                 position: "absolute",
-                top: "105%",
+                top: "73%",
                 right: "10px",
                 width: "50px",
               }}
