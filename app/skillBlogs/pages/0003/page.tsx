@@ -102,7 +102,6 @@ const BlogPage: React.FC = () => {
   const showToast = useCustomToast();
   //右リストの読み込みをlanguage取得後にする
   if (!isLanguageLoaded) {
-    return <div>Loading...</div>; // 言語がロードされるまでのプレースホルダー
   }
   const skillCards = [
     {

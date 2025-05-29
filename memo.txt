@@ -8,3 +8,9 @@ language,
 }
 
 
+ダウンロードした.zipファイルをAAAして下さい
+
+Please AAA the .zip file you downloaded
+
+AAA 下载的 .zip 文件。
+

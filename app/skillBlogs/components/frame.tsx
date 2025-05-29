@@ -791,6 +791,22 @@ const Frame: React.FC<{
                               <Link
                                 href={`#${section.id}`}
                                 title={section.title}
+                                onClick={(e) => {
+                                  e.preventDefault(); // デフォルトの#リンクを無効化
+                                  const target = document.getElementById(
+                                    section.id
+                                  );
+                                  if (target) {
+                                    const targetY =
+                                      target.getBoundingClientRect().top +
+                                      window.pageYOffset;
+                                    const offsetY = targetY - 55;
+                                    window.scrollTo({
+                                      top: offsetY,
+                                      behavior: "smooth",
+                                    });
+                                  }
+                                }}
                               >
                                 {section.title}
                               </Link>

@@ -76,6 +76,7 @@ import UnzipModal from "app/skillBlogs/components/howTo/UnzipModal";
 import FontInstallModal from "app/skillBlogs/components/howTo/FontInstall";
 import { getLocalIp } from "../../components/getLocalIp";
 import { Key } from "@/components/ui/Key";
+import { ImageWithHighlight } from "../../components/ImageWidthHighlight";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
@@ -135,11 +136,9 @@ const BlogPage: React.FC = () => {
     50% { opacity: 0; }
     100% { opacity: 1; }
   `;
-
   const blinkAnimation = `${blink} 0.8s infinite`;
   //右リストの読み込みをlanguage取得後にする
   if (!isLanguageLoaded) {
-    // return <div>ああ</div>; // 言語がロードされるまでのプレースホルダー
   }
 
   return (
@@ -220,9 +219,9 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Box>
-            <Text>
+            <Text whiteSpace="pre-line">
               {getMessage({
-                ja: "作業順を記した手順書にLED番号が有りますよね？その手順書を見ながら制御器のデータを手入力作成していると思います。手順書から制御器に直接書き込むシステムを作成しました。",
+                ja: "作業順を記した手順書にLED番号が有りますよね？その手順書を見ながら制御器のデータを手入力作成していると思います。これは手入力のミスが発生します。\n手順書から制御器に直接書き込むシステムを作成しました。",
                 us: "There are LED numbers in the procedure manual that describes the work order, aren't there? I think you are manually inputting data into the controller while looking at the procedure manual. We have created a system that directly writes data from the procedure manual to the controller.",
                 cn: "程序手册中不是有描述操作顺序的 LED 编号吗？我认为控制器的数据是在查看程序手册时手动创建的。我们创建了一个系统，可以直接从程序手册写入控制器。",
                 language,
@@ -315,15 +314,15 @@ const BlogPage: React.FC = () => {
           <Text fontWeight="bold">
             {getMessage({
               ja: "ダウンロードした.zipファイルを",
-              us: "",
+              us: "Please ",
               cn: "",
               language,
             })}
             <UnzipModal />
             {getMessage({
               ja: "をしてください。",
-              us: ".",
-              cn: "。",
+              us: "the .zip file you downloaded.",
+              cn: "下载的 .zip 文件。",
               language,
             })}
           </Text>
@@ -331,15 +330,15 @@ const BlogPage: React.FC = () => {
           <Text mt={6}>
             {getMessage({
               ja: "この解凍したファイルを利用する場所(通常はNASサーバー)に設置してください。",
-              us: "",
-              cn: "",
+              us: "Place the extracted files in the location where they will use it(usually the NAS server).",
+              cn: "请将解压后的文件放置到需要使用的位置（通常为 NAS 服务器）。",
               language,
             })}
             <br />
             {getMessage({
               ja: "ファイル名を変更する場合は、先頭のYps*.**_は変更しないでください。バージョンアップ/アップロードができなくなります。",
-              us: "",
-              cn: "",
+              us: "If you want to rename the files, do not change the beginning part: Yps*._**. If you do, you will not be able to perform version upgrades or uploads.",
+              cn: "如果要更改文件名，请不要更改以 Yps*.**_ 开头的部分，否则将无法进行版本升级或上传。",
               language,
             })}
           </Text>
@@ -400,8 +399,8 @@ const BlogPage: React.FC = () => {
             "5." +
             getMessage({
               ja: "設定",
-              us: "",
-              cn: "",
+              us: "setting",
+              cn: "设置",
               language,
             })
           }
@@ -413,7 +412,12 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Text mt={2}>
-            使用する為の設定を行います。これは初回だけで以降は必要ありません。
+            {getMessage({
+              ja: "使用する為の設定を行います。これは初回だけの作業です。",
+              us: "Set up the system for use. This is only the first time.",
+              cn: "设置系统以便使用。这是首次操作。",
+              language,
+            })}
           </Text>
         </SectionBox>
         <Box ml={2}>
@@ -423,8 +427,8 @@ const BlogPage: React.FC = () => {
               "5-1." +
               getMessage({
                 ja: "サーバーの設定",
-                us: "",
-                cn: "",
+                us: "Server Configuration",
+                cn: "服务器配置",
                 language,
               })
             }
@@ -440,68 +444,80 @@ const BlogPage: React.FC = () => {
             <Text fontWeight="bold" mb={6}>
               {getMessage({
                 ja: "バージョンアップ/アップロード用のサーバーを設定します。",
-                us: "",
-                cn: "",
+                us: "Set up a server for version upgrades/uploads.",
+                cn: "建立一个用于升级/上传的服务器。",
                 language,
               })}
             </Text>
-            <Text>1.VerUpに使用する場所のアドレスをコピーする。</Text>
-            <Text ml={4}>
-              フォルダを表示して使用場所まで移動。アドレスバー内の右空きスペースをクリックします。
+            <Text mb={2}>
+              {"1. " +
+                getMessage({
+                  ja: "VerUpに使用する場所のアドレスをコピーする",
+                  us: "Copy the address of the location to be used for VerUp.",
+                  cn: "复制用于 VerUp 的位置地址。",
+                  language,
+                })}
             </Text>
-            <Box w="100%" mb={6}>
-              <Box position="relative">
-                <Image src="/images/0010/folder-selectPath.webp" w="100%" />
-                <Box
-                  position="absolute"
-                  top="27%"
-                  left="92%"
-                  w="8%"
-                  h="25%"
-                  bg="transparent"
-                  borderRadius="10px"
-                  border="2px solid red"
-                />
-              </Box>
-              <Center>※フォルダ(Explorer)</Center>
-            </Box>
             <Text ml={4}>
-              クリックするとアドレスを選択した状態になるのでコピーします。
+              {getMessage({
+                ja: "フォルダを表示して使用場所まで移動。アドレスバー内の右空きスペースをクリックします。",
+                us: "Display the folder and navigate to the location where it is used. Click on the right free space in the address bar.",
+                cn: "显示文件夹并导航到使用该文件夹的位置。单击地址栏中右侧的空闲空间。",
+                language,
+              })}
             </Text>
-            <Box position="relative" w="100%" mb={6}>
+            <ImageWithHighlight
+              src="/images/0010/folder-selectPath.webp"
+              label="※フォルダ(Explorer)"
+              highlights={[
+                {
+                  top: "27%",
+                  left: "92%",
+                  w: "8%",
+                  h: "25%",
+                },
+              ]}
+            />
+            <Text>
+              {getMessage({
+                ja: "クリックするとアドレスを選択した状態になるのでコピーします。",
+                us: "Click to select the address and copy it.",
+                cn: "点击选择地址并复制。",
+                language,
+              })}
+            </Text>
+
+            <Box position="relative" w="100%" mt={2} mb={6}>
               <Image src="/images/0010/folder-selectPath2.webp" w="100%" />
-              <Center>※フォルダ(Explorer)</Center>
+              <Center fontSize="xs">※フォルダ(Explorer)</Center>
             </Box>
             <Text>2.[設定]の赤枠にアドレスを入力します。</Text>
             <Text ml={4}>
               {currentUserCompany}の場合は setting_
               {getLocalIp(currentUserCompany)} の右セルに入力します。
             </Text>
-            <Box w="100%" mb={6}>
-              <Box position="relative">
-                <Image src="/images/0010/sheet-setting.webp" w="100%" />
-                <Box
-                  position="absolute"
-                  top="27%"
-                  left="5%"
-                  w="80%"
-                  h="28%"
-                  bg="transparent"
-                  borderRadius="10px"
-                  border="2px solid red"
-                />
-              </Box>
-              <Center>※シート[設定]</Center>
-            </Box>
+            <ImageWithHighlight
+              src="/images/0010/sheet-setting.webp"
+              label="※シート[設定]"
+              highlights={[
+                {
+                  top: "27%",
+                  left: "5%",
+                  w: "80%",
+                  h: "28%",
+                },
+              ]}
+            />
             <Text>3.接続テスト</Text>
             <Text ml={4}>
               シート[設定]を選択した状態で
               <Key>Ctrl</Key> + <Key>Shift</Key> + <Key>Enter</Key>
               を押す。以下が表示されたらサーバーの設定は完了です。
             </Text>
-            <Center position="relative" flexDirection="column" w="100%" my={6}>
-              <Image src="/images/0010/successcomplete.webp" />
-            </Center>
+            <ImageWithHighlight
+              src="/images/0010/successcomplete.webp"
+              label="※シート[設定]"
+            />
             <Text ml={4}>
               ※もし接続出来ない場合は、ネットワークドライブになっている可能性が高いです。その場合は連絡ください。IPアドレスの調べ方をここに追記します。
             </Text>
@@ -539,23 +555,19 @@ const BlogPage: React.FC = () => {
               {currentUserCompany}の場合は stump_
               {getLocalIp(currentUserCompany)} の右セルに入力します。
             </Text>
-            <Box w="100%" mb={6}>
-              <Box position="relative">
-                <Image src="/images/0010/sheet-setting.webp" w="100%" />
-                <Box
-                  position="absolute"
-                  top="60%"
-                  left="5%"
-                  w="68%"
-                  h="28%"
-                  bg="transparent"
-                  borderRadius="10px"
-                  border="2px solid red"
-                />
-              </Box>
-              <Center>※シート[設定]</Center>
-            </Box>
-            <Text>使用しない場合は空欄のままにしてください。</Text>
+            <ImageWithHighlight
+              src="/images/0010/sheet-setting.webp"
+              label="※シート[設定]"
+              highlights={[
+                {
+                  top: "60%",
+                  left: "5%",
+                  w: "68%",
+                  h: "28%",
+                },
+              ]}
+            />
+            <Text>使用しない場合は空欄にしてください。</Text>
           </SectionBox>
         </Box>
         <SectionBox
@@ -589,41 +601,35 @@ const BlogPage: React.FC = () => {
             1.シート[設定]を選択した状態で<Key>Ctrl</Key> + <Key>Enter</Key>
             を押すとシート[入力原紙]が作成されます。
           </Text>
-          <Box w="100%" mb={6}>
-            <Box position="relative">
-              <Image src="/images/0010/sheet-input.webp" w="100%" />
-              <Box
-                position="absolute"
-                top="92%"
-                left="21%"
-                w="12%"
-                h="8%"
-                bg="transparent"
-                borderRadius="7px"
-                border="2px solid red"
-              />
-            </Box>
-          </Box>
-          <Center>※シート[入力原紙]</Center>
+          <ImageWithHighlight
+            src="/images/0010/sheet-input.webp"
+            label="※フォルダ(Explorer)"
+            highlights={[
+              {
+                top: "92%",
+                left: "21%",
+                w: "11.5%",
+                h: "8%",
+                borderRadius: "7px",
+              },
+            ]}
+          />
           <Text>
             2.右上の<Key>MENU</Key>をクリックします。
           </Text>
-          <Box w="100%" my={6}>
-            <Box position="relative">
-              <Image src="/images/0010/sheet-input.webp" w="100%" />
-              <Box
-                position="absolute"
-                top="3%"
-                left="94%"
-                w="7%"
-                h="8%"
-                bg="transparent"
-                borderRadius="7px"
-                border="2px solid red"
-              />
-            </Box>
-            <Center>※シート[入力原紙]</Center>
-          </Box>
+          <ImageWithHighlight
+            src="/images/0010/sheet-input.webp"
+            label="※シート(入力原紙)"
+            highlights={[
+              {
+                top: "3%",
+                left: "94%",
+                w: "7%",
+                h: "8%",
+                borderRadius: "7px",
+              },
+            ]}
+          />
           <Text>3.MENUが開いたらVerUpをクリック</Text>
           <Center w="100%" my={6} flexDirection="column">
             <Box position="relative">
@@ -656,22 +662,20 @@ const BlogPage: React.FC = () => {
             4.[このVerのアップロード]を<Key>Shift</Key>
             を押したままクリックします。
           </Text>
-          <Center w="100%" my={6} flexDirection="column">
-            <Box position="relative">
-              <Image src="/images/0010/yps-verup.webp" w="300px" />
-              <Box
-                position="absolute"
-                top="40%"
-                left="2%"
-                w="55%"
-                h="12.5%"
-                bg="transparent"
-                borderRadius="7px"
-                border="2px solid red"
-              />
-            </Box>
-            <Box>※フォーム[VerUp]</Box>
-          </Center>
+          <ImageWithHighlight
+            src="/images/0010/yps-verup.webp"
+            srcWidth="300px"
+            label="※フォーム(VerUp)"
+            highlights={[
+              {
+                top: "39%",
+                left: "2%",
+                w: "55%",
+                h: "13%",
+                borderRadius: "7px",
+              },
+            ]}
+          />
           <Text>5秒程度でアップロードが完了します。</Text>
         </SectionBox>
         <SectionBox
@@ -745,22 +749,19 @@ const BlogPage: React.FC = () => {
             展開したVerUp.xlsmを[設定]のsetting_{getLocalIp(currentUserCompany)}
             のアドレスに設置します。
           </Text>
-          <Center w="100%" my={6} flexDirection="column">
-            <Box position="relative">
-              <Image src="/images/0010/yps-masterfolder.webp" />
-              <Box
-                position="absolute"
-                top="68%"
-                left="2%"
-                w="30%"
-                h="14%"
-                bg="transparent"
-                borderRadius="7px"
-                border="2px solid red"
-              />
-            </Box>
-            <Box>※Explorer[setting_の場所]</Box>
-          </Center>
+          <ImageWithHighlight
+            src="/images/0010/yps-masterfolder.webp"
+            label="※Explorer[setting_の場所]"
+            highlights={[
+              {
+                top: "68%",
+                left: "2%",
+                w: "30%",
+                h: "14%",
+                borderRadius: "7px",
+              },
+            ]}
+          />
           <Text>以上でバージョンアップが可能になります。</Text>
         </SectionBox>
         <SectionBox
@@ -824,133 +825,65 @@ const BlogPage: React.FC = () => {
               language,
             })}
           </Text>
-
-          <Center w="100%" my={6} flexDirection="column">
-            <Box position="relative">
-              <Image src="/images/0010/yps-sheet.webp" />
-              <Box
-                position="absolute"
-                top="68%"
-                left="5%"
-                w="4%"
-                h="14%"
-                bg="transparent"
-                borderRadius="7px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="-28%" // Boxの中央
-                  left="50%" // Boxの中央
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  1.
-                </Box>
-              </Box>
-              <Box
-                position="absolute"
-                top="50%"
-                left="74.5%"
-                w="4%"
-                h="5%"
-                bg="transparent"
-                borderRadius="7px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="30%" // Boxの中央
-                  left="-40%" // Boxの中央
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  2.
-                </Box>
-              </Box>
-              <Box
-                position="absolute"
-                top="50%"
-                left="97%"
-                w="4%"
-                h="5%"
-                bg="transparent"
-                borderRadius="7px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="30%" // Boxの中央
-                  left="-40%" // Boxの中央
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  3.
-                </Box>
-              </Box>
-              <Box
-                position="absolute"
-                top="68.5%"
-                left="75%"
-                w="25%"
-                h="13%"
-                bg="transparent"
-                borderRadius="7px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="30%"
-                  left="-6%"
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  4.
-                </Box>
-              </Box>
-              <Box
-                position="absolute"
-                top="64%"
-                left="75%"
-                w="25%"
-                h="5%"
-                bg="transparent"
-                borderRadius="4px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="30%"
-                  left="-6%"
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  5.
-                </Box>
-              </Box>
-            </Box>
-            <Box>※Explorer[setting_の場所]</Box>
-          </Center>
+          <ImageWithHighlight
+            src="/images/0010/yps-sheet.webp"
+            label="※フォーム(VerUp)"
+            highlights={[
+              {
+                top: "68%",
+                left: "5%",
+                w: "4%",
+                h: "14%",
+                borderRadius: "7px",
+                label: "1.",
+                animation: "blink",
+              },
+              {
+                top: "50%",
+                left: "74.5%",
+                w: "4%",
+                h: "5%",
+                borderRadius: "7px",
+                label: "2.",
+                labelTop: "30%",
+                labelLeft: "-40%",
+                animation: "blink",
+              },
+              {
+                top: "50%",
+                left: "97%",
+                w: "4%",
+                h: "5%",
+                borderRadius: "7px",
+                label: "3.",
+                labelTop: "30%",
+                labelLeft: "-40%",
+                animation: "blink",
+              },
+              {
+                top: "68.5%",
+                left: "75%",
+                w: "25%",
+                h: "13%",
+                borderRadius: "5px",
+                label: "4.",
+                labelTop: "30%",
+                labelLeft: "-6%",
+                animation: "blink",
+              },
+              {
+                top: "64%",
+                left: "75%",
+                w: "25%",
+                h: "5%",
+                borderRadius: "5px",
+                label: "5.",
+                labelTop: "30%",
+                labelLeft: "-6%",
+                animation: "blink",
+              },
+            ]}
+          />
           <List spacing={1} mb={6} styleType="none" pl={0}>
             <ListItem>
               <Box as="span" color="red">
@@ -1023,84 +956,50 @@ const BlogPage: React.FC = () => {
               language,
             })}
           </Text>
-          <Center w="100%" my={6} flexDirection="column">
-            <Box position="relative">
-              <Image src="/images/0010/yps-sample.webp" />
-              <Box
-                position="absolute"
-                top="51%"
-                left="3%"
-                w="4.2%"
-                h="49%"
-                bg="rgba(255,0,0,0.1)"
-                borderRadius="4px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="-5%" // Boxの中央
-                  left="50%" // Boxの中央
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  1.
-                </Box>
-              </Box>
-              <Box
-                position="absolute"
-                top="40%"
-                left="73.5%"
-                w="26.5%"
-                h="3%"
-                bg="rgba(255,0,0,0.1)"
-                borderRadius="3px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="-3%"
-                  left="-5%"
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  2.
-                </Box>
-              </Box>
-              <Box
-                position="absolute"
-                top="50.5%"
-                left="73.5%"
-                w="26.5%"
-                h="50%"
-                bg="rgba(255,0,0,0.1)"
-                borderRadius="7px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="-3%"
-                  left="-5%"
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  3.
-                </Box>
-              </Box>
-            </Box>
-            <Box>※シート[入力原紙]</Box>
-          </Center>
+
+          <ImageWithHighlight
+            src="/images/0010/yps-sample.webp"
+            label="※シート[入力原紙]"
+            highlights={[
+              {
+                top: "51%",
+                left: "3%",
+                w: "4.2%",
+                h: "49%",
+                label: "1.",
+                labelTop: "-5%",
+                labelLeft: "50%",
+                borderRadius: "5px",
+                animation: "blink",
+                bg: "rgba(255,0,0,0.1)",
+              },
+              {
+                top: "40%",
+                left: "73.5%",
+                w: "26.5%",
+                h: "3%",
+                label: "2.",
+                labelTop: "-3%",
+                labelLeft: "-5%",
+                borderRadius: "5px",
+                animation: "blink",
+                bg: "rgba(255,0,0,0.1)",
+              },
+              {
+                top: "50.5%",
+                left: "73.5%",
+                w: "26.5%",
+                h: "50%",
+                label: "3.",
+                labelTop: "-3%",
+                labelLeft: "-5%",
+                borderRadius: "5px",
+                animation: "blink",
+                bg: "rgba(255,0,0,0.1)",
+              },
+            ]}
+          />
+
           <List spacing={1} mb={6} styleType="none" pl={0}>
             <ListItem>
               <Box as="span" color="red">
@@ -1145,84 +1044,49 @@ const BlogPage: React.FC = () => {
             my={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Center w="100%" my={6} flexDirection="column">
-            <Box position="relative">
-              <Image src="/images/0010/yps-menu.webp" w="200px" />
-              <Box
-                position="absolute"
-                top="9%"
-                left="7.5%"
-                w="82.5%"
-                h="14%"
-                bg="rgba(255,0,0,0.1)"
-                borderRadius="4px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="3%"
-                  left="-6%"
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  1.
-                </Box>
-              </Box>
-              <Box
-                position="absolute"
-                top="28%"
-                left="7.5%"
-                w="82.5%"
-                h="28%"
-                bg="rgba(255,0,0,0.1)"
-                borderRadius="3px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="3%"
-                  left="-6%"
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  2.
-                </Box>
-              </Box>
-              <Box
-                position="absolute"
-                top="75%"
-                left="7.5%"
-                w="82.5%"
-                h="14.5%"
-                bg="rgba(255,0,0,0.1)"
-                borderRadius="7px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="3%"
-                  left="-6%"
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  3.
-                </Box>
-              </Box>
-            </Box>
-            <Box>フォーム[MENU]</Box>
-          </Center>
+          <ImageWithHighlight
+            src="/images/0010/yps-menu.webp"
+            srcWidth="200px"
+            label="※フォーム[MENU]"
+            highlights={[
+              {
+                top: "9%",
+                left: "7.5%",
+                w: "82.5%",
+                h: "14%",
+                label: "1.",
+                labelTop: "3%",
+                labelLeft: "-6%",
+                borderRadius: "5px",
+                animation: "blink",
+                bg: "rgba(255,0,0,0.1)",
+              },
+              {
+                top: "28%",
+                left: "7.5%",
+                w: "82.5%",
+                h: "28%",
+                label: "2.",
+                labelTop: "3%",
+                labelLeft: "-6%",
+                borderRadius: "5px",
+                animation: "blink",
+                bg: "rgba(255,0,0,0.1)",
+              },
+              {
+                top: "75%",
+                left: "7.5%",
+                w: "82.5%",
+                h: "14.5%",
+                label: "3.",
+                labelTop: "3%",
+                labelLeft: "-6%",
+                borderRadius: "5px",
+                animation: "blink",
+                bg: "rgba(255,0,0,0.1)",
+              },
+            ]}
+          />
           <List spacing={1} mb={6} styleType="none" pl={0}>
             <ListItem>
               <Box as="span" color="red">
@@ -1272,60 +1136,37 @@ const BlogPage: React.FC = () => {
           <Text>
             9.の設定一覧を作成をオンで作成されます。LEDベースでの確認が容易です。
           </Text>
-          <Center w="100%" my={6} flexDirection="column">
-            <Box position="relative">
-              <Image src="/images/0010/yps-inlineClipSheet.webp" />
-              <Box
-                position="absolute"
-                top="31%"
-                left="90%"
-                w="7.7%"
-                h="16%"
-                bg="rgba(255,0,0,0.1)"
-                borderRadius="4px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="3%"
-                  left="-12%"
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  1.
-                </Box>
-              </Box>
-              <Box
-                position="absolute"
-                top="66%"
-                left="13%"
-                w="5%"
-                h="34%"
-                bg="rgba(255,0,0,0.1)"
-                borderRadius="4px"
-                border="2px solid red"
-                color="red"
-                fontSize="xs"
-                animation={blinkAnimation}
-              >
-                <Box
-                  position="absolute"
-                  top="6%"
-                  left="-33%"
-                  transform="translate(-50%, -50%)"
-                  color="red"
-                  fontSize="xs"
-                >
-                  2.
-                </Box>
-              </Box>
-            </Box>
-            <Box>シート[出力]</Box>
-          </Center>
+
+          <ImageWithHighlight
+            src="/images/0010/yps-inlineClipSheet.webp"
+            label="※シート[出力]"
+            highlights={[
+              {
+                top: "31%",
+                left: "90%",
+                w: "7.7%",
+                h: "16%",
+                label: "1.",
+                labelTop: "3%",
+                labelLeft: "-20%",
+                bg: "rgba(255,0,0,0.1)",
+                borderRadius: "7px",
+                animation: "blink",
+              },
+              {
+                top: "66%",
+                left: "13%",
+                w: "5%",
+                h: "34%",
+                label: "2.",
+                labelTop: "6%",
+                labelLeft: "-33%",
+                bg: "rgba(255,0,0,0.1)",
+                borderRadius: "7px",
+                animation: "blink",
+              },
+            ]}
+          />
           <List spacing={1} mb={6} styleType="decimal" pl={4}>
             <ListItem
               sx={{
@@ -1335,7 +1176,7 @@ const BlogPage: React.FC = () => {
               }}
             >
               <Key>MENU</Key>
-              をクリックしてYICへの書込みを行います。9.MENU画面と同じなので説明は割愛します。
+              をクリックしてYICへの書込みを行います。9.MENU画面と同じなので説明は割愛。
             </ListItem>
             <ListItem
               sx={{
@@ -1344,7 +1185,7 @@ const BlogPage: React.FC = () => {
                 },
               }}
             >
-              ここにバーコードが表示されていない場合はバーコードフォントがインストールされていません。下記からダウンロードしてください。
+              ここにバーコードが表示されていない場合はバーコードフォントがインストールされていません。下記手順でインストールしてください。
             </ListItem>
             <Box
               mt={2}
