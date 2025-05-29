@@ -256,7 +256,7 @@ const BlogPage: React.FC = () => {
                   language,
                 })}
                 subText={getMessage({
-                  ja: "webpに変換。拡張子が大文字の場合は.webpにならないから小文字に修正してから変換が良いよ。",
+                  ja: "webpに変換。拡張子が大文字の場合は.webpにならないから小文字してから変換がおすすめ。",
                   us: "Convert to webp. If the extension is in uppercase, it won't become .webp, so it's better to convert it to lowercase.",
                   cn: "转换为 webp。如果扩展名是大写的，就不会变成 .webp，所以最好先更正为小写，然后再转换。",
                   language,
@@ -272,6 +272,21 @@ const BlogPage: React.FC = () => {
                 })}
                 subText={getMessage({
                   ja: "webpを圧縮。圧縮率は0-20%くらい。",
+                  us: "Compress webp. Compression ratio is about 0-20%.",
+                  cn: "压缩 webp。压缩率约为 0-20%。",
+                  language,
+                })}
+              />
+            </ListItem>
+            <ListItem>
+              <FaviconLinkItem
+                href="https://www.iloveimg.com/ja/compress-image/compress-png"
+                mainText={getMessage({
+                  ja: "I LOVE IMG",
+                  language,
+                })}
+                subText={getMessage({
+                  ja: "pngを圧縮。圧縮率30-60%くらい。",
                   us: "Compress webp. Compression ratio is about 0-20%.",
                   cn: "压缩 webp。压缩率约为 0-20%。",
                   language,

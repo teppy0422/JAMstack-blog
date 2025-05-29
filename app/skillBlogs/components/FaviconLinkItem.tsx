@@ -24,19 +24,12 @@ export const FaviconLinkItem = ({
 
   return (
     <Box>
-      <Link
-        href={href}
-        isExternal
-        color="blue.500"
-        display="flex"
-        alignItems="center"
-        gap="1"
-      >
+      <Link href={href} isExternal display="flex" alignItems="center" gap="1">
         <Image src={getFaviconUrl(href)} alt="favicon" boxSize="16px" />
-        <Text>{mainText}</Text>
+        <Text color="blue.500">{mainText}</Text>
       </Link>
       {subText && (
-        <Text pl={0} color="gray.600" fontSize="sm">
+        <Text pl={0} colorScheme="gray" fontSize="sm">
           {subText}
         </Text>
       )}
