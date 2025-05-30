@@ -39,7 +39,6 @@ const DownloadButton = ({
       const hasExtension = /\.[a-zA-Z0-9]+$/.test(url.split("/").pop() || "");
 
       if (!hasExtension) {
-        // URLがフォルダっぽい場合
         const res = await fetch("/download/download-meta.json");
         const meta = await res.json();
 

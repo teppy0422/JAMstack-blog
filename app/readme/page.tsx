@@ -8,7 +8,7 @@ export default async function ReadmePage() {
   // ルートの README.md を読み込む
   const readmePath = path.join(process.cwd(), "README.md");
   const raw = fs.readFileSync(readmePath, "utf-8");
-  const html = marked(raw);
+  const html = await marked(raw);
 
   return (
     <div style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>

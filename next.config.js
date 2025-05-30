@@ -1,4 +1,11 @@
-module.exports = {
+const path = require("path");
+const withPWA = require("next-pwa")({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+});
+
+module.exports = withPWA({
   trailingSlash: true,
   experimental: {
     // appDir: true,
@@ -33,6 +40,4 @@ module.exports = {
 
     return config;
   },
-};
-
-const path = require("path");
+});

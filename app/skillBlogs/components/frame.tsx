@@ -800,7 +800,7 @@ const Frame: React.FC<{
                                     const targetY =
                                       target.getBoundingClientRect().top +
                                       window.pageYOffset;
-                                    const offsetY = targetY - 55;
+                                    const offsetY = targetY - 40;
                                     window.scrollTo({
                                       top: offsetY,
                                       behavior: "smooth",

@@ -9,6 +9,7 @@ interface Highlight {
   w: string;
   h: string;
   animation?: string;
+  border?: string;
   borderRadius?: string;
   label?: string;
   labelTop?: string;
@@ -22,7 +23,6 @@ interface ImageWithHighlightProps extends BoxProps {
   label: string;
   highlights?: Highlight[];
 }
-
 export const ImageWithHighlight = ({
   src,
   srcWidth,
@@ -53,7 +53,7 @@ export const ImageWithHighlight = ({
               h={h.h}
               bg={h.bg || "transparent"}
               borderRadius={h.borderRadius || "10px"}
-              border="2px solid red"
+              border={h.border || "2px solid red"}
               animation={h.animation === "blink" ? blinkAnimation : h.animation}
             >
               {h.label && (

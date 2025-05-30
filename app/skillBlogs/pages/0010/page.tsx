@@ -184,12 +184,7 @@ const BlogPage: React.FC = () => {
               language,
             })}
           />
-          <CustomBadge
-            text={getMessage({
-              ja: "作成途中",
-              language,
-            })}
-          />
+
           <Text
             fontSize="sm"
             color={colorMode === "light" ? "gray.800" : "white"}
@@ -270,28 +265,30 @@ const BlogPage: React.FC = () => {
               cn: "如果不能正常工作，请执行 ",
               language,
             })}
+            <Box
+              mt={2}
+              w="5.5em"
+              height="24px"
+              border="1px solid"
+              borderRadius="md"
+              borderColor={
+                colorMode === "light"
+                  ? "custom.theme.light.800"
+                  : "custom.theme.dark.100"
+              }
+              lineHeight="1"
+              fontSize="inherit"
+            >
+              <DownloadButton
+                currentUserName="a"
+                url="/download/yps/yps"
+                bg="custom.excel"
+                color={
+                  colorMode === "light" ? "custom.theme.light.900" : "white"
+                }
+              />
+            </Box>
           </Text>
-          <Box
-            mt={2}
-            w="5.5em"
-            height="24px"
-            border="1px solid"
-            borderRadius="md"
-            borderColor={
-              colorMode === "light"
-                ? "custom.theme.light.800"
-                : "custom.theme.dark.100"
-            }
-            lineHeight="1"
-            fontSize="inherit"
-          >
-            <DownloadButton
-              currentUserName="a"
-              url="/download/yps/yps"
-              bg="custom.excel"
-              color={colorMode === "light" ? "custom.theme.light.900" : "white"}
-            />
-          </Box>
         </SectionBox>
         <SectionBox
           id="section3"
@@ -475,6 +472,11 @@ const BlogPage: React.FC = () => {
                   left: "92%",
                   w: "8%",
                   h: "25%",
+                  animation: "blink",
+                  border: "transparent",
+                  label: "Click",
+                  labelTop: "50%",
+                  bg: "repeating-linear-gradient(45deg, rgba(255,0,0,0.1), rgba(255,0,0,0.1) 4px, transparent 4px, transparent 6px)",
                 },
               ]}
             />
