@@ -1,12 +1,12 @@
 {
-  "name": "えほんアプリ",
-  "short_name": "えほん",
-  "start_url": "/storybook/",
-  "scope": "/storybook/",
+  "name": "受注アプリ",
+  "short_name": "受注",
+  "start_url": "/orderAdmin/",
+  "scope": "/orderAdmin/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#f06292",
-  "description": "子ども向けの楽しいえほんアプリ",
+  "description": "注文アプリ",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",

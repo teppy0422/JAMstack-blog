@@ -1,0 +1,22 @@
+{
+  "name": "注文アプリ",
+  "short_name": "注文",
+  "start_url": "/order/",
+  "scope": "/order/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f06292",
+  "description": "注文アプリ",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

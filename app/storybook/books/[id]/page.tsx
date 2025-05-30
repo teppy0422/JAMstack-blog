@@ -51,37 +51,6 @@ export default function BookPage() {
 
     touchStartX.current = null;
   };
-  const toggleFullScreen = () => {
-    const el = document.documentElement;
-    const isFullScreen = !!(
-      document.fullscreenElement ||
-      (document as any).webkitFullscreenElement ||
-      (document as any).mozFullScreenElement ||
-      (document as any).msFullscreenElement
-    );
-
-    if (isFullScreen) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if ((document as any).webkitExitFullscreen) {
-        (document as any).webkitExitFullscreen();
-      } else if ((document as any).mozCancelFullScreen) {
-        (document as any).mozCancelFullScreen();
-      } else if ((document as any).msExitFullscreen) {
-        (document as any).msExitFullscreen();
-      }
-    } else {
-      if (el.requestFullscreen) {
-        el.requestFullscreen();
-      } else if ((el as any).webkitRequestFullscreen) {
-        (el as any).webkitRequestFullscreen();
-      } else if ((el as any).mozRequestFullScreen) {
-        (el as any).mozRequestFullScreen();
-      } else if ((el as any).msRequestFullscreen) {
-        (el as any).msRequestFullscreen();
-      }
-    }
-  };
   return (
     <Box
       w="100vw"
@@ -92,11 +61,6 @@ export default function BookPage() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <Box textAlign="center" mb={6}>
-        <Button colorScheme="teal" onClick={toggleFullScreen}>
-          画面を最大化する
-        </Button>
-      </Box>
       <PictureBookPage
         imageSrc={page.image}
         text={page.text}
