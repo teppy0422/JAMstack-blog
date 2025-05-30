@@ -8,7 +8,11 @@ export const metadata: Metadata = {
     icon: "/images/ico/storybook-cover.png",
     apple: "/images/ico/storybook-cover.png",
   },
-  manifest: "/public/manifest-storybook.json",
+  manifest: "/manifest-storybook.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  },
 };
 
 export default function StorybookLayout({

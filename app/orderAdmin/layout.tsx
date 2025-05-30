@@ -3,12 +3,16 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "受注",
-  themeColor: "#FF69B4",
+  themeColor: "#73c7c7",
   icons: {
     icon: "/images/ico/orderAdmin-cover.png",
     apple: "/images/ico/orderAdmin-cover.png",
   },
-  manifest: "/public/manifest-orderAdmin.json",
+  manifest: "/manifest-orderAdmin.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  },
 };
 
 export default function StorybookLayout({

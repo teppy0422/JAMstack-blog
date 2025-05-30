@@ -4,18 +4,13 @@
   "start_url": "/storybook/",
   "scope": "/storybook/",
   "display": "standalone",
-  "background_color": "#ff0000",
-  "theme_color": "#f06292",
+  "background_color": "#73c7c7",
+  "theme_color": "#73c7c7",
   "description": "子ども向けの楽しいえほんアプリ",
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icons/icon-512x512.png",
-      "sizes": "512x512",
+      "src": "/public/images/ico/storybook-cover.png",
+      "sizes": "180x180",
       "type": "image/png"
     }
   ]
