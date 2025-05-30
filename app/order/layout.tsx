@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "注文",
+  title: "受注",
   themeColor: "#FF69B4",
   icons: {
     icon: "/images/ico/order-cover.png",

@@ -55,18 +55,17 @@ export default function BookPage() {
     <Box
       w="100vw"
       h="100vh"
-      bg="pink.50"
       position="relative"
       overflow="hidden"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      bg="custom.theme.light.500"
     >
       <PictureBookPage
         imageSrc={page.image}
         text={page.text}
         soundSrc={page.sound}
       />
-
       <Button
         position="absolute"
         bottom="4"
