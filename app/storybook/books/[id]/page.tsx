@@ -41,7 +41,7 @@ export default function BookPage() {
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchEndX - touchStartX.current;
 
-    const threshold = 50; // スワイプ検出の閾値(px)
+    const threshold = 100; // スワイプ検出の閾値(px)
 
     if (diff > threshold) {
       handlePrev(); // 右にスワイプ → 前のページ
@@ -51,6 +51,7 @@ export default function BookPage() {
 
     touchStartX.current = null;
   };
+
   return (
     <Box
       w="100vw"
@@ -65,17 +66,18 @@ export default function BookPage() {
         imageSrc={page.image}
         text={page.text}
         soundSrc={page.sound}
+        animationType={page.AnimationType}
       />
       <Button
         position="absolute"
-        bottom="4"
+        bottom="8"
         left="4"
         onClick={handlePrev}
         isDisabled={currentPage === 0}
       >
         ←
       </Button>
-      <Button position="absolute" bottom="4" right="4" onClick={handleNext}>
+      <Button position="absolute" bottom="8" right="4" onClick={handleNext}>
         →
       </Button>
     </Box>

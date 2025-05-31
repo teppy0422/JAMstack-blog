@@ -9,7 +9,7 @@
   "description": "子ども向けの楽しいえほんアプリ",
   "icons": [
     {
-      "src": "/public/images/ico/storybook-cover.png",
+      "src": "/images/ico/storybook-cover.png",
       "sizes": "180x180",
       "type": "image/png"
     }

@@ -1,8 +1,7 @@
-// app/storybook/layout.tsx
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "受注",
+  title: "注文",
   themeColor: "#FF69B4",
   icons: {
     icon: "/images/ico/order-cover.png",

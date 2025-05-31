@@ -1,3 +1,5 @@
+import { AnimationType } from "framer-motion";
+
 // app/data/storybooks.ts
 export const storybooks = [
   {
@@ -6,12 +8,13 @@ export const storybooks = [
     cover: "/images/illust/hippo/hippo_001.png",
     pages: [
       {
-        image: "/images/storybook/dog.webp",
+        image: "/images/storybook/dog.gif",
         text: "わん！",
         sound: "/sound/storybook/bowwow.mp3",
+        AnimationType: "jump",
       },
       {
-        image: "/images/illust/hippo/hippo_002.png",
+        image: "/images/storybook/cat.gif",
         text: "にゃー！",
         sound: "/sound/storybook/nya.mp3",
       },
