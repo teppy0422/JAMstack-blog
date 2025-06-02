@@ -89,6 +89,7 @@ export const theme = extendTheme({
       windows: "#0078D7",
       mac: "#BFC1C2",
       linux: "#F47E00",
+      omron: "#005cb3",
     },
   },
 });

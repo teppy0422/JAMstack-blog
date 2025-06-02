@@ -1154,16 +1154,16 @@ export default function Ui() {
                     <Flex direction="column" alignItems="flex-start" flex={1}>
                       <Heading size="sm" mb={1.5}>
                         {getMessage({
-                          ja: "main3用PLC",
+                          ja: "main3用ラダー図",
                           us: "PLC for main3",
-                          cn: "main3用PLC",
+                          cn: "main3 的梯形图",
                           language,
                         })}
                       </Heading>
                       <Flex justifyContent="flex-end" alignItems="center">
                         <Badge
                           variant="solid"
-                          style={{ backgroundColor: "#005cb3" }}
+                          style={{ backgroundColor: "custom.omron" }}
                           mr={2}
                           opacity={0.8}
                         >
@@ -1345,7 +1345,7 @@ export default function Ui() {
                       <Flex justifyContent="flex-end" width="100%">
                         <Box fontSize="xs" textAlign="right">
                           <LatestUpdateDate
-                            folderPath="./download/yps/"
+                            folderPath="./download/yps/yps/"
                             removeStrings={["Yps", ".zip", "_"]}
                           />
                         </Box>

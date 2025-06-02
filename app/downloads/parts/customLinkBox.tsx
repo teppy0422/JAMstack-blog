@@ -92,7 +92,6 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
     setModalSrc(src);
     setIsModalOpen(true);
   };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };

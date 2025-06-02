@@ -46,9 +46,10 @@ import { SiSemanticuireact } from "react-icons/si";
 import { MdSettings, MdCheckCircle, MdHelpOutline } from "react-icons/md";
 import NextImage from "next/image";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
-import { SjpIcon } from "@/components/icons";
+import { JdssIcon } from "@/components/icons";
 import styles from "@/styles/home.module.scss";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import UnzipModal from "app/skillBlogs/components/howTo/UnzipModal";
 
 import CustomLinkBox from "../../parts/customLinkBox";
 import CustomPopver from "@/components/ui/popver";
@@ -90,14 +91,14 @@ export default function Page() {
         >
           <Box textAlign="center" mb={3}>
             <HStack spacing={2} alignItems="center" justifyContent="center">
-              <SjpIcon
+              <JdssIcon
                 size={48}
-                title="Sjp+"
-                color={colorMode === "light" ? "#000" : "#FFF"} // カラーモードに応じて色を設定
+                title="JDSS+"
+                color={colorMode === "light" ? "#800080" : "#FFF"} // カラーモードに応じて色を設定
               />
               <Text fontSize="2xl" mb={2} fontWeight={600}>
                 {getMessage({
-                  ja: "誘導ポイント設定一覧表+",
+                  ja: "順立生産システム+",
                   language,
                 })}
               </Text>
@@ -111,12 +112,29 @@ export default function Page() {
               })}
               <br />
               {getMessage({
-                ja: "最新版には以前の更新が全て含まれています",
-                us: "The latest version includes all previous updates",
-                cn: "最新版本包括之前的所有更新",
+                ja: "ダウンロードした.zipは展開(解凍)してください",
+                us: "Please extract (unzip) the .zip file you downloaded.",
+                cn: "请解压缩下载的 .zip",
                 language,
               })}
               <br />
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width="auto"
+                mt={2}
+              >
+                <Box fontSize="sm" mr={1}>
+                  {getMessage({
+                    ja: "ダウンロードしたmain_*.zipを展開(解凍)してからmain_*.mdbが在るフォルダに入れてください",
+                    us: "Extract (unzip) the downloaded main_*.zip file and place it in the folder containing the main_*.mdb file.",
+                    cn: "解压缩下载的 main_*.zip, 并将其放入 main_*.mdb 所在文件夹。",
+                    language,
+                  })}
+                </Box>
+                {/* <TransitionExample /> */}
+              </Box>
               <Box
                 display="flex"
                 alignItems="center"
@@ -126,7 +144,7 @@ export default function Page() {
                 mt={2}
               >
                 <Link
-                  href="/skillBlogs/pages/0010"
+                  href="/skillBlogs/pages/0006"
                   isExternal
                   fontWeight="bold"
                 >
@@ -161,42 +179,101 @@ export default function Page() {
                   <Box>
                     <Heading size="md">
                       <Flex justify="space-between" align="center">
-                        <Box>本体</Box>
+                        <Box>main</Box>
                         <Box fontSize="xs" textAlign="right">
                           <LatestUpdateDate
-                            folderPath="./download/yps/yps/"
+                            folderPath="./download/jdss/main/"
                             removeStrings={[]}
                           />
                         </Box>
                       </Flex>
                     </Heading>
-                    <Badge bg="custom.excel" color="white" marginRight={2}>
-                      Excel 2010
+                    <Badge bg="custom.access" color="white" marginRight={2}>
+                      access2003
                     </Badge>
-                    <Badge bg="custom.excel" color="white" marginRight={2}>
-                      Excel 2013
+                    <Badge bg="custom.access" color="white" marginRight={2}>
+                      2010
                     </Badge>
                     <Divider borderColor="gray.500" my={2} />
                   </Box>
-                  <List spacing={1} styleType="disc" pl={3}>
+                  <Box>バージョンアップ手順</Box>
+                  <List spacing={1} styleType="decimal" pl={5}>
                     <ListItem>
-                      誘導ポイント設定一覧表からYIC書き込み機にデータ転送する事で入力ミスと動作確認の手間を省けます。
+                      <Text fontWeight="bold">
+                        {getMessage({
+                          ja: "ダウンロードした.zipファイルを",
+                          us: "Please ",
+                          cn: "",
+                          language,
+                        })}
+                        <UnzipModal />
+                        {getMessage({
+                          ja: "をしてください。",
+                          us: "the .zip file you downloaded.",
+                          cn: "下载的 .zip 文件。",
+                          language,
+                        })}
+                      </Text>
                     </ListItem>
-                    <ListItem>アップロード/バージョンアップに対応</ListItem>
-                    <ListItem>複数のYICを使った生産に対応(4台まで)</ListItem>
-                    <ListItem>従来の設定一覧表を作成可能</ListItem>
+                    <ListItem>既存のmain_**がある位置に保存</ListItem>
+                    <ListItem>ショートカットの作成</ListItem>
+                    <ListItem>
+                      スタートアップにあるショートカットを削除する
+                    </ListItem>
+                    <ListItem>
+                      スタートアップに3で作成したショートカットを移動
+                    </ListItem>
+                    <ListItem>PCの再起動</ListItem>
                   </List>
                   <ChangelogAccordion
                     changelog={[
                       {
-                        version: "1.00",
-                        date: "2025/06/02",
-                        change: ["リリース"],
+                        version: "165",
+                        date: "2025/03/18",
+                        reason: [
+                          "access2003のみ(?)で送信/印刷ボタンを押すと設定枚数以上に処理される",
+                        ],
+                        change: [
+                          "送信/印刷ボタンを押した時のみ処理完了までこのボタンを無効",
+                          "test",
+                        ],
+                        inCharge: ["徳島", "小松さん", "不具合"],
                       },
                       {
-                        version: "0.61",
-                        date: "2025/05/26",
-                        change: ["パスチェックを修正"],
+                        version: "164",
+                        date: "2025/02/05",
+                        reason: [],
+                        change: [
+                          "軽微な不具合の修正",
+                          "送信/印刷の数量の初期値を設定に追加",
+                        ],
+                        inCharge: ["徳島", "作業者さん"],
+                      },
+                      {
+                        version: "163",
+                        date: "2025/02/04",
+                        reason: ["access2003で開くとaccessが強制終了する"],
+                        change: ["Form!F_main2_settingが破損=>作り直し"],
+                        inCharge: ["徳島", "訪問対応", "小松さん"],
+                      },
+                      {
+                        html: "/html/Jdss/",
+                        htmlText: "デザインの変更",
+                        version: "158",
+                        date: "2025/02/03",
+                        reason: [],
+                        change: ["不要なコードの削除", "デザインの変更"],
+                        inCharge: ["徳島"],
+                      },
+                      {
+                        html: "/html/Jdss/",
+                        htmlText:
+                          "自動機を使用しない場合にラベル印刷だけ行えるように修正",
+                        version: "123",
+                        date: "2024/10/07",
+                        reason: ["main2_次回QRラベルが飛ぶ時がある"],
+                        change: ["SQLクエリ->専用関数に書き直し"],
+                        inCharge: ["徳島", "小松さん", "藤原さん"],
                       },
                     ]}
                   />
@@ -205,8 +282,8 @@ export default function Page() {
               <Divider />
               <DownloadButton
                 currentUserName={currentUserName}
-                url="/download/yps/yps/"
-                bg="custom.excel"
+                url="/download/jdss/main/"
+                bg={"custom.access"}
                 color={
                   colorMode === "light" ? "custom.theme.light.900" : "white"
                 }
@@ -227,35 +304,43 @@ export default function Page() {
                   <Box>
                     <Heading size="md">
                       <Flex justify="space-between" align="center">
-                        <Box>バージョンアップ</Box>
+                        <Box>main3用ラダー図</Box>
                         <Box fontSize="xs" textAlign="right">
                           <LatestUpdateDate
-                            folderPath="./download/yps/verup/"
+                            folderPath="./download/jdss/main3/"
                             removeStrings={[]}
                           />
                         </Box>
                       </Flex>
                     </Heading>
-                    <Badge bg="custom.excel" color="white" marginRight={2}>
-                      Excel 2010
-                    </Badge>
-                    <Badge bg="custom.excel" color="white" marginRight={2}>
-                      Excel 2013
+                    <Badge bg="custom.omron" color="white" marginRight={2}>
+                      OMRON CP**
                     </Badge>
                     <Divider borderColor="gray.500" my={2} />
                   </Box>
                   <List spacing={1} styleType="disc" pl={3}>
                     <ListItem>
-                      本体に更新があった場合に他の本体をバージョンアップが可能
+                      順立生産システムからオムロン社のPLCを制御するサンプルのラダー図。
                     </ListItem>
-                    <ListItem>設置場所はサーバーのルートパス</ListItem>
+                    <ListItem>
+                      これはmain3からPLCへデータを送信して部品セットを行う。
+                    </ListItem>
+                    <ListItem>
+                      main3からシリアル送信するデータは2進数でPLC受信で対応した内部リレーをON/OFFする
+                    </ListItem>
+                    <ListItem>
+                      このラダー図そのままでは使用できるケースは少ないですがラダー図をカスタムして使用
+                    </ListItem>
+                    <ListItem>
+                      書き込みにはオムロン社のCX-Programmerが必要
+                    </ListItem>
                   </List>
                   <ChangelogAccordion
                     changelog={[
                       {
-                        version: "1.00",
-                        date: "2025/06/02",
-                        change: ["リリース"],
+                        version: "17",
+                        date: "2024/03/13",
+                        change: ["最終更新"],
                       },
                     ]}
                   />
@@ -264,8 +349,8 @@ export default function Page() {
               <Divider />
               <DownloadButton
                 currentUserName={currentUserName}
-                url="/download/yps/verup/"
-                bg="custom.excel"
+                url="/download/jdss/main3/"
+                bg="custom.omron"
                 color={
                   colorMode === "light" ? "custom.theme.light.900" : "white"
                 }
@@ -273,7 +358,7 @@ export default function Page() {
             </Card>
             <Box h="20px" w="1px" bg="gray.500" ml="50%" />{" "}
             <Card
-              maxW="lg"
+              maxW="2xl"
               w="100%"
               mx="auto"
               bg="transparent"
@@ -286,10 +371,10 @@ export default function Page() {
                   <Box>
                     <Heading size="md">
                       <Flex justify="space-between" align="center">
-                        <Box>バーコードフォント</Box>
+                        <Box>初回セットアップ</Box>
                         <Box fontSize="xs" textAlign="right">
                           <LatestUpdateDate
-                            folderPath="./download/library/code39/"
+                            folderPath="./download/"
                             removeStrings={[]}
                           />
                         </Box>
@@ -316,53 +401,7 @@ export default function Page() {
               <Divider />
               <DownloadButton
                 currentUserName={currentUserName}
-                url="/download/library/code39"
-                bg="custom.windows"
-                color={
-                  colorMode === "light" ? "custom.theme.light.900" : "white"
-                }
-              />
-            </Card>
-            <Box h="20px" w="1px" bg="gray.500" ml="50%" />
-            <Card
-              maxW="lg"
-              w="100%"
-              mx="auto"
-              bg="transparent"
-              border="1px solid"
-              borderColor="gray.500"
-              overflow="hidden"
-            >
-              <CardBody p="2">
-                <Stack mt="0" spacing="1">
-                  <Box>
-                    <Heading size="md">
-                      <Flex justify="space-between" align="center">
-                        <Box>MSCOMM32.OCX</Box>
-                        <Box fontSize="xs" textAlign="right">
-                          <LatestUpdateDate
-                            folderPath="./download/library/MSCOMM32"
-                            removeStrings={[]}
-                          />
-                        </Box>
-                      </Flex>
-                    </Heading>
-                    <Badge bg="custom.windows" color="white" marginRight={2}>
-                      Windows+VB6
-                    </Badge>
-                    <Divider borderColor="gray.500" my={2} />
-                  </Box>
-                  <List spacing={1} styleType="disc" pl={3}>
-                    <ListItem>
-                      YICへの書き込みに利用しているライブラリがWindowsOSに無い場合に使用。例えばWindows7には無い為、設置が必要
-                    </ListItem>
-                  </List>
-                </Stack>
-              </CardBody>
-              <Divider m="0" p="0" />
-              <DownloadButton
-                currentUserName={currentUserName}
-                url="/download/library/MSCOMM32"
+                url=""
                 bg="custom.windows"
                 color={
                   colorMode === "light" ? "custom.theme.light.900" : "white"
