@@ -32,8 +32,8 @@
     "latestUpdated": "2025-05-26T04:33:42.333Z"
   },
   "yps/yps": {
-    "latestFile": "Yps0.51_.zip",
-    "latestUpdated": "2025-05-26T04:31:52.000Z"
+    "latestFile": "Yps1.00_.zip",
+    "latestUpdated": "2025-06-02T02:30:22.000Z"
   },
   "yps": {
     "latestFile": ".DS_Store",
@@ -41,6 +41,6 @@
   },
   ".": {
     "latestFile": "download-meta.json",
-    "latestUpdated": "2025-05-30T13:29:24.756Z"
+    "latestUpdated": "2025-06-02T02:32:42.562Z"
   }
 }
