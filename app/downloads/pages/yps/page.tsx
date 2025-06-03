@@ -61,7 +61,7 @@ import getMessage from "@/utils/getMessage";
 import LatestUpdateDate from "../../parts/LatestUpdateDate";
 import { ChangelogAccordion } from "../../parts/ChangelogAccordion";
 
-import DownloadButton from "@/components/ui/DownloadButton";
+import DownloadButton from "@/components/ui/DownloadButton2";
 function formatDateTime(input: string): string {
   const date = new Date(input);
 

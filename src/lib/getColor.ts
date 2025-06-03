@@ -9,6 +9,10 @@ export const getColor = (
       return colorMode === "light"
         ? { bg: "red.500", color: "white" }
         : { bg: "pink.500", color: "white" };
+    case "新機能":
+      return colorMode === "light"
+        ? { bg: "green.500", color: "white" }
+        : { bg: "green.500", color: "white" };
     case "徳島":
     case "高知":
       return colorMode === "light"

@@ -50,7 +50,7 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
     setIsModalOpen(false);
   };
   return (
-    <Accordion allowMultiple mt={0} borderColor="transparent">
+    <Accordion allowMultiple mt={0} borderColor="transparent" w="100%">
       <AccordionItem>
         {({ isExpanded }) => (
           <>
@@ -275,10 +275,14 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                         </Popover>
                         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                           <ModalOverlay bg="rgba(0, 0, 0, 0.1)" />
-                          <ModalContent maxW="90vw" maxH="90vh">
+                          <ModalContent
+                            maxW="90vw"
+                            maxH="90vh"
+                            bg="transparent"
+                            boxShadow="none"
+                          >
                             <ModalCloseButton _focus={{ boxShadow: "none" }} />
-                            {/* <ModalHeader></ModalHeader> */}
-                            <ModalBody mx={0}>
+                            <ModalBody mx={0} bg="transparent">
                               <Box
                                 width="99%"
                                 height={{
@@ -289,14 +293,16 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                                 }}
                                 border="none"
                                 maxW="90vw"
+                                bg="transparent"
                               >
                                 <iframe
-                                  src={modalSrc} // モーダルのsrcを設定
+                                  src={modalSrc}
                                   style={{
                                     width: "100%",
                                     height: "100%",
                                     border: "none",
-                                  }} // iframeのサイズを100%に設定
+                                    backgroundColor: "transparent",
+                                  }}
                                   title="Embedded Content"
                                 />
                               </Box>

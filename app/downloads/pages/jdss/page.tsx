@@ -62,7 +62,7 @@ import getMessage from "@/utils/getMessage";
 import LatestUpdateDate from "../../parts/LatestUpdateDate";
 import { ChangelogAccordion } from "../../parts/ChangelogAccordion";
 
-import DownloadButton from "@/components/ui/DownloadButton";
+import DownloadButton2 from "@/components/ui/DownloadButton2";
 function formatDateTime(input: string): string {
   const date = new Date(input);
 
@@ -280,7 +280,7 @@ export default function Page() {
                 </Stack>
               </CardBody>
               <Divider />
-              <DownloadButton
+              <DownloadButton2
                 currentUserName={currentUserName}
                 url="/download/jdss/main/"
                 bg={"custom.access"}
@@ -347,7 +347,7 @@ export default function Page() {
                 </Stack>
               </CardBody>
               <Divider />
-              <DownloadButton
+              <DownloadButton2
                 currentUserName={currentUserName}
                 url="/download/jdss/main3/"
                 bg="custom.omron"
@@ -358,7 +358,7 @@ export default function Page() {
             </Card>
             <Box h="20px" w="1px" bg="gray.500" ml="50%" />{" "}
             <Card
-              maxW="2xl"
+              maxW="lg"
               w="100%"
               mx="auto"
               bg="transparent"
@@ -371,7 +371,7 @@ export default function Page() {
                   <Box>
                     <Heading size="md">
                       <Flex justify="space-between" align="center">
-                        <Box>初回セットアップ</Box>
+                        <Box>桜咲くQR</Box>
                         <Box fontSize="xs" textAlign="right">
                           <LatestUpdateDate
                             folderPath="./download/"
@@ -380,33 +380,49 @@ export default function Page() {
                         </Box>
                       </Flex>
                     </Heading>
-                    <Badge bg="custom.windows" color="white" marginRight={2}>
-                      Windows
-                    </Badge>
-                    <Badge bg="custom.mac" color="white" marginRight={2}>
-                      Mac
-                    </Badge>
-                    <Badge bg="custom.linux" color="white" marginRight={2}>
-                      Linux
-                    </Badge>
                     <Divider borderColor="gray.500" my={2} />
                   </Box>
                   <List spacing={1} styleType="disc" pl={3}>
                     <ListItem>
-                      YICから呼び出すバーコードを設定一覧表に表示するために使用
+                      QRコード描画用アプリ。他社製品のため載せる事が出来ません
                     </ListItem>
                   </List>
                 </Stack>
               </CardBody>
-              <Divider />
-              <DownloadButton
-                currentUserName={currentUserName}
-                url=""
-                bg="custom.windows"
-                color={
-                  colorMode === "light" ? "custom.theme.light.900" : "white"
-                }
-              />
+            </Card>
+            <Box h="20px" w="1px" bg="gray.500" ml="50%" />{" "}
+            <Card
+              maxW="lg"
+              w="100%"
+              mx="auto"
+              bg="transparent"
+              border="1px solid"
+              borderColor="gray.500"
+              overflow="hidden"
+            >
+              <CardBody p="2">
+                <Stack mt="0" spacing="1">
+                  <Box>
+                    <Heading size="md">
+                      <Flex justify="space-between" align="center">
+                        <Box>RS-reciiver light</Box>
+                        <Box fontSize="xs" textAlign="right">
+                          <LatestUpdateDate
+                            folderPath="./download/"
+                            removeStrings={[]}
+                          />
+                        </Box>
+                      </Flex>
+                    </Heading>
+                    <Divider borderColor="gray.500" my={2} />
+                  </Box>
+                  <List spacing={1} styleType="disc" pl={3}>
+                    <ListItem>
+                      バーコードリーダーがシリアルタイプの場合に変換するために使用。他社製品のため載せる事が出来ません
+                    </ListItem>
+                  </List>
+                </Stack>
+              </CardBody>
             </Card>
           </SimpleGrid>
         </div>

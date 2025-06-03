@@ -3,6 +3,7 @@ import { css, keyframes } from "@emotion/react";
 import { Box, Text, useColorMode } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useCustomToast } from "@/components/ui/customToast";
+import DownloadButton2 from "@/components/ui/DownloadButton2";
 import "@/styles/globals.css";
 const shake = keyframes`
   0% { transform: translateX(0); }
@@ -56,20 +57,6 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
             ? "polygon(0 0, 100% 0, 100% 100%, 0 100%)"
             : "polygon(0 0, 0% 0, 0% 100%, 0 100%)"
         }
-        onClick={() => {
-          if (!userName) {
-            showToast(
-              "ダウンロード出来ません",
-              "ダウンロードするにはログインと開発による認証が必要です",
-              "error"
-            );
-          } else {
-            setIsClicked(true);
-            setTimeout(() => {
-              router.push(path);
-            }, 1100);
-          }
-        }}
         _hover={{
           animation:
             isClicked || !userName
@@ -77,7 +64,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
               : `${shake} 0.6s ease-in-out infinite`,
         }}
       >
-        <Text
+        <Box
           transform={isClicked ? "rotate(0deg)" : "rotate(270deg)"}
           letterSpacing="0.2em"
           marginLeft="-0.1rem"
@@ -86,8 +73,13 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           fontSize="16px"
           userSelect="none"
         >
-          DOWNLOAD
-        </Text>
+          <DownloadButton2
+            url={path}
+            bg={backGroundColor}
+            currentUserName={userName ?? null}
+            color="white"
+          />
+        </Box>
       </Box>
       <Box
         position="absolute"

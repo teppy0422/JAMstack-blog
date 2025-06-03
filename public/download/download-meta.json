@@ -20,8 +20,8 @@
     "latestUpdated": "2007-11-29T09:06:24.000Z"
   },
   "library/code39": {
-    "latestFile": "code39.zip",
-    "latestUpdated": "2025-05-25T23:58:44.394Z"
+    "latestFile": "Code39Barcode.ttf",
+    "latestUpdated": "2025-06-03T07:42:28.616Z"
   },
   "sjp": {
     "latestFile": "Sjp3.101.18_.zip",
@@ -41,6 +41,6 @@
   },
   ".": {
     "latestFile": "download-meta.json",
-    "latestUpdated": "2025-06-02T16:27:55.027Z"
+    "latestUpdated": "2025-06-03T12:07:24.933Z"
   }
 }

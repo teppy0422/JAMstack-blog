@@ -71,7 +71,7 @@ import { BsFiletypeExe } from "react-icons/bs";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
-import DownloadButton from "@/components/ui/DownloadButton";
+import DownloadButton from "@/components/ui/DownloadButton2";
 import UnzipModal from "app/skillBlogs/components/howTo/UnzipModal";
 import FontInstallModal from "app/skillBlogs/components/howTo/FontInstall";
 import { getLocalIp } from "../../components/getLocalIp";

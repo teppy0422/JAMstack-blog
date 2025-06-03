@@ -8,7 +8,7 @@ type DownloadButtonProps = {
   color: string;
 };
 
-const DownloadButton = ({
+const DownloadButton2 = ({
   currentUserName,
   url,
   bg,
@@ -57,7 +57,6 @@ const DownloadButton = ({
             `指定されたフォルダが見つかりません: ${cleanedUrl}\n利用可能なキー: ${availableKeys}`
           );
         }
-
         const latestFile = folderData.latestFile;
         downloadUrl = `/download/${cleanedUrl}/${latestFile}`;
         console.log("Final downloadUrl:", downloadUrl);
@@ -127,7 +126,7 @@ const DownloadButton = ({
     }
   };
 
-  return (
+  return url === "" ? null : (
     <Box position="relative" w="100%" h="100%">
       <Box
         position="absolute"
@@ -154,11 +153,11 @@ const DownloadButton = ({
         bg="transparent"
         position="relative"
         zIndex="1"
-        lineHeight="1"
-        fontSize="inherit"
         onClick={handleDownload}
         color={isDownloaded ? "white" : color}
         _hover={isDownloaded ? {} : { bg: bg, opacity: 0.85, color: "white" }}
+        fontFamily="'Archivo Black', 'M PLUS Rounded 1c'"
+        letterSpacing="0.2em"
       >
         {isDownloading ? (
           <Box display="flex" alignItems="center" justifyContent="center">
@@ -166,11 +165,11 @@ const DownloadButton = ({
             <Text fontSize="sm">Downloading...</Text>
           </Box>
         ) : (
-          "Download"
+          "DOWNLOAD"
         )}
       </Box>
     </Box>
   );
 };
 
-export default DownloadButton;
+export default DownloadButton2;
