@@ -194,7 +194,7 @@ const BlogPage: React.FC = () => {
               ja: "更新日",
               language,
             })}
-            :2025-05-28
+            :2025-06-04
           </Text>
         </Box>
         <SectionBox
@@ -267,7 +267,7 @@ const BlogPage: React.FC = () => {
             })}
             <Box
               mt={2}
-              w="5.5em"
+              w="140px"
               height="24px"
               border="1px solid"
               borderRadius="md"
@@ -278,9 +278,10 @@ const BlogPage: React.FC = () => {
               }
               lineHeight="1"
               fontSize="inherit"
+              overflow="hidden"
             >
               <DownloadButton
-                currentUserName="a"
+                currentUserName={currentUserName}
                 url="/download/yps/yps"
                 bg="custom.excel"
                 color={
@@ -713,7 +714,7 @@ const BlogPage: React.FC = () => {
           </Text>
           <Box
             mt={2}
-            w="5.5em"
+            w="140px"
             height="24px"
             border="1px solid"
             borderRadius="md"
@@ -724,9 +725,10 @@ const BlogPage: React.FC = () => {
             }
             lineHeight="1"
             fontSize="inherit"
+            overflow="hidden"
           >
             <DownloadButton
-              currentUserName="a"
+              currentUserName={currentUserName}
               url="/download/yps/verup"
               bg="custom.excel"
               color={colorMode === "light" ? "custom.theme.light.900" : "white"}
@@ -1191,7 +1193,7 @@ const BlogPage: React.FC = () => {
             </ListItem>
             <Box
               mt={2}
-              w="5.5em"
+              w="140px"
               height="24px"
               border="1px solid"
               borderRadius="md"
@@ -1202,9 +1204,10 @@ const BlogPage: React.FC = () => {
               }
               lineHeight="1"
               fontSize="inherit"
+              overflow="hidden"
             >
               <DownloadButton
-                currentUserName="a"
+                currentUserName={currentUserName}
                 url="/download/library/code39"
                 bg="custom.windows"
                 color={
