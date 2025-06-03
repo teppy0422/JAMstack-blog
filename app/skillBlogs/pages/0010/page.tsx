@@ -225,7 +225,7 @@ const BlogPage: React.FC = () => {
             <br />
             <Text>
               <Link
-                href="/downloads/pages/yps"
+                href="/downloads/yps"
                 isExternal
                 color="blue.500"
                 fontWeight="bold"
