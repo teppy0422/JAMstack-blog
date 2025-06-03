@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useSearchParams } from "next/navigation";
 import Content from "@/components/content";
 
 import {
@@ -39,7 +38,6 @@ import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode 
 import DownloadButton from "./parts/DownloadButton";
 import styles from "@/styles/home.module.scss";
 import { useUserContext } from "@/contexts/useUserContext";
-// import Hippo_001_wrap from "../../components/3d/hippo_001_wrap";
 import { AnimationImage } from "@/components/ui/CustomImage";
 import CustomLinkBox from "./parts/customLinkBox";
 import CustomPopver from "@/components/ui/popver";
@@ -54,7 +52,7 @@ import LatestUpdateDate from "./parts/LatestUpdateDate";
 import { ChangelogAccordion } from "./parts/ChangelogAccordion";
 import UploadSjp from "app/skillBlogs/components/howTo/UploadSjp";
 
-export default function Ui() {
+export default function Ui({ filterId }: { filterId?: string }) {
   const { colorMode } = useColorMode();
   const { currentUserId, currentUserName } = useUserContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -128,8 +126,6 @@ export default function Ui() {
     return text.length > 20 ? text.slice(0, maxLength) + "..." : text;
   };
   const [hoverdId, setHoveredId] = useState<string | null>(null);
-  const searchParams = useSearchParams();
-  const targetId = searchParams?.get("id"); // 例: ?id=b2
 
   return (
     <>
@@ -341,7 +337,7 @@ export default function Ui() {
             spacing={0}
             mx={{ base: 2, md: 20, lg: 30, xl: 30 }}
           >
-            {(targetId === null || targetId === "sjp") && (
+            {(filterId === null || filterId === "sjp") && (
               <>
                 <Card
                   backgroundColor="transparent"
@@ -1191,7 +1187,7 @@ export default function Ui() {
               </>
             )}
 
-            {(targetId === null || targetId === "bip") && (
+            {(filterId === null || filterId === "bip") && (
               <>
                 <Card
                   backgroundColor="transparent"
@@ -1293,7 +1289,7 @@ export default function Ui() {
                 </Card>
               </>
             )}
-            {(targetId === null || targetId === "jdss") && (
+            {(filterId === null || filterId === "jdss") && (
               <>
                 <Card
                   backgroundColor="transparent"
@@ -1653,7 +1649,7 @@ export default function Ui() {
                 </Box>
               </>
             )}
-            {(targetId === null || targetId === "yps") && (
+            {(filterId === null || filterId === "yps") && (
               <>
                 <Card
                   backgroundColor="transparent"
@@ -1955,7 +1951,7 @@ export default function Ui() {
                 </Box>
               </>
             )}
-            {(targetId === null || targetId === "library") && (
+            {(filterId === null || filterId === "library") && (
               <>
                 <Card
                   mt="20px"
@@ -2139,7 +2135,7 @@ export default function Ui() {
                 </Card>
               </>
             )}
-            {targetId === null && (
+            {filterId === null && (
               <HStack spacing={2} justifyContent="center" mt={0} height="100%">
                 <Image
                   src="/images/illust/hippo/hippo_001.png"
