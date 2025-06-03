@@ -337,7 +337,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
             spacing={0}
             mx={{ base: 2, md: 20, lg: 30, xl: 30 }}
           >
-            {(filterId === null || filterId === "sjp") && (
+            {(!filterId || filterId === "sjp") && (
               <>
                 <Card
                   backgroundColor="transparent"
@@ -1187,7 +1187,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
               </>
             )}
 
-            {(filterId === null || filterId === "bip") && (
+            {(!filterId || filterId === "bip") && (
               <>
                 <Card
                   backgroundColor="transparent"
@@ -1289,7 +1289,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                 </Card>
               </>
             )}
-            {(filterId === null || filterId === "jdss") && (
+            {(!filterId || filterId === "jdss") && (
               <>
                 <Card
                   backgroundColor="transparent"
@@ -1649,7 +1649,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                 </Box>
               </>
             )}
-            {(filterId === null || filterId === "yps") && (
+            {(!filterId || filterId === "yps") && (
               <>
                 <Card
                   backgroundColor="transparent"
@@ -1951,7 +1951,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                 </Box>
               </>
             )}
-            {(filterId === null || filterId === "library") && (
+            {(!filterId || filterId === "library") && (
               <>
                 <Card
                   mt="20px"
@@ -2135,7 +2135,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                 </Card>
               </>
             )}
-            {filterId === null && (
+            {!filterId && (
               <HStack spacing={2} justifyContent="center" mt={0} height="100%">
                 <Image
                   src="/images/illust/hippo/hippo_001.png"
