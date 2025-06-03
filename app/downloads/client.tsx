@@ -1686,6 +1686,13 @@ export default function Ui() {
                 <ChangelogAccordion
                   changelog={[
                     {
+                      version: "1.01",
+                      date: "2025/06/04",
+                      reason: ["印鑑の設定が無い時にエラーが出る"],
+                      change: ["文字サイズを取得する関数を追加"],
+                      inCharge: ["徳島", "桒原さん", "不具合"],
+                    },
+                    {
                       version: "1.00",
                       date: "2025/06/02",
                       change: ["リリース"],
