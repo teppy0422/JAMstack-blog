@@ -28,12 +28,13 @@ const CustomModalTab: React.FC<{
       <Badge
         variant={path ? "solid" : "outline"} // pathが空の場合はoutline
         colorScheme={path ? undefined : "gray"} // pathが空の場合はgrayのカラースキーム
-        backgroundColor={path ? "#444" : undefined} // pathが空でない場合は背景色を設定
+        bg={path ? "#555" : undefined} // pathが空でない場合は背景色を設定
         color={path ? "white" : undefined} // pathが空でない場合は文字色を設定
         display="inline-block"
         cursor={path ? "pointer" : "default"}
-        _hover={path ? { boxShadow: "dark-lg" } : undefined}
+        _hover={path ? { bg: "#333" } : undefined}
         onClick={path ? () => handleBoxClick(path) : undefined}
+        transition={"all 0.3s ease-in-out"}
       >
         <Flex alignItems="center">
           <Box mr={0}>{truncatedText(text, maxLen)}</Box>

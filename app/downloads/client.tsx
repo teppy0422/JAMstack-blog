@@ -156,7 +156,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                 cn: "点击右侧的",
                 language,
               })}
-              <Badge backgroundColor="#444" color="white" mt={-0.5} mr={0.5}>
+              <Badge backgroundColor="#555" color="white" mt={-0.5} mr={0.5}>
                 {getMessage({
                   ja: "バッジ",
                   us: "badge",
@@ -268,7 +268,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             })}
                             <br />
                             <Badge
-                              backgroundColor="#444"
+                              backgroundColor="#555"
                               color="white"
                               mt={-0.5}
                               mr={0.5}
@@ -635,7 +635,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 language,
                               })}
                               <Badge
-                                backgroundColor="#444"
+                                backgroundColor="#555"
                                 color="white"
                                 mt={-0.5}
                                 mr={0.5}
@@ -913,7 +913,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       <DownloadButton
                         path="/download/bip/"
                         isHovered={hoverdId === "03"}
-                        backGroundColor="green"
+                        backGroundColor="custom.excel"
                         userName={currentUserName}
                       />
                       <Flex
@@ -1301,7 +1301,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       <DownloadButton
                         path="/download/yps/yps/"
                         isHovered={hoverdId === "07"}
-                        backGroundColor="green"
+                        backGroundColor="custom.excel"
                         userName={currentUserName}
                       />
                       <Flex
@@ -1403,7 +1403,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         <DownloadButton
                           path="/download/yps/verup/"
                           isHovered={hoverdId === "08"}
-                          backGroundColor="green"
+                          backGroundColor="custom.excel"
                           userName={currentUserName}
                         />
                         <Flex
@@ -1503,7 +1503,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       <DownloadButton
                         path="/download/library/code39/"
                         isHovered={hoverdId === "06"}
-                        backGroundColor="#333"
+                        backGroundColor="#555"
                         userName={currentUserName}
                       />
                       <Flex
