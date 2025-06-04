@@ -150,7 +150,7 @@ export default function About() {
               <SjpIcon
                 size={48}
                 title="Sjp+"
-                color={colorMode === "light" ? "#81d8d0" : "#FFF"} // カラーモードに応じて色を設定
+                color={colorMode === "light" ? "#81d8d0" : "#FFF"}
               />
               <Text fontSize="2xl" mb={2} fontWeight={600}>
                 {getMessage({

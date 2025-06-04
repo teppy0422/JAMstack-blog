@@ -9,8 +9,6 @@ import React, {
 } from "react";
 import { useRouter, useParams } from "next/navigation";
 import dynamic from "next/dynamic";
-import { motion } from "framer-motion"; // framer-motionをインポート
-const MotionBox = motion(Box); // Boxをmotionでラップ
 
 import {
   FaPaperclip,
@@ -91,6 +89,9 @@ import { getIpAddress } from "@/lib/getIpAddress";
 import { GetColor } from "@/components/CustomColor";
 import { AnimationImage } from "@/components/ui/CustomImage";
 import IconWithDrawer from "./IconWithDrawer";
+import SafeHtml from "../../parts/SafeHtml";
+import ExternalLinkText from "../../parts/ExternalLinkText";
+import UrlPreviewBox from "../../parts/UrlPreviewBox";
 
 import "@/styles/home.module.scss";
 // import { AppContext } from "../../../pages/_app";
@@ -193,7 +194,39 @@ function ThreadContent(): JSX.Element {
             transform: scale(1);
   }
 `;
+  function renderContentWithLinks(content: string) {
+    // URLを検出して分割
+    const urlRegex = /(http[s]?:\/\/[^\s]+)/g;
+    const parts = content.split(urlRegex);
 
+    return parts.map((part, i) => {
+      if (part.match(urlRegex)) {
+        return (
+          <Text
+            as="span"
+            key={i}
+            color="blue.600"
+            textDecoration="underline"
+            cursor="pointer"
+            onClick={() => window.open(part, "_blank")}
+          >
+            {part}
+          </Text>
+        );
+      }
+      // 改行も反映
+      return part.split("\n").map((line, j, arr) =>
+        j < arr.length - 1 ? (
+          <React.Fragment key={j}>
+            {line}
+            <br />
+          </React.Fragment>
+        ) : (
+          line
+        )
+      );
+    });
+  }
   // URLの履歴を追加する関数
   const addToHistory = (originalUrl: string, newUrl: string) => {
     setUrlHistory((prev) => {
@@ -3066,16 +3099,7 @@ function ThreadContent(): JSX.Element {
                                     color="black"
                                     fontSize="15px"
                                   >
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: post.content
-                                          .replace(/\n/g, "<br />")
-                                          .replace(
-                                            /(http[s]?:\/\/[^\s]+)/g,
-                                            '<a href="$1" class="external-link" style="text-decoration: underline;">$1</a>'
-                                          ),
-                                      }}
-                                    />
+                                    <ExternalLinkText content={post.content} />
                                   </Box>
                                   {post.file_url && (
                                     <>
@@ -3550,243 +3574,27 @@ function ThreadContent(): JSX.Element {
                               const url = urls[0];
                               const isExpanded = expandedUrls[url] || false;
                               return (
-                                <Box>
-                                  <Box
-                                    width={isExpanded ? "94%" : "50%"}
-                                    height={isExpanded ? "70vh" : "12vh"}
-                                    mt="8px"
-                                    transition="all 0.3s ease"
-                                    marginLeft={
-                                      post.user_uid === currentUserId
-                                        ? "auto"
-                                        : "44px"
-                                    }
-                                    marginRight={
-                                      post.user_uid === currentUserId
-                                        ? "12px"
-                                        : "auto"
-                                    }
-                                    style={{
-                                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                                      position: "relative",
-                                    }}
-                                    borderRadius="8px"
-                                  >
-                                    <Tooltip
-                                      label={
-                                        isExpanded ? "折りたたむ" : "展開する"
-                                      }
-                                      placement="top"
-                                      hasArrow
-                                    >
-                                      <Box
-                                        display="inline-block"
-                                        position="absolute"
-                                      >
-                                        <Icon
-                                          position="absolute"
-                                          as={LuPanelRightOpen}
-                                          cursor="pointer"
-                                          boxSize="18px"
-                                          right={
-                                            post.user_uid === currentUserId
-                                              ? ""
-                                              : "-22px"
-                                          }
-                                          left={
-                                            post.user_uid === currentUserId
-                                              ? "-22px"
-                                              : ""
-                                          }
-                                          top="6px"
-                                          transform={
-                                            isExpanded
-                                              ? post.user_uid === currentUserId
-                                                ? "rotate(180deg)"
-                                                : "rotate(0deg)"
-                                              : post.user_uid === currentUserId
-                                              ? "rotate(0deg)"
-                                              : "rotate(180deg)"
-                                          }
-                                          transition="transform 0.3s ease"
-                                          onClick={() => {
-                                            setExpandedUrls((prev) => ({
-                                              ...prev,
-                                              [url]: !prev[url],
-                                            }));
-                                          }}
-                                          _hover={{
-                                            transform: isExpanded
-                                              ? post.user_uid === currentUserId
-                                                ? "rotate(180deg) scale(1.2)"
-                                                : "rotate(0deg) scale(1.2)"
-                                              : post.user_uid === currentUserId
-                                              ? "rotate(0deg) scale(1.2)"
-                                              : "rotate(180deg) scale(1.2)",
-                                          }}
-                                        />
-                                      </Box>
-                                    </Tooltip>
-                                    <Box
-                                      position="relative"
-                                      height="100%"
-                                      borderRadius="8px"
-                                      overflow="hidden"
-                                    >
-                                      <Flex
-                                        bg={
-                                          post.user_uid === currentUserId
-                                            ? "#DCF8C6"
-                                            : "#FFFFFF"
-                                        }
-                                        px={2}
-                                        alignItems="center"
-                                        borderBottom="1px solid"
-                                        borderColor="gray.200"
-                                        width="100%"
-                                      >
-                                        <Box display="flex" alignItems="center">
-                                          <IconButton
-                                            color="#000"
-                                            aria-label="戻る"
-                                            icon={<Icon as={FaArrowLeft} />}
-                                            size="sm"
-                                            variant="ghost"
-                                            mr={1}
-                                            isDisabled={
-                                              !urlHistory[url] ||
-                                              currentUrlIndex[url] === 0
-                                            }
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              const prevUrl = goBack(url);
-                                              if (prevUrl) {
-                                                const iframe =
-                                                  document.querySelector(
-                                                    `iframe[data-original-url="${url}"]`
-                                                  ) as HTMLIFrameElement;
-                                                if (iframe) {
-                                                  iframe.src = prevUrl;
-                                                }
-                                              }
-                                            }}
-                                          />
-                                          <IconButton
-                                            aria-label="リロード"
-                                            icon={<Icon as={FaRedo} />}
-                                            color="#000"
-                                            size="sm"
-                                            variant="ghost"
-                                            mr={2}
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              const iframe =
-                                                document.querySelector(
-                                                  `iframe[data-original-url="${url}"]`
-                                                ) as HTMLIFrameElement;
-                                              if (iframe) {
-                                                iframe.src = iframe.src;
-                                              }
-                                            }}
-                                          />
-                                        </Box>
-                                        <Box
-                                          flex="1"
-                                          overflow="hidden"
-                                          whiteSpace="nowrap"
-                                          textOverflow="ellipsis"
-                                          fontSize="xs"
-                                          color="#000"
-                                          alignContent="center"
-                                        >
-                                          {urlTitles[url] ||
-                                            "ページを読み込み中..."}
-                                        </Box>
-                                        <Box flex="1" />
-                                        <IconButton
-                                          color="#000"
-                                          aria-label="新しいタブで開く"
-                                          icon={<Icon as={FaExternalLinkAlt} />}
-                                          size="sm"
-                                          variant="ghost"
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            const currentUrl =
-                                              urlHistory[url]?.[
-                                                currentUrlIndex[url] || 0
-                                              ] || url;
-                                            window.open(currentUrl, "_blank");
-                                          }}
-                                        />
-                                      </Flex>
-                                      {isExpanded && (
-                                        <iframe
-                                          src={url}
-                                          data-original-url={url}
-                                          style={{
-                                            position: "relative",
-                                            top: 0,
-                                            left: 0,
-                                            width: "100%",
-                                            height: "calc(100% - 20px)",
-                                            border: "none",
-                                          }}
-                                          sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-                                          loading="lazy"
-                                          onLoad={(e) => {
-                                            const iframe =
-                                              e.target as HTMLIFrameElement;
-                                            try {
-                                              const currentUrl =
-                                                iframe.contentWindow?.location
-                                                  .href;
-                                              if (
-                                                currentUrl &&
-                                                currentUrl !== url &&
-                                                currentUrl !== iframe.src
-                                              ) {
-                                                addToHistory(url, currentUrl);
-                                              }
-                                              // まずURLからドメイン名を取得してタイトルの初期値として設定
-                                              const domain = new URL(url)
-                                                .hostname;
-                                              setUrlTitles((prev) => ({
-                                                ...prev,
-                                                [url]: domain,
-                                              }));
-                                              // タイトルの取得を試みる
-                                              const title =
-                                                iframe?.contentWindow?.document
-                                                  ?.title ||
-                                                iframe?.contentDocument?.title;
-                                              if (title) {
-                                                setUrlTitles((prev) => ({
-                                                  ...prev,
-                                                  [url]: title,
-                                                }));
-                                              }
-                                            } catch (error) {
-                                              // エラーの場合はドメイン名を表示
-                                              try {
-                                                const domain = new URL(url)
-                                                  .hostname;
-                                                setUrlTitles((prev) => ({
-                                                  ...prev,
-                                                  [url]: domain,
-                                                }));
-                                              } catch (e) {
-                                                setUrlTitles((prev) => ({
-                                                  ...prev,
-                                                  [url]: url,
-                                                }));
-                                              }
-                                            }
-                                          }}
-                                        />
-                                      )}
-                                    </Box>
-                                  </Box>
-                                </Box>
+                                <UrlPreviewBox
+                                  url={url}
+                                  isExpanded={isExpanded}
+                                  onToggle={() =>
+                                    setExpandedUrls((prev) => ({
+                                      ...prev,
+                                      [url]: !prev[url],
+                                    }))
+                                  }
+                                  urlHistory={urlHistory}
+                                  currentUrlIndex={currentUrlIndex}
+                                  urlTitles={urlTitles}
+                                  goBack={goBack}
+                                  addToHistory={addToHistory}
+                                  setUrlTitles={setUrlTitles}
+                                  setExpandedUrls={setExpandedUrls}
+                                  setCurrentUrlIndex={setCurrentUrlIndex}
+                                  colorMode={colorMode}
+                                  currentUserId={currentUserId ?? ""}
+                                  postUserId={post.user_uid}
+                                />
                               );
                             })()}
                           </div>

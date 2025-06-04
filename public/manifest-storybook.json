@@ -6,7 +6,7 @@
   "display": "standalone",
   "background_color": "#73c7c7",
   "theme_color": "#73c7c7",
-  "description": "子ども向けの楽しいえほんアプリ",
+  "description": "幼児向けの動く絵本アプリ",
   "icons": [
     {
       "src": "/images/ico/storybook-cover.png",

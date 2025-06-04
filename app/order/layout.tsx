@@ -1,13 +1,15 @@
+// app/order/layout.tsx
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "注文",
+  description: "注文する為のページ",
   themeColor: "#FF69B4",
   icons: {
     icon: "/images/ico/order-cover.png",
     apple: "/images/ico/order-cover.png",
   },
-  manifest: "/public/manifest-order.json",
+  manifest: "/manifest-order.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

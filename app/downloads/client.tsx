@@ -1215,9 +1215,16 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               })}
                               <br />
                               {getMessage({
-                                ja: "オムロン社のCX-Programmerが必要です",
+                                ja: "PLCへの書込みにはオムロン社のCX-Programmerが必要です",
                                 us: "Requires Omron's CX-Programmer",
                                 cn: "需要使用 Omron 的 CX-Programmer",
+                                language,
+                              })}
+                              <br />
+                              {getMessage({
+                                ja: "ダウンロードファイルには配線図とPLCシリアル設定の説明が含まれます。",
+                                us: "The download file contains wiring diagrams and instructions for PLC serial configuration.",
+                                cn: "下载文件包含 PLC 串行配置的接线图和说明。",
                                 language,
                               })}
                             </Text>
