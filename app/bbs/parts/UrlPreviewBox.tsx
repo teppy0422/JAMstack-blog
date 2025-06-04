@@ -147,46 +147,6 @@ const UrlPreviewBox: React.FC<Props> = ({
             borderColor="gray.200"
             width="100%"
           >
-            <Box display="flex" alignItems="center">
-              <IconButton
-                color="#000"
-                aria-label="戻る"
-                icon={<Icon as={FaArrowLeft} />}
-                size="sm"
-                variant="ghost"
-                mr={1}
-                isDisabled={!urlHistory[url] || currentUrlIndex[url] === 0}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const prevUrl = goBack(url);
-                  if (prevUrl) {
-                    const iframe = document.querySelector(
-                      `iframe[data-original-url="${url}"]`
-                    ) as HTMLIFrameElement;
-                    if (iframe) {
-                      iframe.src = prevUrl;
-                    }
-                  }
-                }}
-              />
-              <IconButton
-                aria-label="リロード"
-                icon={<Icon as={FaRedo} />}
-                color="#000"
-                size="sm"
-                variant="ghost"
-                mr={2}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const iframe = document.querySelector(
-                    `iframe[data-original-url="${url}"]`
-                  ) as HTMLIFrameElement;
-                  if (iframe) {
-                    iframe.src = iframe.src;
-                  }
-                }}
-              />
-            </Box>
             <Box
               flex="1"
               overflow="hidden"
@@ -198,7 +158,6 @@ const UrlPreviewBox: React.FC<Props> = ({
             >
               {urlTitles[url] || "ページを読み込み中..."}
             </Box>
-            <Box flex="1" />
             <IconButton
               color="blue.600"
               aria-label="新しいタブで開く"
@@ -290,7 +249,7 @@ const UrlPreviewBox: React.FC<Props> = ({
                       fontSize="sm"
                       fontWeight="bold"
                       noOfLines={2}
-                      maxW="180px"
+                      maxW="280px"
                     >
                       {urlTitles[url] || domain}
                     </Text>
@@ -299,7 +258,7 @@ const UrlPreviewBox: React.FC<Props> = ({
                         fontSize="xs"
                         color="gray.600"
                         noOfLines={2}
-                        maxW="180px"
+                        maxW="280px"
                         mt={1}
                       >
                         {description}
