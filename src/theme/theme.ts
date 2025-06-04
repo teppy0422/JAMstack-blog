@@ -83,7 +83,7 @@ export const theme = extendTheme({
       dotnet: "#854c8f",
       front: "#F1652A",
       php: "#4E5B92",
-      arduino: "#12999F",
+      arduino: "#0f8592",
       davinci: "#888888",
       inkscape: "#333333",
       windows: "#0078D7",

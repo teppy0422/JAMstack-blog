@@ -29,6 +29,7 @@ import {
   Spacer,
   Link,
   Icon,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 
@@ -51,16 +52,22 @@ import ResponsiveModal from "@/components/responsiveModal";
 import LatestUpdateDate from "./parts/LatestUpdateDate";
 import { ChangelogAccordion } from "./parts/ChangelogAccordion";
 import UploadSjp from "app/skillBlogs/components/howTo/UploadSjp";
+import BadgeList from "@/components/ui/BadgeList";
+import customcardHeader from "./parts/CustomCardHeader";
+import CustomCardHeader from "./parts/CustomCardHeader";
+import DownloadIconAnimation from "./parts/DownloadIconAnimation";
+import CustomModalTab from "./parts/CustomModalTab";
+import CustomModal from "app/skillBlogs/components/customModal";
+import { ToggleSection } from "./parts/ToggleSection";
 
 export default function Ui({ filterId }: { filterId?: string }) {
   const { colorMode } = useColorMode();
+  const bg = useColorModeValue(
+    "custom.theme.light.500",
+    "custom.theme.dark.500"
+  );
   const { currentUserId, currentUserName } = useUserContext();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [modalPath, setModalPath] = useState("");
-  const handleBoxClick = (path) => {
-    setModalPath(path);
-    onOpen();
-  };
+
   const [isHovered, setIsHovered] = useState(false);
   const [showAllMap, setShowAllMap] = useState<Record<number, boolean>>({});
   const toggleShowAll = (groupIndex: number) => {
@@ -70,61 +77,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
     }));
   };
 
-  const CustomBadge: React.FC<{
-    path: string;
-    text: string;
-    media: string;
-  }> = ({ path, text, media }) => {
-    const [isBase] = useMediaQuery("(max-width: 480px)");
-    const maxLen = isBase ? 16 : 99;
-
-    return (
-      <Badge
-        variant={path ? "solid" : "outline"} // pathが空の場合はoutline
-        colorScheme={path ? undefined : "gray"} // pathが空の場合はgrayのカラースキーム
-        backgroundColor={path ? "#444" : undefined} // pathが空でない場合は背景色を設定
-        color={path ? "white" : undefined} // pathが空でない場合は文字色を設定
-        display="inline-block"
-        cursor={path ? "pointer" : "default"}
-        _hover={path ? { boxShadow: "dark-lg" } : undefined}
-        onClick={path ? () => handleBoxClick(path) : undefined}
-      >
-        <Flex alignItems="center">
-          <Box mr={0}>{truncatedText(text, maxLen)}</Box>
-          {media === "movie" ? (
-            <svg
-              stroke="currentColor"
-              fill="currentColor"
-              stroke-width="0"
-              viewBox="0 0 24 24"
-              height="20px"
-              width="20px"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M19.437,19.937H4.562a2.5,2.5,0,0,1-2.5-2.5V6.563a2.5,2.5,0,0,1,2.5-2.5H19.437a2.5,2.5,0,0,1,2.5,2.5V17.437A2.5,2.5,0,0,1,19.437,19.937ZM4.562,5.063a1.5,1.5,0,0,0-1.5,1.5V17.437a1.5,1.5,0,0,0,1.5,1.5H19.437a1.5,1.5,0,0,0,1.5-1.5V6.563a1.5,1.5,0,0,0-1.5-1.5Z"></path>
-              <path d="M14.568,11.149,10.6,8.432a1.032,1.032,0,0,0-1.614.851v5.434a1.032,1.032,0,0,0,1.614.851l3.972-2.717A1.031,1.031,0,0,0,14.568,11.149Z"></path>
-            </svg>
-          ) : media === "html" ? (
-            <svg
-              stroke="currentColor"
-              fill="currentColor"
-              stroke-width="0"
-              viewBox="0 0 240 240"
-              height="20px"
-              width="20px"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M214,120V88a6,6,0,0,0-1.76-4.24l-56-56A6,6,0,0,0,152,26H56A14,14,0,0,0,42,40v80a6,6,0,0,0,12,0V40a2,2,0,0,1,2-2h90V88a6,6,0,0,0,6,6h50v26a6,6,0,0,0,12,0ZM158,46.48,193.52,82H158ZM66,160v48a6,6,0,0,1-12,0V190H30v18a6,6,0,0,1-12,0V160a6,6,0,0,1,12,0v18H54V160a6,6,0,0,1,12,0Zm56,0a6,6,0,0,1-6,6H106v42a6,6,0,0,1-12,0V166H84a6,6,0,0,1,0-12h32A6,6,0,0,1,122,160Zm72,0v48a6,6,0,0,1-12,0V178l-13.2,17.6a6,6,0,0,1-9.6,0L146,178v30a6,6,0,0,1-12,0V160a6,6,0,0,1,10.8-3.6L164,182l19.2-25.6A6,6,0,0,1,194,160Zm56,48a6,6,0,0,1-6,6H216a6,6,0,0,1-6-6V160a6,6,0,0,1,12,0v42h22A6,6,0,0,1,250,208Z"></path>
-            </svg>
-          ) : null}
-        </Flex>
-      </Badge>
-    );
-  };
   const { language, setLanguage } = useLanguage();
-  const truncatedText = (text: string, maxLength: number) => {
-    return text.length > 20 ? text.slice(0, maxLength) + "..." : text;
-  };
   const [hoverdId, setHoveredId] = useState<string | null>(null);
 
   return (
@@ -156,7 +109,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
           },
         }}
       />
-
       <Text ml={4} className="print-only">
         ※別紙3
       </Text>
@@ -182,105 +134,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
               justifyContent="center"
               mb={3}
             >
-              <Box transform="rotate(270deg)" position="relative" top="-3px">
-                {/* <IoTicketOutline size={28} /> */}
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  stroke-width="0"
-                  viewBox="0 0 512 512"
-                  height="28px"
-                  width="28px"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill="none"
-                    stroke-miterlimit="10"
-                    stroke-width="32"
-                    stroke-dasharray="1350"
-                    stroke-dashoffset="1350"
-                    d="M366.05 146a46.7 46.7 0 0 1-2.42-63.42 3.87 3.87 0 0 0-.22-5.26l-44.13-44.18a3.89 3.89 0 0 0-5.5 0l-70.34 70.34a23.62 23.62 0 0 0-5.71 9.24 23.66 23.66 0 0 1-14.95 15 23.7 23.7 0 0 0-9.25 5.71L33.14 313.78a3.89 3.89 0 0 0 0 5.5l44.13 44.13a3.87 3.87 0 0 0 5.26.22 46.69 46.69 0 0 1 65.84 65.84 3.87 3.87 0 0 0 .22 5.26l44.13 44.13a3.89 3.89 0 0 0 5.5 0l180.4-180.39a23.7 23.7 0 0 0 5.71-9.25 23.66 23.66 0 0 1 14.95-15 23.62 23.62 0 0 0 9.24-5.71l70.34-70.34a3.89 3.89 0 0 0 0-5.5l-44.13-44.13a3.87 3.87 0 0 0-5.26-.22 46.7 46.7 0 0 1-63.42-2.32z"
-                  >
-                    <animate
-                      attributeName="stroke-dashoffset"
-                      from="1350"
-                      to="0"
-                      dur="3s"
-                      fill="freeze"
-                    />
-                  </path>
-                  <path
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-miterlimit="10"
-                    stroke-width="32"
-                    stroke-dasharray="10"
-                    stroke-dashoffset="10"
-                    d="m250.5 140.44-16.51-16.51m60.53 60.53-11.01-11m55.03 55.03-11-11.01m60.53 60.53-16.51-16.51"
-                  >
-                    <animate
-                      attributeName="stroke-dashoffset"
-                      from="0"
-                      to="10"
-                      begin="4s"
-                      dur="6s"
-                      fill="freeze"
-                    />
-                  </path>
-                </svg>
-              </Box>
-              <svg
-                width="200"
-                height="50"
-                viewBox="0 0 200 50"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  <clipPath id="textClip">
-                    <rect x="0" y="0" width="0" height="50">
-                      <animate
-                        attributeName="width"
-                        from="0"
-                        to="200"
-                        dur="1s"
-                        begin="2s"
-                        fill="freeze"
-                      />
-                    </rect>
-                  </clipPath>
-                </defs>
-                <text
-                  x="0"
-                  y="30"
-                  font-family="'Archivo Black', 'M PLUS Rounded 1c'"
-                  font-size="24"
-                  fill="none"
-                  stroke={colorMode === "light" ? "Orange" : "white"}
-                  stroke-width="2"
-                  stroke-dasharray="200"
-                  stroke-dashoffset="200"
-                >
-                  DOWNLOAD
-                  <animate
-                    attributeName="stroke-dashoffset"
-                    from="200"
-                    to="0"
-                    dur="3s"
-                    fill="freeze"
-                  />
-                </text>
-                <text
-                  x="0"
-                  y="30"
-                  font-family="'Archivo Black', 'M PLUS Rounded 1c'"
-                  font-size="24"
-                  fill={colorMode === "light" ? "#333" : "#111"}
-                  clip-path="url(#textClip)"
-                >
-                  DOWNLOAD
-                </text>
-              </svg>
-
+              <DownloadIconAnimation />
               <AnimationImage
                 src="/images/illust/hippo/hippo_007_pixcel.gif"
                 width="50px"
@@ -344,27 +198,13 @@ export default function Ui({ filterId }: { filterId?: string }) {
                   border="1px solid"
                   borderColor="gray.500"
                 >
-                  <CardHeader p={2} pl={3} pb={0}>
-                    <Flex align="center">
-                      <Heading size="md" mb={2}>
-                        {getMessage({
-                          ja: "生産準備+",
-                          language,
-                        })}
-                      </Heading>
-                      <Spacer />
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        width="auto"
-                        mt={2}
-                        fontSize="xs"
-                      >
-                        <UploadSjp />
-                      </Box>
-                    </Flex>
-                  </CardHeader>
+                  <CustomCardHeader
+                    text={getMessage({
+                      ja: "生産準備+",
+                      language,
+                    })}
+                    link={<UploadSjp />}
+                  />
                   <Divider borderColor="gray.500" />
                   <CardBody p={0}>
                     <Box
@@ -381,7 +221,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       <DownloadButton
                         path="/download/sjp"
                         isHovered={hoverdId === "01"}
-                        backGroundColor="green"
+                        backGroundColor="custom.excel"
                         userName={currentUserName}
                       />
                       <Flex
@@ -393,7 +233,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb={1.5}>
+                          <Heading size="sm" mb="3px">
                             {getMessage({
                               ja: "Sjp+ 本体",
                               us: "Sjp+ main unit",
@@ -401,33 +241,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               language,
                             })}
                           </Heading>
-                          <Flex justifyContent="flex-end" alignItems="center">
-                            <Badge
-                              variant="solid"
-                              bg="green"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              EXCEL2010
-                            </Badge>
-                            <Badge
-                              variant="solid"
-                              bg="green"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              2013
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              colorScheme="gray"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              365
-                            </Badge>
-                          </Flex>
-                          <Text pt="2" fontSize="sm">
+                          <BadgeList
+                            labels={["EXCEL2010", "EXCEL2013", "EXCEL365"]}
+                            useGetColor={[true, true, false]}
+                          />
+                          <Text pt="3px" fontSize="sm">
                             {getMessage({
                               ja: "最初はこれから始めるのがおすすめです",
                               us: "I recommend starting with this one.",
@@ -482,60 +300,30 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               />
                             </Box>
                           </Flex>
-                          <CustomBadge
+                          <CustomModalTab
                             path=""
+                            text="10.竿レイアウト"
                             media=""
-                            text={
-                              "10." +
-                              getMessage({
-                                ja: "竿レイアウト",
-                                language,
-                              })
-                            }
                           />
-                          <CustomBadge
+                          <CustomModalTab
                             path="./tabs/40/"
+                            text="10.サブ図"
                             media="html"
-                            text={
-                              "40." +
-                              getMessage({
-                                ja: "サブ図",
-                                language,
-                              })
-                            }
                           />
-                          <CustomBadge
+                          <CustomModalTab
                             path="./tabs/41/"
+                            text="41.先ハメ誘導"
                             media="movie"
-                            text={
-                              "41." +
-                              getMessage({
-                                ja: "先ハメ誘導",
-                                language,
-                              })
-                            }
                           />
-                          <CustomBadge
-                            path="./tabs/56"
+                          <CustomModalTab
+                            path="./tabs/56/"
+                            text="56.配策誘導ナビ"
                             media="html"
-                            text={
-                              "56." +
-                              getMessage({
-                                ja: "配策誘導ナビ",
-                                language,
-                              })
-                            }
                           />
-                          <CustomBadge
+                          <CustomModalTab
                             path="./tabs/70/"
+                            text="70.ポイント点滅"
                             media="html"
-                            text={
-                              "70." +
-                              getMessage({
-                                ja: "ポイント点滅",
-                                language,
-                              })
-                            }
                           />
                         </Stack>
                       </Flex>
@@ -673,64 +461,19 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     />
                   </CardBody>
                 </Card>
-                <Box
-                  position="relative"
-                  h="40px"
-                  w="1px"
-                  bg="gray.500"
-                  ml="50%"
+                <ToggleSection
+                  id={3}
+                  isShown={showAllMap[3]}
+                  toggleShowAll={toggleShowAll}
                 >
-                  <Box
-                    position="absolute"
-                    top={showAllMap[3] ? "50%" : "70%"}
-                    left="50%"
-                    transform="translate(-50%, -50%)"
-                    py={0.5}
-                    px={2}
-                    textAlign="center"
-                    m="auto"
-                    border="1px solid"
-                    borderColor="gray.500"
-                    bg="#b8b2ad"
-                    fontWeight={600}
-                    color="white"
-                    borderRadius="md"
-                    cursor="pointer"
-                    fontSize="xs"
-                    whiteSpace="nowrap"
-                    transition="all 0.3s ease"
-                    _hover={{
-                      bg: "#a69d96",
-                      color: "white",
-                      borderColor: "gray.600",
-                    }}
-                    onClick={() => toggleShowAll(3)}
-                  >
-                    {showAllMap[3] ? "閉じる" : "関連を表示"}
-                  </Box>
-                </Box>
-                <Box
-                  border="1px solid"
-                  borderColor="gray.500"
-                  borderRadius="md"
-                  transition="all 0.3s ease"
-                  maxHeight={showAllMap[3] ? "1000px" : "0px"}
-                  opacity={showAllMap[3] ? 1 : 0}
-                  p={showAllMap[3] ? "16px" : "0px"}
-                >
-                  <Card
-                    backgroundColor="transparent"
-                    border="1px solid"
-                    borderColor="gray.500"
-                  >
-                    <CardHeader p={1} pl={2} pb={0}>
-                      <Heading size="sm" mb={1}>
-                        {getMessage({
-                          ja: "コネクタ撮影",
-                          language,
-                        })}
-                      </Heading>
-                    </CardHeader>
+                  <Card bg={bg} border="1px solid" borderColor="gray.500">
+                    <CustomCardHeader
+                      text={getMessage({
+                        ja: "コネクタ撮影",
+                        language,
+                      })}
+                      textSize="sm"
+                    />
                     <Divider borderColor="gray.500" />
                     <CardBody p={0}>
                       <Box
@@ -763,21 +506,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             alignItems="flex-start"
                             flex={1}
                           >
-                            <Heading size="sm" mb={1.5}>
+                            <Heading size="sm" mb="3px">
                               CAMERA+
                             </Heading>
-                            <Flex justifyContent="flex-end" alignItems="center">
-                              <Badge
-                                variant="solid"
-                                backgroundColor="#6C277D"
-                                color="white"
-                                opacity={0.8}
-                                mr={2}
-                              >
-                                VB.net
-                              </Badge>
-                            </Flex>
-                            <Text pt="2" fontSize="sm">
+                            <BadgeList labels={["VB.net"]} />
+                            <Text pt="3px" fontSize="sm">
                               {getMessage({
                                 ja: "コネクタを撮影するアプリケーション",
                                 us: "Application to shoot connectors",
@@ -819,15 +552,15 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 1.0.0.4
                               </Text>
                             </Flex>
-                            <CustomBadge
+                            <CustomModalTab
                               path=""
-                              media=""
                               text={getMessage({
                                 ja: "撮影方法",
                                 us: "Shooting Method",
                                 cn: "拍摄方法",
                                 language,
                               })}
+                              media=""
                             />
                           </Stack>
                         </Flex>
@@ -847,19 +580,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     />
                   </Box>
                   <Card
-                    backgroundColor="transparent"
+                    bg={bg}
                     border="1px solid"
                     borderColor="gray.500"
                     mx="24px"
                   >
-                    <CardHeader p={1} pl={3} pb={0}>
-                      <Heading size="sm" mb={1}>
-                        {getMessage({
-                          ja: "誘導ナビ.net",
-                          language,
-                        })}
-                      </Heading>
-                    </CardHeader>
+                    <CustomCardHeader
+                      text={getMessage({
+                        ja: "誘導ナビ.net",
+                        language,
+                      })}
+                      textSize="sm"
+                    />
                     <Divider borderColor="gray.500" />
                     <CardBody p={0}>
                       <Box
@@ -891,21 +623,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             alignItems="flex-start"
                             flex={1}
                           >
-                            <Heading size="sm" mb={1.5}>
+                            <Heading size="sm" mb="3px">
                               yudo.net
                             </Heading>
-                            <Flex justifyContent="flex-end" alignItems="center">
-                              <Badge
-                                variant="solid"
-                                backgroundColor="#6C277D"
-                                color="white"
-                                opacity={0.8}
-                                mr={2}
-                              >
-                                VB.net
-                              </Badge>
-                            </Flex>
-                            <Text pt="2" fontSize="sm">
+                            <BadgeList labels={["VB.net"]} />
+                            <Text pt="3px" fontSize="sm">
                               {getMessage({
                                 ja: "",
                                 us: "Application for displaying ",
@@ -961,9 +683,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           </Stack>
                         </Flex>
                       </Box>
-
                       <Divider borderColor="gray.500" />
-
                       <Box
                         position="relative"
                         px={2}
@@ -994,22 +714,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             flex={1}
                             maxW={{ base: "40vw" }}
                           >
-                            <Heading size="sm" mb={1.5} maxW="100%">
+                            <Heading size="sm" mb="3px" maxW="100%">
                               i_000L6470_SPI_stepMoter_sketch
                             </Heading>
-
-                            <Flex justifyContent="flex-end" alignItems="center">
-                              <Badge
-                                variant="solid"
-                                bg="#007582"
-                                color="white"
-                                opacity={0.8}
-                                mr={2}
-                              >
-                                Arduino
-                              </Badge>
-                            </Flex>
-                            <Text pt="2" fontSize="sm">
+                            <BadgeList labels={["Arduino"]} />
+                            <Text pt="3px" fontSize="sm">
                               {getMessage({
                                 ja: "yudo.netから信号を受けて配策誘導のディスプレイを移動させるArduinoのスケッチ",
                                 us: "Sketch of an Arduino that receives a signal from yudo.net and moves the display of the routing guidance.",
@@ -1036,7 +745,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 <br />0
                               </Text>
                             </Flex>
-                            <CustomBadge
+                            <CustomModalTab
                               path="./tabs/56.net"
                               media="movie"
                               text={getMessage({
@@ -1053,22 +762,21 @@ export default function Ui({ filterId }: { filterId?: string }) {
                   </Card>
                   <Box position="relative" h="20px" w="100%" m="0">
                     <Box
-                      position="absolute" // 絶対位置で配置
-                      left="50%" // 左から50%の位置に配置
+                      position="absolute"
+                      left="50%"
                       top="0"
                       bottom="0"
-                      borderLeft="1px solid" // 左に線を引く
+                      borderLeft="1px solid"
                       borderColor="gray.500"
-                      transform="translateX(-50%)" // 左に50%移動して中央に揃える
+                      transform="translateX(-50%)"
                     />
                   </Box>
                   <Card
-                    backgroundColor="transparent"
+                    bg={bg}
                     border="1px solid"
                     borderColor="gray.500"
                     mx="24px"
                   >
-                    <Divider borderColor="gray.500" />
                     <CardBody p={0}>
                       <Box
                         position="relative"
@@ -1099,24 +807,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             alignItems="flex-start"
                             flex={1}
                           >
-                            <Heading size="sm" mb={1.5}>
+                            <Heading size="sm" mb="3px">
                               {getMessage({
                                 ja: "検査履歴システム",
                                 language,
                               })}
                             </Heading>
-                            <Flex justifyContent="flex-end" alignItems="center">
-                              <Badge
-                                variant="solid"
-                                backgroundColor="#6C277D"
-                                color="white"
-                                opacity={0.8}
-                                mr={2}
-                              >
-                                VB.net
-                              </Badge>
-                            </Flex>
-                            <Text pt="2" fontSize="sm">
+                            <BadgeList labels={["VB.net"]} />
+                            <Text pt="3px" fontSize="sm">
                               {getMessage({
                                 ja: "検査実績の記憶とラベル印刷が可能",
                                 us: "Capable of storing inspection results and printing labels.",
@@ -1183,26 +881,24 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       </Box>
                     </CardBody>
                   </Card>
-                </Box>
+                </ToggleSection>
               </>
             )}
-
             {(!filterId || filterId === "bip") && (
               <>
                 <Card
-                  backgroundColor="transparent"
+                  bg={bg}
                   border="1px solid"
                   borderColor="gray.500"
                   my="20px"
                 >
-                  <CardHeader p={2} pl={3} pb={0}>
-                    <Heading size="md" mb={2}>
-                      {getMessage({
-                        ja: "部材一覧+",
-                        language,
-                      })}
-                    </Heading>
-                  </CardHeader>
+                  <CustomCardHeader
+                    text={getMessage({
+                      ja: "部材一覧+",
+                      language,
+                    })}
+                    textSize="md"
+                  />
                   <Divider borderColor="gray.500" />
                   <CardBody p={0}>
                     <Box
@@ -1229,31 +925,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb={1.5}>
+                          <Heading size="sm" mb="3px">
                             Bip+
                           </Heading>
-                          <Flex justifyContent="flex-end" alignItems="center">
-                            <Badge
-                              variant="solid"
-                              backgroundColor="green"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              EXCEL2010
-                            </Badge>
-                            <Badge
-                              variant="solid"
-                              backgroundColor="green"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              2013
-                            </Badge>
-                            <Badge variant="outline" colorScheme="gray" mr={2}>
-                              365
-                            </Badge>
-                          </Flex>
-                          <Text pt="2" fontSize="sm">
+                          <BadgeList
+                            labels={["EXCEL2010", "EXCEL2013", "EXCEL365"]}
+                            useGetColor={[true, true, false]}
+                          />
+                          <Text pt="3px" fontSize="sm">
                             {getMessage({
                               ja: "全製品品番の使用部品リストの一覧表を作成",
                               us: "Create a list of parts used for all product part numbers",
@@ -1291,19 +970,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
             )}
             {(!filterId || filterId === "jdss") && (
               <>
-                <Card
-                  backgroundColor="transparent"
-                  border="1px solid"
-                  borderColor="gray.500"
-                >
-                  <CardHeader p={2} pl={3} pb={0}>
-                    <Heading size="md" mb={2}>
-                      {getMessage({
-                        ja: "順立生産システム",
-                        language,
-                      })}
-                    </Heading>
-                  </CardHeader>
+                <Card bg={bg} border="1px solid" borderColor="gray.500">
+                  <CustomCardHeader
+                    text={getMessage({
+                      ja: "順立生産システム",
+                      language,
+                    })}
+                    textSize="md"
+                  />
                   <Divider borderColor="gray.500" />
                   <CardBody p={0}>
                     <Box
@@ -1332,28 +1006,12 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb={1.5}>
+                          <Heading size="sm" mb="3px">
                             main
                           </Heading>
-                          <Flex justifyContent="flex-end" alignItems="center">
-                            <Badge
-                              variant="solid"
-                              style={{ backgroundColor: "custom.access" }}
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              ACCESS2003
-                            </Badge>
-                            <Badge
-                              variant="solid"
-                              style={{ backgroundColor: "custom.access" }}
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              2010
-                            </Badge>
-                          </Flex>
-                          <Text pt="2" fontSize="sm">
+
+                          <BadgeList labels={["ACCESS2003", "ACCESS2010"]} />
+                          <Text pt="3px" fontSize="sm">
                             {getMessage({
                               ja: "一貫工程などの連続して生産する工程で有効",
                               us: "Effective in continuous production processes such as integrated processes.",
@@ -1396,7 +1054,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               />
                             </Box>
                           </Flex>
-                          <CustomBadge
+                          <CustomModalTab
                             path=""
                             media=""
                             text={
@@ -1409,13 +1067,13 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               })
                             }
                           />
-                          <CustomBadge
+                          <CustomModalTab
                             path="./tabs/main2"
                             media="movie"
                             text="main2.SSC"
                           />
-                          <CustomBadge path="" media="" text="main3.CB" />
-                          <CustomBadge
+                          <CustomModalTab path="" media="" text="main3.CB" />
+                          <CustomModalTab
                             path="./tabs/main3plc"
                             media="movie"
                             text="main3.PLC"
@@ -1478,66 +1136,25 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     />
                   </CardBody>
                 </Card>
-                <Box
-                  position="relative"
-                  h="40px"
-                  w="1px"
-                  bg="gray.500"
-                  ml="50%"
-                >
-                  <Box
-                    position="absolute"
-                    top={showAllMap[2] ? "50%" : "80%"}
-                    left="50%"
-                    transform="translate(-50%, -50%)"
-                    py={0.5}
-                    px={2}
-                    textAlign="center"
-                    m="auto"
-                    border="1px solid"
-                    borderColor="gray.500"
-                    bg="#b8b2ad"
-                    fontWeight={600}
-                    color="white"
-                    borderRadius="md"
-                    cursor="pointer"
-                    fontSize="xs"
-                    whiteSpace="nowrap"
-                    transition="all 0.3s ease"
-                    _hover={{
-                      bg: "#a69d96",
-                      color: "white",
-                      borderColor: "gray.600",
-                    }}
-                    onClick={() => toggleShowAll(2)}
-                  >
-                    {showAllMap[2] ? "閉じる" : "関連を表示"}
-                  </Box>
-                </Box>
-                <Box
-                  border="1px solid"
-                  borderColor="gray.500"
-                  borderRadius="md"
-                  transition="all 0.3s ease"
-                  maxHeight={showAllMap[2] ? "1000px" : "0px"} // ← 数値指定でアニメーション可能
-                  opacity={showAllMap[2] ? 1 : 0}
-                  p={showAllMap[2] ? "16px" : "0px"} // ← 数値指定でアニメーション可能
+                <ToggleSection
+                  id={2}
+                  isShown={showAllMap[2]}
+                  toggleShowAll={toggleShowAll}
                 >
                   <Card
-                    backgroundColor="transparent"
+                    bg={bg}
                     border="1px solid"
                     borderColor="gray.500"
                     mx="20px"
                     overflow="hidden"
                   >
-                    <CardHeader p={1} pl={2} pb={0}>
-                      <Heading size="sm" mb={1}>
-                        {getMessage({
-                          ja: "PLCとの連携",
-                          language,
-                        })}
-                      </Heading>
-                    </CardHeader>
+                    <CustomCardHeader
+                      text={getMessage({
+                        ja: "PLCとの連携",
+                        language,
+                      })}
+                      textSize="sm"
+                    />
                     <Divider borderColor="gray.500" />
                     <CardBody p={0}>
                       <Box
@@ -1566,7 +1183,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             alignItems="flex-start"
                             flex={1}
                           >
-                            <Heading size="sm" mb={1.5}>
+                            <Heading size="sm" mb="3px">
                               {getMessage({
                                 ja: "main3用ラダー図",
                                 us: "PLC for main3",
@@ -1574,17 +1191,8 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 language,
                               })}
                             </Heading>
-                            <Flex justifyContent="flex-end" alignItems="center">
-                              <Badge
-                                variant="solid"
-                                style={{ backgroundColor: "custom.omron" }}
-                                mr={2}
-                                opacity={1}
-                              >
-                                OMRON CP**
-                              </Badge>
-                            </Flex>
-                            <Text pt="2" fontSize="sm">
+                            <BadgeList labels={["OMRON CP**"]} />
+                            <Text pt="3px" fontSize="sm">
                               {getMessage({
                                 ja: "main3からPLCへデータを送信して部品セットを行う",
                                 us: "Send data from main3 to PLC to set parts",
@@ -1646,26 +1254,23 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       />
                     </CardBody>
                   </Card>
-                </Box>
+                </ToggleSection>
               </>
             )}
             {(!filterId || filterId === "yps") && (
               <>
                 <Card
-                  backgroundColor="transparent"
+                  bg={bg}
                   border="1px solid"
                   borderColor="gray.500"
                   mt="20px"
                 >
-                  <CardHeader p={2} pl={3} pb={0}>
-                    <Flex align="center">
-                      <Heading size="md" mb={2}>
-                        {getMessage({
-                          ja: "誘導ポイント設定一覧表",
-                          language,
-                        })}
-                      </Heading>
-                      <Spacer />
+                  <CustomCardHeader
+                    text={getMessage({
+                      ja: "誘導ポイント設定一覧表",
+                      language,
+                    })}
+                    link={
                       <Link
                         href="/skillBlogs/pages/0010"
                         isExternal
@@ -1680,10 +1285,9 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           language,
                         })}
                       </Link>
-                    </Flex>
-                  </CardHeader>
+                    }
+                  />
                   <Divider borderColor="gray.500" />
-
                   <CardBody p={0}>
                     <Box
                       key="07"
@@ -1709,39 +1313,17 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb="1">
+                          <Heading size="sm" mb="3px">
                             {getMessage({
                               ja: "誘導ポイント設定一覧表",
                               language,
                             })}
                           </Heading>
-                          <Flex justifyContent="flex-end" alignItems="center">
-                            <Badge
-                              variant="outline"
-                              colorScheme="gray"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              EXCEL2010
-                            </Badge>
-                            <Badge
-                              variant="solid"
-                              bg="green"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              2013
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              colorScheme="gray"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              365
-                            </Badge>
-                          </Flex>
-                          <Text pt="2" fontSize="sm">
+                          <BadgeList
+                            labels={["EXCEL2010", "EXCEL2013", "EXCEL365"]}
+                            useGetColor={[true, true, false]}
+                          />
+                          <Text pt="3px" fontSize="sm">
                             {getMessage({
                               ja: "誘導ポイント設定一覧表(作業内容とインラインNo./忘れん棒番号/製品品番の使い分けを記した作業手順書)",
                               us: "Induction point setting list (work procedure document describing the work and the use of inline No./forgotten bar number/product part number)",
@@ -1796,53 +1378,13 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     />
                   </CardBody>
                 </Card>
-                <Box
-                  position="relative"
-                  h="40px"
-                  w="1px"
-                  bg="gray.500"
-                  ml="50%"
-                >
-                  <Box
-                    position="absolute"
-                    top={showAllMap[1] ? "50%" : "80%"}
-                    left="50%"
-                    transform="translate(-50%, -50%)"
-                    py={0.5}
-                    px={2}
-                    textAlign="center"
-                    m="auto"
-                    border="1px solid"
-                    borderColor="gray.500"
-                    bg="#b8b2ad"
-                    fontWeight={600}
-                    color="white"
-                    borderRadius="md"
-                    cursor="pointer"
-                    fontSize="xs"
-                    whiteSpace="nowrap"
-                    transition="all 0.3s ease"
-                    _hover={{
-                      bg: "#a69d96",
-                      color: "white",
-                      borderColor: "gray.600",
-                    }}
-                    onClick={() => toggleShowAll(1)}
-                  >
-                    {showAllMap[1] ? "閉じる" : "関連を表示"}
-                  </Box>
-                </Box>
-                <Box
-                  border="1px solid"
-                  borderColor="gray.500"
-                  borderRadius="md"
-                  transition="all 0.3s ease"
-                  maxHeight={showAllMap[1] ? "1000px" : "0px"} // ← 数値指定でアニメーション可能
-                  opacity={showAllMap[1] ? 1 : 0}
-                  p={showAllMap[1] ? "16px" : "0px"} // ← 数値指定でアニメーション可能
+                <ToggleSection
+                  id={1}
+                  isShown={showAllMap[1]}
+                  toggleShowAll={toggleShowAll}
                 >
                   <Card
-                    backgroundColor="transparent"
+                    bg={bg}
                     border="1px solid"
                     borderColor="gray.500"
                     mx="24px"
@@ -1873,39 +1415,17 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             alignItems="flex-start"
                             flex={1}
                           >
-                            <Heading size="sm" mb={1}>
+                            <Heading size="sm" mb="3px">
                               {getMessage({
                                 ja: "バージョンアップ",
                                 language,
                               })}
                             </Heading>
-                            <Flex justifyContent="flex-end" alignItems="center">
-                              <Badge
-                                variant="outline"
-                                colorScheme="gray"
-                                mr={2}
-                                opacity={0.8}
-                              >
-                                EXCEL2010
-                              </Badge>
-                              <Badge
-                                variant="solid"
-                                bg="green"
-                                mr={2}
-                                opacity={0.8}
-                              >
-                                2013
-                              </Badge>
-                              <Badge
-                                variant="outline"
-                                colorScheme="gray"
-                                mr={2}
-                                opacity={0.8}
-                              >
-                                365
-                              </Badge>
-                            </Flex>
-                            <Text pt="2" fontSize="sm">
+                            <BadgeList
+                              labels={["EXCEL2010", "EXCEL2013", "EXCEL365"]}
+                              useGetColor={[true, true, false]}
+                            />
+                            <Text pt="3px" fontSize="sm">
                               {getMessage({
                                 ja: "誘導ポイント設定一覧表(作業内容とインラインNo./忘れん棒番号/製品品番の使い分けを記した作業手順書)",
                                 us: "Induction point setting list (work procedure document describing the work and the use of inline No./forgotten bar number/product part number)",
@@ -1948,28 +1468,27 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       />
                     </CardBody>
                   </Card>
-                </Box>
+                </ToggleSection>
               </>
             )}
             {(!filterId || filterId === "library") && (
               <>
                 <Card
                   mt="20px"
-                  backgroundColor="transparent"
+                  bg={bg}
                   border="1px solid"
                   borderColor="gray.500"
                   overflow="hidden"
                 >
-                  <CardHeader p={2} pl={3} pb={0}>
-                    <Heading size="md" mb={2}>
-                      {getMessage({
-                        ja: "その他ライブラリなど",
-                        us: "Other libraries, etc.",
-                        cn: "其他图书馆等",
-                        language,
-                      })}
-                    </Heading>
-                  </CardHeader>
+                  <CustomCardHeader
+                    text={getMessage({
+                      ja: "その他ライブラリなど",
+                      us: "Other libraries, etc.",
+                      cn: "其他图书馆等",
+                      language,
+                    })}
+                    textSize="sm"
+                  />
                   <Divider borderColor="gray.500" />
                   <CardBody p={0}>
                     <Box
@@ -1996,7 +1515,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb={1.5}>
+                          <Heading size="sm" mb="3px">
                             {getMessage({
                               ja: "バーコードフォント",
                               us: "bar code font",
@@ -2004,36 +1523,8 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               language,
                             })}
                           </Heading>
-                          <Flex justifyContent="flex-end" alignItems="center">
-                            <Badge
-                              variant="solid"
-                              color="white"
-                              backgroundColor="custom.windows"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              Win
-                            </Badge>
-                            <Badge
-                              variant="solid"
-                              color="white"
-                              backgroundColor="custom.mac"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              mac
-                            </Badge>
-                            <Badge
-                              variant="solid"
-                              color="white"
-                              backgroundColor="custom.linux"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              linux
-                            </Badge>
-                          </Flex>
-                          <Text pt="2" fontSize="sm">
+                          <BadgeList labels={["Windows", "Mac", "Linux"]} />
+                          <Text pt="3px" fontSize="sm">
                             {getMessage({
                               ja: "バーコードを表示するためのフォント",
                               us: "",
@@ -2085,7 +1576,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb={1.5}>
+                          <Heading size="sm" mb="3px">
                             {getMessage({
                               ja: "シリアル通信用ライブラリ",
                               us: "",
@@ -2093,18 +1584,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               language,
                             })}
                           </Heading>
-                          <Flex justifyContent="flex-end" alignItems="center">
-                            <Badge
-                              variant="solid"
-                              color="white"
-                              backgroundColor="custom.windows"
-                              mr={2}
-                              opacity={0.8}
-                            >
-                              Win+VB6など
-                            </Badge>
-                          </Flex>
-                          <Text pt="2" fontSize="sm">
+                          <BadgeList
+                            labels={["Windows", "VB6", "VB.net"]}
+                            useGetColor={[true, true, false]}
+                          />
+                          <Text pt="3px" fontSize="sm">
                             {getMessage({
                               ja: "VBの環境でシリアル通信を行うためのライブラリ",
                               us: "",
@@ -2146,12 +1630,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
               </HStack>
             )}
           </SimpleGrid>
-
-          <ResponsiveModal
-            isOpen={isOpen}
-            onClose={onClose}
-            modalPath={modalPath}
-          />
         </Box>
         <Box mb={10} />
       </Content>

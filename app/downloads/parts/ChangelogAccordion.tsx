@@ -54,7 +54,7 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
       <AccordionItem>
         {({ isExpanded }) => (
           <>
-            <AccordionButton p="0" pl="3px">
+            <AccordionButton p="0" pl="7px">
               <Flex flex="1" textAlign="left" alignItems="center" fontSize="xs">
                 <Box fontSize="xs" py="1px" px="0">
                   更新履歴
@@ -66,13 +66,22 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                 />
               </Flex>
             </AccordionButton>
-            <AccordionPanel pb={2} fontSize="xs" p={1}>
-              <List spacing={1} styleType="none" pl={0}>
+            <AccordionPanel fontSize="xs" pt={0} px={2} pb={2}>
+              <List spacing={0} styleType="none" pl={0}>
                 {changelog.map((item, index) => (
                   <>
                     <Box h="1px" width="100%" bg="gray.500" />
                     <ListItem key={index}>
-                      <Box as="span" fontSize="14px" fontWeight="400" mr={2}>
+                      <Box
+                        as="span"
+                        fontSize="13px"
+                        fontWeight="400"
+                        mr={2}
+                        bg="gray"
+                        color="white"
+                        p="2px"
+                        lineHeight={0.8}
+                      >
                         {item.version}
                       </Box>
                       <Box as="span" fontWeight="bold">
@@ -140,6 +149,7 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                               as="article"
                               maxW="auto"
                               p="2"
+                              mb={2}
                               borderWidth="1px"
                               rounded="md"
                               borderColor="gray.500"
