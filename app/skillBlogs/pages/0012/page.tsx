@@ -62,7 +62,7 @@ import UnderlinedTextWithDrawer from "../../components/UnderlinedTextWithDrawer"
 import ExternalLink from "../../components/ExternalLink";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import ImageSliderModal from "../../components/ImageSliderModal"; // モーダルコンポーネントをインポート
-import ReferenceSettingModal from "../../components/howTo/referenceSettingModal";
+import ReferenceSettingModal from "../../../../src/components/howto/office/referenceSettingModal";
 import { useUserContext } from "@/contexts/useUserContext";
 import { supabase } from "@/utils/supabase/client";
 import { useReadCount } from "@/hooks/useReadCount";
@@ -72,8 +72,8 @@ import { BsFiletypeExe } from "react-icons/bs";
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import DownloadButton from "@/components/ui/DownloadButton2";
-import UnzipModal from "app/skillBlogs/components/howTo/UnzipModal";
-import FontInstallModal from "app/skillBlogs/components/howTo/FontInstall";
+import UnzipModal from "@/components/howto/os/UnzipModal";
+import FontInstallModal from "@/components/howto/os/FontInstall";
 import { getLocalIp } from "../../components/getLocalIp";
 import { Key } from "@/components/ui/Key";
 import { FaviconLinkItem } from "app/skillBlogs/components/FaviconLinkItem";

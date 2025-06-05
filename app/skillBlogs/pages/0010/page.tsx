@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import Confetti from "react-confetti";
 import {
   Box,
   Heading,
@@ -62,7 +61,7 @@ import UnderlinedTextWithDrawer from "../../components/UnderlinedTextWithDrawer"
 import ExternalLink from "../../components/ExternalLink";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import ImageSliderModal from "../../components/ImageSliderModal"; // モーダルコンポーネントをインポート
-import ReferenceSettingModal from "../../components/howTo/referenceSettingModal";
+import ReferenceSettingModal from "../../../../src/components/howto/office/referenceSettingModal";
 import { useUserContext } from "@/contexts/useUserContext";
 import { supabase } from "@/utils/supabase/client";
 import { useReadCount } from "@/hooks/useReadCount";
@@ -72,11 +71,12 @@ import { BsFiletypeExe } from "react-icons/bs";
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import DownloadButton from "@/components/ui/DownloadButton2";
-import UnzipModal from "app/skillBlogs/components/howTo/UnzipModal";
-import FontInstallModal from "app/skillBlogs/components/howTo/FontInstall";
+import UnzipModal from "@/components/howto/os/UnzipModal";
+import FontInstallModal from "@/components/howto/os/FontInstall";
 import { getLocalIp } from "../../components/getLocalIp";
 import { Key } from "@/components/ui/Key";
 import { ImageWithHighlight } from "../../components/ImageWidthHighlight";
+import VBATrustSettingsPage from "@/components/howto/office/VbaTrustSettings";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
@@ -346,9 +346,9 @@ const BlogPage: React.FC = () => {
           title={
             "4." +
             getMessage({
-              ja: "参照設定の確認",
+              ja: "EXCELの設定",
               us: "Check reference settings",
-              cn: "检查参考设置",
+              cn: "EXCEL 设置。",
               language,
             })
           }
@@ -361,36 +361,100 @@ const BlogPage: React.FC = () => {
           />
           <Text fontWeight="bold">
             {getMessage({
-              ja: "ファイルを開いて",
-              us: "If it does not work correctly, do ",
-              cn: "如果不能正常工作，请执行 ",
-              language,
-            })}
-            <ReferenceSettingModal />
-            {getMessage({
-              ja: "をしてください。",
-              us: ".",
-              cn: "。",
-              language,
-            })}
-          </Text>
-
-          <Text mt={6}>
-            {getMessage({
-              ja: "参照不可がある場合はその画面を「問い合わせ」から連絡をください。",
-              us: 'If it is unreferenced, please send us the screen from the "Contact" chat.',
-              cn: '如果屏幕没有参考资料，请通过 "联系" 聊天将其发送给我们。',
-              language,
-            })}
-            <br />
-            {getMessage({
-              ja: "誘導ポイント設定一覧表では標準ライブラリしか使ってないので通常は参照不可は無いはずです。",
-              us: "The induction point setting list uses only the standard library, so the unreferenced should not occur.",
-              cn: "感应点设置列表只使用标准库，因此不应出现不引用的情况。",
+              ja: "プログラムを含むエクセルの場合に必要ないつもの設定です。",
+              us: "This is the usual setup required for Excel, including programs.",
+              cn: "这是 Excel（包括程序）所需的常规设置。",
               language,
             })}
           </Text>
         </SectionBox>
+        <Box ml={2}>
+          <SectionBox
+            id="section4_1"
+            title={
+              "4-1." +
+              getMessage({
+                ja: "セキュリティの設定",
+                us: "Check reference settings",
+                cn: "检查参考设置",
+                language,
+              })
+            }
+            sectionRefs={sectionRefs}
+            sections={sections}
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text fontWeight="bold">
+              {getMessage({
+                ja: "ファイルを開いて",
+                us: "If it does not work correctly, do ",
+                cn: "如果不能正常工作，请执行 ",
+                language,
+              })}
+              <VBATrustSettingsPage />
+              {getMessage({
+                ja: "をしてください。",
+                us: ".",
+                cn: "。",
+                language,
+              })}
+            </Text>
+            <Box h="2rem" />
+          </SectionBox>
+          <SectionBox
+            id="section4_2"
+            title={
+              "4-2." +
+              getMessage({
+                ja: "参照設定の確認",
+                us: "Check reference settings",
+                cn: "检查参考设置",
+                language,
+              })
+            }
+            sectionRefs={sectionRefs}
+            sections={sections}
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text fontWeight="bold">
+              {getMessage({
+                ja: "ファイルを開いて",
+                us: "If it does not work correctly, do ",
+                cn: "如果不能正常工作，请执行 ",
+                language,
+              })}
+              <ReferenceSettingModal />
+              {getMessage({
+                ja: "をしてください。",
+                us: ".",
+                cn: "。",
+                language,
+              })}
+            </Text>
+
+            <Text mt={6}>
+              {getMessage({
+                ja: "参照不可がある場合はその画面を「問い合わせ」から連絡をください。",
+                us: 'If it is unreferenced, please send us the screen from the "Contact" chat.',
+                cn: '如果屏幕没有参考资料，请通过 "联系" 聊天将其发送给我们。',
+                language,
+              })}
+              <br />
+              {getMessage({
+                ja: "誘導ポイント設定一覧表では標準ライブラリしか使ってないので通常は参照不可は無いはずです。",
+                us: "The induction point setting list uses only the standard library, so the unreferenced should not occur.",
+                cn: "感应点设置列表只使用标准库，因此不应出现不引用的情况。",
+                language,
+              })}
+            </Text>
+          </SectionBox>
+        </Box>
         <SectionBox
           id="section5"
           title={

@@ -49,7 +49,7 @@ import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode 
 import { JdssIcon } from "@/components/icons";
 import styles from "@/styles/home.module.scss";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import UnzipModal from "app/skillBlogs/components/howTo/UnzipModal";
+import UnzipModal from "@/components/howto/os/UnzipModal";
 
 import CustomLinkBox from "../../parts/customLinkBox";
 import CustomPopver from "@/components/ui/popver";

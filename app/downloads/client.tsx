@@ -51,7 +51,7 @@ import ResponsiveModal from "@/components/responsiveModal";
 
 import LatestUpdateDate from "./parts/LatestUpdateDate";
 import { ChangelogAccordion } from "./parts/ChangelogAccordion";
-import UploadSjp from "app/skillBlogs/components/howTo/UploadSjp";
+import UploadSjp from "@/components/howto/UploadSjp";
 import BadgeList from "@/components/ui/BadgeList";
 import customcardHeader from "./parts/CustomCardHeader";
 import CustomCardHeader from "./parts/CustomCardHeader";

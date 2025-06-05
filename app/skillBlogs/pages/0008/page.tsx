@@ -56,7 +56,7 @@ import ExternalLink from "../../components/ExternalLink";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 import ImageSliderModal from "../../components/ImageSliderModal"; // モーダルコンポーネントをインポート
 import OptionalBox from "../../components/OptionalBox";
-import ReferenceSettingModal from "../../components/howTo/referenceSettingModal";
+import ReferenceSettingModal from "../../../../src/components/howto/office/referenceSettingModal";
 import { useUserContext } from "@/contexts/useUserContext";
 import { useReadCount } from "@/hooks/useReadCount";
 
