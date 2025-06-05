@@ -156,7 +156,6 @@ const BlogPage: React.FC = () => {
       ja: "良く使うコード",
       us: "Frequently Used Codes",
       cn: "常用代码",
-      language,
     }),
     type: "folder",
     isOpen: true,
@@ -166,7 +165,6 @@ const BlogPage: React.FC = () => {
           ja: "1次元配列の並び替え",
           us: "Sorting one-dimensional arrays",
           cn: "一维数组排序",
-          language,
         }),
         type: "folder",
         isOpen: false,
@@ -178,7 +176,6 @@ const BlogPage: React.FC = () => {
               ja: "arr_は1次元配列,1,2,3,10,11,A,Bのような昇順で並び替える",
               us: "arr_ is a 1D array, sorted in ascending order as 1,2,3,10,11,A,B",
               cn: "arr_ 是一个一维数组，按升序排列为 1、2、3、10、11、A、B",
-              language,
             }),
           },
         ],
@@ -188,7 +185,6 @@ const BlogPage: React.FC = () => {
           ja: "部品品番の変換",
           us: "Conversion of part part numbers",
           cn: "零件编号的转换",
-          language,
         }),
 
         type: "folder",
@@ -201,7 +197,6 @@ const BlogPage: React.FC = () => {
               ja: "str_が7119-5555-30なら7119555530に変換.7119555530なら7119-5555-30に変換",
               us: "If str_ is 7119-5555-30, convert to 7119555530.If 7119555530, convert to 7119-5555-30",
               cn: "如果 str_ 是 7119-5555-30，转换为 7119555530.如果是 7119555530，转换为 7119-5555-30",
-              language,
             }),
           },
         ],
@@ -211,7 +206,6 @@ const BlogPage: React.FC = () => {
           ja: "1次元配列をUTF8でテキスト出力",
           us: "Text output of 1D array in UTF8",
           cn: "以 UTF8 编码输出一维数组文本",
-          language,
         }),
         type: "folder",
         isOpen: false,
@@ -223,7 +217,6 @@ const BlogPage: React.FC = () => {
               ja: "Excel-vbaの標準だとShift_JISでテキスト出力されて文字化けの原因になるからUTF8で出力.htmlとか.cssとかで使う",
               us: "Excel-vba's standard outputs text in Shift_JIS, which causes character corruption, so use UTF8 output .html or .css.",
               cn: "Excel-vba 标准以 Shift_JIS 输出文本，这会导致字符损坏，因此请使用 UTF8 输出 .html 或 .css。",
-              language,
             }),
           },
         ],
@@ -235,7 +228,6 @@ const BlogPage: React.FC = () => {
       ja: "ワイヤーハーネス(治具単位)",
       us: "Wire harnesses (jig unit)",
       cn: "线束（夹具单元）",
-      language,
     }),
     type: "folder",
     isOpen: true,
@@ -245,7 +237,6 @@ const BlogPage: React.FC = () => {
           ja: "エクセルvbaでは専用のライブラリも概念も無い為、classとcollectionを使ってオブジェクト指向を実現しています。以下はワイヤーハーネスのオブジェクトのイメージです。※これは省略した形で実際はもっと要素数が多いです。",
           us: "Since there are no dedicated libraries or concepts in Excel vba, classes and collections are used to achieve object orientation. Below is an image of a wire harness object. This is an abbreviated form and the actual number of elements is much larger.",
           cn: "由于 Excel vba 中没有专门的库或概念，因此使用类和集合来实现面向对象。下面是线束对象的图像。*这是一个缩写形式，实际上包含更多元素。",
-          language,
         }),
         type: "file",
       },
@@ -261,7 +252,6 @@ const BlogPage: React.FC = () => {
               ja: "製品品番の点数\n値:1\nInteger",
               us: "Number of points of product part number.\nValue:1\nInteger",
               cn: "产品部件号数量\n値:1\nInteger",
-              language,
             }),
             isOpen: false,
           },
@@ -273,7 +263,6 @@ const BlogPage: React.FC = () => {
               ja: "製品品番の1点目\nproductクラス",
               us: "The first point of the product part number.\nclass: product",
               cn: "第一点是产品部件号\n类: 产品",
-              language,
             }),
             children: [
               {
@@ -283,7 +272,6 @@ const BlogPage: React.FC = () => {
                   ja: "製品品番\n値:82111A123     \nString",
                   us: "Product part number.\nValue:82111A123     \nString",
                   cn: "产品编号\n値:82111A123     \nString",
-                  language,
                 }),
               },
               {
@@ -293,7 +281,6 @@ const BlogPage: React.FC = () => {
                   ja: "設変\n値:C00\nString",
                   us: "engineering change\nValue:C00\nString",
                   cn: "工程变更\n値:C00\nString",
-                  language,
                 }),
               },
               {
@@ -303,7 +290,6 @@ const BlogPage: React.FC = () => {
                   ja: "呼称\n値:123\nString",
                   us: "designation\nValue:123\nString",
                   cn: "名称\n値:123\nString",
-                  language,
                 }),
               },
               {
@@ -313,7 +299,6 @@ const BlogPage: React.FC = () => {
                   ja: "cavの合計数\n値:1042\nInteger",
                   us: "Total number of cav\nValue:1042\nInteger",
                   cn: "骑兵总数\n値:1042\nInteger",
-                  language,
                 }),
               },
               {
@@ -323,7 +308,6 @@ const BlogPage: React.FC = () => {
                   ja: "後ハメ数の合計\n値:162\nInteger",
                   us: "Total number of insert after\nValue:162\nInteger",
                   cn: "后插入总数\n値:162\nInteger",
-                  language,
                 }),
               },
               {
@@ -334,7 +318,6 @@ const BlogPage: React.FC = () => {
                   ja: "コネクタ端末\ncollection",
                   us: "Connector terminals.\ncollection",
                   cn: "连接器端子\ncollection",
-                  language,
                 }),
                 children: [
                   {
@@ -344,7 +327,6 @@ const BlogPage: React.FC = () => {
                       ja: "コネクタ写真のアドレス\n値:G:¥18_部材一覧¥201_写真¥7283-1018-40_1_001.png\nString",
                       us: "Connector photo address.\nValue:G:¥18_部材一覧¥201_写真¥7283-1018-40_1_001.png\nString",
                       cn: "连接照片地址\n値:G:¥18_部材一覧¥201_写真¥7283-1018-40_1_001.png\nString",
-                      language,
                     }),
                   },
                   {
@@ -354,7 +336,6 @@ const BlogPage: React.FC = () => {
                       ja: "端末No\n値:6\nString",
                       us: "Terminal No\nValue:6\nString",
                       cn: "端子编号\n値:6\nString",
-                      language,
                     }),
                   },
                   {
@@ -364,7 +345,6 @@ const BlogPage: React.FC = () => {
                       ja: "サブNo\n値:GK4\nString",
                       us: "Sub No\nValue:GK4\nString",
                       cn: "子编号\n値:GK4\nString",
-                      language,
                     }),
                   },
                   {
@@ -375,7 +355,6 @@ const BlogPage: React.FC = () => {
                       ja: "1つ目の端末\nterminalクラス",
                       us: "First terminal\nterminal class",
                       cn: "第一个端子\nterminal类",
-                      language,
                     }),
                     children: [
                       {
@@ -386,7 +365,6 @@ const BlogPage: React.FC = () => {
                           ja: "端末の穴\ncollection",
                           us: "Holes of terminal\ncollection",
                           cn: "端子的孔\ncollection",
-                          language,
                         }),
                         children: [
                           {
@@ -401,7 +379,6 @@ const BlogPage: React.FC = () => {
                                   ja: "穴の形状\n値:Cir\nString",
                                   us: "Shape of hole\nValue:Cir\nString",
                                   cn: "孔的形状\n値:Cir\nString",
-                                  language,
                                 }),
                               },
                               {
@@ -411,7 +388,6 @@ const BlogPage: React.FC = () => {
                                   ja: "導通検査のポイントナンバー\n値:1014\nString",
                                   us: "Point number for continuity test\nValue:1014\nString",
                                   cn: "导通测试的点号\n値:1014\nString",
-                                  language,
                                 }),
                               },
                               {
@@ -421,7 +397,6 @@ const BlogPage: React.FC = () => {
                                   ja: "コネクタ写真に対しての穴の左位置\n値:77\nString",
                                   us: "Left position of hole relative to connector photo\nValue:77\nString",
                                   cn: "相对于连接器照片的孔的左侧位置\n値:77\nString",
-                                  language,
                                 }),
                               },
                               {
@@ -432,7 +407,6 @@ const BlogPage: React.FC = () => {
                                   ja: "電線\ncollection",
                                   us: "Wires\ncollection",
                                   cn: "电线\ncollection",
-                                  language,
                                 }),
                                 children: [
                                   {
@@ -447,7 +421,6 @@ const BlogPage: React.FC = () => {
                                           ja: "電線の色番号\n値:70\nString",
                                           us: "Color number of wire\nValue:70\nString",
                                           cn: "电线的颜色编号\n値:70\nString",
-                                          language,
                                         }),
                                       },
                                       {
@@ -457,7 +430,6 @@ const BlogPage: React.FC = () => {
                                           ja: "電線の色呼称\n値:Y\nString",
                                           us: "Color code of wire\nValue:Y\nString",
                                           cn: "电线的颜色代码\n値:Y\nString",
-                                          language,
                                         }),
                                       },
                                       {
@@ -467,7 +439,6 @@ const BlogPage: React.FC = () => {
                                           ja: "電線のサイズ呼称\n値:039\nString",
                                           us: "Size designation of wire\nValue:039\nString",
                                           cn: "电线的尺寸名称\n値:039\nString",
-                                          language,
                                         }),
                                       },
                                     ],
@@ -494,7 +465,6 @@ const BlogPage: React.FC = () => {
       ja: "Sjp*.xlsmがあるフォルダ",
       us: "Folder with Sjp*.xlsm",
       cn: "带 Sjp*.xlsm 的文件夹",
-      language,
     }),
     type: "folder",
     children: [
@@ -506,7 +476,6 @@ const BlogPage: React.FC = () => {
           ja: "入手したRLTF-AとRLTF-Bを分解する為には、その2ファイルのみをここに入れます",
           us: "To disassemble the RLTF-A and RLTF-B files you have obtained, put only those two files here",
           cn: "要反汇编您获得的 RLTF-A 和 RLTF-B，只需将这两个文件放在此处",
-          language,
         }),
         children: [
           {
@@ -517,7 +486,6 @@ const BlogPage: React.FC = () => {
               ja: "分解元のデータ\nこれは開発者の確認用で通常は使用しません\n※単線分析リクエストの管理No.毎に保存されます",
               us: "Data from the decomposition source,\nThis is for developer confirmation only and is not normally used,\n※It is stored for each control No. of single line analysis request.",
               cn: "来自分解源的数据，\n这是供开发人员确认的。通常不使用。\n※它为每个单线分析请求控制号存储。",
-              language,
             }),
             children: [
               {
@@ -541,7 +509,6 @@ const BlogPage: React.FC = () => {
               ja: "分解したデータ\nこれは古い生産準備+で使用していたデータで通常は使用しません",
               us: "Disassembled data \nThis is the data used in the old Production Preparation+ and is not normally used.",
               cn: "拆解数据。该数据用于旧的生产就绪+，通常不使用",
-              language,
             }),
             children: [
               {
@@ -586,7 +553,6 @@ const BlogPage: React.FC = () => {
           ja: "入手したPVSW.csvを入れます。生産準備+のPVSWインポートのターゲットフォルダです。インポート後は適当な名前のフォルダを付けて保存してください",
           us: "Put the PVSW.csv you obtained. This is the target folder for PVSW import in Production Preparation+. After importing, save the file with an appropriately named folder.",
           cn: "插入获得的 PVSW.csv。在生产准备+ 中导入 PVSW 的目标文件夹。导入后，请将文件保存到适当命名的文件夹中",
-          language,
         }),
         isOpen: false,
         children: [{ name: "PVSW***.csv", type: "file" }],
@@ -599,7 +565,6 @@ const BlogPage: React.FC = () => {
           ja: "生産準備+からRLTF-Aを指定するのに使用します",
           us: "Used to specify RLTF-A from Production Ready+.",
           cn: "用于从 生产准备+ 指定 RLTF-A。",
-          language,
         }),
         children: [{ name: "RLTF17A*.txt", type: "file" }],
       },
@@ -611,7 +576,6 @@ const BlogPage: React.FC = () => {
           ja: "生産準備+からRLTF-Bを指定するのに使用します",
           us: "Used to specify RLTF-B from Production Ready+.",
           cn: "用于从 生产准备+ 指定 RLTF-B。",
-          language,
         }),
         children: [{ name: "RLTF17B*.txt", type: "file" }],
       },
@@ -622,7 +586,6 @@ const BlogPage: React.FC = () => {
           ja: "社内図のサブ形態を利用する時にSUBデータを入れます。通常は使用しません",
           us: "SUB data is put in when using a sub-form of an internal chart. Normally not used",
           cn: "使用内部图表的子表格时会包含 SUB 数据。通常不使用",
-          language,
         }),
         children: [
           { name: "製品品番1-A01-SUB.csv", type: "file" },
@@ -637,7 +600,6 @@ const BlogPage: React.FC = () => {
           ja: "ここに入手したMDデータを入れて変換します",
           us: "Put the obtained MD data here and convert it.",
           cn: "将获得的 MD 数据放在这里并进行转换。",
-          language,
         }),
         children: [
           {
@@ -647,7 +609,6 @@ const BlogPage: React.FC = () => {
               ja: "入手したMDデータ",
               us: "MD data obtained",
               cn: "获得 MD 数据。",
-              language,
             }),
             isOpen: false,
             children: [
@@ -685,7 +646,6 @@ const BlogPage: React.FC = () => {
               ja: "生産準備+で使えるように変換するプログラム",
               us: "Program to convert for use in Production Preparation+.",
               cn: "转换用于生产准备的方案+。",
-              language,
             }),
           },
           {
@@ -695,7 +655,6 @@ const BlogPage: React.FC = () => {
               ja: "上記.exeの設定ファイルです。生産準備+を起動する度に自動で書き換えられます",
               us: "This is the configuration file for the above .exe. It is automatically rewritten each time Production Preparation+ is started.",
               cn: "上述 .exe 的配置文件。每次启动 Production Preparation+ 时，该文件都会自动重写。",
-              language,
             }),
           },
         ],
@@ -711,7 +670,6 @@ const BlogPage: React.FC = () => {
               ja: "変換後のMDデータ",
               us: "MD data after conversion",
               cn: "转换后的 MD 数据",
-              language,
             }),
             isOpen: false,
             children: [
@@ -812,7 +770,6 @@ const BlogPage: React.FC = () => {
           ja: "生産準備+が提案したサブ形態",
           us: "Sub-forms proposed by Production Preparation+.",
           cn: "生产准备+提出的子表格。",
-          language,
         }),
         isOpen: false,
         children: [
@@ -843,7 +800,6 @@ const BlogPage: React.FC = () => {
               <Text>
                 {getMessage({
                   ja: "開発",
-                  language,
                 })}
               </Text>
               <Spacer />
@@ -859,19 +815,16 @@ const BlogPage: React.FC = () => {
                 ja: "プログラムの解説",
                 us: "Program Description",
                 cn: "计划说明",
-                language,
               })}
             </Heading>
             <CustomBadge
               text={getMessage({
                 ja: "生準+",
-                language,
               })}
             />
             <CustomBadge
               text={getMessage({
                 ja: "開発",
-                language,
               })}
             />
             <Text
@@ -879,7 +832,7 @@ const BlogPage: React.FC = () => {
               color={colorMode === "light" ? "gray.800" : "white"}
               mt={1}
             >
-              {getMessage({ ja: "更新日", language })}
+              {getMessage({ ja: "更新日" })}
               :2024-11-17
             </Text>
           </Box>
@@ -889,7 +842,6 @@ const BlogPage: React.FC = () => {
               "1." +
               getMessage({
                 ja: "はじめに",
-                language,
               })
             }
             sectionRefs={sectionRefs}
@@ -906,7 +858,6 @@ const BlogPage: React.FC = () => {
                   ja: "コードを書ける人なら誰でも更新出来る形を目指して更新しています。最終的目標は自分が離れても維持/更新が出来る仕組みを作る事です。",
                   us: "I am updating the site in a way that anyone who can write code can update it. The ultimate goal is to create a system that can be maintained/updated even after I leave.",
                   cn: "我更新它的方式是，任何会写代码的人都可以更新它。最终目标是创建一个即使我离开后也能维护/更新的系统。",
-                  language,
                 })}
               </Text>
             </Box>
@@ -919,7 +870,6 @@ const BlogPage: React.FC = () => {
                 ja: "コーディングスタイルガイド",
                 us: "Coding Style Guide",
                 cn: "编码风格指南",
-                language,
               })
             }
             sectionRefs={sectionRefs}
@@ -934,7 +884,6 @@ const BlogPage: React.FC = () => {
                 ja: "コーディングは下記のルールで行います",
                 us: "Coding is done according to the following rules",
                 cn: "编码基于以下规则",
-                language,
               })}
             </Text>
             <Box m={3}>
@@ -943,7 +892,6 @@ const BlogPage: React.FC = () => {
                   ja: "命名規則",
                   us: "Naming Rules",
                   cn: "命名規則",
-                  language,
                 }) + ":"}
               </Text>
               <List spacing={4}>
@@ -959,7 +907,6 @@ const BlogPage: React.FC = () => {
                       ja: "boolean型はis,他は動詞(get,paint)から始める",
                       us: "Start with is for boolean types, verbs (get, paint) for others",
                       cn: "布尔类型是，其他类型以动词开头（get、paint）。",
-                      language,
                     })}
                   </Flex>
                   <Flex alignItems="flex-start" my={2}>
@@ -973,7 +920,6 @@ const BlogPage: React.FC = () => {
                       ja: "定数は全て大文字, 変数はキャメルケース(camelCase)",
                       us: "Constants are all uppercase, variables are camelCase",
                       cn: "常量均为大写，变量为驼峰字体",
-                      language,
                     })}
                   </Flex>
                   <Flex alignItems="flex-start" my={2}>
@@ -987,7 +933,6 @@ const BlogPage: React.FC = () => {
                       ja: "JavaScriptが用意している関数名を出来るだけ真似る",
                       us: "Mimic the function names provided by JavaScript as much as possible.",
                       cn: "尽可能模仿 JavaScript 提供的函数名称。",
-                      language,
                     })}
                   </Flex>
                   <Flex alignItems="flex-start" my={2}>
@@ -1001,7 +946,6 @@ const BlogPage: React.FC = () => {
                       ja: "インデントは4スペース,全角スペースは使わない",
                       us: "Indent 4 spaces, no full-width spaces",
                       cn: "缩进 4 个空格，没有全宽空格。",
-                      language,
                     })}
                   </Flex>
                   <Flex alignItems="flex-start" my={2}>
@@ -1015,7 +959,6 @@ const BlogPage: React.FC = () => {
                       ja: "アップロード前にコンパイルを実行,option explicitは必須",
                       us: "Compile before uploading,option explicit is required",
                       cn: "上传前编译，需要 option explicit",
-                      language,
                     })}
                   </Flex>
                   <Text as="span" fontWeight="bold" mr={2}>
@@ -1023,7 +966,6 @@ const BlogPage: React.FC = () => {
                       ja: "禁止",
                       us: "prohibition",
                       cn: "禁令",
-                      language,
                     }) + ":"}
                   </Text>
                   <Flex alignItems="flex-start" my={2}>
@@ -1032,7 +974,6 @@ const BlogPage: React.FC = () => {
                       ja: "on error resume nextは使わない(EXCELの軽い破損で動作しない)",
                       us: "on error resume next is not used (does not work with EXCEL light corruption).",
                       cn: "在出错时恢复下一个不使用（在 EXCEL 轻度损坏时不起作用）。",
-                      language,
                     })}
                   </Flex>
                   <Flex alignItems="flex-start" my={2}>
@@ -1041,7 +982,6 @@ const BlogPage: React.FC = () => {
                       ja: "SQL文は使わない(リモートでのデバッグが難しい)",
                       us: "SQL statements are not used (difficult to debug remotely)",
                       cn: "不使用 SQL 语句（难以远程调试）。",
-                      language,
                     })}
                   </Flex>
                   <Flex alignItems="flex-start" my={2}>
@@ -1050,7 +990,6 @@ const BlogPage: React.FC = () => {
                       ja: "go toは使わない(予想外のエラーが発生しがち)",
                       us: "Do not use go to (tends to cause unexpected errors)",
                       cn: "不要使用 go to（容易导致意外错误）。",
-                      language,
                     })}
                   </Flex>
                 </ListItem>
@@ -1065,7 +1004,6 @@ const BlogPage: React.FC = () => {
                 ja: "オブジェクト指向について",
                 us: "About Object Oriented",
                 cn: "关于面向对象",
-                language,
               })
             }
             sectionRefs={sectionRefs}
@@ -1078,20 +1016,17 @@ const BlogPage: React.FC = () => {
             <Text display="inline">
               {getMessage({
                 ja: "生産準備+",
-                language,
               })}
               {getMessage({
                 ja: "では",
                 us: "will consist mainly of",
                 cn: "主要包括",
-                language,
               })}
               <UnderlinedTextWithDrawer
                 text={getMessage({
                   ja: " オブジェクト指向 ",
                   us: " object-oriented ",
                   cn: " 面向对象 ",
-                  language,
                 })}
                 onOpen={() => handleOpen("オブジェクト指向")}
                 isOpen={isOpen && activeDrawer === "オブジェクト指向"}
@@ -1100,7 +1035,6 @@ const BlogPage: React.FC = () => {
                   ja: "オブジェクト指向",
                   us: " object-oriented ",
                   cn: "面向对象",
-                  language,
                 })}
                 children={
                   <Box>
@@ -1112,7 +1046,6 @@ const BlogPage: React.FC = () => {
                           ja: "オブジェクト指向プログラミングは、プログラムを「オブジェクト」という単位で考える方法です。",
                           us: "Object-oriented programming is a way of thinking of programs in terms of units called [objects].",
                           cn: "面向对象编程是一种以称为 「对象」的单元来思考程序的方法。",
-                          language,
                         })}
                       </Text>
                       <Divider />
@@ -1122,14 +1055,12 @@ const BlogPage: React.FC = () => {
                             ja: "オブジェクト",
                             us: "Object ",
                             cn: "对象 ",
-                            language,
                           })}
                         </strong>
                         {getMessage({
                           ja: "とは、データ（プロパティ）とそのデータを操作するための関数（メソッド）をまとめたものです。",
                           us: "is a collection of data (properties) and functions (methods) to manipulate that data.",
                           cn: "是数据（属性）和操作数据的函数（方法）的集合。",
-                          language,
                         })}
                       </Text>
                       <Text>
@@ -1137,21 +1068,18 @@ const BlogPage: React.FC = () => {
                           ja: "例えば、",
                           us: "For example,",
                           cn: "例如 ",
-                          language,
                         })}
                         <strong>
                           {getMessage({
                             ja: "「ワイヤーハーネス」",
                             us: " [Wire harnesses] ",
                             cn: "[线束]",
-                            language,
                           })}
                         </strong>
                         {getMessage({
                           ja: "というオブジェクトを考えてみましょう。",
                           us: "Consider an object called",
                           cn: "考虑一个名为",
-                          language,
                         })}
                       </Text>
                       <Box bg="gray.100" p={1} borderRadius="md">
@@ -1161,7 +1089,6 @@ const BlogPage: React.FC = () => {
                               ja: "プロパティ",
                               us: "property",
                               cn: "财产",
-                              language,
                             })}
                             :
                           </strong>
@@ -1169,7 +1096,6 @@ const BlogPage: React.FC = () => {
                             ja: "生産治具、コネクタ品番、電線色、電線サイズ、端子品番、付属部品など",
                             us: "Production jigs, connector part numbers, wire colors, wire sizes, terminal part numbers, accessory parts, etc.",
                             cn: "生产夹具、连接器零件编号、导线颜色、导线尺寸、端子零件编号、附件零件等。",
-                            language,
                           })}
                         </Text>
                         <Text>
@@ -1178,7 +1104,6 @@ const BlogPage: React.FC = () => {
                               ja: "メソッド",
                               us: "method",
                               cn: "方法",
-                              language,
                             })}
                             :
                           </strong>
@@ -1186,7 +1111,6 @@ const BlogPage: React.FC = () => {
                             ja: "端子挿入、配策など",
                             us: "Terminal insertion, distribution, etc.",
                             cn: "端子插入、分配等",
-                            language,
                           })}
                         </Text>
                       </Box>
@@ -1195,7 +1119,6 @@ const BlogPage: React.FC = () => {
                           ja: "オブジェクト指向では、現実世界のものをプログラムで表現する事により設計がし易くなります。",
                           us: "Object-oriented design facilitates design by allowing programs to represent things in the real world.",
                           cn: "面向对象技术通过在程序中表示真实世界的对象来促进设计。",
-                          language,
                         })}
                       </Text>
                     </VStack>
@@ -1206,7 +1129,6 @@ const BlogPage: React.FC = () => {
                 ja: "と関数型をメインで作成しています。",
                 us: "and functional types",
                 cn: "和功能类型。",
-                language,
               })}
             </Text>
             <Box m={3}>
@@ -1216,7 +1138,6 @@ const BlogPage: React.FC = () => {
                   ja: "ExcelVBAでの実装方法",
                   us: "How to implement in ExcelVBA",
                   cn: "如何在 ExcelVBA 中实施",
-                  language,
                 })}
               </Text>
               <Text fontWeight="400" my={4}>
@@ -1224,7 +1145,6 @@ const BlogPage: React.FC = () => {
                   ja: "以下はワイヤーハーネスのオブジェクトのイメージです。",
                   us: "Below is an image of a wiring harness object.",
                   cn: "下面是一个线束物体的图像。",
-                  language,
                 })}
               </Text>
               <FileSystemNode item={directoryData1} />
@@ -1238,7 +1158,6 @@ const BlogPage: React.FC = () => {
                 ja: "ディレクトリ構造",
                 us: "directory structure",
                 cn: "目录结构",
-                language,
               })
             }
             sectionRefs={sectionRefs}
@@ -1253,7 +1172,6 @@ const BlogPage: React.FC = () => {
                 ja: "生産準備+に関係するファイルのディレクトリ構造です。",
                 us: "Directory structure of files related to production preparation+.",
                 cn: "与生产准备相关的文件目录结构+。",
-                language,
               })}
             </Text>
             <Box m={3}>
@@ -1263,7 +1181,6 @@ const BlogPage: React.FC = () => {
                   ja: "専用ディレクトリ",
                   us: "dedicated directory",
                   cn: "专用目录",
-                  language,
                 })}
               </Text>
               <FileSystemNode item={directoryData0} />
@@ -1273,7 +1190,6 @@ const BlogPage: React.FC = () => {
                   ja: "外部ディレクトリ",
                   us: "external directory",
                   cn: "外部目录",
-                  language,
                 })}
               </Text>
               <Text my={4}>
@@ -1281,7 +1197,6 @@ const BlogPage: React.FC = () => {
                   ja: "--そのうち追加--",
                   us: "--Sooner or later, add--",
                   cn: "--迟早要加--",
-                  language,
                 })}
               </Text>
             </Box>
@@ -1294,7 +1209,6 @@ const BlogPage: React.FC = () => {
                 ja: "よく使うコード",
                 us: "Frequently used codes",
                 cn: "常用代码",
-                language,
               })
             }
             sectionRefs={sectionRefs}
@@ -1309,7 +1223,6 @@ const BlogPage: React.FC = () => {
                 ja: "汎用性の高いコードをここにまとめていきます。",
                 us: "We will summarize the versatile codes here.",
                 cn: "这里总结了最通用的代码。",
-                language,
               })}
             </Text>
             <FileSystemNode item={directoryData2} />
@@ -1322,7 +1235,6 @@ const BlogPage: React.FC = () => {
                 ja: "更新とアップロードの手順",
                 us: "Update and Upload Procedures",
                 cn: "更新和上传程序",
-                language,
               })
             }
             sectionRefs={sectionRefs}
@@ -1337,7 +1249,6 @@ const BlogPage: React.FC = () => {
                 ja: "--そのうち追加--",
                 us: "--Sooner or later, add--",
                 cn: "--迟早要加--",
-                language,
               })}
             </Text>
           </SectionBox>
@@ -1347,7 +1258,6 @@ const BlogPage: React.FC = () => {
               "7." +
               getMessage({
                 ja: "まとめ",
-                language,
               })
             }
             sectionRefs={sectionRefs}

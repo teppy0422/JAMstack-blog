@@ -153,7 +153,6 @@ export default function BBS() {
             ja: "※別紙1",
             us: "*Attachment 1",
             cn: "*附录1.",
-            language,
           })}
         </Text>
         <Container
@@ -163,7 +162,6 @@ export default function BBS() {
             ja: "Noto Sans JP",
             us: "Noto Sans,Noto Sans JP",
             cn: "Noto Sans SC,Noto Sans JP",
-            language,
           })}
           fontWeight={400}
         >
@@ -185,7 +183,6 @@ export default function BBS() {
                   ja: "問い合わせ",
                   us: "Inquiry",
                   cn: "询问",
-                  language,
                 })}
               </Text>
               {/* <AiOutlineWechat size={30} /> */}
@@ -218,7 +215,6 @@ export default function BBS() {
                     ja: "使用者",
                     us: "user",
                     cn: "使用者",
-                    language,
                   })}
                 </Badge>
                 <Badge variant="solid" colorScheme="purple" ml={2}>
@@ -226,7 +222,6 @@ export default function BBS() {
                     ja: "管理者",
                     us: "administrator",
                     cn: "管理者",
-                    language,
                   })}
                 </Badge>
                 <Badge variant="solid" colorScheme="red" ml={2}>
@@ -234,7 +229,6 @@ export default function BBS() {
                     ja: "開発者",
                     us: "developer",
                     cn: "开发人员",
-                    language,
                   })}
                 </Badge>
               </Box>

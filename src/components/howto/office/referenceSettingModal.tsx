@@ -34,7 +34,6 @@ const ReferenceSettingModal: React.FC = () => {
     ja: "参照設定の確認方法",
     us: "How to check reference settings in Excel",
     cn: "如何检查 Excel 中的引用设置",
-    language,
   });
 
   const body = (
@@ -44,7 +43,6 @@ const ReferenceSettingModal: React.FC = () => {
           ja: "Excel/ACCESSの対象ファイルを開きます。",
           us: "Open the target file in Excel/ACCESS.",
           cn: "在 Excel/ACCESS 中打开目标文件",
-          language,
         })}
       </ListItem>
       <ListItem>
@@ -52,14 +50,12 @@ const ReferenceSettingModal: React.FC = () => {
           ja: "",
           us: "Press ",
           cn: "按 ",
-          language,
         })}
         <Kbd {...kbdStyle}>ALT</Kbd> + <Kbd {...kbdStyle}>F11</Kbd>
         {getMessage({
           ja: "を押してVBAを開く",
           us: " to open VBA.",
           cn: " 打开 VBA。",
-          language,
         })}
       </ListItem>
       <ListItem>
@@ -67,7 +63,6 @@ const ReferenceSettingModal: React.FC = () => {
           ja: "[ツール] → [参照設定]をクリック",
           us: "Click [Tools] → [Browse Settings]",
           cn: "单击 [工具] → [浏览设置]。",
-          language,
         })}
       </ListItem>
       <ListItem>
@@ -75,7 +70,6 @@ const ReferenceSettingModal: React.FC = () => {
           ja: "下図が表示されるので参照不可になっている項目を確認する",
           us: "Check the items that cannot be referred to in the chart below.",
           cn: "显示下图，并检查不可用的项目以供参考。",
-          language,
         })}
         <Box textAlign="center" mt={2}>
           <Image src="/images/howTo/unReference.webp" w="90%" mx="auto" />
@@ -86,7 +80,6 @@ const ReferenceSettingModal: React.FC = () => {
           ja: "参照不可がある場合は、参照不可を解除する操作が必要になります",
           us: "If the reference is disabled, the operation to remove the disablement must be performed.",
           cn: "如果存在禁止取消引用，则需要进行操作才能取消引用。",
-          language,
         })}
       </ListItem>
     </List>
@@ -109,7 +102,6 @@ const ReferenceSettingModal: React.FC = () => {
           ja: "参照設定の確認",
           us: "Check Excel reference settings",
           cn: "检查 Excel 参考设置。",
-          language,
         })}
         <Icon as={FaRegEdit} mx={1} />
       </Box>

@@ -1,14 +1,15 @@
 import React, { useContext } from "react";
-import { useLanguage, LanguageProvider } from "../contexts/LanguageContext";
+import { useLanguage } from "../contexts/LanguageContext";
 
 type MessageDisplayProps = {
   ja: string;
   us?: string;
   cn?: string;
-  language: string;
 };
 
-const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
+const getMessage = ({ ja, us, cn }: MessageDisplayProps): string => {
+  const { language } = useLanguage();
+
   const translations = {
     お使いのブラウザは動画タグをサポートしていません: {
       us: "Your browser does not support video tags",
@@ -87,6 +88,7 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
     緒方さん: { us: "Mr.ogata", cn: "緒方先生" },
     書き直し: { us: "rewrite", cn: "重拟" },
     更新: { us: "update", cn: "更新" },
+    設定: { us: "setting", cn: "设置" },
   };
 
   const {

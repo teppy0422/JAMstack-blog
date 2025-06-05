@@ -53,7 +53,6 @@ const Home = () => {
                 ja: "トップページです\n配策するサブナンバーをタップしてみてください",
                 us: "Top page.\nTap the sub-number you want to distribute.",
                 cn: "首页\n点选要分发的子号码",
-                language,
               })
             );
           } else if (fileName.includes("-")) {
@@ -74,7 +73,6 @@ const Home = () => {
                   fileName.replace("-", "") +
                   "]出发的所有目的地\n装图 显示目的终端编号\n" +
                   "-可以通过以下方式访问它-\n1.点击屏幕上的设备编号，然后点击显示屏幕的右上角\n在右上角输入[终端-]",
-                language,
               })
             );
           } else if (fileName.length === 4) {
@@ -102,7 +100,6 @@ const Home = () => {
                   "1.点击屏幕上的电线\n" +
                   "2.使用 QR 阅读器阅读说明\n" +
                   "3.\n输入右上角的四位配置编号",
-                language,
               })
             );
           } else {
@@ -135,7 +132,6 @@ const Home = () => {
           {"56." +
             getMessage({
               ja: "配策誘導ナビ",
-              language,
             }) +
             "Ver3.1"}
         </Text>
@@ -144,14 +140,12 @@ const Home = () => {
             ja: "要素をタップ/クリックで画面が変わります",
             us: "Tap/Click on an element to change the screen",
             cn: "轻敲/点击元素可更改屏幕",
-            language,
           })}
           <br />
           {getMessage({
             ja: "実際に操作してみてください",
             us: "Try to actually operate it!",
             cn: "实际操作",
-            language,
           })}
         </Text>
         {/* <IconButton
@@ -186,7 +180,6 @@ const Home = () => {
             ja: "トップページに戻るには最上部の電線情報をタップ",
             us: "To return to the top page, tap the wire information at the top of the page.",
             cn: "要返回首页，请点击最上面的电线信息。",
-            language,
           })}
         </Text>
       </Box>

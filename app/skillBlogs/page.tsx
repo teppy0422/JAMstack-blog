@@ -131,7 +131,7 @@ const SkillBlogTopPage: React.FC = () => {
             />
             <Text>@kataoka</Text>
             <Text>in</Text>
-            <Text>{getMessage({ ja: "開発", language })}</Text>
+            <Text>{getMessage({ ja: "開発" })}</Text>
             <Spacer />
             <Flex justifyContent="flex-end">
               <Text>
@@ -147,7 +147,6 @@ const SkillBlogTopPage: React.FC = () => {
                 ja: "技術ブログ",
                 us: "Technology Blog",
                 cn: "技术博客",
-                language,
               })}
               <Box
                 position="relative"
@@ -184,7 +183,7 @@ const SkillBlogTopPage: React.FC = () => {
             color={colorMode === "light" ? "gray.800" : "white"}
             mt={1}
           >
-            {getMessage({ ja: "更新日", language })}: 2024-11-18
+            {getMessage({ ja: "更新日" })}: 2024-11-18
           </Text>
 
           <Text fontSize="sm" my={5}>
@@ -192,7 +191,6 @@ const SkillBlogTopPage: React.FC = () => {
               ja: "ここに各システムの使い方や開発の経緯/進め方をまとめていきます。",
               us: "Here is a summary of how each system is used and how it was/is developed.",
               cn: "以下是每个系统的使用方法和开发过程的摘要。",
-              language,
             })}
           </Text>
 

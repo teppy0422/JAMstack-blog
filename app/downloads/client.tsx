@@ -124,7 +124,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
             ja: "Noto Sans JP",
             us: "Noto Sans,Noto Sans JP",
             cn: "Noto Sans SC,Noto Sans JP",
-            language,
           })}
         >
           <Box textAlign="center" mb={8}>
@@ -147,35 +146,30 @@ export default function Ui({ filterId }: { filterId?: string }) {
                 ja: "ダウンロードは適宜追加していきます",
                 us: "Downloads and descriptions will be added as appropriate.",
                 cn: "将酌情添加下载和说明",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "右側にある",
                 us: "Click on the ",
                 cn: "点击右侧的",
-                language,
               })}
               <Badge backgroundColor="#555" color="white" mt={-0.5} mr={0.5}>
                 {getMessage({
                   ja: "バッジ",
                   us: "badge",
                   cn: "奖章",
-                  language,
                 })}
               </Badge>
               {getMessage({
                 ja: "をクリックすると説明ページが表示されます",
                 us: "on the right to go to the description page",
                 cn: "进入说明页面",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "過去のバージョンが必要な場合は連絡ください",
                 us: "Please contact us if you need previous versions.",
                 cn: "如果您需要以前的版本，请联系我们。",
-                language,
               })}
               <Box
                 display="flex"
@@ -201,7 +195,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                   <CustomCardHeader
                     text={getMessage({
                       ja: "生産準備+",
-                      language,
                     })}
                     link={<UploadSjp />}
                   />
@@ -238,7 +231,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               ja: "Sjp+ 本体",
                               us: "Sjp+ main unit",
                               cn: "Sjp+ 机构",
-                              language,
                             })}
                           </Heading>
                           <BadgeList
@@ -250,21 +242,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               ja: "最初はこれから始めるのがおすすめです",
                               us: "I recommend starting with this one.",
                               cn: "建议从这里开始。",
-                              language,
                             })}
                             <br />
                             {getMessage({
                               ja: "ハメ図を作成したりサブ形態を入力する本体",
                               us: "Main body to create frame diagrams and enter sub-forms",
                               cn: "用于创建框架图和输入子表格的主单元",
-                              language,
                             })}
                             <br />
                             {getMessage({
                               ja: "PVSW.csvとRLTF.txtが必須",
                               us: "PVSW.csv and RLTF.txt are required",
                               cn: "需要 PVSW.csv 和 RLTF.txt 文件",
-                              language,
                             })}
                             <br />
                             <Badge
@@ -276,14 +265,12 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               {"41." +
                                 getMessage({
                                   ja: "先ハメ誘導",
-                                  language,
                                 })}
                             </Badge>
                             {getMessage({
                               ja: "は生産準備+が自動立案したサブ形態のみ対応",
                               us: "is only supported for sub-forms automatically planned by Production Preparation+.",
                               cn: "仅支持由生产准备+ 自动起草的子表格。",
-                              language,
                             })}
                           </Text>
                         </Flex>
@@ -470,7 +457,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <CustomCardHeader
                       text={getMessage({
                         ja: "コネクタ撮影",
-                        language,
                       })}
                       textSize="sm"
                     />
@@ -515,28 +501,24 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 ja: "コネクタを撮影するアプリケーション",
                                 us: "Application to shoot connectors",
                                 cn: "应用于拍摄连接器",
-                                language,
                               })}
                               <br />
                               {getMessage({
                                 ja: "SONYのカメラのみ対応",
                                 us: "Only SONY cameras are supported.",
                                 cn: "仅与 SONY 相机兼容。",
-                                language,
                               })}
                               <br />
                               {getMessage({
                                 ja: "生産準備+で写真撮影を実行時に自動インストールされるので使用には必要ありません",
                                 us: "Automatically installed when running a photo shoot in Production Preparation+, so not required for use.",
                                 cn: "无需使用，因为在 生产准备+ 中运行照片拍摄时会自动安装。",
-                                language,
                               })}
                               <br />
                               {getMessage({
                                 ja: "アプリケーションを修正したい場合のみダウンロードしてください",
                                 us: "Download only if you want to modify your application",
                                 cn: "仅在要修改应用程序时下载",
-                                language,
                               })}
                             </Text>
                           </Flex>
@@ -558,7 +540,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 ja: "撮影方法",
                                 us: "Shooting Method",
                                 cn: "拍摄方法",
-                                language,
                               })}
                               media=""
                             />
@@ -588,7 +569,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <CustomCardHeader
                       text={getMessage({
                         ja: "誘導ナビ.net",
-                        language,
                       })}
                       textSize="sm"
                     />
@@ -632,7 +612,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 ja: "",
                                 us: "Application for displaying ",
                                 cn: "申请显示 ",
-                                language,
                               })}
                               <Badge
                                 backgroundColor="#555"
@@ -643,28 +622,24 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 {"56." +
                                   getMessage({
                                     ja: "配策誘導ナビ",
-                                    language,
                                   })}
                               </Badge>
                               {getMessage({
                                 ja: " の表示とディスプレイ移動の為のアプリケーション",
                                 us: " and moving the display.",
                                 cn: " 和移动显示屏",
-                                language,
                               })}
                               <br />
                               {getMessage({
                                 ja: "ブラウザではCOMポートへのアクセス許可がページ毎に必要なので作成しました",
                                 us: "Created because the browser requires permission to access the COM port on a page-by-page basis.",
                                 cn: "创建的原因是浏览器需要逐页访问 COM 端口的权限",
-                                language,
                               })}
                               <br />
                               {getMessage({
                                 ja: ".NetFrameWork4.8はインストーラーに含まれます",
                                 us: ".NetFrameWork4.8 is included in the installer.",
                                 cn: "安装程序中包含 .NetFrameWork4.8",
-                                language,
                               })}
                             </Text>
                           </Flex>
@@ -723,14 +698,12 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 ja: "yudo.netから信号を受けて配策誘導のディスプレイを移動させるArduinoのスケッチ",
                                 us: "Sketch of an Arduino that receives a signal from yudo.net and moves the display of the routing guidance.",
                                 cn: "接收来自 yudo.net 的信号并移动分发指南显示屏的 Arduino 的草图。",
-                                language,
                               })}
                               <br />
                               {getMessage({
                                 ja: "ArduinoのATmega328P系にプログラムを書き込む事で動作可能",
                                 us: "Can be operated by writing a program to Arduino's ATmega328P series.",
                                 cn: "可通过向 Arduino ATmega328P 系列编写程序来操作。",
-                                language,
                               })}
                             </Text>
                           </Flex>
@@ -752,7 +725,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 ja: "ディスプレイ移動",
                                 us: "Display Movement",
                                 cn: "显示屏移动",
-                                language,
                               })}
                             />
                           </Stack>
@@ -810,7 +782,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             <Heading size="sm" mb="3px">
                               {getMessage({
                                 ja: "検査履歴システム",
-                                language,
                               })}
                             </Heading>
                             <BadgeList labels={["VB.net"]} />
@@ -819,14 +790,12 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 ja: "検査実績の記憶とラベル印刷が可能",
                                 us: "Capable of storing inspection results and printing labels.",
                                 cn: "能够存储检测结果并打印标签",
-                                language,
                               })}
                               <br />
                               {getMessage({
                                 ja: "瀬戸内部品の開発なのでここではダウンロードできません",
                                 us: "Not available for download here as it is a development of the Setouchi component.",
                                 cn: "在此无法下载，因为它是 Setouchi 组件的开发版本。",
-                                language,
                               })}
                               <br />
                               <Badge
@@ -838,14 +807,12 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 {"70." +
                                   getMessage({
                                     ja: "ポイント点滅",
-                                    language,
                                   })}
                               </Badge>
                               {getMessage({
                                 ja: "を利用すると更に作業効率の向上を図れます",
                                 us: "can be used to further improve work efficiency.",
                                 cn: "可以用来进一步提高工作效率。",
-                                language,
                               })}
                               <br />
                               {"⚠️" +
@@ -853,13 +820,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                   ja: "ブラウザのバージョンはPCに依存しているので注意",
                                   us: "Note that browser version is PC-dependent.",
                                   cn: "请注意，浏览器版本取决于电脑。",
-                                  language,
                                 })}
                               {getMessage({
                                 ja: "※最新Verは不明です",
                                 us: "*Latest version is unknown.",
                                 cn: "*最新版本未知。",
-                                language,
                               })}
                               <br />
                             </Text>
@@ -895,7 +860,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                   <CustomCardHeader
                     text={getMessage({
                       ja: "部材一覧+",
-                      language,
                     })}
                     textSize="md"
                   />
@@ -937,14 +901,12 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               ja: "全製品品番の使用部品リストの一覧表を作成",
                               us: "Create a list of parts used for all product part numbers",
                               cn: "编制所有产品部件号所用部件清单",
-                              language,
                             })}
                             <br />
                             {getMessage({
                               ja: "EXTESを自動制御して手入力の手間とミスを無くせます",
                               us: "Automatically control EXTES to eliminate manual input and errors.",
                               cn: "自动控制 EXTES，消除手动输入和错误。",
-                              language,
                             })}
                           </Text>
                         </Flex>
@@ -974,7 +936,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                   <CustomCardHeader
                     text={getMessage({
                       ja: "順立生産システム",
-                      language,
                     })}
                     textSize="md"
                   />
@@ -1016,28 +977,24 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               ja: "一貫工程などの連続して生産する工程で有効",
                               us: "Effective in continuous production processes such as integrated processes.",
                               cn: "适用于连续生产工艺，如集成工艺",
-                              language,
                             })}
                             <br />
                             {getMessage({
                               ja: "かんばん等のデータを読み込んでその順番で各作業場所で生産指示を行う",
                               us: "Reads Kanban and other data and gives production instructions at each work location in that order.",
                               cn: "读取来自看板和其他来源的数据，并按顺序在每个工作地点下达生产指令。",
-                              language,
                             })}
                             <br />
                             {getMessage({
                               ja: "生産指示の対象は[作業者] [自動機(SA,AS)] ",
                               us: "The subject of the production order is [Operator] [automatic(SA,AS)] ",
                               cn: "生产订单受 [工人] [自动(SA,AS)] ",
-                              language,
                             }) + "[CB10,70] [YSS]."}
                             <br />
                             {getMessage({
                               ja: "※宮崎部品が委託開発した3つのシステムを統合して機能追加しました",
                               us: "*Miyazaki Parts has integrated three systems developed on consignment and added functionality.",
                               cn: "*宮崎部品 整合了由 委托开发的三个系统，并增加了其他功能",
-                              language,
                             })}
                           </Text>
                         </Flex>
@@ -1063,7 +1020,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 ja: "指示",
                                 us: "directives",
                                 cn: "指示",
-                                language,
                               })
                             }
                           />
@@ -1151,7 +1107,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <CustomCardHeader
                       text={getMessage({
                         ja: "PLCとの連携",
-                        language,
                       })}
                       textSize="sm"
                     />
@@ -1188,7 +1143,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 ja: "main3用ラダー図",
                                 us: "PLC for main3",
                                 cn: "main3 的梯形图",
-                                language,
                               })}
                             </Heading>
                             <BadgeList labels={["OMRON CP**"]} />
@@ -1197,35 +1151,30 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 ja: "main3からPLCへデータを送信して部品セットを行う",
                                 us: "Send data from main3 to PLC to set parts",
                                 cn: "从 main3 向 PLC 发送数据以设置部件。",
-                                language,
                               })}
                               <br />
                               {getMessage({
                                 ja: "main3からシリアル送信するデータは2進数でPLC受信で対応した内部リレーをON/OFFする",
                                 us: "Data sent serially from main3 is binary and turns on/off the internal relay corresponding to the PLC reception.",
                                 cn: "从 main3 串行发送的数据为二进制数，在 PLC 接收到这些数据时会打开/关闭相应的内部继电器。",
-                                language,
                               })}
                               <br />
                               {getMessage({
                                 ja: "このラダー図そのままでは使用できるケースは少ないですが部品セットの参考になると思います",
                                 us: "This ladder diagram can be used as is in only a few cases, but it can be used as a reference for the parts set.",
                                 cn: "这种梯形图只能在少数情况下使用，但可以作为组件集的参考。",
-                                language,
                               })}
                               <br />
                               {getMessage({
                                 ja: "PLCへの書込みにはオムロン社のCX-Programmerが必要です",
                                 us: "Requires Omron's CX-Programmer",
                                 cn: "需要使用 Omron 的 CX-Programmer",
-                                language,
                               })}
                               <br />
                               {getMessage({
                                 ja: "ダウンロードファイルには配線図とPLCシリアル設定の説明が含まれます。",
                                 us: "The download file contains wiring diagrams and instructions for PLC serial configuration.",
                                 cn: "下载文件包含 PLC 串行配置的接线图和说明。",
-                                language,
                               })}
                             </Text>
                           </Flex>
@@ -1275,7 +1224,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                   <CustomCardHeader
                     text={getMessage({
                       ja: "誘導ポイント設定一覧表",
-                      language,
                     })}
                     link={
                       <Link
@@ -1289,7 +1237,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           ja: "使い方のページ",
                           us: "Upload Procedure",
                           cn: "上传程序",
-                          language,
                         })}
                       </Link>
                     }
@@ -1323,7 +1270,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           <Heading size="sm" mb="3px">
                             {getMessage({
                               ja: "誘導ポイント設定一覧表",
-                              language,
                             })}
                           </Heading>
                           <BadgeList
@@ -1335,13 +1281,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               ja: "誘導ポイント設定一覧表(作業内容とインラインNo./忘れん棒番号/製品品番の使い分けを記した作業手順書)",
                               us: "Induction point setting list (work procedure document describing the work and the use of inline No./forgotten bar number/product part number)",
                               cn: "上岗点设置清单（附有工作描述的工作程序以及内联编号/遗忘的条形码/产品部件编号的使用）。",
-                              language,
                             })}
                             {getMessage({
                               ja: "からYICの書き込み器にデータ転送を行います。作業効率化/入力ミス削減が図れます。",
                               us: "The data is transferred from the YIC to the writer of the YIC. This improves work efficiency and reduces input errors.",
                               cn: "数据从 YIC 传输到 YIC 写入器。提高工作效率/减少输入错误。",
-                              language,
                             })}
                           </Text>
                         </Flex>
@@ -1425,7 +1369,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             <Heading size="sm" mb="3px">
                               {getMessage({
                                 ja: "バージョンアップ",
-                                language,
                               })}
                             </Heading>
                             <BadgeList
@@ -1437,13 +1380,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 ja: "誘導ポイント設定一覧表(作業内容とインラインNo./忘れん棒番号/製品品番の使い分けを記した作業手順書)",
                                 us: "Induction point setting list (work procedure document describing the work and the use of inline No./forgotten bar number/product part number)",
                                 cn: "上岗点设置清单（附有工作描述的工作程序以及内联编号/遗忘的条形码/产品部件编号的使用）。",
-                                language,
                               })}
                               {getMessage({
                                 ja: "からYICの書き込み器にデータ転送を行います。作業効率化/入力ミス削減が図れます。",
                                 us: "The data is transferred from the YIC to the writer of the YIC. This improves work efficiency and reduces input errors.",
                                 cn: "数据从 YIC 传输到 YIC 写入器。提高工作效率/减少输入错误。",
-                                language,
                               })}
                             </Text>
                           </Flex>
@@ -1492,7 +1433,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       ja: "その他ライブラリなど",
                       us: "Other libraries, etc.",
                       cn: "其他图书馆等",
-                      language,
                     })}
                     textSize="sm"
                   />
@@ -1527,7 +1467,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               ja: "バーコードフォント",
                               us: "bar code font",
                               cn: "条形码字体",
-                              language,
                             })}
                           </Heading>
                           <BadgeList labels={["Windows", "Mac", "Linux"]} />
@@ -1536,7 +1475,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               ja: "バーコードを表示するためのフォント",
                               us: "",
                               cn: "",
-                              language,
                             })}
                             <br />
                             <br />
@@ -1588,7 +1526,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               ja: "シリアル通信用ライブラリ",
                               us: "",
                               cn: "",
-                              language,
                             })}
                           </Heading>
                           <BadgeList
@@ -1600,7 +1537,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               ja: "VBの環境でシリアル通信を行うためのライブラリ",
                               us: "",
                               cn: "",
-                              language,
                             })}
                             <br />
                             <br />

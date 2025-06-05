@@ -99,7 +99,6 @@ export default function Page() {
               <Text fontSize="2xl" mb={2} fontWeight={600}>
                 {getMessage({
                   ja: "順立生産システム+",
-                  language,
                 })}
               </Text>
             </HStack>
@@ -108,14 +107,12 @@ export default function Page() {
                 ja: "以下からダウンロードしてください",
                 us: "Please download below",
                 cn: "请在下方下载。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "ダウンロードした.zipは展開(解凍)してください",
                 us: "Please extract (unzip) the .zip file you downloaded.",
                 cn: "请解压缩下载的 .zip",
-                language,
               })}
               <br />
               <Box
@@ -130,7 +127,6 @@ export default function Page() {
                     ja: "ダウンロードしたmain_*.zipを展開(解凍)してからmain_*.mdbが在るフォルダに入れてください",
                     us: "Extract (unzip) the downloaded main_*.zip file and place it in the folder containing the main_*.mdb file.",
                     cn: "解压缩下载的 main_*.zip, 并将其放入 main_*.mdb 所在文件夹。",
-                    language,
                   })}
                 </Box>
                 {/* <TransitionExample /> */}
@@ -153,7 +149,6 @@ export default function Page() {
                     ja: "使い方のページ",
                     us: "Upload Procedure",
                     cn: "上传程序",
-                    language,
                   })}
                 </Link>
               </Box>
@@ -204,14 +199,12 @@ export default function Page() {
                           ja: "ダウンロードした.zipファイルを",
                           us: "Please ",
                           cn: "",
-                          language,
                         })}
                         <UnzipModal />
                         {getMessage({
                           ja: "をしてください。",
                           us: "the .zip file you downloaded.",
                           cn: "下载的 .zip 文件。",
-                          language,
                         })}
                       </Text>
                     </ListItem>

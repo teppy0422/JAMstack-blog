@@ -142,7 +142,6 @@ const BlogPage: React.FC = () => {
             <Text>
               {getMessage({
                 ja: "開発",
-                language,
               })}
             </Text>
             <Spacer />
@@ -158,7 +157,6 @@ const BlogPage: React.FC = () => {
               ja: "開発スタッフ",
               us: "Development Staff",
               cn: "开发人员",
-              language,
             })}
           </Heading>
           <Text
@@ -168,7 +166,6 @@ const BlogPage: React.FC = () => {
           >
             {getMessage({
               ja: "更新日",
-              language,
             })}
             :2025-2-6
           </Text>
@@ -179,7 +176,6 @@ const BlogPage: React.FC = () => {
             ja: "1.片岡 哲兵",
             us: "1.Kataoka Teppei",
             cn: "1.片岡 哲兵",
-            language,
           })}
           sectionRefs={sectionRefs}
           sections={sections}
@@ -203,7 +199,6 @@ const BlogPage: React.FC = () => {
             ja: "2.このサイトについて",
             us: "2.About this site",
             cn: "2.关于本网站",
-            language,
           })}
           sectionRefs={sectionRefs}
           sections={sections}
@@ -239,28 +234,24 @@ const BlogPage: React.FC = () => {
                 ja: "このWEBサイトは効率良く活動を進めるために作成しました。",
                 us: "This web site was created to promote activities efficiently.",
                 cn: "创建该网站的目的是为了有效地宣传各项活动。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "たとえば従来のメール連絡だと下記が不都合でした。",
                 us: "For example, the following were inconvenient with conventional e-mail communication",
                 cn: "例如，传统的电子邮件通信有以下不便之处",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "1.送信できるファイルサイズが小さい(2MB程度)",
                 us: "1. Small file size (about 2MB) that can be sent",
                 cn: "1. 可发送的文件大小较小（约 2 MB）",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "2.過去のやりとりの確認がし辛い",
                 us: "2. It is hard to confirm past correspondence.",
                 cn: "2. 难以检查过去的通信",
-                language,
               })}
               <br />
               <br />
@@ -268,21 +259,18 @@ const BlogPage: React.FC = () => {
                 ja: "そこで、LINEのようなリアルタイムチャットを用意しました。",
                 us: "Therefore, we have prepared a real-time chat like LINE.",
                 cn: "因此，我们准备了一个类似 LINE 的实时聊天系统。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "1.管理者が認証したアカウントのみ閲覧可能",
                 us: "1. Only accounts authenticated by the administrator can be viewed",
                 cn: "1. 只有管理员授权的账户才能查看。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "2.他社のやりとりは閲覧不可",
                 us: "2. Interactions with other companies are not viewable.",
                 cn: "2. 无法查看与其他公司的交流。",
-                language,
               })}
               <br />
               <br />
@@ -290,7 +278,6 @@ const BlogPage: React.FC = () => {
                 ja: "その他、最新のプログラムのダウンロードや使い方を載せていきます。",
                 us: "We will also post the latest program downloads and instructions on how to use them.",
                 cn: "此外，还将张贴最新的程序下载和使用说明。",
-                language,
               })}
               <br />
               <br />
@@ -299,21 +286,18 @@ const BlogPage: React.FC = () => {
                 ja: "このサイトのソースコードはGitHubに公開しています。",
                 us: "The source code for this site is available on GitHub.",
                 cn: "该网站的源代码可在 GitHub 上获取。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "レポジトリは JAMstack-blog。 自由に使って構いません。",
                 us: "",
                 cn: "",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "※チャット内容/添付ファイル/ユーザー情報/その他一部のファイルはsupabase内にあるのでアクセス出来ない事をご了承ください。",
                 us: "Please note that the chat contents/attachments/user information and some other files are in supabase and cannot be accessed.",
                 cn: "请注意，聊天内容/附件/用户信息和其他一些文件位于 SUPABASE 中，无法访问。",
-                language,
               })}
               <br />
               <br />
@@ -321,28 +305,24 @@ const BlogPage: React.FC = () => {
                 ja: "Next.js + TypeScriptで書いています",
                 us: "Written in Next.js + TypeScript",
                 cn: "使用 Next.js + TypeScript 编写",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "CSSフレームワークはChakraUI",
                 us: "CSS framework is ChakraUI",
                 cn: "CSS 框架是 ChakraUI。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "データベースはVercel + supabase",
                 us: "Database is Vercel + supabase",
                 cn: "数据库是 Vercel + supabase。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "ブログはmicroCMS",
                 us: "Blog is microCMS",
                 cn: "博客是 microCMS。",
-                language,
               })}
             </Text>
             <Flex alignItems="left" m={4} mt={6}>

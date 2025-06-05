@@ -179,7 +179,6 @@ const BusinessCard: React.FC = () => {
                   ja: "片岡 哲兵",
                   us: "\u00A0",
                   cn: "\u00A0",
-                  language,
                 })}
               </Text>
               <Text fontSize="sm" color="black">
@@ -197,7 +196,6 @@ const BusinessCard: React.FC = () => {
                     ja: "徳島県藍住町\n奥野和田135-35",
                     us: "Tokushima Aizumi-cho OkunoWada135-35",
                     cn: "徳島県藍住町奥野和田135-35",
-                    language,
                   })}
                 </Text>
               </Flex>
@@ -260,7 +258,6 @@ const BusinessCard: React.FC = () => {
                     ja: "ワイヤーハーネス歴20年の知識",
                     us: "20 years of wiring harness knowledge.",
                     cn: "20 年的线束知识",
-                    language,
                   })}
                 </Text>
               </ListItem>
@@ -278,7 +275,6 @@ const BusinessCard: React.FC = () => {
                     ja: "プログラム言語はだいたい対応可能",
                     us: "Most programming languages are supported.",
                     cn: "支持大多数编程语言",
-                    language,
                   })}
                 </Text>
               </ListItem>
@@ -314,7 +310,6 @@ const BusinessCard: React.FC = () => {
                       ja: "090-8971-4946",
                       us: "(+81)090-8971-4946",
                       cn: "(+81)090-8971-4946",
-                      language,
                     })}
                   </Text>
                 </Flex>
@@ -453,7 +448,6 @@ const BusinessCard: React.FC = () => {
                     "現場の人と相談しながら更に発展させていくのが得意。プログラミングは嫌い。",
                   us: "Born in Kochi. Experienced in wire harness manufacturing plant / machine maintenance / front-end production analysis / back-end production analysis / engineering work / machine improvement team. The Craft Improvement Team gave me experience with PLC/Arduino and other hardware. Later, while combining hardware and software, I experienced HTML/JavaScript and went on to create web applications. He is good at consulting with people in the field to further develop the project. I hate programming.",
                   cn: "生于高知。在一家线束制造厂担任经验丰富的/机器维护/前端生产分析/后端生产分析/工程/机器改进小组的工作。工艺改进小组为我提供了使用 PLC/Arduino 等硬件的经验。后来，在结合硬件和软件的过程中，他体验了 HTML/JavaScript 并继续创建了一个网络应用程序。他善于与当地人协商，以进一步发展项目。我不喜欢编程。",
-                  language,
                 })}
               </Text>
             </Flex>
@@ -466,7 +460,6 @@ const BusinessCard: React.FC = () => {
                   ja: "スキル",
                   us: "skills",
                   cn: "技能",
-                  language,
                 })}
               </Text>
             </div>

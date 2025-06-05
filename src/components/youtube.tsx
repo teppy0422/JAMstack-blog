@@ -360,7 +360,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
           ja: "Noto Sans JP",
           us: "Noto Sans,Noto Sans JP",
           cn: "Noto Sans SC",
-          language,
         })}
         templateColumns={{ base: "1fr", md: "5fr 2fr" }}
         gap={6}
@@ -537,7 +536,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                         ja: "もっと読む",
                         us: "Read more",
                         cn: "更多信息",
-                        language,
                       })}
                 </Box>
               </Text>
@@ -559,7 +557,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                   ja: "再生リスト",
                   us: "PlayList",
                   cn: "播放列表",
-                  language,
                 })}
               </Heading>
             </Box>
@@ -572,9 +569,8 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                   ja: "先ハメ誘導を使った作業",
                   us: "Work with Pre-Fitting Guidance",
                   cn: "使用先装引导",
-                  language,
                 })}
-                name={"41." + getMessage({ ja: "先ハメ誘導", language })}
+                name={"41." + getMessage({ ja: "先ハメ誘導" })}
                 src="downloads/tabs/41"
                 thumbnail="/images/thumbnail/41.png"
               />
@@ -583,7 +579,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                   ja: "ディスプレイ移動",
                   us: "Display Movement",
                   cn: "显示屏移动",
-                  language,
                 })}
                 name="56.net"
                 src="downloads/tabs/56.net"
@@ -593,7 +588,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                 title="main2(SSC)"
                 name={getMessage({
                   ja: "順立生産システム",
-                  language,
                 })}
                 src="downloads/tabs/main2"
                 thumbnail="/images/thumbnail/main2.png"
@@ -602,7 +596,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                 title="main3(PLC)"
                 name={getMessage({
                   ja: "順立生産システム",
-                  language,
                 })}
                 src="downloads/tabs/main3plc"
                 thumbnail="/images/thumbnail/main3.png"

@@ -63,7 +63,6 @@ function TransitionExample() {
               ja: "アップロードの手順",
               us: "Upload Procedure",
               cn: "上传程序",
-              language,
             })}
           </AlertDialogHeader>
           <AlertDialogCloseButton _focus={{ boxShadow: "none" }} />
@@ -73,7 +72,6 @@ function TransitionExample() {
                 ja: "Noto Sans JP",
                 us: "Noto Sans,Noto Sans JP",
                 cn: "Noto Sans SC,Noto Sans JP",
-                language,
               })}
               fontWeight={400}
             >
@@ -83,7 +81,6 @@ function TransitionExample() {
                     ja: "ダウンロードしたエクセルブックを開く",
                     us: "Open the downloaded Excel book.",
                     cn: "打开下载的 Excel 电子书。",
-                    language,
                   })}
                 <br />
                 {"2." +
@@ -91,7 +88,6 @@ function TransitionExample() {
                     ja: "[Ver]のVerupを押す",
                     us: "Press Verup under [Ver]",
                     cn: "按 [Ver] 中的 Verup",
-                    language,
                   })}
                 <br />
                 {"3." +
@@ -99,7 +95,6 @@ function TransitionExample() {
                     ja: "",
                     us: "Click [このVerのアップロード] while holding down ",
                     cn: "按住 ",
-                    language,
                   })}
                 <span>
                   <Kbd>Shift</Kbd>
@@ -108,7 +103,6 @@ function TransitionExample() {
                   ja: "を押しながら[このVerのアップロード]をクリック",
                   us: "",
                   cn: " 单击 [上传此 Ver]",
-                  language,
                 })}
               </Box>
               <Box as="p" textAlign="center" mb={1}>
@@ -116,7 +110,6 @@ function TransitionExample() {
                   ja: "以上で全ての部材一覧+からこのバージョンへの更新が可能になります",
                   us: "This is all you need to do to update from Parts List+ to this version!",
                   cn: "这将使所有物料清单+ 更新到该版本",
-                  language,
                 })}
               </Box>
             </Box>
@@ -155,7 +148,6 @@ export default function About() {
               <Text fontSize="2xl" mb={2} fontWeight={600}>
                 {getMessage({
                   ja: "部材一覧+",
-                  language,
                 })}
               </Text>
             </HStack>
@@ -164,14 +156,12 @@ export default function About() {
                 ja: "以下からダウンロードしてください",
                 us: "Please download below",
                 cn: "请在下方下载。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "通常は最新版",
                 us: "Usually select the latest version ",
                 cn: "通常选择最新版本 ",
-                language,
               })}
               <Badge colorScheme="teal" margin={1}>
                 LATEST
@@ -180,14 +170,12 @@ export default function About() {
                 ja: "を選択します",
                 us: ".",
                 cn: "。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "最新版には以前の更新が全て含まれています",
                 us: "The latest version includes all previous updates",
                 cn: "最新版本包括之前的所有更新",
-                language,
               })}
               <br />
               <Box
@@ -202,7 +190,6 @@ export default function About() {
                     ja: "アップロードの手順",
                     us: "Upload Procedure",
                     cn: "上传程序",
-                    language,
                   })}
                 </Box>
                 <TransitionExample />
@@ -221,7 +208,6 @@ export default function About() {
                 ja: "製品品番の点数が146を超える場合に警告。新規アップロード",
                 us: "Warning when the number of product part numbers exceeds 146. New Upload",
                 cn: "如果产品部件号超过 146 个，则发出警告。新上传",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/bip/Bip2.200.15_.zip"

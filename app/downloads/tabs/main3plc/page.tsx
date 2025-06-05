@@ -19,7 +19,6 @@ const HomePage: React.FC = () => {
           "41." +
           getMessage({
             ja: "順立生産システム",
-            language,
           }) +
           "_main3"
         }
@@ -40,7 +39,6 @@ const HomePage: React.FC = () => {
 
 
                 `,
-          language,
         })}
       />
     </IpadFrame>

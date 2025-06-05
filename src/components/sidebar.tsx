@@ -133,7 +133,6 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
               ja: "ロードマップ",
               us: "Road Map",
               cn: "路线图",
-              language,
             }),
             true,
             <FaRoad size={21} />
@@ -144,7 +143,6 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
               ja: "技術ブログ",
               us: "Skills Blog",
               cn: "技术博客",
-              language,
             }),
             true,
             <>
@@ -166,7 +164,6 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
               ja: "ダウンロード",
               us: "Download",
               cn: "下载",
-              language,
             }),
             true,
             <>
@@ -187,7 +184,6 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
               ja: "問い合わせ",
               us: "Inquiry",
               cn: "询问",
-              language,
             }),
             true,
             <AiOutlineWechat size={22} />
@@ -198,7 +194,6 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
               ja: "WEBアプリ一覧",
               us: "List of WEB Apps",
               cn: "網路應用程式清單",
-              language,
             }),
             true,
             <IoApps size={21} />

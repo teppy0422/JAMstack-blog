@@ -54,7 +54,6 @@ export default function About() {
                   ja: "その他のライブラリ",
                   us: "Other Libraries",
                   cn: "其他图书馆",
-                  language,
                 })}
               </Text>
             </HStack>
@@ -63,7 +62,6 @@ export default function About() {
                 ja: "以下からダウンロードしてください",
                 us: "Please download below",
                 cn: "请在下方下载",
-                language,
               })}
             </Box>
           </Box>
@@ -78,13 +76,11 @@ export default function About() {
                 ja: "Officeの参照設定で参照不可になる",
                 us: `'Office's reference setting makes it unreferenced.`,
                 cn: "办公室参考设置使其没有参考。",
-                language,
               })}
               description2={getMessage({
                 ja: "このファイルを任意の場所に保存する",
                 us: "Save this file to any location.",
                 cn: "将此文件保存在任何位置。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Library_/MSCOMM32.OCX"

@@ -149,19 +149,16 @@ const BlogPage: React.FC = () => {
               ja: "サブナンバー引越しのやり方",
               us: "How to do a sub-number move",
               cn: "如何进行子编号移动",
-              language,
             })}
           </Heading>
           <CustomBadge
             text={getMessage({
               ja: "生準+",
-              language,
             })}
           />
           <CustomBadge
             text={getMessage({
               ja: "高知",
-              language,
             })}
           />
           <Text
@@ -171,7 +168,6 @@ const BlogPage: React.FC = () => {
           >
             {getMessage({
               ja: "更新日",
-              language,
             })}
             :2024-11-20
           </Text>
@@ -183,7 +179,6 @@ const BlogPage: React.FC = () => {
             "1." +
             getMessage({
               ja: "はじめに",
-              language,
             })
           }
           sectionRefs={sectionRefs}
@@ -200,7 +195,6 @@ const BlogPage: React.FC = () => {
                 ja: "マイナーチェンジって旧製品品番と新製品品番でサブ形態が殆ど変わらない事が多いですよね？そこで「サブナンバーを引越し」させる機能を追加しました。",
                 us: "Minor changes often leave the sub-numbers almost the same between the old and new product part numbers, don't they? Therefore, we have added a function to [move the sub-number].",
                 cn: "微小的变化往往意味着新旧产品零件编号之间的子编号几乎没有变化，不是吗？这就是我们增加 [移动子编号 功能的原因]",
-                language,
               })}
             </Text>
             <UnderlinedTextWithDrawer
@@ -210,7 +204,6 @@ const BlogPage: React.FC = () => {
                     ja: "開発の背景",
                     us: "Development Background",
                     cn: "发展背景",
-                    language,
                   })}
                 </Box>
                 <LuPanelRightOpen
@@ -225,7 +218,6 @@ const BlogPage: React.FC = () => {
                 ja: "開発の背景",
                 us: "Development Background",
                 cn: "发展背景",
-                language,
               })}
               size="md"
               children={
@@ -236,7 +228,6 @@ const BlogPage: React.FC = () => {
                       ja: "高知工場の王さんの提案を元に作成しました。当初は電線サブナンバーしか考えていませんでしたが、途中で端末サブナンバーも必要やなと思って追加しました。",
                       us: "This was created based on a proposal by Mr. Oh of the Kochi Plant. At first, we only thought of wire sub-numbers, but we added terminal sub-numbers along the way because we thought we also needed them.",
                       cn: "它是根据高知工厂王先生的建议而创建的。起初，我们只考虑了导线子编号，但后来又增加了端子子编号，因为我们认为我们也需要这些子编号。",
-                      language,
                     })}
                   </Text>
                 </Box>
@@ -252,7 +243,6 @@ const BlogPage: React.FC = () => {
               ja: "全体の流れ",
               us: "Overall flow",
               cn: "总流量",
-              language,
             })
           }
           sectionRefs={sectionRefs}
@@ -267,7 +257,6 @@ const BlogPage: React.FC = () => {
               ja: "下図の流れで実行します",
               us: "Execute the following flow chart",
               cn: "执行下图中的流程",
-              language,
             })}
           </Text>
           <Flex
@@ -287,7 +276,6 @@ const BlogPage: React.FC = () => {
               ja: "サブナンバーの出力",
               us: "Output sub-numbers",
               cn: "子编号的输出",
-              language,
             })
           }
           sectionRefs={sectionRefs}
@@ -302,7 +290,6 @@ const BlogPage: React.FC = () => {
               ja: "旧の生産準備+から出力します",
               us: "Output from the old Production Preparation+.",
               cn: "旧版 生产准备+ 的输出。",
-              language,
             })}
           </Text>
           <Text fontWeight="400" my={4}>
@@ -311,7 +298,6 @@ const BlogPage: React.FC = () => {
                 ja: "旧の生産準備+から「MENU」をクリック",
                 us: "Click on [MENU] from the old Production Preparation+.",
                 cn: "点击旧生产准备+中的 [MENU]",
-                language,
               })}
           </Text>
           <Flex direction="column" alignItems="center" justifyContent="center">
@@ -323,7 +309,6 @@ const BlogPage: React.FC = () => {
                 ja: "「サブナンバー引越し」をクリック",
                 us: "Click on [Sub Number Move].",
                 cn: "点击 [移动子编号]",
-                language,
               })}
           </Text>
           <Flex direction="column" alignItems="center" justifyContent="center">
@@ -339,7 +324,6 @@ const BlogPage: React.FC = () => {
                 ja: "「メイン品番」で出力をクリック",
                 us: "Under [Main Part Number], click Output.",
                 cn: "在 主要零件编号 下，[点击输出]",
-                language,
               })}
           </Text>
           <Flex direction="column" alignItems="center" justifyContent="center">
@@ -355,7 +339,6 @@ const BlogPage: React.FC = () => {
                 ja: "一時保管場所(B01_サブナンバー引越し)に出力されました",
                 us: "Output to temporary storage (B01_Subnumber moved)",
                 cn: "临时存储中的输出（B01_子编号已移动）。",
-                language,
               })}
           </Text>
           <Flex direction="column" alignItems="center" justifyContent="center">
@@ -374,7 +357,6 @@ const BlogPage: React.FC = () => {
               ja: "サブナンバーの取得",
               us: "Obtaining a sub-number",
               cn: "获取子编号",
-              language,
             })
           }
           sectionRefs={sectionRefs}
@@ -389,7 +371,6 @@ const BlogPage: React.FC = () => {
               ja: "新の製品品番を開いて取得します",
               us: "Open and retrieve the new product part number",
               cn: "打开并检索新产品部件号",
-              language,
             })}
           </Text>
           <Text fontWeight="400" my={4}>
@@ -398,7 +379,6 @@ const BlogPage: React.FC = () => {
                 ja: "旧メイン品番の項目に引き継ぎたい製品品番(旧)を入力",
                 us: "Enter the product part number (old) to be transferred in the Old main part number field.",
                 cn: "在旧主部件号字段中输入要转移的（旧）产品部件号。",
-                language,
               })}
           </Text>
           <Flex direction="column" alignItems="center" justifyContent="center">
@@ -410,7 +390,6 @@ const BlogPage: React.FC = () => {
                 ja: "「旧メイン品番で取得」をクリック",
                 us: "Click on Retrieve by old main part number.",
                 cn: "单击 「按旧主部件号检索」",
-                language,
               })}
           </Text>
           <Flex direction="column" alignItems="center" justifyContent="center">
@@ -426,7 +405,6 @@ const BlogPage: React.FC = () => {
                 ja: "旧のサブナンバーが取得されました",
                 us: "The old sub-numbers have been obtained.",
                 cn: "已获得旧的子编号",
-                language,
               })}
           </Text>
           <Flex direction="column" alignItems="center" justifyContent="center">
@@ -442,7 +420,6 @@ const BlogPage: React.FC = () => {
                 ja: "旧のサブナンバーが取得されました",
                 us: "The old sub-numbers have been obtained.",
                 cn: "已获得旧的子编号",
-                language,
               })}
           </Text>
           <Flex direction="column" alignItems="center" justifyContent="center">
@@ -451,7 +428,6 @@ const BlogPage: React.FC = () => {
                 ja: "PVSW_RLTFに電線サブナンバーを取得",
                 us: "Get wire sub-number in PVSW_RLTF",
                 cn: "获取 PVSW_RLTF 中的导线子编号",
-                language,
               })}
             </Box>
             <Image
@@ -464,7 +440,6 @@ const BlogPage: React.FC = () => {
                 ja: "端末一覧に端末サブナンバーを取得",
                 us: "Get terminal sub-number in the terminal list",
                 cn: "获取终端列表中的终端子编号",
-                language,
               })}
             </Box>
             <Image
@@ -478,21 +453,18 @@ const BlogPage: React.FC = () => {
               ja: "※取得したサブナンバーは",
               us: "*Sub-numbers obtained will be ",
               cn: "*获得的子编号将以",
-              language,
             })}
             <strong>
               {getMessage({
                 ja: " 太字 ",
                 us: " bold ",
                 cn: " 粗体 ",
-                language,
               })}
             </strong>
             {getMessage({
               ja: "になります",
               us: ".",
               cn: "显示。",
-              language,
             })}
           </Text>
         </SectionBox>
@@ -502,7 +474,6 @@ const BlogPage: React.FC = () => {
             "5." +
             getMessage({
               ja: "まとめ",
-              language,
             })
           }
           sectionRefs={sectionRefs}
@@ -538,7 +509,6 @@ const BlogPage: React.FC = () => {
                 ja: "このようにサブナンバーを任意の製品品番から取得出来る為、類似した製品形態から取得するのも良いかもしれません",
                 us: "Since sub-numbers can be obtained from any product part number in this way, it may be a good idea to obtain sub-numbers from similar product forms.",
                 cn: "由于子编号可以通过这种方式从任何产品零件编号中获取，因此最好从类似的产品表格中获取子编号。",
-                language,
               })}
             </Text>
             <Image

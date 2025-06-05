@@ -16,7 +16,6 @@ const HomePage: React.FC = () => {
           ja: "ディスプレイ移動",
           us: "Display Movement",
           cn: "显示屏移动",
-          language,
         })}
         date="2018/7/22"
         src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018150130.mp4"
@@ -41,7 +40,6 @@ const HomePage: React.FC = () => {
               根据 56 创建的坐标数据移动。
 
               通过 Arduino 和步进电机移动。`,
-          language,
         })}
       />
     </IpadFrame>

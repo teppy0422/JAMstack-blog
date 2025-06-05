@@ -64,7 +64,6 @@ function TransitionExample() {
               ja: "アップロードの手順",
               us: "Upload Procedure",
               cn: "上传程序",
-              language,
             })}
           </AlertDialogHeader>
           <AlertDialogCloseButton _focus={{ boxShadow: "none" }} />
@@ -74,7 +73,6 @@ function TransitionExample() {
                 ja: "Noto Sans JP",
                 us: "Noto Sans,Noto Sans JP",
                 cn: "Noto Sans SC,Noto Sans JP",
-                language,
               })}
               fontWeight={400}
             >
@@ -84,7 +82,6 @@ function TransitionExample() {
                     ja: "ダウンロードしたエクセルブックを開く",
                     us: "Open the downloaded Excel book.",
                     cn: "打开下载的 Excel 电子书。",
-                    language,
                   })}
                 <br />
                 {"2." +
@@ -92,7 +89,6 @@ function TransitionExample() {
                     ja: "Menuを開いてVerupを押す",
                     us: "Open Menu and press Verup.",
                     cn: "打开菜单并按下 Verup。",
-                    language,
                   })}
                 <br />
                 {"3." +
@@ -100,7 +96,6 @@ function TransitionExample() {
                     ja: "",
                     us: "Click [このVerのアップロード] while holding down ",
                     cn: "按住 ",
-                    language,
                   })}
                 <span>
                   <Kbd>Shift</Kbd>
@@ -109,7 +104,6 @@ function TransitionExample() {
                   ja: "を押しながら[このVerのアップロード]をクリック",
                   us: "",
                   cn: " 单击 [上传此 Ver]",
-                  language,
                 })}
               </Box>
               <Box textAlign="center" mb={4}>
@@ -126,7 +120,6 @@ function TransitionExample() {
                   ja: "以上で全ての生産準備+からこのバージョンへの更新が可能になります",
                   us: "This is all you need to do to update from Production Preparation+ to this version!",
                   cn: "这将使所有生产准备+ 更新到该版本",
-                  language,
                 })}
               </Box>
             </Box>
@@ -165,7 +158,6 @@ export default function About() {
               <Text fontSize="2xl" mb={2} fontWeight={600}>
                 {getMessage({
                   ja: "生産準備+",
-                  language,
                 })}
               </Text>
             </HStack>
@@ -174,14 +166,12 @@ export default function About() {
                 ja: "以下からダウンロードしてください",
                 us: "Please download below",
                 cn: "请在下方下载。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "通常は最新版",
                 us: "Usually select the latest version ",
                 cn: "通常选择最新版本 ",
-                language,
               })}
               <Badge colorScheme="teal" margin={1}>
                 LATEST
@@ -190,14 +180,12 @@ export default function About() {
                 ja: "を選択します",
                 us: ".",
                 cn: "。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "最新版には以前の更新が全て含まれています",
                 us: "The latest version includes all previous updates",
                 cn: "最新版本包括之前的所有更新",
-                language,
               })}
               <br />
               <Box
@@ -212,7 +200,6 @@ export default function About() {
                     ja: "アップロードの手順",
                     us: "Upload Procedure",
                     cn: "上传程序",
-                    language,
                   })}
                 </Box>
                 <TransitionExample />
@@ -231,13 +218,11 @@ export default function About() {
                 ja: "82111_Aで検査履歴が作成できない?端末114がネック",
                 us: "Unable to create inspection history in 82111_A? Terminal 114 is the bottleneck",
                 cn: "无法使用 82111_A 创建检查历史记录？114 号航站楼是一个瓶颈。",
-                language,
               })}
               description2={getMessage({
                 ja: "114でのstopを削除。まとめて作成する場合に進捗を必ず存在する端末を返すように修正",
                 us: "Removed stop at 114. Fixed progress to always return the existing terminal when creating a batch.",
                 cn: "删除了 114 处的停止。已修正，以便在创建批次时，进度总是返回存在的终端",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/sjp/Sjp3.101.18_.zip"
@@ -252,13 +237,11 @@ export default function About() {
                 ja: "CAV一覧のWidth,Heightがx,yになっている",
                 us: "Width,Height in CAV list is x,y",
                 cn: "CAV 列表中的宽度和高度分别为 x 和 y。",
-                language,
               })}
               description2={getMessage({
                 ja: "Width,Hiehgtに修正。小数点以下を非表示",
                 us: "Corrected to Width,Hiehgt. Hide decimal point.",
                 cn: "更正为 Width,Hiehgt。隐藏小数点。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/sjp/Sjp3.101.17_.zip"
@@ -273,13 +256,11 @@ export default function About() {
                 ja: "DSWに登録が無いコネクタがある場合、処理が中断する。部品リストの説明が正しく無い",
                 us: "If there is a connector that is not registered in the DSW, the process will be interrupted.",
                 cn: "如果连接器没有在 DSW 中注册，程序将被中断",
-                language,
               })}
               description2={getMessage({
                 ja: "登録が無い場合はPVSW_RLTFからキャビティ最大数を求める。部品リストの説明を修正",
                 us: "If there is no registration, the maximum number of cavities is obtained from PVSW_RLTF",
                 cn: "如果没有登记，则通过 PVSW_RLTF 获取最大空腔数。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Sjp/Sjp3.101.16_.zip"
@@ -294,13 +275,11 @@ export default function About() {
                 ja: "ハメ図作成をグループ単位で作成すると進捗平均求める時に0が返ってエラー",
                 us: "Error when creating a frame diagram by group, 0 is returned when determining the average of progress.",
                 cn: "在分组中创建帧图时出错，且在确定进度平均值时返回 0",
-                language,
               })}
               description2={getMessage({
                 ja: "平均値が取得できない場合はgetAverageHoleTerminalNumberは1を返す",
                 us: "If the average value cannot be obtained, getAverageHoleTerminalNumber returns 1",
                 cn: "如果无法获得平均值,getAverageHoleTerminalNumber 返回 1",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Sjp/Sjp3.101.14_.zip"
@@ -315,13 +294,11 @@ export default function About() {
                 ja: "連続してハメ図を作成するとボンダー付属部品が取得できない",
                 us: "Cannot get bonder attached parts when creating frame drawings in succession.",
                 cn: "在创建连续框架图时，无法获取粘结剂连接部件",
-                language,
               })}
               description2={getMessage({
                 ja: "作成都度に取得し直すように変更",
                 us: "Changed to reacquire each time it is created.",
                 cn: "更改后，每次创建时都会重新获取",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Sjp/Sjp3.101.13_.zip"
@@ -337,7 +314,6 @@ export default function About() {
                 ja: "主に共通する目的でボンダーの簡易作成を追加",
                 us: "Added simple functionality for bonders, mainly for common purposes",
                 cn: "粘合剂的附加简单功能，主要用于普通用途。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Sjp/Sjp3.101.12_.zip"

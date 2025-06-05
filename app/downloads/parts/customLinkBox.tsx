@@ -261,7 +261,7 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
                 }} // sxプロパティを適用
                 marginRight={1}
               >
-                {getMessage({ ja: inCharge, language })}
+                {getMessage({ ja: inCharge })}
               </Badge>
             ))}
             {props.description1 &&

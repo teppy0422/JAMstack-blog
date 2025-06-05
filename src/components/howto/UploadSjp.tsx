@@ -41,7 +41,6 @@ export default function UploadSjp() {
               ja: "アップロードの手順",
               us: "Upload Procedure",
               cn: "上传程序",
-              language,
             })}
           </AlertDialogHeader>
           <AlertDialogCloseButton _focus={{ boxShadow: "none" }} />
@@ -51,7 +50,6 @@ export default function UploadSjp() {
                 ja: "Noto Sans JP",
                 us: "Noto Sans,Noto Sans JP",
                 cn: "Noto Sans SC,Noto Sans JP",
-                language,
               })}
               fontWeight={400}
             >
@@ -61,7 +59,6 @@ export default function UploadSjp() {
                     ja: "ダウンロードしたエクセルブックを開く",
                     us: "Open the downloaded Excel book.",
                     cn: "打开下载的 Excel 电子书。",
-                    language,
                   })}
                 <br />
                 {"2." +
@@ -69,7 +66,6 @@ export default function UploadSjp() {
                     ja: "Menuを開いてVerupを押す",
                     us: "Open Menu and press Verup.",
                     cn: "打开菜单并按下 Verup。",
-                    language,
                   })}
                 <br />
                 {"3." +
@@ -77,7 +73,6 @@ export default function UploadSjp() {
                     ja: "",
                     us: "Click [このVerのアップロード] while holding down ",
                     cn: "按住 ",
-                    language,
                   })}
                 <span>
                   <Kbd>Shift</Kbd>
@@ -86,7 +81,6 @@ export default function UploadSjp() {
                   ja: "を押しながら[このVerのアップロード]をクリック",
                   us: "",
                   cn: " 单击 [上传此 Ver]",
-                  language,
                 })}
               </Box>
               <Box textAlign="center" mb={4}>
@@ -103,7 +97,6 @@ export default function UploadSjp() {
                   ja: "以上で全ての生産準備+からこのバージョンへの更新が可能になります",
                   us: "This is all you need to do to update from Production Preparation+ to this version!",
                   cn: "这将使所有生产准备+ 更新到该版本",
-                  language,
                 })}
               </Box>
             </Box>

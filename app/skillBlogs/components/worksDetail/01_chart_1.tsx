@@ -78,7 +78,6 @@ const SjpChart01: React.FunctionComponent = (): JSX.Element => {
       {
         name: getMessage({
           ja: "作業工数",
-          language,
         }),
 
         data: [920, 635, 445, 300, 201, 93, 22],
@@ -88,7 +87,6 @@ const SjpChart01: React.FunctionComponent = (): JSX.Element => {
           ja: "残業",
           us: "residual industry",
           cn: "残業",
-          language,
         }),
 
         data: [320, 200, 133, 20, 0, 0, 0],
@@ -98,7 +96,6 @@ const SjpChart01: React.FunctionComponent = (): JSX.Element => {
           ja: "休日出勤",
           us: "working on a day off",
           cn: "假日工作",
-          language,
         }),
 
         data: [98, 30, 16, 0, 0, 0, 0],

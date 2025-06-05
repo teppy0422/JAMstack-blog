@@ -581,7 +581,6 @@ const TypingPage = () => {
                 ja: "Noto Sans JP",
                 us: "Noto Sans JP",
                 cn: "Noto Sans SC",
-                language,
               }),
             }}
           >
@@ -590,14 +589,12 @@ const TypingPage = () => {
                 ja: "このページはキーボードが必要です",
                 us: "This page requires a keyboard",
                 cn: "此页面需要键盘。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "キーボードのあるデバイスでアクセスしてください",
                 us: "Please access with a device that has a keyboard",
                 cn: "使用带键盘的设备访问。",
-                language,
               })}
             </Text>
           </Box>
@@ -639,7 +636,6 @@ const TypingPage = () => {
                     ja: "Noto Sans JP",
                     us: "Noto Sans JP",
                     cn: "Noto Sans SC",
-                    language,
                   }),
                 }}
               >
@@ -658,7 +654,6 @@ const TypingPage = () => {
                           ja: "残り時間",
                           us: "Time Remaining",
                           cn: "剩余时间",
-                          language,
                         })}
                       </Text>
                       <Center>
@@ -706,7 +701,6 @@ const TypingPage = () => {
                           ja: "タイプミス",
                           us: "typo",
                           cn: "讹字",
-                          language,
                         })}
                       </Text>
                       <Center>
@@ -738,7 +732,6 @@ const TypingPage = () => {
                           ja: "金額",
                           us: "Amount",
                           cn: "金額",
-                          language,
                         })}
                       </Text>
                       <Center>
@@ -765,7 +758,6 @@ const TypingPage = () => {
                           ja: "¥ ",
                           us: "$ ",
                           cn: "¥ ",
-                          language,
                         })}
                         {totalCost.current}
                       </Text>
@@ -812,7 +804,6 @@ const TypingPage = () => {
                         ja: "[SPACE]でスタート",
                         us: "Start with [SPACE].",
                         cn: "从 [SPACE] 开始。",
-                        language,
                       })}
                     </Text>
                     <Spacer />
@@ -831,7 +822,6 @@ const TypingPage = () => {
                     ja: "¥ ",
                     us: "$ ",
                     cn: "¥ ",
-                    language,
                   })}
                   {Q_cost.current}
                 </Center>

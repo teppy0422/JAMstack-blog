@@ -137,7 +137,6 @@ const BlogPage: React.FC = () => {
             <Text>
               {getMessage({
                 ja: "開発",
-                language,
               })}
             </Text>
             <Spacer />
@@ -153,19 +152,16 @@ const BlogPage: React.FC = () => {
               ja: "PC初回セットアップ手順",
               us: "PC First Time Setup Procedure",
               cn: "电脑首次设置程序",
-              language,
             })}
           </Heading>
           <CustomBadge
             text={getMessage({
               ja: "順立生産システム",
-              language,
             })}
           />
           <CustomBadge
             text={getMessage({
               ja: "作成途中",
-              language,
             })}
           />
           <Text
@@ -175,7 +171,6 @@ const BlogPage: React.FC = () => {
           >
             {getMessage({
               ja: "更新日",
-              language,
             })}
             :2024-12-07
           </Text>
@@ -186,7 +181,6 @@ const BlogPage: React.FC = () => {
             "1." +
             getMessage({
               ja: "はじめに",
-              language,
             })
           }
           sectionRefs={sectionRefs}
@@ -202,7 +196,6 @@ const BlogPage: React.FC = () => {
                 ja: "順立生産システムでは初回だけPCのセットアップが必要です。",
                 us: "The sequential production system requires PC setup only for the first time.",
                 cn: "顺序生产系统只要求首次设置 PC。",
-                language,
               })}
             </Text>
           </Box>
@@ -215,7 +208,6 @@ const BlogPage: React.FC = () => {
               ja: "インストールソフトについて",
               us: "About Installation Software",
               cn: "关于安装软件",
-              language,
             })
           }
           sectionRefs={sectionRefs}
@@ -231,7 +223,6 @@ const BlogPage: React.FC = () => {
                 ja: "現在のバージョンでは下記の他社製品を含んでいます。",
                 us: "The current version includes the following third-party products",
                 cn: "当前版本包括以下第三方产品。",
-                language,
               })}
               <br />
               {"・" +
@@ -239,7 +230,6 @@ const BlogPage: React.FC = () => {
                   ja: "RS-RecieverLight(シリアル受信)",
                   us: "RS-RecieverLight (serial receive)",
                   cn: "RS-Reciever 灯（串行接收）",
-                  language,
                 })}
               <br />
               {"・" +
@@ -247,7 +237,6 @@ const BlogPage: React.FC = () => {
                   ja: "さくらさくQR(QR作成)",
                   us: "さくらさくQR (QR creation)",
                   cn: "さくらさくQR（QR 创建）",
-                  language,
                 })}
               <br />
               <br />
@@ -255,14 +244,12 @@ const BlogPage: React.FC = () => {
                 ja: "これによりここでPCセットアップの全てを解説する事が出来ません。",
                 us: "This makes it impossible to explain the entire PC setup here.",
                 cn: "因此，无法在此对 PC 设置的所有方面进行说明。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "WEBサービス開始後に上記機能を自作してセットアップ手順を記載します。",
                 us: "After the web service is started, we will describe the setup procedure by creating the above functions by ourselves.",
                 cn: "网络服务启动后，将自行设计上述功能，并介绍设置程序。",
-                language,
               })}
             </Text>
           </Box>
@@ -273,7 +260,6 @@ const BlogPage: React.FC = () => {
             "99." +
             getMessage({
               ja: "まとめ",
-              language,
             })
           }
           sectionRefs={sectionRefs}

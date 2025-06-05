@@ -359,7 +359,6 @@ export default function Header() {
                         ja: "QR Code",
                         us: "QR Code",
                         cn: "QR 码",
-                        language,
                       })}
                     </ModalHeader>
                     <CustomModalCloseButton
@@ -391,7 +390,6 @@ export default function Header() {
                           ja: "スマホで読み込む事でこのページにアクセスできます",
                           us: "You can access this page by loading it with your phone",
                           cn: "您可以通过手机阅读本页面",
-                          language,
                         })}
                       </Text>
                     </ModalFooter>

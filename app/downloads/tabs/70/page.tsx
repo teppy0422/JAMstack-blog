@@ -20,7 +20,6 @@ const ScrollableContent: React.FC = () => {
             {"70." +
               getMessage({
                 ja: "ポイント点滅",
-                language,
               })}
           </Heading>
           <Text as="h4" mt={2} textAlign="center">
@@ -28,14 +27,12 @@ const ScrollableContent: React.FC = () => {
               ja: "下記はYC-Cで検査する場合の例です",
               us: "Below is an example of inspection by YC-C",
               cn: "以下是使用 YC-C 进行检查的示例",
-              language,
             })}
             <br />
             {getMessage({
               ja: "意見を頂ければ自由に対応可能です",
               us: "Feel free to respond with your input.",
               cn: "如果您提出意见，我们可以随时答复。",
-              language,
             })}
           </Text>
           <Text mt={4} textAlign="center">
@@ -43,7 +40,6 @@ const ScrollableContent: React.FC = () => {
               ja: "スクロールしてください",
               us: "Please scroll down.",
               cn: "滚动到",
-              language,
             })}
           </Text>
           <Box className="container" mt="15vh" textAlign="center">
@@ -73,7 +69,6 @@ const ScrollableContent: React.FC = () => {
                   ja: "任意のポイントを点滅させる画像を作成できます",
                   us: "You can create an image that blinks any point.",
                   cn: "您可以创建一个闪烁任意点的图像。",
-                  language,
                 })}
               </Text>
             </Box>
@@ -87,14 +82,12 @@ const ScrollableContent: React.FC = () => {
                   ja: "電線が無い経路の場合はこのようになります",
                   us: "For a route with no wires, it would look like this.",
                   cn: "没有电线的线路就是这种情况",
-                  language,
                 })}
                 <br />
                 {getMessage({
                   ja: "これは空栓(詰栓)の場合です",
                   us: "This is the case of an empty (plugged) plug.",
                   cn: "这适用于空（堵塞）插头",
-                  language,
                 })}
               </Text>
             </Box>
@@ -109,14 +102,12 @@ const ScrollableContent: React.FC = () => {
                   ja: "コネクタの二重係止と共用ポイントの場合",
                   us: "For double-engaging connectors and shared points.",
                   cn: "用于双啮合连接器和共享点",
-                  language,
                 })}
                 <br />
                 {getMessage({
                   ja: "二重係止の確認を促す為にメッセージが表示されます",
                   us: "A message will be displayed to prompt you to confirm the double-engagement.",
                   cn: "系统会显示一条信息，提示您确认双重啮合。",
-                  language,
                 })}
               </Text>
             </Box>
@@ -131,7 +122,6 @@ const ScrollableContent: React.FC = () => {
                   ja: "リレーボックスなどの大型コネクタも表示可能",
                   us: "Large connectors such as relay boxes can also be displayed.",
                   cn: "还可以显示继电器盒等大型连接器。",
-                  language,
                 })}
               </Text>
             </Box>
@@ -142,14 +132,12 @@ const ScrollableContent: React.FC = () => {
                   ja: "ポイントナンバーの入力画面",
                   us: "Point number input screen.",
                   cn: "输入点编号屏幕。",
-                  language,
                 })}
                 <br />
                 {getMessage({
                   ja: "黄色の欄に入力するだけです",
                   us: "Just type in the yellow field.",
                   cn: "只需在黄色字段中输入即可。",
-                  language,
                 })}
               </Text>
             </Box>
@@ -160,7 +148,6 @@ const ScrollableContent: React.FC = () => {
                   ja: "ポイントナンバーを入力した後はMENUから作成実行",
                   us: "After entering the point number, go to MENU and execute creation.",
                   cn: "输入点编号后，使用菜单执行创建。",
-                  language,
                 })}
               </Text>
             </Box>
@@ -171,21 +158,18 @@ const ScrollableContent: React.FC = () => {
                   ja: "生産準備+から上記コードを作成",
                   us: "Create the above code from Production Preparation+.",
                   cn: "从生产准备+中创建上述代码。",
-                  language,
                 })}
                 <br />
                 {getMessage({
                   ja: "WEBサーバーが無くても動作します",
                   us: "Works without a web server.",
                   cn: "无需网络服务器即可运行。",
-                  language,
                 })}
                 <br />
                 {getMessage({
                   ja: "なのでVB.netやJAVAで作成したローカルアプリでも簡単に使用できます",
                   us: "So even local applications created with VB.net or JAVA can be used easily!",
                   cn: "因此，即使是用 VB.net 或 JAVA 创建的本地应用程序也能轻松使用。",
-                  language,
                 })}
               </Text>
               <Text as="h5">
@@ -193,7 +177,6 @@ const ScrollableContent: React.FC = () => {
                   ja: "※ブラウザはIE11以上が必要",
                   us: "*Browser must be IE11 or higher.",
                   cn: "*浏览器要求 IE11 或更高版本。",
-                  language,
                 })}
               </Text>
             </Box>
@@ -209,7 +192,6 @@ const ScrollableContent: React.FC = () => {
                   ja: "検査履歴システム(瀬戸内部品開発)での使用動画",
                   us: "Video of use in Inspection history system (Setouchi parts development)",
                   cn: "检查履历系统的使用视频（濑户内部件开发）。",
-                  language,
                 })}
               </Text>
             </Box>
@@ -232,7 +214,6 @@ const ScrollableContent: React.FC = () => {
               >
                 {getMessage({
                   ja: "まとめ",
-                  language,
                 })}
               </Heading>
               <Text
@@ -246,7 +227,6 @@ const ScrollableContent: React.FC = () => {
                   ja: "検査履歴システム用にポイントが点滅するように作った例です",
                   us: "This is an example of making points blink for an inspection history system.",
                   cn: "检查履历系统的闪光点示例。",
-                  language,
                 })}
                 <br />
                 <br />
@@ -254,7 +234,6 @@ const ScrollableContent: React.FC = () => {
                   ja: "他にも使用するアイデアがあればご意見ください",
                   us: "If you have other ideas for use, please let us know.",
                   cn: "如果您有其他使用想法，请向我们提出建议。",
-                  language,
                 })}
               </Text>
             </Box>

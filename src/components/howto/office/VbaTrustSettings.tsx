@@ -22,9 +22,8 @@ const VBATrustSettingsModal: React.FC = () => {
 
   const title = getMessage({
     ja: "「信頼性に欠ける」エラーへの対応手順",
-    us: 'How to Prevent the "Macros Have Been Disabled" Error in Excel VBA',
-    cn: "如何防止 Excel VBA 中的“宏已被禁用”错误",
-    language,
+    us: 'Procedures for dealing with "unreliable" errors',
+    cn: "处理 '不可靠' 错误的程序。",
   });
 
   const body = (
@@ -32,22 +31,27 @@ const VBATrustSettingsModal: React.FC = () => {
       <Text mb={4}>
         {getMessage({
           ja: `Excelでプログラムを実行するにはこの設定が必要です。この設定は初回のみ1度だけです。`,
-          us: `Steps to prevent the "Macros have been disabled" error when opening Excel files with macros.`,
-          cn: `防止在打开包含宏的 Excel 文件时出现“宏已被禁用”错误的步骤。`,
-          language,
+          us: `This setting is required to run the program in Excel. This setting is only required once, the first time.`,
+          cn: `在 Excel 中运行程序时需要此设置。此设置只需要一次，即第一次。`,
         })}
       </Text>
       <ImageWithHighlight
         src="/images/howTo/vba-trust-error.webp"
-        label="※[設定してない場合のエラー画面]"
+        label={
+          "*" +
+          getMessage({
+            ja: "[設定してない場合のエラー画面]",
+            us: "[Error screen if not set]",
+            cn: "[未设置时的错误屏幕]。",
+          })
+        }
       />
       <List spacing={3} pl={4} styleType="decimal">
         <ListItem>
           {getMessage({
             ja: `Excelファイルを開いて[ファイル]→[オプション]→1[セキュリティセンター]→2[セキュリティセンターの設定]`,
-            us: `Right-click the Excel file and open "Properties"`,
-            cn: `右键单击 Excel 文件并打开“属性”`,
-            language,
+            us: `Open an Excel file [File] -> [Options] -> 1 [Security Center] -> 2 [Security Center Settings].`,
+            cn: `打开 Excel 文件 [文件] → [选项] → 1 [安全中心] → 2 [安全中心设置]。`,
           })}
         </ListItem>
         <ImageWithHighlight
@@ -86,7 +90,6 @@ const VBATrustSettingsModal: React.FC = () => {
             ja: `3[マクロの設定]→4[VBAプロジェクトオブジェクトモデルへのアクセスを信頼する]を☑️→5[OK]をクリック`,
             us: `Check "Unblock" in the "Security" section and click "OK"`,
             cn: `在“安全性”部分勾选“解除锁定”并点击“确定”`,
-            language,
           })}
         </ListItem>
         <ImageWithHighlight
@@ -138,7 +141,6 @@ const VBATrustSettingsModal: React.FC = () => {
             ja: `Excelを一度終了すると設定完了。次の起動時に反映されます`,
             us: `Reopen Excel and check if macros are enabled`,
             cn: `重新打开 Excel 并检查宏是否可用`,
-            language,
           })}
         </ListItem>
       </List>
@@ -149,7 +151,6 @@ const VBATrustSettingsModal: React.FC = () => {
             ja: "この設定は信頼できるフォルダ・ファイルにのみ使用してください。",
             us: "Use this setting only for trusted folders/files.",
             cn: "请仅对可信文件或文件夹使用此设置。",
-            language,
           })}
       </Text>
     </>
@@ -172,7 +173,6 @@ const VBATrustSettingsModal: React.FC = () => {
           ja: "マクロを信頼する設定",
           us: "How to Fix Macro Disabled Error",
           cn: "如何修复宏被禁用错误",
-          language,
         })}
         <Icon as={FaShieldAlt} mx={1} />
       </Box>

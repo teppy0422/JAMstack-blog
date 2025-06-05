@@ -107,13 +107,11 @@ const BlogPage: React.FC = () => {
     {
       title: getMessage({
         ja: "生産準備+",
-        language,
       }),
       subTitle: getMessage({
         ja: "画像を自動で作る",
         us: "Automatic image creation",
         cn: "自动创建图像",
-        language,
       }),
       eyeCatchPath: "/images/sjp_menu.png",
       detail: <Detail01 />,
@@ -130,19 +128,16 @@ const BlogPage: React.FC = () => {
         ja: "詳細(第1話)を見る",
         us: "Details (Episode 1)",
         cn: "详情（第 1 集）",
-        language,
       }),
     },
     {
       title: getMessage({
         ja: "導通検査",
-        language,
       }),
       subTitle: getMessage({
         ja: "WEB技術の基礎",
         us: "Fundamentals of Web Technology",
         cn: "网络技术基础",
-        language,
       }),
       eyeCatchPath: "/images/sjp_kensarireki_YCC.png",
       detail: <Detail02 />,
@@ -171,19 +166,16 @@ const BlogPage: React.FC = () => {
         ja: "詳細(第2話)を見る",
         us: "Details (Episode 2)",
         cn: "详情（第 2 集）",
-        language,
       }),
     },
     {
       title: getMessage({
         ja: "誘導ナビ.net",
-        language,
       }),
       subTitle: getMessage({
         ja: "マイコン",
         us: "microcomputer",
         cn: "微机",
-        language,
       }),
       eyeCatchPath: "/images/detail_03_title.png",
       detail: <Detail03 />,
@@ -193,7 +185,6 @@ const BlogPage: React.FC = () => {
             ja: "そのうち追記します",
             us: "I'll add it soon.",
             cn: "我将在适当的时候补充这一点。",
-            language,
           })}
         </Center>
       ),
@@ -229,7 +220,6 @@ const BlogPage: React.FC = () => {
         ja: "詳細(第3話)を見る",
         us: "Details (Episode 3)",
         cn: "详情（第 3 集）",
-        language,
       }),
     },
   ];
@@ -248,7 +238,6 @@ const BlogPage: React.FC = () => {
             <Text>
               {getMessage({
                 ja: "開発",
-                language,
               })}
             </Text>
             <Spacer />
@@ -264,7 +253,6 @@ const BlogPage: React.FC = () => {
               ja: "改善活動の参考事例集",
               us: "Reference Case Studies of Improvement Activities",
               cn: "改进活动的参考案例研究。",
-              language,
             })}
           </Heading>
           <CustomBadge
@@ -272,7 +260,6 @@ const BlogPage: React.FC = () => {
               ja: "参考",
               us: "consultation",
               cn: "参考",
-              language,
             })}
           />
           <Text
@@ -282,7 +269,6 @@ const BlogPage: React.FC = () => {
           >
             {getMessage({
               ja: "更新日",
-              language,
             })}
             :2024-11-18
           </Text>
@@ -293,7 +279,6 @@ const BlogPage: React.FC = () => {
             "1." +
             getMessage({
               ja: "はじめに",
-              language,
             })
           }
           sectionRefs={sectionRefs}
@@ -309,7 +294,6 @@ const BlogPage: React.FC = () => {
                 ja: "現場の意見と相談しながらどのように改善していくかを試行錯誤した経験をまとめていきます。改善を進める人の参考になれば幸いです。",
                 us: "This section summarizes our trial-and-error experience on how to make improvements in consultation with opinions from the field. We hope it will be helpful to those who promote improvements.",
                 cn: "本节总结了我们在征求实地意见的基础上进行改进的试错经验。希望能对推动改进工作的人员有所帮助。",
-                language,
               })}
             </Text>
           </Box>
@@ -322,17 +306,14 @@ const BlogPage: React.FC = () => {
               ja: "",
               us: "Business improvement using ",
               cn: "",
-              language,
             }) +
             getMessage({
               ja: "生産準備+",
-              language,
             }) +
             getMessage({
               ja: "を使った業務改善",
               us: "",
               cn: " 使用以下方法改进操作",
-              language,
             })
           }
           sectionRefs={sectionRefs}
@@ -348,7 +329,6 @@ const BlogPage: React.FC = () => {
                 ja: "デフォルメしています。娘は居ません。",
                 us: "I'm deformed. I don't have a daughter.",
                 cn: "畸形。没有女儿",
-                language,
               })}
             </Text>
             <Box
@@ -390,7 +370,6 @@ const BlogPage: React.FC = () => {
             "3." +
             getMessage({
               ja: "まとめ",
-              language,
             })
           }
           sectionRefs={sectionRefs}

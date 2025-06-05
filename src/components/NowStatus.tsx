@@ -1182,7 +1182,6 @@ export const NowStatus = ({
         ja: "Noto Sans JP",
         us: "Noto Sans JP",
         cn: "Noto Sans SC",
-        language,
       })}
     >
       <Text
@@ -1199,7 +1198,6 @@ export const NowStatus = ({
           ja: "更新",
           us: "Admin status update",
           cn: "管理员状态更新。",
-          language,
         })}
       </Text>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -1210,7 +1208,6 @@ export const NowStatus = ({
               ja: "スケジュール更新",
               us: "Admin status update",
               cn: "管理员状态更新。",
-              language,
             })}
           </ModalHeader>
           <ModalCloseButton />

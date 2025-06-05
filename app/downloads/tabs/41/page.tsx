@@ -21,7 +21,6 @@ const HomePage: React.FC = () => {
             ja: "先ハメ誘導の使い方",
             us: "How to use the Pre-Fitting Guidance",
             cn: "如何使用 先装引导",
-            language,
           })
         }
         date="2021/3/24"
@@ -39,7 +38,6 @@ const HomePage: React.FC = () => {
 
                 *在供应过程中尤其有效，可根据具体情况考虑第一个框架订单。
                 *仅与 Production Preparation+ 自动编制的子表格兼容。`,
-          language,
         })}
       />
     </IpadFrame>

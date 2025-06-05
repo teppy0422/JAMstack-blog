@@ -65,7 +65,6 @@ function TransitionExample() {
               ja: "アップロードの手順",
               us: "Upload Procedure",
               cn: "上传程序",
-              language,
             })}
           </AlertDialogHeader>
           <AlertDialogCloseButton _focus={{ boxShadow: "none" }} />
@@ -76,7 +75,6 @@ function TransitionExample() {
                   ja: "ダウンロードしたエクセルブックを開く",
                   us: "Open the downloaded Excel book.",
                   cn: "打开下载的 Excel 电子书。",
-                  language,
                 })}
               <br />
               {"2." +
@@ -84,7 +82,6 @@ function TransitionExample() {
                   ja: "Menuを開いてVerupを押す",
                   us: "Open Menu and press Verup.",
                   cn: "打开菜单并按下 Verup",
-                  language,
                 })}
               <br />
               {"3." +
@@ -92,7 +89,6 @@ function TransitionExample() {
                   ja: "",
                   us: "Click [このVerのアップロード] while holding down ",
                   cn: "按住 ",
-                  language,
                 })}
               <span>
                 <Kbd>Shift</Kbd>
@@ -101,7 +97,6 @@ function TransitionExample() {
                 ja: "を押しながら[このVerのアップロード]をクリック",
                 us: ".",
                 cn: " 单击 [このVerのアップロード]",
-                language,
               })}
             </Box>
             <Box textAlign="center" mb={4}>
@@ -118,7 +113,6 @@ function TransitionExample() {
                 ja: "以上で全ての生産準備+からこのバージョンへの更新が可能になります",
                 us: "This is all you need to do to update from Production Ready+ to this version!",
                 cn: "这将使所有生产准备+ 更新到该版本",
-                language,
               })}
             </Box>
           </AlertDialogBody>
@@ -149,7 +143,6 @@ export default function About() {
               ja: "Noto Sans JP",
               us: "Noto Sans,Noto Sans JP",
               cn: "Noto Sans SC,Noto Sans JP",
-              language,
             }),
           }}
         >
@@ -163,7 +156,6 @@ export default function About() {
               <Text fontSize="2xl" mb={2} fontWeight={600}>
                 {getMessage({
                   ja: "順立生産システム+",
-                  language,
                 })}
               </Text>
             </HStack>
@@ -172,14 +164,12 @@ export default function About() {
                 ja: "以下からダウンロードしてください",
                 us: "Please download below",
                 cn: "请在下方下载。",
-                language,
               })}
               <br />
               {getMessage({
                 ja: "ダウンロードした.zipは展開(解凍)してください",
                 us: "Please extract (unzip) the .zip file you downloaded.",
                 cn: "请解压缩下载的 .zip",
-                language,
               })}
               <Box
                 display="flex"
@@ -193,7 +183,6 @@ export default function About() {
                     ja: "ダウンロードしたmain_*.zipを展開(解凍)してからmain_*.mdbが在るフォルダに入れてください",
                     us: "Extract (unzip) the downloaded main_*.zip file and place it in the folder containing the main_*.mdb file.",
                     cn: "解压缩下载的 main_*.zip, 并将其放入 main_*.mdb 所在文件夹。",
-                    language,
                   })}
                 </Box>
                 {/* <TransitionExample /> */}
@@ -211,13 +200,11 @@ export default function About() {
                 ja: "access2003のみ(?)で送信/印刷ボタンを押すと設定枚数以上に処理される",
                 us: "Only in access2003(?) More than the set number of sheets are processed when the send/print button is pressed in",
                 cn: "仅在 access2003（？）在下列情况下按下发送/打印按钮时，处理的页数超过了设定的页数。",
-                language,
               })}
               description2={getMessage({
                 ja: "送信/印刷ボタンを押した時のみ処理完了までこのボタンを無効",
                 us: "Disable this button until processing is complete only when the Send/Print button is pressed.",
                 cn: "只有按下发送/打印按钮时，该按钮才会禁用，直到处理完成。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main/main_165.zip"
@@ -232,7 +219,6 @@ export default function About() {
                 ja: "軽微な不具合の修正。送信/印刷の数量の初期値を設定に追加",
                 us: "Minor bug fixes.。Added default values for sending/printing quantities to settings.",
                 cn: "小错误修复。在设置中添加了发送/打印数量的初始值。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_164.zip"
@@ -246,13 +232,11 @@ export default function About() {
                 ja: "access2003で開くとaccessが強制終了する",
                 us: "When I open with access2003, access is forced to close.",
                 cn: "在 Access2003 中打开时,Access 被强制关闭",
-                language,
               })}
               description2={getMessage({
                 ja: "Form!F_main2_settingが破損=>作り直し",
                 us: "Form!F_main2_setting is corrupted => rebuild",
                 cn: "Form!F_main2_setting 已损坏 => 重建",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_163.zip"
@@ -267,7 +251,6 @@ export default function About() {
                 ja: "TransferText=>importT_master。強制移動後にrequery。sql削除。進捗フレームに変更",
                 us: "TransferText=>importT_master.。requery after forced move.。sql deleted.。Change to progress frame.",
                 cn: "TransferText=>importT_master。强制移动后重新查询。已删除 sql。改为进度框",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_160.zip"
@@ -282,7 +265,6 @@ export default function About() {
                 ja: "不要なコードの削除。進捗状況の追加(設定項目を追加)。処理状況の追加。更新履歴の追加。デザインの変更",
                 us: "Removing unnecessary codes.。Adding progress status.。Addition of processing status.。Addition of update history.。Design changes",
                 cn: "删除不必要的代码。增加进度状态。添加处理状态。添加更新历史。设计更改",
-                language,
               })}
               descriptionIN="デザインの変更"
               linkHref="/download/Jdss/main_158.zip"
@@ -297,7 +279,6 @@ export default function About() {
                 ja: "自動機に送信しないの時の動作を変更",
                 us: "Changed behavior when not sending to automatic machines",
                 cn: "更改了不发送到自动机器时的行为",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_150.zip"
@@ -312,7 +293,6 @@ export default function About() {
                 ja: "自動機側のデータ取得処理を書き直し",
                 us: "Rewrote data acquisition process on the automatic machine side",
                 cn: "重写自动机器端的数据采集流程",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_148.zip"
@@ -326,13 +306,11 @@ export default function About() {
                 ja: "印刷ボタンで印刷出来ない。強制移動でデータ仕掛中が表示されなくなる",
                 us: "Cannot print using the print button. 。Data in progress is not displayed when forced to move.",
                 cn: "无法使用打印按钮打印。强制移动时不显示正在进行的数据。",
-                language,
               })}
               description2={getMessage({
                 ja: "パブリック変数の呼び出しでモジュール名を含める。強制移動でrs_.closeを削除",
                 us: "Include module name in public variable calls.。 Remove rs_.close in forced move.",
                 cn: "在调用公有变量时包含模块名称。删除强制移动中的 rs_.close。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_147.zip"
@@ -346,13 +324,11 @@ export default function About() {
                 ja: "access2003で閉じる時に最適化チェックオフになる?",
                 us: "Optimization check off when closing in access2003?",
                 cn: "在 access2003 中关闭时勾选优化？",
-                language,
               })}
               description2={getMessage({
                 ja: "オープン時にチェックオンを追加",
                 us: "Add check on when open",
                 cn: "开放时增加签到",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_145.zip"
@@ -366,13 +342,11 @@ export default function About() {
                 ja: "動作が不安定",
                 us: "Unstable operation",
                 cn: "运行不稳定",
-                language,
               })}
               description2={getMessage({
                 ja: "importRecord_Clickを1度のみ実行に修正。SSC更新を書き直し。閉じる時に最適化のチェックオン",
                 us: "Fixed importRecord_Click to be executed only once",
                 cn: "修复 importRecord_Click 只运行一次的问题。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_143.zip"
@@ -386,13 +360,11 @@ export default function About() {
                 ja: "動作が不安定",
                 us: "Unstable operation",
                 cn: "运行不稳定",
-                language,
               })}
               description2={getMessage({
                 ja: "タイマーの削除。解放を追加",
                 us: "Removed timer. Added release.",
                 cn: "删除计时器。增加了释放功能。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_142.zip"
@@ -406,13 +378,11 @@ export default function About() {
                 ja: "途中からデータが送信できない時がある",
                 us: "Sometimes data cannot be sent during the process.",
                 cn: "有时，数据无法在过程中传输。",
-                language,
               })}
               description2={getMessage({
                 ja: "label.captionで条件分岐を変数に変更",
                 us: "Change conditional branch to variable in label.caption",
                 cn: "将条件分支改为标签标题中的变量",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_139.zip"
@@ -426,13 +396,11 @@ export default function About() {
                 ja: "",
                 us: "",
                 cn: "",
-                language,
               })}
               description2={getMessage({
                 ja: "データインポート後に1秒の待機を追加",
                 us: "Add 1 second wait after data import",
                 cn: "数据导入后增加 1 秒等待时间",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_138.zip"
@@ -446,13 +414,11 @@ export default function About() {
                 ja: "win7/access2003で送信印刷の途中でエラー無しで停止",
                 us: "Stopped without error in the middle of outgoing printing in win7/access2003",
                 cn: "在 win7/access2003 中，在外发打印过程中无错误地停止打印",
-                language,
               })}
               description2={getMessage({
                 ja: "sleepとdoeventsを追記。データ仕掛中が無い場合にメッセージを追加。ロック中の非表示を削除",
                 us: "Add sleep and doevents",
                 cn: "添加了 SLEEP 和 doevents。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_137.zip"
@@ -466,7 +432,6 @@ export default function About() {
                 ja: "ACCESS2003でエラー",
                 us: "Error in ACCESS2003",
                 cn: "ACCESS 2003 中的错误。",
-                language,
               })}
               description2=""
               descriptionIN=""
@@ -481,7 +446,6 @@ export default function About() {
                 ja: "QRリーダーで読み込み時にENTERイベントが発生する",
                 us: "ENTER event occurs when reading with QR reader",
                 cn: "使用 QR 阅读器阅读时会发生 ENTER 事件。",
-                language,
               })}
               description2=""
               descriptionIN=""
@@ -496,13 +460,11 @@ export default function About() {
                 ja: "自動機に送信しないをオンでラベル印刷する",
                 us: 'No label printing with "Do not send to automatic machines" turned on.',
                 cn: "打开 不发送到自动机器，不打印标签",
-                language,
               })}
               description2={getMessage({
                 ja: "ラベル印刷もしないように修正",
                 us: "Fixed to not print labels as well.",
                 cn: "修改后也不打印标签",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_134.zip"
@@ -516,13 +478,11 @@ export default function About() {
                 ja: "自動機に送信しない不具合",
                 us: "Failure to transmit to automatic machine",
                 cn: "无法传输到自动机器",
-                language,
               })}
               description2={getMessage({
                 ja: "自動機バーコードを送信するように修正",
                 us: "Modified to send automatic machine barcodes",
                 cn: "经改装后可传输自动机器条形码",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_133.zip"
@@ -536,13 +496,11 @@ export default function About() {
                 ja: "押せないボタンがある",
                 us: "There's a button I can't press.",
                 cn: "某些按钮无法按下",
-                language,
               })}
               description2={getMessage({
                 ja: "押せるように修正。ネーム印刷の下地",
                 us: "Modified so that it can be stamped.。 Base for name printing",
                 cn: "经过改装，可进行烫印。用于印制名称的底座。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_132.zip"
@@ -556,13 +514,11 @@ export default function About() {
                 ja: "自動機に送信できない。自動機タイプが常にASだから待機時間が常に長い(10秒)",
                 us: "Cannot transmit to automatic machine. Waiting time is always long (10 seconds) because automatic machine type is always AS.",
                 cn: "无法传输到自动设备。等待时间总是很长（10 秒），因为自动机器类型总是 AS。",
-                language,
               })}
               description2={getMessage({
                 ja: "自動機へのシリアル送信に関わる箇所の書き直し。自動機タイプSAを追加(3秒)",
                 us: "Rewriting of the part related to the serial transmission to the automatic machine. Add automatic machine type SA (3 seconds)",
                 cn: "重写与自动机串行传输有关的章节。增加自动机械类型 SA（3 秒）。",
-                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main_130.zip"

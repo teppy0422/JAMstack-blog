@@ -43,7 +43,6 @@ const Home = () => {
         title={
           getMessage({
             ja: "順立生産システム",
-            language,
           }) + "_SSC"
         }
         src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018151459.mp4"
@@ -66,7 +65,6 @@ Based on this concept, YSS, CB, PLC, etc. are also supported.
 在集成流程中，每个人都按顺序生产相同的产品，因此只需下达一次生产指令。
 基于这一概念，还支持 YSS、CB 和 PLC。
 `,
-          language,
         })}
         date="2024/1/20"
         autoPlay={false}
