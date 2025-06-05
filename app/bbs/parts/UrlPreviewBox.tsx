@@ -57,21 +57,29 @@ const UrlPreviewBox: React.FC<Props> = ({
     }
   })();
   useEffect(() => {
-    // microlink.ioの無料APIを使ってOGP画像を取得
-    fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`)
+    // microlink.ioでOGP画像（metaタグ）を優先して取得
+    fetch(
+      `https://api.microlink.io/?url=${encodeURIComponent(
+        url
+      )}&meta=true&image=meta`
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.status === "success") {
+          // OGP画像（og:image）があればそれを使う
           if (data.data.image?.url) {
             setThumbnailUrl(data.data.image.url);
+          } else {
+            setThumbnailUrl(null);
           }
-          // タイトルもセット
+          // タイトル
           if (data.data.title) {
             setUrlTitles((prev) => ({
               ...prev,
               [url]: data.data.title,
             }));
           }
+          // 説明
           if (data.data.description) {
             setDescription(data.data.description);
           } else {
