@@ -1,6 +1,7 @@
 export const metadata = {
   title: "注文アプリ",
   description: "受注アプリに注文が送信されます。デザインは4パターン。",
+  themeColor: "#FF69B4",
   openGraph: {
     images: [
       {
@@ -14,6 +15,15 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     images: ["/images/ico/order-cover.png"],
+  },
+  icons: {
+    icon: "/images/ico/order-cover.png",
+    apple: "/images/ico/order-cover.png",
+  },
+  manifest: "/manifest-order.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
   },
 };
 

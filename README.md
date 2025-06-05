@@ -116,6 +116,10 @@ npx @chakra-ui/cli snippet add tooltip
 
 skillBlogs/0010/にサムネとかディスクリプションを設定する構造を追加
 
+#### 要確認
+
+order/のサムネ変更が反映されないから様子見
+
 #### 予定
 
 全てのリンクをクリックして動作確認
