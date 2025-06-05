@@ -114,6 +114,8 @@ Modal が Dialog
 Accordion
 npx @chakra-ui/cli snippet add tooltip
 
+skillBlogs/0010/にサムネとかディスクリプションを設定する構造を追加
+
 #### 予定
 
 全てのリンクをクリックして動作確認

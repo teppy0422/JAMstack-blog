@@ -92,7 +92,7 @@ const UrlPreviewBox: React.FC<Props> = ({
   return (
     <Box>
       <Box
-        width={isExpanded ? "94%" : "50%"}
+        width={isExpanded ? "94%" : "320px"}
         height={isExpanded ? "70vh" : "110px"}
         mt="8px"
         transition="all 0.3s ease"
@@ -103,6 +103,8 @@ const UrlPreviewBox: React.FC<Props> = ({
           position: "relative",
         }}
         borderRadius="8px"
+        border="1px solid"
+        borderColor={colorMode === "light" ? "transparent" : "gray.600"}
       >
         <Tooltip
           label={isExpanded ? "折りたたむ" : "展開する"}

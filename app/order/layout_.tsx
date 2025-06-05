@@ -4,6 +4,16 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "注文",
   description: "注文する為のページ",
+  openGraph: {
+    images: [
+      {
+        url: "/images/illust/hippo/hippo_016.png",
+        width: 1200,
+        height: 630,
+        alt: "誘導ポイント設定一覧表のサムネイル",
+      },
+    ],
+  },
   themeColor: "#FF69B4",
   icons: {
     icon: "/images/ico/order-cover.png",
