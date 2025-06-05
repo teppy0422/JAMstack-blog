@@ -85,7 +85,7 @@ const UrlPreviewBox: React.FC<Props> = ({
     <Box>
       <Box
         width={isExpanded ? "94%" : "50%"}
-        height={isExpanded ? "70vh" : "12vh"}
+        height={isExpanded ? "70vh" : "110px"}
         mt="8px"
         transition="all 0.3s ease"
         marginLeft={postUserId === currentUserId ? "auto" : "44px"}
@@ -266,20 +266,8 @@ const UrlPreviewBox: React.FC<Props> = ({
                     )}
                   </Box>
                 </>
-              ) : faviconUrl ? (
-                // ファビコンがあれば表示
-                <img
-                  src={faviconUrl}
-                  alt="favicon"
-                  style={{
-                    width: "32px",
-                    height: "32px",
-                    borderRadius: "4px",
-                    background: "#eee",
-                  }}
-                />
               ) : (
-                // どちらもなければアイコン＋ドメイン
+                // アイコン＋ドメイン
                 <Box
                   display="flex"
                   alignItems="center"
