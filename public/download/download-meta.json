@@ -23,9 +23,9 @@
     "latestFile": "Code39Barcode.ttf",
     "latestUpdated": "2025-06-03T07:42:28.616Z"
   },
-  "sjp": {
-    "latestFile": "Sjp3.101.18_.zip",
-    "latestUpdated": "2025-04-25T04:43:32.000Z"
+  "sjp/sjp": {
+    "latestFile": "Sjp3.101.21_.zip",
+    "latestUpdated": "2025-06-07T08:41:40.000Z"
   },
   "yps/verup": {
     "latestFile": "VerUp.zip",
@@ -41,6 +41,6 @@
   },
   ".": {
     "latestFile": "download-meta.json",
-    "latestUpdated": "2025-06-05T13:34:06.479Z"
+    "latestUpdated": "2025-06-07T08:59:10.859Z"
   }
 }

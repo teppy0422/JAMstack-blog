@@ -212,7 +212,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       onMouseEnter={() => setHoveredId("01")}
                     >
                       <DownloadButton
-                        path="/download/sjp"
+                        path="/download/sjp/sjp/"
                         isHovered={hoverdId === "01"}
                         backGroundColor="custom.excel"
                         userName={currentUserName}
@@ -282,7 +282,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           <Flex justifyContent="flex-end" width="100%">
                             <Box fontSize="xs" textAlign="right">
                               <LatestUpdateDate
-                                folderPath="/download/sjp/"
+                                folderPath="/download/sjp/sjp/"
                                 removeStrings={[]}
                               />
                             </Box>
@@ -319,6 +319,21 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          downloadPath: "/download/sjp/sjp/Sjp3.101.21_.zip",
+                          version: "3.101.21",
+                          date: "2025/06/07",
+                          reason: [
+                            "座標データに負の値がある場合にエラーが発生する",
+                          ],
+                          change: [
+                            "コネクタ画像登録で負の数がある場合は警告/登録できないように変更",
+                            "ハメ図作成時に負の値を正に置き換えて実行するように変更",
+                            "書き直し:システムパーツの参照を動的に変更",
+                          ],
+                          inCharge: ["高知", "王さん"],
+                        },
+                        {
+                          downloadPath: "/download/sjp/sjp/Sjp3.101.18_.zip",
                           version: "3.101.18",
                           date: "2025/04/25",
                           reason: [

@@ -22,9 +22,13 @@ import {
   ModalCloseButton,
   ModalBody,
   Text,
+  useColorMode,
 } from "@chakra-ui/react";
 import { CheckCircleIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import { getColor } from "@/lib/getColor";
+import { useUserContext } from "@/contexts/useUserContext";
+
+import DownloadButton from "@/components/ui/DownloadButton2";
 
 type ChangelogItem = {
   date: string;
@@ -34,11 +38,11 @@ type ChangelogItem = {
   inCharge?: string[];
   html?: string;
   htmlText?: string;
+  downloadPath?: string;
 };
 type ChangelogAccordionProps = {
   changelog: ChangelogItem[];
 };
-
 export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalSrc, setModalSrc] = useState("");
@@ -49,6 +53,17 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+  const {
+    currentUserId,
+    currentUserName,
+    currentUserMainCompany,
+    currentUserCompany,
+    currentUserCreatedAt,
+    getUserById,
+    isLoading: isLoadingContext,
+  } = useUserContext();
+  const { colorMode } = useColorMode();
+
   return (
     <Accordion allowMultiple mt={0} borderColor="transparent" w="100%">
       <AccordionItem>
@@ -68,261 +83,282 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
             </AccordionButton>
             <AccordionPanel fontSize="xs" pt={0} px={2} pb={2}>
               <List spacing={0} styleType="none" pl={0}>
-                {changelog.map((item, index) => (
-                  <>
-                    <Box h="1px" width="100%" bg="gray.500" />
-                    <ListItem key={index}>
-                      <Box
-                        as="span"
-                        fontSize="13px"
-                        fontWeight="400"
-                        mr={2}
-                        bg="gray"
-                        color="white"
-                        p="2px"
-                        lineHeight={0.8}
-                      >
-                        {item.version}
-                      </Box>
-                      <Box as="span" fontWeight="bold">
-                        {item.date}
-                      </Box>
-                      {item.inCharge && item.inCharge.length > 0 && (
+                {changelog.map((item, index) => {
+                  return (
+                    <>
+                      <Box h="1px" width="100%" bg="gray.500" />
+                      <ListItem key={index}>
+                        <Box
+                          as="span"
+                          fontSize="13px"
+                          fontWeight="400"
+                          mr={2}
+                          bg="gray"
+                          color="white"
+                          p="2px"
+                          lineHeight={0.8}
+                        >
+                          {item.version}
+                        </Box>
+                        <Box as="span" fontWeight="bold">
+                          {item.date}
+                        </Box>
+                        {item.inCharge && item.inCharge.length > 0 && (
+                          <>
+                            {item.inCharge.map((name, i) => {
+                              const { bg, color, borderColor } = getColor(name);
+                              return (
+                                <Badge
+                                  key={i}
+                                  bg={bg}
+                                  color={color}
+                                  border={borderColor ? "1px solid" : "none"}
+                                  borderColor={borderColor}
+                                  fontWeight={600}
+                                  fontSize="0.6rem"
+                                  ml={1}
+                                >
+                                  {name}
+                                </Badge>
+                              );
+                            })}
+                          </>
+                        )}
+                        {item.reason && item.reason.length > 0 && (
+                          <Box mt={1} pl={0}>
+                            <List spacing={1} pl={0}>
+                              {item.reason.map((r, i) => (
+                                <ListItem key={i}>
+                                  <ListIcon
+                                    as={WarningTwoIcon}
+                                    color="red.500"
+                                    mr={1}
+                                  />
+                                  {r}
+                                </ListItem>
+                              ))}
+                            </List>
+                          </Box>
+                        )}
+                        {item.change && item.change.length > 0 && (
+                          <Box mt={1} pl={0}>
+                            <List spacing={1} pl={0}>
+                              {item.change.map((c, i) => (
+                                <ListItem key={i}>
+                                  <ListIcon
+                                    as={CheckCircleIcon}
+                                    color="green.500"
+                                    mr={1}
+                                  />
+                                  {c}
+                                </ListItem>
+                              ))}
+                            </List>
+                          </Box>
+                        )}
+                        {item.downloadPath && (
+                          <DownloadButton
+                            currentUserName={currentUserName}
+                            url={item.downloadPath}
+                            bg="custom.excel"
+                            color={
+                              colorMode === "light"
+                                ? "custom.theme.light.900"
+                                : "white"
+                            }
+                          />
+                        )}
+                      </ListItem>
+                      {item.htmlText && (
                         <>
-                          {item.inCharge.map((name, i) => {
-                            const { bg, color, borderColor } = getColor(name);
-                            return (
-                              <Badge
-                                key={i}
-                                bg={bg}
-                                color={color}
-                                border={borderColor ? "1px solid" : "none"}
-                                borderColor={borderColor}
-                                fontWeight={600}
-                                fontSize="0.6rem"
-                                ml={1}
+                          <Popover placement="bottom">
+                            <PopoverTrigger>
+                              <LinkBox
+                                as="article"
+                                maxW="auto"
+                                p="2"
+                                mb={2}
+                                borderWidth="1px"
+                                rounded="md"
+                                borderColor="gray.500"
+                                _hover={{ boxShadow: "dark-lg" }}
                               >
-                                {name}
-                              </Badge>
-                            );
-                          })}
-                        </>
-                      )}
-                      {item.reason && item.reason.length > 0 && (
-                        <Box mt={1} pl={0}>
-                          <List spacing={1} pl={0}>
-                            {item.reason.map((r, i) => (
-                              <ListItem key={i}>
-                                <ListIcon
-                                  as={WarningTwoIcon}
-                                  color="red.500"
-                                  mr={1}
-                                />
-                                {r}
-                              </ListItem>
-                            ))}
-                          </List>
-                        </Box>
-                      )}
-                      {item.change && item.change.length > 0 && (
-                        <Box mt={1} pl={0}>
-                          <List spacing={1} pl={0}>
-                            {item.change.map((c, i) => (
-                              <ListItem key={i}>
-                                <ListIcon
-                                  as={CheckCircleIcon}
-                                  color="green.500"
-                                  mr={1}
-                                />
-                                {c}
-                              </ListItem>
-                            ))}
-                          </List>
-                        </Box>
-                      )}
-                    </ListItem>
-                    {item.htmlText && (
-                      <>
-                        <Popover placement="bottom">
-                          <PopoverTrigger>
-                            <LinkBox
-                              as="article"
-                              maxW="auto"
-                              p="2"
-                              mb={2}
-                              borderWidth="1px"
-                              rounded="md"
-                              borderColor="gray.500"
-                              _hover={{ boxShadow: "dark-lg" }}
-                            >
-                              <PopoverBody
-                                height="auto"
-                                style={{ border: "none" }}
-                                p={1}
-                                maxW="100%"
-                              >
-                                <Box
-                                  display="flex"
-                                  justifyContent="space-between"
-                                  alignItems="center"
+                                <PopoverBody
+                                  height="auto"
+                                  style={{ border: "none" }}
+                                  p={1}
+                                  maxW="100%"
                                 >
                                   <Box
-                                    position="relative"
-                                    width={{
-                                      base: "45%",
-                                      sm: "45%",
-                                      md: "45%",
-                                      lg: "50%",
-                                      xl: "50%",
-                                    }} // 画面サイズに応じて変更
-                                    height={{
-                                      base: "100px",
-                                      sm: "170px",
-                                      md: "200px",
-                                      lg: "190px",
-                                      xl: "240px",
-                                    }}
-                                    border="none"
+                                    display="flex"
+                                    justifyContent="space-between"
+                                    alignItems="center"
                                   >
-                                    <iframe
-                                      height="100%"
-                                      src={
-                                        item.html +
-                                        item.version +
-                                        `_/index.html`
-                                      }
-                                      style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        border: "none",
-                                      }} // iframeのサイズを100%に設定
-                                      title="Embedded Content"
-                                    />
                                     <Box
-                                      position="absolute"
-                                      top="0"
-                                      left="0"
-                                      width="100%"
-                                      height="100%"
-                                      onClick={() =>
-                                        handleBoxClick(
-                                          item.html +
-                                            item.version +
-                                            `_/index.html`
-                                        )
-                                      }
-                                      style={{
-                                        cursor: "pointer",
-                                        backgroundColor: "transparent",
-                                      }} // 追加
-                                    />
-                                  </Box>
-                                  <Box
-                                    mx={1}
-                                    fontSize="xl"
-                                    color="gray.500"
-                                    bg="transparent"
-                                  >
-                                    →
-                                  </Box>
-                                  <Box
-                                    position="relative"
-                                    width={{
-                                      base: "45%",
-                                      sm: "45%",
-                                      md: "45%",
-                                      lg: "50%",
-                                      xl: "50%",
-                                    }} // 画面サイズに応じて変更
-                                    height={{
-                                      base: "100px",
-                                      sm: "170px",
-                                      md: "200px",
-                                      lg: "190px",
-                                      xl: "240px",
-                                    }}
-                                    border="none"
-                                  >
-                                    <iframe
-                                      height="100%"
-                                      src={
-                                        item.html + item.version + `/index.html`
-                                      }
-                                      style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        border: "none",
+                                      position="relative"
+                                      width={{
+                                        base: "45%",
+                                        sm: "45%",
+                                        md: "45%",
+                                        lg: "50%",
+                                        xl: "50%",
+                                      }} // 画面サイズに応じて変更
+                                      height={{
+                                        base: "100px",
+                                        sm: "170px",
+                                        md: "200px",
+                                        lg: "190px",
+                                        xl: "240px",
                                       }}
-                                      title="Embedded Content"
-                                    />
+                                      border="none"
+                                    >
+                                      <iframe
+                                        height="100%"
+                                        src={
+                                          item.html +
+                                          item.version +
+                                          `_/index.html`
+                                        }
+                                        style={{
+                                          width: "100%",
+                                          height: "100%",
+                                          border: "none",
+                                        }} // iframeのサイズを100%に設定
+                                        title="Embedded Content"
+                                      />
+                                      <Box
+                                        position="absolute"
+                                        top="0"
+                                        left="0"
+                                        width="100%"
+                                        height="100%"
+                                        onClick={() =>
+                                          handleBoxClick(
+                                            item.html +
+                                              item.version +
+                                              `_/index.html`
+                                          )
+                                        }
+                                        style={{
+                                          cursor: "pointer",
+                                          backgroundColor: "transparent",
+                                        }} // 追加
+                                      />
+                                    </Box>
                                     <Box
-                                      position="absolute"
-                                      top="0"
-                                      left="0"
-                                      width="100%"
-                                      height="100%"
-                                      onClick={() =>
-                                        handleBoxClick(
-                                          item.html +
-                                            item.version +
-                                            `/index.html`
-                                        )
-                                      }
-                                      style={{
-                                        cursor: "pointer",
-                                        backgroundColor: "transparent",
+                                      mx={1}
+                                      fontSize="xl"
+                                      color="gray.500"
+                                      bg="transparent"
+                                    >
+                                      →
+                                    </Box>
+                                    <Box
+                                      position="relative"
+                                      width={{
+                                        base: "45%",
+                                        sm: "45%",
+                                        md: "45%",
+                                        lg: "50%",
+                                        xl: "50%",
+                                      }} // 画面サイズに応じて変更
+                                      height={{
+                                        base: "100px",
+                                        sm: "170px",
+                                        md: "200px",
+                                        lg: "190px",
+                                        xl: "240px",
                                       }}
-                                    />
+                                      border="none"
+                                    >
+                                      <iframe
+                                        height="100%"
+                                        src={
+                                          item.html +
+                                          item.version +
+                                          `/index.html`
+                                        }
+                                        style={{
+                                          width: "100%",
+                                          height: "100%",
+                                          border: "none",
+                                        }}
+                                        title="Embedded Content"
+                                      />
+                                      <Box
+                                        position="absolute"
+                                        top="0"
+                                        left="0"
+                                        width="100%"
+                                        height="100%"
+                                        onClick={() =>
+                                          handleBoxClick(
+                                            item.html +
+                                              item.version +
+                                              `/index.html`
+                                          )
+                                        }
+                                        style={{
+                                          cursor: "pointer",
+                                          backgroundColor: "transparent",
+                                        }}
+                                      />
+                                    </Box>
                                   </Box>
-                                </Box>
-                                <Box h="1px" width="100%" bg="gray.500" />
-                                <Text fontSize="sm" fontWeight={400}>
-                                  {item.htmlText}
-                                </Text>
-                              </PopoverBody>
-                            </LinkBox>
-                          </PopoverTrigger>
-                        </Popover>
-                        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                          <ModalOverlay bg="rgba(0, 0, 0, 0.1)" />
-                          <ModalContent
-                            maxW="90vw"
-                            maxH="90vh"
-                            bg="transparent"
-                            boxShadow="none"
+                                  <Box h="1px" width="100%" bg="gray.500" />
+                                  <Text fontSize="sm" fontWeight={400}>
+                                    {item.htmlText}
+                                  </Text>
+                                </PopoverBody>
+                              </LinkBox>
+                            </PopoverTrigger>
+                          </Popover>
+                          <Modal
+                            isOpen={isModalOpen}
+                            onClose={handleCloseModal}
                           >
-                            <ModalCloseButton _focus={{ boxShadow: "none" }} />
-                            <ModalBody mx={0} bg="transparent">
-                              <Box
-                                width="99%"
-                                height={{
-                                  base: "30vh",
-                                  sm: "40vh",
-                                  md: "50vh",
-                                  lg: "70vh",
-                                }}
-                                border="none"
-                                maxW="90vw"
-                                bg="transparent"
-                              >
-                                <iframe
-                                  src={modalSrc}
-                                  style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    border: "none",
-                                    backgroundColor: "transparent",
+                            <ModalOverlay bg="rgba(0, 0, 0, 0.1)" />
+                            <ModalContent
+                              maxW="90vw"
+                              maxH="90vh"
+                              bg="transparent"
+                              boxShadow="none"
+                            >
+                              <ModalCloseButton
+                                _focus={{ boxShadow: "none" }}
+                              />
+                              <ModalBody mx={0} bg="transparent">
+                                <Box
+                                  width="99%"
+                                  height={{
+                                    base: "30vh",
+                                    sm: "40vh",
+                                    md: "50vh",
+                                    lg: "70vh",
                                   }}
-                                  title="Embedded Content"
-                                />
-                              </Box>
-                            </ModalBody>
-                          </ModalContent>
-                        </Modal>
-                      </>
-                    )}
-                  </>
-                ))}
+                                  border="none"
+                                  maxW="90vw"
+                                  bg="transparent"
+                                >
+                                  <iframe
+                                    src={modalSrc}
+                                    style={{
+                                      width: "100%",
+                                      height: "100%",
+                                      border: "none",
+                                      backgroundColor: "transparent",
+                                    }}
+                                    title="Embedded Content"
+                                  />
+                                </Box>
+                              </ModalBody>
+                            </ModalContent>
+                          </Modal>
+                        </>
+                      )}
+                    </>
+                  );
+                })}
               </List>
             </AccordionPanel>
           </>
