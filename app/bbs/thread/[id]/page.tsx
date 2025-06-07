@@ -105,6 +105,7 @@ const seasonalAnimations = {
   ),
   hachisuka: dynamic(() => import("@/components/season/HachisukaAnimation")),
   yae: dynamic(() => import("@/components/season/YaeAnimation")),
+  firefly: dynamic(() => import("@/components/season/FireflyAnimation")),
   // ochiba: dynamic(() => import("../../../components/OchibaAnimation")), // 落ち葉アニメーションのインポート
   // 他の季節のアニメーションをここに追加
 };
@@ -355,6 +356,7 @@ function ThreadContent(): JSX.Element {
   const [isSomeiyoshinoActive, setIsSomeiyoshinoActive] = useState(false);
   const [isHachisukaActive, setIsHachisukaActive] = useState(false);
   const [isYaeActive, setIsYaeActive] = useState(false);
+  const [isFirefly, setIsFirefly] = useState(false);
 
   //season判断
   useEffect(() => {
@@ -372,6 +374,9 @@ function ThreadContent(): JSX.Element {
     const YaeStartDate = new Date(today.getFullYear(), 3, 15); // 4月15日
     const YaeEndDate = new Date(today.getFullYear(), 3, 22); // 4月22日
     setIsYaeActive(today >= YaeStartDate && today <= YaeEndDate);
+    const FireflyStartDate = new Date(today.getFullYear(), 5, 1); // 6月1日
+    const FireflyEndDate = new Date(today.getFullYear(), 5, 12); // 6月12日
+    setIsFirefly(today >= FireflyStartDate && today <= FireflyEndDate);
   }, []);
 
   // isAtBottomがtrueになった時に未読の投稿を既読にする
@@ -2434,6 +2439,7 @@ function ThreadContent(): JSX.Element {
               {isSomeiyoshinoActive && <seasonalAnimations.someiyoshino />}
               {isHachisukaActive && <seasonalAnimations.hachisuka />}
               {isYaeActive && <seasonalAnimations.yae />}
+              {isFirefly && <seasonalAnimations.firefly />}
               <Link
                 href="#"
                 onClick={(e) => {

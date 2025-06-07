@@ -266,7 +266,7 @@ const UrlPreviewBox: React.FC<Props> = ({
                     {description && (
                       <Text
                         fontSize="xs"
-                        color="gray.600"
+                        color={colorMode === "light" ? "gray.600" : "gray.400"}
                         noOfLines={2}
                         maxW="280px"
                         mt={1}
