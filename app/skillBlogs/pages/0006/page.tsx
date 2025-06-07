@@ -640,12 +640,12 @@ const BlogPage: React.FC = () => {
               mt={4}
             >
               <IframeDisplay
-                src="/files/download/html/Sjp/70/8211158A40/0080.html"
+                src="/html/Sjp/70/8211158A40/0080.html"
                 width="240"
                 height="300"
               />
               <IframeDisplay
-                src="/files/download/html/Sjp/70/8211158A40/0022.html"
+                src="/html/Sjp/70/8211158A40/0022.html"
                 width="240"
                 height="300"
               />
