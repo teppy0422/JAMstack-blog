@@ -890,7 +890,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       onMouseEnter={() => setHoveredId("03")}
                     >
                       <DownloadButton
-                        path="/download/bip/"
+                        path="/download/bip/bip/"
                         isHovered={hoverdId === "03"}
                         backGroundColor="custom.excel"
                         userName={currentUserName}
