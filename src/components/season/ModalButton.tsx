@@ -86,8 +86,8 @@ const ModalButton: React.FC<CustomModalProps> = ({
             outline="4px solid"
             outlineColor={
               colorMode === "light"
-                ? "custom.theme.dark.400"
-                : "custom.theme.dark.400"
+                ? "custom.theme.dark.800"
+                : "custom.theme.dark.800"
             }
           />
           <Box

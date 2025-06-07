@@ -353,7 +353,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           ],
                           change: ["EdgeまたはIEの選択式に変更"],
                           inCharge: ["高知", "王さん"],
-                          html: "/html/sjp/",
+                          html: "/html/Sjp/",
                           htmlText: " ",
                         },
                         {
@@ -361,7 +361,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           date: "2024/10/07",
                           change: ["ハメ図作成の選択肢にコネクタ性別を追加"],
                           inCharge: ["高知", "王さん", "徳島", "山田さん"],
-                          html: "/html/sjp/",
+                          html: "/html/Sjp/",
                           htmlText: "コネクタ性別がMaleの場合は点線にする",
                         },
                         {
@@ -369,7 +369,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           date: "2024/09/15",
                           change: ["タッチ操作に対応した配策誘導ナビの追加"],
                           inCharge: ["開発", "書き直し", "新機能"],
-                          html: "/html/sjp/",
+                          html: "/html/Sjp/",
                           htmlText: "ハメ図の数字は相手端末ナンバー",
                         },
                         {
@@ -379,7 +379,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             "配策誘導ナビ端末-のデザインとコードを最適化",
                           ],
                           inCharge: ["開発", "書き直し"],
-                          html: "/html/sjp/",
+                          html: "/html/Sjp/",
                           htmlText: "ハメ図の数字は相手端末ナンバー",
                         },
                         {
@@ -389,7 +389,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             "配策誘導ナビ端末のデザインとコードを最適化",
                           ],
                           inCharge: ["開発", "書き直し"],
-                          html: "/html/sjp/",
+                          html: "/html/Sjp/",
                           htmlText: " ",
                         },
                         {
@@ -397,7 +397,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           date: "2024/08/24",
                           change: ["配策誘導ナビ構成のタブ情報を最適化"],
                           inCharge: ["開発", "書き直し"],
-                          html: "/html/sjp/",
+                          html: "/html/Sjp/",
                           htmlText: "電線コードと端末部品名を追加",
                         },
                         {
@@ -406,7 +406,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           reason: ["画面サイズが小さい場合にデザインが崩れる"],
                           change: ["レスポンシブデザインに対応"],
                           inCharge: ["開発", "書き直し", "不具合"],
-                          html: "/html/sjp/",
+                          html: "/html/Sjp/",
                           htmlText:
                             "構成No毎の.cssを廃止->ファイルサイズ284->264MB。ファイル数1269->1105",
                         },
@@ -416,7 +416,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           reason: ["モバイルでサイズのバランスが崩れる"],
                           change: ["レスポンシブデザインに対応"],
                           inCharge: ["開発", "書き直し", "不具合"],
-                          html: "/html/sjp/",
+                          html: "/html/Sjp/",
                           htmlText: "検査履歴システム※IE11以上が必要",
                         },
                         {
@@ -424,7 +424,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           date: "2024/08/18",
                           change: ["ポイント点滅をグループ単位で作成に対応"],
                           inCharge: ["開発", "書き直し"],
-                          html: "/html/sjp/",
+                          html: "/html/Sjp/",
                           htmlText: "デザインの変更",
                         },
                         {
@@ -435,7 +435,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           ],
                           change: ["複数電線でも赤枠になるように修正"],
                           inCharge: ["高知", "王さん", "不具合"],
-                          html: "/html/sjp/",
+                          html: "/html/Sjp/",
                           htmlText:
                             "ダブり圧着の赤枠を複数電線でも赤枠になるように修正",
                         },
@@ -449,7 +449,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             "検査履歴用の画像で共用ポイントを点滅するように修正",
                           ],
                           inCharge: ["高知", "王さん"],
-                          html: "/html/sjp/",
+                          html: "/html/Sjp/",
                           htmlText:
                             "先ハメ/後ハメが分かるように更新。共用ポイントは点滅",
                         },
