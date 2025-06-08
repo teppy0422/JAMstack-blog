@@ -1,29 +1,20 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useRef, useContext, use } from "react";
 import Confetti from "react-confetti";
 import {
   Box,
   Flex,
-  Heading,
   Text,
   VStack,
   HStack,
   Link,
   List,
   ListItem,
-  Divider,
-  ChakraProvider,
-  extendTheme,
   IconButton,
-  Badge,
   Avatar,
-  Code,
-  Image,
-  Kbd,
   Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
-  AccordionIcon,
   createIcon,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
@@ -45,20 +36,9 @@ import "@fontsource/yomogi";
 
 import { useLanguage } from "../../../src/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
+import { get, set } from "lodash";
+import ReadByIcon from "./ReadByIcon";
 
-const customTheme = extendTheme({
-  fonts: {
-    heading: ",'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
-  },
-  fontWeights: {
-    normal: 200,
-    medium: 300,
-    bold: 400,
-    light: 300,
-    extraLight: 100,
-  },
-});
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
   viewBox: "0 0 26 26",
@@ -66,20 +46,6 @@ const CustomIcon = createIcon({
     <path
       d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"
       fill="gray"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  ),
-});
-const CustomIcon2 = createIcon({
-  displayName: "CustomIcon2",
-  viewBox: "0 0 26 26",
-  path: (
-    <path
-      d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"
-      fill="none"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
@@ -108,20 +74,48 @@ const Frame: React.FC<{
   const showToast = useCustomToast();
   const [ipAddress, setIpAddress] = useState("");
 
-  const { currentUserId, currentUserName } = useUserContext();
-  const { readByCount, skillBlogsData } = useReadCount(currentUserId);
+  const { currentUserId, currentUserName, getUserById } = useUserContext();
+  const { readByCount, skillBlogsData, refresh, insertOrUpdate } =
+    useReadCount(currentUserId);
+  const [isReadByUser, setIsReadByUser] = useState<boolean>(false);
+  const [matchedBlog, setMatchedBlog] = useState<any>(null);
+  const [currentPath, setCurrentPath] = useState("");
+  const [pathUrl, setPathUrl] = useState<string>("");
+  const [isBottom, setIsBottom] = useState<boolean>(false);
 
+  useEffect(() => {
+    setCurrentPath(window.location.pathname);
+    refresh();
+  }, []);
+
+  useEffect(() => {
+    if (!skillBlogsData) return;
+    const pathSplit = currentPath.split("/");
+    const pathUrl = pathSplit[3];
+    console.log(pathUrl);
+    setPathUrl(pathUrl);
+    const matchedBlog = skillBlogsData.find((data) => data.url === pathUrl);
+    console.log(matchedBlog);
+    const isReadByUser = matchedBlog?.readBy.includes(currentUserId ?? "");
+    console.log(isReadByUser);
+    setIsReadByUser(isReadByUser ?? false);
+    setMatchedBlog(matchedBlog);
+  }, [currentPath, skillBlogsData]);
+
+  if (!matchedBlog) {
+    null;
+  }
+
+  // 2秒後にハッシュ位置へスクロール
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-      // ローディング完了後にハッシュ位置へスクロール
       handleHashScroll();
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    let lastScrollY = window.scrollY;
     let ticking = false;
     const updateActiveSection = () => {
       if (sectionRefs?.current) {
@@ -134,8 +128,8 @@ const Frame: React.FC<{
               scrollPosition >= sectionTop &&
               scrollPosition <= sectionBottom
             ) {
-              console.log("スクロールで検出したセクション:", section.id);
-              setActiveSection(section.id);
+              const newActiveSection = section.id;
+              setActiveSection(newActiveSection);
             }
           }
         });
@@ -150,15 +144,31 @@ const Frame: React.FC<{
         });
         ticking = true;
       }
+      const isBottomTemp =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+      if (!isBottom && isBottomTemp) {
+        setIsBottom(isBottomTemp);
+      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [sectionRefs]);
 
-  // activeSection変更時のデバッグログ
   useEffect(() => {
-    console.log("現在のアクティブセクション:", activeSection);
-  }, [activeSection]);
+    console.log("ページの一番下に到達しました！");
+    console.log(isReadByUser);
+    console.log(currentUserId);
+    console.log(pathUrl);
+
+    if (!isReadByUser && currentUserId) {
+      (async () => {
+        await insertOrUpdate(pathUrl, currentUserId);
+        refresh();
+      })();
+      console.log("更新");
+    }
+  }, [isBottom]);
 
   const handleHashScroll = () => {
     const hash = window.location.hash;
@@ -171,22 +181,21 @@ const Frame: React.FC<{
             element.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({ top: y, behavior: "smooth" });
         }
-      }, 100); // ローディング完了直後にスクロール
+      }, 100);
     }
   };
 
-  const [currentPath, setCurrentPath] = useState("");
   const [accordionIndex, setAccordionIndex] = useState<number[]>([]);
 
   const createLinkPanel = (path: string, text: string, isMain?: boolean) => {
     const pathSplit = path.split("/").filter(Boolean);
-    const pathUrl = pathSplit[1];
+    const pathUrl = pathSplit[2];
 
-    let isReadByUser = true;
+    let isRead = true;
     if (pathUrl !== undefined) {
       const matchingData =
         skillBlogsData.find((data) => data.url === pathUrl)?.readBy || [];
-      isReadByUser = matchingData.includes(currentUserId ?? "");
+      isRead = matchingData.includes(currentUserId ?? "");
     }
 
     const linkStyles = {
@@ -195,12 +204,6 @@ const Frame: React.FC<{
       px: 2,
       borderRadius: "4px",
       bg: currentPath === path ? "#d8cabf" : "transparent",
-      color:
-        currentPath === path
-          ? "white"
-          : colorMode === "light"
-          ? "black"
-          : "white",
       cursor: path === "#" ? "not-allowed" : "pointer",
     };
     return (
@@ -208,12 +211,20 @@ const Frame: React.FC<{
         <Link
           href={path}
           {...linkStyles}
-          color={isMain ? "#FFF" : ""}
+          color={
+            isMain
+              ? "#FFF"
+              : colorMode === "light"
+              ? "black"
+              : currentPath === path
+              ? "black"
+              : ""
+          }
           display="block"
           my={0.5}
         >
           {text}
-          {!isReadByUser && <CustomIcon />}
+          {!isRead && <CustomIcon />}
         </Link>
       </AccordionPanel>
     );
@@ -221,7 +232,6 @@ const Frame: React.FC<{
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setCurrentPath(window.location.pathname);
       let index: number[] = [];
       switch (true) {
         case window.location.pathname.includes("/skillBlogs/pages/0004"):
@@ -245,6 +255,9 @@ const Frame: React.FC<{
         case window.location.pathname.includes("/skillBlogs/pages/0003"):
           index = [4];
           break;
+        case window.location.pathname.includes("/skillBlogs/pages/0012"):
+          index = [5];
+          break;
         default:
           index = [];
       }
@@ -266,6 +279,53 @@ const Frame: React.FC<{
       return () => clearTimeout(timer);
     }
   }, [sections?.current, retryCount]);
+
+  const ReadByList = () => {
+    return (
+      <VStack align="center" mx=".5px">
+        {matchedBlog?.readBy && matchedBlog.readBy.length > 0 ? (
+          <Box position="relative" width="fit-content" mx="auto">
+            {matchedBlog.readBy.map((user, index) => {
+              const userData = getUserById(user);
+              return (
+                <Box
+                  key={index}
+                  position="relative"
+                  mt={index === 0 ? 0 : "-2px"}
+                  _hover={{ cursor: "pointer" }}
+                >
+                  <Avatar
+                    src={userData?.picture_url}
+                    h="32px"
+                    w="32px"
+                    border={
+                      colorMode === "light"
+                        ? "1px solid black"
+                        : "1px solid white"
+                    }
+                    outline={
+                      colorMode === "light"
+                        ? "1px solid #f0e4da"
+                        : "1px solid #202024"
+                    }
+                  />
+                </Box>
+              );
+            })}
+          </Box>
+        ) : (
+          <Box display="flex" justifyContent="center">
+            <Avatar
+              h="32px"
+              w="32px"
+              border="1px solid black"
+              outline="1px solid #eee"
+            />
+          </Box>
+        )}
+      </VStack>
+    );
+  };
 
   return (
     <>
@@ -632,6 +692,9 @@ const Frame: React.FC<{
                   position="sticky"
                   top="64px"
                   display={["none", "none", "none", "block"]}
+                  alignItems="center"
+                  justifyContent="center"
+                  bg="transparent"
                 >
                   <IconButton
                     icon={<CiHeart size={24} />}
@@ -639,47 +702,21 @@ const Frame: React.FC<{
                     minWidth="33px"
                     width="33px !important"
                     height="33px !important"
+                    mx="auto"
                     borderRadius="50%"
                     border="1px solid"
                     borderColor={colorMode === "light" ? "black" : "white"}
                     color={colorMode === "light" ? "black" : "white"}
-                    backgroundColor={colorMode === "light" ? "#eee" : "black"}
+                    bg={colorMode === "light" ? "#eee" : "black"}
                     aria-label="いいね"
-                    mb={3}
+                    mb={1}
                     onClick={() => {
-                      showToast(
-                        getMessage({
-                          ja: "用意していません",
-                          us: "Not provided.",
-                          cn: "不详",
-                        }),
-                        getMessage({
-                          ja: "そのうち追加するかもです",
-                          us: "I may add it soon.",
-                          cn: "我可能很快就会加入",
-                        }),
-                        "success"
-                      );
                       setShowConfetti(true);
                       setTimeout(() => setShowConfetti(false), 8000);
                     }}
                   />
-                  <IconButton
-                    icon={<CustomIcon2 viewBox="0 0 24 24" fill="red" />}
-                    minWidth="33px"
-                    width="33px !important"
-                    height="33px !important"
-                    borderRadius="50%"
-                    border="1px solid"
-                    borderColor={colorMode === "light" ? "black" : "white"}
-                    color={colorMode === "light" ? "black" : "white"}
-                    backgroundColor={colorMode === "light" ? "#eee" : "black"}
-                    aria-label="既読数"
-                    cursor="default"
-                  />
-                  <Text textAlign="center" cursor="default">
-                    {readByCount}
-                  </Text>
+                  <ReadByIcon content={<ReadByList />} isRead={isReadByUser} />
+                  <Text textAlign="center">{readByCount}</Text>
                 </VStack>
                 <VStack
                   align="start"

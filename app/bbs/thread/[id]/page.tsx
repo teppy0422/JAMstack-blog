@@ -341,7 +341,7 @@ function ThreadContent(): JSX.Element {
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
 
   //既読チェック
-  const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0"; // 任意のユーザーID
+  const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0";
   useEffect(() => {
     const handleScroll = () => {
       setIsAtBottom(
@@ -374,6 +374,7 @@ function ThreadContent(): JSX.Element {
     const YaeStartDate = new Date(today.getFullYear(), 3, 15); // 4月15日
     const YaeEndDate = new Date(today.getFullYear(), 3, 22); // 4月22日
     setIsYaeActive(today >= YaeStartDate && today <= YaeEndDate);
+
     const FireflyStartDate = new Date(today.getFullYear(), 5, 1); // 6月1日
     const FireflyEndDate = new Date(today.getFullYear(), 5, 12); // 6月12日
     setIsFirefly(today >= FireflyStartDate && today <= FireflyEndDate);
@@ -696,7 +697,6 @@ function ThreadContent(): JSX.Element {
           }
         )
         .subscribe();
-
       // クリーンアップ
       return () => {
         supabase.removeChannel(channel);
@@ -1153,7 +1153,7 @@ function ThreadContent(): JSX.Element {
 
           // ファイルの拡張子を取得
           const fileExtension = fileUrl.split(".").pop()?.toLowerCase();
-          const isImage = ["jpg", "jpeg", "png", "gif", "webp"].includes(
+          const isImage = ["jpg", "jpeg", "png", "gif", "webp", "bmp"].includes(
             fileExtension || ""
           );
 
@@ -1645,6 +1645,12 @@ function ThreadContent(): JSX.Element {
                   <Icon size="28px" as={FaArrowDown} />
                 </Box>
               )}
+
+              {isSomeiyoshinoActive && <seasonalAnimations.someiyoshino />}
+              {isHachisukaActive && <seasonalAnimations.hachisuka />}
+              {isYaeActive && <seasonalAnimations.yae />}
+              {isFirefly && <seasonalAnimations.firefly />}
+
               <Box
                 id="question"
                 className="no-print-page"
@@ -2436,10 +2442,6 @@ function ThreadContent(): JSX.Element {
             </Modal>
             <SidebarBBS isMain={false} />
             <Content>
-              {isSomeiyoshinoActive && <seasonalAnimations.someiyoshino />}
-              {isHachisukaActive && <seasonalAnimations.hachisuka />}
-              {isYaeActive && <seasonalAnimations.yae />}
-              {isFirefly && <seasonalAnimations.firefly />}
               <Link
                 href="#"
                 onClick={(e) => {

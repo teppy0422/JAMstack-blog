@@ -35,7 +35,7 @@ const MotionBox = motion(Box);
 
 const apps = [
   {
-    title: "タイピング練習",
+    title: "タイピング",
     href: "/typing",
     description:
       "速度に応じて雪が降るエフェクト付きのタイピング練習。ランキング機能あり。",
@@ -64,7 +64,7 @@ const apps = [
     title: "居酒屋注文システム(注文)",
     href: "/order",
     description: "栄養バランス表示。リアルタイム注文。",
-    src: "/images/illust/obj/orderLogo.webp",
+    src: "/images/ico/order-cover.png",
     rate: 4,
     limitTag: "使用",
   },
@@ -72,7 +72,7 @@ const apps = [
     title: "居酒屋注文システム(受注)",
     href: "/orderAdmin",
     description: "食材ToDoリストで買い物。レシピ登録/編集。栄養バランス表示。",
-    src: "/images/illust/obj/orderLogo.webp",
+    src: "/images/ico/orderAdmin-cover.png",
     rate: 5,
     limitTag: "使用",
   },
@@ -88,7 +88,7 @@ export default function AppList() {
     isLoading,
   } = useUserContext();
   const userData = currentUserId ? getUserById(currentUserId) : null;
-  const router = useRouter(); // ← これが必要！
+  const router = useRouter();
   const toast = useToast();
   const { colorMode } = useColorMode();
   const [direction, setDirection] = useState<"right" | "left">("right");
@@ -108,10 +108,15 @@ export default function AppList() {
       <Sidebar isDrawer={false} />
       <Content>
         <Box p={4}>
-          <Heading mb={8} fontWeight="600" textAlign="center">
+          <Heading
+            mb={8}
+            fontWeight="600"
+            textAlign="center"
+            fontFamily="Noto Sans JP"
+          >
             WEBアプリ一覧
           </Heading>
-          <SimpleGrid columns={{ base: 2, sm: 2, md: 3, lg: 4 }} spacing={2}>
+          <SimpleGrid columns={{ base: 2, sm: 3, md: 3, lg: 4 }} spacing={2}>
             {apps.map((app) => (
               <Link
                 as="div"

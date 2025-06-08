@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 
 type MessageDisplayProps = {
@@ -6,7 +5,6 @@ type MessageDisplayProps = {
   us?: string;
   cn?: string;
 };
-
 const getMessage = ({ ja, us, cn }: MessageDisplayProps): string => {
   const { language } = useLanguage();
 

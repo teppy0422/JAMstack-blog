@@ -39,7 +39,6 @@ import { keyframes } from "@emotion/react";
 import { CustomBadge } from "./components/customBadge";
 import Sidebar from "@/components/sidebar";
 import { useUserContext } from "@/contexts/useUserContext";
-import { useReadCount } from "@/hooks/useReadCount";
 import { useLanguage } from "../../src/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import { createIcon } from "@chakra-ui/react";
@@ -62,7 +61,6 @@ const CustomIcon = createIcon({
 
 const SkillBlogTopPage: React.FC = () => {
   const { currentUserId } = useUserContext();
-  const { readByCount } = useReadCount(currentUserId);
   const { language } = useLanguage();
   const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -132,13 +130,6 @@ const SkillBlogTopPage: React.FC = () => {
             <Text>@kataoka</Text>
             <Text>in</Text>
             <Text>{getMessage({ ja: "開発" })}</Text>
-            <Spacer />
-            <Flex justifyContent="flex-end">
-              <Text>
-                <Icon as={CustomIcon} mr={0} />
-                {readByCount}
-              </Text>
-            </Flex>
           </HStack>
 
           <Heading fontSize="3xl" mb={1} mt={5}>

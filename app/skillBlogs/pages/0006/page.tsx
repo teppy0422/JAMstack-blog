@@ -41,7 +41,6 @@ import { CustomBadge } from "@/components/ui/CustomBadge";
 import UnderlinedTextWithDrawer from "../../components/UnderlinedTextWithDrawer";
 import IframeDisplay from "../../components/IframeDisplay";
 import { useUserContext } from "@/contexts/useUserContext";
-import { useReadCount } from "@/hooks/useReadCount";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
@@ -63,7 +62,6 @@ const CustomIcon = createIcon({
 });
 const BlogPage: React.FC = () => {
   const { currentUserId } = useUserContext();
-  const { readByCount } = useReadCount(currentUserId);
   const { language, setLanguage } = useLanguage();
   //右リストの読み込みをlanguage取得後にする
   const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
@@ -112,13 +110,6 @@ const BlogPage: React.FC = () => {
                 ja: "開発",
               })}
             </Text>
-            <Spacer />
-            <Flex justifyContent="flex-end">
-              <Text>
-                <Icon as={CustomIcon} mr={0} />
-                {readByCount}
-              </Text>
-            </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
             {getMessage({

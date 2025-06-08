@@ -44,24 +44,10 @@ import BusinessCard from "../../components/BusinessCard";
 import ICT from "../../components/ICT/page";
 import styles from "@/styles/home.module.scss";
 import { useUserContext } from "@/contexts/useUserContext";
-import { useReadCount } from "@/hooks/useReadCount";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 
-const customTheme = extendTheme({
-  fonts: {
-    heading: "'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
-  },
-  fontWeights: {
-    normal: 200,
-    medium: 300,
-    bold: 400,
-    light: 300,
-    extraLight: 100,
-  },
-});
 //テキストジャンプアニメーション
 const jumpAnimation = keyframes`
   0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
@@ -93,7 +79,6 @@ const CustomIcon = createIcon({
 });
 const BlogPage: React.FC = () => {
   const { currentUserId } = useUserContext();
-  const { readByCount } = useReadCount(currentUserId);
   const { language, setLanguage } = useLanguage();
 
   //右リストの読み込みをlanguage取得後にする
@@ -144,13 +129,6 @@ const BlogPage: React.FC = () => {
                 ja: "開発",
               })}
             </Text>
-            <Spacer />
-            <Flex justifyContent="flex-end">
-              <Text>
-                <Icon as={CustomIcon} mr={0} />
-                {readByCount}
-              </Text>
-            </Flex>
           </HStack>
           <Heading fontSize="3xl" mb={1}>
             {getMessage({

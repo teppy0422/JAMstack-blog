@@ -43,7 +43,15 @@ export default function FireflyPage() {
 
   // モーダルの内容を定義
   const modalBody = (
-    <Box color="custom.theme.light.100">
+    <Box
+      color="custom.theme.light.100"
+      textShadow="
+        -1px -1px 2px black,
+        1px -1px 2px black,
+        -1px  1px 2px black,
+        1px  1px 2px black
+      "
+    >
       <Box
         display="inline-block"
         fontSize="20px"

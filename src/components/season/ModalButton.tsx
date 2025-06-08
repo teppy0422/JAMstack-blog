@@ -43,8 +43,8 @@ const ModalButton: React.FC<CustomModalProps> = ({
           lg: "block",
           xl: "block",
         }}
-        top="4px"
-        right="4px"
+        top="-27px"
+        left="8px"
       >
         <Box
           onClick={onOpen}
@@ -64,6 +64,18 @@ const ModalButton: React.FC<CustomModalProps> = ({
           }
           px="4px"
           py="2px"
+          _hover={{
+            bg:
+              colorMode === "light"
+                ? "custom.theme.light.850"
+                : "custom.theme.dark.100",
+            color: colorMode === "light" ? "white" : "black",
+            borderColor:
+              colorMode === "light"
+                ? "custom.theme.light.850"
+                : "custom.theme.dark.100",
+            transition: "all 0.2s ease-in-out",
+          }}
         >
           {title}
         </Box>
@@ -72,7 +84,7 @@ const ModalButton: React.FC<CustomModalProps> = ({
         <ModalOverlay />
         <ModalContent
           // filter="invert(1)" // 白黒を入れ替えるフィルターを適用
-          filter="grayscale(100%)" // グレースケールフィルターを適用
+          filter="grayscale(80%)" // グレースケールフィルターを適用
           bg={
             colorMode === "light"
               ? "custom.theme.dark.400"
