@@ -1,5 +1,39 @@
 import React from "react";
 
+export const LuHeartIcon = ({ size, stroke, fill }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 432.73 417.3"
+    width={size}
+    height={size}
+  >
+    <path
+      d="M215.72,74.27C186.88,21.77,140.61-7.55,88.44,10.18,24.13,32.03-10.04,104.46,10.16,179.93c24.03,89.77,102.31,158.76,167.3,206.44,8.46,6.2,27.92,22.17,36.05,25.32,1.21.47,2.32,1.39,3.68,1.22,78.12-56.86,181.15-125.46,206.88-238.22,31.22-136.81-115.42-228.42-191.43-127.49-6.52,8.65-10.13,19.43-16.92,27.07Z"
+      fill={fill}
+      stroke={stroke}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="18"
+    />
+  </svg>
+);
+export const LuBookCheckIcon = ({ size, stroke }) => (
+  <svg
+    stroke={stroke}
+    fill="none"
+    stroke-width="1.5"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path>
+    <path d="m9 9.5 2 2 4-4"></path>
+  </svg>
+);
+
 const SjpIcon = ({ size, title, color }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

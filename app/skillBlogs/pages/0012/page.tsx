@@ -512,7 +512,6 @@ const BlogPage: React.FC = () => {
             </ListItem>
           </List>
         </SectionBox>
-        <Box h="90vh" />
       </Frame>
     </>
   );

@@ -270,7 +270,10 @@ export default function Header() {
           },
         }}
       />
-      <div className="no-print-page">
+      <div
+        className="no-print-page"
+        style={{ zIndex: "2000", position: "relative" }}
+      >
         <header id="navTop" style={{ maxWidth: "100vw", overflowX: "hidden" }}>
           <VStack>
             <Flex className={`${myClass} ${styles.headerNav}`} maxWidth="100vw">

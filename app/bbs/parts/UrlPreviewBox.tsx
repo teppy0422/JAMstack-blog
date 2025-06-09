@@ -89,68 +89,75 @@ const UrlPreviewBox: React.FC<Props> = ({
       });
   }, [url, setUrlTitles]);
 
+  const OpenCloseIcon = ({ isRight }: { isRight: boolean }) => {
+    return (
+      <Tooltip
+        label={isExpanded ? "折りたたむ" : "展開する"}
+        placement="top"
+        hasArrow
+      >
+        <Box
+          position="absolute"
+          right={!isRight ? "-22px" : undefined}
+          left={isRight ? "-22px" : undefined}
+          top="6px"
+          cursor="pointer"
+          onClick={onToggle}
+        >
+          <Icon
+            as={LuPanelRightOpen}
+            boxSize="18px"
+            transform={
+              isExpanded
+                ? isRight
+                  ? "rotate(180deg)"
+                  : "rotate(0deg)"
+                : isRight
+                ? "rotate(0deg)"
+                : "rotate(180deg)"
+            }
+            transition="transform 0.3s ease"
+            _hover={{
+              transform: isExpanded
+                ? isRight
+                  ? "rotate(180deg) scale(1.2)"
+                  : "rotate(0deg) scale(1.2)"
+                : isRight
+                ? "rotate(0deg) scale(1.2)"
+                : "rotate(180deg) scale(1.2)",
+            }}
+          />
+        </Box>
+      </Tooltip>
+    );
+  };
+
+  const isRight = postUserId === currentUserId;
   return (
-    <Box>
+    <Box zIndex="1000" position="relative">
       <Box
+        position="relative"
         width={isExpanded ? "94%" : "320px"}
         height={isExpanded ? "70vh" : "110px"}
         mt="8px"
         transition="all 0.3s ease"
-        marginLeft={postUserId === currentUserId ? "auto" : "44px"}
-        marginRight={postUserId === currentUserId ? "12px" : "auto"}
+        marginLeft={isRight ? "auto" : "44px"}
+        marginRight={isRight ? "12px" : "auto"}
         style={{
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          position: "relative",
         }}
         borderRadius="8px"
         border="1px solid"
         borderColor={colorMode === "light" ? "transparent" : "gray.600"}
       >
-        <Tooltip
-          label={isExpanded ? "折りたたむ" : "展開する"}
-          placement="top"
-          hasArrow
-        >
-          <Box display="inline-block" position="absolute">
-            <Icon
-              position="absolute"
-              as={LuPanelRightOpen}
-              cursor="pointer"
-              boxSize="18px"
-              right={postUserId === currentUserId ? "" : "-22px"}
-              left={postUserId === currentUserId ? "-22px" : ""}
-              top="6px"
-              transform={
-                isExpanded
-                  ? postUserId === currentUserId
-                    ? "rotate(180deg)"
-                    : "rotate(0deg)"
-                  : postUserId === currentUserId
-                  ? "rotate(0deg)"
-                  : "rotate(180deg)"
-              }
-              transition="transform 0.3s ease"
-              onClick={onToggle}
-              _hover={{
-                transform: isExpanded
-                  ? postUserId === currentUserId
-                    ? "rotate(180deg) scale(1.2)"
-                    : "rotate(0deg) scale(1.2)"
-                  : postUserId === currentUserId
-                  ? "rotate(0deg) scale(1.2)"
-                  : "rotate(180deg) scale(1.2)",
-              }}
-            />
+        {!isRight && (
+          <Box position="relative" height="0">
+            <OpenCloseIcon isRight={false} />
           </Box>
-        </Tooltip>
-        <Box
-          position="relative"
-          height="100%"
-          borderRadius="8px"
-          overflow="hidden"
-        >
+        )}
+        <Box height="100%" borderRadius="8px" overflow="hidden">
           <Flex
-            bg={postUserId === currentUserId ? "#DCF8C6" : "#FFFFFF"}
+            bg={isRight ? "#DCF8C6" : "#FFFFFF"}
             px={2}
             alignItems="center"
             borderBottom="1px solid"
@@ -187,12 +194,12 @@ const UrlPreviewBox: React.FC<Props> = ({
               src={url}
               data-original-url={url}
               style={{
-                position: "relative",
                 top: 0,
                 left: 0,
                 width: "100%",
                 height: "calc(100% - 20px)",
                 border: "none",
+                transition: "transform 0.3s ease-in-out",
               }}
               sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
               loading="lazy"
@@ -296,6 +303,7 @@ const UrlPreviewBox: React.FC<Props> = ({
             </Box>
           )}
         </Box>
+        {isRight && <OpenCloseIcon isRight={true} />}
       </Box>
     </Box>
   );

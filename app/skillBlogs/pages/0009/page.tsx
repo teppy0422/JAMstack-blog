@@ -693,7 +693,6 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Box
-            height="80vh"
             style={{
               backgroundImage:
                 "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
@@ -702,6 +701,7 @@ const BlogPage: React.FC = () => {
               color: "#fff",
               position: "relative",
             }}
+            pb={5}
           >
             <Text
               style={{
@@ -761,14 +761,13 @@ const BlogPage: React.FC = () => {
               alt="Hippo"
               style={{
                 position: "absolute",
-                bottom: "10px",
-                right: "10px",
+                bottom: "-10px",
+                right: "-10px",
                 width: "50px",
               }}
             />
           </Box>
         </SectionBox>
-        <Box h="31vh" />
       </Frame>
     </>
   );

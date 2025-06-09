@@ -1738,14 +1738,13 @@ const BlogPage: React.FC = () => {
               alt="Hippo"
               style={{
                 position: "absolute",
-                top: "73%",
-                right: "10px",
+                bottom: "-10px",
+                right: "-10px",
                 width: "50px",
               }}
             />
           </Box>
         </SectionBox>
-        <Box h="5vh" />
       </Frame>
     </>
   );

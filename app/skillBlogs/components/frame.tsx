@@ -38,6 +38,7 @@ import { useLanguage } from "../../../src/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import { get, set } from "lodash";
 import ReadByIcon from "./ReadByIcon";
+import { LuHeartIcon } from "@/components/icons";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
@@ -45,7 +46,7 @@ const CustomIcon = createIcon({
   path: (
     <path
       d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"
-      fill="gray"
+      fill="none"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
@@ -77,11 +78,15 @@ const Frame: React.FC<{
   const { currentUserId, currentUserName, getUserById } = useUserContext();
   const { readByCount, skillBlogsData, refresh, insertOrUpdate } =
     useReadCount(currentUserId);
+  // 既読ユーザーボタン
   const [isReadByUser, setIsReadByUser] = useState<boolean>(false);
   const [matchedBlog, setMatchedBlog] = useState<any>(null);
   const [currentPath, setCurrentPath] = useState("");
   const [pathUrl, setPathUrl] = useState<string>("");
   const [isBottom, setIsBottom] = useState<boolean>(false);
+  const [isReadByOpen, setIsReadByOpen] = useState(false);
+  // いいねボタン
+  const [isLikeHovered, setIsLikeHovered] = useState(false);
 
   useEffect(() => {
     setCurrentPath(window.location.pathname);
@@ -160,9 +165,9 @@ const Frame: React.FC<{
     console.log(isReadByUser);
     console.log(currentUserId);
     console.log(pathUrl);
-
     if (!isReadByUser && currentUserId) {
       (async () => {
+        setIsReadByOpen(true); //ReadByIconをopen
         await insertOrUpdate(pathUrl, currentUserId);
         refresh();
       })();
@@ -224,7 +229,12 @@ const Frame: React.FC<{
           my={0.5}
         >
           {text}
-          {!isRead && <CustomIcon />}
+          {!isRead && (
+            <CustomIcon
+              color={colorMode === "light" ? "red.500" : "orange.500"}
+              ml={0.5}
+            />
+          )}
         </Link>
       </AccordionPanel>
     );
@@ -697,7 +707,20 @@ const Frame: React.FC<{
                   bg="transparent"
                 >
                   <IconButton
-                    icon={<CiHeart size={24} />}
+                    _hover={{ color: "pink.100" }} // ホバー時の色
+                    icon={
+                      <LuHeartIcon
+                        size={20}
+                        stroke={colorMode === "light" ? "black" : "white"}
+                        fill={
+                          isLikeHovered
+                            ? colorMode === "light"
+                              ? "#F56565"
+                              : "orange"
+                            : "none"
+                        }
+                      />
+                    }
                     ref={buttonRef}
                     minWidth="33px"
                     width="33px !important"
@@ -706,16 +729,22 @@ const Frame: React.FC<{
                     borderRadius="50%"
                     border="1px solid"
                     borderColor={colorMode === "light" ? "black" : "white"}
-                    color={colorMode === "light" ? "black" : "white"}
-                    bg={colorMode === "light" ? "#eee" : "black"}
+                    color={colorMode === "light" ? "none" : "white"}
                     aria-label="いいね"
                     mb={1}
                     onClick={() => {
                       setShowConfetti(true);
                       setTimeout(() => setShowConfetti(false), 8000);
                     }}
+                    onMouseEnter={() => setIsLikeHovered(true)}
+                    onMouseLeave={() => setIsLikeHovered(false)}
                   />
-                  <ReadByIcon content={<ReadByList />} isRead={isReadByUser} />
+                  <ReadByIcon
+                    content={<ReadByList />}
+                    isRead={isReadByUser}
+                    open={isReadByOpen}
+                    onToggleOpen={() => setIsReadByOpen((prev) => !prev)}
+                  />
                   <Text textAlign="center">{readByCount}</Text>
                 </VStack>
                 <VStack

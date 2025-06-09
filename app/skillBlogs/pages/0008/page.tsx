@@ -1857,7 +1857,7 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Box
-            height="80vh"
+            pb={20}
             style={{
               backgroundImage:
                 "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
@@ -1895,14 +1895,13 @@ const BlogPage: React.FC = () => {
               alt="Hippo"
               style={{
                 position: "absolute",
-                bottom: "10px",
-                right: "10px",
+                bottom: "-10px",
+                right: "-10px",
                 width: "50px",
               }}
             />
           </Box>
         </SectionBox>
-        <Box h="3vh" />
       </Frame>
     </>
   );

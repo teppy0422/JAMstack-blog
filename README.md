@@ -115,9 +115,24 @@ Accordion
 npx @chakra-ui/cli snippet add tooltip
 
 skillBlogs/0010/にサムネとかディスクリプションを設定する構造を追加
+skillBlosg の readBy の UI とか変更
+Open ReadyByIcon when setIsBottom is called in called in skillBlogs.
+change design heart icon in skillBlogs.
+
+#### 変更中
+
+Review decision to scroll to the bottom in /bbs/.
+Fix position of open/close icon in bbs preview.
+
+#### task
+
+if is is useState, rendering will occur each time, so change it to useRef.
+
+Click on a firefly to view the description page.
 
 #### 要確認
 
+Review the height at the bottom of skillBlogs.
 order/のサムネ変更が反映されないから様子見
 
 #### 予定

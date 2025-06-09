@@ -195,7 +195,7 @@ const BlogPage: React.FC = () => {
               color: "#fff",
               position: "relative",
             }}
-            pb="5vh"
+            pb="3vh"
           >
             <Text
               style={{
@@ -316,14 +316,13 @@ const BlogPage: React.FC = () => {
               alt="Hippo"
               style={{
                 position: "absolute",
-                bottom: "10px",
+                bottom: "-18px",
                 right: "10px",
                 width: "50px",
               }}
             />
           </Box>
         </SectionBox>
-        <Box h="10vh" />
       </Frame>
     </>
   );

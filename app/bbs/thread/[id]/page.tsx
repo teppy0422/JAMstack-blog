@@ -380,8 +380,12 @@ function ThreadContent(): JSX.Element {
     setIsFirefly(today >= FireflyStartDate && today <= FireflyEndDate);
   }, []);
 
-  // isAtBottomがtrueになった時に未読の投稿を既読にする
+  // isAtBottomがtrueになった時に未読の投稿を全て既読にする
   useEffect(() => {
+    if (!isAtBottom) {
+      return;
+    }
+    console.log("isAtBottom is true");
     if (isAtBottom && unreadPostIds.length > 0 && currentUserId) {
       const markUnreadPostsAsRead = async () => {
         try {
@@ -585,18 +589,6 @@ function ThreadContent(): JSX.Element {
       textarea.focus();
     }
   };
-  //スクロール位置がボトムにあるかを管理する状態
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsAtBottom(
-        window.scrollY + window.innerHeight >= document.body.scrollHeight - 50
-      );
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -938,17 +930,6 @@ function ThreadContent(): JSX.Element {
       setInitialLoadComplete(true);
     }
   };
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     if (window.scrollY === 0 && hasMore && !loading) {
-  //       fetchPosts(posts.length); // 現在の投稿数をオフセットとして使用
-  //     }
-  //   };
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, [posts, hasMore, loading]);
   // 投稿する
   const createPost = async (inputValue: string) => {
     let fileUrl: string = "";
@@ -1404,6 +1385,7 @@ function ThreadContent(): JSX.Element {
       return (
         <Box
           display="flex"
+          zIndex="1000"
           flexDirection="column"
           fontSize="13px"
           color="gray.500"
@@ -1645,11 +1627,6 @@ function ThreadContent(): JSX.Element {
                   <Icon size="28px" as={FaArrowDown} />
                 </Box>
               )}
-
-              {isSomeiyoshinoActive && <seasonalAnimations.someiyoshino />}
-              {isHachisukaActive && <seasonalAnimations.hachisuka />}
-              {isYaeActive && <seasonalAnimations.yae />}
-              {isFirefly && <seasonalAnimations.firefly />}
 
               <Box
                 id="question"
@@ -2442,6 +2419,10 @@ function ThreadContent(): JSX.Element {
             </Modal>
             <SidebarBBS isMain={false} />
             <Content>
+              {isSomeiyoshinoActive && <seasonalAnimations.someiyoshino />}
+              {isHachisukaActive && <seasonalAnimations.hachisuka />}
+              {isYaeActive && <seasonalAnimations.yae />}
+              {isFirefly && <seasonalAnimations.firefly />}
               <Link
                 href="#"
                 onClick={(e) => {
@@ -2453,7 +2434,7 @@ function ThreadContent(): JSX.Element {
               >
                 <Box
                   position="fixed"
-                  zIndex="1000"
+                  zIndex="2000"
                   display={{
                     base: "none",
                     sm: "block",
@@ -2884,6 +2865,7 @@ function ThreadContent(): JSX.Element {
                               >
                                 {post.reply_post_id && ( //ポストにリプライを含む場合
                                   <CardBody
+                                    zIndex="1000"
                                     px="0"
                                     py="0"
                                     cursor="pointer"
@@ -3075,7 +3057,7 @@ function ThreadContent(): JSX.Element {
                                     <Divider borderColor="gray.400" />
                                   </CardBody>
                                 )}
-                                <CardBody px="8px" py="5px">
+                                <CardBody px="8px" py="5px" zIndex="1000">
                                   <Box
                                     fontFamily="Noto Sans JP"
                                     fontWeight="200"
@@ -3586,7 +3568,7 @@ function ThreadContent(): JSX.Element {
                     })
                 )}
               </Stack>
-              <Box mb="60vh" />
+              <Box mb="10vh" />
             </Content>
             <StatusDisplay />
           </div>

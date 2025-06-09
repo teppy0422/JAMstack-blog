@@ -38,7 +38,7 @@ const VBATrustSettingsModal: React.FC = () => {
       <ImageWithHighlight
         src="/images/howTo/vba-trust-error.webp"
         label={
-          "*" +
+          "※" +
           getMessage({
             ja: "[設定してない場合のエラー画面]",
             us: "[Error screen if not set]",

@@ -514,6 +514,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
       <Box
         display={isMain ? "block" : { base: "none", xl: "block" }}
         position={isMain ? "static" : "fixed"}
+        zIndex="1000"
         w={maxWidth}
         maxWidth={maxWidth}
         h={isMain ? "" : "90vh"}

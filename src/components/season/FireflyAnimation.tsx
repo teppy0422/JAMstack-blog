@@ -40,6 +40,7 @@ export default function FireflyPage() {
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
   const { colorMode } = useColorMode();
+  const firefliesRef = useRef<Firefly[]>([]);
 
   // モーダルの内容を定義
   const modalBody = (
@@ -112,15 +113,15 @@ export default function FireflyPage() {
     canvas.width = width;
     canvas.height = height;
 
-    let fireflies: Firefly[] = [];
+    firefliesRef.current = [];
     for (let i = 0; i < FIREFLY_COUNT; i++) {
-      fireflies.push(createFirefly(width, height));
+      firefliesRef.current.push(createFirefly(width, height));
     }
 
     function animate() {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
-      for (let f of fireflies) {
+      for (let f of firefliesRef.current) {
         // 軌跡をランダムに
         f.angle += random(-0.1, 0.1);
         f.x += Math.cos(f.angle) * f.speed;
@@ -153,6 +154,25 @@ export default function FireflyPage() {
     }
     animate();
 
+    const handleClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      console.log("click-firefly");
+
+      const radius = 10; // クリック判定半径
+
+      for (let f of firefliesRef.current) {
+        const dx = f.x - mouseX;
+        const dy = f.y - mouseY;
+        if (dx * dx + dy * dy < radius * radius) {
+          setModalOpen(true);
+          break;
+        }
+      }
+    };
+    canvas.addEventListener("click", handleClick);
+
     // リサイズ対応
     const handleResize = () => {
       width = window.innerWidth;
@@ -161,7 +181,10 @@ export default function FireflyPage() {
       canvas.height = height;
     };
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      canvas.removeEventListener("click", handleClick);
+    };
   }, []);
 
   return (
@@ -175,19 +198,54 @@ export default function FireflyPage() {
           position: "fixed",
           bottom: 0,
           left: 0,
-          zIndex: 0,
-          pointerEvents: "none", // ← これを追加
+          zIndex: 1,
+          pointerEvents: "none",
         }}
       />
-      <ModalButton
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onOpen={openModal}
-        colorMode={colorMode}
-        title="源氏蛍"
-        bgImage="url('/images/common/firefly.webp')"
-        body={modalBody}
+      <Box
+        position="fixed"
+        width="100vw"
+        height="100vh"
+        bottom={0}
+        left={0}
+        zIndex="2"
+        // pointerEvents="none"
+        onClick={(e) => {
+          console.log("clicked-box");
+          const canvas = canvasRef.current;
+          if (!canvas) return;
+          const rect = canvas.getBoundingClientRect();
+
+          // キャンバスの実ピクセルに対するCSSサイズの比率を考慮
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+
+          const mouseX = (e.clientX - rect.left) * scaleX;
+          const mouseY = (e.clientY - rect.top) * scaleY;
+
+          const radius = 16;
+          for (let f of firefliesRef.current) {
+            const dx = f.x - mouseX;
+            const dy = f.y - mouseY;
+            if (dx * dx + dy * dy < radius * radius) {
+              console.log("clicked-firefly");
+              setModalOpen(true);
+              break;
+            }
+          }
+        }}
       />
+      <Box opacity="0">
+        <ModalButton
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onOpen={openModal}
+          colorMode={colorMode}
+          title="源氏蛍"
+          bgImage="url('/images/common/firefly.webp')"
+          body={modalBody}
+        />
+      </Box>
     </>
   );
 }

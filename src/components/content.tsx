@@ -92,9 +92,9 @@ export default function Content({
             minH="10vh"
           >
             <Center
-              py="14px"
-              color={colorMode === "light" ? "black" : "white"}
-              fontSize="14px"
+              py="12px"
+              color={colorMode === "light" ? "gray.500" : "white"}
+              fontSize="12px"
               fontFamily={getMessage({
                 ja: "Noto Sans JP",
                 us: "Noto Sans JP",
@@ -118,7 +118,11 @@ export default function Content({
                 })}
               </NextLink>
             </Center>
-            <Center mb="2px" color={colorMode === "light" ? "black" : "white"}>
+            <Center
+              mb="2px"
+              fontSize="12px"
+              color={colorMode === "light" ? "gray.500" : "white"}
+            >
               ©︎ 2022-2025 Teppei Kataoka. All rights Reserved.
             </Center>
           </Box>

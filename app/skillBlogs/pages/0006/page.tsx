@@ -1103,7 +1103,7 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Box
-            height="80vh"
+            pb={10}
             style={{
               backgroundImage:
                 "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
@@ -1130,27 +1130,15 @@ const BlogPage: React.FC = () => {
                 cn: "新功能会根据现场反馈意见进行协商添加。如果您有任何想法或要求，请咨询菜单联系人。如果您尚未创建账户，请通过开发聊天给我们留言。",
               })}
             </Text>
-            <Box
-              as="span"
-              style={{
-                position: "absolute",
-                bottom: "-280px",
-                right: "-130px",
-                width: "50px",
-                margin: "200px",
-              }}
-            >
-              <AnimationImage
-                src="/images/hippo.gif"
-                width="50px"
-                left="80px"
-                bottom="73px"
-                animation="nyoki_rabit 5s forwards, rabitJump 10s infinite 7s"
-              />
-            </Box>
+            <AnimationImage
+              src="/images/hippo.gif"
+              width="50px"
+              right="-10px"
+              bottom="-18px"
+              animation="nyoki_rabit 5s forwards, rabitJump 10s infinite 7s"
+            />
           </Box>
         </SectionBox>
-        <Box h="3vh" />
       </Frame>
     </>
   );
