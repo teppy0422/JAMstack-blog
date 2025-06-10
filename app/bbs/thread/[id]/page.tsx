@@ -69,6 +69,7 @@ import {
   Center,
   Link,
   AspectRatio,
+  HStack,
 } from "@chakra-ui/react";
 import { theme } from "@/theme/theme";
 
@@ -153,6 +154,7 @@ function ThreadContent(): JSX.Element {
   const [currentUrl, setCurrentUrl] = useState<string | null>(null);
 
   const [threadBlogUrl, setThreadBlogUrl] = useState("");
+
   useEffect(() => {
     if (threadBlogUrl && threadBlogUrl !== currentUrl) {
       const fetchContent = async () => {
@@ -339,6 +341,39 @@ function ThreadContent(): JSX.Element {
   } = useUserContext();
 
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
+
+  // 日付の位置固定
+  const [currentDate, setCurrentDate] = useState("");
+  const dateRefs = useRef<{ date: string; ref: HTMLDivElement | null }[]>([]);
+  const [isSticky, setIsSticky] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      const topOffset = 56;
+      let latestDate = "";
+      for (const item of dateRefs.current.filter(
+        (i): i is { date: string; ref: HTMLDivElement } => !!i && !!i.ref
+      )) {
+        const rect = item.ref.getBoundingClientRect();
+        if (rect.top < topOffset) {
+          latestDate = item.date;
+        }
+      }
+      // 最初のrefより上にいる場合は currentDate を空にする
+      const firstValid = dateRefs.current.find(
+        (i): i is { date: string; ref: HTMLDivElement } => !!i && !!i.ref
+      );
+      if (firstValid) {
+        const firstTop = firstValid.ref.getBoundingClientRect().top;
+        if (firstTop > topOffset) {
+          latestDate = "";
+        }
+      }
+      setCurrentDate(latestDate);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   //既読チェック
   const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0";
@@ -1312,12 +1347,7 @@ function ThreadContent(): JSX.Element {
       return format(date, "H:mm", { locale });
     }
     const dayOfWeek = format(date, "E", { locale });
-    const translatedDayOfWeek = getMessage({
-      ja: dayOfWeek,
-      us: dayOfWeek, // 英語の曜日をそのまま使用
-      cn: dayOfWeek, // 中国語の曜日をそのまま使用
-    });
-
+    const translatedDayOfWeek = dayOfWeek;
     if (prevDate) {
       const isSameYear = date.getFullYear() === prevDate.getFullYear();
       const isSameMonth = isSameYear && date.getMonth() === prevDate.getMonth();
@@ -2423,18 +2453,21 @@ function ThreadContent(): JSX.Element {
               {isHachisukaActive && <seasonalAnimations.hachisuka />}
               {isYaeActive && <seasonalAnimations.yae />}
               {isFirefly && <seasonalAnimations.firefly />}
-              <Link
+              <Box
+                as="a"
                 href="#"
+                position="fixed"
+                top="46px"
+                zIndex="2000"
                 onClick={(e) => {
                   if (threadBlogUrl) {
                     e.preventDefault();
                     handleOpen("blogModal");
                   }
                 }}
+                cursor="pointer"
               >
                 <Box
-                  position="fixed"
-                  zIndex="2000"
                   display={{
                     base: "none",
                     sm: "block",
@@ -2442,16 +2475,13 @@ function ThreadContent(): JSX.Element {
                     lg: "block",
                     xl: "block",
                   }}
-                  top="46px"
-                  mb={0}
-                  ml={0}
+                  m={0}
                   pt={0}
                   border="1px solid #bfb0a4"
                   borderRadius="md"
                   backdropFilter={
-                    colorMode === "light" ? "blur(20px)" : "blur(100px)"
+                    colorMode === "light" ? "blur(10px)" : "blur(10px)"
                   }
-                  cursor={threadBlogUrl ? "pointer" : "default"}
                   _hover={{
                     bg: threadBlogUrl
                       ? colorMode === "light"
@@ -2468,7 +2498,17 @@ function ThreadContent(): JSX.Element {
                       : "none"
                   }
                 >
-                  <Box borderRadius="md" pb={1} px={1}>
+                  <Box
+                    borderRadius="md"
+                    py={0}
+                    px={1}
+                    fontWeight="600"
+                    textShadow={
+                      colorMode === "light"
+                        ? "-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white"
+                        : "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black"
+                    }
+                  >
                     <Box as="span" fontSize={11} fontWeight={400} mr={1}>
                       {getMessage({
                         ja: threadCompany,
@@ -2523,7 +2563,24 @@ function ThreadContent(): JSX.Element {
                     </Box>
                   </Box>
                 </Box>
-              </Link>
+              </Box>
+              <Box
+                position="sticky"
+                zIndex="10000"
+                top="40px"
+                fontSize="14px"
+                textAlign="center"
+              >
+                <Text
+                  display="inline"
+                  fontSize="14px"
+                  bg="custom.theme.light.500"
+                  px="1px"
+                  transition="all 0.3s ease-in-out"
+                >
+                  {currentDate}
+                </Text>
+              </Box>
               <Box height="4.5em" />
               <Stack
                 spacing="2"
@@ -2658,29 +2715,43 @@ function ThreadContent(): JSX.Element {
                         <>
                           <div className="post">
                             {isNewDay && ( //日付の区切り線
-                              <Flex
-                                alignItems="center"
-                                justifyContent="center"
-                                width="100%"
-                                mb="1.5"
-                              >
-                                <Divider borderColor="gray.500" />
-                                <Text
-                                  fontSize="14px"
-                                  color="gray.500"
-                                  whiteSpace="nowrap"
+                              <>
+                                <Box
+                                  ref={(el) => {
+                                    dateRefs.current[index] = {
+                                      date: formatDate(
+                                        post.created_at,
+                                        prevDateString,
+                                        false
+                                      ),
+                                      ref: el,
+                                    };
+                                  }}
+                                />
+                                <Box
+                                  top="40px"
+                                  zIndex="10"
+                                  py="1"
                                   textAlign="center"
-                                  mx="2"
-                                  lineHeight="1.2"
                                 >
-                                  {formatDate(
-                                    post.created_at,
-                                    prevDateString,
-                                    false
-                                  )}
-                                </Text>
-                                <Divider borderColor="gray.500" />
-                              </Flex>
+                                  <HStack>
+                                    <Divider borderColor="gray.500" />
+                                    <Text
+                                      fontSize="14px"
+                                      whiteSpace="nowrap"
+                                      mx="1"
+                                      lineHeight="1.2"
+                                    >
+                                      {formatDate(
+                                        post.created_at,
+                                        prevDateString,
+                                        false
+                                      )}
+                                    </Text>
+                                    <Divider borderColor="gray.500" />
+                                  </HStack>
+                                </Box>
+                              </>
                             )}
                             <Flex //post内容
                               className="post"

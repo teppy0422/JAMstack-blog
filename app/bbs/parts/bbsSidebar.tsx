@@ -289,7 +289,6 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                   borderRadius={0}
                   pl={1.5}
                   pr={1}
-                  // py={0.5}
                   my={0}
                 >
                   {projectName}
@@ -331,20 +330,25 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
               {...buttonStyle(path_)}
               position="relative"
               _hover={{
-                bg: colorMode === "light" ? "rgba(255,255,255,0.5)" : "#000",
+                bg:
+                  colorMode === "light"
+                    ? "rgba(255,255,255,0.7)"
+                    : "rbga(0,0,0,0.6)",
                 borderRadius: "5px",
                 width: "100%",
               }}
               bg={
                 isCurrentPage &&
-                (colorMode === "light" ? "rgba(255,255,255,0.5)" : "#000")
+                (colorMode === "light"
+                  ? "rgba(255,255,255,0.7)"
+                  : "rgba(0,0,0,0.6)")
               }
               color={useColorMode && colorMode === "light" ? "black" : "white"}
               maxWidth={maxWidth}
               width={maxWidth}
               whiteSpace="nowrap"
-              // overflow="hidden"
               textOverflow="ellipsis"
+              borderRadius="md"
               py={0}
               pl={0}
               cursor={isDifferentCompany ? "default" : "pointer"}

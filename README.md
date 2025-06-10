@@ -90,8 +90,6 @@ pmponents を全て@に移動
 
 components/common を追加して移動
 
-コピー
-
 CustomCloseButton を押したら Modal が閉じるように修正
 ダウンロードページのファイル名と更新日の取得を更新
 applList のデザイン修正
@@ -118,23 +116,26 @@ skillBlogs/0010/にサムネとかディスクリプションを設定する構�
 skillBlosg の readBy の UI とか変更
 Open ReadyByIcon when setIsBottom is called in called in skillBlogs.
 change design heart icon in skillBlogs.
-
-#### 変更中
-
-Review decision to scroll to the bottom in /bbs/.
+Review decision to scroll to the bottom in bbs/.
+Review the height at the bottom of skillBlogs/.
 Fix position of open/close icon in bbs preview.
+Click on a firefly to view the description page.
+Fix design of threadTitle in BBS.
+Review Stiky date label.
 
-#### task
+#### to do now
+
+ログイン情報のデザインを Liquid Glass に変更
+Login information design changed to Liquid Glass.
+
+#### to do
 
 if is is useState, rendering will occur each time, so change it to useRef.
 
-Click on a firefly to view the description page.
+#### confirmation required
 
-#### 要確認
-
-Review the height at the bottom of skillBlogs.
 order/のサムネ変更が反映されないから様子見
 
-#### 予定
+#### comming soon...
 
 全てのリンクをクリックして動作確認

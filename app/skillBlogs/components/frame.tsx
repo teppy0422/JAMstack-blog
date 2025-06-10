@@ -17,9 +17,7 @@ import {
   AccordionPanel,
   createIcon,
 } from "@chakra-ui/react";
-import { CiHeart } from "react-icons/ci";
 import { PiGithubLogoFill } from "react-icons/pi";
-import { LuPanelRightOpen } from "react-icons/lu";
 import Content from "@/components/content";
 import { useColorMode } from "@chakra-ui/react";
 import { useCustomToast } from "@/components/ui/customToast";
@@ -34,9 +32,8 @@ import { CustomLoading } from "@/components/ui/CustomLoading";
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";
 
-import { useLanguage } from "../../../src/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
-import { get, set } from "lodash";
 import ReadByIcon from "./ReadByIcon";
 import { LuHeartIcon } from "@/components/icons";
 
