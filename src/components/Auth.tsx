@@ -18,6 +18,12 @@ import {
   ButtonGroup,
   Divider,
   Center,
+  Image as ChakraImage,
+  Grid,
+  GridItem,
+  HStack,
+  Spacer,
+  VStack,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import { MdBusiness, MdEmail, MdHistory } from "react-icons/md";
@@ -329,6 +335,30 @@ export default function Auth({ userData }: AuthProps) {
     return Math.floor(timeDiff / (1000 * 3600 * 24)); // ミリ秒を日数に変換
   };
 
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [transform, setTransform] = useState<string>("perspective(1000px)");
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * 5; // 上に近いと手前に傾く
+    const rotateY = ((x - centerX) / centerX) * -5; // 右に近いと手前に傾く
+
+    setTransform(
+      `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`
+    );
+  };
+  const resetTransform = () => {
+    setTransform("perspective(1000px)");
+  };
   return (
     <Box
       fontFamily={getMessage({
@@ -336,132 +366,23 @@ export default function Auth({ userData }: AuthProps) {
         us: "Noto Sans JP",
         cn: "Noto Sans SC",
       })}
+      color="#ccc"
     >
       {user ? (
         <>
           <Box textAlign="center" mb={4}>
-            <Divider
-              borderColor={
-                colorMode === "light"
-                  ? "custom.theme.light.850"
-                  : "custom.theme.dark,800"
-              }
-              width="60%"
-              mx="auto"
-              mt={10}
-              mb={0}
-              position="relative"
-            />
-            <Text
-              fontSize="lg"
-              position="relative"
-              top="-16px"
-              px={2}
-              bg={
-                colorMode === "light"
-                  ? "custom.theme.light.500"
-                  : "custom.theme.dark.500"
-              }
-              display={"inline-block"}
-            >
-              {userData.userName || "No Name"}
-            </Text>
-            <Text
-              fontSize="sm"
-              mb={1}
-              color={colorMode === "light" ? "black" : "white"}
-            >
-              {getMessage({ ja: userData.userMainCompany || "" }) || ""}
-            </Text>
-            <Box display="flex" justifyContent="center">
-              <Box
-                display="flex"
-                alignItems="center"
-                mx="auto"
-                textAlign="center"
-              >
-                <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={1} />
-                {getMessage({ ja: userData.userCompany || "" }) || ""}
-              </Box>
-            </Box>
-            <Box display="flex" justifyContent="center">
-              <Box
-                display="flex"
-                alignItems="center"
-                mx="auto"
-                textAlign="center"
-              >
-                <Icon as={MdEmail} boxSize={4} mr={0.5} mt={1} />
-                {userData.userEmail}
-              </Box>
-            </Box>
-            <Box display="flex" justifyContent="center">
-              <Box
-                display="flex"
-                alignItems="center"
-                mx="auto"
-                textAlign="center"
-              >
-                <Icon as={MdHistory} boxSize={4} mr={0.5} mt={1} />
-                {formatDate(userData.created_at)} (
-                {calculateDaysSince(userData.created_at)}日)
-              </Box>
-            </Box>
             <Box
               display="flex"
               justifyContent="center"
               alignItems="center"
               mt={2}
-            >
-              <Tooltip
-                label={getMessage({
-                  ja: "ユーザーアイコンを変更",
-                  us: "Change user icon",
-                  cn: "更改用户图标",
-                })}
-                aria-label={getMessage({
-                  ja: "ユーザーアイコンを変更",
-                  us: "Change user icon",
-                  cn: "更改用户图标",
-                })}
-                hasArrow
-                placement="top"
-              >
-                <Box
-                  onClick={handleAvatarClick} // クリックで画像選択
-                  cursor="pointer"
-                  borderRadius="50%"
-                  overflow="hidden"
-                >
-                  <CustomAvatar
-                    src={userData.pictureUrl}
-                    boxSize="200px"
-                    mt={2}
-                  />
-                </Box>
-              </Tooltip>
-            </Box>
+            ></Box>
             <input
               type="file"
               ref={fileInputRef}
               style={{ display: "none" }} // ファイル入力を非表示
               onChange={handleFileChange} // ファイル選択時の処理
             />
-          </Box>
-          <Box display="flex" justifyContent="center">
-            <Button
-              onClick={handleSignOut}
-              colorScheme="red"
-              mx="auto"
-              px={2}
-              height="1.8em"
-            >
-              {getMessage({
-                ja: "ログアウト",
-                us: "Logout",
-                cn: "注销",
-              })}
-            </Button>
           </Box>
         </>
       ) : (
@@ -488,13 +409,7 @@ export default function Auth({ userData }: AuthProps) {
                   </TabList>
                   <TabPanels>
                     <TabPanel>
-                      <Text
-                        fontSize="9px"
-                        color="gray.500"
-                        mb={0.3}
-                        ml={1}
-                        textAlign="left"
-                      >
+                      <Text fontSize="10px" mb={0.3} ml={1} textAlign="left">
                         {getMessage({
                           ja: "メールアドレス",
                           us: "Email Address",
@@ -514,13 +429,7 @@ export default function Auth({ userData }: AuthProps) {
                         onFocus={() => setIsEmailFocused(true)}
                         onBlur={() => setIsEmailFocused(false)}
                       />
-                      <Text
-                        fontSize="9px"
-                        color="gray.500"
-                        mb={0.3}
-                        ml={1}
-                        textAlign="left"
-                      >
+                      <Text fontSize="10px" mb={0.3} ml={1} textAlign="left">
                         {getMessage({
                           ja: "パスワード",
                           us: "Password",
@@ -605,13 +514,7 @@ export default function Auth({ userData }: AuthProps) {
                           cn: " 通过验证后即可登录",
                         })}
                       </Text>
-                      <Text
-                        fontSize="9px"
-                        color="gray.500"
-                        mb={0.3}
-                        ml={1}
-                        textAlign="left"
-                      >
+                      <Text fontSize="10px" mb={0.3} ml={1} textAlign="left">
                         {getMessage({
                           ja: " メールアドレス",
                           us: " Email Address",
@@ -631,13 +534,7 @@ export default function Auth({ userData }: AuthProps) {
                         onFocus={() => setIsEmailFocused(true)}
                         onBlur={() => setIsEmailFocused(false)}
                       />
-                      <Text
-                        fontSize="9px"
-                        color="gray.500"
-                        mb={0.3}
-                        ml={1}
-                        textAlign="left"
-                      >
+                      <Text fontSize="10px" mb={0.3} ml={1} textAlign="left">
                         {getMessage({
                           ja: "パスワード",
                           us: "Password",
@@ -657,13 +554,7 @@ export default function Auth({ userData }: AuthProps) {
                         onFocus={() => setIsPasswordFocused(true)}
                         onBlur={() => setIsPasswordFocused(false)}
                       />
-                      <Text
-                        fontSize="9px"
-                        color="gray.500"
-                        mb={0.3}
-                        ml={1}
-                        textAlign="left"
-                      >
+                      <Text fontSize="10px" mb={0.3} ml={1} textAlign="left">
                         {getMessage({
                           ja: "パスワード(確認)",
                           us: "Password (Confirm)",
@@ -729,119 +620,234 @@ export default function Auth({ userData }: AuthProps) {
           )}
         </>
       )}
-      <Box mt={5} position="relative" borderRadius={8}>
-        <Divider
-          position="relative"
-          border="solid 0.5px"
-          color={
-            colorMode === "light"
-              ? "custom.theme.light.850"
-              : "custom.theme.dark.100"
-          }
-        />
-        <Text
-          textAlign="center"
-          mx="auto"
-          px="6px"
-          position="relative"
-          top="-14px"
-          bg={
-            colorMode === "light"
-              ? "custom.theme.light.500"
-              : "custom.theme.dark.500"
-          }
-          transform="translateX(-50%)"
-          left="50%"
-          display="inline-block"
+      {user && (
+        <Grid
+          templateColumns={{ base: "1fr", sm: "3.5fr 6.5fr" }}
+          gap={4}
+          py={2}
+          mx={4}
         >
-          {getMessage({
-            ja: "言語選択",
-            us: "Language Selection",
-            cn: "语言选择",
-          })}
-        </Text>
-        <Text
-          fontSize="13px"
-          mx="auto"
-          textAlign="center"
-          position="relative"
-          top="-10px"
-          my={0.5}
-        >
-          {getMessage({
-            ja: "画像の翻訳は日本語以外は未対応です",
-            us: "Translation of images is not yet available except for Japanese",
-            cn: "除日语外，尚未提供图像翻译。",
-          })}
-          <br />
-          {getMessage({
-            ja: "必要であれば対応するので連絡ください",
-            us: "Please contact me if you need assistance.",
-            cn: "如有必要，请联系我们寻求帮助。",
-          })}
-        </Text>
-        <ButtonGroup
-          mt={0}
-          mb={3}
-          bottom="0"
-          left="0"
-          width="100%"
-          display="flex"
-          justifyContent="center"
-        >
-          <Tooltip label={<Box>日本語</Box>} aria-label="English">
-            <img
-              src="/images/land/jp.svg"
-              alt="日本語"
-              style={{
-                width: "32px",
-                height: "24px",
-                margin: "0px",
-                padding: "0px",
-                border: "solid 1px",
-                marginRight: "10px",
-                cursor: "pointer",
-                opacity: language !== "ja" ? 0.3 : 1,
-              }}
-              onClick={() => updateLanguage("ja")}
-            />
-          </Tooltip>
-          <Tooltip label={<Box>American English</Box>} aria-label="English">
-            <img
-              src="/images/land/um.svg"
-              alt="英語"
-              style={{
-                width: "32px",
-                height: "24px",
-                margin: "0px",
-                padding: "0px",
-                border: "solid 1px",
-                marginRight: "10px",
-                cursor: "pointer",
-                opacity: language !== "us" ? 0.3 : 1,
-              }}
-              onClick={() => updateLanguage("us")}
-            />
-          </Tooltip>
-          <Tooltip label={<Box>简体中文</Box>} aria-label="English">
-            <img
-              src="/images/land/cn.svg"
-              alt="簡体字中国語"
-              style={{
-                width: "32px",
-                height: "24px",
-                margin: "0px",
-                padding: "0px",
-                border: "solid 1px",
-                marginRight: "10px",
-                cursor: "pointer",
-                opacity: language !== "cn" ? 0.3 : 1,
-              }}
-              onClick={() => updateLanguage("cn")}
-            />
-          </Tooltip>
-        </ButtonGroup>
-      </Box>
+          <GridItem>
+            <Flex
+              // minH="100vh"
+              align="center"
+              justify="center"
+              bgGradient="linear(to-br, custom.theme.light.500, purple.600)"
+              p={0}
+              m={0}
+              borderRadius="md"
+            >
+              <Box
+                ref={cardRef}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={resetTransform}
+                transform={transform}
+                transition="transform 0.1s ease"
+                bg="whiteAlpha.200"
+                backdropFilter="blur(16px)"
+                border="1px solid"
+                borderColor="whiteAlpha.300"
+                borderRadius="md"
+                boxShadow="lg"
+                py={2}
+                px={4}
+                w="100%"
+                m={0}
+                textAlign="left"
+                sx={{
+                  transformStyle: "preserve-3d",
+                }}
+              >
+                <ChakraImage
+                  src={userData.pictureUrl}
+                  alt="Profile"
+                  h="152px"
+                  w="152px"
+                  objectFit="cover" // ← この行を追加
+                  border="1px solid white"
+                  mx="auto"
+                  mb={3}
+                />
+                <Text fontSize="xl" fontWeight="bold" color="white">
+                  {userData.userName || "No Name"}
+                </Text>
+                <Text fontSize="12px" fontWeight="bold" color="white">
+                  {formatDate(userData.created_at)} (
+                  {calculateDaysSince(userData.created_at)}日)
+                </Text>
+                <Text mt={4} fontSize="13px" color="whiteAlpha.900">
+                  {getMessage({ ja: userData.userMainCompany || "" }) || ""}:{" "}
+                  {getMessage({ ja: userData.userCompany || "" }) || ""}
+                </Text>
+              </Box>
+            </Flex>
+          </GridItem>
+          <GridItem>
+            <Box
+              bg="#2c2b29"
+              p={4}
+              borderRadius="md"
+              border="1px solid #4c4b49"
+              color="#ccc"
+              mb={4}
+            >
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text fontWeight="bold" fontSize="14px">
+                  E-mail
+                </Text>
+                <Text fontSize="13px">{userData.userEmail}</Text>
+              </Flex>
+            </Box>
+            <Box
+              bg="#2c2b29"
+              p={4}
+              borderRadius="md"
+              border="1px solid #4c4b49"
+              color="#ccc"
+              mb={4}
+            >
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text fontWeight="bold" fontSize="14px">
+                  {getMessage({
+                    ja: "言語選択",
+                    us: "Language",
+                    cn: "语言选择",
+                  })}
+                </Text>
+                <HStack>
+                  <Tooltip label={<Box>日本語</Box>} aria-label="ja">
+                    <img
+                      src="/images/land/jp.svg"
+                      alt="日本語"
+                      style={{
+                        width: "32px",
+                        height: "24px",
+                        margin: "0px",
+                        padding: "0px",
+                        border: "solid 1px",
+                        marginRight: "10px",
+                        cursor: "pointer",
+                        opacity: language !== "ja" ? 0.3 : 1,
+                      }}
+                      onClick={() => updateLanguage("ja")}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    label={<Box>American English</Box>}
+                    aria-label="English"
+                  >
+                    <img
+                      src="/images/land/um.svg"
+                      alt="英語"
+                      style={{
+                        width: "32px",
+                        height: "24px",
+                        margin: "0px",
+                        padding: "0px",
+                        border: "solid 1px",
+                        marginRight: "10px",
+                        cursor: "pointer",
+                        opacity: language !== "us" ? 0.3 : 1,
+                      }}
+                      onClick={() => updateLanguage("us")}
+                    />
+                  </Tooltip>
+                  <Tooltip label={<Box>简体中文</Box>} aria-label="cn">
+                    <img
+                      src="/images/land/cn.svg"
+                      alt="簡体字中国語"
+                      style={{
+                        width: "32px",
+                        height: "24px",
+                        margin: "0px",
+                        padding: "0px",
+                        border: "solid 1px",
+                        marginRight: "10px",
+                        cursor: "pointer",
+                        opacity: language !== "cn" ? 0.3 : 1,
+                      }}
+                      onClick={() => updateLanguage("cn")}
+                    />
+                  </Tooltip>
+                </HStack>
+              </Flex>
+              <Box h="1px" w="100%" bg="#4c4b49" my={2} />
+              <Text fontSize="12px" mx="auto" textAlign="left">
+                {getMessage({
+                  ja: "画像の翻訳は日本語以外は未対応です。",
+                  us: "Translation of images is not yet available except for Japanese",
+                  cn: "除日语外，尚未提供图像翻译。",
+                })}
+                {getMessage({
+                  ja: "必要であれば対応するので連絡ください。",
+                  us: "Please contact me if you need assistance.",
+                  cn: "如有必要，请联系我们寻求帮助。",
+                })}
+              </Text>
+            </Box>
+            <Spacer h="10px" />
+            <Box
+              bg="#2c2b29"
+              p={4}
+              borderRadius="md"
+              // border="1px solid #4c4b49"
+              color="#ccc"
+              mb={4}
+            >
+              <Flex justifyContent="space-between" alignItems="center">
+                <Box display="flex" justifyContent="center">
+                  <Tooltip
+                    label={getMessage({
+                      ja: "ユーザーアイコンを変更",
+                      us: "Change user icon",
+                      cn: "更改用户图标",
+                    })}
+                    aria-label={getMessage({
+                      ja: "ユーザーアイコンを変更",
+                      us: "Change user icon",
+                      cn: "更改用户图标",
+                    })}
+                    hasArrow
+                    placement="top"
+                  >
+                    <Box
+                      onClick={handleAvatarClick} // クリックで画像選択
+                      cursor="pointer"
+                      _hover={{ opacity: 0.8 }}
+                    >
+                      <Box mx="auto" px={2} height="1.8em" fontSize="12px">
+                        {getMessage({
+                          ja: "アイコン変更",
+                          us: "Icon Change",
+                          cn: "图标更改",
+                        })}
+                      </Box>
+                    </Box>
+                  </Tooltip>
+                </Box>
+                <Box h="1rem" width="1px" bg="#4c4b49" />
+                <Box display="flex" justifyContent="center">
+                  <Box
+                    onClick={handleSignOut}
+                    mx="auto"
+                    px={2}
+                    height="1.8em"
+                    fontSize="12px"
+                    cursor="pointer"
+                    _hover={{ opacity: 0.8 }}
+                  >
+                    {getMessage({
+                      ja: "ログアウト",
+                      us: "Logout",
+                      cn: "注销",
+                    })}
+                  </Box>
+                </Box>
+              </Flex>
+            </Box>
+          </GridItem>
+        </Grid>
+      )}
     </Box>
   );
 }

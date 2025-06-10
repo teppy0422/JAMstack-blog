@@ -64,29 +64,23 @@ youtube の遷移先を修正
 ipad を components に移動
 getMessage を utils に移動
 
-デプロイ 0001
-
 skillBlogs のトップリンクを修正
 posterImage を order/parts に移動
-
-デプロイ 0002
 
 youtube のデザイン修正
 modal サイズの調整
 youtube のデザイン修正
 
-デプロイ
-
 sidebar のリンク変更 BBS -> bbs
 
-デプロイ 0003
+-deploy0003-
 
 過去の header を削除してリネーム
 season を移動
 不要っぽい components を削除
 pmponents を全て@に移動
 
-デプロイ 0004
+-deploy0004-
 
 components/common を追加して移動
 
@@ -94,7 +88,7 @@ CustomCloseButton を押したら Modal が閉じるように修正
 ダウンロードページのファイル名と更新日の取得を更新
 applList のデザイン修正
 
-デプロイ 0005
+-deploy0005-
 
 料亭のフォント修正
 
@@ -122,6 +116,7 @@ Fix position of open/close icon in bbs preview.
 Click on a firefly to view the description page.
 Fix design of threadTitle in BBS.
 Review Stiky date label.
+-deploy 0006-
 
 #### to do now
 

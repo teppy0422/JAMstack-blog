@@ -346,8 +346,19 @@ function ThreadContent(): JSX.Element {
   const [currentDate, setCurrentDate] = useState("");
   const dateRefs = useRef<{ date: string; ref: HTMLDivElement | null }[]>([]);
   const [isSticky, setIsSticky] = useState(false);
+  // 日付の表示/非表示
+  const [isScrolling, setIsScrolling] = useState(false);
+
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
     const handleScroll = () => {
+      // スクロール停止後1秒で非表示
+      setIsScrolling(true);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsScrolling(false);
+      }, 1000);
       const topOffset = 56;
       let latestDate = "";
       for (const item of dateRefs.current.filter(
@@ -2458,7 +2469,7 @@ function ThreadContent(): JSX.Element {
                 href="#"
                 position="fixed"
                 top="46px"
-                zIndex="2000"
+                zIndex="1100"
                 onClick={(e) => {
                   if (threadBlogUrl) {
                     e.preventDefault();
@@ -2479,9 +2490,7 @@ function ThreadContent(): JSX.Element {
                   pt={0}
                   border="1px solid #bfb0a4"
                   borderRadius="md"
-                  backdropFilter={
-                    colorMode === "light" ? "blur(10px)" : "blur(10px)"
-                  }
+                  backdropFilter="blur(10px)"
                   _hover={{
                     bg: threadBlogUrl
                       ? colorMode === "light"
@@ -2498,17 +2507,7 @@ function ThreadContent(): JSX.Element {
                       : "none"
                   }
                 >
-                  <Box
-                    borderRadius="md"
-                    py={0}
-                    px={1}
-                    fontWeight="600"
-                    textShadow={
-                      colorMode === "light"
-                        ? "-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white"
-                        : "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black"
-                    }
-                  >
+                  <Box borderRadius="md" py={0} px={1} fontWeight="600">
                     <Box as="span" fontSize={11} fontWeight={400} mr={1}>
                       {getMessage({
                         ja: threadCompany,
@@ -2566,20 +2565,28 @@ function ThreadContent(): JSX.Element {
               </Box>
               <Box
                 position="sticky"
-                zIndex="10000"
-                top="40px"
+                zIndex="2001"
+                top="44px"
                 fontSize="14px"
                 textAlign="center"
+                opacity={isScrolling ? 1 : 0}
+                transition="opacity 0.3s ease"
+                pointerEvents="none"
               >
-                <Text
-                  display="inline"
-                  fontSize="14px"
-                  bg="custom.theme.light.500"
-                  px="1px"
-                  transition="all 0.3s ease-in-out"
+                <Box
+                  display="inline-block"
+                  backdropFilter="blur(5px)"
+                  borderRadius="full"
+                  px="4px"
                 >
-                  {currentDate}
-                </Text>
+                  <Text
+                    display="inline"
+                    fontSize="14px"
+                    transition="all 0.3s ease-in-out"
+                  >
+                    {currentDate}
+                  </Text>
+                </Box>
               </Box>
               <Box height="4.5em" />
               <Stack

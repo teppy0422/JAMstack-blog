@@ -68,6 +68,7 @@ import getMessage from "@/utils/getMessage";
 import Sidebar from "./sidebar";
 import { CustomAvatar } from "./ui/CustomAvatar";
 import { CustomModalCloseButton } from "./ui/CustomModalCloseButton";
+import MacCloseButton from "./ui/MacCloseButton";
 import { CustomSwitchColorModeButton } from "./ui/CustomSwitchButton";
 
 import { useUserContext } from "@/contexts/useUserContext";
@@ -723,41 +724,33 @@ export default function Header() {
         </ModalContent>
       </Modal>
       {/* ログインモーダル */}
-      <Modal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)}>
+      <Modal
+        isOpen={isLoginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+        size="lg"
+      >
         <ModalOverlay />
         <ModalContent
-          bg={
-            colorMode === "light"
-              ? "custom.theme.light.500"
-              : "custom.theme.dark.500"
-          }
           borderColor={
             colorMode === "light"
               ? "custom.theme.light.100"
               : "custom.theme.light.100"
           }
-          borderWidth="0.5px"
+          borderWidth="0.1px"
           px={0}
+          zIndex={4001}
+          overflow="hidden"
         >
-          <CustomModalCloseButton
-            colorMode={colorMode}
-            onClose={() => setLoginModalOpen(false)}
-            outline={colorMode === "light" ? "4px solid" : "6px solid"}
-            outlineColor={
-              colorMode === "light"
-                ? "custom.theme.light.500"
-                : "custom.theme.dark.500"
-            }
-            top="-4px"
-            right="-4px"
-          />
+          <ModalHeader bg="#3c3b39">
+            <MacCloseButton
+              onClickHandlers={[() => setLoginModalOpen(false)]}
+            />
+          </ModalHeader>
           <ModalBody
-            mb={2}
-            bg={
-              colorMode === "light"
-                ? "custom.theme.light.500"
-                : "custom.theme.dark.500"
-            }
+            bg={colorMode === "light" ? "#2c2b29" : "custom.theme.dark.500"}
+            borderBottomRadius="md"
+            m={0}
+            p={0}
           >
             <Auth
               userData={{
