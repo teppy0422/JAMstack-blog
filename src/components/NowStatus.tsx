@@ -68,12 +68,11 @@ import getMessage from "@/utils/getMessage";
 import { getBoxShadow } from "@chakra-ui/react/dist/types/popper/utils";
 import { AnimationImage } from "@/components/ui/CustomImage";
 
-import { CustomModalCloseButton } from "./ui/CustomModalCloseButton";
 import {
   ProjectLists,
   getProjectOptionsColor,
 } from "@/components/ui/CustomBadge";
-import CustomModal from "../../app/skillBlogs/components/customModal";
+import CustomModal from "@/components/ui/CustomModal";
 
 const activityOptions = [
   { value: "online", label: "オンライン", color: "#815ad6" },
@@ -459,366 +458,333 @@ export const StatusDisplay = () => {
         </Stack>
       </Box>
       {/* スケジュール表示用モーダル */}
-      <Modal isOpen={isScheduleModalOpen} onClose={onClose} size="xl">
-        <ModalOverlay />
-        <ModalContent
-          bg={
-            colorMode === "light"
-              ? "custom.theme.light.500"
-              : "custom.theme.dark.500"
-          }
-        >
-          <ModalHeader py={2} px={3}>
-            {selectedUserId && (
-              <>
-                <Box>
-                  <HStack>
-                    <Text>日程</Text>
-                    <Avatar
-                      src={
-                        getUserById(selectedUserId)?.picture_url ?? undefined
-                      }
-                      boxSize="24px"
-                    />
-                    <Text fontSize="16px" fontWeight="bold">
-                      {getUserById(selectedUserId)?.user_metadata.name}
-                    </Text>
-                    {currentUserId === selectedUserId && (
-                      <NowStatus
-                        schedules={schedules}
-                        onSchedulesUpdate={(newSchedules) => {
-                          setSchedules(newSchedules);
-                          getUserSchedules(selectedUserId, new Date());
-                        }}
-                        userId={currentUserId}
-                      />
-                    )}
-                    <Box position="relative" w="400px" h="20px" flex={1}>
-                      <Image
-                        src="/images/illust/hippo/hippo_014_pixcel.gif"
-                        width="28px"
-                        position="absolute"
-                        left="0"
-                        top="0"
-                        style={{
-                          animation:
-                            "zoomUp 3s forwards,moveHorizontal 8s ease-in-out infinite, floatUpDown 8s ease-in-out infinite",
-                        }}
-                      />
-                      <style jsx>{`
-                        @keyframes upDown {
-                          0% {
-                            transform: translateY(-10px);
-                          }
-                          10% {
-                            transform: translateY(-10px);
-                          }
-                          30% {
-                            transform: translateY(calc(100% - 35px));
-                          }
-                          48% {
-                            transform: translateY(calc(100% - 35px));
-                          }
-                          100% {
-                            transform: translateY(-10px);
-                          }
-                        }
-                        @keyframes zoomUp {
-                          0% {
-                            top: 60px;
-                            left: -60px;
-                            width: 0;
-                          }
-                          100% {
-                            top: 0;
-                            left: 0;
-                          }
-                        }
-                        @keyframes moveHorizontal {
-                          0% {
-                            left: 0;
-                          }
-                          50% {
-                            left: calc(100% - 58px);
-                          }
-                          100% {
-                            left: 0;
-                          }
-                        }
-                        @keyframes floatUpDown {
-                          0% {
-                            transform: translateY(-6px) scaleX(1);
-                          }
-                          12% {
-                            transform: translateY(-32px) scaleX(1);
-                          }
-                          25% {
-                            transform: translateY(0px) scaleX(1);
-                          }
-                          37% {
-                            transform: translateY(-12px) scaleX(1);
-                          }
-                          50% {
-                            transform: translateY(-6px) scaleX(1);
-                          }
-                          50.1% {
-                            transform: translateY(-6px) scaleX(-1);
-                          }
-                          63% {
-                            transform: translateY(-32px) scaleX(-1);
-                          }
-                          75% {
-                            transform: translateY(0px) scaleX(-1);
-                          }
-                          87% {
-                            transform: translateY(-12px) scaleX(-1);
-                          }
-                          100% {
-                            transform: translateY(-6px) scaleX(-1);
-                          }
-                        }
-                      `}</style>
-                    </Box>
-                  </HStack>
-                  <Text fontSize="12px" color="gray.500" fontWeight={600}>
-                    {new Date().toLocaleDateString("ja-JP", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    }) + "更新"}
-                  </Text>
-                </Box>
-              </>
+      <CustomModal
+        title="日程"
+        isOpen={isScheduleModalOpen}
+        onClose={onClose}
+        modalSize="xl"
+        macCloseButtonHandlers={[onClose]}
+        footer={<></>}
+      >
+        <Box color="#ddd">
+          <HStack>
+            <Avatar
+              src={getUserById(selectedUserId)?.picture_url ?? undefined}
+              boxSize="24px"
+            />
+            <Text fontSize="16px" fontWeight="bold">
+              {getUserById(selectedUserId)?.user_metadata.name}
+            </Text>
+            {currentUserId === selectedUserId && (
+              <NowStatus
+                schedules={schedules}
+                onSchedulesUpdate={(newSchedules) => {
+                  setSchedules(newSchedules);
+                  getUserSchedules(selectedUserId, new Date());
+                }}
+                userId={currentUserId}
+              />
             )}
-          </ModalHeader>
-          <CustomModalCloseButton
-            colorMode={colorMode}
-            onClose={onClose}
-            top="-4px"
-            right="-4px"
-            outline={colorMode === "light" ? "4px solid" : "6px solid"}
-            outlineColor={
-              colorMode === "light"
-                ? "custom.theme.light.500"
-                : "custom.theme.dark.500"
-            }
-          />
-          {/* <CustomModalCloseButton onClose={onClose} /> */}
-          <ModalBody pb={3}>
-            <Stack spacing={1}>
-              <Center mb={3}>
-                {/* 週を戻るアイコン */}
-                <IconButton
-                  aria-label="Previous week"
-                  icon={<MdKeyboardDoubleArrowLeft />}
-                  bg="transparent"
-                  _hover={{ bg: "transparent", fontSize: "md" }}
-                  onClick={() => handlePreviousWeek()}
-                  h="18px"
-                  w="36px"
-                />
-                <Box fontWeight={400}>
-                  {targetDate &&
-                    `${targetDate.getFullYear()}/${
-                      targetDate.getMonth() + 1
-                    }/${targetDate.getDate()}`}
-                  の週
-                </Box>
-                {/* 週を進めるアイコン */}
-                <IconButton
-                  aria-label="Next week"
-                  icon={<MdKeyboardDoubleArrowRight />}
-                  bg="transparent"
-                  _hover={{ bg: "transparent", fontSize: "md" }}
-                  onClick={() => handleNextWeek()}
-                  h="18px"
-                  w="36px"
-                />
-              </Center>
-              {userSchedules.map((schedule, index) => {
-                const now = new Date();
-                const start = schedule.startTime
-                  ? new Date(schedule.startTime)
-                  : null;
-                const end = schedule.endTime
-                  ? new Date(schedule.endTime)
-                  : null;
-                const isCurrent = start && now >= start && (!end || now <= end);
 
-                const date = new Date(schedule.startTime);
-                let currentDate = "";
-
-                if (isNaN(date.getTime())) {
-                  console.error("Invalid date:", schedule.startTime);
-                } else {
-                  const options: Intl.DateTimeFormatOptions = {
-                    // year: "numeric",
-                    month: "numeric",
-                    day: "numeric",
-                    weekday: "short",
-                    timeZone: "Asia/Tokyo",
-                  };
-                  currentDate = date.toLocaleDateString("ja-JP", options);
+            <Spacer />
+            <Text fontSize="12px" fontWeight={600}>
+              {new Date().toLocaleDateString("ja-JP", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }) + "更新"}
+            </Text>
+          </HStack>
+        </Box>
+        <Stack spacing={1} color="#ddd">
+          <Box position="relative" w="100%" h="20px" flex={1}>
+            <Image
+              src="/images/illust/hippo/hippo_014_pixcel.gif"
+              width="28px"
+              position="absolute"
+              left="0"
+              top="0"
+              style={{
+                animation:
+                  "zoomUp 3s forwards,moveHorizontal 8s ease-in-out infinite, floatUpDown 8s ease-in-out infinite",
+              }}
+            />
+            <style jsx>{`
+              @keyframes upDown {
+                0% {
+                  transform: translateY(-10px);
                 }
-                const showDate = currentDate !== previousDate;
-                previousDate = currentDate;
+                10% {
+                  transform: translateY(-10px);
+                }
+                30% {
+                  transform: translateY(calc(100% - 35px));
+                }
+                48% {
+                  transform: translateY(calc(100% - 35px));
+                }
+                100% {
+                  transform: translateY(-10px);
+                }
+              }
+              @keyframes zoomUp {
+                0% {
+                  top: 60px;
+                  left: -60px;
+                  width: 0;
+                }
+                100% {
+                  top: 0;
+                  left: 0;
+                }
+              }
+              @keyframes moveHorizontal {
+                0% {
+                  left: 0;
+                }
+                50% {
+                  left: calc(100% - 58px);
+                }
+                100% {
+                  left: 0;
+                }
+              }
+              @keyframes floatUpDown {
+                0% {
+                  transform: translateY(-6px) scaleX(1);
+                }
+                12% {
+                  transform: translateY(-32px) scaleX(1);
+                }
+                25% {
+                  transform: translateY(0px) scaleX(1);
+                }
+                37% {
+                  transform: translateY(-12px) scaleX(1);
+                }
+                50% {
+                  transform: translateY(-6px) scaleX(1);
+                }
+                50.1% {
+                  transform: translateY(-6px) scaleX(-1);
+                }
+                63% {
+                  transform: translateY(-32px) scaleX(-1);
+                }
+                75% {
+                  transform: translateY(0px) scaleX(-1);
+                }
+                87% {
+                  transform: translateY(-12px) scaleX(-1);
+                }
+                100% {
+                  transform: translateY(-6px) scaleX(-1);
+                }
+              }
+            `}</style>
+          </Box>
+          <Center mb={3}>
+            {/* 週を戻るアイコン */}
+            <IconButton
+              aria-label="Previous week"
+              icon={<MdKeyboardDoubleArrowLeft />}
+              bg="transparent"
+              color="#ddd"
+              _hover={{ bg: "transparent", fontSize: "md" }}
+              onClick={() => handlePreviousWeek()}
+              h="18px"
+              w="36px"
+            />
+            <Box fontWeight={400}>
+              {targetDate &&
+                `${targetDate.getFullYear()}/${
+                  targetDate.getMonth() + 1
+                }/${targetDate.getDate()}`}
+              の週
+            </Box>
+            {/* 週を進めるアイコン */}
+            <IconButton
+              aria-label="Next week"
+              icon={<MdKeyboardDoubleArrowRight />}
+              bg="transparent"
+              color="#ddd"
+              _hover={{ bg: "transparent", fontSize: "md" }}
+              onClick={() => handleNextWeek()}
+              h="18px"
+              w="36px"
+            />
+          </Center>
+          {userSchedules.map((schedule, index) => {
+            const now = new Date();
+            const start = schedule.startTime
+              ? new Date(schedule.startTime)
+              : null;
+            const end = schedule.endTime ? new Date(schedule.endTime) : null;
+            const isCurrent = start && now >= start && (!end || now <= end);
 
-                // 今日の日付かどうかを判定
-                const isToday =
-                  new Date().toDateString() ===
-                  new Date(schedule.startTime).toDateString();
+            const date = new Date(schedule.startTime);
+            let currentDate = "";
 
-                return (
-                  <Flex direction="column" key={index}>
-                    {showDate && (
-                      <Box
-                        textAlign="center"
-                        flex="1"
-                        position="relative"
-                        mb={6}
-                        w="100%"
-                      >
-                        <Text
-                          bg={
-                            colorMode === "light"
-                              ? "custom.theme.light.500"
-                              : "custom.theme.dark.500"
-                          }
-                          zIndex="2"
-                          position="absolute"
-                          top="-4px"
-                          fontWeight={isToday ? "bold" : "medium"}
-                        >
-                          {currentDate}
-                        </Text>
-                        {isToday && (
-                          <Box
-                            w="3px"
-                            h="1rem"
-                            position="absolute"
-                            zIndex="3"
-                            bg={colorMode === "light" ? "red" : "#F55"}
-                            left="-5px"
-                          />
-                        )}
-                        <Divider
-                          position="absolute"
-                          w="100%"
-                          top="8px"
-                          zIndex="1"
-                          borderWidth={0.1}
-                          borderColor="#777"
-                        />
-                      </Box>
-                    )}
-                    <Flex
-                      direction="row"
-                      textAlign="left"
-                      justify="left"
-                      mt={0}
-                      ml={7}
+            if (isNaN(date.getTime())) {
+              console.error("Invalid date:", schedule.startTime);
+            } else {
+              const options: Intl.DateTimeFormatOptions = {
+                // year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                weekday: "short",
+                timeZone: "Asia/Tokyo",
+              };
+              currentDate = date.toLocaleDateString("ja-JP", options);
+            }
+            const showDate = currentDate !== previousDate;
+            previousDate = currentDate;
+
+            // 今日の日付かどうかを判定
+            const isToday =
+              new Date().toDateString() ===
+              new Date(schedule.startTime).toDateString();
+
+            return (
+              <Flex direction="column" key={index}>
+                {showDate && (
+                  <Box
+                    textAlign="center"
+                    flex="1"
+                    position="relative"
+                    mb={6}
+                    w="100%"
+                  >
+                    <Box
+                      // backdropBlur="blur(10px)"
+                      zIndex={1000}
+                      // bg="rgba(0,0,0,0.1)"
+                      bg="red"
                     >
-                      <Stack position="relative" mb={0} align="center" gap="0">
-                        <Text fontWeight="medium" fontSize="12px">
-                          {new Date(schedule.startTime).toLocaleTimeString(
-                            "ja-JP",
-                            { hour: "2-digit", minute: "2-digit" }
-                          )}
-                        </Text>
-                        <Box
-                          w="1px"
-                          h={
-                            schedule.endTime
-                              ? `${
-                                  ((new Date(schedule.endTime).getTime() -
-                                    new Date(schedule.startTime).getTime()) /
-                                    (1000 * 60 * 30)) *
-                                  2
-                                }px`
-                              : "20px"
-                          }
-                          bg={colorMode === "light" ? "#000" : "#aaa"}
-                          my={0}
-                        />
-                        <Text fontWeight="medium" fontSize="12px">
-                          {schedule.endTime &&
-                            new Date(schedule.endTime).toLocaleTimeString(
-                              "ja-JP",
-                              { hour: "2-digit", minute: "2-digit" }
-                            )}
-                        </Text>
-                        <Tooltip
-                          label={getActivityLabel(schedule.activity)}
-                          placement="left"
-                          hasArrow
-                        >
-                          <Box
-                            w="6px"
-                            left="-9px"
-                            h="100%"
-                            position="absolute"
-                            bg={getActivityColor(schedule.activity)}
-                          />
-                        </Tooltip>
-                        {isCurrent && (
-                          <>
-                            {/* <Box h="100%" w="10px" bg="red" /> */}
-                            {/* <Box
+                      <Text
+                        zIndex="2"
+                        position="absolute"
+                        bg="#2c2b29"
+                        pr="4px"
+                        top="-4px"
+                        fontWeight={isToday ? "bold" : "medium"}
+                      >
+                        {currentDate}
+                      </Text>
+                    </Box>
+                    {isToday && (
+                      <Box
+                        w="3px"
+                        h="1rem"
+                        position="absolute"
+                        zIndex="3"
+                        bg="#F55"
+                        left="-5px"
+                      />
+                    )}
+                    <Divider
+                      position="absolute"
+                      w="100%"
+                      top="8px"
+                      zIndex="1"
+                      borderWidth={0.1}
+                      borderColor="#777"
+                    />
+                  </Box>
+                )}
+                <Flex
+                  direction="row"
+                  textAlign="left"
+                  justify="left"
+                  mt={0}
+                  ml={7}
+                >
+                  <Stack position="relative" mb={0} align="center" gap="0">
+                    <Text fontWeight="medium" fontSize="12px">
+                      {new Date(schedule.startTime).toLocaleTimeString(
+                        "ja-JP",
+                        { hour: "2-digit", minute: "2-digit" }
+                      )}
+                    </Text>
+                    <Box
+                      w="0.5px"
+                      h={
+                        schedule.endTime
+                          ? `${
+                              ((new Date(schedule.endTime).getTime() -
+                                new Date(schedule.startTime).getTime()) /
+                                (1000 * 60 * 30)) *
+                              2
+                            }px`
+                          : "20px"
+                      }
+                      bg="#ccc"
+                      my={0}
+                    />
+                    <Text fontWeight="medium" fontSize="12px">
+                      {schedule.endTime &&
+                        new Date(schedule.endTime).toLocaleTimeString("ja-JP", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                    </Text>
+                    <Tooltip
+                      label={getActivityLabel(schedule.activity)}
+                      placement="left"
+                      hasArrow
+                    >
+                      <Box
+                        w="6px"
+                        left="-9px"
+                        h="100%"
+                        position="absolute"
+                        bg={getActivityColor(schedule.activity)}
+                      />
+                    </Tooltip>
+                    {isCurrent && (
+                      <>
+                        {/* <Box h="100%" w="10px" bg="red" /> */}
+                        {/* <Box
                               w="3px"
                               h="100%"
                               position="absolute"
                               bg={colorMode === "light" ? "red" : "#F55"}
                               left="-9px"
                             /> */}
-                            <Box // Imageを包むBoxを追加
-                              position="absolute"
-                              zIndex="1000"
-                              left="-28px"
-                              top="0"
-                              height="100%" // Stackの高さ全体を継承
-                              style={{
-                                animation: isAnimating
-                                  ? "upDown 7s ease-in-out infinite"
-                                  : "none",
-                              }}
-                            >
-                              <Image
-                                src={
-                                  "/images/illust/hippo/hippo_023_pixcel.gif"
-                                }
-                                onLoad={handleImageLoad}
-                                width="36px"
-                                zIndex="1000"
-                              />
-                            </Box>
-                          </>
-                        )}
-                      </Stack>
-                      <Stack spacing={0} ml={2}>
-                        <Flex direction="row" alignItems="center">
-                          <Box
-                            bg={getProjectOptionsColor(schedule.project)}
-                            color="white"
-                            fontFamily="Noto Sans Jp"
-                            fontWeight={400}
-                            fontSize={13}
-                            borderRadius={3}
-                            lineHeight={1.2}
-                            px={1}
-                          >
-                            <Text
-                              display="inline-block"
-                              textAlign="left"
-                              fontSize="12px"
-                              fontWeight="bold"
-                              width="fit-content"
-                            >
-                              {schedule.project}
-                            </Text>
-                          </Box>
-                        </Flex>
-                        {/* {getActivityLabel(schedule.activity)} */}
-                        {/* </Text> */}
+                        <Box // Imageを包むBoxを追加
+                          position="absolute"
+                          zIndex="1000"
+                          left="-28px"
+                          top="0"
+                          height="100%" // Stackの高さ全体を継承
+                          style={{
+                            animation: isAnimating
+                              ? "upDown 7s ease-in-out infinite"
+                              : "none",
+                          }}
+                        >
+                          <Image
+                            src={"/images/illust/hippo/hippo_023_pixcel.gif"}
+                            onLoad={handleImageLoad}
+                            width="36px"
+                            zIndex="1000"
+                          />
+                        </Box>
+                      </>
+                    )}
+                  </Stack>
+                  <Stack spacing={0} ml={2}>
+                    <Flex direction="row" alignItems="center">
+                      <Box
+                        bg={getProjectOptionsColor(schedule.project)}
+                        color="white"
+                        fontFamily="Noto Sans Jp"
+                        fontWeight={400}
+                        fontSize={13}
+                        borderRadius={3}
+                        lineHeight={1.2}
+                        px={1}
+                      >
                         <Text
                           display="inline-block"
                           textAlign="left"
@@ -826,17 +792,28 @@ export const StatusDisplay = () => {
                           fontWeight="bold"
                           width="fit-content"
                         >
-                          {schedule.note}
+                          {schedule.project}
                         </Text>
-                      </Stack>
+                      </Box>
                     </Flex>
-                  </Flex>
-                );
-              })}
-            </Stack>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+                    {/* {getActivityLabel(schedule.activity)} */}
+                    {/* </Text> */}
+                    <Text
+                      display="inline-block"
+                      textAlign="left"
+                      fontSize="12px"
+                      fontWeight="bold"
+                      width="fit-content"
+                    >
+                      {schedule.note}
+                    </Text>
+                  </Stack>
+                </Flex>
+              </Flex>
+            );
+          })}
+        </Stack>
+      </CustomModal>
     </>
   );
 };
@@ -1187,7 +1164,6 @@ export const NowStatus = ({
       <Text
         border="1px solid"
         textAlign="center"
-        color={colorMode === "light" ? "black" : "white"}
         fontWeight={400}
         onClick={onOpen}
         cursor="pointer"

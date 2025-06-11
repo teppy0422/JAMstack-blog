@@ -70,6 +70,7 @@ import { CustomAvatar } from "./ui/CustomAvatar";
 import { CustomModalCloseButton } from "./ui/CustomModalCloseButton";
 import MacCloseButton from "./ui/MacCloseButton";
 import { CustomSwitchColorModeButton } from "./ui/CustomSwitchButton";
+import QrModal from "./ui/QrModal";
 
 import { useUserContext } from "@/contexts/useUserContext";
 
@@ -330,75 +331,10 @@ export default function Header() {
                       </Box>
                     </Link>
                   </NextLink>
-                  <Center
-                    onClick={onOpen}
-                    cursor="pointer"
-                    _hover={{ bg: "transparent" }}
-                    bg="transparent"
-                    h="24px"
-                    maxH="24px"
-                  >
-                    <IconButton
-                      icon={<ImQrcode style={{ fontSize: "24px" }} />}
-                      _hover={{ bg: "transparent" }}
-                      bg="transparent"
-                      p="0"
-                      height="100%"
-                      width="100%"
-                      aria-label="QR Code Icon"
-                    />
+                  <Center h="24px" maxH="24px">
+                    <QrModal />
                   </Center>
                 </Flex>
-                <Modal isOpen={isOpen} onClose={onClose}>
-                  <ModalOverlay />
-                  <ModalContent
-                    bg={
-                      colorMode === "light"
-                        ? "custom.theme.light.500"
-                        : "custom.theme.dark.500"
-                    }
-                  >
-                    <ModalHeader py={2} textAlign="center" color="#000">
-                      {getMessage({
-                        ja: "QR Code",
-                        us: "QR Code",
-                        cn: "QR 码",
-                      })}
-                    </ModalHeader>
-                    <CustomModalCloseButton
-                      onClose={onClose}
-                      colorMode={colorMode}
-                      top="-4px"
-                      right="-4px"
-                      outline={
-                        colorMode === "light" ? "4px solid" : "6px solid"
-                      }
-                      outlineColor={
-                        colorMode === "light"
-                          ? "custom.theme.light.500"
-                          : "custom.theme.dark.500"
-                      }
-                    />
-                    <ModalBody>
-                      <Flex mt="4" alignItems="center" justifyContent="center">
-                        <Box bg="white" p="5px">
-                          {typeof window !== "undefined" && (
-                            <QRCode value={window.location.href} size={80} />
-                          )}
-                        </Box>
-                      </Flex>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Text fontSize="12px" fontWeight={400} color="#000">
-                        {getMessage({
-                          ja: "スマホで読み込む事でこのページにアクセスできます",
-                          us: "You can access this page by loading it with your phone",
-                          cn: "您可以通过手机阅读本页面",
-                        })}
-                      </Text>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal>
               </Center>
               <Center>
                 <CustomSwitchColorModeButton />
@@ -741,11 +677,7 @@ export default function Header() {
           zIndex={4001}
           overflow="hidden"
         >
-          <ModalHeader bg="#3c3b39">
-            <MacCloseButton
-              onClickHandlers={[() => setLoginModalOpen(false)]}
-            />
-          </ModalHeader>
+          <MacCloseButton onClickHandlers={[() => setLoginModalOpen(false)]} />
           <ModalBody
             bg={colorMode === "light" ? "#2c2b29" : "custom.theme.dark.500"}
             borderBottomRadius="md"

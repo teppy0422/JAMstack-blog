@@ -359,7 +359,7 @@ function ThreadContent(): JSX.Element {
       timeoutId = setTimeout(() => {
         setIsScrolling(false);
       }, 1000);
-      const topOffset = 56;
+      const topOffset = 60;
       let latestDate = "";
       for (const item of dateRefs.current.filter(
         (i): i is { date: string; ref: HTMLDivElement } => !!i && !!i.ref
@@ -2470,6 +2470,7 @@ function ThreadContent(): JSX.Element {
                 position="fixed"
                 top="46px"
                 zIndex="1100"
+                opacity={isScrolling ? 1 : 0}
                 onClick={(e) => {
                   if (threadBlogUrl) {
                     e.preventDefault();

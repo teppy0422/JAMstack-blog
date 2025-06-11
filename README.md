@@ -117,8 +117,15 @@ Click on a firefly to view the description page.
 Fix design of threadTitle in BBS.
 Review Stiky date label.
 -deploy 0006-
+Review design login infomation.
+Add three close button.
+Fix background color of currentDate.
+-deploy 0007-
 
 #### to do now
+
+モーダルの ui をテンプレートにしてみる
+Try using the modal ui as a template.
 
 ログイン情報のデザインを Liquid Glass に変更
 Login information design changed to Liquid Glass.
