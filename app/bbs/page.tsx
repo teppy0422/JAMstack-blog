@@ -37,11 +37,12 @@ import SidebarBBS from "./parts/bbsSidebar";
 import { ScrollText } from "@/components/ui/CustomText";
 import { ProjectLists, CategoryLists } from "@/components/ui/CustomBadge";
 import { AnimationImage } from "@/components/ui/CustomImage";
-import { StatusDisplay } from "@/components/NowStatus";
+import { StatusDisplay } from "@/components/modals/NowStatusModal";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import { useUserContext } from "@/contexts/useUserContext";
+import NewThreadModal from "./parts/NewThreadModal";
 
 export default function BBS() {
   const {
@@ -153,6 +154,7 @@ export default function BBS() {
             ja: "※別紙1",
             us: "*Attachment 1",
             cn: "*附录1.",
+            language,
           })}
         </Text>
         <Container
@@ -162,6 +164,7 @@ export default function BBS() {
             ja: "Noto Sans JP",
             us: "Noto Sans,Noto Sans JP",
             cn: "Noto Sans SC,Noto Sans JP",
+            language,
           })}
           fontWeight={400}
         >
@@ -183,6 +186,7 @@ export default function BBS() {
                   ja: "問い合わせ",
                   us: "Inquiry",
                   cn: "询问",
+                  language,
                 })}
               </Text>
               {/* <AiOutlineWechat size={30} /> */}
@@ -215,6 +219,7 @@ export default function BBS() {
                     ja: "使用者",
                     us: "user",
                     cn: "使用者",
+                    language,
                   })}
                 </Badge>
                 <Badge variant="solid" colorScheme="purple" ml={2}>
@@ -222,6 +227,7 @@ export default function BBS() {
                     ja: "管理者",
                     us: "administrator",
                     cn: "管理者",
+                    language,
                   })}
                 </Badge>
                 <Badge variant="solid" colorScheme="red" ml={2}>
@@ -229,6 +235,7 @@ export default function BBS() {
                     ja: "開発者",
                     us: "developer",
                     cn: "开发人员",
+                    language,
                   })}
                 </Badge>
               </Box>
@@ -242,125 +249,8 @@ export default function BBS() {
           </Stack>
 
           <SidebarBBS isMain={true} reload={reloadSidebar} />
-          <HStack
-            spacing={2}
-            alignItems="center"
-            justifyContent="center"
-            mt={8}
-          >
-            <Button
-              onClick={onOpen}
-              color="#000"
-              outline="1px solid black"
-              px={2}
-            >
-              新しく追加
-            </Button>
-          </HStack>
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader pb={0} userSelect="none">
-                新しいスレッドを追加
-              </ModalHeader>
-              <ModalCloseButton />
-              <ModalBody pt={0}>
-                <Badge variant="outline" mr={2} userSelect="none">
-                  {currentUserMainCompany}
-                </Badge>
-                <Badge variant="outline" mr={2} userSelect="none">
-                  {currentUserCompany}
-                </Badge>
-                <Badge variant="outline" mr={2} userSelect="none">
-                  {currentUserName}
-                </Badge>
-                <Text mt={3} userSelect="none">
-                  対象のプロジェクトを選択
-                </Text>
-                <Divider border="1.4px solid #888" />
-                <Box as="span" fontSize="sm" fontWeight={400} color="red">
-                  {ProjectMessage}
-                </Box>
-                <ProjectLists
-                  colorMode={colorMode}
-                  onProjectClick={handleProjectClick}
-                />
-                <Text mt={4} userSelect="none">
-                  分類
-                </Text>
-                <Divider border="1.4px solid #888" />
-                <Box as="span" fontSize="sm" fontWeight={400} color="red">
-                  {CategoryMessage}
-                </Box>
-                <CategoryLists
-                  colorMode={colorMode}
-                  onCategoryClick={handleCategoryClick}
-                  userMainCompany={currentUserMainCompany}
-                />
-                <Text mt={4} userSelect="none">
-                  内容(変更可能なので適当で構いません)
-                </Text>
-                <Divider border="1.4px solid #888" />
-                <Box as="span" fontSize="sm" fontWeight={400} color="red">
-                  {TitleMessage}
-                </Box>
-                <Stack spacing="4" mt={6} direction="row" justify="flex-end">
-                  <Input
-                    ref={inputRef}
-                    type="text"
-                    value={newThreadTitle}
-                    onChange={(e) => setNewThreadTitle(e.target.value)}
-                    placeholder="ハメ図に治具座標を表示したい : 等"
-                    size="sm"
-                    color="#000"
-                    border="none"
-                    borderRadius={0}
-                    mb={0}
-                    px={0}
-                    boxShadow="none"
-                    borderBottom="1px solid #333"
-                    _focus={{ boxShadow: "none", borderBottomColor: "#000" }}
-                    _hover={{ borderBottomColor: "#000" }}
-                  />
-                  <Button
-                    onClick={createThread}
-                    colorScheme="gray"
-                    px={3}
-                    top="-8px"
-                    outline="1px solid black"
-                  >
-                    追加
-                  </Button>
-                </Stack>
-                <HStack
-                  spacing={2}
-                  alignItems="center"
-                  justifyContent="center"
-                  mt={4}
-                >
-                  {CompleteMessage && (
-                    <Box
-                      as="button"
-                      position="absolute"
-                      bottom="8px"
-                      _focus={{ boxShadow: "none" }}
-                      fontFamily="Noto Sans JP"
-                      color="#82d9d0"
-                      // color="transparent"
-                      bg="#211c1c"
-                      fontSize="18px"
-                      // borderTop="solid 1px #000"
-                      cursor="pointer"
-                      overflow="hidden" // ボックスからはみ出さないようにする
-                      w="100%"
-                    >
-                      <ScrollText colorMode={colorMode} text="追加完了&nbsp;" />
-                    </Box>
-                  )}
-                </HStack>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
+
+          <NewThreadModal />
         </Container>
         <StatusDisplay />
       </Content>

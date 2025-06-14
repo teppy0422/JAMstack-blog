@@ -37,14 +37,14 @@ export const ProjectLists: React.FC<ProjectListsProps> = ({
         display="inline-block"
         fontFamily="Noto Sans Jp"
         fontWeight={400}
-        fontSize={14}
+        fontSize={12}
         borderRadius={3}
         px={1}
         mr={2}
         cursor="pointer"
-        border={isClicked ? "solid 1px transparent" : "solid 1px #000"}
+        border={isClicked ? "solid 0.5px transparent" : "solid 0.5px #ccc"}
         bg={isClicked ? bg : "transparent"}
-        color={isClicked ? "#FFF" : "#000"}
+        color={isClicked ? "#FFF" : "#ddd"}
         onClick={() => {
           const newClicked = isClicked ? null : text;
           setClicked(newClicked);
@@ -95,20 +95,20 @@ export const CategoryLists: React.FC<CategoryListsProps> = ({
         display="inline-block"
         fontFamily="Noto Sans Jp"
         fontWeight={400}
-        fontSize={14}
+        fontSize={12}
         borderRadius={3}
         px={1}
         mr={2}
         cursor="pointer"
-        border={isClicked ? "solid 1px " + bg : "solid 1px #000"}
+        border={isClicked ? "solid 0.5px " + bg : "solid 0.5px #ddd"}
         bg={isClicked ? "transparent" : "transparent"}
-        color={isClicked ? bg : "#000"}
+        color={isClicked ? bg : "#ccc"}
         onClick={() => {
           const newClicked = isClicked ? null : text;
           setClicked(newClicked);
           onCategoryClick(newClicked);
         }}
-        _hover={{ bg: "#eee" }}
+        _hover={{ bg: "#000" }}
       >
         {text}
       </Box>

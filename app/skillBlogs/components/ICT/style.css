@@ -31,7 +31,7 @@ h1.title {
 
 .cd-main-content {
   position: relative;
-  z-index: 100000;
+  z-index: 1000;
   display: table;
 }
 

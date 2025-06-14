@@ -375,6 +375,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                 <Box fontSize={isMain ? "md" : "sm"} isTruncated>
                   {getMessage({
                     ja: title,
+                    language,
                   })}
                   {projectName && showCompleted && (
                     <>
@@ -532,6 +533,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
           ja: "Noto Sans JP",
           us: "Noto Sans,Noto Sans JP",
           cn: "Noto Sans SC,Noto Sans JP",
+          language,
         })}
         fontWeight={400}
         overflowY={isMain ? "visible" : "auto"}
@@ -637,11 +639,13 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                                 ja: "閲覧できません",
                                 us: "Cannot view",
                                 cn: "无法查看",
+                                language,
                               }),
                               getMessage({
                                 ja: "閲覧できるのは同じ会社のみです",
                                 us: "Only the same company can view",
                                 cn: "只有同一家公司可以查看",
+                                language,
                               }),
                               "error"
                             );
@@ -656,9 +660,11 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                           {mainCompany !== "開発" &&
                             getMessage({
                               ja: mainCompany,
+                              language,
                             })}
                           {getMessage({
                             ja: company,
+                            language,
                           })}
                           <Box as="span">
                             {"("}

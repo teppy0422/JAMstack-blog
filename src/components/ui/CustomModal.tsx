@@ -7,6 +7,8 @@ import {
   ModalFooter,
   Box,
   Flex,
+  ResponsiveValue,
+  ModalProps,
 } from "@chakra-ui/react";
 import { motion, useDragControls } from "framer-motion";
 import { ReactNode } from "react";
@@ -17,11 +19,12 @@ const MotionModalContent = motion(ModalContent);
 type CustomModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  modalSize?: string;
+  modalSize?: ModalProps["size"]; // ←ここを修正
   macCloseButtonHandlers: (() => void)[];
   children?: React.ReactNode;
   footer?: React.ReactNode;
   title?: string;
+  marginTop?: string;
 };
 export default function CustomModal({
   isOpen,
@@ -31,11 +34,12 @@ export default function CustomModal({
   children,
   footer,
   title,
+  marginTop = "64px",
 }: CustomModalProps) {
   const dragControls = useDragControls();
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered size={modalSize}>
+    <Modal isOpen={isOpen} onClose={onClose} size={modalSize}>
       <ModalOverlay />
       <MotionModalContent
         drag
@@ -51,21 +55,27 @@ export default function CustomModal({
         p={0}
         m={0}
         overflow="hidden"
-        style={{ cursor: "default" }}
+        style={{ cursor: "default", marginTop: marginTop, zIndex: 99999 }}
       >
-        <Box onPointerDown={(e) => dragControls.start(e)} bg="#2c2b29" p="0">
+        <Box
+          onPointerDown={(e) => dragControls.start(e)}
+          bg="custom.system.500"
+          p="0"
+        >
           <MacCloseButton
             onClickHandlers={macCloseButtonHandlers}
             title={title}
           />
         </Box>
 
-        <ModalBody bg="#2c2b29">{children}</ModalBody>
+        <ModalBody p={0}>{children}</ModalBody>
 
         {footer && (
           <>
             <Box h="1px" bg="#4c4b49" w="100%" />
-            <ModalFooter bg="#2c2b29">{footer}</ModalFooter>
+            <ModalFooter bg="#2c2b29" fontSize="12px" color="#ccc" p="9px">
+              {footer}
+            </ModalFooter>
           </>
         )}
       </MotionModalContent>

@@ -99,6 +99,7 @@ export default function Content({
                 ja: "Noto Sans JP",
                 us: "Noto Sans JP",
                 cn: "Noto Sans SC",
+                language,
               })}
               fontWeight="100"
             >
@@ -107,6 +108,7 @@ export default function Content({
                   ja: "プライバシーポリシー",
                   us: "Privacy Policy",
                   cn: "隐私政策",
+                  language,
                 })}
               </NextLink>
               <Box mr={5} />
@@ -115,6 +117,7 @@ export default function Content({
                   ja: "利用規約",
                   us: "Terms of Use",
                   cn: "条款和条件",
+                  language,
                 })}
               </NextLink>
             </Center>

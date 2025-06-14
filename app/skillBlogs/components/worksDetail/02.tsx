@@ -48,6 +48,7 @@ export default function SjpDetail() {
               ja: "簡単な説明",
               us: "Brief Description",
               cn: "简要说明",
+              language,
             })}
           </Text>
           <Text
@@ -58,6 +59,7 @@ export default function SjpDetail() {
               ja: "配線ミスがあった場合、間違い箇所と正常な状態が分かる画像を自動表示させました。それまではエラー番号(0-2000番)を図面から探していました。",
               us: "In the event of a wiring error, an image showing the wrong part and the normal state is automatically displayed. Until then, the error number (0-2000) was searched from the drawing.",
               cn: "如果出现接线错误，则会自动显示错误部件和正常状态的图像。在此之前，必须从图纸中查找错误编号（0-2000）。",
+              language,
             })}
           </Text>
           <Text className={styles.borderText}>
@@ -65,6 +67,7 @@ export default function SjpDetail() {
               ja: "特記",
               us: "special mention",
               cn: "特别提及",
+              language,
             })}
           </Text>
           <Text className={styles.text} style={{ fontSize: "14px" }}>
@@ -72,6 +75,7 @@ export default function SjpDetail() {
               ja: "Windows7でも点滅箇所がズレないようJavaScriptで点滅させる事に苦労しました。",
               us: "Even in Windows 7, we had trouble making the blinking points blink with JavaScript so that they would not be misaligned.",
               cn: "即使在 Windows 7 中，也很难通过 JavaScript 使闪烁点闪烁，从而使其不会移动。",
+              language,
             })}
           </Text>
         </Box>

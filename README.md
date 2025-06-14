@@ -121,16 +121,26 @@ Review design login infomation.
 Add three close button.
 Fix background color of currentDate.
 -deploy 0007-
+Try using the modal ui as a template.
+-deploy 0008-
+NowStatus reflects customModal.
+Bussiness card reflects customModal.
+CustomModalize the newly add button on bbs.
+fixed getMessage.
+Change all modals in downloads to customModal.
 
 #### to do now
 
-モーダルの ui をテンプレートにしてみる
-Try using the modal ui as a template.
+skillBlogs の配色を調整
+
+#### to do
+
+CustomModalize the login user icon.
+
+新しく追加ボタンで画面が更新されない気がする
 
 ログイン情報のデザインを Liquid Glass に変更
 Login information design changed to Liquid Glass.
-
-#### to do
 
 if is is useState, rendering will occur each time, so change it to useRef.
 

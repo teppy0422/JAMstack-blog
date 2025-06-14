@@ -248,6 +248,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
           ja: "クリックでデータの削除",
           us: "Delete data with a click",
           cn: "点击删除数据",
+          language,
         }),
         style: {
           color: getColor("text"),
@@ -321,6 +322,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
             ja: "金額",
             us: "Amount",
             cn: "金額",
+            language,
           }),
           yAxis: 1,
           legendIndex: 2,
@@ -337,6 +339,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
             ja: "ミス",
             us: "missed",
             cn: "失去的",
+            language,
           }),
           legendIndex: 1,
           type: "spline",
@@ -349,6 +352,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
               ja: " 回",
               us: " time",
               cn: " 回",
+              language,
             }),
           },
           color: "red",
@@ -383,6 +387,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
                       ja: "自分のデータのみ削除できます",
                       us: "Only your data can be deleted.",
                       cn: "只能删除自己的数据",
+                      language,
                     })
                   );
                 }
@@ -487,6 +492,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
               ja: "Noto Sans JP",
               us: "Noto Sans JP",
               cn: "Noto Sans SC",
+              language,
             }),
           }}
           id={`openButton-${userID}`}
@@ -505,6 +511,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
                 ja: "履歴",
                 us: "Log",
                 cn: "历史",
+                language,
               })
             : ""}
         </Box>
@@ -515,6 +522,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
             ja: "ログインしていると開けます",
             us: "You can open it if you are logged in.",
             cn: "登录后打开",
+            language,
           })}
           bg="gray.600"
         >
@@ -526,6 +534,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
                 ja: "Noto Sans JP",
                 us: "Noto Sans JP",
                 cn: "Noto Sans SC",
+                language,
               }),
             }}
           >
@@ -533,6 +542,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
               ja: "履歴",
               us: "Log",
               cn: "历史",
+              language,
             })}
           </Box>
         </Tooltip>
@@ -549,6 +559,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
               ja: "Noto Sans JP",
               us: "Noto Sans,Noto Sans JP",
               cn: "Noto Sans SC",
+              language,
             }),
           }}
         >
@@ -557,6 +568,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
               ja: "タイピング履歴",
               us: "Typing history",
               cn: "打字历史",
+              language,
             })}
           </ModalHeader>
 
@@ -574,6 +586,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
                   ja: "1分間の入力キー数",
                   us: "Keys per minute",
                   cn: "每分钟输入的按键数",
+                  language,
                 })}
                 bg="gray.600"
               >
@@ -590,12 +603,14 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
                   ja: "ミス",
                   us: "missed",
                   cn: "失去的",
+                  language,
                 })}
                 :{missedCount}
                 {getMessage({
                   ja: "回",
                   us: "time",
                   cn: "回",
+                  language,
                 })}
               </Badge>
               <Badge colorScheme="purple">
@@ -603,6 +618,7 @@ const GraphTemp = forwardRef<GraphTempHandle, GraphTempProps>((props, ref) => {
                   ja: "¥ ",
                   us: "$ ",
                   cn: "¥ ",
+                  language,
                 })}
                 {totalCost}
               </Badge>

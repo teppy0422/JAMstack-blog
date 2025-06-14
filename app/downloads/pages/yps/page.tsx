@@ -98,6 +98,7 @@ export default function Page() {
               <Text fontSize="2xl" mb={2} fontWeight={600}>
                 {getMessage({
                   ja: "誘導ポイント設定一覧表+",
+                  language,
                 })}
               </Text>
             </HStack>
@@ -106,12 +107,14 @@ export default function Page() {
                 ja: "以下からダウンロードしてください",
                 us: "Please download below",
                 cn: "请在下方下载。",
+                language,
               })}
               <br />
               {getMessage({
                 ja: "最新版には以前の更新が全て含まれています",
                 us: "The latest version includes all previous updates",
                 cn: "最新版本包括之前的所有更新",
+                language,
               })}
               <br />
               <Box
@@ -132,6 +135,7 @@ export default function Page() {
                     ja: "使い方のページ",
                     us: "Upload Procedure",
                     cn: "上传程序",
+                    language,
                   })}
                 </Link>
               </Box>

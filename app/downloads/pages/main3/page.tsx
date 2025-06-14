@@ -53,6 +53,7 @@ export default function About() {
               <Text fontSize="2xl" fontWeight={600}>
                 {getMessage({
                   ja: "順立生産システム+",
+                  language,
                 })}
               </Text>
             </HStack>
@@ -64,18 +65,21 @@ export default function About() {
                 ja: "以下からダウンロードしてください",
                 us: "Please download below",
                 cn: "请在下方下载。",
+                language,
               })}
               <br />
               {getMessage({
                 ja: "ダウンロードした.zipは必ず展開(解凍)してください",
                 us: "Be sure to extract (unzip) the .zip file you downloaded.",
                 cn: "请务必解压缩下载的 .zip 文件。",
+                language,
               })}
               <br />
               {getMessage({
                 ja: "ファイルを閲覧するにはOMRONのCX-Programmerが必要です",
                 us: `'OMRON's CX-Programmer is required to view the files`,
                 cn: "需要使用 OMRON CX-Programmer 查看文件",
+                language,
               })}
               <Box
                 display="flex"
@@ -98,6 +102,7 @@ export default function About() {
                 ja: "内部タイマーの調整",
                 us: "Adjustment of internal timer",
                 cn: "调整内部计时器",
+                language,
               })}
               descriptionIN=""
               linkHref="/download/Jdss/main3/main3_17.zip"

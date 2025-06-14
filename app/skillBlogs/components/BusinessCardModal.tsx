@@ -21,6 +21,7 @@ import {
   SimpleGrid,
   ListItem,
   ListIcon,
+  Spacer,
 } from "@chakra-ui/react";
 import QRCode from "qrcode.react";
 
@@ -35,8 +36,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import SkillGraph from "./sillGraph";
 import SkillCircle from "./skillCircle";
 import styles from "@/styles/home.module.scss";
+import CustomModal from "@/components/ui/CustomModal";
 
-const BusinessCard: React.FC = () => {
+const BusinessCardModal: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { language, setLanguage } = useLanguage();
   const { colorMode, toggleColorMode } = useColorMode();
@@ -179,6 +181,7 @@ const BusinessCard: React.FC = () => {
                   ja: "片岡 哲兵",
                   us: "\u00A0",
                   cn: "\u00A0",
+                  language,
                 })}
               </Text>
               <Text fontSize="sm" color="black">
@@ -196,6 +199,7 @@ const BusinessCard: React.FC = () => {
                     ja: "徳島県藍住町\n奥野和田135-35",
                     us: "Tokushima Aizumi-cho OkunoWada135-35",
                     cn: "徳島県藍住町奥野和田135-35",
+                    language,
                   })}
                 </Text>
               </Flex>
@@ -258,6 +262,7 @@ const BusinessCard: React.FC = () => {
                     ja: "ワイヤーハーネス歴20年の知識",
                     us: "20 years of wiring harness knowledge.",
                     cn: "20 年的线束知识",
+                    language,
                   })}
                 </Text>
               </ListItem>
@@ -275,6 +280,7 @@ const BusinessCard: React.FC = () => {
                     ja: "プログラム言語はだいたい対応可能",
                     us: "Most programming languages are supported.",
                     cn: "支持大多数编程语言",
+                    language,
                   })}
                 </Text>
               </ListItem>
@@ -310,6 +316,7 @@ const BusinessCard: React.FC = () => {
                       ja: "090-8971-4946",
                       us: "(+81)090-8971-4946",
                       cn: "(+81)090-8971-4946",
+                      language,
                     })}
                   </Text>
                 </Flex>
@@ -330,85 +337,6 @@ const BusinessCard: React.FC = () => {
                   <Text color="#FFF">https://teppy.link</Text>
                 </Flex>
               </Box>
-              {/* <Grid templateColumns="repeat(3, 1fr)" gap={0} mt={4} ml={12}>
-                <Box
-                  width="14px"
-                  height="10px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  color="white"
-                  borderLeftWidth="2px"
-                  borderTopWidth="2px"
-                  borderColor="#FFF"
-                />
-                <Box
-                  width="14px"
-                  height="10px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                />
-                <Box
-                  width="14px"
-                  height="10px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  borderTopWidth="2px"
-                  borderRightWidth="2px"
-                  borderColor="#FFF"
-                />
-
-                <Box
-                  width="14px"
-                  height="10px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                />
-                <Box
-                  width="14px"
-                  height="10px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                />
-                <Box
-                  width="14px"
-                  height="10px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                />
-                <Box
-                  width="14px"
-                  height="10px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  borderLeftWidth="2px"
-                  borderBottomWidth="2px"
-                  borderColor="#FFF"
-                />
-                <Box
-                  width="14px"
-                  height="10px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                />
-                <Box
-                  width="14px"
-                  height="10px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  borderBottomWidth="2px"
-                  borderRightWidth="2px"
-                  borderColor="#FFF"
-                />
-              </Grid> */}
               <Box ml={4} mt={2} p={1} pt={0} bg="#FFF" color="#000">
                 WEB
                 <QRCode value="https://teppy.link" size={38} />
@@ -417,29 +345,30 @@ const BusinessCard: React.FC = () => {
           </Box>
         </Box>
       </SimpleGrid>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent
-          maxWidth={["90%", "80%", "70%", "60%"]}
-          bg={colorMode === "light" ? "#f2e9df" : "#000"}
-          zIndex="100000"
-        >
-          <ModalHeader color={colorMode === "light" ? "#000" : "#FFF"}>
-            片岡 哲兵
-          </ModalHeader>
-          <ModalCloseButton
-            _focus={{ boxShadow: "none" }}
-            color={colorMode === "light" ? "#FFF" : "#000"}
-          />
-          <ModalBody>
+      <CustomModal
+        title="片岡 哲兵"
+        isOpen={isOpen}
+        onClose={onClose}
+        modalSize="lg"
+        macCloseButtonHandlers={[onClose]}
+        footer={
+          <Text
+            fontSize="12px"
+            fontWeight={400}
+            color="#ddd"
+            onClick={onClose}
+            cursor="pointer"
+            _hover={{ opacity: 0.8 }}
+          >
+            閉じる
+          </Text>
+        }
+      >
+        <Box bg="custom.system.500" color="#ccc" p={4}>
+          <Box borderRadius="md" px={6} py={3} border="1px solid #4c4b49">
             <Flex alignItems="flex-start" mb={4} justifyContent="center">
-              <Avatar src="/images/me.jpeg" width={8} height={8} m={2} />
-              <Text
-                w={["100%", "95%", "90%", "90%"]}
-                mb={20}
-                ml={0}
-                color={colorMode === "light" ? "#000" : "#FFF"}
-              >
+              <Avatar src="/images/me.jpeg" width={12} height={12} m={2} />
+              <Text w={["100%", "95%", "90%", "90%"]} ml={0} fontSize="13px">
                 {getMessage({
                   ja:
                     "高知出身。ワイヤーハーネス製造工場で/機械保全/前工程生産分析/後工程生産分析/工務/工作改善チームを経験。" +
@@ -448,61 +377,51 @@ const BusinessCard: React.FC = () => {
                     "現場の人と相談しながら更に発展させていくのが得意。プログラミングは嫌い。",
                   us: "Born in Kochi. Experienced in wire harness manufacturing plant / machine maintenance / front-end production analysis / back-end production analysis / engineering work / machine improvement team. The Craft Improvement Team gave me experience with PLC/Arduino and other hardware. Later, while combining hardware and software, I experienced HTML/JavaScript and went on to create web applications. He is good at consulting with people in the field to further develop the project. I hate programming.",
                   cn: "生于高知。在一家线束制造厂担任经验丰富的/机器维护/前端生产分析/后端生产分析/工程/机器改进小组的工作。工艺改进小组为我提供了使用 PLC/Arduino 等硬件的经验。后来，在结合硬件和软件的过程中，他体验了 HTML/JavaScript 并继续创建了一个网络应用程序。他善于与当地人协商，以进一步发展项目。我不喜欢编程。",
+                  language,
                 })}
               </Text>
             </Flex>
-            <div data-aos="fade-right" style={{ display: "inline-block" }}>
-              <Text
-                className={styles.subTitle}
-                color={colorMode === "light" ? "#000" : "#FFF"}
-              >
-                {getMessage({
-                  ja: "スキル",
-                  us: "skills",
-                  cn: "技能",
-                })}
-              </Text>
-            </div>
+          </Box>
+          <Spacer h="20px" />
+          <Box borderRadius="md" p={6} py={3} border="1px solid #4c4b49">
+            <Text className={styles.subTitle}>
+              {getMessage({
+                ja: "スキル",
+                us: "skills",
+                cn: "技能",
+                language,
+              })}
+            </Text>
             <Flex justifyContent="center">
               <SkillGraph />
             </Flex>
-
-            <Box style={{ textAlign: "center" }} mb={20}>
-              {skillCircles.map((item, index) => {
-                const aosOffset: number = (index % 5) * 70;
-                return (
-                  <Flex
-                    key={index}
-                    data-aos="fade-up"
-                    data-aos-offset={aosOffset}
-                    style={{ display: "inline-block" }}
-                  >
-                    <SkillCircle
-                      value={item.value}
-                      cirText={item.cirText}
-                      color={item.color}
-                      timing={index}
-                      img={item.img}
-                    />
-                  </Flex>
-                );
-              })}
-            </Box>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              colorScheme="gray"
-              mr={1}
-              border="1px solid gray"
-              onClick={onClose}
-            >
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          </Box>
+          <Spacer h="30px" />
+          <Box style={{ textAlign: "center" }} mb={3}>
+            {skillCircles.map((item, index) => {
+              const aosOffset: number = (index % 5) * 7000;
+              return (
+                <Flex
+                  key={index}
+                  data-aos="fade-up"
+                  data-aos-offset={aosOffset}
+                  style={{ display: "inline-block" }}
+                >
+                  <SkillCircle
+                    value={item.value}
+                    cirText={item.cirText}
+                    color={item.color}
+                    timing={index}
+                    img={item.img}
+                  />
+                </Flex>
+              );
+            })}
+          </Box>
+        </Box>
+      </CustomModal>
     </>
   );
 };
 
-export default BusinessCard;
+export default BusinessCardModal;

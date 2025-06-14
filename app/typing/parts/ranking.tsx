@@ -194,6 +194,7 @@ const Ranking = forwardRef<RankingRefHandle, RankingProps>((props, ref) => {
               ja: "Noto Sans JP",
               us: "Noto Sans JP",
               cn: "Noto Sans SC",
+              language,
             }),
           }}
         >
@@ -202,6 +203,7 @@ const Ranking = forwardRef<RankingRefHandle, RankingProps>((props, ref) => {
               ja: "ランキング",
               us: "Ranking",
               cn: "排名",
+              language,
             })}
           </ModalHeader>
 

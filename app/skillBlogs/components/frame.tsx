@@ -367,6 +367,7 @@ const Frame: React.FC<{
                 ja: "閲覧するにはログインと開発による認証が必要です",
                 us: "Login and authentication by development is required to view",
                 cn: "查看需要开发人员登录和验证",
+                language,
               })}
             </Text>
           </Box>
@@ -383,6 +384,7 @@ const Frame: React.FC<{
                 ja: "閲覧するには開発による認証が必要です",
                 us: "Authentication by development is required to view",
                 cn: "观看需要得到开发部门的授权",
+                language,
               })}
             </Text>
           </Box>
@@ -408,6 +410,7 @@ const Frame: React.FC<{
                         ja: "技術ブログ",
                         us: "skills blog",
                         cn: "技术博客",
+                        language,
                       })}
                     </Text>
                     <PiGithubLogoFill size={24} />
@@ -441,6 +444,7 @@ const Frame: React.FC<{
                             ja: "自己紹介",
                             us: "self-introduction",
                             cn: "自我介绍",
+                            language,
                           })}
                         </Box>
                       </AccordionButton>
@@ -450,6 +454,7 @@ const Frame: React.FC<{
                           ja: "開発スタッフ",
                           us: "Development Staff",
                           cn: "开发人员",
+                          language,
                         }),
                         isMain
                       )}
@@ -475,6 +480,7 @@ const Frame: React.FC<{
                             ja: "生産準備+の使い方",
                             us: "How to use Production Preparation+",
                             cn: "如何使用生产准备+",
+                            language,
                           })}
                         </Box>
                       </AccordionButton>
@@ -484,6 +490,7 @@ const Frame: React.FC<{
                           ja: "生産準備+とは",
                           us: "What is Production Preparation+",
                           cn: "什么是生产准备+？",
+                          language,
                         }),
                         isMain
                       )}
@@ -493,6 +500,7 @@ const Frame: React.FC<{
                           ja: "導入の効果",
                           us: "Effects of Introduction",
                           cn: "引进的影响",
+                          language,
                         }),
                         isMain
                       )}
@@ -502,6 +510,7 @@ const Frame: React.FC<{
                           ja: "練習(初級)",
                           us: "Practice (Elementary)",
                           cn: "实践（初级）",
+                          language,
                         }),
                         isMain
                       )}
@@ -511,6 +520,7 @@ const Frame: React.FC<{
                           ja: "練習(中級)",
                           us: "Practice (Intermediate)",
                           cn: "实践（中级）",
+                          language,
                         }),
                         isMain
                       )}
@@ -520,6 +530,7 @@ const Frame: React.FC<{
                           ja: "コネクタの撮影から座標登録",
                           us: "Coordinate registration from connector shooting",
                           cn: "登记连接器拍摄的坐标",
+                          language,
                         }),
                         isMain
                       )}
@@ -529,6 +540,7 @@ const Frame: React.FC<{
                           ja: "サブナンバーの引越し",
                           us: "Moving sub-numbers",
                           cn: "移动子编号",
+                          language,
                         }),
                         isMain
                       )}
@@ -538,6 +550,7 @@ const Frame: React.FC<{
                           ja: "プログラムの解説",
                           us: "Program Description",
                           cn: "计划说明",
+                          language,
                         }),
                         isMain
                       )}
@@ -563,6 +576,7 @@ const Frame: React.FC<{
                             ja: "順立生産システム+の使い方",
                             us: "How to use the Sequential Production System+",
                             cn: "如何使用顺序生产系统+",
+                            language,
                           })}
                         </Box>
                       </AccordionButton>
@@ -572,6 +586,7 @@ const Frame: React.FC<{
                           ja: "PC初回セットアップ手順",
                           us: "PC First Time Setup Procedure",
                           cn: "电脑首次设置程序",
+                          language,
                         }),
                         isMain
                       )}
@@ -581,6 +596,7 @@ const Frame: React.FC<{
                           ja: "MODE1(計画)の設定",
                           us: "MODE1 (planning) setting",
                           cn: "模式1（规划）。",
+                          language,
                         }),
                         isMain
                       )}
@@ -606,6 +622,7 @@ const Frame: React.FC<{
                             ja: "誘導ポイント設定一覧表",
                             us: "Induction point setting list",
                             cn: "感应点设置列表",
+                            language,
                           })}
                         </Box>
                       </AccordionButton>
@@ -615,6 +632,7 @@ const Frame: React.FC<{
                           ja: "使い方",
                           us: "treatment",
                           cn: "待遇",
+                          language,
                         }),
                         isMain
                       )}
@@ -640,6 +658,7 @@ const Frame: React.FC<{
                             ja: "改善活動の進め方",
                             us: "How to proceed with improvement activities",
                             cn: "如何开展改进活动",
+                            language,
                           })}
                         </Box>
                       </AccordionButton>
@@ -649,6 +668,7 @@ const Frame: React.FC<{
                           ja: "参考事例集",
                           us: "Collection of reference examples",
                           cn: "参考事例集",
+                          language,
                         }),
                         isMain
                       )}
@@ -674,6 +694,7 @@ const Frame: React.FC<{
                             ja: "ツール",
                             us: "tool (esp. software, etc.)",
                             cn: "工具",
+                            language,
                           })}
                         </Box>
                       </AccordionButton>
@@ -683,6 +704,7 @@ const Frame: React.FC<{
                           ja: "WEBサイト/WEBアプリ",
                           us: "Website/Application",
                           cn: "网站/应用程序",
+                          language,
                         }),
                         isMain
                       )}
@@ -790,6 +812,7 @@ const Frame: React.FC<{
                                 ja: "読み込み中...",
                                 us: "Loading...",
                                 cn: "正在加载...",
+                                language,
                               })}
                             </Text>
                           </ListItem>
@@ -858,6 +881,7 @@ const Frame: React.FC<{
                               ja: "レンダリング条件が見つかりませんでした",
                               us: "No blog found",
                               cn: "没有找到博客",
+                              language,
                             })}
                           </Text>
                         </ListItem>

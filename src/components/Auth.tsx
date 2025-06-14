@@ -77,6 +77,7 @@ export default function Auth({ userData }: AuthProps) {
           ja: "パスワードは6文字以上である必要があります",
           us: "Password must be at least 6 characters",
           cn: "密码长度至少为 6 个字符",
+          language,
         })
       );
       return;
@@ -87,6 +88,7 @@ export default function Auth({ userData }: AuthProps) {
           ja: "パスワードが一致しません",
           us: "Password does not match",
           cn: "密码不匹配",
+          language,
         })
       );
       return;
@@ -100,6 +102,7 @@ export default function Auth({ userData }: AuthProps) {
           ja: "登録済みのメールアドレスです",
           us: "Registered email address.",
           cn: "注册电子邮件地址",
+          language,
         })
       );
       return;
@@ -112,6 +115,7 @@ export default function Auth({ userData }: AuthProps) {
             ja: "メール送信の制限を超えました。しばらく待ってから再試行してください。",
             us: "You have exceeded the limit for sending e-mail. Please wait a moment and try again.",
             cn: "已超过发送电子邮件的限制。请稍候再试",
+            language,
           })
         );
       } else {
@@ -121,6 +125,7 @@ export default function Auth({ userData }: AuthProps) {
             ja: "新規登録に失敗しました: ",
             us: "New registration failed: ",
             cn: "新注册失败: ",
+            language,
           }) + error.message
         ); // エラーメッセージを設定
       }
@@ -131,6 +136,7 @@ export default function Auth({ userData }: AuthProps) {
           ja: "認証用のメールを送信しました。受信したメールで認証を行ってください。認証後にログインが可能になります。",
           us: "An email for authentication has been sent. Please use the email you received to authenticate. You will be able to log in after authentication.",
           cn: "已发送验证电子邮件。请使用收到的电子邮件进行验证。验证后，您就可以登录了",
+          language,
         })
       ); // 成功メッセージを設定
       setActiveTab("signin");
@@ -152,6 +158,7 @@ export default function Auth({ userData }: AuthProps) {
           ja: "パスワードが違います:D",
           us: "Wrong password:D",
           cn: "密码错误:D",
+          language,
         })
       ); // エラーメッセージを設定
     } else {
@@ -365,6 +372,7 @@ export default function Auth({ userData }: AuthProps) {
         ja: "Noto Sans JP",
         us: "Noto Sans JP",
         cn: "Noto Sans SC",
+        language,
       })}
       color="#ccc"
     >
@@ -397,6 +405,7 @@ export default function Auth({ userData }: AuthProps) {
                         ja: "ログイン",
                         us: "Login",
                         cn: "登录",
+                        language,
                       })}
                     </Tab>
                     <Tab>
@@ -404,6 +413,7 @@ export default function Auth({ userData }: AuthProps) {
                         ja: "新規登録",
                         us: "Sign Up",
                         cn: "新注册",
+                        language,
                       })}
                     </Tab>
                   </TabList>
@@ -414,6 +424,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "メールアドレス",
                           us: "Email Address",
                           cn: "电子邮件地址",
+                          language,
                         })}
                       </Text>
                       <Input
@@ -422,6 +433,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "Email",
                           us: "Email address",
                           cn: "电子邮件地址",
+                          language,
                         })}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -434,6 +446,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "パスワード",
                           us: "Password",
                           cn: "密码",
+                          language,
                         })}
                       </Text>
                       <Input
@@ -442,6 +455,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "パスワード",
                           us: "Password",
                           cn: "密码",
+                          language,
                         })}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -459,6 +473,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "ログイン",
                           us: "Login",
                           cn: "登录",
+                          language,
                         })}
                       </Button>
                     </TabPanel>
@@ -468,6 +483,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "新規登録の流れ:",
                           us: "New Registration Process",
                           cn: "新的注册程序",
+                          language,
                         })}
                       </Text>
                       <Text fontSize="sm" mb={2}>
@@ -476,18 +492,21 @@ export default function Auth({ userData }: AuthProps) {
                           ja: " メールアドレスと",
                           us: " Please enter Email address and",
                           cn: " 电子邮件地址和",
+                          language,
                         })}
                         <span style={{ color: spanColor }}>
                           {getMessage({
                             ja: "パスワード(6文字以上)",
                             us: " Password (at least 6 characters).",
                             cn: "密码（至少 6 个字符）",
+                            language,
                           })}
                         </span>
                         {getMessage({
                           ja: "を 入力してください。",
                           us: "",
                           cn: "输入",
+                          language,
                         })}
                       </Text>
                       <Text fontSize="sm" mb={2}>
@@ -496,6 +515,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: " 「新規登録」をクリックします。",
                           us: " Click on [Sign Up].",
                           cn: " 点击 [新注册]",
+                          language,
                         })}
                       </Text>
                       <Text fontSize="sm" mb={2}>
@@ -504,6 +524,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: " 受信したメールを確認し、認証を行ってください",
                           us: " Please check the email you received and authenticate.",
                           cn: " 检查收到的电子邮件并进行验证",
+                          language,
                         })}
                       </Text>
                       <Text fontSize="sm" mb={2}>
@@ -512,6 +533,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: " 認証後、ログインが可能になります。",
                           us: " After authentication, you will be able to log in.",
                           cn: " 通过验证后即可登录",
+                          language,
                         })}
                       </Text>
                       <Text fontSize="10px" mb={0.3} ml={1} textAlign="left">
@@ -519,6 +541,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: " メールアドレス",
                           us: " Email Address",
                           cn: " 电子邮件地址",
+                          language,
                         })}
                       </Text>
                       <Input
@@ -527,6 +550,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "Email",
                           us: "Email address",
                           cn: "电子邮件地址",
+                          language,
                         })}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -539,6 +563,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "パスワード",
                           us: "Password",
                           cn: "密码",
+                          language,
                         })}
                       </Text>
                       <Input
@@ -547,6 +572,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "パスワード(6文字以上)",
                           us: "Password (6+ words)",
                           cn: "密码(6文字以上)",
+                          language,
                         })}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -559,6 +585,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "パスワード(確認)",
                           us: "Password (Confirm)",
                           cn: "密码（确认）",
+                          language,
                         })}
                       </Text>
                       <Input
@@ -567,6 +594,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "Password",
                           us: "Password",
                           cn: "密码",
+                          language,
                         })}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -584,6 +612,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "新規登録",
                           us: "Sign Up",
                           cn: "新注册",
+                          language,
                         })}
                       </Button>
                     </TabPanel>
@@ -676,8 +705,8 @@ export default function Auth({ userData }: AuthProps) {
                   {calculateDaysSince(userData.created_at)}日)
                 </Text>
                 <Text mt={4} fontSize="13px" color="whiteAlpha.900">
-                  {getMessage({ ja: userData.userMainCompany || "" }) || ""}:{" "}
-                  {getMessage({ ja: userData.userCompany || "" }) || ""}
+                  {getMessage({ ja: userData.userMainCompany || "", language })}
+                  : {getMessage({ ja: userData.userCompany || "", language })}
                 </Text>
               </Box>
             </Flex>
@@ -712,6 +741,7 @@ export default function Auth({ userData }: AuthProps) {
                     ja: "言語選択",
                     us: "Language",
                     cn: "语言选择",
+                    language,
                   })}
                 </Text>
                 <HStack>
@@ -777,11 +807,13 @@ export default function Auth({ userData }: AuthProps) {
                   ja: "画像の翻訳は日本語以外は未対応です。",
                   us: "Translation of images is not yet available except for Japanese",
                   cn: "除日语外，尚未提供图像翻译。",
+                  language,
                 })}
                 {getMessage({
                   ja: "必要であれば対応するので連絡ください。",
                   us: "Please contact me if you need assistance.",
                   cn: "如有必要，请联系我们寻求帮助。",
+                  language,
                 })}
               </Text>
             </Box>
@@ -801,11 +833,13 @@ export default function Auth({ userData }: AuthProps) {
                       ja: "ユーザーアイコンを変更",
                       us: "Change user icon",
                       cn: "更改用户图标",
+                      language,
                     })}
                     aria-label={getMessage({
                       ja: "ユーザーアイコンを変更",
                       us: "Change user icon",
                       cn: "更改用户图标",
+                      language,
                     })}
                     hasArrow
                     placement="top"
@@ -820,6 +854,7 @@ export default function Auth({ userData }: AuthProps) {
                           ja: "アイコン変更",
                           us: "Icon Change",
                           cn: "图标更改",
+                          language,
                         })}
                       </Box>
                     </Box>
@@ -840,6 +875,7 @@ export default function Auth({ userData }: AuthProps) {
                       ja: "ログアウト",
                       us: "Logout",
                       cn: "注销",
+                      language,
                     })}
                   </Box>
                 </Box>

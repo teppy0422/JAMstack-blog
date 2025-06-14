@@ -117,6 +117,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "ガリ",
         us: "Pickled ginger",
         cn: "腌姜",
+        language,
       }),
     },
     {
@@ -125,6 +126,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "つけもの",
         us: "Tsukemono",
         cn: "Tsukemono",
+        language,
       }),
     },
     {
@@ -133,6 +135,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "梅干",
         us: "Dried plum",
         cn: "梅干",
+        language,
       }),
     },
     {
@@ -141,6 +144,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "たまご",
         us: "Roasted eggs",
         cn: "烤蛋",
+        language,
       }),
     },
     {
@@ -149,6 +153,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "イカ",
         us: "Squid",
         cn: "烏賊",
+        language,
       }),
     },
     {
@@ -157,6 +162,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "鰯",
         us: "Sardine",
         cn: "鰯",
+        language,
       }),
     },
     {
@@ -165,6 +171,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "鉄火巻き",
         us: "Tuna roll",
         cn: "铁火卷",
+        language,
       }),
     },
     {
@@ -173,6 +180,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "甘エビ",
         us: "Sweet Shrimp",
         cn: "甜虾",
+        language,
       }),
     },
     {
@@ -181,6 +189,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "エビ",
         us: "Shrimp",
         cn: "虾",
+        language,
       }),
     },
     {
@@ -189,6 +198,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "サーモン",
         us: "Salmon",
         cn: "三文鱼",
+        language,
       }),
     },
     {
@@ -197,6 +207,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "イクラ",
         us: "Salmon Roe",
         cn: "鲑鱼卵",
+        language,
       }),
     },
     {
@@ -205,6 +216,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "大トロ",
         us: "Fatty Tuna",
         cn: "大肥金枪鱼",
+        language,
       }),
     },
     {
@@ -213,6 +225,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
         ja: "さんま焼き",
         us: "Grilled Pacific Saury",
         cn: "烤秋刀鱼",
+        language,
       }),
     },
   ];
@@ -276,12 +289,14 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
               ja: "タイピング速度は",
               us: "Typing speed is",
               cn: "打字速度为 ",
+              language,
             })}
             「{sushiCommentRef.current}」
             {getMessage({
               ja: "でした",
               us: "",
               cn: "",
+              language,
             })}
           </ModalHeader>
           <ModalCloseButton _focus={{ boxShadow: "none" }} />
@@ -305,6 +320,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
                     ja: "ミス",
                     us: "missed",
                     cn: "失去的",
+                    language,
                   })}
                   :{missedCount}
                 </Box>
@@ -314,6 +330,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
                     ja: "¥ ",
                     us: "$ ",
                     cn: "¥ ",
+                    language,
                   })}
                   {totalCost}
                 </Box>
@@ -338,6 +355,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
                 ja: "もう一度プレイ[SPACE]",
                 us: "Play again [SPACE]",
                 cn: "再次播放 [SPACE]",
+                language,
               })}
             </Button>
             {user && isFlagTrue ? (
@@ -365,6 +383,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
                     ja: "登録",
                     us: "Registration",
                     cn: "注册",
+                    language,
                   })}
                 </Button>
                 <div style={{ display: "none" }}>
@@ -391,6 +410,7 @@ export const Voucher = forwardRef<VoucherRef, VoucherProps>((props, ref) => {
                     ja: "登録",
                     us: "Registration",
                     cn: "注册",
+                    language,
                   })}
                 </Button>
               </>

@@ -2,26 +2,27 @@
 
 import { useState } from "react";
 import { useDisclosure } from "@chakra-ui/react";
-import { Badge, Box, Flex, useMediaQuery } from "@chakra-ui/react";
+import { Badge, Box, Flex, useMediaQuery, Text } from "@chakra-ui/react";
 import ResponsiveModal from "@/components/responsiveModal";
+import CustomModal from "@/components/ui/CustomModal";
 
 const truncatedText = (text: string, maxLength: number) => {
   return text.length > 20 ? text.slice(0, maxLength) + "..." : text;
 };
 
 const CustomModalTab: React.FC<{
+  onOpen?: () => void;
   path: string;
   text: string;
   media: string;
-}> = ({ path, text, media }) => {
+}> = ({ onOpen, path, text, media }) => {
   const [isBase] = useMediaQuery("(max-width: 480px)");
   const maxLen = isBase ? 16 : 99;
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalPath, setModalPath] = useState("");
 
   const handleBoxClick = (path) => {
     setModalPath(path);
-    onOpen();
+    onOpen && onOpen();
   };
   return (
     <>
@@ -66,11 +67,6 @@ const CustomModalTab: React.FC<{
           ) : null}
         </Flex>
       </Badge>
-      <ResponsiveModal
-        isOpen={isOpen}
-        onClose={onClose}
-        modalPath={modalPath}
-      />
     </>
   );
 };

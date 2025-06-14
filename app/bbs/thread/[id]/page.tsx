@@ -93,6 +93,7 @@ import IconWithDrawer from "./IconWithDrawer";
 import SafeHtml from "../../parts/SafeHtml";
 import ExternalLinkText from "../../parts/ExternalLinkText";
 import UrlPreviewBox from "../../parts/UrlPreviewBox";
+import ChatFeatureMoal from "@/components/modals/ChatFeatures";
 
 import "@/styles/home.module.scss";
 // import { AppContext } from "../../../pages/_app";
@@ -112,7 +113,7 @@ const seasonalAnimations = {
 };
 import { Global } from "@emotion/react";
 import { CustomLoading } from "@/components/ui/CustomLoading";
-import { StatusDisplay } from "@/components/NowStatus";
+import { StatusDisplay } from "@/components/modals/NowStatusModal";
 import { isatty } from "tty";
 import { useUnread } from "@/contexts/UnreadContext";
 import imageCompression from "browser-image-compression";
@@ -1260,6 +1261,7 @@ function ThreadContent(): JSX.Element {
             ja: "ファイルサイズが30MBを超えています。",
             us: "File size exceeds 30 MB.",
             cn: "文件大小超过 30 MB。",
+            language,
           }),
           description:
             `(${(file.size / 1024 / 1024).toFixed(1)}MB)\n` +
@@ -1267,6 +1269,7 @@ function ThreadContent(): JSX.Element {
               ja: "以下を試してみてください。\n\n・ファイルを圧縮する\n・生産準備+の場合は画像シートを削除する\n\nそれでも送信できない場合はチャットでご相談ください。",
               us: "Try the following\n\n・Compressing files.\n・Delete image sheet if Production Preparation+.\n\nIf you still cannot send the message, please contact us via chat.",
               cn: "试试以下方法。\n\n・压缩文件\n・生产准备+时删除图像页\n\n如果仍然无法发送信息, 请通过聊天联系我们。",
+              language,
             }),
           status: "error",
           duration: 5000,
@@ -1317,11 +1320,13 @@ function ThreadContent(): JSX.Element {
           ja: "ダウンロードできません",
           us: "Cannot download",
           cn: "无法下载",
+          language,
         }),
         getMessage({
           ja: "ダウンロードするにはログインと管理者によるマスター登録が必要です",
           us: "Login and master registration by administrator is required to download",
           cn: "若要下载，您需要登录并由管理员注册为主用户",
+          language,
         }),
         "error"
       );
@@ -1519,6 +1524,7 @@ function ThreadContent(): JSX.Element {
         ja: "Noto Sans JP",
         us: "Noto Sans,Noto Sans JP",
         cn: "Noto Sans SC,Noto Sans JP",
+        language,
       })}
     >
       {isLoading ? (
@@ -1700,57 +1706,7 @@ function ThreadContent(): JSX.Element {
                 justifyContent="center"
                 alignItems="center"
               >
-                <IconWithDrawer
-                  text=""
-                  onOpen={() => handleOpen("機能一覧")}
-                  isOpen={isOpen && activeDrawer === "機能一覧"}
-                  onClose={handleClose}
-                  header={getMessage({
-                    ja: "機能一覧",
-                    us: "List of Functions",
-                    cn: "功能一览",
-                  })}
-                  size="sm"
-                  children={
-                    <Box>
-                      <Text fontWeight={400}>
-                        {getMessage({
-                          ja: "クリック長押しで以下の機能が使えます",
-                          us: "Click and hold to use the following functions",
-                          cn: "点击并按住可使用以下功能",
-                        })}
-                      </Text>
-                      <Text mt={4} fontWeight={600}>
-                        {getMessage({
-                          ja: "リプライ",
-                          us: "Functions",
-                          cn: "功能",
-                        })}
-                      </Text>
-                      <Text mt={1} ml={4} fontWeight={400}>
-                        {getMessage({
-                          ja: "投稿を参照",
-                          us: "See post",
-                          cn: "参见帖子",
-                        })}
-                      </Text>
-                      <Text mt={4} fontWeight={600}>
-                        {getMessage({
-                          ja: "削除",
-                          us: "Delete",
-                          cn: "删除",
-                        })}
-                      </Text>
-                      <Text mt={1} ml={4} fontWeight={400}>
-                        {getMessage({
-                          ja: "投稿を削除",
-                          us: "delete post",
-                          cn: "删除帖子",
-                        })}
-                      </Text>
-                    </Box>
-                  }
-                />
+                <ChatFeatureMoal />
               </Box>
               {replyToPostId && (
                 <Stack
@@ -1882,6 +1838,7 @@ function ThreadContent(): JSX.Element {
                     ja: "添付ファイルを選択",
                     us: "Select Attachment",
                     cn: "选择附件",
+                    language,
                   })}
                   cursor="pointer"
                   placement="top"
@@ -1983,6 +1940,7 @@ function ThreadContent(): JSX.Element {
                     ja: "メッセージを入力 (Shift+Enterで送信)",
                     us: "Type your message (Shift+Enter to send)",
                     cn: "输入信息（Shift+Enter 发送）。",
+                    language,
                   })}
                   py={2}
                   px={10}
@@ -2011,6 +1969,7 @@ function ThreadContent(): JSX.Element {
                     ja: "送信",
                     us: "send",
                     cn: "传动",
+                    language,
                   })}
                   cursor="pointer"
                   placement="left"
@@ -2048,11 +2007,13 @@ function ThreadContent(): JSX.Element {
                             ja: "送信するものが有りません",
                             us: "Nothing to send",
                             cn: "没什么可发送的。",
+                            language,
                           }),
                           getMessage({
                             ja: "メッセージまたはファイル添付が必要です",
                             us: "Message or file attachment required",
                             cn: "需要信息或文件附件",
+                            language,
                           }),
                           "error"
                         );
@@ -2512,6 +2473,7 @@ function ThreadContent(): JSX.Element {
                     <Box as="span" fontSize={11} fontWeight={400} mr={1}>
                       {getMessage({
                         ja: threadCompany,
+                        language,
                       })}
                     </Box>
                     <Box
@@ -2557,6 +2519,7 @@ function ThreadContent(): JSX.Element {
                       >
                         {getMessage({
                           ja: threadTitle,
+                          language,
                         })}
                         {threadBlogUrl && <FaMicroblog />}
                       </Flex>
@@ -2600,6 +2563,7 @@ function ThreadContent(): JSX.Element {
                       ja: "認証されていません",
                       us: "Not authenticated.",
                       cn: "未经授权。",
+                      language,
                     })}
                   </Text>
                 ) : threadMainCompany !== currentUserMainCompany &&
@@ -2610,14 +2574,17 @@ function ThreadContent(): JSX.Element {
                       ja: "このチャットは ",
                       us: "This chat is only viewable by ",
                       cn: "此聊天只能由 ",
+                      language,
                     })}
                     {getMessage({
                       ja: currentUserMainCompany || "",
+                      language,
                     })}
                     {getMessage({
                       ja: " のみ閲覧可能です",
                       us: "",
                       cn: " 查看",
+                      language,
                     })}
                   </Text>
                 ) : (
@@ -2864,6 +2831,7 @@ function ThreadContent(): JSX.Element {
                                             ja: "削除",
                                             us: "Delete",
                                             cn: "删减",
+                                            language,
                                           })}
                                         </Text>
                                       </Stack>
@@ -2903,6 +2871,7 @@ function ThreadContent(): JSX.Element {
                                             ja: "リプライ",
                                             us: "reply",
                                             cn: "回复",
+                                            language,
                                           })}
                                         </Text>
                                       </Stack>

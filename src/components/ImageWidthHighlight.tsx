@@ -21,6 +21,8 @@ interface ImageWithHighlightProps extends BoxProps {
   srcWidth?: string;
   srcHeight?: string;
   label: string;
+  mt?: number;
+  mb?: number;
   highlights?: Highlight[];
 }
 export const ImageWithHighlight = ({
@@ -28,6 +30,8 @@ export const ImageWithHighlight = ({
   srcWidth,
   label,
   highlights,
+  mt = 2,
+  mb = 6,
   ...props
 }: ImageWithHighlightProps) => {
   // 🔴 点滅アニメーションを定義
@@ -39,9 +43,10 @@ export const ImageWithHighlight = ({
   const blinkAnimation = `${blink} 0.8s infinite`;
 
   return (
-    <Center w="100%" mt={2} mb={6} flexDirection="column">
+    <Center w="100%" mt={mt} mb={mb} flexDirection="column">
       <Box position="relative" {...props}>
         <Image src={src} {...(srcWidth ? { w: srcWidth } : {})} />
+
         {highlights &&
           highlights.map((h, index) => (
             <Box
@@ -64,6 +69,7 @@ export const ImageWithHighlight = ({
                   transform="translate(-50%, -50%)"
                   color="red"
                   fontSize="xs"
+                  whiteSpace="nowrap"
                 >
                   {h.label}
                 </Box>
@@ -71,7 +77,11 @@ export const ImageWithHighlight = ({
             </Box>
           ))}
       </Box>
-      <Box fontSize="xs">{label}</Box>
+      <Box fontSize="xs" whiteSpace="nowrap">
+        {label}
+      </Box>
     </Center>
   );
 };
+
+export default ImageWithHighlight;

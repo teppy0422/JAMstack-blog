@@ -1,13 +1,10 @@
-import { useLanguage } from "../contexts/LanguageContext";
-
 type MessageDisplayProps = {
   ja: string;
   us?: string;
   cn?: string;
+  language: string;
 };
-const getMessage = ({ ja, us, cn }: MessageDisplayProps): string => {
-  const { language } = useLanguage();
-
+const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
   const translations = {
     お使いのブラウザは動画タグをサポートしていません: {
       us: "Your browser does not support video tags",
@@ -87,6 +84,9 @@ const getMessage = ({ ja, us, cn }: MessageDisplayProps): string => {
     書き直し: { us: "rewrite", cn: "重拟" },
     更新: { us: "update", cn: "更新" },
     設定: { us: "setting", cn: "设置" },
+    "タッチパネル/クリック": { us: "Touch panel/click", cn: "触摸屏/点击" },
+    タップ: { us: "tap", cn: "自来水" },
+    キーボード: { us: "keyboard", cn: "键盘" },
   };
 
   const {

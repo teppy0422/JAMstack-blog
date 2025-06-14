@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import {
   Box,
   Flex,
@@ -178,7 +178,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         bg="transparent"
         boxShadow={0}
         cursor="pointer"
-        _hover={{ backgroundColor: "#ddd" }}
+        _hover={{ bg: "custom.system.500" }}
         onClick={() => changeVideoSource(src)}
       >
         <Box
@@ -195,35 +195,44 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
           maxW={{ base: "50%", sm: "100px" }}
           maxH={{ base: "80px", sm: "60px" }}
           src={thumbnail}
-          alt="Caffe Latte"
-          borderRadius="8px"
+          borderRadius="6px"
           border="0.5px solid"
-          mt="8px"
-          mb="4px"
-          ml="10px"
+          py="4px"
+          ml="4px"
         />
         <Stack>
-          <CardBody maxH={{ base: "80px", sm: "60px" }} p={2} pl={3}>
+          <CardBody maxH={{ base: "80px", sm: "60px" }} p={1} pl={2}>
             <Flex
               direction="column"
               justifyContent="space-between"
               height="100%"
+              textAlign="left"
             >
               <Heading
-                size="xs"
+                fontSize="12px"
+                textAlign="left"
                 overflow="hidden"
                 display="-webkit-box"
                 style={{
                   WebkitBoxOrient: "vertical",
                   WebkitLineClamp: 2, // 2行まで表示
                 }}
+                color="#eee"
               >
                 {title}
-                {/* {src} */}
               </Heading>
-              <Text py="1" fontSize={12} bottom="0" position="absolute">
+              <Text
+                py="1"
+                fontSize="10px"
+                bottom="0"
+                position="absolute"
+                textAlign="left"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+                color="#ccc"
+              >
                 {name}
-                {/* {youtubePath} */}
               </Text>
             </Flex>
           </CardBody>
@@ -268,342 +277,386 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
-
+  // 現在からの期間
+  function getPastText(dateString: string): string {
+    const now = new Date();
+    const target = new Date(dateString);
+    const diffMs = now.getTime() - target.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays < 30) {
+      return `${diffDays}日前`;
+    }
+    const diffMonths = Math.floor(diffDays / 30); // おおよそで月数を計算
+    if (diffMonths < 12) {
+      return `${diffMonths}ヶ月前`;
+    }
+    const diffYears = Math.floor(diffMonths / 12);
+    if (diffYears < 10) {
+      return `${diffYears}年前`;
+    }
+    return "10年前以上前";
+  }
   return (
     <>
-      <HStack
-        px={2}
-        py={1}
-        bg={
-          colorMode === "light"
-            ? "custom.theme.light.50"
-            : "custom.theme.dark.700"
-        }
-        borderBottom="1px"
-        borderColor="gray.300"
-        spacing={3}
-      >
-        {/* 左：ロゴ */}
-        <Box
-          justifyContent="center"
-          display="flex"
-          alignItems="center"
-          color={colorMode === "light" ? "#D13030" : "#F89173"}
-          w="36px"
-          minW="36px"
-          mr="0"
-          ml="0"
-          bottom="4px"
-        >
-          <YoutubeLike />
-        </Box>
-        {/* タイトル（オプション） */}
-        <Box fontWeight="900" fontSize="lg" letterSpacing="-1px">
-          Premium
-        </Box>
-
-        {/* 中央：検索バー */}
-        <Spacer />
-        <InputGroup
-          maxW="600px"
-          flex="3"
-          display={{ base: "none", sm: "block" }}
-        >
-          <Input
-            placeholder="検索"
-            bg={colorMode === "light" ? "gray.100" : "gray.800"}
-            borderRadius="3xl"
-            h="28px"
-            fontSize="xs"
-            focusBorderColor="gray.400" // ★ これが一番確実！
-          />
-          <InputRightElement
-            borderRightRadius="3xl"
-            border="1px solid"
-            borderColor={colorMode === "light" ? "gray.500" : "gray.600"}
-            bg={colorMode === "light" ? "gray.100" : "gray.800"}
-            w={{ base: "3rem", md: "4rem" }}
-            h="28px"
-          >
-            <IconButton
-              aria-label="Search"
-              icon={<SearchIcon />}
-              variant="ghost"
-              mx="20px"
-              w="100px"
-              _hover={{ bg: "none" }}
-            />
-          </InputRightElement>
-        </InputGroup>
-        <Spacer />
-
-        {/* 右：通知・アカウント */}
-        <HStack spacing={3}>
-          <IconButton
-            aria-label="Notifications"
-            icon={<TbBell />}
-            variant="ghost"
-            fontSize="24px"
-          />
-          <CustomAvatar
-            src={currentUserPictureUrl ?? undefined}
-            boxSize="34px"
-          />
-        </HStack>
-      </HStack>
-      <Grid
-        mt={0}
-        p={1}
+      <Box
+        maxH="60vh"
         overflowY="auto"
-        maxHeight="90vh"
-        fontFamily={getMessage({
-          ja: "Noto Sans JP",
-          us: "Noto Sans,Noto Sans JP",
-          cn: "Noto Sans SC",
-        })}
-        templateColumns={{ base: "1fr", md: "5fr 2fr" }}
-        gap={6}
+        overflowX="hidden"
+        bg="custom.system.800"
+        color="#ddd"
       >
-        <VStack flex="5">
+        <HStack
+          px={2}
+          py={1}
+          // borderBottom="1px"
+          borderColor="gray.300"
+          spacing={0.5}
+          bg="custom.system.700"
+          mb="10px"
+        >
+          {/* 左：ロゴ */}
           <Box
-            border="1px solid "
-            borderColor={colorMode === "light" ? "gray.200" : "gray.400"}
-            borderRadius="0px"
-            width="100%"
-            // maxWidth="800px"
-            margin="0 auto"
-            overflow="hidden"
-            position="relative"
-            boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
-            cursor="pointer"
+            justifyContent="center"
+            display="flex"
+            alignItems="center"
+            color={colorMode === "light" ? "#D13030" : "#F89173"}
+            w="36px"
+            minW="36px"
+            mr="0"
+            ml="0"
+            bottom="4px"
           >
-            <video
-              className="box1"
-              ref={videoRef}
-              onClick={togglePlayPause}
-              {...(autoPlay ? { autoPlay: true, loop: true } : {})}
-              src={src}
-              style={{
-                width: "100%",
-                height: "auto",
-              }}
+            <YoutubeLike />
+          </Box>
+          <Box fontWeight="900" fontSize="lg" letterSpacing="-1px">
+            Premium
+          </Box>
+
+          <Spacer />
+          <InputGroup
+            maxW="600px"
+            flex="3"
+            display={{ base: "none", sm: "block" }}
+          >
+            <Input
+              placeholder="検索"
+              color="#ddd"
+              bg="custom.system.700"
+              border="0.5px solid"
+              borderColor="custom.system.100"
+              borderRadius="full"
+              h="28px"
+              fontSize="13px"
+              focusBorderColor="custom.system.200"
             />
+            <InputRightElement
+              borderRightRadius="full"
+              border="0.5px solid"
+              borderColor="custom.system.100"
+              bg="custom.system.500"
+              w={{ base: "2rem", md: "3rem" }}
+              h="28px"
+            >
+              <IconButton
+                aria-label="Search"
+                icon={<SearchIcon />}
+                color="#ddd"
+                variant="ghost"
+                mx="20px"
+                w="100px"
+                _hover={{ bg: "none" }}
+              />
+            </InputRightElement>
+          </InputGroup>
+          <Spacer />
+
+          <HStack spacing={3}>
+            <IconButton
+              aria-label="Notifications"
+              icon={<TbBell />}
+              fontSize="24px"
+              bg="transparent"
+              borderRadius="full"
+              color="#ccc"
+              _hover={{ bg: "custom.system.500" }}
+            />
+            <CustomAvatar
+              src={currentUserPictureUrl ?? undefined}
+              boxSize="34px"
+            />
+          </HStack>
+        </HStack>
+        <Grid
+          mt={0}
+          p={1}
+          // overflowY="auto"
+          maxHeight="90vh"
+          fontFamily={getMessage({
+            ja: "Noto Sans JP",
+            us: "Noto Sans,Noto Sans JP",
+            cn: "Noto Sans SC",
+            language,
+          })}
+          templateColumns={{ base: "1fr", xl: "5fr 2fr" }}
+          gap={3}
+        >
+          <VStack flex="5">
             <Box
-              id="progress-container"
-              position="absolute"
-              bottom="0"
-              left="0"
+              border="0.5px solid "
+              borderColor="custom.system.300"
+              borderRadius="0px"
               width="100%"
-              backgroundColor="#777"
-              height="4px"
+              // maxWidth="800px"
+              margin="0 auto"
+              overflow="hidden"
+              position="relative"
+              boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
               cursor="pointer"
             >
-              <Progress
-                id="progress-bar"
-                size="xs"
-                backgroundColor="red"
-                value={0}
+              <video
+                className="box1"
+                ref={videoRef}
+                onClick={togglePlayPause}
+                {...(autoPlay ? { autoPlay: true, loop: true } : {})}
+                src={src}
                 style={{
-                  width: "0%",
-                  height: "100%",
+                  width: "100%",
+                  height: "auto",
                 }}
               />
-            </Box>
-            <Center
-              id="pause-overlay"
-              position="absolute"
-              top="0"
-              width="100%"
-              height="100%"
-              bg="rgba(0, 0, 0, 0.3)"
-              color="white"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              cursor="pointer"
-              onClick={togglePlayPause}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              onTouchStart={handleTouch}
-            >
-              <HStack
+              <Box
+                id="progress-container"
                 position="absolute"
-                bottom={0}
+                bottom="0"
                 left="0"
-                spacing={6}
-                m={4}
-                opacity={visible ? 1 : 0}
-                pointerEvents={visible ? "auto" : "none"}
-                transition="opacity 0.5s ease"
+                width="100%"
+                backgroundColor="#777"
+                height="4px"
+                cursor="pointer"
               >
-                <Box
-                  as="svg"
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 24 24"
-                  height="24px"
-                  width="24px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  _hover={{ fill: "red", stroke: "red" }} // マウスオーバーで色を青に変更
-                  onClick={rewindPlay} // クリックで先頭に戻る
-                  cursor="pointer"
-                >
-                  <path d="M19.496 4.136l-12 7a1 1 0 0 0 0 1.728l12 7a1 1 0 0 0 1.504 -.864v-14a1 1 0 0 0 -1.504 -.864z"></path>
-                  <path d="M4 4a1 1 0 0 1 .993 .883l.007 .117v14a1 1 0 0 1 -1.993 .117l-.007 -.117v-14a1 1 0 0 1 1 -1z"></path>
-                </Box>
-                <Box
-                  as="svg"
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 24 24"
-                  height="24px"
-                  width="24px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  _hover={{ fill: "red", stroke: "red" }} // マウスオーバーで色を赤に変更
-                >
-                  <path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z"></path>
-                </Box>
-                <Box
-                  as="svg"
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 24 24"
-                  height="24px"
-                  width="24px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  _hover={{ fill: "red", stroke: "red" }} // マウスオーバーで色を青に変更
-                  // onClick={handleRewind} // クリックで先頭に戻る
-                  cursor="pointer"
-                >
-                  <path d="M3 5v14a1 1 0 0 0 1.504 .864l12 -7a1 1 0 0 0 0 -1.728l-12 -7a1 1 0 0 0 -1.504 .864z"></path>
-                  <path d="M20 4a1 1 0 0 1 .993 .883l.007 .117v14a1 1 0 0 1 -1.993 .117l-.007 -.117v-14a1 1 0 0 1 1 -1z"></path>
-                </Box>
-                <Box
-                  as="svg"
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 24 24"
-                  height="24px"
-                  width="24px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  _hover={{ fill: "red", stroke: "red" }} // マウスオーバーで色を青に変更
-                  cursor="pointer"
-                  onClick={toggleVolume} // クリックでボリュームを切り替える
-                >
-                  {isMuted ? (
-                    <path d="m7.727 6.313-4.02-4.02-1.414 1.414 18 18 1.414-1.414-2.02-2.02A9.578 9.578 0 0 0 21.999 12c0-4.091-2.472-7.453-5.999-9v2c2.387 1.386 3.999 4.047 3.999 7a8.13 8.13 0 0 1-1.671 4.914l-1.286-1.286C17.644 14.536 18 13.19 18 12c0-1.771-.775-3.9-2-5v7.586l-2-2V2.132L7.727 6.313zM4 17h2.697L14 21.868v-3.747L3.102 7.223A1.995 1.995 0 0 0 2 9v6c0 1.103.897 2 2 2z"></path>
-                  ) : (
-                    <>
-                      <path d="M16 21c3.527-1.547 5.999-4.909 5.999-9S19.527 4.547 16 3v2c2.387 1.386 3.999 4.047 3.999 7S18.387 17.614 16 19v2z"></path>
-                      <path d="M16 7v10c1.225-1.1 2-3.229 2-5s-.775-3.9-2-5zM4 17h2.697L14 21.868V2.132L6.697 7H4c-1.103 0-2 .897-2 2v6c0 1.103.897 2 2 2z"></path>
-                    </>
-                  )}
-                </Box>
-              </HStack>
-            </Center>
-          </Box>
-          <Box width="100%" textAlign="left">
-            <Text fontSize={18} fontWeight={600}>
-              {title}
-            </Text>
-            <HStack align="start" my={2}>
-              <Avatar
-                size="sm"
-                src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp"
-              />
-              <Text>kataoka</Text>
-            </HStack>
-            <Card
-              w="100%"
-              p={2}
-              onClick={handleToggleText}
-              bg="rgba(0,0,0,0.07)"
-              cursor="pointer"
-            >
-              <Box fontWeight={500} fontSize={14}>
-                {date}
+                <Progress
+                  id="progress-bar"
+                  size="xs"
+                  backgroundColor="red"
+                  value={0}
+                  style={{
+                    width: "0%",
+                    height: "100%",
+                  }}
+                />
               </Box>
-              <Text whiteSpace="pre-wrap" fontSize={14}>
-                {showFullText ? textContent : `${truncatedText}...`}
-                <Box as="span" fontSize={11} ml={3}>
-                  {showFullText
-                    ? ""
-                    : getMessage({
-                        ja: "もっと読む",
-                        us: "Read more",
-                        cn: "更多信息",
-                      })}
-                </Box>
+              <Center
+                id="pause-overlay"
+                position="absolute"
+                top="0"
+                width="100%"
+                height="100%"
+                bg="rgba(0, 0, 0, 0.3)"
+                color="white"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                cursor="pointer"
+                onClick={togglePlayPause}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onTouchStart={handleTouch}
+              >
+                <HStack
+                  position="absolute"
+                  bottom={0}
+                  left="0"
+                  spacing={6}
+                  m={4}
+                  opacity={visible ? 1 : 0}
+                  pointerEvents={visible ? "auto" : "none"}
+                  transition="opacity 0.5s ease"
+                >
+                  <Box
+                    as="svg"
+                    stroke="currentColor"
+                    fill="currentColor"
+                    strokeWidth="0"
+                    viewBox="0 0 24 24"
+                    height="24px"
+                    width="24px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    _hover={{ fill: "red", stroke: "red" }} // マウスオーバーで色を青に変更
+                    onClick={rewindPlay} // クリックで先頭に戻る
+                    cursor="pointer"
+                  >
+                    <path d="M19.496 4.136l-12 7a1 1 0 0 0 0 1.728l12 7a1 1 0 0 0 1.504 -.864v-14a1 1 0 0 0 -1.504 -.864z"></path>
+                    <path d="M4 4a1 1 0 0 1 .993 .883l.007 .117v14a1 1 0 0 1 -1.993 .117l-.007 -.117v-14a1 1 0 0 1 1 -1z"></path>
+                  </Box>
+                  <Box
+                    as="svg"
+                    stroke="currentColor"
+                    fill="currentColor"
+                    strokeWidth="0"
+                    viewBox="0 0 24 24"
+                    height="24px"
+                    width="24px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    _hover={{ fill: "red", stroke: "red" }} // マウスオーバーで色を赤に変更
+                  >
+                    <path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z"></path>
+                  </Box>
+                  <Box
+                    as="svg"
+                    stroke="currentColor"
+                    fill="currentColor"
+                    strokeWidth="0"
+                    viewBox="0 0 24 24"
+                    height="24px"
+                    width="24px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    _hover={{ fill: "red", stroke: "red" }} // マウスオーバーで色を青に変更
+                    // onClick={handleRewind} // クリックで先頭に戻る
+                    cursor="pointer"
+                  >
+                    <path d="M3 5v14a1 1 0 0 0 1.504 .864l12 -7a1 1 0 0 0 0 -1.728l-12 -7a1 1 0 0 0 -1.504 .864z"></path>
+                    <path d="M20 4a1 1 0 0 1 .993 .883l.007 .117v14a1 1 0 0 1 -1.993 .117l-.007 -.117v-14a1 1 0 0 1 1 -1z"></path>
+                  </Box>
+                  <Box
+                    as="svg"
+                    stroke="currentColor"
+                    fill="currentColor"
+                    strokeWidth="0"
+                    viewBox="0 0 24 24"
+                    height="24px"
+                    width="24px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    _hover={{ fill: "red", stroke: "red" }} // マウスオーバーで色を青に変更
+                    cursor="pointer"
+                    onClick={toggleVolume} // クリックでボリュームを切り替える
+                  >
+                    {isMuted ? (
+                      <path d="m7.727 6.313-4.02-4.02-1.414 1.414 18 18 1.414-1.414-2.02-2.02A9.578 9.578 0 0 0 21.999 12c0-4.091-2.472-7.453-5.999-9v2c2.387 1.386 3.999 4.047 3.999 7a8.13 8.13 0 0 1-1.671 4.914l-1.286-1.286C17.644 14.536 18 13.19 18 12c0-1.771-.775-3.9-2-5v7.586l-2-2V2.132L7.727 6.313zM4 17h2.697L14 21.868v-3.747L3.102 7.223A1.995 1.995 0 0 0 2 9v6c0 1.103.897 2 2 2z"></path>
+                    ) : (
+                      <>
+                        <path d="M16 21c3.527-1.547 5.999-4.909 5.999-9S19.527 4.547 16 3v2c2.387 1.386 3.999 4.047 3.999 7S18.387 17.614 16 19v2z"></path>
+                        <path d="M16 7v10c1.225-1.1 2-3.229 2-5s-.775-3.9-2-5zM4 17h2.697L14 21.868V2.132L6.697 7H4c-1.103 0-2 .897-2 2v6c0 1.103.897 2 2 2z"></path>
+                      </>
+                    )}
+                  </Box>
+                </HStack>
+              </Center>
+            </Box>
+            <Box width="100%" textAlign="left" ml="10px">
+              <Text textAlign="left" fontSize="16px" fontWeight={600} ml={2}>
+                {title}
               </Text>
-            </Card>
-          </Box>
-        </VStack>
-        <VStack flex="2">
-          <Card
-            border="1px solid"
-            borderColor="#888"
-            maxH="80vh"
-            width="100%"
-            bg="transparent"
-            mb="20px"
-          >
-            <Box width="100%" bg="rgba(255, 255, 255, 0.3)">
-              <Heading size="xs" mx={3} mt={1.5}>
-                {getMessage({
-                  ja: "再生リスト",
-                  us: "PlayList",
-                  cn: "播放列表",
-                })}
-              </Heading>
+              <HStack align="center" my={2} ml={1}>
+                <Avatar
+                  size="sm"
+                  src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp"
+                />
+                <Text fontSize="16px">kataoka</Text>
+              </HStack>
+              <Card
+                w="100%"
+                p={2}
+                onClick={handleToggleText}
+                bg="custom.system.500"
+                color="#ddd"
+                cursor="pointer"
+                fontSize={13}
+              >
+                <Box fontWeight={500}>{date + "  " + getPastText(date)}</Box>
+                <Text whiteSpace="pre-wrap" textAlign="left">
+                  {showFullText ? textContent : `${truncatedText}...`}
+                  <Box as="span" fontSize={11} ml={3}>
+                    {showFullText
+                      ? ""
+                      : getMessage({
+                          ja: "もっと読む",
+                          us: "Read more",
+                          cn: "更多信息",
+                          language,
+                        })}
+                  </Box>
+                </Text>
+              </Card>
             </Box>
-            <Box
-              overflowY="auto" // 縦方向にスクロール可能にする
-              // maxHeight="200px"
+          </VStack>
+          <VStack flex="2">
+            <Card
+              border="0.5px solid"
+              borderColor="custom.system.100"
+              maxH="80vh"
+              width="100%"
+              bg="transparent"
+              mb="20px"
+              overflow="hidden"
             >
-              <CustomCard
-                title={getMessage({
-                  ja: "先ハメ誘導を使った作業",
-                  us: "Work with Pre-Fitting Guidance",
-                  cn: "使用先装引导",
-                })}
-                name={"41." + getMessage({ ja: "先ハメ誘導" })}
-                src="downloads/tabs/41"
-                thumbnail="/images/thumbnail/41.png"
-              />
-              <CustomCard
-                title={getMessage({
-                  ja: "ディスプレイ移動",
-                  us: "Display Movement",
-                  cn: "显示屏移动",
-                })}
-                name="56.net"
-                src="downloads/tabs/56.net"
-                thumbnail="/images/thumbnail/56.net.png"
-              />
-              <CustomCard
-                title="main2(SSC)"
-                name={getMessage({
-                  ja: "順立生産システム",
-                })}
-                src="downloads/tabs/main2"
-                thumbnail="/images/thumbnail/main2.png"
-              />
-              <CustomCard
-                title="main3(PLC)"
-                name={getMessage({
-                  ja: "順立生産システム",
-                })}
-                src="downloads/tabs/main3plc"
-                thumbnail="/images/thumbnail/main3.png"
-              />
-            </Box>
-          </Card>
-        </VStack>
-      </Grid>
+              <Box
+                width="100%"
+                color="#ddd"
+                fontWeight="600"
+                bg="custom.system.400"
+                textAlign="center"
+                verticalAlign="middle"
+              >
+                <Heading size="xs" mx={3} my={1}>
+                  {getMessage({
+                    ja: "その他の動画",
+                    us: "PlayList",
+                    cn: "播放列表",
+                    language,
+                  })}
+                </Heading>
+              </Box>
+              <Flex
+                direction="column"
+                overflowY="auto" // 縦方向にスクロール可能にする
+                // maxHeight="200px"
+                py="4px"
+              >
+                <CustomCard
+                  title={getMessage({
+                    ja: "先ハメ誘導を使った作業",
+                    us: "Work with Pre-Fitting Guidance",
+                    cn: "使用先装引导",
+                    language,
+                  })}
+                  name={"41." + getMessage({ ja: "先ハメ誘導", language })}
+                  src="downloads/tabs/41"
+                  thumbnail="/images/thumbnail/41.png"
+                />
+                <CustomCard
+                  title={getMessage({
+                    ja: "ディスプレイ移動",
+                    us: "Display Movement",
+                    cn: "显示屏移动",
+                    language,
+                  })}
+                  name="56.net"
+                  src="downloads/tabs/56.net"
+                  thumbnail="/images/thumbnail/56.net.png"
+                />
+                <CustomCard
+                  title="main2(SSC)"
+                  name={getMessage({
+                    ja: "順立生産システム",
+                    language,
+                  })}
+                  src="downloads/tabs/main2"
+                  thumbnail="/images/thumbnail/main2.png"
+                />
+                <CustomCard
+                  title="main3(PLC)"
+                  name={getMessage({
+                    ja: "順立生産システム",
+                    language,
+                  })}
+                  src="downloads/tabs/main3plc"
+                  thumbnail="/images/thumbnail/main3.png"
+                />
+              </Flex>
+            </Card>
+          </VStack>
+        </Grid>
+      </Box>
     </>
   );
 };

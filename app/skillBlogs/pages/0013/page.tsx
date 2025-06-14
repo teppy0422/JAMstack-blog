@@ -283,6 +283,7 @@ const BlogPage: React.FC = () => {
             <Text>
               {getMessage({
                 ja: "開発",
+                language,
               })}
             </Text>
           </HStack>
@@ -291,6 +292,7 @@ const BlogPage: React.FC = () => {
               ja: "ベース楽譜",
               us: "Bass Scores",
               cn: "低音提琴乐谱",
+              language,
             })}
           </Heading>
           <CustomBadge
@@ -298,6 +300,7 @@ const BlogPage: React.FC = () => {
               ja: "バンド",
               us: "band",
               cn: "带",
+              language,
             })}
           />
           <Text
@@ -307,6 +310,7 @@ const BlogPage: React.FC = () => {
           >
             {getMessage({
               ja: "更新日",
+              language,
             })}
             :2024-12-07
           </Text>
@@ -319,6 +323,7 @@ const BlogPage: React.FC = () => {
               ja: "マリーゴールド",
               us: "marigold",
               cn: "万寿菊",
+              language,
             })
           }
           sectionRefs={sectionRefs}
@@ -513,6 +518,7 @@ const BlogPage: React.FC = () => {
               ja: "チューニング",
               us: "tuning",
               cn: "调音",
+              language,
             })
           }
           sectionRefs={sectionRefs}

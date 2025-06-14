@@ -3,7 +3,7 @@ import { useDisclosure, Text, IconButton, Flex, Box } from "@chakra-ui/react";
 import QRCode from "qrcode.react";
 import { ImQrcode } from "react-icons/im";
 import getMessage from "@/utils/getMessage";
-import CustomModal from "./CustomModal";
+import CustomModal from "../ui/CustomModal";
 
 export default function QrModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,7 +33,12 @@ export default function QrModal() {
           </Text>
         }
       >
-        <Flex my={4} alignItems="center" justifyContent="center">
+        <Flex
+          py={4}
+          alignItems="center"
+          justifyContent="center"
+          bg="custom.system.500"
+        >
           <Box bg="white" p="5px">
             {typeof window !== "undefined" && (
               <QRCode value={window.location.href} size={80} />
