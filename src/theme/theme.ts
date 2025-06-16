@@ -89,6 +89,11 @@ export const theme = extendTheme({
           900: "#63171B",
         },
       },
+      brand: {
+        dark: {
+          500: "#f79172",
+        },
+      },
       system: {
         100: "#6f6e6c", // 明るめグレー
         200: "#575653", // 少し暗め

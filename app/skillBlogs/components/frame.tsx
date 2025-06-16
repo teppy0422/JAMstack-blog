@@ -35,7 +35,7 @@ import "@fontsource/yomogi";
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import ReadByIcon from "./ReadByIcon";
-import { LuHeartIcon } from "@/components/icons";
+import { LuHeartIcon } from "@/components/ui/icons";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
@@ -772,8 +772,8 @@ const Frame: React.FC<{
                   flex="10"
                   bg={
                     colorMode === "light"
-                      ? "rgb(255,255,255,0.3)"
-                      : "rgb(255,255,255,0.1)"
+                      ? "rgb(255,255,255,0.15)"
+                      : "rgb(255,255,255,0.01)"
                   }
                   w={["100%", "100%", "100%", "70%"]}
                   p={4}

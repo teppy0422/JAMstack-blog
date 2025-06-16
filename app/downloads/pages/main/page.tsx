@@ -26,7 +26,7 @@ import {
 import { FocusableElement } from "@chakra-ui/utils"; // FocusableElement をインポート
 
 import { MdSettings, MdCheckCircle, MdHelpOutline } from "react-icons/md";
-import { JdssIcon } from "@/components/icons";
+import { JdssIcon } from "@/components/ui/icons";
 import NextImage from "next/image";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
 

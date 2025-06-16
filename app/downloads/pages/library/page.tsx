@@ -16,7 +16,7 @@ import { SiSemanticuireact } from "react-icons/si";
 import { MdSettings, MdCheckCircle, MdHelpOutline } from "react-icons/md";
 import NextImage from "next/image";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
-import { SjpIcon } from "@/components/icons";
+import { SjpIcon } from "@/components/ui/icons";
 import styles from "@/styles/home.module.scss";
 
 import Hippo_001_wrap from "@/components/3d/hippo_001_wrap";

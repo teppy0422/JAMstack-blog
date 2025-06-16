@@ -25,6 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { supabase } from "@/utils/supabase/client-js";
 import { MdCheckBox } from "react-icons/md";
+
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
 
 import NextLink from "next/link";

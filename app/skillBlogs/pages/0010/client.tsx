@@ -281,7 +281,7 @@ const BlogPage: React.FC = () => {
             })}
             <UnzipModal />
             {getMessage({
-              ja: "をしてください。",
+              ja: "してください。",
               us: "the .zip file you downloaded.",
               cn: "下载的 .zip 文件。",
               language,
@@ -845,7 +845,6 @@ const BlogPage: React.FC = () => {
               cn: "按住",
               language,
             })}
-            <Key>Shift</Key>
             {getMessage({
               ja: "",
               us: ".",

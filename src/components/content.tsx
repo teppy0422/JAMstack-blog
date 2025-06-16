@@ -51,7 +51,7 @@ export default function Content({
             bg={
               colorMode === "light"
                 ? "custom.theme.light.500"
-                : "custom.theme.dark.500"
+                : "custom.system.900"
             }
           >
             <Box flex="1">

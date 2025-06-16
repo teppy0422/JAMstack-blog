@@ -928,62 +928,7 @@ export default function WelcomeClient() {
               lg: "scall(1.25)",
               xl: "scall(1.25)",
             }}
-          >
-            {/* <svg
-              width="352"
-              height="50"
-              viewBox="0 0 352 50"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <clipPath id="textClip">
-                  <rect x="0" y="0" width="0" height="100">
-                    <animate
-                      attributeName="width"
-                      from="0"
-                      to="450"
-                      dur="1s"
-                      begin="2s"
-                      fill="freeze"
-                    />
-                  </rect>
-                </clipPath>
-              </defs>
-              <text
-                x="0"
-                y="30"
-                height="100"
-                font-family="'Rampart One', 'M PLUS Rounded 1c'"
-                font-size="32"
-                fill="none"
-                stroke={colorMode === "light" ? "Orange" : "white"}
-                // stroke={colorMode === "light" ? "#333" : "white"}
-                stroke-width="1"
-                stroke-dasharray="340"
-                stroke-dashoffset="340"
-              >
-                提供中の主なプログラム
-                <animate
-                  attributeName="stroke-dashoffset"
-                  from="450"
-                  to="0"
-                  dur="3s"
-                  fill="freeze"
-                />
-              </text>
-              <text
-                x="0"
-                y="30"
-                height="100"
-                font-family="'Rampart One', 'M PLUS Rounded 1c'"
-                font-size="32"
-                fill={colorMode === "light" ? "#333" : "#FFF"}
-                clip-path="url(#textClip)"
-              >
-                提供中の主なプログラム
-              </text>
-            </svg> */}
-          </Box>
+          ></Box>
 
           <Card
             maxW="640px"

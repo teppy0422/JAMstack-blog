@@ -7,7 +7,6 @@ type MacCloseButtonProps = {
   onClickHandlers?: Array<(() => void) | undefined>;
   title?: string;
 };
-
 export const MacCloseButton = ({
   onClickHandlers = [],
   title,

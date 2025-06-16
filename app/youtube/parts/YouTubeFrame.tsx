@@ -24,32 +24,40 @@ import {
 import { SearchIcon, BellIcon } from "@chakra-ui/icons";
 import { TbBell } from "react-icons/tb";
 import { useUserContext } from "@/contexts/useUserContext";
-import { useLanguage } from "../contexts/LanguageContext";
-import getMessage from "../utils/getMessage";
+import { useLanguage } from "../../../src/contexts/LanguageContext";
+import getMessage from "../../../src/utils/getMessage";
 import { isMobile } from "react-device-detect";
 
-import { CustomAvatar } from "./ui/CustomAvatar";
-import YoutubeLike from "../../public/images/etc/youtubeLike.svg";
+import { CustomAvatar } from "@/components/ui/CustomAvatar";
+import YoutubeLike from "/images/etc/youtubeLike.svg";
+import TopNavbar from "./TopNavbar";
+import YouTubeList from "./YouTubeList";
 
-interface YouTubePlayerProps {
-  src: string;
-  title: string;
-  textContent: string;
-  date: string;
-  autoPlay: boolean;
+import { VideoMeta } from "@/types/video-meta";
+import { allVideos } from "../movies/allVideos";
+
+interface YouTubeFrameProps {
+  initialVideoId?: string;
+  isModal?: boolean;
 }
-const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
-  src,
-  title,
-  textContent,
-  date,
-  autoPlay,
+const YouTubeFrame: React.FC<YouTubeFrameProps> = ({
+  initialVideoId,
+  isModal,
 }) => {
   const [showFullText, setShowFullText] = useState(false);
   const { language, setLanguage } = useLanguage();
+  const initialVideo =
+    allVideos.find((v) => v.id === initialVideoId) || allVideos[0];
+  const [currentVideo, setCurrentVideo] = useState<VideoMeta>(initialVideo);
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(false);
   const { colorMode } = useColorMode();
+
+  useEffect(() => {
+    console.log("currentSrc changed:", currentVideo);
+  }, [currentVideo]);
+
   const {
     currentUserId,
     currentUserPictureUrl,
@@ -138,110 +146,13 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       progressContainer.removeEventListener("click", handleProgressClick);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [src]);
+  }, [currentVideo.src]);
 
-  const changeVideoSource = (newSrc: string) => {
-    const fullPath = "/" + newSrc.replace(/^\/+/, ""); // 先頭のスラッシュを除去してから追加
-    console.log(fullPath);
-    window.location.href = fullPath;
-  };
-
-  interface CustomCardProps {
-    src: string;
-    title: string;
-    name: string;
-    thumbnail: string;
-  }
-
-  const CustomCard: React.FC<CustomCardProps> = ({
-    src,
-    title,
-    name,
-    thumbnail,
-  }) => {
-    const [youtubePath, setYoutubePath] = useState("");
-
-    useEffect(() => {
-      const href = window.location.href;
-      let path = "/youtube" + new URL(href).pathname.split("/youtube")[1] || "";
-      path = path.replace(/\/$/, ""); // 末尾のスラッシュを削除
-
-      setYoutubePath(path);
-    }, []);
-    return (
-      <Card
-        direction={{ base: "column", sm: "row" }}
-        overflow="hidden"
-        variant="outline"
-        borderRadius="0"
-        border="0px"
-        bg="transparent"
-        boxShadow={0}
-        cursor="pointer"
-        _hover={{ bg: "custom.system.500" }}
-        onClick={() => changeVideoSource(src)}
-      >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          height="100%"
-          position="absolute"
-        >
-          {youtubePath === src ? ">" : null}
-        </Box>
-        <Image
-          objectFit="cover"
-          maxW={{ base: "50%", sm: "100px" }}
-          maxH={{ base: "80px", sm: "60px" }}
-          src={thumbnail}
-          borderRadius="6px"
-          border="0.5px solid"
-          py="4px"
-          ml="4px"
-        />
-        <Stack>
-          <CardBody maxH={{ base: "80px", sm: "60px" }} p={1} pl={2}>
-            <Flex
-              direction="column"
-              justifyContent="space-between"
-              height="100%"
-              textAlign="left"
-            >
-              <Heading
-                fontSize="12px"
-                textAlign="left"
-                overflow="hidden"
-                display="-webkit-box"
-                style={{
-                  WebkitBoxOrient: "vertical",
-                  WebkitLineClamp: 2, // 2行まで表示
-                }}
-                color="#eee"
-              >
-                {title}
-              </Heading>
-              <Text
-                py="1"
-                fontSize="10px"
-                bottom="0"
-                position="absolute"
-                textAlign="left"
-                whiteSpace="nowrap"
-                overflow="hidden"
-                textOverflow="ellipsis"
-                color="#ccc"
-              >
-                {name}
-              </Text>
-            </Flex>
-          </CardBody>
-        </Stack>
-      </Card>
-    );
-  };
-
-  const truncatedText = textContent
+  const text =
+    typeof currentVideo.textContent === "string"
+      ? currentVideo.textContent
+      : currentVideo.textContent?.[language] || "";
+  const truncatedText = text
     .split("\n")
     .reduce((acc, line) => {
       if (acc.length + line.length <= 50) {
@@ -277,6 +188,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
+
   // 現在からの期間
   function getPastText(dateString: string): string {
     const now = new Date();
@@ -298,94 +210,15 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   }
   return (
     <>
+      <TopNavbar />
       <Box
-        maxH="60vh"
+        // maxH="60vh"
+        h="100vh"
         overflowY="auto"
         overflowX="hidden"
         bg="custom.system.800"
         color="#ddd"
       >
-        <HStack
-          px={2}
-          py={1}
-          // borderBottom="1px"
-          borderColor="gray.300"
-          spacing={0.5}
-          bg="custom.system.700"
-          mb="10px"
-        >
-          {/* 左：ロゴ */}
-          <Box
-            justifyContent="center"
-            display="flex"
-            alignItems="center"
-            color={colorMode === "light" ? "#D13030" : "#F89173"}
-            w="36px"
-            minW="36px"
-            mr="0"
-            ml="0"
-            bottom="4px"
-          >
-            <YoutubeLike />
-          </Box>
-          <Box fontWeight="900" fontSize="lg" letterSpacing="-1px">
-            Premium
-          </Box>
-
-          <Spacer />
-          <InputGroup
-            maxW="600px"
-            flex="3"
-            display={{ base: "none", sm: "block" }}
-          >
-            <Input
-              placeholder="検索"
-              color="#ddd"
-              bg="custom.system.700"
-              border="0.5px solid"
-              borderColor="custom.system.100"
-              borderRadius="full"
-              h="28px"
-              fontSize="13px"
-              focusBorderColor="custom.system.200"
-            />
-            <InputRightElement
-              borderRightRadius="full"
-              border="0.5px solid"
-              borderColor="custom.system.100"
-              bg="custom.system.500"
-              w={{ base: "2rem", md: "3rem" }}
-              h="28px"
-            >
-              <IconButton
-                aria-label="Search"
-                icon={<SearchIcon />}
-                color="#ddd"
-                variant="ghost"
-                mx="20px"
-                w="100px"
-                _hover={{ bg: "none" }}
-              />
-            </InputRightElement>
-          </InputGroup>
-          <Spacer />
-
-          <HStack spacing={3}>
-            <IconButton
-              aria-label="Notifications"
-              icon={<TbBell />}
-              fontSize="24px"
-              bg="transparent"
-              borderRadius="full"
-              color="#ccc"
-              _hover={{ bg: "custom.system.500" }}
-            />
-            <CustomAvatar
-              src={currentUserPictureUrl ?? undefined}
-              boxSize="34px"
-            />
-          </HStack>
-        </HStack>
         <Grid
           mt={0}
           p={1}
@@ -397,7 +230,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             cn: "Noto Sans SC",
             language,
           })}
-          templateColumns={{ base: "1fr", xl: "5fr 2fr" }}
+          templateColumns={{ base: "1fr", lg: "5fr 2fr" }}
           gap={3}
         >
           <VStack flex="5">
@@ -415,10 +248,11 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             >
               <video
                 className="box1"
+                key={currentVideo.src}
+                src={currentVideo.src}
+                autoPlay={currentVideo.autoPlay}
                 ref={videoRef}
                 onClick={togglePlayPause}
-                {...(autoPlay ? { autoPlay: true, loop: true } : {})}
-                src={src}
                 style={{
                   width: "100%",
                   height: "auto",
@@ -544,7 +378,9 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             </Box>
             <Box width="100%" textAlign="left" ml="10px">
               <Text textAlign="left" fontSize="16px" fontWeight={600} ml={2}>
-                {title}
+                {typeof currentVideo.title === "string"
+                  ? currentVideo.title
+                  : currentVideo.title.ja}
               </Text>
               <HStack align="center" my={2} ml={1}>
                 <Avatar
@@ -562,9 +398,11 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                 cursor="pointer"
                 fontSize={13}
               >
-                <Box fontWeight={500}>{date + "  " + getPastText(date)}</Box>
+                <Box fontWeight={500}>
+                  {currentVideo.date + "  " + getPastText(currentVideo.date)}
+                </Box>
                 <Text whiteSpace="pre-wrap" textAlign="left">
-                  {showFullText ? textContent : `${truncatedText}...`}
+                  {showFullText ? text : `${truncatedText}...`}
                   <Box as="span" fontSize={11} ml={3}>
                     {showFullText
                       ? ""
@@ -597,7 +435,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                 textAlign="center"
                 verticalAlign="middle"
               >
-                <Heading size="xs" mx={3} my={1}>
+                <Heading fontSize="12px" mx={3} my={1}>
                   {getMessage({
                     ja: "その他の動画",
                     us: "PlayList",
@@ -606,51 +444,11 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                   })}
                 </Heading>
               </Box>
-              <Flex
-                direction="column"
-                overflowY="auto" // 縦方向にスクロール可能にする
-                // maxHeight="200px"
-                py="4px"
-              >
-                <CustomCard
-                  title={getMessage({
-                    ja: "先ハメ誘導を使った作業",
-                    us: "Work with Pre-Fitting Guidance",
-                    cn: "使用先装引导",
-                    language,
-                  })}
-                  name={"41." + getMessage({ ja: "先ハメ誘導", language })}
-                  src="downloads/tabs/41"
-                  thumbnail="/images/thumbnail/41.png"
-                />
-                <CustomCard
-                  title={getMessage({
-                    ja: "ディスプレイ移動",
-                    us: "Display Movement",
-                    cn: "显示屏移动",
-                    language,
-                  })}
-                  name="56.net"
-                  src="downloads/tabs/56.net"
-                  thumbnail="/images/thumbnail/56.net.png"
-                />
-                <CustomCard
-                  title="main2(SSC)"
-                  name={getMessage({
-                    ja: "順立生産システム",
-                    language,
-                  })}
-                  src="downloads/tabs/main2"
-                  thumbnail="/images/thumbnail/main2.png"
-                />
-                <CustomCard
-                  title="main3(PLC)"
-                  name={getMessage({
-                    ja: "順立生産システム",
-                    language,
-                  })}
-                  src="downloads/tabs/main3plc"
-                  thumbnail="/images/thumbnail/main3.png"
+              <Flex direction="column" overflowY="auto" py="4px">
+                <YouTubeList
+                  allVideos={allVideos}
+                  currentId={currentVideo.id}
+                  onSelectVideo={(video: VideoMeta) => setCurrentVideo(video)}
                 />
               </Flex>
             </Card>
@@ -661,4 +459,4 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   );
 };
 
-export default YouTubePlayer;
+export default YouTubeFrame;

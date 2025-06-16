@@ -1,5 +1,5 @@
 type MessageDisplayProps = {
-  ja: string;
+  ja?: string;
   us?: string;
   cn?: string;
   language: string;
@@ -88,7 +88,12 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
     タップ: { us: "tap", cn: "自来水" },
     キーボード: { us: "keyboard", cn: "键盘" },
   };
-
+  if (!ja) {
+    // ja が無いなら、直接言語ごとの文字列を返す（翻訳辞書を使わない）
+    if (language === "us") return us ?? "";
+    if (language === "cn") return cn ?? "";
+    return us ?? cn ?? "";
+  }
   const {
     us: translatedUs = "untranslated:(" + ja + ")",
     cn: translatedCn = "未翻译:(" + ja + ")",

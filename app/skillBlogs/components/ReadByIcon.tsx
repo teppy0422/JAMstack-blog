@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, useRef, useLayoutEffect } from "react";
 import { IconButton, useColorMode, createIcon, Box } from "@chakra-ui/react";
-import { LuBookCheckIcon } from "@/components/icons";
+import { LuBookCheckIcon } from "@/components/ui/icons";
 
 type ReadByIconProps = {
   content: ReactNode;

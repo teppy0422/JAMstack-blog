@@ -27,7 +27,7 @@ import { SiSemanticuireact } from "react-icons/si";
 import { MdSettings, MdCheckCircle, MdHelpOutline } from "react-icons/md";
 import NextImage from "next/image";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
-import { SjpIcon } from "@/components/icons";
+import { SjpIcon } from "@/components/ui/icons";
 import styles from "@/styles/home.module.scss";
 
 import CustomLinkBox from "../../parts/customLinkBox";

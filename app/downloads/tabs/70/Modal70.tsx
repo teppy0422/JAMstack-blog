@@ -5,7 +5,6 @@ import { Box, Text, Image, useDisclosure, Flex } from "@chakra-ui/react";
 
 import CustomModal from "@/components/ui/CustomModal";
 import CustomModalTab from "../../parts/CustomModalTab";
-import IpadFrame from "@/components/ipad";
 import AnimatedListItem from "../40/AnimatedListItem";
 import ImageWithHighlight from "@/components/ImageWidthHighlight";
 

@@ -1,5 +1,23 @@
 import React from "react";
 
+export const MacFinderIcon = ({ size }) => (
+  <svg
+    stroke="currentColor"
+    fill="none"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    height={size}
+    width={size}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+    <path d="M6 8h.01" stroke="#F66" />
+    <path d="M10 8h.01" />
+    <path d="M14 8h.01" />
+  </svg>
+);
 export const LuHeartIcon = ({ size, stroke, fill }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

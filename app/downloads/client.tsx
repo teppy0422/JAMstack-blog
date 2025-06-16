@@ -53,16 +53,12 @@ import CustomModal from "app/skillBlogs/components/customModal";
 import { ToggleSection } from "./parts/ToggleSection";
 
 import Modal40 from "./tabs/40/Modal40";
-import Modal41 from "./tabs/41/Modal41";
+
 import Modal56 from "./tabs/56/Modal56";
 import Modal70 from "./tabs/70/Modal70";
 
-import Modal56net from "./tabs/56net/56net";
-
-import ModalMain2 from "./tabs/main2/main2";
-import ModalMain3plc from "./tabs/main3plc/main3plc";
-
 import ModalYps from "./tabs/yps/yps";
+import YouTubeModal from "./parts/YouTubeModal";
 
 export default function Ui({ filterId }: { filterId?: string }) {
   const { colorMode } = useColorMode();
@@ -310,7 +306,21 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             media=""
                           />
                           <Modal40 />
-                          <Modal41 />
+
+                          <YouTubeModal
+                            text={
+                              "41." +
+                              getMessage({
+                                ja: "先ハメ誘導",
+                                us: "How to use the Pre-Fitting Guidance",
+                                cn: "如何使用 先装引导",
+                                language,
+                              })
+                            }
+                            initialVideoId="41"
+                            isModal={true}
+                          />
+
                           <Modal56 />
                           <Modal70 />
                         </Stack>
@@ -748,7 +758,16 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 <br />0
                               </Text>
                             </Flex>
-                            <Modal56net />
+                            <YouTubeModal
+                              text={getMessage({
+                                ja: "ディスプレイ移動",
+                                us: "Display Movement",
+                                cn: "显示屏移动",
+                                language,
+                              })}
+                              initialVideoId="56.net"
+                              isModal={true}
+                            />
                           </Stack>
                         </Flex>
                       </Box>
@@ -1061,9 +1080,27 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               })
                             }
                           />
-                          <ModalMain2 />
+                          <YouTubeModal
+                            text={getMessage({
+                              ja: "MAIN2.SSC",
+                              us: "MAIN2.SSC",
+                              cn: "MAIN2.SSC",
+                              language,
+                            })}
+                            initialVideoId="jdss_main2"
+                            isModal={true}
+                          />
                           <CustomModalTab path="" media="" text="main3.CB" />
-                          <ModalMain3plc />
+                          <YouTubeModal
+                            text={getMessage({
+                              ja: "MAIN3.PLC",
+                              us: "MAIN3.PLC",
+                              cn: "MAIN3.PLC",
+                              language,
+                            })}
+                            initialVideoId="jdss_main3_plc"
+                            isModal={true}
+                          />
                         </Stack>
                       </Flex>
                     </Box>

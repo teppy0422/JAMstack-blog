@@ -128,10 +128,15 @@ Bussiness card reflects customModal.
 CustomModalize the newly add button on bbs.
 fixed getMessage.
 Change all modals in downloads to customModal.
+-deploy 0009-
+Change youtube as a whole
+-deploy 0010-
 
 #### to do now
 
-skillBlogs の配色を調整
+全体の背景色を調整
+
+skillBlogs の modal を CustomModal に変更
 
 #### to do
 
