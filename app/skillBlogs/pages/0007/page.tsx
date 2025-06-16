@@ -21,14 +21,6 @@ import {
   Image,
   Kbd,
   AvatarGroup,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
   Flex,
   Icon,
   createIcon,
@@ -52,6 +44,8 @@ import CustomModal from "../../components/customModal";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
+
+import SAveForChrome from "@/components/modals/SaveForChrome";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
@@ -244,32 +238,7 @@ const BlogPage: React.FC = () => {
             </Text>
             <Image src="/images/0007/0001.png" alt="0001.png" w="60%" />
 
-            <Text
-              onClick={() => handleOpen("chrome")}
-              cursor="pointer"
-              color="blue.500"
-            >
-              {getMessage({
-                ja: "※Chromeの場合",
-                us: "*In case of Chrome",
-                cn: "*如果使用 Chrome 浏览器。",
-                language,
-              })}
-            </Text>
-            <CustomModal
-              isOpen={activeDrawer === "chrome"}
-              onClose={handleClose}
-              title={getMessage({
-                ja: "※Chromeの場合",
-                us: "*In case of Chrome",
-                cn: "*如果使用 Chrome 浏览器。",
-                language,
-              })}
-              modalBody=<>
-                <Image src="/images/0007/0004.png" alt="0004.png" />
-              </>
-            />
-
+            <SAveForChrome />
             <Text fontWeight="400" my={4}>
               {"2-3." +
                 getMessage({

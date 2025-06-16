@@ -44,6 +44,8 @@ import { useUserContext } from "@/contexts/useUserContext";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
+
+import AboutObjectOriented from "@/components/modals/AboutObjectOriented";
 //テキストジャンプアニメーション
 const jumpAnimation = keyframes`
   0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
@@ -1077,122 +1079,8 @@ const BlogPage: React.FC = () => {
                 cn: "主要包括",
                 language,
               })}
-              <UnderlinedTextWithDrawer
-                text={getMessage({
-                  ja: " オブジェクト指向 ",
-                  us: " object-oriented ",
-                  cn: " 面向对象 ",
-                  language,
-                })}
-                onOpen={() => handleOpen("オブジェクト指向")}
-                isOpen={isOpen && activeDrawer === "オブジェクト指向"}
-                onClose={handleClose}
-                header={getMessage({
-                  ja: "オブジェクト指向",
-                  us: " object-oriented ",
-                  cn: "面向对象",
-                  language,
-                })}
-                children={
-                  <Box>
-                    <Icon as={FaObjectGroup} w="36px" h="36px" mb={2} />
+              <AboutObjectOriented />
 
-                    <VStack spacing={4} align="start">
-                      <Text>
-                        {getMessage({
-                          ja: "オブジェクト指向プログラミングは、プログラムを「オブジェクト」という単位で考える方法です。",
-                          us: "Object-oriented programming is a way of thinking of programs in terms of units called [objects].",
-                          cn: "面向对象编程是一种以称为 「对象」的单元来思考程序的方法。",
-                          language,
-                        })}
-                      </Text>
-                      <Divider />
-                      <Text>
-                        <strong>
-                          {getMessage({
-                            ja: "オブジェクト",
-                            us: "Object ",
-                            cn: "对象 ",
-                            language,
-                          })}
-                        </strong>
-                        {getMessage({
-                          ja: "とは、データ（プロパティ）とそのデータを操作するための関数（メソッド）をまとめたものです。",
-                          us: "is a collection of data (properties) and functions (methods) to manipulate that data.",
-                          cn: "是数据（属性）和操作数据的函数（方法）的集合。",
-                          language,
-                        })}
-                      </Text>
-                      <Text>
-                        {getMessage({
-                          ja: "例えば、",
-                          us: "For example,",
-                          cn: "例如 ",
-                          language,
-                        })}
-                        <strong>
-                          {getMessage({
-                            ja: "「ワイヤーハーネス」",
-                            us: " [Wire harnesses] ",
-                            cn: "[线束]",
-                            language,
-                          })}
-                        </strong>
-                        {getMessage({
-                          ja: "というオブジェクトを考えてみましょう。",
-                          us: "Consider an object called",
-                          cn: "考虑一个名为",
-                          language,
-                        })}
-                      </Text>
-                      <Box bg="gray.100" p={1} borderRadius="md">
-                        <Text mb={1}>
-                          <strong>
-                            {getMessage({
-                              ja: "プロパティ",
-                              us: "property",
-                              cn: "财产",
-                              language,
-                            })}
-                            :
-                          </strong>
-                          {getMessage({
-                            ja: "生産治具、コネクタ品番、電線色、電線サイズ、端子品番、付属部品など",
-                            us: "Production jigs, connector part numbers, wire colors, wire sizes, terminal part numbers, accessory parts, etc.",
-                            cn: "生产夹具、连接器零件编号、导线颜色、导线尺寸、端子零件编号、附件零件等。",
-                            language,
-                          })}
-                        </Text>
-                        <Text>
-                          <strong>
-                            {getMessage({
-                              ja: "メソッド",
-                              us: "method",
-                              cn: "方法",
-                              language,
-                            })}
-                            :
-                          </strong>
-                          {getMessage({
-                            ja: "端子挿入、配策など",
-                            us: "Terminal insertion, distribution, etc.",
-                            cn: "端子插入、分配等",
-                            language,
-                          })}
-                        </Text>
-                      </Box>
-                      <Text>
-                        {getMessage({
-                          ja: "オブジェクト指向では、現実世界のものをプログラムで表現する事により設計がし易くなります。",
-                          us: "Object-oriented design facilitates design by allowing programs to represent things in the real world.",
-                          cn: "面向对象技术通过在程序中表示真实世界的对象来促进设计。",
-                          language,
-                        })}
-                      </Text>
-                    </VStack>
-                  </Box>
-                }
-              />
               {getMessage({
                 ja: "と関数型をメインで作成しています。",
                 us: "and functional types",

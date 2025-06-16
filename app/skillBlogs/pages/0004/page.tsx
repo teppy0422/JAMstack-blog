@@ -167,7 +167,6 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <BusinessCardModal />
-          {/* 必要に応じて他のBusinessCardを追加 */}
           <Flex alignItems="left" m={4} mt={6}>
             <Flex alignItems="center" borderBottom="1px solid">
               <Icon as={CiBeerMugFull} w={6} h={6} />

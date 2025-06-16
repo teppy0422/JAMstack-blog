@@ -58,7 +58,6 @@ import { CustomBadge } from "@/components/ui/CustomBadge";
 import DownloadLink from "../../components/DownloadLink";
 import ExternalLink from "../../components/ExternalLink";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
-import ImageSliderModal from "../../components/ImageSliderModal"; // モーダルコンポーネントをインポート
 import ReferenceSettingModal from "../../../../src/components/howto/office/referenceSettingModal";
 import { useUserContext } from "@/contexts/useUserContext";
 

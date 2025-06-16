@@ -131,16 +131,16 @@ Change all modals in downloads to customModal.
 -deploy 0009-
 Change youtube as a whole
 -deploy 0010-
+-deploy 0011-
 
 #### to do now
 
-全体の背景色を調整
-
-skillBlogs の modal を CustomModal に変更
+Change SkillBlogs/Tools to CustomModal.
 
 #### to do
 
 CustomModalize the login user icon.
+Changed our approach to this activity to customModal.
 
 新しく追加ボタンで画面が更新されない気がする
 

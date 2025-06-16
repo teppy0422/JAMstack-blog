@@ -64,8 +64,8 @@ const ThumnailCard: React.FC<ThumnailCardProps> = ({
 
       <Image
         objectFit="cover"
-        w={{ base: "50%", sm: "100px" }}
-        h={{ base: "80px", sm: "60px" }}
+        w={{ base: "75%", sm: "90px" }}
+        h={{ base: "50px", sm: "60px" }}
         src={thumbnail}
         borderRadius="6px"
         border="0.5px solid"

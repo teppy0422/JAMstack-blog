@@ -29,6 +29,9 @@ import { useUserContext } from "@/contexts/useUserContext";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
+
+import AboutInkScape from "@/components/modals/AboutInkScape";
+import Photoroom from "@/components/modals/Photoroom";
 //テキストジャンプアニメーション
 const jumpAnimation = keyframes`
   0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
@@ -287,114 +290,8 @@ const BlogPage: React.FC = () => {
               cn: "免费图像编辑软件",
               language,
             })}
-            <UnderlinedTextWithDrawer
-              text={
-                <>
-                  <Box as="span" display="inline" borderBottom="2px solid">
-                    InkScape
-                  </Box>
-                  <LuPanelRightOpen
-                    size="20px"
-                    style={{ marginBottom: "-5px", display: "inline" }}
-                  />
-                </>
-              }
-              onOpen={() => handleOpen("InkScape")}
-              isOpen={isOpen && activeDrawer === "InkScape"}
-              onClose={handleClose}
-              header={getMessage({
-                ja: "InkScapeとは",
-                us: "What is InkScape?",
-                cn: "什么是 InkScape？",
-                language,
-              })}
-              children={
-                <Box>
-                  <Image
-                    src="/images/brandIcons/logo_inkscape.svg"
-                    alt="logo_inkscape.svg"
-                    w="36px"
-                    h="36px"
-                    mb={2}
-                  />
-                  <Text>
-                    <span style={{ fontWeight: "600" }}>InkScape</span>
-                    {getMessage({
-                      ja: "は、コンピュータで絵を描くための無料のソフトです。特に「ベクターグラフィックス」という方法で絵を描けます。",
-                      us: "is a free software for drawing pictures on your computer. In particular, you can draw pictures using the [vector graphics] method.",
-                      cn: "是一款在电脑上绘制图片的免费软件。特别是，它允许您使用一种称为 [vector graphics]的方法来绘制图片。",
-                      language,
-                    })}
-                  </Text>
-                  <Text fontWeight="600" mt={4}>
-                    {getMessage({
-                      ja: "ベクターグラフィックスって何？",
-                      us: "What is vector graphics?",
-                      cn: "vector graphics 是什么？",
-                      language,
-                    })}
-                  </Text>
-                  <Text>
-                    {getMessage({
-                      ja: "拡大してもきれい",
-                      us: "Beautiful even when enlarged",
-                      cn: "放大后非常漂亮",
-                      language,
-                    })}
-                    :
-                    {getMessage({
-                      ja: "普通の写真や画像は、拡大するとぼやけてしまいます。でも、ベクターグラフィックスは、どんなに拡大しても線がくっきりしています。これは、絵が線や形で表現されているからです。",
-                      us: "Ordinary photos and images become blurred when enlarged. However, in vector graphics, lines are clear no matter how much they are enlarged. This is because the picture is represented by lines and shapes.",
-                      cn: "普通照片和图像放大后会变得模糊不清。但对于矢量图形，无论放大多少，线条都很清晰。这是因为图片是用线条和形状来表示的。",
-                      language,
-                    })}
-                  </Text>
-                  <Text fontWeight="600" mt={4}>
-                    {getMessage({
-                      ja: "Inkscapeのいいところ",
-                      us: "What I like about Inkscape",
-                      cn: "Inkscape 的优点",
-                      language,
-                    })}
-                  </Text>
-                  <Text>
-                    {getMessage({
-                      ja: "無料で使える",
-                      us: "Free of charge",
-                      cn: "免费。",
-                      language,
-                    })}
-                    :
-                    {getMessage({
-                      ja: "お金を払わなくても、誰でも自由にダウンロードして使えます。",
-                      us: "Anyone is free to download and use it without paying.",
-                      cn: "任何人都可以免费下载和使用，无需付费。",
-                      language,
-                    })}
-                  </Text>
-                  <Text
-                    fontWeight="600"
-                    mt={4}
-                    animation={`${jumpAnimation} 1s infinite`} // アニメーションを適用
-                  >
-                    {getMessage({
-                      ja: "注意点",
-                      us: "point of attention",
-                      cn: "注意点",
-                      language,
-                    })}
-                  </Text>
-                  <Text>
-                    {getMessage({
-                      ja: "通常の会社ではソフトのインストール許可申請が必要です。許可が降りてからインストールを行なってください。",
-                      us: "Normal companies require an application for permission to install the software. Please install the software only after permission is granted.",
-                      cn: "在普通公司，安装软件需要申请许可。只有在获得许可后才能进行安装。",
-                      language,
-                    })}
-                  </Text>
-                </Box>
-              }
-            />
+            <AboutInkScape />
+
             {getMessage({
               ja: "で写真の背景除去を行います",
               us: "to remove the background of a photo",
@@ -556,79 +453,7 @@ const BlogPage: React.FC = () => {
             />
             <Text display="inline-block" mt={4}>
               4-2.
-              <UnderlinedTextWithDrawer
-                text={
-                  <>
-                    <Box as="span" display="inline" borderBottom="2px solid">
-                      Photoroom
-                    </Box>
-                    <LuPanelRightOpen
-                      size="20px"
-                      style={{ marginBottom: "-5px", display: "inline" }}
-                    />
-                  </>
-                }
-                onOpen={() => handleOpen("Photoroom")}
-                isOpen={isOpen && activeDrawer === "Photoroom"}
-                onClose={handleClose}
-                header={getMessage({
-                  ja: "Photoroomの使い方",
-                  us: "How to use Photoroom",
-                  cn: "如何使用 Photoroom",
-                  language,
-                })}
-                size="md"
-                children={
-                  <Box>
-                    <video width="100%" height="100%" loop autoPlay muted>
-                      <source
-                        src="/images/0001/howToPhotoroom.mp4"
-                        type="video/mp4"
-                      />
-                      {getMessage({
-                        ja: "お使いのブラウザは動画タグをサポートしていません。",
-                        us: "Your browser does not support video tags.",
-                        cn: "您的浏览器不支持视频标记。",
-                        language,
-                      })}
-                    </video>
-                    <Text mt={4}>
-                      <span style={{ fontWeight: "600" }}>Photoroom</span>
-                      {getMessage({
-                        ja: "は、ブラウザ上で動作する画像加工WEBアプリです。2024/11/16現在は無料です。",
-                        us: "is an image processing web application that runs in your browser and is free as of 2024/11/16.",
-                        cn: "是一款图像处理网络应用程序，可在浏览器中运行，自 2024 年 11 月 16 日起免费。",
-                        language,
-                      })}
-                    </Text>
-                    <Text fontWeight="600" mt={4}>
-                      {getMessage({
-                        ja: "使い方",
-                        us: "How to use",
-                        cn: "如何使用",
-                        language,
-                      })}
-                    </Text>
-                    <Text>
-                      {"1." +
-                        getMessage({
-                          ja: "上の動画のように加工したい写真をドラッグすると背景が除去されます。",
-                          us: "Drag the photo you want to process as shown in the video above to remove the background.",
-                          cn: "拖动要处理的照片，移除背景，如上视频所示。",
-                          language,
-                        })}
-                      <br />
-                      {"2." +
-                        getMessage({
-                          ja: "ダウンロード(標準解像度)してパソコンに保存します。",
-                          us: "Download (standard resolution) and save to your computer.",
-                          cn: "下载（标准分辨率）并保存在电脑上。",
-                          language,
-                        })}
-                    </Text>
-                  </Box>
-                }
-              />
+              <Photoroom />
               {getMessage({
                 ja: "で写真の背景除去を行なってダウンロードします",
                 us: "to remove the background of the photo and download it",

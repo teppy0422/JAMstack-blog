@@ -21,14 +21,6 @@ import {
   Image,
   Kbd,
   AvatarGroup,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
   Flex,
   Icon,
   createIcon,
@@ -54,13 +46,14 @@ import DownloadLink from "../../components/DownloadLink";
 import UnderlinedTextWithDrawer from "../../components/UnderlinedTextWithDrawer";
 import ExternalLink from "../../components/ExternalLink";
 import { FileSystemNode } from "@/components/fileSystemNode"; // FileSystemNode コンポーネントをインポート
-import ImageSliderModal from "../../components/ImageSliderModal"; // モーダルコンポーネントをインポート
 import OptionalBox from "../../components/OptionalBox";
 import ReferenceSettingModal from "../../../../src/components/howto/office/referenceSettingModal";
 import { useUserContext } from "@/contexts/useUserContext";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
+
+import ExtesModal from "@/components/howto/ExtesModal";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",
@@ -519,7 +512,7 @@ const BlogPage: React.FC = () => {
                 language,
               })}
             </Text>
-            <ExternalLink href="../../download/sjp" text="download/sjp" />
+            <ExternalLink href="/downloads/sjp" text="downloads/sjp" />
           </Box>
         </SectionBox>
         <SectionBox
@@ -584,21 +577,23 @@ const BlogPage: React.FC = () => {
             })}
           </Text>
           <UnderlinedTextWithDrawer
-            text=<>
-              <Box as="span" display="inline" borderBottom="2px solid">
-                {"#" +
-                  getMessage({
-                    ja: "準備済みの必要データ",
-                    us: "Prepared required data",
-                    cn: "准备所需数据",
-                    language,
-                  })}
-              </Box>
-              <LuPanelRightOpen
-                size="20px"
-                style={{ marginBottom: "-5px", display: "inline" }}
-              />
-            </>
+            text={
+              <>
+                <Box as="span" display="inline" borderBottom="2px solid">
+                  {"#" +
+                    getMessage({
+                      ja: "準備済みの必要データ",
+                      us: "Prepared required data",
+                      cn: "准备所需数据",
+                      language,
+                    })}
+                </Box>
+                <LuPanelRightOpen
+                  size="20px"
+                  style={{ marginBottom: "-5px", display: "inline" }}
+                />
+              </>
+            }
             onOpen={() => handleOpen("準備済みの必要データ")}
             isOpen={isOpen && activeDrawer === "準備済みの必要データ"}
             onClose={handleClose}
@@ -721,7 +716,7 @@ const BlogPage: React.FC = () => {
                   language,
                 })}
                 <ExternalLink
-                  href="../../thread/8d7d2ec1-3157-4f5c-a2c3-2e1223e1d2b9"
+                  href="/bbs/thread/8d7d2ec1-3157-4f5c-a2c3-2e1223e1d2b9"
                   text={getMessage({
                     ja: " 開発/相談",
                     us: " Development/Consultation",
@@ -779,29 +774,7 @@ const BlogPage: React.FC = () => {
                     cn: "*",
                     language,
                   })}
-                  <ImageSliderModal
-                    title={getMessage({
-                      ja: "EXTESの設定変更",
-                      us: "EXTES settings",
-                      cn: "EXTES 设置",
-                      language,
-                    })}
-                    text={getMessage({
-                      ja: "EXTESを起動してプロパティで下記と同じように設定します",
-                      us: "Start EXTES and set the same as below in the properties",
-                      cn: "启动 EXTES 并在属性中设置如下。",
-                      language,
-                    })}
-                    images={[
-                      "../../images/0008/extes2.jpg",
-                      "../../images/0008/extes3.jpg",
-                      "../../images/0008/extes4.jpg",
-                      "../../images/0008/extes5.jpg",
-                    ]}
-                    isOpen={isModalOpen}
-                    onClose={onModalClose}
-                    onModalOpen={onModalOpen}
-                  />
+                  <ExtesModal />
                   {getMessage({
                     ja: "が必要です。",
                     us: "need to be changed for the first time only",

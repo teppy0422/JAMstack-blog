@@ -96,7 +96,8 @@ h1.title {
   height: 45px;
   width: 45px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.3) url(./cd-icon-close.svg) no-repeat center center;
+  color: "red";
+  background: rgba(255, 255, 255, 0.3) url(./cd-icon-close.svg) no-repeat center center;
   /* image replacement */
   overflow: hidden;
   text-indent: 100%;

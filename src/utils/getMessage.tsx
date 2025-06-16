@@ -88,6 +88,13 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
     タップ: { us: "tap", cn: "自来水" },
     キーボード: { us: "keyboard", cn: "键盘" },
   };
+  if (ja === "") {
+    // 空文字が指定されている場合
+    if (language === "ja") return "";
+    if (language === "us") return us ?? "";
+    if (language === "cn") return cn ?? "";
+    return us ?? cn ?? "";
+  }
   if (!ja) {
     // ja が無いなら、直接言語ごとの文字列を返す（翻訳辞書を使わない）
     if (language === "us") return us ?? "";

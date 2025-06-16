@@ -410,7 +410,12 @@ const BlogPage: React.FC = () => {
                 fontWeight: "bold",
               }}
             >
-              なにか事例があったら追記します。たぶん。
+              {getMessage({
+                ja: "なにか事例があったら追記します。たぶん。",
+                us: "If I find any examples, I will add them. Maybe.",
+                cn: "如果我们找到任何例子，我们会添加进去。可能是",
+                language,
+              })}
             </Text>
             <Image
               src="/images/hippo.gif"

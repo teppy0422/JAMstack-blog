@@ -21,15 +21,11 @@ import {
   Input,
   useColorMode,
 } from "@chakra-ui/react";
-import { SearchIcon, BellIcon } from "@chakra-ui/icons";
-import { TbBell } from "react-icons/tb";
 import { useUserContext } from "@/contexts/useUserContext";
 import { useLanguage } from "../../../src/contexts/LanguageContext";
 import getMessage from "../../../src/utils/getMessage";
 import { isMobile } from "react-device-detect";
 
-import { CustomAvatar } from "@/components/ui/CustomAvatar";
-import YoutubeLike from "/images/etc/youtubeLike.svg";
 import TopNavbar from "./TopNavbar";
 import YouTubeList from "./YouTubeList";
 
