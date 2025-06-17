@@ -2,6 +2,69 @@ import { VideoMeta } from "@/types/video-meta";
 
 export const allVideos: VideoMeta[] = [
   {
+    id: "youtube_0003",
+    title: {
+      ja: "ChatGPT × Excelマクロ",
+      us: "ChatGPT × Excel Macros.",
+      cn: "ChatGPT × Excel Macros.",
+    },
+    autoPlay: true,
+    date: "2023/4/1",
+    name: {
+      ja: "",
+    },
+    textContent: {
+      ja: `これはYouTubeの転載です。このサイトで作成した動画ではありません。`,
+      us: `This is a YouTube reprint. This is not a video created by this site.`,
+      cn: `这是 YouTube 的转载。这不是本网站制作的视频。`,
+    },
+    src: "https://www.youtube.com/watch?v=miIxVaMBsGg",
+    thumbnail: "https://img.youtube.com/vi/miIxVaMBsGg/hqdefault.jpg",
+    time: "19:25",
+  },
+  {
+    id: "youtube_0002",
+    title: {
+      ja: "超初心者から3日でブラインドタッチをマスターする練習方法",
+      us: "How to practice mastering blind touch from a very beginner to blind touch in 3 days.",
+      cn: "如何在三天内从初学者练习掌握盲摸。",
+    },
+    autoPlay: true,
+    date: "2021/6/17",
+    name: {
+      ja: "",
+    },
+    textContent: {
+      ja: `これはYouTubeの転載です。このサイトで作成した動画ではありません。`,
+      us: `This is a YouTube reprint. This is not a video created by this site.`,
+      cn: `这是 YouTube 的转载。这不是本网站制作的视频。`,
+    },
+    src: "https://www.youtube.com/watch?v=zt0cL5upOFc",
+    thumbnail: "https://img.youtube.com/vi/zt0cL5upOFc/hqdefault.jpg",
+    time: "08:54",
+  },
+  {
+    id: "youtube_0001",
+    title: {
+      ja: "オブジェクト指向の考え方",
+      us: "Object-Oriented Concept.",
+      cn: "面向对象的方法",
+    },
+    autoPlay: true,
+    date: "2025/4/17",
+    name: {
+      ja: "",
+    },
+    textContent: {
+      ja: `これはYouTubeの転載です。このサイトで作成した動画ではありません。`,
+      us: `This is a YouTube reprint. This is not a video created by this site.`,
+      cn: `这是 YouTube 的转载。这不是本网站制作的视频。`,
+    },
+    src: "https://www.youtube.com/watch?v=9eDw6u6mewc",
+    thumbnail: "https://img.youtube.com/vi/9eDw6u6mewc/hqdefault.jpg",
+    time: "08:25",
+  },
+  {
     id: "42",
     title: {
       ja: "SSC作業誘導を液晶ディスプレイを使って作ってみた",
@@ -38,6 +101,7 @@ The development was abandoned due to prioritizing other work.`,
     },
     src: "/youtube/videos/42.mp4",
     thumbnail: "/youtube/thumbnail/42.webp",
+    time: "00:11",
   },
   {
     id: "56-2",
@@ -67,6 +131,7 @@ The development was abandoned due to prioritizing other work.`,
     },
     src: "/youtube/videos/56-2.mp4",
     thumbnail: "/youtube/thumbnail/56-2.webp",
+    time: "01:19",
   },
   {
     id: "56-1",
@@ -99,6 +164,7 @@ It can be used even in situations where there is no web environment such as Apac
     },
     src: "/youtube/videos/56-1.mp4",
     thumbnail: "/youtube/thumbnail/56-1.webp",
+    time: "00:35",
   },
   {
     id: "70_2",
@@ -119,6 +185,7 @@ It can be used even in situations where there is no web environment such as Apac
     },
     src: "/youtube/videos/70poster.mp4",
     thumbnail: "/youtube/thumbnail/70poster.webp",
+    time: "00:26",
   },
   {
     id: "41",
@@ -147,6 +214,7 @@ It can be used even in situations where there is no web environment such as Apac
     },
     src: "https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018145058.mp4",
     thumbnail: "/youtube/thumbnail/41.png",
+    time: "02:41",
   },
   {
     id: "56.net",
@@ -182,6 +250,7 @@ It is moved by Arduino and stepping motors.`,
     },
     src: "https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018150130.mp4",
     thumbnail: "/youtube/thumbnail/56.net.png",
+    time: "00:23",
   },
   {
     id: "jdss_main2",
@@ -208,6 +277,7 @@ Based on this concept, YSS, CB, PLC, etc. are also supported.`,
     },
     src: "https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018151459.mp4",
     thumbnail: "/youtube/thumbnail/main2.png",
+    time: "01:33",
   },
   {
     id: "jdss_main3_plc",
@@ -228,5 +298,6 @@ Based on this concept, YSS, CB, PLC, etc. are also supported.`,
     },
     src: "https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241018151928.mp4",
     thumbnail: "/youtube/thumbnail/main3.png",
+    time: "00:31",
   },
 ];

@@ -26,7 +26,7 @@ type CustomModalProps = {
   title?: string;
   marginTop?: string;
 };
-export default function CustomModal({
+export function CustomModal({
   isOpen,
   onClose,
   modalSize = "md",
@@ -68,7 +68,9 @@ export default function CustomModal({
           />
         </Box>
 
-        <ModalBody p={0}>{children}</ModalBody>
+        <ModalBody p={0} m={0}>
+          {children}
+        </ModalBody>
 
         {footer && (
           <>
@@ -82,3 +84,5 @@ export default function CustomModal({
     </Modal>
   );
 }
+
+export default CustomModal;

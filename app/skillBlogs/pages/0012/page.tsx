@@ -75,6 +75,7 @@ import FontInstallModal from "@/components/howto/os/FontInstall";
 import { getLocalIp } from "../../components/getLocalIp";
 import { Key } from "@/components/ui/Key";
 import { FaviconLinkItem } from "app/skillBlogs/components/FaviconLinkItem";
+import { CustomModal } from "@/components/ui/CustomModal";
 
 const CustomIcon = createIcon({
   displayName: "CustomIcon",

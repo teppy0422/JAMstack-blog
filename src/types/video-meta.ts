@@ -14,4 +14,5 @@ export type VideoMeta = {
   textContent: LocalizedString;
   src: string;
   thumbnail: string;
+  time: string;
 };

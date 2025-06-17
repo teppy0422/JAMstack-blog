@@ -26,17 +26,11 @@ export const YouTubeModal: React.FC<YouTubeModalProps> = ({
         title=""
         isOpen={isOpen}
         onClose={onClose}
-        modalSize={{ base: "sm", md: "lg", lg: "2xl" }}
+        modalSize={{ base: "sm", md: "lg", lg: "3xl" }}
         macCloseButtonHandlers={[onClose]}
         footer={<></>}
       >
-        {isModal ? (
-          <Box h="50vh" overflow="auto">
-            <YouTubeFrame initialVideoId={initialVideoId} isModal={true} />
-          </Box>
-        ) : (
-          <YouTubeFrame initialVideoId={initialVideoId} isModal={true} />
-        )}
+        <YouTubeFrame initialVideoId={initialVideoId} isModal={isModal} />
       </CustomModal>
     </>
   );

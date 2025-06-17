@@ -132,10 +132,15 @@ Change all modals in downloads to customModal.
 Change youtube as a whole
 -deploy 0010-
 -deploy 0011-
+Add AspectRatio to YouTubeFrame
+Support YouTube Play in YouTubeFrame
+Add playback time to youtube
+Add icon if youtube.com to youtube
+Changed control to animate when mousing over video
+Fix youtube progress bar
+-deploy 0012-
 
 #### to do now
-
-Change SkillBlogs/Tools to CustomModal.
 
 #### to do
 

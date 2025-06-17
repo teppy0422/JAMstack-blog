@@ -24,7 +24,13 @@ export const FaviconLinkItem = ({
 
   return (
     <Box>
-      <Link href={href} isExternal display="flex" alignItems="center" gap="1">
+      <Link
+        href={href}
+        isExternal
+        display="inline-flex"
+        alignItems="center"
+        gap="1"
+      >
         <Image src={getFaviconUrl(href)} alt="favicon" boxSize="16px" />
         <Text color="blue.500">{mainText}</Text>
       </Link>

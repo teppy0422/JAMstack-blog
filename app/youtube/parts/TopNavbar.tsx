@@ -29,7 +29,6 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ currentUserPictureUrl }) => {
       borderColor="gray.300"
       spacing={0.5}
       bg="custom.system.700"
-      mb="10px"
     >
       {/* 左：ロゴ */}
       <Box
