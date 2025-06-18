@@ -139,8 +139,14 @@ Add icon if youtube.com to youtube
 Changed control to animate when mousing over video
 Fix youtube progress bar
 -deploy 0012-
+Added Play and Pause button animation to youtube page.
+Change Visible youtube's icon if thumbnail of included youtube.com
+-deploy 0013-
 
 #### to do now
+
+認証されてないログインしていない場合の画面を追加
+Added Screen for unauthenticated and not logged in
 
 #### to do
 

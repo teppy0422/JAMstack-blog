@@ -30,6 +30,7 @@ import Content from "@/components/content";
 import Sidebar from "@/components/sidebar";
 import { sr } from "date-fns/locale";
 import { useUserContext } from "@/contexts/useUserContext";
+import YoutubeLike from "/public/images/etc/youtubeLike.svg";
 
 const MotionBox = motion(Box);
 
@@ -75,6 +76,22 @@ const apps = [
     src: "/images/ico/orderAdmin-cover.png",
     rate: 5,
     limitTag: "使用",
+  },
+  {
+    title: "絵本アプリ",
+    href: "/storybook",
+    description:
+      "1-2歳向けの絵本アプリ。iPhoneでホームアプリにして閲覧予定。作成途中。",
+    src: "/images/ico/storybook-cover.png",
+    rate: 1,
+  },
+  {
+    title: "YouTube(偽)",
+    href: "/youtube",
+    description: "動画再生用のページをなんとなく弄ってたら出来ました。",
+    src: "/images/etc/youtubeLike.svg",
+    rate: 2,
+    limitTag: "閲覧",
   },
 ];
 
@@ -154,25 +171,42 @@ export default function AppList() {
                 >
                   <CardBody p={2}>
                     <Box display="flex" justifyContent="center">
-                      <Image
-                        src={app.src}
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                        width="140px"
-                        height="120px"
-                      />
+                      {app.src.endsWith(".svg") ? (
+                        <Box
+                          w="120px"
+                          h="120px"
+                          color={colorMode === "light" ? "#D13030" : "#F89173"}
+                        >
+                          <YoutubeLike
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              fill: "currentColor",
+                            }}
+                          />
+                        </Box>
+                      ) : (
+                        <Image
+                          src={app.src}
+                          alt="image"
+                          width="120px"
+                          height="120px"
+                        />
+                      )}
                     </Box>
                     <Stack mt="3" spacing="1">
                       <Heading fontSize="15px">{app.title}</Heading>
                       <Box display="flex" fontSize="13px" alignItems="center">
-                        {Array(5)
-                          .fill("")
-                          .map((_, i) => (
-                            <StarIcon
-                              key={i}
-                              color={i < app.rate ? "orange.400" : "gray.300"}
-                            />
-                          ))}
+                        <Box m={0} p={0}>
+                          {Array(5)
+                            .fill("")
+                            .map((_, i) => (
+                              <StarIcon
+                                key={i}
+                                color={i < app.rate ? "orange.400" : "gray.300"}
+                              />
+                            ))}
+                        </Box>
                         {app.limitTag === "閲覧" && (
                           <Badge
                             colorScheme="red"

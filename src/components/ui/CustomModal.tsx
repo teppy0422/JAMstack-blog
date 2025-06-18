@@ -61,6 +61,7 @@ export function CustomModal({
           onPointerDown={(e) => dragControls.start(e)}
           bg="custom.system.500"
           p="0"
+          userSelect="none"
         >
           <MacCloseButton
             onClickHandlers={macCloseButtonHandlers}

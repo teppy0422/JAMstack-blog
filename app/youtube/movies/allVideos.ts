@@ -2,6 +2,36 @@ import { VideoMeta } from "@/types/video-meta";
 
 export const allVideos: VideoMeta[] = [
   {
+    id: "youtube_0004",
+    title: {
+      ja: "初心者が最初に覚えるべき関数",
+      us: "The first function a beginner should learn",
+      cn: "初学者应首先学习的功能",
+    },
+    autoPlay: true,
+    date: "2021/12/24",
+    name: {
+      ja: "EXCEL",
+      us: "EXCEL",
+      cn: "EXCEL",
+    },
+    textContent: {
+      ja: `これはYouTubeの転載です。このサイトで作成した動画ではありません。
+
+以下の8個だけ何となく覚えてたら充分です。
+SUM、AVERAGE、COUNT、COUNTA、IF、COUNTIF、SUMIF、VLOOKUP。
+
+エクセル関数の勉強に時間を使うのは無駄です。
+エクセル関数は簡易的なものです。組み合わせたり工夫が必要になってきたら難易度が跳ね上がります。
+そうなったらVBAを習得しましょう。VBAなら関数を自作できるので都合の良いように作成できます。`,
+      us: `This is a YouTube reprint. This is not a video created by this site.`,
+      cn: `这是 YouTube 的转载。这不是本网站制作的视频。`,
+    },
+    src: "https://www.youtube.com/watch?v=cfGKFhSE6uA",
+    thumbnail: "https://img.youtube.com/vi/cfGKFhSE6uA/hqdefault.jpg",
+    time: "30:05",
+  },
+  {
     id: "youtube_0003",
     title: {
       ja: "ChatGPT × Excelマクロ",
@@ -74,7 +104,9 @@ export const allVideos: VideoMeta[] = [
     autoPlay: true,
     date: "2019/1/31",
     name: {
-      ja: "",
+      ja: "先ハメ誘導(開発中止)",
+      us: "Pre-hame induction (development discontinued)",
+      cn: "前置诱导（停止开发）",
     },
     textContent: {
       ja: `配策誘導ナビの延長で同じ仕組みでSSCのハメ作業を誘導する仕組みを作ってみました。
@@ -113,7 +145,9 @@ The development was abandoned due to prioritizing other work.`,
     autoPlay: true,
     date: "2018/11/25",
     name: {
-      ja: "",
+      ja: "生産準備+ & 配策誘導ナビ & マイコン",
+      us: "生产准备+ & 分配指导 导航和微型计算机",
+      cn: "Production Preparation+ & Guidance Navigation & Microcomputer",
     },
     textContent: {
       ja: `配策誘導ナビを表示するためのアプリケーションをVB.netで作成しました。
@@ -143,7 +177,9 @@ The development was abandoned due to prioritizing other work.`,
     autoPlay: true,
     date: "2018/10/22",
     name: {
-      ja: "",
+      ja: "生産準備+",
+      us: "Production Preparation+",
+      cn: "生产准备+。",
     },
     textContent: {
       ja: `生産準備+で配策経路を表示する配策誘導ナビを作成しました。
@@ -176,7 +212,9 @@ It can be used even in situations where there is no web environment such as Apac
     autoPlay: true,
     date: "2018/8/11",
     name: {
-      ja: "",
+      ja: "生産準備+ & 検査履歴システム",
+      us: "Production Preparation+ & Inspection History System",
+      cn: "生产准备+ & 检验历史系统",
     },
     textContent: {
       ja: `生産準備+で作成したポイント点滅画像を検査履歴システムに入れる事で製品品番専用のポイント点滅画像を簡単に表示できます。`,
@@ -197,7 +235,9 @@ It can be used even in situations where there is no web environment such as Apac
     autoPlay: true,
     date: "2021/3/24",
     name: {
-      ja: "先ハメ誘導",
+      ja: "生産準備+",
+      us: "Production Preparation+",
+      cn: "生产准备+。",
     },
     textContent: {
       ja: `先ハメ初心者でも最適な順番で作業が行えます。\n製造指示書にサブナンバーと作業順を印刷してその順番で作業を行います。\n\n※先ハメ順を都度考える補給品工程で特に有効です\n※生産準備+で自動立案したサブ形態のみ対応`,
@@ -226,7 +266,9 @@ It can be used even in situations where there is no web environment such as Apac
       cn: "显示屏移动",
     },
     name: {
-      ja: "順立生産システム",
+      ja: "生産準備+ & 配策誘導ナビ & マイコン",
+      us: "生产准备+ & 分配指导 导航和微型计算机",
+      cn: "Production Preparation+ & Guidance Navigation & Microcomputer",
     },
     textContent: {
       ja: `配策時にディスプレイが見えやすい位置に移動します。
@@ -259,6 +301,8 @@ It is moved by Arduino and stepping motors.`,
     title: { ja: "main2(SSC)" },
     name: {
       ja: "順立生産システム",
+      us: "sequential production system",
+      cn: "连续生产系统",
     },
     textContent: {
       ja: `SSCで使う場合の例です
@@ -285,7 +329,9 @@ Based on this concept, YSS, CB, PLC, etc. are also supported.`,
     autoPlay: true,
     title: { ja: "main3(PLC)" },
     name: {
-      ja: "順立生産システム",
+      ja: "順立生産システム & PLC(OMRON)",
+      us: "sequential production system & PLC(OMRON)",
+      cn: "连续生产系统 & PLC(OMRON)",
     },
     textContent: {
       ja: `PLCなどの外部デバイスにシリアル送信を行なって製品品番に応じた動作を行います。\n動画のように忘れん棒に部品セットを行う場合はロボットアームの方が良いかもしれません。`,

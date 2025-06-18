@@ -23,12 +23,14 @@ import getMessage from "../../../src/utils/getMessage";
 import { isMobile } from "react-device-detect";
 import { AnimatePresence, motion } from "framer-motion";
 import { ControlBar } from "./ControlBar";
+import { FaPlay, FaPause } from "react-icons/fa";
 
 import TopNavbar from "./TopNavbar";
 import YouTubeList from "./YouTubeList";
 
 import { VideoMeta } from "@/types/video-meta";
 import { allVideos } from "../movies/allVideos";
+import { is } from "cheerio/dist/commonjs/api/traversing";
 
 interface YouTubeFrameProps {
   initialVideoId?: string;
@@ -46,8 +48,15 @@ const YouTubeFrame: React.FC<YouTubeFrameProps> = ({
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(false);
-  const { colorMode } = useColorMode();
 
+  // 再生/停止のアニメーション
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showAnimIcon, setShowAnimIcon] = useState(false);
+  const handlePush = (isPlay) => {
+    setIsPlaying(isPlay);
+    setShowAnimIcon(true);
+    setTimeout(() => setShowAnimIcon(false), 500);
+  };
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const formatTime = (time: number) => {
@@ -72,14 +81,17 @@ const YouTubeFrame: React.FC<YouTubeFrameProps> = ({
     getUserById,
     isLoading,
   } = useUserContext();
+  const userData = currentUserId ? getUserById(currentUserId) : null;
 
   const togglePlayPause = () => {
     const video = document.querySelector<HTMLVideoElement>(".box1");
     if (video) {
       if (video.paused) {
         video.play().catch((error) => console.error("Play error:", error));
+        handlePush(true);
       } else {
         video.pause();
+        handlePush(false);
       }
     }
   };
@@ -230,282 +242,305 @@ const YouTubeFrame: React.FC<YouTubeFrameProps> = ({
     video.play();
   };
 
-  const MotionHStack = motion(HStack);
-
   return (
     <>
-      <Box bg="custom.system.100">
-        <TopNavbar />
-        <Box
-          m="0"
-          h={isModal ? undefined : "90vh"}
-          overflowY="auto"
-          overflowX="hidden"
-          bg="custom.system.800"
-          color="#ddd"
-        >
-          <Grid
-            mt={0}
-            p={1}
-            maxHeight="90vh"
-            fontFamily={getMessage({
-              ja: "Noto Sans JP",
-              us: "Noto Sans,Noto Sans JP",
-              cn: "Noto Sans SC",
-              language,
-            })}
-            templateColumns={{ base: "1fr", lg: "5fr 2.5fr" }}
-            gap={3}
+      {!userData ? (
+        <Flex height="100vh" align="center" justify="center">
+          <Box fontSize="lg" textAlign="center">
+            閲覧するにはログインが必要です
+          </Box>
+        </Flex>
+      ) : !userData.user_metadata?.name ? (
+        <Flex height="100vh" align="center" justify="center">
+          <Box fontSize="lg" textAlign="center">
+            閲覧するにはユーザー認証（名前登録）が必要です
+          </Box>
+        </Flex>
+      ) : (
+        <Box bg="custom.system.100">
+          <TopNavbar currentUserPictureUrl={currentUserPictureUrl} />
+          <Box
+            m="0"
+            h={isModal ? "40vh" : "90vh"}
+            overflowY="auto"
+            overflowX="hidden"
+            bg="custom.system.800"
+            color="#ddd"
           >
-            <VStack flex="5">
-              <Box
-                border="0.5px solid "
-                borderColor="custom.system.300"
-                borderRadius="0px"
-                width="100%"
-                margin="0 auto"
-                overflow="hidden"
-                position="relative"
-                boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
-              >
-                <AspectRatio ratio={16 / 9} maxW="800px" mx="auto">
-                  {currentVideo.src.includes("youtube.com") ||
-                  currentVideo.src.includes("youtu.be") ? (
-                    <iframe
-                      title="YouTube video"
-                      src={
-                        currentVideo.src.includes("watch?v=")
-                          ? currentVideo.src.replace("watch?v=", "embed/") +
-                            "?rel=0&modestbranding=1"
-                          : currentVideo.src.replace(
-                              "youtu.be/",
-                              "www.youtube.com/embed/"
-                            ) + "?rel=0&modestbranding=1"
-                      }
-                      rel="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        border: "none",
-                      }}
-                    />
-                  ) : (
-                    <video
-                      className="box1"
-                      key={currentVideo.src}
-                      src={currentVideo.src}
-                      autoPlay={currentVideo.autoPlay}
-                      ref={videoRef}
-                      onClick={togglePlayPause}
-                      onTimeUpdate={() => {
-                        if (videoRef.current) {
-                          setCurrentTime(videoRef.current.currentTime);
+            <Grid
+              mt={0}
+              p={1}
+              maxHeight="90vh"
+              fontFamily={getMessage({
+                ja: "Noto Sans JP",
+                us: "Noto Sans,Noto Sans JP",
+                cn: "Noto Sans SC",
+                language,
+              })}
+              templateColumns={{ base: "1fr", lg: "5fr 2.5fr" }}
+              gap={3}
+            >
+              <VStack flex="5">
+                <Box
+                  border="0.5px solid "
+                  borderColor="custom.system.300"
+                  borderRadius="0px"
+                  width="100%"
+                  margin="0 auto"
+                  overflow="hidden"
+                  position="relative"
+                  boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
+                >
+                  <AspectRatio ratio={16 / 9} maxW="800px" mx="auto">
+                    {currentVideo.src.includes("youtube.com") ||
+                    currentVideo.src.includes("youtu.be") ? (
+                      <iframe
+                        title="YouTube video"
+                        src={
+                          currentVideo.src.includes("watch?v=")
+                            ? currentVideo.src.replace("watch?v=", "embed/") +
+                              "?rel=0&modestbranding=1"
+                            : currentVideo.src.replace(
+                                "youtu.be/",
+                                "www.youtube.com/embed/"
+                              ) + "?rel=0&modestbranding=1"
                         }
-                      }}
-                      onLoadedMetadata={() => {
-                        if (videoRef.current) {
-                          setDuration(videoRef.current.duration);
-                        }
-                      }}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center",
-                      }}
-                    />
-                  )}
-                </AspectRatio>
-                {!currentVideo.src.includes("youtube.com") &&
-                  !currentVideo.src.includes("youtu.be") && (
-                    <>
-                      <Box
-                        id="progress-container"
-                        position="absolute"
-                        zIndex={10}
-                        bottom="0"
-                        left="0"
-                        width="100%"
-                        height="4px"
-                        backgroundColor="#777"
-                        cursor="pointer"
-                      >
-                        {/* 実際の赤い進捗バー */}
+                        rel="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          border: "none",
+                        }}
+                      />
+                    ) : (
+                      <video
+                        className="box1"
+                        key={currentVideo.src}
+                        src={currentVideo.src}
+                        autoPlay={currentVideo.autoPlay}
+                        ref={videoRef}
+                        onClick={togglePlayPause}
+                        onTimeUpdate={() => {
+                          if (videoRef.current) {
+                            setCurrentTime(videoRef.current.currentTime);
+                          }
+                        }}
+                        onLoadedMetadata={() => {
+                          if (videoRef.current) {
+                            setDuration(videoRef.current.duration);
+                          }
+                        }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "center",
+                        }}
+                      />
+                    )}
+                  </AspectRatio>
+                  {!currentVideo.src.includes("youtube.com") &&
+                    !currentVideo.src.includes("youtu.be") && (
+                      <>
                         <Box
-                          id="progress-bar"
-                          height="100%"
-                          width={`${
-                            duration > 0 ? (currentTime / duration) * 100 : 0
-                          }%`}
-                          backgroundColor="red"
-                          transition="width 0.1s linear"
-                        />
-
-                        {/* 操作用の透明な大きなレイヤー */}
-                        <Box
+                          id="progress-container"
                           position="absolute"
-                          top="-10px" // 上に6px広げる
+                          zIndex={10}
+                          bottom="0"
                           left="0"
                           width="100%"
-                          height="14px" // 合計：上6px + progress 4px + 下6px のイメージ
+                          height="4px"
+                          backgroundColor="#777"
                           cursor="pointer"
-                          onMouseMove={handleProgressMove}
-                          onMouseLeave={handleProgressLeave}
-                          onClick={handleProgressClick}
-                          zIndex={20}
-                        />
+                        >
+                          {/* 実際の赤い進捗バー */}
+                          <Box
+                            id="progress-bar"
+                            height="100%"
+                            width={`${
+                              duration > 0 ? (currentTime / duration) * 100 : 0
+                            }%`}
+                            backgroundColor="red"
+                            transition="width 0.1s linear"
+                          />
 
-                        {/* ツールチップ */}
-                        {hoverTime !== null && hoverX !== null && (
+                          {/* 操作用の透明な大きなレイヤー */}
                           <Box
                             position="absolute"
-                            left={`${hoverX}px`}
-                            bottom="20px"
-                            transform="translateX(-50%)"
-                            px={2}
-                            py={1}
-                            bg="rgba(0,0,0,0.8)"
-                            color="white"
-                            fontSize="12px"
-                            borderRadius="md"
-                            pointerEvents="none"
-                            whiteSpace="nowrap"
-                          >
-                            {formatTime(hoverTime)}
-                          </Box>
-                        )}
-                      </Box>
+                            top="-10px" // 上に6px広げる
+                            left="0"
+                            width="100%"
+                            height="14px" // 合計：上6px + progress 4px + 下6px のイメージ
+                            cursor="pointer"
+                            onMouseMove={handleProgressMove}
+                            onMouseLeave={handleProgressLeave}
+                            onClick={handleProgressClick}
+                            zIndex={20}
+                          />
 
-                      <Center
-                        id="pause-overlay"
-                        position="absolute"
-                        zIndex={5}
-                        top="0"
-                        width="100%"
-                        height="100%"
-                        bg="rgba(0, 0, 0, 0.3)"
-                        color="white"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        onClick={togglePlayPause}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        onTouchStart={handleTouch}
-                        transition="all 0.3s ease-in-out"
-                      >
-                        <AnimatePresence>
-                          {visible && (
-                            <ControlBar
-                              rewindPlay={rewindPlay}
-                              toggleVolume={toggleVolume}
-                              isMuted={isMuted}
-                            />
+                          {/* ツールチップ */}
+                          {hoverTime !== null && hoverX !== null && (
+                            <Box
+                              position="absolute"
+                              left={`${hoverX}px`}
+                              bottom="20px"
+                              transform="translateX(-50%)"
+                              px={2}
+                              py={1}
+                              bg="rgba(0,0,0,0.8)"
+                              color="white"
+                              fontSize="12px"
+                              borderRadius="md"
+                              pointerEvents="none"
+                              whiteSpace="nowrap"
+                            >
+                              {formatTime(hoverTime)}
+                            </Box>
                           )}
-                        </AnimatePresence>
-                        <Text
-                          opacity={visible ? 1 : 0}
-                          transition="all 0.3s ease-in-out"
+                        </Box>
+
+                        <Center
+                          id="pause-overlay"
                           position="absolute"
-                          zIndex={20}
-                          bottom="8px"
-                          right="6px"
-                          fontSize="11px"
+                          zIndex={5}
+                          top="0"
+                          width="100%"
+                          height="100%"
+                          bg="rgba(0, 0, 0, 0.3)"
                           color="white"
-                          bg="rgba(0,0,0,0.5)"
-                          px={1.5}
-                          py={1}
-                          borderRadius="md"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          onClick={togglePlayPause}
+                          onMouseEnter={handleMouseEnter}
+                          onMouseLeave={handleMouseLeave}
+                          onTouchStart={handleTouch}
+                          transition="all 0.3s ease-in-out"
                         >
-                          {formatTime(currentTime)} / {formatTime(duration)}
-                        </Text>
-                      </Center>
-                    </>
-                  )}
-              </Box>
-              <Box width="100%" textAlign="left" ml="10px">
-                <Text textAlign="left" fontSize="16px" fontWeight={600} ml={2}>
-                  {typeof currentVideo.title === "string"
-                    ? currentVideo.title
-                    : currentVideo.title.ja}
-                </Text>
-                <HStack align="center" my={2} ml={1}>
-                  <Avatar
-                    size="sm"
-                    src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp"
-                  />
-                  <Text fontSize="16px">kataoka</Text>
-                </HStack>
-                <Card
-                  w="100%"
-                  p={2}
-                  onClick={handleToggleText}
-                  bg="custom.system.500"
-                  color="#ddd"
-                  cursor="pointer"
-                  fontSize={13}
-                >
-                  <Box fontWeight={500}>
-                    {currentVideo.date + "  " + getPastText(currentVideo.date)}
-                  </Box>
-                  <Text whiteSpace="pre-wrap" textAlign="left">
-                    {showFullText ? text : `${truncatedText}...`}
-                    <Box as="span" fontSize={11} ml={3}>
-                      {showFullText
-                        ? ""
-                        : getMessage({
-                            ja: "もっと読む",
-                            us: "Read more",
-                            cn: "更多信息",
-                            language,
-                          })}
-                    </Box>
-                  </Text>
-                </Card>
-              </Box>
-            </VStack>
-            <VStack flex="2">
-              <Card
-                border="0.5px solid"
-                borderColor="custom.system.100"
-                maxH="80vh"
-                width="100%"
-                bg="transparent"
-                mb="20px"
-                overflow="hidden"
-              >
-                <Box
-                  width="100%"
-                  color="#ddd"
-                  fontWeight="600"
-                  bg="custom.system.400"
-                  textAlign="center"
-                  verticalAlign="middle"
-                >
-                  <Heading fontSize="12px" mx={3} my={1}>
-                    {getMessage({
-                      ja: "その他の動画",
-                      us: "PlayList",
-                      cn: "播放列表",
-                      language,
-                    })}
-                  </Heading>
+                          <AnimatePresence>
+                            {visible && (
+                              <ControlBar
+                                rewindPlay={rewindPlay}
+                                toggleVolume={toggleVolume}
+                                isMuted={isMuted}
+                                isPlaying={isPlaying}
+                                showAnimIcon={showAnimIcon}
+                              />
+                            )}
+                          </AnimatePresence>
+                          <Text
+                            opacity={visible ? 1 : 0}
+                            transition="all 0.3s ease-in-out"
+                            position="absolute"
+                            zIndex={20}
+                            bottom="8px"
+                            right="6px"
+                            fontSize="11px"
+                            color="white"
+                            bg="rgba(0,0,0,0.5)"
+                            px={1.5}
+                            py={1}
+                            borderRadius="md"
+                          >
+                            {formatTime(currentTime)} / {formatTime(duration)}
+                          </Text>
+                        </Center>
+                      </>
+                    )}
                 </Box>
-                <Flex direction="column" overflowY="auto" py="4px">
-                  <YouTubeList
-                    allVideos={allVideos}
-                    currentId={currentVideo.id}
-                    onSelectVideo={(video: VideoMeta) => setCurrentVideo(video)}
-                    isModal={isModal}
-                  />
-                </Flex>
-              </Card>
-            </VStack>
-          </Grid>
+                <Box width="100%" textAlign="left" ml="10px">
+                  <Text
+                    textAlign="left"
+                    fontSize="16px"
+                    fontWeight={600}
+                    ml={2}
+                  >
+                    {typeof currentVideo.title === "string"
+                      ? currentVideo.title
+                      : currentVideo.title.ja}
+                  </Text>
+                  <HStack align="center" my={2} ml={1}>
+                    <Avatar
+                      size="sm"
+                      src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp"
+                    />
+                    <Text fontSize="16px">kataoka</Text>
+                  </HStack>
+                  <Card
+                    w="100%"
+                    p={2}
+                    onClick={handleToggleText}
+                    bg="custom.system.500"
+                    color="#ddd"
+                    cursor="pointer"
+                    fontSize={13}
+                  >
+                    <Box fontWeight={500}>
+                      {currentVideo.date +
+                        "  " +
+                        getPastText(currentVideo.date)}
+                    </Box>
+                    <Text whiteSpace="pre-wrap" textAlign="left">
+                      {showFullText ? text : `${truncatedText}...`}
+                      <Box as="span" fontSize={11} ml={3}>
+                        {showFullText
+                          ? ""
+                          : getMessage({
+                              ja: "もっと読む",
+                              us: "Read more",
+                              cn: "更多信息",
+                              language,
+                            })}
+                      </Box>
+                    </Text>
+                  </Card>
+                </Box>
+              </VStack>
+              <VStack flex="2">
+                <Card
+                  border="0.5px solid"
+                  borderColor="custom.system.100"
+                  maxH="80vh"
+                  width="100%"
+                  bg="transparent"
+                  mb="20px"
+                  overflow="hidden"
+                >
+                  <Box
+                    width="100%"
+                    color="#ddd"
+                    fontWeight="600"
+                    bg="custom.system.400"
+                    textAlign="center"
+                    verticalAlign="middle"
+                  >
+                    <Heading fontSize="12px" mx={3} my={1}>
+                      {getMessage({
+                        ja: "その他の動画",
+                        us: "PlayList",
+                        cn: "播放列表",
+                        language,
+                      })}
+                    </Heading>
+                  </Box>
+                  <Flex direction="column" overflowY="auto" py="4px">
+                    <YouTubeList
+                      allVideos={allVideos}
+                      currentId={currentVideo.id}
+                      onSelectVideo={(video: VideoMeta) =>
+                        setCurrentVideo(video)
+                      }
+                      isModal={isModal}
+                    />
+                  </Flex>
+                </Card>
+              </VStack>
+            </Grid>
+          </Box>
         </Box>
-      </Box>
+      )}
     </>
   );
 };

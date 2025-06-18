@@ -32,26 +32,31 @@ export default function YouTubeList({
       >
         <Box flex="1" overflowY="auto">
           {allVideos.map((video) => (
-            <ThumnailCard
-              key={video.id}
-              title={
-                typeof video.title === "string"
-                  ? video.title
-                  : GetMessageLocalize(video.title, language)
-              }
-              name={
-                video.name
-                  ? typeof video.name === "string"
-                    ? `${video.id}.${video.name}`
-                    : `${video.id}.${GetMessageLocalize(video.name, language)}`
-                  : video.id
-              }
-              src={video.src}
-              thumbnail={video.thumbnail}
-              time={video.time}
-              isActive={currentId === video.id}
-              onClick={() => onSelectVideo(video)}
-            />
+            <>
+              <ThumnailCard
+                key={video.id}
+                title={
+                  typeof video.title === "string"
+                    ? video.title
+                    : GetMessageLocalize(video.title, language)
+                }
+                name={
+                  video.name
+                    ? typeof video.name === "string"
+                      ? `${video.id}.${video.name}`
+                      : `${video.id}.${GetMessageLocalize(
+                          video.name,
+                          language
+                        )}`
+                    : video.id
+                }
+                src={video.src}
+                thumbnail={video.thumbnail}
+                time={video.time}
+                isActive={currentId === video.id}
+                onClick={() => onSelectVideo(video)}
+              />
+            </>
           ))}
         </Box>
       </Flex>
