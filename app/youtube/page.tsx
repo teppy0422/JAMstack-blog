@@ -16,11 +16,9 @@ export default function YouTubePage() {
 
   return (
     <Content maxWidth="100vw">
-      <Box bg="custom.system.900" color="#ddd">
-        {/* <TopNavbar /> */}
-        {/* 動画プレイヤー */}
-        <YouTubeFrame initialVideoId={currentVideo.id} />
-      </Box>
+      {/* <TopNavbar /> */}
+      {/* 動画プレイヤー */}
+      <YouTubeFrame initialVideoId={currentVideo.id} />
     </Content>
   );
 }

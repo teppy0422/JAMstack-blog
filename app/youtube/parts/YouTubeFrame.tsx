@@ -32,6 +32,8 @@ import { VideoMeta } from "@/types/video-meta";
 import { allVideos } from "../movies/allVideos";
 import { is } from "cheerio/dist/commonjs/api/traversing";
 
+import UnAuthenticatedNotice from "@/components/UnAuthenticatedNotice";
+
 interface YouTubeFrameProps {
   initialVideoId?: string;
   isModal?: boolean;
@@ -40,6 +42,7 @@ const YouTubeFrame: React.FC<YouTubeFrameProps> = ({
   initialVideoId,
   isModal,
 }) => {
+  const { colorMode } = useColorMode();
   const [showFullText, setShowFullText] = useState(false);
   const { language, setLanguage } = useLanguage();
   const initialVideo =
@@ -245,17 +248,20 @@ const YouTubeFrame: React.FC<YouTubeFrameProps> = ({
   return (
     <>
       {!userData ? (
-        <Flex height="100vh" align="center" justify="center">
-          <Box fontSize="lg" textAlign="center">
-            閲覧するにはログインが必要です
-          </Box>
-        </Flex>
+        <Box bg="custom.system.400">
+          <UnAuthenticatedNotice
+            currentUserId={currentUserId}
+            colorMode={colorMode}
+          />
+        </Box>
       ) : !userData.user_metadata?.name ? (
-        <Flex height="100vh" align="center" justify="center">
-          <Box fontSize="lg" textAlign="center">
-            閲覧するにはユーザー認証（名前登録）が必要です
-          </Box>
-        </Flex>
+        <Box bg="custom.system.400">
+          <UnAuthenticatedNotice
+            colorMode={colorMode}
+            currentUserName={userData?.user_metadata?.name}
+            currentUserId={userData.id}
+          />
+        </Box>
       ) : (
         <Box bg="custom.system.100">
           <TopNavbar currentUserPictureUrl={currentUserPictureUrl} />
@@ -525,7 +531,7 @@ const YouTubeFrame: React.FC<YouTubeFrameProps> = ({
                       })}
                     </Heading>
                   </Box>
-                  <Flex direction="column" overflowY="auto" py="4px">
+                  <Flex direction="column" overflowY="auto" py="0">
                     <YouTubeList
                       allVideos={allVideos}
                       currentId={currentVideo.id}

@@ -27,10 +27,11 @@ export default function YouTubeList({
         overflowY="auto"
         maxH={isModal ? "41vh" : "85vh"}
         minH="0"
-        py="4px"
-        bg="#000"
+        bg="custom.system.900"
+        p={0}
+        m={0}
       >
-        <Box flex="1" overflowY="auto">
+        <Box flex="1" overflowY="auto" py={1} m={0}>
           {allVideos.map((video) => (
             <>
               <ThumnailCard

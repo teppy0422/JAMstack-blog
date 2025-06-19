@@ -142,21 +142,20 @@ Fix youtube progress bar
 Added Play and Pause button animation to youtube page.
 Change Visible youtube's icon if thumbnail of included youtube.com
 -deploy 0013-
+Add icons to Mac-style 3-color buttons
+Added Screen for unauthenticated and not logged in
+Changed header icon when not logged in.
+Login information design changed to Liquid Glass.
 
 #### to do now
 
-認証されてないログインしていない場合の画面を追加
-Added Screen for unauthenticated and not logged in
+CustomModalize the login user icon.
 
 #### to do
 
-CustomModalize the login user icon.
 Changed our approach to this activity to customModal.
 
 新しく追加ボタンで画面が更新されない気がする
-
-ログイン情報のデザインを Liquid Glass に変更
-Login information design changed to Liquid Glass.
 
 if is is useState, rendering will occur each time, so change it to useRef.
 

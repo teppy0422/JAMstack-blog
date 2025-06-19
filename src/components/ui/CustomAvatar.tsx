@@ -37,11 +37,20 @@ export const CustomAvatar: React.FC<AnimationAvatarProps> = ({
   }, [src]);
   return (
     <>
-      {isLoading ? ( // 画像が読み込まれているかどうかをチェック
-        <SkeletonCircle boxSize={boxSize} mr={mr} />
+      {src ? (
+        isLoading ? (
+          <SkeletonCircle boxSize={boxSize} mt={mt} mr={mr} />
+        ) : (
+          <Avatar
+            src={src}
+            boxSize={boxSize}
+            mt={mt}
+            mr={mr}
+            bg={colorMode === "light" ? "#bfb1a4" : "#888"}
+          />
+        )
       ) : (
         <Avatar
-          src={src || undefined}
           boxSize={boxSize}
           mt={mt}
           mr={mr}

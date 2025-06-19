@@ -28,6 +28,7 @@ import { useUserContext } from "@/contexts/useUserContext";
 
 import { CustomAccordionIcon } from "@/components/ui/CustomText";
 import { CustomLoading } from "@/components/ui/CustomLoading";
+import UnAuthenticatedNotice from "@/components/UnAuthenticatedNotice";
 
 import "@fontsource/noto-sans-jp";
 import "@fontsource/yomogi";
@@ -356,37 +357,19 @@ const Frame: React.FC<{
           </Box>
         ) : !isThrough && !currentUserId && !isLoading ? (
           <Box h="30vh">
-            <Text
-              fontSize="lg"
-              textAlign="center"
-              mt={4}
-              fontWeight="bold"
-              color={colorMode === "light" ? "orange" : "orange"}
-            >
-              {getMessage({
-                ja: "閲覧するにはログインと開発による認証が必要です",
-                us: "Login and authentication by development is required to view",
-                cn: "查看需要开发人员登录和验证",
-                language,
-              })}
-            </Text>
+            <UnAuthenticatedNotice
+              colorMode={colorMode}
+              currentUserId={currentUserId}
+              currentUserName={currentUserName}
+            />
           </Box>
         ) : !isThrough && !currentUserName && !isLoading ? (
           <Box h="30vh">
-            <Text
-              fontSize="lg"
-              textAlign="center"
-              mt={4}
-              fontWeight="bold"
-              color={colorMode === "light" ? "orange" : "orange"}
-            >
-              {getMessage({
-                ja: "閲覧するには開発による認証が必要です",
-                us: "Authentication by development is required to view",
-                cn: "观看需要得到开发部门的授权",
-                language,
-              })}
-            </Text>
+            <UnAuthenticatedNotice
+              colorMode={colorMode}
+              currentUserId={currentUserId}
+              currentUserName={currentUserName}
+            />
           </Box>
         ) : (
           <HStack align="start" spacing={2} p={2} w="100%" bg="transparent">

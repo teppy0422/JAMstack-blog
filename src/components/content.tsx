@@ -28,18 +28,19 @@ export default function Content({
             },
           },
           "::-webkit-scrollbar": {
-            width: "6px",
+            width: "4px",
           },
           "::-webkit-scrollbar-track": {
-            background: colorMode === "light" ? "#f8e9df" : "#111",
-            borderRadius: "3px",
+            background: "transparent",
+            borderRadius: "0px",
           },
           "::-webkit-scrollbar-thumb": {
-            background: colorMode === "light" ? "#8d7c6f" : "#555",
-            borderRadius: "3px",
+            background: colorMode === "light" ? "#6f6e6c" : "#555",
+            borderRadius: "2px",
           },
           "::-webkit-scrollbar-thumb:hover": {
-            background: colorMode === "light" ? "#555" : "#777",
+            background: colorMode === "light" ? "#575653" : "#777",
+            cursor: "pointer",
           },
         }}
       />

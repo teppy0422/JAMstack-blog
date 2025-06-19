@@ -28,7 +28,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ currentUserPictureUrl }) => {
       py={1}
       borderColor="gray.300"
       spacing={0.5}
-      bg="custom.system.700"
+      bg="custom.system.800"
       color="#fcfcfc"
     >
       {/* 左：ロゴ */}
@@ -96,7 +96,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ currentUserPictureUrl }) => {
           color="#ccc"
           _hover={{ bg: "custom.system.500" }}
         />
-        <CustomAvatar src={currentUserPictureUrl ?? undefined} boxSize="34px" />
+        {/* <CustomAvatar src={currentUserPictureUrl ?? undefined} boxSize="34px" /> */}
       </HStack>
     </HStack>
   );

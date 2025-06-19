@@ -56,6 +56,11 @@ export function CustomModal({
         m={0}
         overflow="hidden"
         style={{ cursor: "default", marginTop: marginTop, zIndex: 99999 }}
+        borderRadius="10px"
+        border="0.1px solid"
+        borderColor="custom.system.100"
+        outline="0.1px solid"
+        outlineColor="custom.system.900"
       >
         <Box
           onPointerDown={(e) => dragControls.start(e)}
@@ -75,8 +80,14 @@ export function CustomModal({
 
         {footer && (
           <>
-            <Box h="1px" bg="#4c4b49" w="100%" />
-            <ModalFooter bg="#2c2b29" fontSize="12px" color="#ccc" p="9px">
+            <ModalFooter
+              bg="custom.system.600"
+              borderTop="0.5px solid"
+              borderTopColor="custom.system.200"
+              color="#ccc"
+              fontSize="12px"
+              p="9px"
+            >
               {footer}
             </ModalFooter>
           </>

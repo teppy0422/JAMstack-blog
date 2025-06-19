@@ -283,6 +283,7 @@ export default function Header() {
               <Flex
                 // className={`${myClass} ${styles.headerNav}`}
                 maxWidth="100vw"
+                h="42px"
               >
                 <Center>
                   <IconButton
