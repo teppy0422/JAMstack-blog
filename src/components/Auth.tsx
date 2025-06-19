@@ -48,7 +48,7 @@ export default function Auth({ userData }: AuthProps) {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"signup" | "signin">("signup");
   const { colorMode } = useColorMode();
-  const spanColor = colorMode === "light" ? "red" : "orange";
+  const spanColor = colorMode === "light" ? "custom.theme.red.400" : "orange";
 
   const { language, setLanguage } = useLanguage();
 
@@ -372,16 +372,14 @@ export default function Auth({ userData }: AuthProps) {
         language,
       })}
       color="#ccc"
+      bg="custom.system.800"
+      m={0}
+      p={0}
     >
       {user ? (
         <>
           <Box textAlign="center" mb={4}>
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              mt={2}
-            ></Box>
+            <Box display="flex" justifyContent="center" alignItems="center" />
             <input
               type="file"
               ref={fileInputRef}
@@ -393,11 +391,18 @@ export default function Auth({ userData }: AuthProps) {
       ) : (
         <>
           <Tabs>
-            <TabPanels p={0}>
+            <TabPanels p={0} color="#ccc">
               <TabPanel p={0}>
                 <Tabs p={0}>
                   <TabList>
-                    <Tab>
+                    <Tab
+                      fontSize="13px"
+                      _selected={{
+                        color: "custom.theme.red.400",
+                        borderBottom: "2px solid",
+                        borderBottomColor: "custom.theme.red.400",
+                      }}
+                    >
                       {getMessage({
                         ja: "ログイン",
                         us: "Login",
@@ -405,7 +410,14 @@ export default function Auth({ userData }: AuthProps) {
                         language,
                       })}
                     </Tab>
-                    <Tab>
+                    <Tab
+                      fontSize="13px"
+                      _selected={{
+                        color: "custom.theme.red.400",
+                        borderBottom: "2px solid",
+                        borderBottomColor: "custom.theme.red.400",
+                      }}
+                    >
                       {getMessage({
                         ja: "新規登録",
                         us: "Sign Up",
@@ -434,9 +446,14 @@ export default function Auth({ userData }: AuthProps) {
                         })}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        mb={3}
+                        mb={2}
                         onFocus={() => setIsEmailFocused(true)}
                         onBlur={() => setIsEmailFocused(false)}
+                        _focus={{
+                          borderColor: "custom.theme.red.300",
+                          outline: "none",
+                          boxShadow: "none",
+                        }}
                       />
                       <Text fontSize="10px" mb={0.3} ml={1} textAlign="left">
                         {getMessage({
@@ -459,20 +476,44 @@ export default function Auth({ userData }: AuthProps) {
                         mb={4}
                         onFocus={() => setIsPasswordFocused(true)}
                         onBlur={() => setIsPasswordFocused(false)}
+                        _focus={{
+                          borderColor: "custom.theme.red.300",
+                          outline: "none",
+                          boxShadow: "none",
+                        }}
                       />
-                      <Button
-                        onClick={handleSignIn}
-                        isLoading={loading}
-                        colorScheme="blue"
-                        width="full"
-                      >
-                        {getMessage({
-                          ja: "ログイン",
-                          us: "Login",
-                          cn: "登录",
-                          language,
-                        })}
-                      </Button>
+                      <Flex w="100%" justify="center">
+                        <Button
+                          onClick={handleSignIn}
+                          isLoading={loading}
+                          fontSize="14px"
+                          h="2rem"
+                          px="6px"
+                          py="8px"
+                          lineHeight="1"
+                          borderRadius="md"
+                          bgGradient="linear(to-b, #f0f0f3, #dcdcdc)" // 明るめグラデーション
+                          boxShadow="inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 1px 2px rgba(0, 0, 0, 0.2)"
+                          border="1px solid #b0b0b0"
+                          color="black"
+                          _hover={{
+                            bgGradient: "linear(to-b, #e5e5e5, #cfcfcf)",
+                            boxShadow:
+                              "inset 0 0 0 1px rgba(255,255,255,0.8), 0 2px 4px rgba(0,0,0,0.3)",
+                          }}
+                          _active={{
+                            transform: "translateY(1px)",
+                            boxShadow: "inset 0 1px 3px rgba(0,0,0,0.3)",
+                          }}
+                        >
+                          {getMessage({
+                            ja: "ログイン",
+                            us: "Login",
+                            cn: "登录",
+                            language,
+                          })}
+                        </Button>
+                      </Flex>
                     </TabPanel>
                     <TabPanel>
                       <Text fontSize="sm" mb={4}>
@@ -491,7 +532,7 @@ export default function Auth({ userData }: AuthProps) {
                           cn: " 电子邮件地址和",
                           language,
                         })}
-                        <span style={{ color: spanColor }}>
+                        <span style={{ color: "#F56565" }}>
                           {getMessage({
                             ja: "パスワード(6文字以上)",
                             us: " Password (at least 6 characters).",
@@ -554,6 +595,11 @@ export default function Auth({ userData }: AuthProps) {
                         mb={2}
                         onFocus={() => setIsEmailFocused(true)}
                         onBlur={() => setIsEmailFocused(false)}
+                        _focus={{
+                          borderColor: "custom.theme.red.300",
+                          outline: "none",
+                          boxShadow: "none",
+                        }}
                       />
                       <Text fontSize="10px" mb={0.3} ml={1} textAlign="left">
                         {getMessage({
@@ -576,6 +622,11 @@ export default function Auth({ userData }: AuthProps) {
                         mb={2}
                         onFocus={() => setIsPasswordFocused(true)}
                         onBlur={() => setIsPasswordFocused(false)}
+                        _focus={{
+                          borderColor: "custom.theme.red.300",
+                          outline: "none",
+                          boxShadow: "none",
+                        }}
                       />
                       <Text fontSize="10px" mb={0.3} ml={1} textAlign="left">
                         {getMessage({
@@ -598,6 +649,11 @@ export default function Auth({ userData }: AuthProps) {
                         mb={3}
                         onFocus={() => setIsConfirmPasswordFocused(true)}
                         onBlur={() => setIsConfirmPasswordFocused(false)}
+                        _focus={{
+                          borderColor: "custom.theme.red.300",
+                          outline: "none",
+                          boxShadow: "none",
+                        }}
                       />
                       <Button
                         onClick={handleSignUp}
@@ -650,7 +706,6 @@ export default function Auth({ userData }: AuthProps) {
         <Grid
           templateColumns={{ base: "1fr", sm: "3.5fr 6.5fr" }}
           gap={4}
-          py={2}
           mx={4}
         >
           <GridItem>

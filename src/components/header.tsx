@@ -74,6 +74,7 @@ import QrModal from "./modals/QrModal";
 
 import { useUserContext } from "@/contexts/useUserContext";
 import LiquidGlass from "@/components/LiquidGlass";
+import { CustomModal } from "@/components/ui/CustomModal";
 
 import "@fontsource/dela-gothic-one";
 
@@ -673,43 +674,25 @@ export default function Header() {
         </ModalContent>
       </Modal>
       {/* ログインモーダル */}
-      <Modal
+      <CustomModal
+        title=""
         isOpen={isLoginModalOpen}
         onClose={() => setLoginModalOpen(false)}
-        size="lg"
+        modalSize="lg"
+        macCloseButtonHandlers={[() => setLoginModalOpen(false)]}
+        footer={<></>}
       >
-        <ModalOverlay />
-        <ModalContent
-          borderColor={
-            colorMode === "light"
-              ? "custom.theme.light.100"
-              : "custom.theme.light.100"
-          }
-          borderWidth="0.1px"
-          px={0}
-          zIndex={4001}
-          overflow="hidden"
-        >
-          <MacCloseButton onClickHandlers={[() => setLoginModalOpen(false)]} />
-          <ModalBody
-            bg={colorMode === "light" ? "#2c2b29" : "custom.theme.dark.500"}
-            borderBottomRadius="md"
-            m={0}
-            p={0}
-          >
-            <Auth
-              userData={{
-                userName: currentUserName,
-                userCompany: currentUserCompany,
-                pictureUrl: currentUserPictureUrl,
-                userMainCompany: currentUserMainCompany,
-                userEmail: currentUserEmail,
-                created_at: currentUserCreatedAt,
-              }}
-            />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+        <Auth
+          userData={{
+            userName: currentUserName,
+            userCompany: currentUserCompany,
+            pictureUrl: currentUserPictureUrl,
+            userMainCompany: currentUserMainCompany,
+            userEmail: currentUserEmail,
+            created_at: currentUserCreatedAt,
+          }}
+        />
+      </CustomModal>
 
       <Drawer isOpen={isMenuOpen} placement="left" onClose={onMenuClose}>
         <DrawerOverlay zIndex={1100}>

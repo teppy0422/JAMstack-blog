@@ -146,10 +146,15 @@ Add icons to Mac-style 3-color buttons
 Added Screen for unauthenticated and not logged in
 Changed header icon when not logged in.
 Login information design changed to Liquid Glass.
+-deploy 0014-
+CustomModalize the login user icon.
+sendMail successfully with test/page.tsx
+Sendmail embedded in bbs/[id]/page.tsx
 
 #### to do now
 
-CustomModalize the login user icon.
+ui をまとめる input とか button とか toast とか
+サブ自動立案
 
 #### to do
 

@@ -122,6 +122,7 @@ import { CustomModalCloseButton } from "../../../../src/components/ui/CustomModa
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
+import { sendMail } from "@/lib/sendMail";
 
 let cachedUsers: any[] | null = null;
 const now = new Date();
@@ -1011,6 +1012,12 @@ function ThreadContent(): JSX.Element {
     if (error) {
       console.error("Error creating post:", error.message);
     } else {
+      // メール送信
+      handleSendMail({
+        to: "teppy@aol.jp",
+        subject: "📨 sendMail.ts 経由のテスト送信",
+        text: inputValue,
+      });
       setNewPostContent("");
       setSelectedFile(null);
       setSelectedFileName(null);
@@ -1027,7 +1034,28 @@ function ThreadContent(): JSX.Element {
       }
     }
   };
-  //ファイルをアップロード
+  // メールを送信
+  const handleSendMail = async ({
+    to,
+    subject,
+    text,
+  }: {
+    to: string;
+    subject: string;
+    text: string;
+  }) => {
+    const success = await sendMail({
+      to,
+      subject,
+      text,
+    });
+    toast({
+      title: success ? "送信成功！" : "送信失敗",
+      status: success ? "success" : "error",
+    });
+  };
+
+  // ファイルをアップロード
   const uploadFile = async (file: File) => {
     let processedFile = file;
 
