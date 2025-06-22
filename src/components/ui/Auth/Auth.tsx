@@ -21,12 +21,14 @@ import {
   HStack,
   Spacer,
   VStack,
+  Switch,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import { MdBusiness, MdEmail, MdHistory } from "react-icons/md";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import { CustomAvatar } from "./ui/CustomAvatar";
+import { CustomAvatar } from "../CustomAvatar";
+import EmailNotifySwitch from "./emailNotifySwitch";
 
 import getMessage from "@/utils/getMessage";
 
@@ -38,6 +40,8 @@ interface AuthProps {
     userMainCompany: string | null;
     userEmail: string | null;
     created_at: string | null;
+    is_email_active?: boolean;
+    is_email_notify?: boolean;
   };
 }
 export default function Auth({ userData }: AuthProps) {
@@ -48,7 +52,6 @@ export default function Auth({ userData }: AuthProps) {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"signup" | "signin">("signup");
   const { colorMode } = useColorMode();
-  const spanColor = colorMode === "light" ? "custom.theme.red.400" : "orange";
 
   const { language, setLanguage } = useLanguage();
 
@@ -777,6 +780,18 @@ export default function Auth({ userData }: AuthProps) {
                   E-mail
                 </Text>
                 <Text fontSize="13px">{userData.userEmail}</Text>
+              </Flex>
+              <Box h="1px" w="100%" bg="#4c4b49" my={2} />
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text fontWeight="bold" fontSize="13px">
+                  {getMessage({
+                    ja: "通知の設定",
+                    us: "Notification Settings",
+                    cn: "通知设置",
+                    language,
+                  })}
+                </Text>
+                <EmailNotifySwitch userId={user.id} />
               </Flex>
             </Box>
             <Box

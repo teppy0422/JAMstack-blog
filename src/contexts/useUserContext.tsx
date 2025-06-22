@@ -19,8 +19,18 @@ export interface UserData {
   user_company: string | null;
   user_mainCompany: string | null;
   created_at: string | null;
+  is_email_active?: boolean | undefined;
+  is_email_notify?: boolean | undefined;
+  last_notified_at?: string | null;
+  email?: string | null;
 }
-
+interface AuthUserData {
+  id: string;
+  email: string;
+  created_at: string;
+  last_sign_in_at: string;
+  user_metadata: any;
+}
 interface UserContextType {
   // 現在のユーザー情報
   currentUserId: string | null;
@@ -30,9 +40,12 @@ interface UserContextType {
   currentUserMainCompany: string | null;
   currentUserEmail: string | null;
   currentUserCreatedAt: string | null;
-
+  currentUserIsEmailActive?: boolean | undefined;
+  currentUserIsEmailNotify?: boolean | undefined;
+  currentLastNotifiedAt?: boolean | null;
   // ユーザー検索機能
   getUserById: (id: string | null) => UserData | null;
+  updateUserById: (id: string, updates: Partial<UserData>) => void;
   refreshUsers: () => Promise<void>;
   isLoading: boolean;
 }
@@ -60,10 +73,20 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [currentUserCreatedAt, setCurrentUserCreatedAt] = useState<
     string | null
   >(null);
+  const [currentUserIsEmailActive, setCurrentUserIsEmailActive] = useState<
+    boolean | undefined
+  >(false);
+  const [currentUserIsEmailNotify, setCurrentUserIsEmailNotify] = useState<
+    boolean | undefined
+  >(false);
+  const [currentLastNotifiedAt, setCurrentLastNotifiedAt] = useState<
+    string | null | undefined
+  >(null);
 
   // 全ユーザー情報のステート
   const [allUsers, setAllUsers] = useState<UserData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [users, setUsers] = useState<UserData[]>([]);
 
   const fetchAllUsers = async () => {
     try {
@@ -106,7 +129,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         setIsLoading(false);
       }
     };
-
     initializeUser();
   }, []);
 
@@ -121,6 +143,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         setCurrentUserCompany(userData.user_company);
         setCurrentUserMainCompany(userData.user_mainCompany);
         setCurrentUserCreatedAt(userData.created_at);
+        setCurrentUserIsEmailActive(userData.is_email_active);
+        setCurrentUserIsEmailNotify(userData.is_email_notify);
+        setCurrentLastNotifiedAt(userData.last_notified_at);
       } else {
         // console.log("No user data found for ID:", currentUserId);
       }
@@ -129,6 +154,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const getUserById = (id: string): UserData | null => {
     return allUsers.find((user) => user.id === id) || null;
+  };
+
+  const updateUserById = (id, updates) => {
+    setUsers((prev) =>
+      prev.map((u) => (u.id === id ? { ...u, ...updates } : u))
+    );
   };
 
   const refreshUsers = async () => {
@@ -148,9 +179,11 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         currentUserMainCompany,
         currentUserEmail,
         currentUserCreatedAt,
-
+        currentUserIsEmailActive,
+        currentUserIsEmailNotify,
         // ユーザー検索機能
         getUserById,
+        updateUserById,
         refreshUsers,
         isLoading,
       }}

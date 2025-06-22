@@ -60,7 +60,7 @@ import { WiDaySunny, WiCloudyGusts, WiRainMix } from "react-icons/wi";
 import { SunderText, ScrollText } from "./ui/CustomText";
 import { AnimationImage } from "./ui/CustomImage";
 
-import Auth from "@/components/Auth";
+import Auth from "@/components/ui/Auth/Auth";
 import { Global } from "@emotion/react";
 
 import { useLanguage } from "../contexts/LanguageContext";
@@ -94,6 +94,7 @@ export default function Header() {
     currentUserPictureUrl,
     currentUserEmail,
     currentUserCreatedAt,
+    currentUserIsEmailActive,
   } = useUserContext();
 
   const {

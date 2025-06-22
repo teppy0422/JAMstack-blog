@@ -94,12 +94,10 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
           "created_at",
           new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
         );
-
       if (error) {
         console.error("Error fetching unread count:", error);
         return;
       }
-
       // スレッドごとの未読数を計算
       const counts: Record<string, number> = {};
       data.forEach((post) => {
@@ -110,13 +108,11 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
           counts[post.thread_id] = (counts[post.thread_id] || 0) + 1;
         }
       });
-
       setUnreadCountsByThread(counts);
       const totalUnreadCount = Object.values(counts).reduce(
         (sum: number, count: number) => sum + count,
         0
       );
-
       setUnreadCount(totalUnreadCount as number);
       console.log("Unread counts by thread:", counts);
     };

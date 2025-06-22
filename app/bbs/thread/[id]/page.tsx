@@ -94,12 +94,14 @@ import SafeHtml from "../../parts/SafeHtml";
 import ExternalLinkText from "../../parts/ExternalLinkText";
 import UrlPreviewBox from "../../parts/UrlPreviewBox";
 import ChatFeatureMoal from "@/components/modals/ChatFeatures";
+import { bbsNotifEmailHtml } from "@/lib/templates/bbsNotifEmailHtml";
 
 import "@/styles/home.module.scss";
 // import { AppContext } from "../../../pages/_app";
 
 import { useLanguage, LanguageProvider } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
+
 // 季節ごとのアニメーションを管理するマッピング
 const seasonalAnimations = {
   someiyoshino: dynamic(
@@ -123,6 +125,8 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
 import { sendMail } from "@/lib/sendMail";
+import { getUserEmail } from "@/lib/getUserEmail";
+import { last } from "lodash";
 
 let cachedUsers: any[] | null = null;
 const now = new Date();
@@ -136,8 +140,9 @@ export default function Thread() {
 }
 
 function ThreadContent(): JSX.Element {
-  const { language, setLanguage } = useLanguage();
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { language } = useLanguage();
+  const { colorMode } = useColorMode();
+  const [isSentNotify, setIsSentNotify] = useState<boolean>(false);
 
   const { updateUnreadCount } = useUnread();
   const toast = useToast();
@@ -156,6 +161,7 @@ function ThreadContent(): JSX.Element {
   const [currentUrl, setCurrentUrl] = useState<string | null>(null);
 
   const [threadBlogUrl, setThreadBlogUrl] = useState("");
+  const [threadUserId, setThreadUserId] = useState<string | null>(null);
 
   useEffect(() => {
     if (threadBlogUrl && threadBlogUrl !== currentUrl) {
@@ -339,9 +345,11 @@ function ThreadContent(): JSX.Element {
     currentUserCompany,
     currentUserCreatedAt,
     getUserById,
+    updateUserById,
     isLoading: isLoadingContext,
   } = useUserContext();
 
+  const [email, setEmail] = useState<string | null>(null);
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
 
   // 日付の位置固定
@@ -480,7 +488,6 @@ function ThreadContent(): JSX.Element {
               );
             }
           }
-
           // 未読リストをクリア
           setUnreadPostIds([]);
           // 未読数を0に更新
@@ -658,12 +665,18 @@ function ThreadContent(): JSX.Element {
       setThreadMainCompany(data?.mainCompany || "");
       setThreadCompany(data?.company || "");
       setThreadBlogUrl(data?.blog_url);
+      setThreadUserId(data?.user_uid);
       setIsLoading(false); // ローディング終了
     };
     setIsClient(true);
     fetchIpAddress();
     fetchThreadTitle();
   }, []);
+
+  const handleFetchEmail = async (uid: string): Promise<string | null> => {
+    const email = await getUserEmail(uid);
+    return String(email);
+  };
 
   useEffect(() => {
     if (isClient && id && !isLoadingContext) {
@@ -1013,11 +1026,54 @@ function ThreadContent(): JSX.Element {
       console.error("Error creating post:", error.message);
     } else {
       // メール送信
-      handleSendMail({
-        to: "teppy@aol.jp",
-        subject: "📨 sendMail.ts 経由のテスト送信",
-        text: inputValue,
-      });
+      const is_email_notify = getUserById(currentUserId)?.is_email_notify;
+      if (is_email_notify) {
+        if (!isSentNotify) {
+          if (threadUserId !== currentUserId) {
+            const threadUrl = `https://teppy.link/bbs/thread/${id}`; // このページのパスを設定
+
+            let lastNotifiedAt = getUserById(currentUserId)?.last_notified_at;
+            let hoursDiff = 25;
+            const now = new Date();
+            if (lastNotifiedAt) {
+              const lastNotifiedDate = new Date(lastNotifiedAt);
+              const timeDiff = now.getTime() - lastNotifiedDate.getTime();
+              hoursDiff = timeDiff / (1000 * 60 * 60);
+            }
+
+            console.log("threadUserId", { threadUserId });
+            console.log("hoursDiff", { hoursDiff });
+
+            if (hoursDiff > 24 && threadUserId) {
+              // メール送信
+              const email = await handleFetchEmail(threadUserId);
+              console.log(email);
+              const senderAvatarUrl = getUserById(currentUserId)?.picture_url;
+              handleSendMail({
+                to: String(email),
+                subject: "📨 BBSの" + threadTitle + "に新着メッセージ",
+                text: threadTitle + " に新着メッセージ " + inputValue,
+                html: bbsNotifEmailHtml({
+                  threadTitle,
+                  inputValue,
+                  threadUrl,
+                  senderAvatarUrl: senderAvatarUrl ?? "",
+                }),
+              });
+              // 送信日時を保存
+              const { error: updateError } = await supabase
+                .from("table_users")
+                .update({ last_notified_at: now.toISOString() })
+                .eq("id", currentUserId);
+              if (updateError) {
+                console.error("❌ last_notified_at update error:", updateError);
+              }
+              setIsSentNotify(true);
+            }
+          }
+        }
+      }
+      console.log("log:");
       setNewPostContent("");
       setSelectedFile(null);
       setSelectedFileName(null);
@@ -1039,19 +1095,26 @@ function ThreadContent(): JSX.Element {
     to,
     subject,
     text,
+    html,
   }: {
     to: string;
     subject: string;
     text: string;
+    html: string;
   }) => {
-    const success = await sendMail({
+    const { success, errorMessage } = await sendMail({
       to,
       subject,
       text,
+      html,
     });
+
     toast({
       title: success ? "送信成功！" : "送信失敗",
+      description: !success ? errorMessage : undefined,
       status: success ? "success" : "error",
+      duration: 5000,
+      isClosable: true,
     });
   };
 

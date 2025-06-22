@@ -6,19 +6,29 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
 export async function POST(request: NextRequest) {
   try {
-    const { to, subject, text } = await request.json();
+    const { to, subject, text, html } = await request.json();
 
-    await sgMail.send({
-      to, // 受信者（例: 管理者メールなど）
-      from: "noreply@teppy.link", // 認証済みの送信元
+    const response = await sgMail.send({
+      to,
+      from: "noreply@teppy.link",
       replyTo: "teppy422@au.com",
       subject,
       text,
+      html,
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("SendGrid error", error);
-    return NextResponse.json({ error: "Failed to send mail" }, { status: 500 });
+  } catch (error: any) {
+    console.error("SendGrid error:", error?.response?.body || error.message);
+
+    return NextResponse.json(
+      {
+        error:
+          error?.response?.body?.errors?.[0]?.message ||
+          "メール送信に失敗しました",
+        errors: error?.response?.body?.errors || [],
+      },
+      { status: 500 }
+    );
   }
 }

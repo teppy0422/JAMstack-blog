@@ -148,10 +148,15 @@ Changed header icon when not logged in.
 Login information design changed to Liquid Glass.
 -deploy 0014-
 CustomModalize the login user icon.
-sendMail successfully with test/page.tsx
-Sendmail embedded in bbs/[id]/page.tsx
+SendMail successfully with test/page.tsx
+SendMail embedded in bbs/[id]/page.tsx
+-commit 0015-
+Added html format to SendMail
 
 #### to do now
+
+BBS 通知 html
+BBS notification html
 
 ui をまとめる input とか button とか toast とか
 サブ自動立案
