@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
 import { MdBusiness, MdChat } from "react-icons/md";
-import { useCustomToast } from "@/components/ui/customToast";
+import { CustomToast } from "@/components/ui/CustomToast";
 import { GetColor } from "@/components/CustomColor";
 import { useUnread } from "@/contexts/UnreadContext";
 import {
@@ -22,6 +22,7 @@ import {
   AccordionPanel,
   AccordionIcon,
   SkeletonCircle,
+  useToast,
 } from "@chakra-ui/react";
 import { supabase } from "@/utils/supabase/client-js";
 import { MdCheckBox } from "react-icons/md";
@@ -74,7 +75,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
 
   const { currentUserId, currentUserCompany, currentUserMainCompany } =
     useUserContext();
-  const showToast = useCustomToast();
+  const showToast = useToast();
 
   const [visibleCompanies, setVisibleCompanies] = useState<number[]>([]);
   //新しい投稿の監視
@@ -631,21 +632,34 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                           ) {
                             toggleCompanyVisibility(index);
                           } else {
-                            showToast(
-                              getMessage({
-                                ja: "閲覧できません",
-                                us: "Cannot view",
-                                cn: "无法查看",
-                                language,
-                              }),
-                              getMessage({
-                                ja: "閲覧できるのは同じ会社のみです",
-                                us: "Only the same company can view",
-                                cn: "只有同一家公司可以查看",
-                                language,
-                              }),
-                              "error"
-                            );
+                            showToast({
+                              position: "bottom",
+                              duration: 4000,
+                              isClosable: true,
+                              render: ({ onClose }) => (
+                                <CustomToast
+                                  onClose={onClose}
+                                  title={getMessage({
+                                    ja: "閲覧できません",
+                                    us: "Cannot view",
+                                    cn: "无法查看",
+                                    language,
+                                  })}
+                                  description={
+                                    <>
+                                      <Box>
+                                        {getMessage({
+                                          ja: "閲覧できるのは同じ会社のみです",
+                                          us: "Only the same company can view",
+                                          cn: "只有同一家公司可以查看",
+                                          language,
+                                        })}
+                                      </Box>
+                                    </>
+                                  }
+                                />
+                              ),
+                            });
                           }
                         }
                       }}

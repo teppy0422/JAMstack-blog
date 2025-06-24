@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Box, useToast, Text, Spinner } from "@chakra-ui/react";
+import CustomToast from "@/components/ui/CustomToast";
+import getMessage from "@/utils/getMessage";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type DownloadButtonProps = {
   currentUserName: string | null;
@@ -15,6 +18,7 @@ const DownloadButton2 = ({
   color,
 }: DownloadButtonProps) => {
   const toast = useToast();
+  const { language } = useLanguage();
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
@@ -24,9 +28,32 @@ const DownloadButton2 = ({
 
     if (!currentUserName) {
       toast({
-        title: "ダウンロードできません",
-        description: "ダウンロードするにはログインと開発による認証が必要です",
-        status: "error",
+        position: "bottom",
+        duration: 4000,
+        isClosable: true,
+        render: ({ onClose }) => (
+          <CustomToast
+            onClose={onClose}
+            title={getMessage({
+              ja: "ダウンロードできません",
+              us: "Cannot download",
+              cn: "无法下载。",
+              language,
+            })}
+            description={
+              <>
+                <Box>
+                  {getMessage({
+                    ja: "ダウンロードするにはログインと開発による認証が必要です",
+                    us: "Download requires login and authentication by development",
+                    cn: "下载需要开发人员登录和验证",
+                    language,
+                  })}
+                </Box>
+              </>
+            }
+          />
+        ),
       });
       return;
     }
@@ -87,16 +114,64 @@ const DownloadButton2 = ({
           window.URL.revokeObjectURL(downloadBlobUrl);
 
           toast({
-            title: "ダウンロード完了",
-            description: `${fileName} のダウンロードが完了しました`,
-            status: "success",
+            position: "bottom",
+            duration: 4000,
+            isClosable: true,
+            render: ({ onClose }) => (
+              <CustomToast
+                onClose={onClose}
+                title={getMessage({
+                  ja: "ダウンロード完了",
+                  us: "Download Complete",
+                  cn: "下载完成。",
+                  language,
+                })}
+                description={
+                  <>
+                    <Box>
+                      {{ fileName } +
+                        getMessage({
+                          ja: " のダウンロードが完了しました",
+                          us: " download has been completed",
+                          cn: " 的下载已完成",
+                          language,
+                        })}
+                    </Box>
+                  </>
+                }
+              />
+            ),
           });
           setIsDownloaded(true);
         } else {
           toast({
-            title: "ダウンロード失敗",
-            description: `エラーコード: ${xhr.status}`,
-            status: "error",
+            position: "bottom",
+            duration: 4000,
+            isClosable: true,
+            render: ({ onClose }) => (
+              <CustomToast
+                onClose={onClose}
+                title={getMessage({
+                  ja: "ダウンロード失敗",
+                  us: "Cannot download",
+                  cn: "无法下载。",
+                  language,
+                })}
+                description={
+                  <>
+                    <Box>
+                      {getMessage({
+                        ja: "エラーコード: ",
+                        us: "Error code: ",
+                        cn: "错误代码：",
+                        language,
+                      })}
+                      {xhr.status}
+                    </Box>
+                  </>
+                }
+              />
+            ),
           });
           setDownloadProgress(0);
         }
@@ -105,9 +180,32 @@ const DownloadButton2 = ({
 
       xhr.onerror = () => {
         toast({
-          title: "ダウンロード失敗",
-          description: "ネットワークエラーが発生しました",
-          status: "error",
+          position: "bottom",
+          duration: 4000,
+          isClosable: true,
+          render: ({ onClose }) => (
+            <CustomToast
+              onClose={onClose}
+              title={getMessage({
+                ja: "ダウンロード失敗",
+                us: "Cannot download",
+                cn: "无法下载。",
+                language,
+              })}
+              description={
+                <>
+                  <Box>
+                    {getMessage({
+                      ja: "ネットワークエラーが発生しました: ",
+                      us: "A network error has occurred.",
+                      cn: "发生网络错误。",
+                      language,
+                    })}
+                  </Box>
+                </>
+              }
+            />
+          ),
         });
         setIsDownloading(false);
         setDownloadProgress(0);
@@ -115,11 +213,34 @@ const DownloadButton2 = ({
 
       xhr.send();
     } catch (err: any) {
-      console.error(err);
       toast({
-        title: "ダウンロード失敗",
-        description: err.message || "不明なエラーが発生しました",
-        status: "error",
+        position: "bottom",
+        duration: 4000,
+        isClosable: true,
+        render: ({ onClose }) => (
+          <CustomToast
+            onClose={onClose}
+            title={getMessage({
+              ja: "ダウンロード失敗",
+              us: "Cannot download",
+              cn: "无法下载。",
+              language,
+            })}
+            description={
+              <>
+                <Box>
+                  {getMessage({
+                    ja: "エラーコード: ",
+                    us: "Error code: ",
+                    cn: "错误代码：",
+                    language,
+                  })}
+                  {err.message}
+                </Box>
+              </>
+            }
+          />
+        ),
       });
       setIsDownloading(false);
       setDownloadProgress(0);

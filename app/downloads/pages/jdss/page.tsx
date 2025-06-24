@@ -27,7 +27,6 @@ import {
   Heading,
   Divider,
   ButtonGroup,
-  useToast,
   Toast,
   Flex,
   List,
@@ -78,8 +77,7 @@ function formatDateTime(input: string): string {
 export default function Page() {
   const { colorMode } = useColorMode();
   const { currentUserId, currentUserName } = useUserContext();
-  const { language, setLanguage } = useLanguage();
-  const toast = useToast();
+  const { language } = useLanguage();
 
   return (
     <>

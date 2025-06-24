@@ -30,7 +30,6 @@ import { LuPanelRightOpen } from "react-icons/lu";
 import { PiGithubLogoFill } from "react-icons/pi";
 
 import Content from "@/components/content";
-import { useCustomToast } from "@/components/ui/customToast";
 import { AnimationImage } from "@/components/ui/CustomImage";
 import SectionBox from "./components/SectionBox";
 import BasicDrawer from "@/components/ui/BasicDrawer";

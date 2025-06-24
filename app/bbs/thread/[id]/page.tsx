@@ -85,7 +85,7 @@ import { useUserContext } from "@/contexts/useUserContext";
 
 import Content from "@/components/content";
 import SidebarBBS from "../../parts/bbsSidebar";
-import { useCustomToast } from "@/components/ui/customToast";
+import { CustomToast } from "@/components/ui/CustomToast";
 import { getIpAddress } from "@/lib/getIpAddress";
 import { GetColor } from "@/components/CustomColor";
 import { AnimationImage } from "@/components/ui/CustomImage";
@@ -145,7 +145,9 @@ function ThreadContent(): JSX.Element {
   const [isSentNotify, setIsSentNotify] = useState<boolean>(false);
 
   const { updateUnreadCount } = useUnread();
+  const showToast = useToast();
   const toast = useToast();
+
   const [expandedUrls, setExpandedUrls] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -321,7 +323,6 @@ function ThreadContent(): JSX.Element {
     null
   );
   const blinkIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const showToast = useCustomToast();
   // スマートフォンかどうかを判別
   const isMobileDevice = () => {
     return /Mobi|Android/i.test(navigator.userAgent);
@@ -1041,13 +1042,9 @@ function ThreadContent(): JSX.Element {
               hoursDiff = timeDiff / (1000 * 60 * 60);
             }
 
-            console.log("threadUserId", { threadUserId });
-            console.log("hoursDiff", { hoursDiff });
-
             if (hoursDiff > 24 && threadUserId) {
               // メール送信
               const email = await handleFetchEmail(threadUserId);
-              console.log(email);
               const senderAvatarUrl = getUserById(currentUserId)?.picture_url;
               handleSendMail({
                 to: String(email),
@@ -1073,7 +1070,6 @@ function ThreadContent(): JSX.Element {
           }
         }
       }
-      console.log("log:");
       setNewPostContent("");
       setSelectedFile(null);
       setSelectedFileName(null);
@@ -1110,11 +1106,34 @@ function ThreadContent(): JSX.Element {
     });
 
     toast({
-      title: success ? "送信成功！" : "送信失敗",
-      description: !success ? errorMessage : undefined,
-      status: success ? "success" : "error",
-      duration: 5000,
+      position: "bottom",
+      duration: 4000,
       isClosable: true,
+      render: ({ onClose }) => (
+        <CustomToast
+          onClose={onClose}
+          title={
+            success
+              ? getMessage({
+                  ja: "通知送信が成功",
+                  us: "Successful notification transmission",
+                  cn: "通知传送成功。",
+                  language,
+                })
+              : getMessage({
+                  ja: "通知送信が失敗",
+                  us: "Failed to send notification",
+                  cn: "通知传送失败。",
+                  language,
+                })
+          }
+          description={
+            <>
+              <Box>{success ? undefined : errorMessage}</Box>
+            </>
+          }
+        />
+      ),
     });
   };
 
@@ -1348,24 +1367,35 @@ function ThreadContent(): JSX.Element {
     if (file) {
       if (file.size > 30 * 1024 * 1024) {
         toast({
-          title: getMessage({
-            ja: "ファイルサイズが30MBを超えています。",
-            us: "File size exceeds 30 MB.",
-            cn: "文件大小超过 30 MB。",
-            language,
-          }),
-          description:
-            `(${(file.size / 1024 / 1024).toFixed(1)}MB)\n` +
-            getMessage({
-              ja: "以下を試してみてください。\n\n・ファイルを圧縮する\n・生産準備+の場合は画像シートを削除する\n\nそれでも送信できない場合はチャットでご相談ください。",
-              us: "Try the following\n\n・Compressing files.\n・Delete image sheet if Production Preparation+.\n\nIf you still cannot send the message, please contact us via chat.",
-              cn: "试试以下方法。\n\n・压缩文件\n・生产准备+时删除图像页\n\n如果仍然无法发送信息, 请通过聊天联系我们。",
-              language,
-            }),
-          status: "error",
-          duration: 5000,
+          position: "bottom",
+          duration: 4000,
           isClosable: true,
+          render: ({ onClose }) => (
+            <CustomToast
+              onClose={onClose}
+              title={getMessage({
+                ja: "ファイルサイズが30MBを超えています。",
+                us: "File size exceeds 30 MB.",
+                cn: "文件大小超过 30 MB。",
+                language,
+              })}
+              description={
+                <>
+                  <Box whiteSpace="pre-line">
+                    {`(${(file.size / 1024 / 1024).toFixed(1)}MB)\n` +
+                      getMessage({
+                        ja: "以下を試してみてください。\n\n・ファイルを圧縮する\n・生産準備+の場合は画像シートを削除する\n\nそれでも送信できない場合はチャットでご相談ください。",
+                        us: "Try the following\n\n・Compressing files.\n・Delete image sheet if Production Preparation+.\n\nIf you still cannot send the message, please contact us via chat.",
+                        cn: "试试以下方法。\n\n・压缩文件\n・生产准备+时删除图像页\n\n如果仍然无法发送信息, 请通过聊天联系我们。",
+                        language,
+                      })}
+                  </Box>
+                </>
+              }
+            />
+          ),
         });
+
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
@@ -1406,21 +1436,34 @@ function ThreadContent(): JSX.Element {
   //ファイルをダウンロード
   const handleDownload = async (url: string, originalFileName: string) => {
     if (!currentUserName) {
-      showToast(
-        getMessage({
-          ja: "ダウンロードできません",
-          us: "Cannot download",
-          cn: "无法下载",
-          language,
-        }),
-        getMessage({
-          ja: "ダウンロードするにはログインと管理者によるマスター登録が必要です",
-          us: "Login and master registration by administrator is required to download",
-          cn: "若要下载，您需要登录并由管理员注册为主用户",
-          language,
-        }),
-        "error"
-      );
+      showToast({
+        position: "bottom",
+        duration: 4000,
+        isClosable: true,
+        render: ({ onClose }) => (
+          <CustomToast
+            onClose={onClose}
+            title={getMessage({
+              ja: "ダウンロードできません",
+              us: "Cannot download",
+              cn: "无法下载",
+              language,
+            })}
+            description={
+              <>
+                <Box>
+                  {getMessage({
+                    ja: "ダウンロードするにはログインと管理者によるマスター登録が必要です",
+                    us: "Login and master registration by administrator is required to download",
+                    cn: "若要下载，您需要登录并由管理员注册为主用户",
+                    language,
+                  })}
+                </Box>
+              </>
+            }
+          />
+        ),
+      });
       // alert("ダウンロードするにはログインと管理者によるマスター登録が必要です");
       return;
     }
@@ -2093,21 +2136,34 @@ function ThreadContent(): JSX.Element {
                       const inputValueElement =
                         inputValue as HTMLTextAreaElement;
                       if (!inputValueElement.value.trim() && !selectedFile) {
-                        showToast(
-                          getMessage({
-                            ja: "送信するものが有りません",
-                            us: "Nothing to send",
-                            cn: "没什么可发送的。",
-                            language,
-                          }),
-                          getMessage({
-                            ja: "メッセージまたはファイル添付が必要です",
-                            us: "Message or file attachment required",
-                            cn: "需要信息或文件附件",
-                            language,
-                          }),
-                          "error"
-                        );
+                        showToast({
+                          position: "bottom",
+                          duration: 4000,
+                          isClosable: true,
+                          render: ({ onClose }) => (
+                            <CustomToast
+                              onClose={onClose}
+                              title={getMessage({
+                                ja: "送信するものが有りません",
+                                us: "Nothing to send",
+                                cn: "没什么可发送的。",
+                                language,
+                              })}
+                              description={
+                                <>
+                                  <Box>
+                                    {getMessage({
+                                      ja: "メッセージまたはファイル添付が必要です",
+                                      us: "Message or file attachment required",
+                                      cn: "需要信息或文件附件",
+                                      language,
+                                    })}
+                                  </Box>
+                                </>
+                              }
+                            />
+                          ),
+                        });
                         return;
                       }
                       // setNewPostContent(inputValueElement.value);

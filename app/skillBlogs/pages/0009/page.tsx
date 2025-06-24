@@ -48,7 +48,6 @@ import { LuPanelRightOpen } from "react-icons/lu";
 import { FaDownload } from "react-icons/fa6";
 import Content from "@/components/content";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "@/components/ui/customToast";
 import SectionBox from "../../components/SectionBox";
 import BasicDrawer from "@/components/ui/BasicDrawer";
 import Frame from "../../components/frame";

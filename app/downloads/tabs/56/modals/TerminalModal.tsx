@@ -13,7 +13,6 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 
-import IpadFrame from "@/components/ipad";
 import CustomModalTab from "../../../parts/CustomModalTab";
 import CustomModal from "@/components/ui/CustomModal";
 import { useLanguage } from "@/contexts/LanguageContext";

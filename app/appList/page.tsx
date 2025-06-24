@@ -31,6 +31,9 @@ import Sidebar from "@/components/sidebar";
 import { sr } from "date-fns/locale";
 import { useUserContext } from "@/contexts/useUserContext";
 import YoutubeLike from "/public/images/etc/youtubeLike.svg";
+import { CustomToast } from "@/components/ui/CustomToast";
+import getMessage from "@/utils/getMessage";
+import { useLanguage } from "../../src/contexts/LanguageContext";
 
 const MotionBox = motion(Box);
 
@@ -107,6 +110,7 @@ export default function AppList() {
   const userData = currentUserId ? getUserById(currentUserId) : null;
   const router = useRouter();
   const toast = useToast();
+  const { language } = useLanguage();
   const { colorMode } = useColorMode();
   const [direction, setDirection] = useState<"right" | "left">("right");
 
@@ -145,11 +149,32 @@ export default function AppList() {
                       router.push(app.href);
                     } else {
                       toast({
-                        title: "閲覧制限",
-                        description: "このアプリは開発部のみアクセスできます。",
-                        status: "warning",
+                        position: "bottom",
                         duration: 3000,
                         isClosable: true,
+                        render: ({ onClose }) => (
+                          <CustomToast
+                            onClose={onClose}
+                            title={getMessage({
+                              ja: "閲覧制限",
+                              us: "Restricted Viewing",
+                              cn: "限制浏览",
+                              language,
+                            })}
+                            description={
+                              <>
+                                <Box>
+                                  {getMessage({
+                                    ja: "このアプリは開発のみアクセスできます。",
+                                    us: "This application is accessible only for development.",
+                                    cn: "该应用程序只能通过开发访问。",
+                                    language,
+                                  })}
+                                </Box>
+                              </>
+                            }
+                          />
+                        ),
                       });
                     }
                   } else {

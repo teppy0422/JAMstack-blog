@@ -27,7 +27,6 @@ import { CiHeart } from "react-icons/ci";
 import { LuPanelRightOpen } from "react-icons/lu";
 import Content from "@/components/content";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "@/components/ui/customToast";
 import SectionBox from "../../components/SectionBox";
 import BasicDrawer from "@/components/ui/BasicDrawer";
 import Frame from "../../components/frame";
@@ -78,7 +77,6 @@ const BlogPage: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
 
-  const showToast = useCustomToast();
   //64pxまでスクロールしないとサイドバーが表示されないから暫定
   useEffect(() => {
     const hash = window.location.hash;

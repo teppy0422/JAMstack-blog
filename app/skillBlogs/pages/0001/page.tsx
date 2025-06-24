@@ -31,7 +31,7 @@ import { LuPanelRightOpen } from "react-icons/lu";
 import { FaBan, FaObjectGroup } from "react-icons/fa";
 import Content from "@/components/content";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "@/components/ui/customToast";
+import { CustomToast } from "@/components/ui/CustomToast";
 import SectionBox from "../../components/SectionBox";
 import BasicDrawer from "@/components/ui/BasicDrawer";
 import Frame from "../../components/frame";
@@ -97,7 +97,6 @@ const BlogPage: React.FC = () => {
   useEffect(() => {
     setIsClient(true);
   }, []);
-  const showToast = useCustomToast();
   //アンダーライン付きテキスト_ドロワー
   const UnderlinedTextWithDrawer = ({
     text,

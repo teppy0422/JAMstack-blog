@@ -1,12 +1,24 @@
-import { useState, useEffect } from "react";
-import { Switch, useToast } from "@chakra-ui/react";
+import { useState, useEffect, useRef } from "react";
+import { Switch, useToast, Box } from "@chakra-ui/react";
 import { supabase } from "@/utils/supabase/client";
-// ↑ 適切なパスに合わせて修正してください
+import CustomToast from "@/components/ui/CustomToast";
+import getMessage from "@/utils/getMessage";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function EmailNotifySwitch({ userId }: { userId: string }) {
   const [isNotifyEnabled, setIsNotifyEnabled] = useState(false);
   const [isEmailActive, setIsEmailActive] = useState(true);
+  const { language } = useLanguage();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const toast = useToast();
+
+  useEffect(() => {
+    // 初回マウント時にフォーカスを外す
+    if (inputRef.current) {
+      inputRef.current.blur();
+    }
+  }, [][userId]);
 
   // 初期データ取得
   useEffect(() => {
@@ -32,11 +44,32 @@ export function EmailNotifySwitch({ userId }: { userId: string }) {
     if (newValue && !isEmailActive) {
       // オンにしようとしたが、無効なメール
       toast({
-        title: "通知不可",
-        description: "このメールアドレスは存在しない為、通知は不可能です。",
-        status: "warning",
-        duration: 4000,
+        position: "bottom",
+        duration: 3000,
         isClosable: true,
+        render: ({ onClose }) => (
+          <CustomToast
+            onClose={onClose}
+            title={getMessage({
+              ja: "通知不可",
+              us: "notifiable",
+              cn: "通知不可",
+              language,
+            })}
+            description={
+              <>
+                <Box>
+                  {getMessage({
+                    ja: "このメールアドレスは存在しない為、通知をオンに出来ません。",
+                    us: "Notifications cannot be turned on because this email address does not exist.",
+                    cn: "由于该电子邮件地址不存在，因此无法打开通知。",
+                    language,
+                  })}
+                </Box>
+              </>
+            }
+          />
+        ),
       });
       // 一旦表示上 true になるので、1秒後に false に戻す
       setIsNotifyEnabled(true);
@@ -53,11 +86,32 @@ export function EmailNotifySwitch({ userId }: { userId: string }) {
       .eq("id", userId);
     if (error) {
       toast({
-        title: "更新失敗",
-        description: "通知設定の更新に失敗しました。",
-        status: "error",
-        duration: 4000,
+        position: "bottom",
+        duration: 3000,
         isClosable: true,
+        render: ({ onClose }) => (
+          <CustomToast
+            onClose={onClose}
+            title={getMessage({
+              ja: "更新失敗",
+              us: "Failed to update",
+              cn: "更新失敗",
+              language,
+            })}
+            description={
+              <>
+                <Box>
+                  {getMessage({
+                    ja: "通知設定の更新に失敗しました。",
+                    us: "Failed to update notification settings.",
+                    cn: "更新通知设置失败。",
+                    language,
+                  })}
+                </Box>
+              </>
+            }
+          />
+        ),
       });
     } else {
       setIsNotifyEnabled(newValue);
@@ -73,14 +127,19 @@ export function EmailNotifySwitch({ userId }: { userId: string }) {
       userSelect="none"
       _focus={{ boxShadow: "none", outline: "none" }}
       _focusVisible={{ boxShadow: "none", outline: "none" }}
+      isFocusable={false} // ← これでTabやフォーカス制御を無効化
+      ref={inputRef}
       sx={{
+        input: {
+          boxShadow: "none !important",
+        },
         "input:focus": {
-          outline: "none",
-          boxShadow: "none",
+          boxShadow: "none !important",
+          outline: "none !important",
         },
         "input:focus-visible": {
-          outline: "none",
-          boxShadow: "none",
+          boxShadow: "none !important",
+          outline: "none !important",
         },
         "*": {
           userSelect: "none !important",

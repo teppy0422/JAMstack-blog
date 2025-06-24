@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { css, keyframes } from "@emotion/react";
-import { Box, Text, useColorMode } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useCustomToast } from "@/components/ui/customToast";
+import { CustomToast } from "@/components/ui/CustomToast";
 import DownloadButton2 from "@/components/ui/DownloadButton2";
 import "@/styles/globals.css";
 const shake = keyframes`
@@ -29,8 +29,6 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
 }) => {
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
-  const showToast = useCustomToast();
-  const { colorMode } = useColorMode();
   return (
     <>
       <Box

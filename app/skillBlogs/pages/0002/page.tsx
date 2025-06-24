@@ -17,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { LuPanelRightOpen } from "react-icons/lu";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "@/components/ui/customToast";
 import SectionBox from "../../components/SectionBox";
 import Frame from "../../components/frame";
 import { useDisclosure } from "@chakra-ui/react";
@@ -79,8 +78,6 @@ const BlogPage: React.FC = () => {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
-
-  const showToast = useCustomToast();
 
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);

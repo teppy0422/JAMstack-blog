@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { isValidUrl } from "@/utils/urlValidator"; // URLのバリデーション関数をインポート
-import { useCustomToast } from "@/components/ui/customToast";
+import { CustomToast } from "@/components/ui/CustomToast";
 
 import {
   LinkBox,
@@ -29,6 +29,7 @@ import {
   ModalCloseButton,
   ModalHeader,
   ModalBody,
+  useToast,
   useColorMode,
   Flex,
 } from "@chakra-ui/react";
@@ -70,7 +71,7 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalSrc, setModalSrc] = useState("");
   const [isClient, setIsClient] = useState(false);
-  const showToast = useCustomToast();
+  const showToast = useToast();
   const { language, setLanguage } = useLanguage();
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -211,15 +212,38 @@ const CustomLinkBox: React.FC<CustomLinkBoxProps> = (props) => {
                   onClick={(e) => {
                     if (!props.userName) {
                       e.preventDefault(); // デフォルトのリンク動作を防ぐ
-                      showToast(
-                        "ダウンロードできません",
-                        "ダウンロードするにはログインと開発による認証が必要です",
-                        "error"
-                      );
+                      showToast({
+                        position: "bottom",
+                        duration: 4000,
+                        isClosable: true,
+                        render: ({ onClose }) => (
+                          <CustomToast
+                            onClose={onClose}
+                            title={getMessage({
+                              ja: "ダウンロードできません",
+                              us: "Cannot download",
+                              cn: "无法下载",
+                              language,
+                            })}
+                            description={
+                              <>
+                                <Box>
+                                  {getMessage({
+                                    ja: "ダウンロードするにはログインと開発による認証が必要です",
+                                    us: "Download requires login and authentication by development",
+                                    cn: "下载需要开发人员登录和验证",
+                                    language,
+                                  })}
+                                </Box>
+                              </>
+                            }
+                          />
+                        ),
+                      });
                     }
                   }}
                 >
-                  Download
+                  Downloada
                 </Button>
               )}
             </Box>

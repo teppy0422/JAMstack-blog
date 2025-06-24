@@ -25,6 +25,8 @@ _イタリック_
 
 ![画像の代替テキスト](https://google.com)
 
+[SendGrid](https://app.sendgrid.com/email_activity?_gl=1*10mbfns*_gcl_au*MTgyMzcxNTA5Ni4xNzUwMzMwNTY4*_ga*MTIzNTgzODU3Ny4xNzUwMzMwNTY4*_ga_8W5LR442LD*czE3NTAzNTAyMjkkbzMkZzEkdDE3NTAzNTYxMzgkajYwJGwwJGgw&filters=%22%22&isAndOperator=true&page=1)
+
 > これは引用です。
 
 これは `console.log` を使った例です。
@@ -152,11 +154,12 @@ SendMail successfully with test/page.tsx
 SendMail embedded in bbs/[id]/page.tsx
 -commit 0015-
 Added html format to SendMail
+-deploy 0015-
 
 #### to do now
 
-BBS 通知 html
-BBS notification html
+CustomToast を作成し直して toast を書き換え
+Re-create CustomToast and rewrite toast
 
 ui をまとめる input とか button とか toast とか
 サブ自動立案

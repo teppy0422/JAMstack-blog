@@ -32,7 +32,6 @@ import { LuPanelRightOpen } from "react-icons/lu";
 import { FaGithub } from "react-icons/fa";
 import { CiBeerMugFull } from "react-icons/ci";
 import Content from "@/components/content";
-import { useCustomToast } from "@/components/ui/customToast";
 import SectionBox from "../../components/SectionBox";
 import BasicDrawer from "@/components/ui/BasicDrawer";
 import Frame from "../../components/frame";
@@ -97,8 +96,6 @@ const BlogPage: React.FC = () => {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
-
-  const showToast = useCustomToast();
 
   const handleOpen = (drawerName: string) => {
     setActiveDrawer(drawerName);

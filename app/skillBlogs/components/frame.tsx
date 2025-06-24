@@ -20,7 +20,6 @@ import {
 import { PiGithubLogoFill } from "react-icons/pi";
 import Content from "@/components/content";
 import { useColorMode } from "@chakra-ui/react";
-import { useCustomToast } from "@/components/ui/customToast";
 import { useDisclosure } from "@chakra-ui/react";
 
 import { useReadCount } from "@/hooks/useReadCount";
@@ -70,7 +69,6 @@ const Frame: React.FC<{
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
-  const showToast = useCustomToast();
   const [ipAddress, setIpAddress] = useState("");
 
   const { currentUserId, currentUserName, getUserById } = useUserContext();

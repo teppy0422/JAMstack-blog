@@ -27,7 +27,6 @@ import {
   Heading,
   Divider,
   ButtonGroup,
-  useToast,
   Toast,
   Flex,
   List,
@@ -78,7 +77,6 @@ export default function Page() {
   const { colorMode } = useColorMode();
   const { currentUserId, currentUserName } = useUserContext();
   const { language, setLanguage } = useLanguage();
-  const toast = useToast();
 
   return (
     <>
