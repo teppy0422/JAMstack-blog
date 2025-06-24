@@ -155,11 +155,11 @@ SendMail embedded in bbs/[id]/page.tsx
 -commit 0015-
 Added html format to SendMail
 -deploy 0015-
+Re-create CustomToast and rewrite toast
+-deploy 0017-
+Modalize alert
 
 #### to do now
-
-CustomToast を作成し直して toast を書き換え
-Re-create CustomToast and rewrite toast
 
 ui をまとめる input とか button とか toast とか
 サブ自動立案

@@ -89,6 +89,8 @@
     "recharts": "^2.15.3",
     "recoil": "^0.7.3-alpha.2",
     "sass": "^1.51.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "styled-components": "^6.1.15",
     "three": "^0.165.0",
     "typeface-noto-sans-sc": "^1.1.13",
