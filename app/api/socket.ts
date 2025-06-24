@@ -10,13 +10,11 @@ interface SocketWithIO extends NetSocket {
     io?: IOServer;
   };
 }
-
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-
 export default async function handler(
   req: NextRequest,
   res: NextApiResponse & { socket: SocketWithIO }
@@ -26,7 +24,6 @@ export default async function handler(
     const io = new IOServer(res.socket.server, {
       path: "/api/socket",
     });
-
     io.on("connection", (socket) => {
       socket.on("offer", (data) => socket.broadcast.emit("offer", data));
       socket.on("answer", (data) => socket.broadcast.emit("answer", data));
@@ -34,9 +31,7 @@ export default async function handler(
         socket.broadcast.emit("ice-candidate", data)
       );
     });
-
     res.socket.server.io = io;
   }
-
   res.end();
 }

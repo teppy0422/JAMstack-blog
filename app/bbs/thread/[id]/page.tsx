@@ -1027,13 +1027,14 @@ function ThreadContent(): JSX.Element {
       console.error("Error creating post:", error.message);
     } else {
       // メール送信
-      const is_email_notify = getUserById(currentUserId)?.is_email_notify;
+      const is_email_notify = getUserById(threadUserId)?.is_email_notify;
+      console.log("is_email_notify", is_email_notify);
       if (is_email_notify) {
         if (!isSentNotify) {
           if (threadUserId !== currentUserId) {
             const threadUrl = `https://teppy.link/bbs/thread/${id}`; // このページのパスを設定
 
-            let lastNotifiedAt = getUserById(currentUserId)?.last_notified_at;
+            let lastNotifiedAt = getUserById(threadUserId)?.last_notified_at;
             let hoursDiff = 25;
             const now = new Date();
             if (lastNotifiedAt) {
@@ -1041,7 +1042,7 @@ function ThreadContent(): JSX.Element {
               const timeDiff = now.getTime() - lastNotifiedDate.getTime();
               hoursDiff = timeDiff / (1000 * 60 * 60);
             }
-
+            console.log("hoursDiff", hoursDiff);
             if (hoursDiff > 24 && threadUserId) {
               // メール送信
               const email = await handleFetchEmail(threadUserId);
@@ -1061,11 +1062,12 @@ function ThreadContent(): JSX.Element {
               const { error: updateError } = await supabase
                 .from("table_users")
                 .update({ last_notified_at: now.toISOString() })
-                .eq("id", currentUserId);
+                .eq("id", threadUserId);
               if (updateError) {
                 console.error("❌ last_notified_at update error:", updateError);
               }
               setIsSentNotify(true);
+              console.log("send Email to ", String(email));
             }
           }
         }
