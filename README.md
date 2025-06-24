@@ -158,8 +158,12 @@ Added html format to SendMail
 Re-create CustomToast and rewrite toast
 -deploy 0017-
 Modalize alert
+-deploy 0018-
 
 #### to do now
+
+get-email を修正
+alert を修正
 
 ui をまとめる input とか button とか toast とか
 サブ自動立案

@@ -25,7 +25,6 @@ interface AlertModalProps {
 
 export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose }) => {
   const { colorMode } = useColorMode();
-  const [isAlertModalOpen, setAlertModalOpen] = useState(false);
   const dummyRef = useRef(null);
 
   return (

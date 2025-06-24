@@ -118,7 +118,7 @@ export default function Header() {
   }, []);
 
   // 警告メッセージ(一日一回だけ表示)
-  const [isAlertModalOpen, setAlertModalOpen] = useState(true);
+  const [isAlertModalOpen, setAlertModalOpen] = useState(false);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const today = new Date().toISOString().split("T")[0]; // 今日の日付を取得
