@@ -15,6 +15,7 @@
     "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^2.8.2",
     "@chakra-ui/system": "^2.6.2",
+    "@daily-co/daily-js": "^0.80.0",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@ffmpeg/ffmpeg": "^0.12.15",

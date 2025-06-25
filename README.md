@@ -165,6 +165,12 @@ Modalize alert
 get-email を修正
 alert を修正
 
+ngrok をインストールして localhost でも https 接続できるようにする
+
+daily のインストール 音声チャット
+npm install @daily-co/daily-js
+npm install -g localtunnel
+
 ui をまとめる input とか button とか toast とか
 サブ自動立案
 
@@ -183,3 +189,15 @@ order/のサムネ変更が反映されないから様子見
 #### comming soon...
 
 全てのリンクをクリックして動作確認
+
+#### ngrok で localhost を https にする
+
+1.https://dashboard.ngrok.com にアクセスしてアカウントを作成（無料）
+
+2.ダッシュボードに表示されている「Auth Token」をコピー
+
+3.ngrok config add-authtoken <ここにトークン貼る>
+
+4.ngrok http 3000
+
+5.表示される Forwarding ではじまるアドレスで接続する
