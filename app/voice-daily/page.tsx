@@ -1,6 +1,7 @@
 "use client";
 import DailyIframe from "@daily-co/daily-js";
 import { useRef, useState } from "react";
+import VoiceDailyModal from "@/components/modals/VoiceDailyModal";
 
 export default function DailyVoiceCall() {
   const callFrameRef = useRef<any>(null);
@@ -41,12 +42,14 @@ export default function DailyVoiceCall() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>📞 音声通話（Daily）</h2>
-      <button onClick={startCall} disabled={callStarted}>
-        {callStarted ? "通話中…" : "通話を開始"}
-      </button>
-      <div id="daily-container" style={{ marginTop: "20px" }} />
-    </div>
+    <>
+      <div style={{ padding: "20px" }}>
+        <h2>📞 音声通話（Daily）</h2>
+        <button onClick={startCall} disabled={callStarted}>
+          {callStarted ? "通話中…" : "通話を開始"}
+        </button>
+        <div id="daily-container" style={{ marginTop: "20px" }} />
+      </div>
+    </>
   );
 }

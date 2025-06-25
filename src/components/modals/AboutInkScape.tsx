@@ -21,7 +21,7 @@ import ModalButton from "@/components/ui/ModalButton";
 import { deflate } from "zlib";
 
 export function AboutInkScape() {
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
