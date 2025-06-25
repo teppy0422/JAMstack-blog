@@ -6,7 +6,7 @@ export default function DailyVoiceCall() {
   const callFrameRef = useRef<any>(null);
   const [callStarted, setCallStarted] = useState(false);
 
-  const roomUrl = "https://teppy.daily.co/teppy-room";
+  const roomUrl = "https://teppy.daily.co/teppy";
 
   const startCall = () => {
     if (!callFrameRef.current) {

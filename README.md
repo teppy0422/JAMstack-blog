@@ -201,3 +201,6 @@ order/のサムネ変更が反映されないから様子見
 4.ngrok http 3000
 
 5.表示される Forwarding ではじまるアドレスで接続する
+
+npm run dev -- --hostname 0.0.0.0
+ngrok http 3000
