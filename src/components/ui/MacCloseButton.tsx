@@ -18,7 +18,7 @@ export const MacCloseButton = ({
 }: MacCloseButtonProps) => {
   return (
     <Box
-      bg="custom.system.600"
+      bg="custom.system.500"
       w="100%"
       h="30px"
       borderBottom="0.5px solid"

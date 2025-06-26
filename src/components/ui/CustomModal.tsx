@@ -81,7 +81,7 @@ export function CustomModal({
         {footer && (
           <>
             <ModalFooter
-              bg="custom.system.600"
+              bg="custom.system.500"
               borderTop="0.5px solid"
               borderTopColor="custom.system.200"
               color="#ccc"
