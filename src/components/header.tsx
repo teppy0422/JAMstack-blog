@@ -33,6 +33,7 @@ import {
   DrawerBody,
   Divider,
   Avatar,
+  Spacer,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { IoIosMail } from "react-icons/io";
@@ -80,6 +81,7 @@ import "@fontsource/dela-gothic-one";
 import VoiceDailyModal from "@/components/modals/VoiceDailyModal";
 
 import AlertModal from "@/components/modals/Alert";
+import { MenuIcon } from "@/components/ui/icons";
 
 export default function Header() {
   const { language, setLanguage } = useLanguage();
@@ -296,29 +298,32 @@ export default function Header() {
                 h="42px"
               >
                 <Center>
-                  <IconButton
-                    className={`${styles.snowTarget}`}
-                    style={{
-                      transform: "translateX(0rem)",
-                    }}
-                    display={{ base: "block", xl: "block" }}
-                    icon={<HamburgerIcon />}
-                    bg="white.1"
-                    aria-label="Open Menu"
-                    onClick={onMenuOpen}
-                    ml="6px"
+                  <Box
                     zIndex="1101"
-                    opacity="0.85"
-                    borderColor={colorMode === "light" ? "black" : "white"}
-                    borderWidth="1px"
-                    fontSize="sm"
-                    size="sm"
-                  />
+                    onClick={onMenuOpen}
+                    className={`${styles.snowTarget}`}
+                    borderRadius="6px"
+                    border="1px solid"
+                    borderColor={colorMode === "light" ? "#6a4f3e" : "#d9d9dc"}
+                    p="7px"
+                    cursor="pointer"
+                    ml="6px"
+                    _hover={{ opacity: "0.8" }}
+                  >
+                    <MenuIcon
+                      size="16px"
+                      fill={colorMode === "light" ? "#6a4f3e" : "#d9d9dc"}
+                    />
+                  </Box>
                 </Center>
+
+                <Spacer />
+
                 <Center
                   flex="1"
                   style={{ gap: "2px" }}
                   className={styles.logoAndText}
+                  ml={2}
                 >
                   <Flex alignItems="center" gap="2px">
                     <Box display={{ base: "none", sm: "block" }}>
@@ -326,7 +331,7 @@ export default function Header() {
                         viewBox="-15,80,60,60"
                         className={styles.logo}
                         style={{
-                          backgroundColor: "transparent", // ← 上書きされないよう修正
+                          backgroundColor: "transparent",
                           marginRight: 0,
                           padding: "0px",
                           width: "42px",
@@ -360,6 +365,9 @@ export default function Header() {
                     </Center>
                   </Flex>
                 </Center>
+
+                <Spacer />
+
                 <Center mr={2}>
                   <VoiceDailyModal currentUserName={currentUserName} />
                 </Center>

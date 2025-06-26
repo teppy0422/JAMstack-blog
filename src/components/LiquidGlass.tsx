@@ -25,7 +25,7 @@ export default function LiquidGlass({ children }: LiquidGlassProps) {
               type="fractalNoise"
               baseFrequency="0.01 0.01"
               numOctaves="1"
-              seed="5"
+              seed="3"
               result="turbulence"
             />
             <feComponentTransfer in="turbulence" result="mapped">
