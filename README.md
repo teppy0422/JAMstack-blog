@@ -164,6 +164,9 @@ install ngrok to allow https connections even on localhost
 npm install @daily-co/daily-js
 Install daily Add voice chat
 -deploy 0019-
+-deploy 0020-
+change Adobe font setting from head to layout
+-deploy 0021-
 
 #### to do now
 

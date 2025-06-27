@@ -59,6 +59,7 @@ import { StarIcon } from "@chakra-ui/icons";
 import { FaStar } from "react-icons/fa";
 import { FaAnglesDown } from "react-icons/fa6";
 import RyouteiBon from "../../public/images/etc/ryouteiBon.svg";
+import { SunderText } from "@/components/ui/CustomText";
 
 interface OrderItem {
   menu_item_id: number;
@@ -115,7 +116,7 @@ const getTodayInKanji = (): string => {
 };
 
 export default function OrderPage() {
-  const { colorMode } = useColorMode();
+  const { colorMode, setColorMode } = useColorMode();
   const toast = useToast();
   const [cart, setCart] = useState<
     { item: MenuItem; quantity: number; addedAt: Date }[]
@@ -947,7 +948,9 @@ export default function OrderPage() {
 
   const handleChangeMode = (idx: number) => {
     setMode(idx);
-    if (idx === 1) handleReposition();
+    if (idx === 1) {
+      handleReposition();
+    }
   };
 
   const half = Math.ceil(displayCategories.length / 2);
@@ -1134,7 +1137,11 @@ export default function OrderPage() {
                 {mode === 0 ? (
                   <Text>居酒屋ぼん</Text>
                 ) : mode === 1 ? (
-                  <Text fontFamily="ab-countryroad">バーぼん</Text>
+                  <SunderText
+                    text="バーぼん"
+                    fontSize="36px"
+                    colorMode={colorMode}
+                  />
                 ) : mode === 2 ? (
                   <Text>カフェぼん</Text>
                 ) : (

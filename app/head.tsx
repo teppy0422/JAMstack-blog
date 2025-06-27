@@ -8,7 +8,7 @@ export default function CustomHead() {
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
       />
       {/* Adobe Fonts スクリプト読み込み */}
-      <Script
+      {/* <Script
         id="adobe-fonts"
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
@@ -68,7 +68,7 @@ export default function CustomHead() {
               })(document);
             `,
         }}
-      />
+      /> */}
     </>
   );
 }
