@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Box, Tooltip, Icon, Flex, IconButton, Text } from "@chakra-ui/react";
-import { FaArrowLeft, FaRedo, FaExternalLinkAlt } from "react-icons/fa";
-import { LuPanelRightOpen } from "react-icons/lu";
-import { FaGlobe } from "react-icons/fa";
+import {
+  FaExternalLinkAltIcon,
+  FaGlobeIcon,
+  LuPanelRightOpenIcon,
+} from "@/components/ui/icons";
+
 function getFaviconUrl(url: string) {
   try {
     const domain = new URL(url).hostname;
@@ -104,9 +107,7 @@ const UrlPreviewBox: React.FC<Props> = ({
           cursor="pointer"
           onClick={onToggle}
         >
-          <Icon
-            as={LuPanelRightOpen}
-            boxSize="18px"
+          <Box
             transform={
               isExpanded
                 ? isRight
@@ -126,7 +127,16 @@ const UrlPreviewBox: React.FC<Props> = ({
                 ? "rotate(0deg) scale(1.2)"
                 : "rotate(180deg) scale(1.2)",
             }}
-          />
+          >
+            <LuPanelRightOpenIcon
+              size="18px"
+              stroke={
+                colorMode === "light"
+                  ? "custom.theme.light.900"
+                  : "custom.theme.dark.200"
+              }
+            />
+          </Box>
         </Box>
       </Tooltip>
     );
@@ -158,7 +168,7 @@ const UrlPreviewBox: React.FC<Props> = ({
         <Box height="100%" borderRadius="8px" overflow="hidden">
           <Flex
             bg={isRight ? "#DCF8C6" : "#FFFFFF"}
-            px={2}
+            p={2}
             alignItems="center"
             borderBottom="1px solid"
             borderColor="gray.200"
@@ -175,19 +185,24 @@ const UrlPreviewBox: React.FC<Props> = ({
             >
               {urlTitles[url] || "ページを読み込み中..."}
             </Box>
-            <IconButton
-              color="blue.600"
-              aria-label="新しいタブで開く"
-              icon={<Icon as={FaExternalLinkAlt} />}
-              size="sm"
-              variant="ghost"
-              onClick={(e) => {
-                e.stopPropagation();
-                const currentUrl =
-                  urlHistory[url]?.[currentUrlIndex[url] || 0] || url;
-                window.open(currentUrl, "_blank");
-              }}
-            />
+
+            <Tooltip label="新しいタブで開く" placement="left" hasArrow>
+              <Box
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const currentUrl =
+                    urlHistory[url]?.[currentUrlIndex[url] || 0] || url;
+                  window.open(currentUrl, "_blank");
+                }}
+                cursor="pointer"
+                _hover={{ transform: "scale(1.1)" }}
+              >
+                <FaExternalLinkAltIcon
+                  size="14px"
+                  fill="custom.theme.light.850"
+                />
+              </Box>
+            </Tooltip>
           </Flex>
           {isExpanded ? (
             <iframe
@@ -248,59 +263,93 @@ const UrlPreviewBox: React.FC<Props> = ({
               }}
             />
           ) : (
-            <Box px={2} py={1} display="flex" alignItems="center" gap={2}>
+            <>
               {thumbnailUrl ? (
                 <>
-                  <img
-                    src={thumbnailUrl}
-                    alt="サムネイル"
-                    style={{
-                      width: "70px",
-                      height: "70px",
-                      objectFit: "cover",
-                      borderRadius: "6px",
-                    }}
-                  />
-                  <Box ml={2} minW={0}>
-                    <Text
-                      fontSize="sm"
-                      fontWeight="bold"
-                      noOfLines={2}
-                      maxW="280px"
-                    >
-                      {urlTitles[url] || domain}
-                    </Text>
-                    {description && (
+                  <Box
+                    px="3px"
+                    py="2px"
+                    display="flex"
+                    alignItems="center"
+                    gap={2}
+                  >
+                    <img
+                      src={thumbnailUrl}
+                      alt="サムネイル"
+                      style={{
+                        width: "70px",
+                        height: "70px",
+                        objectFit: "cover",
+                        borderRadius: "6px",
+                      }}
+                    />
+                    <Box ml={2} minW={0}>
                       <Text
-                        fontSize="xs"
-                        color={colorMode === "light" ? "gray.600" : "gray.400"}
+                        fontSize="sm"
+                        fontWeight="bold"
                         noOfLines={2}
                         maxW="280px"
-                        mt={1}
                       >
-                        {description}
+                        {urlTitles[url] || domain}
                       </Text>
-                    )}
+                      {description && (
+                        <Text
+                          fontSize="xs"
+                          color={
+                            colorMode === "light" ? "gray.600" : "gray.400"
+                          }
+                          noOfLines={2}
+                          maxW="280px"
+                          mt={1}
+                        >
+                          {description}
+                        </Text>
+                      )}
+                    </Box>
                   </Box>
                 </>
               ) : (
                 // アイコン＋ドメイン
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  gap={1}
-                  bg="gray.100"
-                  borderRadius="4px"
-                  px={2}
-                  py={1}
-                >
-                  <FaGlobe size={24} color="#888" />
-                  <Text fontSize="sm" color="gray.600">
-                    {domain}
-                  </Text>
-                </Box>
+                <>
+                  <Box
+                    display="flex"
+                    alignItems="stretch" // 子要素のalignSelfが効くように
+                    bg={
+                      colorMode === "light"
+                        ? "custom.theme.light.200"
+                        : "custom.theme.dark.400"
+                    }
+                    borderRadius="4px"
+                    h="74px"
+                    overflow="hidden"
+                    w="100%"
+                  >
+                    <Box alignSelf="flex-start">
+                      <FaGlobeIcon
+                        size="100px"
+                        fill={
+                          colorMode === "light"
+                            ? "custom.theme.light.800"
+                            : "custom.theme.dark.700"
+                        }
+                      />
+                    </Box>
+                    <Text
+                      fontSize="sm"
+                      color={
+                        colorMode === "light"
+                          ? "custom.theme.light.800"
+                          : "custom.theme.dark.700"
+                      }
+                      alignSelf="flex-end"
+                      ml={1}
+                    >
+                      {domain}
+                    </Text>
+                  </Box>
+                </>
               )}
-            </Box>
+            </>
           )}
         </Box>
         {isRight && <OpenCloseIcon isRight={true} />}

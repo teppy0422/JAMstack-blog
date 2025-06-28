@@ -329,7 +329,14 @@ export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose }) => {
                   _focus={{ boxShadow: "none" }}
                 >
                   <Box display="flex" alignItems="center">
-                    <PhoneIcon size="18px" />
+                    <PhoneIcon
+                      size="18px"
+                      fill={
+                        colorMode === "light"
+                          ? "custom.theme.light.900"
+                          : "custom.theme.dark.200"
+                      }
+                    />
                     070-9133-6256
                   </Box>
                 </Link>

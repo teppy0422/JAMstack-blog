@@ -1,24 +1,36 @@
 "use client";
-import { useDisclosure, Text, IconButton, Flex, Box } from "@chakra-ui/react";
+import {
+  useDisclosure,
+  Text,
+  IconButton,
+  Flex,
+  Box,
+  useColorMode,
+} from "@chakra-ui/react";
 import QRCode from "qrcode.react";
-import { ImQrcode } from "react-icons/im";
 import getMessage from "@/utils/getMessage";
 import CustomModal from "../ui/CustomModal";
+import { QrIcon } from "@/components/ui/icons";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function QrModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const { colorMode } = useColorMode();
+  const { language } = useLanguage();
   return (
     <>
-      <Box onClick={onOpen}>
-        <IconButton
-          icon={<ImQrcode style={{ fontSize: "24px" }} />}
-          _hover={{ bg: "transparent" }}
-          bg="transparent"
-          p="0"
-          height="100%"
-          width="100%"
-          aria-label="QR Code Icon"
+      <Box
+        onClick={onOpen}
+        cursor="pointer"
+        _hover={{ opacity: 0.85, transform: "scale(1.1)" }}
+      >
+        <QrIcon
+          size="32px"
+          fill={
+            colorMode === "light"
+              ? "custom.theme.light.900"
+              : "custom.theme.dark.100"
+          }
         />
       </Box>
       <CustomModal
@@ -29,7 +41,12 @@ export default function QrModal() {
         macCloseButtonHandlers={[onClose]}
         footer={
           <Text fontSize="12px" fontWeight={400} color="#ddd">
-            スマホで読み込むとこのページにアクセスできます
+            {getMessage({
+              ja: "スマホで読み込むとこのページにアクセスできます",
+              us: "You can access this page by loading it with your phone",
+              cn: "您可以通过手机阅读本页面。",
+              language,
+            })}
           </Text>
         }
       >

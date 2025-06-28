@@ -5,9 +5,10 @@ import { ReactNode } from "react";
 
 type LiquidGlassProps = {
   children: ReactNode;
+  colorMode: string;
 };
 
-export default function LiquidGlass({ children }: LiquidGlassProps) {
+export default function LiquidGlass({ children, colorMode }: LiquidGlassProps) {
   return (
     <Box position="fixed" top="0" left="0" w="100vw">
       <Box position="relative" overflow="hidden">
@@ -78,7 +79,11 @@ export default function LiquidGlass({ children }: LiquidGlassProps) {
           position="absolute"
           inset={0}
           zIndex={1}
-          bg="rgba(255, 255, 255, 0.25)"
+          bg={
+            colorMode === "light"
+              ? "rgba(255, 255, 255, 0.25)"
+              : "rgba(255,255,255,0.05)"
+          }
         />
 
         {/* Shineレイヤー */}

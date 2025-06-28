@@ -17,15 +17,15 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import {
-  MdOutlineCheckBoxOutlineBlank,
-  MdOutlineCheckBox,
-  MdEditRoad,
-} from "react-icons/md";
+  MdEditRoadIcon,
+  MdOutlineCheckBoxIcon,
+  MdOutlineCheckBoxOutlineBlankIcon,
+} from "@/components/ui/icons";
 import Sidebar from "@/components/sidebar";
 import Content from "@/components/content";
 import { Global } from "@emotion/react";
 
-import { useLanguage } from "../../src/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 
 interface RoadmapItem {
@@ -1134,7 +1134,7 @@ const Roadmap = () => {
         >
           <Heading as="h3" fontSize="24px" mb={8} textAlign="center">
             <HStack spacing={2} alignItems="center" justifyContent="center">
-              <Text>
+              <Text fontWeight="600">
                 {getMessage({
                   ja: "ロードマップ",
                   us: "Road map",
@@ -1142,7 +1142,15 @@ const Roadmap = () => {
                   language,
                 })}
               </Text>
-              <MdEditRoad size={30} />
+              <MdEditRoadIcon
+                size="30px"
+                fill={
+                  colorMode === "light"
+                    ? "custom.theme.light.900"
+                    : "custom.theme.dark.100"
+                }
+                stroke="currentColor"
+              />
             </HStack>
           </Heading>
           <Badge variant="solid" colorScheme="green" ml={2}>
@@ -1263,15 +1271,21 @@ const Roadmap = () => {
                     {section.items &&
                       section.items.map((item, idx) => (
                         <Flex key={idx} align="center" mb={2}>
-                          <Icon
-                            as={
-                              item.completed
-                                ? MdOutlineCheckBox
-                                : MdOutlineCheckBoxOutlineBlank
-                            }
-                            color={item.completed ? "green.500" : "red.500"}
-                            mr={2}
-                          />
+                          <Box mr={1}>
+                            {item.completed ? (
+                              <MdOutlineCheckBoxIcon
+                                size="16px"
+                                fill="green.500"
+                                stroke="currentColor"
+                              />
+                            ) : (
+                              <MdOutlineCheckBoxOutlineBlankIcon
+                                size="16px"
+                                fill="red.500"
+                                stroke="currentColor"
+                              />
+                            )}
+                          </Box>
                           <Text fontSize="md" color="gray.700">
                             {item.text}
                           </Text>

@@ -11,27 +11,24 @@ import { useRouter, useParams } from "next/navigation";
 import dynamic from "next/dynamic";
 
 import {
-  FaPaperclip,
-  FaDownload,
-  FaPaperPlane,
-  FaTimes,
-  FaTrashAlt,
-  FaReply,
-  FaArrowDown,
-  FaCheck,
-  FaArrowLeft,
-  FaArrowRight,
-  FaRedo,
-  FaExternalLinkAlt,
-  FaPlus,
-  FaMinus,
-} from "react-icons/fa";
-import { ImAttachment } from "react-icons/im";
-import { BsSend, BsFillSendFill } from "react-icons/bs";
+  FaPaperclipIcon,
+  FaDownloadIcon,
+  FaTimesIcon,
+  FaTrashCanHeadIcon,
+  FaTrashCanBodyIcon,
+  FaReplyIcon,
+  FaArrowDownIcon,
+  FaCheckIcon,
+  FaRedoIcon,
+  FaPlusIcon,
+  FaMinusIcon,
+  FaMicroblogIcon,
+  BsFillSendFillIcon,
+} from "@/components/ui/icons";
+
 import { supabase } from "@/utils/supabase/client";
 import { format } from "date-fns";
 import { css, keyframes } from "@emotion/react";
-
 import { ja, enUS, zhCN } from "date-fns/locale";
 import "@fontsource/noto-sans-jp";
 import {
@@ -74,9 +71,6 @@ import {
 import { theme } from "@/theme/theme";
 
 import { ChatIcon } from "@chakra-ui/icons";
-import { MdBusiness } from "react-icons/md";
-import { FaMicroblog } from "react-icons/fa";
-import { LuPanelRightOpen } from "react-icons/lu";
 import { CloseIcon } from "@chakra-ui/icons";
 
 import ContentDisplay from "./ContextDisplay";
@@ -110,6 +104,7 @@ const seasonalAnimations = {
   hachisuka: dynamic(() => import("@/components/season/HachisukaAnimation")),
   yae: dynamic(() => import("@/components/season/YaeAnimation")),
   firefly: dynamic(() => import("@/components/season/FireflyAnimation")),
+  milkyway: dynamic(() => import("@/components/season/MilkyWayAnimation")),
   // ochiba: dynamic(() => import("../../../components/OchibaAnimation")), // 落ち葉アニメーションのインポート
   // 他の季節のアニメーションをここに追加
 };
@@ -414,6 +409,7 @@ function ThreadContent(): JSX.Element {
   const [isHachisukaActive, setIsHachisukaActive] = useState(false);
   const [isYaeActive, setIsYaeActive] = useState(false);
   const [isFirefly, setIsFirefly] = useState(false);
+  const [isMilkyWay, setIsMilkyWay] = useState(false);
 
   //season判断
   useEffect(() => {
@@ -433,8 +429,12 @@ function ThreadContent(): JSX.Element {
     setIsYaeActive(today >= YaeStartDate && today <= YaeEndDate);
 
     const FireflyStartDate = new Date(today.getFullYear(), 5, 1); // 6月1日
-    const FireflyEndDate = new Date(today.getFullYear(), 5, 12); // 6月12日
+    const FireflyEndDate = new Date(today.getFullYear(), 5, 16); // 6月16日
     setIsFirefly(today >= FireflyStartDate && today <= FireflyEndDate);
+
+    const MilkyWayDate = new Date(today.getFullYear(), 5, 27); // 6月27日
+    const MilkyWayEndDate = new Date(today.getFullYear(), 6, 16); // 7月16日
+    setIsMilkyWay(today >= MilkyWayDate && today <= MilkyWayEndDate);
   }, []);
 
   // isAtBottomがtrueになった時に未読の投稿を全て既読にする
@@ -1585,7 +1585,15 @@ function ThreadContent(): JSX.Element {
             justifyContent={isRight ? "flex-start" : "flex-end"}
           >
             {!isRight && hasMasterUserId ? (
-              <Icon as={FaCheck} color="green.500" />
+              <FaCheckIcon
+                size="13px"
+                fill={
+                  colorMode === "light"
+                    ? "green.500"
+                    : "custom.theme.orange.400"
+                }
+                stroke="currentColor"
+              />
             ) : null}
             {readByCount > 0 && ( // readByCountが0でない場合に表示
               <Box
@@ -1633,7 +1641,15 @@ function ThreadContent(): JSX.Element {
               </Box>
             )}
             {isRight && hasMasterUserId ? (
-              <Icon as={FaCheck} color="green.500" />
+              <FaCheckIcon
+                size="13px"
+                fill={
+                  colorMode === "light"
+                    ? "green.500"
+                    : "custom.theme.orange.400"
+                }
+                stroke="currentColor"
+              />
             ) : null}
           </Flex>
           {time_stamp}
@@ -1775,8 +1791,8 @@ function ThreadContent(): JSX.Element {
                   className="no-print-page"
                   position="absolute"
                   zIndex="1003"
-                  top="-74px"
-                  right="8px"
+                  top="-65px"
+                  right="6px"
                   aria-label="Your Icon"
                   cursor="pointer"
                   bg={
@@ -1801,13 +1817,19 @@ function ThreadContent(): JSX.Element {
                     transition: "all 0.2s ease-in-out",
                   }}
                   borderRadius="10%"
-                  width="32px"
-                  height="32px"
+                  width="28px"
+                  height="28px"
                   display="flex"
                   justifyContent="center"
                   alignItems="center"
                 >
-                  <Icon size="28px" as={FaArrowDown} />
+                  <FaArrowDownIcon
+                    size="16px"
+                    fill={
+                      colorMode === "light" ? "custom.theme.light.900" : "gray"
+                    }
+                    stroke="currentColor"
+                  />
                 </Box>
               )}
 
@@ -1816,8 +1838,8 @@ function ThreadContent(): JSX.Element {
                 className="no-print-page"
                 position="absolute"
                 zIndex="1003"
-                top="-37px"
-                right="8px"
+                top="-32px"
+                right="6px"
                 aria-label="Your Icon"
                 cursor="pointer"
                 bg={
@@ -1836,8 +1858,8 @@ function ThreadContent(): JSX.Element {
                   transition: "all 0.2s ease-in-out",
                 }}
                 borderRadius="10%"
-                width="32px"
-                height="32px"
+                width="28px"
+                height="28px"
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
@@ -1880,7 +1902,7 @@ function ThreadContent(): JSX.Element {
                         color={
                           colorMode === "light"
                             ? "custom.theme.light.900"
-                            : "red"
+                            : "custom.theme.dark.200"
                         }
                       >
                         -{replyPostUserCompany}-
@@ -1896,7 +1918,9 @@ function ThreadContent(): JSX.Element {
                       maxWidth="85vw"
                       fontSize="xs"
                       color={
-                        colorMode === "light" ? "custom.theme.light.900" : "red"
+                        colorMode === "light"
+                          ? "custom.theme.light.900"
+                          : "custom.theme.dark.200"
                       }
                     >
                       {replyPostContent}
@@ -1927,7 +1951,14 @@ function ThreadContent(): JSX.Element {
                     ) : (
                       replyPostFileUrl && ( // nullチェックを追加
                         <Box display="flex" alignItems="center" ml="2">
-                          <FaPaperclip />
+                          <FaPaperclipIcon
+                            size="14px"
+                            fill={
+                              colorMode === "light"
+                                ? "custom.theme.light.900"
+                                : "custom.theme.dark.100"
+                            }
+                          />
                           <Text ml="1">
                             {replyPostFileUrl.split("/").pop()}
                           </Text>
@@ -1935,9 +1966,7 @@ function ThreadContent(): JSX.Element {
                       )
                     )}
                   </Stack>
-                  <IconButton
-                    aria-label="Close reply"
-                    icon={<FaTimes />}
+                  <Box
                     onClick={() => {
                       setReplyToPostId(null); // リプライを閉じる
                       setReplyPostContent(""); // リプライ内容をリセット
@@ -1945,16 +1974,23 @@ function ThreadContent(): JSX.Element {
                       setReplyPostFileUrl(null); // リプライ対象のファイルURLをリセット
                     }}
                     color={
-                      colorMode === "light" ? "custom.theme.light.900" : ""
+                      colorMode === "light"
+                        ? "custom.theme.light.900"
+                        : "custom.theme.dark.200"
                     }
                     position="absolute"
-                    variant="ghost"
-                    size="sm"
+                    _hover={{ opacity: "0.8" }}
                     ml="2"
                     top="1"
                     right="1"
-                    _hover={{ backgroundColor: "transparent" }}
-                  />
+                    cursor="pointer"
+                  >
+                    <FaTimesIcon
+                      size="16px"
+                      fill="currentColor"
+                      stroke="currentColor"
+                    />
+                  </Box>
                 </Stack>
               )}
               <Stack
@@ -1990,15 +2026,14 @@ function ThreadContent(): JSX.Element {
                     bg="none"
                     _hover={{ bg: "none" }}
                   >
-                    <IconButton
+                    <Box
                       position="absolute"
                       cursor="pointer"
                       aria-label="Upload file"
-                      icon={<FaPlus size="14px" />}
                       bg={
                         colorMode === "light"
                           ? "custom.theme.light.500"
-                          : "custom.theme.dark.100"
+                          : "custom.theme.dark.300"
                       }
                       color={
                         colorMode === "light"
@@ -2022,7 +2057,20 @@ function ThreadContent(): JSX.Element {
                       minW="28px"
                       p="0"
                       zIndex="99"
-                    />
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <FaPlusIcon
+                        size="14px"
+                        fill={
+                          colorMode === "light"
+                            ? "custom.theme.light.800"
+                            : "custom.theme.dark.500"
+                        }
+                        stroke="currentColor"
+                      />
+                    </Box>
                     <Input
                       type="file"
                       position="absolute"
@@ -2186,9 +2234,14 @@ function ThreadContent(): JSX.Element {
                       isSubmitting ? (
                         <Spinner />
                       ) : (
-                        <BsFillSendFill
-                          style={{ transform: "rotate(0deg)" }}
-                          size="24px"
+                        <BsFillSendFillIcon
+                          size="20px"
+                          fill={
+                            colorMode === "light"
+                              ? "custom.theme.light.850"
+                              : "custom.theme.dark.300"
+                          }
+                          stroke="currentColor"
                         />
                       )
                     }
@@ -2429,11 +2482,8 @@ function ThreadContent(): JSX.Element {
                             gap="10px"
                             zIndex="1000"
                           >
-                            <IconButton
-                              aria-label="Zoom in"
-                              icon={<FaPlus />}
+                            <Box
                               onClick={() => zoomIn()}
-                              size="sm"
                               color={
                                 colorMode === "light"
                                   ? "custom.theme.light.850"
@@ -2456,12 +2506,21 @@ function ThreadContent(): JSX.Element {
                               _focus={{
                                 boxShadow: "none",
                               }}
-                            />
-                            <IconButton
-                              aria-label="Zoom out"
-                              icon={<FaMinus />}
+                              cursor="pointer"
+                              borderRadius="md"
+                              boxSize="32px"
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="center"
+                            >
+                              <FaPlusIcon
+                                size="14px"
+                                fill="custom.theme.light.900"
+                                stroke="currentColor"
+                              />
+                            </Box>
+                            <Box
                               onClick={() => zoomOut()}
-                              size="sm"
                               color={
                                 colorMode === "light"
                                   ? "custom.theme.light.850"
@@ -2484,12 +2543,22 @@ function ThreadContent(): JSX.Element {
                               _focus={{
                                 boxShadow: "none",
                               }}
-                            />
-                            <IconButton
-                              aria-label="Reset zoom"
-                              icon={<FaRedo />}
+                              cursor="pointer"
+                              borderRadius="md"
+                              boxSize="32px"
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="center"
+                            >
+                              <FaMinusIcon
+                                size="18px"
+                                fill="custom.theme.light.900"
+                                stroke="currentColor"
+                              />
+                            </Box>
+
+                            <Box
                               onClick={() => resetTransform()}
-                              size="sm"
                               color={
                                 colorMode === "light"
                                   ? "custom.theme.light.850"
@@ -2512,7 +2581,19 @@ function ThreadContent(): JSX.Element {
                               _focus={{
                                 boxShadow: "none",
                               }}
-                            />
+                              cursor="pointer"
+                              borderRadius="md"
+                              boxSize="32px"
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="center"
+                            >
+                              <FaRedoIcon
+                                size="16px"
+                                fill="custom.theme.light.900"
+                                stroke="currentColor"
+                              />
+                            </Box>
                           </Box>
                         </>
                       )}
@@ -2574,6 +2655,7 @@ function ThreadContent(): JSX.Element {
               {isHachisukaActive && <seasonalAnimations.hachisuka />}
               {isYaeActive && <seasonalAnimations.yae />}
               {isFirefly && <seasonalAnimations.firefly />}
+              {isMilkyWay && <seasonalAnimations.milkyway />}
               <Box
                 as="a"
                 href="#"
@@ -2670,7 +2752,17 @@ function ThreadContent(): JSX.Element {
                           ja: threadTitle,
                           language,
                         })}
-                        {threadBlogUrl && <FaMicroblog />}
+                        {threadBlogUrl && (
+                          <FaMicroblogIcon
+                            size="18px"
+                            fill={
+                              colorMode === "light"
+                                ? "custom.theme.light.900"
+                                : "custom.theme.dark.100"
+                            }
+                            stroke="currentColor"
+                          />
+                        )}
                       </Flex>
                     </Box>
                   </Box>
@@ -2837,7 +2929,7 @@ function ThreadContent(): JSX.Element {
                       }
                       return (
                         <>
-                          <div className="post">
+                          <Box className="post" overflowX="hidden">
                             {isNewDay && ( //日付の区切り線
                               <>
                                 <Box
@@ -2974,7 +3066,30 @@ function ThreadContent(): JSX.Element {
                                         maxWidth={1.5}
                                         color="gray.900"
                                       >
-                                        <Icon as={FaTrashAlt} boxSize={5} />
+                                        <Box role="group" position="relative">
+                                          <Box position="relative">
+                                            <FaTrashCanBodyIcon
+                                              size="20px"
+                                              fill="custom.theme.light.900"
+                                              stroke="currentColor"
+                                            />
+                                          </Box>
+                                          <Box
+                                            position="absolute"
+                                            top="0px"
+                                            transition="transform 0.2s ease"
+                                            _groupHover={{
+                                              transform: "translateY(-2px)",
+                                            }}
+                                          >
+                                            <FaTrashCanHeadIcon
+                                              size="20px"
+                                              fill="custom.theme.light.900"
+                                              stroke="currentColor"
+                                            />
+                                          </Box>
+                                        </Box>
+
                                         <Text fontSize="0.5rem" lineHeight="1">
                                           {getMessage({
                                             ja: "削除",
@@ -3009,7 +3124,11 @@ function ThreadContent(): JSX.Element {
                                         maxWidth={1.5}
                                         color="gray.900"
                                       >
-                                        <Icon as={FaReply} boxSize={5} />
+                                        <FaReplyIcon
+                                          size="18px"
+                                          fill="custom.theme.light.900"
+                                          stroke="currentColor"
+                                        />
                                         <Text
                                           fontSize="0.5rem"
                                           lineHeight="1"
@@ -3190,13 +3309,8 @@ function ThreadContent(): JSX.Element {
                                             />
                                           ) : (
                                             <>
-                                              <IconButton
-                                                icon={<FaPaperclip />}
-                                                aria-label="添付ファイル"
-                                                bg="transparent"
-                                                p={0}
-                                                m={0}
-                                                minWidth={0}
+                                              <Box
+                                                position="relative"
                                                 onMouseLeave={(e) => {
                                                   const tooltip =
                                                     e.currentTarget.dataset
@@ -3235,9 +3349,16 @@ function ThreadContent(): JSX.Element {
                                                     tooltip.style.border =
                                                       "1px solid gray";
                                                     tooltip.style.padding =
-                                                      "5px";
+                                                      "4px";
                                                     tooltip.style.zIndex =
                                                       "1000";
+
+                                                    tooltip.style.right = "0px"; // 親の右端に合わせる
+                                                    tooltip.style.bottom =
+                                                      "100%"; // 親の上に表示
+                                                    tooltip.style.marginBottom =
+                                                      "4px"; // 上に少し離す
+
                                                     e.currentTarget.appendChild(
                                                       tooltip
                                                     );
@@ -3245,7 +3366,16 @@ function ThreadContent(): JSX.Element {
                                                       tooltip.id; // データ属性にIDを保存
                                                   }
                                                 }}
-                                              />
+                                              >
+                                                <FaPaperclipIcon
+                                                  size="14px"
+                                                  fill={
+                                                    colorMode === "light"
+                                                      ? "custom.theme.light.900"
+                                                      : "custom.theme.dark.100"
+                                                  }
+                                                />
+                                              </Box>
                                             </>
                                           )}
                                         </Box>
@@ -3340,7 +3470,7 @@ function ThreadContent(): JSX.Element {
                                               border="1px solid"
                                               borderColor={
                                                 colorMode === "light"
-                                                  ? "#bfb0a4"
+                                                  ? "custom.theme.light.900"
                                                   : "gray.800"
                                               }
                                               outline={
@@ -3381,7 +3511,11 @@ function ThreadContent(): JSX.Element {
                                               alignItems="center" // 垂直方向の中央揃え
                                               justifyContent="center" // 水平方向の中央揃え
                                             >
-                                              <FaDownload size={16} />
+                                              <FaDownloadIcon
+                                                size="16px"
+                                                fill="currentColor"
+                                                stroke="currentColor"
+                                              />
                                             </Box>
                                           </Box>
                                         ) : (
@@ -3409,11 +3543,11 @@ function ThreadContent(): JSX.Element {
                                                   maxHeight: "240px",
                                                   backgroundColor: "#f2e9df",
                                                   backgroundImage: `
-                                          linear-gradient(45deg, #fff 25%, transparent 25%),
-                                          linear-gradient(135deg, #fff 25%, transparent 25%),
-                                          linear-gradient(45deg, transparent 75%, #fff 75%),
-                                          linear-gradient(135deg, transparent 75%, #fff 75%)
-                                        `,
+                                                    linear-gradient(45deg, #fff 25%, transparent 25%),
+                                                    linear-gradient(135deg, #fff 25%, transparent 25%),
+                                                    linear-gradient(45deg, transparent 75%, #fff 75%),
+                                                    linear-gradient(135deg, transparent 75%, #fff 75%)
+                                                  `,
                                                   backgroundSize: "20px 20px",
                                                   backgroundPosition:
                                                     "0 0, 10px 0, 10px -10px, 0px 10px",
@@ -3509,7 +3643,7 @@ function ThreadContent(): JSX.Element {
                                                 border="1px solid"
                                                 borderColor={
                                                   colorMode === "light"
-                                                    ? "#bfb0a4"
+                                                    ? "custom.theme.light.900"
                                                     : "gray.800"
                                                 }
                                                 outline={
@@ -3551,7 +3685,11 @@ function ThreadContent(): JSX.Element {
                                                 alignItems="center" // 垂直方向の中央揃え
                                                 justifyContent="center" // 水平方向の中央揃え
                                               >
-                                                <FaDownload size={16} />
+                                                <FaDownloadIcon
+                                                  size="16px"
+                                                  fill="currentColor"
+                                                  stroke="currentColor"
+                                                />
                                               </Box>
                                             </Box>
                                           </>
@@ -3610,7 +3748,7 @@ function ThreadContent(): JSX.Element {
                                               border="1px solid"
                                               borderColor={
                                                 colorMode === "light"
-                                                  ? "#bfb0a4"
+                                                  ? "custom.theme.light.900"
                                                   : "gray.800"
                                               }
                                               outline={
@@ -3651,7 +3789,11 @@ function ThreadContent(): JSX.Element {
                                               alignItems="center" // 垂直方向の中央揃え
                                               justifyContent="center" // 水平方向の中央揃え
                                             >
-                                              <FaDownload size={16} />
+                                              <FaDownloadIcon
+                                                size="16px"
+                                                fill="currentColor"
+                                                stroke="currentColor"
+                                              />
                                             </Box>
                                           </Box>
                                           <Box
@@ -3759,7 +3901,7 @@ function ThreadContent(): JSX.Element {
                                 />
                               );
                             })()}
-                          </div>
+                          </Box>
                         </>
                       );
                     })

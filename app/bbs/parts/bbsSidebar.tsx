@@ -1,6 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
-import { MdBusiness, MdChat } from "react-icons/md";
+import {
+  HomeIcon,
+  CheckBoxIcon,
+  CheckBoxOutlineBlankIcon,
+} from "@/components/ui/icons";
 import { CustomToast } from "@/components/ui/CustomToast";
 import { GetColor } from "@/components/CustomColor";
 import { useUnread } from "@/contexts/UnreadContext";
@@ -25,9 +29,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { supabase } from "@/utils/supabase/client-js";
-import { MdCheckBox } from "react-icons/md";
-
-import { MdCheckBoxOutlineBlank } from "react-icons/md";
 
 import NextLink from "next/link";
 import styles from "../styles/Home.module.css";
@@ -562,20 +563,41 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
             <Box textAlign="left">
               <Flex
                 align="center"
-                gap="2px"
+                gap="1px"
                 onClick={toggleShowCompleted}
                 userSelect="none"
+                cursor="pointer"
               >
                 {showCompleted ? (
                   <>
-                    <MdCheckBox size="16px" />
+                    <CheckBoxIcon
+                      size="20px"
+                      fill={
+                        colorMode === "light"
+                          ? "custom.theme.light.900"
+                          : "custom.theme.dark.100"
+                      }
+                    />
                   </>
                 ) : (
                   <>
-                    <MdCheckBoxOutlineBlank size="16px" />
+                    <CheckBoxOutlineBlankIcon
+                      size="20px"
+                      fill={
+                        colorMode === "light"
+                          ? "custom.theme.light.900"
+                          : "custom.theme.dark.100"
+                      }
+                    />
                   </>
                 )}
-                <Box as="button" fontSize="13px">
+                <Box
+                  as="span"
+                  fontSize="13px"
+                  lineHeight="1"
+                  display="flex"
+                  alignItems="center"
+                >
                   完了済みを表示
                 </Box>
               </Flex>
@@ -665,8 +687,21 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                       }}
                     >
                       <CustomAccordionIcon isExpanded={isExpanded} />
-                      <Box px={1} borderRadius="5px">
-                        <Icon as={MdBusiness} boxSize={4} mr={0.5} mt={0} />
+                      <Box
+                        px={1}
+                        borderRadius="5px"
+                        display="flex"
+                        alignItems="center"
+                        gap="4px"
+                      >
+                        <HomeIcon
+                          size="16px"
+                          fill={
+                            colorMode === "light"
+                              ? "custom.theme.light.900"
+                              : "custom.theme.dark.100"
+                          }
+                        />
                         <Box as="span" fontSize="sm">
                           {mainCompany !== "開発" &&
                             getMessage({

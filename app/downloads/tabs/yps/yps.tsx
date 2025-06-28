@@ -12,7 +12,6 @@ import {
   Grid,
   GridItem,
 } from "@chakra-ui/react";
-import { FaQuestion } from "react-icons/fa";
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import CustomModal from "@/components/ui/CustomModal";

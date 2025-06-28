@@ -34,12 +34,13 @@ import {
   Divider,
   Avatar,
   Spacer,
+  HStack,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { IoIosMail } from "react-icons/io";
 import { FaLine } from "react-icons/fa6";
 import { IoMoonOutline } from "react-icons/io5";
-import StudioIcon from "../../public/images/etc/studio.svg";
+import StudioIcon from "/public/images/etc/studio.svg";
 
 import {
   FaSun,
@@ -81,13 +82,13 @@ import "@fontsource/dela-gothic-one";
 import VoiceDailyModal from "@/components/modals/VoiceDailyModal";
 
 import AlertModal from "@/components/modals/Alert";
-import { MenuIcon } from "@/components/ui/icons";
+import { HippoFootPrintIcon, MenuIcon } from "@/components/ui/icons";
 
 export default function Header() {
   const { language, setLanguage } = useLanguage();
 
   const { data: session } = useSession();
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { colorMode } = useColorMode();
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -285,113 +286,119 @@ export default function Header() {
           },
         }}
       />
-      <div
+      <Box
         className="no-print-page"
         style={{ zIndex: "2000", position: "relative" }}
       >
-        <header id="navTop" style={{ maxWidth: "100vw", overflowX: "hidden" }}>
-          <VStack>
-            <LiquidGlass>
-              <Flex
-                // className={`${myClass} ${styles.headerNav}`}
-                maxWidth="100vw"
-                h="42px"
+        <LiquidGlass colorMode={colorMode}>
+          <Flex
+            as="header"
+            id="navTop"
+            w="100%"
+            maxW="100vw"
+            h="42px"
+            px={2}
+            align="center"
+            justify="space-between"
+            position="relative"
+            overflowX="hidden"
+          >
+            <HStack spacing={2}>
+              <Box
+                zIndex="1101"
+                onClick={onMenuOpen}
+                className={`${styles.snowTarget}`}
+                borderRadius="6px"
+                border="1px solid"
+                borderColor={
+                  colorMode === "light"
+                    ? "custom.theme.light.900"
+                    : "custom.theme.dark.200"
+                }
+                p="7px"
+                cursor="pointer"
+                _hover={{ opacity: "0.8", transform: "scale(1.1)" }}
               >
-                <Center>
-                  <Box
-                    zIndex="1101"
-                    onClick={onMenuOpen}
-                    className={`${styles.snowTarget}`}
-                    borderRadius="6px"
-                    border="1px solid"
-                    borderColor={colorMode === "light" ? "#6a4f3e" : "#d9d9dc"}
-                    p="7px"
-                    cursor="pointer"
-                    ml="6px"
-                    _hover={{ opacity: "0.8" }}
-                  >
-                    <MenuIcon
-                      size="16px"
-                      fill={colorMode === "light" ? "#6a4f3e" : "#d9d9dc"}
-                    />
-                  </Box>
-                </Center>
+                <MenuIcon
+                  size="16px"
+                  fill={
+                    colorMode === "light"
+                      ? "custom.theme.light.900"
+                      : "custom.theme.dark.200"
+                  }
+                />
+              </Box>
+            </HStack>
 
-                <Spacer />
-
-                <Center
-                  flex="1"
-                  style={{ gap: "2px" }}
-                  className={styles.logoAndText}
-                  ml={2}
-                >
-                  <Flex alignItems="center" gap="2px">
-                    <Box display={{ base: "none", sm: "block" }}>
-                      <svg
-                        viewBox="-15,80,60,60"
-                        className={styles.logo}
-                        style={{
-                          backgroundColor: "transparent",
-                          marginRight: 0,
-                          padding: "0px",
-                          width: "42px",
-                          height: "42px",
-                        }}
-                      >
-                        <path d="M10.729923,127.85275 c -2.8633203,-0.64195 -5.7809833,-2.2546 -7.6029793,-4.20232 -2.71948803,-2.90714 -4.03868803,-5.85986 -4.03868803,-9.03966 v -1.63491 l 1.365844,-0.16177 c 1.99806403,-0.23664 3.63172803,-1.15354 4.79294703,-2.69006 1.416664,-1.87453 2.557995,-4.29711 2.680002,-5.68854 0.05742,-0.65485 0.116243,-1.27993 0.13072,-1.38907 0.01448,-0.10914 0.540492,-0.19843 1.168924,-0.19843 2.0168213,0 3.8262033,-0.71348 5.0793843,-2.00291 0.626531,-0.64465 1.22157,-1.17209 1.322309,-1.17209 0.100739,0 0.768508,0.52627 1.48393,1.1695 1.613961,1.45109 3.292081,2.28077 5.054902,2.4992 l 1.353886,0.16775 0.300673,1.45521 c 0.817552,3.95682 4.011102,7.4686 7.34721,8.07933 0.978188,0.17908 0.992161,0.19896 0.990332,1.40897 -0.0026,1.69332 -0.907536,5.31392 -1.745599,6.9837 -1.648468,3.28448 -3.341526,4.48453 -8.306713,5.88785 -3.154913,0.89168 -8.623521,1.1456 -11.377084,0.52825 z M -2.8744683,110.96968 c -2.068338,-2.71173 -2.065755,-6.83028 0.0065,-10.4246 0.821618,-1.425067 1.559682,-1.930427 2.81935,-1.930427 2.610953,0 5.486838,2.949917 5.486838,5.628087 0,1.9649 -3.025031,6.13924 -5.14763,7.10339 -1.620182,0.73594 -2.386117,0.64484 -3.165094,-0.37645 z m 33.5631303,-0.0131 c -1.95025,-0.91771 -3.270954,-2.20007 -4.12491,-4.00514 -0.842209,-1.78025 -0.990759,-3.66914 -0.381249,-4.8478 0.530283,-1.02546 3.150325,-3.433097 3.956024,-3.635307 0.926526,-0.23255 2.531523,0.58905 3.245194,1.661197 0.757531,1.13805 1.73592,4.84205 1.762241,6.67153 0.01418,0.98634 -0.190682,1.99385 -0.621916,3.05839 -0.600583,1.48259 -0.704279,1.59213 -1.569122,1.65764 -0.553715,0.0419 -1.464892,-0.18342 -2.266262,-0.56051 z M 7.0882384,101.31584 c -1.035009,-0.32423 -4.73509,-3.432897 -5.081547,-4.269317 -0.287893,-0.69504 -0.252685,-0.95229 0.281998,-2.06042 0.89808,-1.86129 2.87534,-3.67722 4.548861,-4.17772 2.5152843,-0.75224 4.1391416,-0.77729 5.4643836,-0.0843 1.715155,0.89691 2.26628,1.78687 2.255764,3.64261 -0.01088,1.92048 -1.522894,5.19857 -2.872703,6.228117 -0.924537,0.70518 -3.4052206,1.09428 -4.5967566,0.72101 z m 12.7698106,-0.28025 c -1.575126,-0.96741 -2.987823,-2.800307 -3.188203,-4.136527 -0.246361,-1.64286 0.05068,-4.02385 0.626547,-5.02229 0.910045,-1.57784 3.253803,-2.12464 6.082514,-1.41907 2.154079,0.53729 5.342684,4.36722 5.342684,6.41726 0,0.91637 -2.284579,3.247797 -3.986139,4.067897 -1.536861,0.74071 -3.753749,0.78286 -4.877403,0.0927 z" />
-                      </svg>
+            <Box
+              position="absolute"
+              left="50%"
+              transform="translateX(-50%)"
+              display="flex"
+              alignItems="center"
+              gap={1}
+            >
+              <Box
+                display={{ base: "none", sm: "block" }}
+                sx={{ transform: "rotate(-18deg)" }}
+              >
+                <HippoFootPrintIcon
+                  size="32px"
+                  fill={
+                    colorMode === "light"
+                      ? "custom.theme.light.900"
+                      : "custom.theme.dark.100"
+                  }
+                />
+              </Box>
+              <Box display={{ base: "none", sm: "block" }}>
+                <NextLink href="/" legacyBehavior>
+                  <Link _focus={{ _focus: "none" }}>
+                    <Box
+                      justifyContent="center"
+                      display="flex"
+                      alignItems="center"
+                      color={
+                        colorMode === "light"
+                          ? "custom.theme.light.900"
+                          : "custom.theme.orange.400"
+                      }
+                      w="130px"
+                      minW="36px"
+                      mr="0"
+                      ml="0"
+                      bottom="4px"
+                      _hover={{ opacity: "0.9", transform: "scale(1.1)" }}
+                    >
+                      <StudioIcon />
                     </Box>
-                    <Box display={{ base: "none", sm: "block" }}>
-                      <NextLink href="/" legacyBehavior>
-                        <Link _focus={{ _focus: "none" }}>
-                          <Box
-                            justifyContent="center"
-                            display="flex"
-                            alignItems="center"
-                            color={colorMode === "light" ? "#333" : "#F89173"}
-                            w="130px"
-                            minW="36px"
-                            mr="0"
-                            ml="0"
-                            bottom="4px"
-                          >
-                            <StudioIcon />
-                          </Box>
-                        </Link>
-                      </NextLink>
-                    </Box>
-                    <Center h="24px" maxH="24px">
-                      <QrModal />
-                    </Center>
-                  </Flex>
-                </Center>
+                  </Link>
+                </NextLink>
+              </Box>
+              <Center h="24px" maxH="24px">
+                <QrModal />
+              </Center>
+            </Box>
 
-                <Spacer />
-
-                <Center mr={2}>
-                  <VoiceDailyModal currentUserName={currentUserName} />
-                </Center>
-                <Center>
-                  <CustomSwitchColorModeButton />
-                </Center>
-                <Center w="54px">
-                  <Box
-                    onClick={() =>
-                      session?.user ? signOut() : setLoginModalOpen(true)
-                    }
-                    cursor="pointer"
-                  >
-                    <CustomAvatar
-                      src={currentUserPictureUrl ?? undefined}
-                      boxSize="34px"
-                    />
-                  </Box>
-                </Center>
-              </Flex>
-            </LiquidGlass>
-          </VStack>
-        </header>
-      </div>
+            <HStack spacing={2}>
+              <VoiceDailyModal currentUserName={currentUserName} />
+              <CustomSwitchColorModeButton />
+              <Box
+                onClick={() =>
+                  session?.user ? signOut() : setLoginModalOpen(true)
+                }
+                cursor="pointer"
+                _hover={{ transform: "scale(1.1)" }}
+              >
+                <CustomAvatar
+                  src={currentUserPictureUrl ?? undefined}
+                  boxSize="34px"
+                />
+              </Box>
+            </HStack>
+          </Flex>
+        </LiquidGlass>
+      </Box>
       {/* 告知モーダル */}
       <AlertModal
         isOpen={isAlertModalOpen}
@@ -420,7 +427,7 @@ export default function Header() {
       </CustomModal>
 
       <Drawer isOpen={isMenuOpen} placement="left" onClose={onMenuClose}>
-        <DrawerOverlay zIndex={1100}>
+        <DrawerOverlay zIndex={2100}>
           <DrawerContent
             w={["75%", "100%", "100%"]}
             maxW="200px"

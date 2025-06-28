@@ -26,23 +26,7 @@
   border-color: #fff;
   fill: pink;
 }
-.logo {
-  transform: rotate(-30deg);
-  transition: 0.5s;
-}
-.logoAndText {
-  text-decoration: none !important;
-  &:hover .logo {
-    transform: rotate(30deg);
-  }
-}
 
-.logoText {
-  font-family: "M PLUS Rounded 1c", sans-serif;
-  font-weight: 700;
-  text-decoration: none !important;
-  transition: 0.6s;
-}
 .githubIcon {
   font-size: 28px;
   width: 28px;

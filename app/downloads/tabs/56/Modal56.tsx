@@ -10,7 +10,6 @@ import {
   useDisclosure,
   Flex,
 } from "@chakra-ui/react";
-import { FaSyncAlt } from "react-icons/fa";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";

@@ -13,6 +13,7 @@ import getMessage from "@/utils/getMessage";
 import CustomModal from "@/components/ui/CustomModal";
 import { PhoneIcon } from "@/components/ui/icons";
 import { OldPhoneBodyIcon, OldPhoneHeadIcon } from "@/components/ui/icons";
+import { Customized } from "recharts";
 
 type VoiceDailyModalProps = {
   currentUserName: string | null;
@@ -72,8 +73,20 @@ export default function VoiceDailyModal({
   };
   return (
     <>
-      <Box onClick={onOpen} cursor="pointer">
-        <PhoneIcon size="26px" />
+      <Box
+        onClick={onOpen}
+        cursor="pointer"
+        _hover={{ opacity: "0.85", transform: "scale(1.1)" }}
+        transition="all 0.3 ease-in-out"
+      >
+        <PhoneIcon
+          size="26px"
+          fill={
+            colorMode === "light"
+              ? "custom.theme.light.900"
+              : "custom.theme.dark.100"
+          }
+        />
       </Box>
       <CustomModal
         title={getMessage({

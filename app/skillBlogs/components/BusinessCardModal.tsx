@@ -25,11 +25,11 @@ import {
 } from "@chakra-ui/react";
 import QRCode from "qrcode.react";
 
-import { AiOutlineWechat } from "react-icons/ai";
 import { FaStarOfLife } from "react-icons/fa";
-import { CiBeerMugFull } from "react-icons/ci";
 import { IoMdPhonePortrait, IoMdMail } from "react-icons/io";
 import { MdWeb } from "react-icons/md";
+
+import { GiPostStampIcon, FaStarOfLifeIcon } from "@/components/ui/icons";
 
 import getMessage from "@/utils/getMessage";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -172,7 +172,7 @@ const BusinessCardModal: React.FC = () => {
             clipPath="polygon(100% 100%, 0 100%, 100% 0)" // 逆向きの三角形の形状を指定
           />
           <Flex align="center">
-            <Box ml={5}>
+            <Box ml={5} mr={2}>
               <Text fontWeight="bold" fontSize="sm" mt={0} color="#000">
                 STUDIO+
               </Text>
@@ -189,12 +189,14 @@ const BusinessCardModal: React.FC = () => {
               </Text>
               <Divider borderColor="black" my={2} />
               <Flex align="flex-start" mt={3}>
-                <AiOutlineWechat
-                  size={16}
-                  style={{ marginRight: "4px", marginTop: "2px" }}
-                  color="#999"
-                />
-                <Text fontSize="xs" color="black">
+                <Box mr="2px">
+                  <GiPostStampIcon
+                    size="16px"
+                    fill="custom.theme.light.900"
+                    stroke="currentColor"
+                  />
+                </Box>
+                <Text fontSize="12px" color="black" whiteSpace="pre-lne">
                   {getMessage({
                     ja: "徳島県藍住町\n奥野和田135-35",
                     us: "Tokushima Aizumi-cho OkunoWada135-35",

@@ -1,8 +1,6 @@
 import React from "react";
-import { HStack, Box, Icon } from "@chakra-ui/react";
-import { LuPanelRightOpen } from "react-icons/lu";
+import { HStack, Box, Icon, useColorMode } from "@chakra-ui/react";
 import { FaQuestion } from "react-icons/fa";
-import { useColorMode } from "@chakra-ui/react";
 import BasicDrawer from "@/components/ui/BasicDrawer";
 
 interface UnderlinedTextWithDrawerProps {
@@ -14,7 +12,6 @@ interface UnderlinedTextWithDrawerProps {
   children: React.ReactNode;
   size?: string;
 }
-
 const UnderlinedTextWithDrawer: React.FC<UnderlinedTextWithDrawerProps> = ({
   text,
   onOpen,
@@ -24,6 +21,7 @@ const UnderlinedTextWithDrawer: React.FC<UnderlinedTextWithDrawerProps> = ({
   children,
   size = "xs",
 }) => {
+  const { colorMode } = useColorMode();
   return (
     <>
       <HStack

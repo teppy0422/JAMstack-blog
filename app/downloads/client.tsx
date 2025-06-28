@@ -579,6 +579,22 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         </Flex>
                       </Box>
                       <Divider borderColor="gray.500" />
+                      <ChangelogAccordion
+                        changelog={[
+                          {
+                            version: "1.0.0.4",
+                            date: "2020/12/09",
+                            reason: [
+                              "撮影環境が異なる場合、コネクタ写真の色が異なる",
+                              "コネクタ写真の登録が面倒",
+                            ],
+                            change: [
+                              "撮影するとコネクタ品番を付けて写真を生産準備+に渡す",
+                            ],
+                            inCharge: ["徳島", "補給品"],
+                          },
+                        ]}
+                      />
                     </CardBody>
                   </Card>
                   <Box position="relative" h="20px" w="100%" m="0">
@@ -977,6 +993,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         </Stack>
                       </Flex>
                     </Box>
+                    <Divider borderColor="gray.500" />
+                    <ChangelogAccordion
+                      changelog={[
+                        {
+                          version: "2.200.15",
+                          date: "2025/01/23",
+                          reason: ["製品品番の点数が146を超える場合にエラー"],
+                          change: ["146点を超える場合は実行前に警告を追加"],
+                          inCharge: ["徳島"],
+                        },
+                      ]}
+                    />
                   </CardBody>
                 </Card>
               </>
@@ -1050,6 +1078,13 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               ja: "※宮崎部品が委託開発した3つのシステムを統合して機能追加しました",
                               us: "*Miyazaki Parts has integrated three systems developed on consignment and added functionality.",
                               cn: "*宮崎部品 整合了由 委托开发的三个系统，并增加了其他功能",
+                              language,
+                            })}
+                            <br />
+                            {getMessage({
+                              ja: "※QRラベル印刷に桜咲くQR、RS232C変換にRS-reciiverLightが必要",
+                              us: "*Cherry Blossom QR for QR label printing, RS-reciiverLight for RS232C conversion required.",
+                              cn: "*需要使用用于 QR 标签打印的樱花 QR 和用于 RS232C 转换的 RS-reciiverLight",
                               language,
                             })}
                           </Text>
@@ -1278,7 +1313,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           {
                             version: "17",
                             date: "2024/03/13",
-                            change: ["最終更新"],
+                            change: ["内部タイマーの調整"],
                           },
                         ]}
                       />

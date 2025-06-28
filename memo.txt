@@ -13,17 +13,8 @@ Please AAA the .zip file you downloaded
 
 AAA 下载的 .zip 文件。
 
-        <ImageWithHighlight
-            src="/images/0010/yps-verup.webp"
-            srcWidth="300px"
-            label="※フォーム(VerUp)"
-            highlights={[
-              {
-                top: "39%",
-                left: "2%",
-                w: "55%",
-                h: "13%",
-                borderRadius: "7px",
-              },
-            ]}
-          />
+   <FaReplyIcon
+      size="18px"
+      fill="custom.theme.light.900"
+      stroke="currentColor"
+    />

@@ -188,7 +188,6 @@ export default function TxtAnalyzerPage() {
         fixedNodes={fixedNodes}
         setFixedNodes={setFixedNodes}
       />
-
       <Textarea
         mt={4}
         rows={10}

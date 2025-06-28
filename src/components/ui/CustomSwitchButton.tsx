@@ -111,7 +111,7 @@ export const CustomSwitchButton = ({ onClick, isRight }) => {
 export const CustomSwitchColorModeButton = ({}) => {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
-    <Box cursor="pointer">
+    <Box cursor="pointer" _hover={{ transform: "scale(1.1)" }}>
       <Box
         position="relative"
         bg={colorMode === "light" ? "white" : "white"}

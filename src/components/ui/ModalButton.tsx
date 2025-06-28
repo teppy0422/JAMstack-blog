@@ -36,7 +36,7 @@ export const ModalButton = ({
       >
         {label}
         <Box ml={0.5}>
-          <MacFinderIcon size="20px" />
+          <MacFinderIcon size="20px" fill="none" />
         </Box>
       </Box>
     </>

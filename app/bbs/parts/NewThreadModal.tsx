@@ -18,7 +18,6 @@ import {
 import { supabase } from "@/utils/supabase/client";
 
 import QRCode from "qrcode.react";
-import { ImQrcode } from "react-icons/im";
 import getMessage from "@/utils/getMessage";
 import { useUserContext } from "@/contexts/useUserContext";
 import { ProjectLists, CategoryLists } from "@/components/ui/CustomBadge";

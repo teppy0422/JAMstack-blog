@@ -25,9 +25,6 @@ import {
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
-import { CiHeart } from "react-icons/ci";
-import { LuPanelRightOpen } from "react-icons/lu";
-import { PiGithubLogoFill } from "react-icons/pi";
 
 import Content from "@/components/content";
 import { AnimationImage } from "@/components/ui/CustomImage";

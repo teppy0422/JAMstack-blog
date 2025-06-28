@@ -88,6 +88,18 @@ export const theme = extendTheme({
           800: "#822727",
           900: "#63171B",
         },
+        orange: {
+          50: "#FFF3ED", // very light
+          100: "#FFE0D6",
+          200: "#FFC2B3",
+          300: "#FFA48F",
+          400: "#F98E76",
+          500: "#F89173", // base color
+          600: "#E0775C",
+          700: "#C3634B",
+          800: "#A3503D",
+          900: "#833E30", // very dark
+        },
       },
       brand: {
         dark: {

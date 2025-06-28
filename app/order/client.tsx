@@ -55,10 +55,8 @@ import "@fontsource/yomogi";
 import * as d3 from "d3";
 import React from "react";
 import cloud from "d3-cloud";
-import { StarIcon } from "@chakra-ui/icons";
-import { FaStar } from "react-icons/fa";
-import { FaAnglesDown } from "react-icons/fa6";
-import RyouteiBon from "../../public/images/etc/ryouteiBon.svg";
+import { FaStarIcon, FaAnglesDownIcon } from "@/components/ui/icons";
+import RyouteiBon from "/public/images/etc/ryouteiBon.svg";
 import { SunderText } from "@/components/ui/CustomText";
 
 interface OrderItem {
@@ -1386,13 +1384,37 @@ export default function OrderPage() {
                                 justify="center"
                               >
                                 {item.recommendation_level >= 4 && (
-                                  <Icon as={FaStar} />
+                                  <FaStarIcon
+                                    size="10px"
+                                    fill={
+                                      colorMode === "light"
+                                        ? "custom.theme.light.50"
+                                        : "custom.theme.light.200"
+                                    }
+                                    stroke="currentColor"
+                                  />
                                 )}
                                 {item.recommendation_level >= 4.5 && (
-                                  <Icon as={FaStar} />
+                                  <FaStarIcon
+                                    size="10px"
+                                    fill={
+                                      colorMode === "light"
+                                        ? "custom.theme.light.50"
+                                        : "custom.theme.light.200"
+                                    }
+                                    stroke="currentColor"
+                                  />
                                 )}
                                 {item.recommendation_level >= 5 && (
-                                  <Icon as={FaStar} />
+                                  <FaStarIcon
+                                    size="10px"
+                                    fill={
+                                      colorMode === "light"
+                                        ? "custom.theme.light.50"
+                                        : "custom.theme.light.200"
+                                    }
+                                    stroke="currentColor"
+                                  />
                                 )}
                               </HStack>
                             </Box>
@@ -2113,8 +2135,6 @@ export default function OrderPage() {
                           <Box data-roof-id="sakura">
                             <HStack>
                               <Box
-                                as={FaAnglesDown}
-                                fontSize="sm"
                                 animation="moveUpDown 1s ease-in-out infinite"
                                 sx={{
                                   "@keyframes moveUpDown": {
@@ -2123,11 +2143,15 @@ export default function OrderPage() {
                                     "100%": { transform: "translateY(1px)" }, // 元の位置に戻る
                                   },
                                 }}
-                              />
+                              >
+                                <FaAnglesDownIcon
+                                  size="14px"
+                                  fill="custom.theme.light.500"
+                                  stroke="currentColor"
+                                />
+                              </Box>
                               <Text>注文を確定</Text>
                               <Box
-                                as={FaAnglesDown}
-                                fontSize="sm"
                                 animation="moveUpDown 1s ease-in-out infinite"
                                 sx={{
                                   "@keyframes moveUpDown": {
@@ -2136,7 +2160,13 @@ export default function OrderPage() {
                                     "100%": { transform: "translateY(1px)" }, // 元の位置に戻る
                                   },
                                 }}
-                              />
+                              >
+                                <FaAnglesDownIcon
+                                  size="14px"
+                                  fill="custom.theme.light.500"
+                                  stroke="currentColor"
+                                />
+                              </Box>
                             </HStack>
                           </Box>
                         </Button>

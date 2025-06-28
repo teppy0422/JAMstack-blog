@@ -167,10 +167,14 @@ Install daily Add voice chat
 -deploy 0020-
 change Adobe font setting from head to layout
 -deploy 0021-
+Correct header balance and design
+Added Tanabata animation
+-deploy 0022-
 
 #### to do now
 
-ヘッダーのバランスとデザイン修正
+switch アイコンの向きを変える
+react-icons を利用しない
 
 ui をまとめる input とか button とか toast とか
 サブ自動立案
