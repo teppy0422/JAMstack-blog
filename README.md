@@ -172,6 +172,7 @@ Added Tanabata animation
 -deploy 0022-
 Added Yps1.03
 Fixed SkillBolgs 0010
+Deploy 0023
 
 #### to do now
 
