@@ -58,6 +58,7 @@ import { ImageWithHighlight } from "../../../../src/components/ImageWidthHighlig
 import VBATrustSettingsPage from "@/components/howto/office/VbaTrustSettings";
 
 import ModalYps from "app/downloads/tabs/yps/yps";
+import BorderBox from "@/components/ui/BorderBox";
 
 const BlogPage: React.FC = () => {
   const {
@@ -472,65 +473,88 @@ const BlogPage: React.FC = () => {
             <Text mb={2}>
               {"1. " +
                 getMessage({
-                  ja: "VerUpに使用する場所のアドレスをコピーする。これは通常、サーバーのトップレベルに",
-                  us: "Copy the address of the location to be used for VerUp.",
-                  cn: "复制用于 VerUp 的位置地址。",
+                  ja: "システムが使う場所(サーバー)を決める",
+                  us: "",
+                  cn: "",
                   language,
                 })}
             </Text>
-            <Text ml={4}>
-              {getMessage({
-                ja: "フォルダを表示して使用場所まで移動。アドレスバー内の右空きスペースをクリックします。",
-                us: "Display the folder and navigate to the location where it is used. Click on the right free space in the address bar.",
-                cn: "显示文件夹并导航到使用该文件夹的位置。单击地址栏中右侧的空闲空间。",
-                language,
-              })}
-            </Text>
-            <ImageWithHighlight
-              src="/images/0010/folder-selectPath.webp"
-              label={
-                "*" +
+            <Box mb={2} ml={4}>
+              <BorderBox
+                items={[
+                  "誘導ポイント設定一覧表を利用する人がアクセスできる場所",
+                  "¥¥から始まるアドレス",
+                ]}
+                marker="dot"
+              />
+            </Box>
+            <Box mb={2}>
+              {"2. " +
                 getMessage({
-                  ja: "フォルダ(Explorer)",
-                  us: "Folder (Explorer)",
-                  cn: "文件夹(Explorer)",
+                  ja: "実際にそのフォルダを開いてみよう",
+                  us: "",
+                  cn: "",
                   language,
-                })
-              }
-              highlights={[
-                {
-                  top: "27%",
-                  left: "92%",
-                  w: "8%",
-                  h: "25%",
-                  animation: "blink",
-                  border: "transparent",
-                  label: "Click",
-                  labelTop: "50%",
-                  bg: "repeating-linear-gradient(45deg, rgba(255,0,0,0.1), rgba(255,0,0,0.1) 4px, transparent 4px, transparent 6px)",
-                },
-              ]}
-            />
-            <Text>
-              {getMessage({
-                ja: "クリックするとアドレスを選択した状態になるのでコピーします。",
-                us: "Click to select the address and copy it.",
-                cn: "点击选择地址并复制。",
-                language,
-              })}
-            </Text>
-
-            <Box position="relative" w="100%" mt={2} mb={6}>
-              <Image src="/images/0010/folder-selectPath2.webp" w="100%" />
-              <Center fontSize="xs">
-                {"*" +
+                })}
+            </Box>
+            <Box mb={2} ml={4}>
+              <Text>
+                ふだん使っているエクスプローラー(ファイルを開く画面)で、そのフォルダーに行ってみましょう。
+              </Text>
+              <Text>
+                {getMessage({
+                  ja: "移動したらアドレスバー内の右空きスペースをクリックします。",
+                  us: "Display the folder and navigate to the location where it is used. Click on the right free space in the address bar.",
+                  cn: "显示文件夹并导航到使用该文件夹的位置。单击地址栏中右侧的空闲空间。",
+                  language,
+                })}
+              </Text>
+              <ImageWithHighlight
+                src="/images/0010/folder-selectPath.webp"
+                label={
+                  "*" +
                   getMessage({
                     ja: "フォルダ(Explorer)",
                     us: "Folder (Explorer)",
                     cn: "文件夹(Explorer)",
                     language,
-                  })}
-              </Center>
+                  })
+                }
+                highlights={[
+                  {
+                    top: "27%",
+                    left: "92%",
+                    w: "8%",
+                    h: "25%",
+                    animation: "blink",
+                    border: "transparent",
+                    label: "Click",
+                    labelTop: "50%",
+                    bg: "repeating-linear-gradient(45deg, rgba(255,0,0,0.1), rgba(255,0,0,0.1) 4px, transparent 4px, transparent 6px)",
+                  },
+                ]}
+              />
+              <Text>
+                {getMessage({
+                  ja: "クリックするとアドレスを選択した状態になるのでコピーします。",
+                  us: "Click to select the address and copy it.",
+                  cn: "点击选择地址并复制。",
+                  language,
+                })}
+              </Text>
+
+              <Box position="relative" w="100%" mt={2} mb={6}>
+                <Image src="/images/0010/folder-selectPath2.webp" w="100%" />
+                <Center fontSize="xs">
+                  {"*" +
+                    getMessage({
+                      ja: "フォルダ(Explorer)",
+                      us: "Folder (Explorer)",
+                      cn: "文件夹(Explorer)",
+                      language,
+                    })}
+                </Center>
+              </Box>
             </Box>
             <Text>
               2.
@@ -541,31 +565,126 @@ const BlogPage: React.FC = () => {
                 language,
               })}
             </Text>
-            <Text ml={4}>
-              {currentUserCompany}の場合は setting_
-              {getLocalIp(currentUserCompany)} の右セルに入力します。
-            </Text>
-            <ImageWithHighlight
-              src="/images/0010/sheet-setting.webp"
-              label={
-                "*" +
-                getMessage({
-                  ja: "シート[設定]",
-                  us: "Sheet [Setup].",
-                  cn: "工作表 [设置]。",
+            <Box ml={4}>
+              <Text>
+                {getMessage({ ja: "", us: "For ", cn: "对于 ", language })}
+                {getMessage({ ja: String(currentUserCompany), language })}
+                {getMessage({
+                  ja: "の場合は",
+                  us: ", enter in the right call of ",
+                  cn: ", 请在 ",
                   language,
-                })
-              }
-              highlights={[
-                {
-                  top: "27%",
-                  left: "5%",
-                  w: "80%",
-                  h: "28%",
-                },
-              ]}
-            />
-            <Text>
+                })}
+                {"setting_" + getLocalIp(currentUserCompany)}
+                {getMessage({
+                  ja: " の右セルに入力します。",
+                  us: ".",
+                  cn: " 右侧单元格中输入",
+                  language,
+                })}
+              </Text>
+              <ImageWithHighlight
+                src="/images/0010/sheet-setting.webp"
+                label={
+                  "*" +
+                  getMessage({
+                    ja: "シート[設定]",
+                    us: "Sheet [Setup].",
+                    cn: "工作表 [设置]。",
+                    language,
+                  })
+                }
+                highlights={[
+                  {
+                    top: "27%",
+                    left: "5%",
+                    w: "80%",
+                    h: "28%",
+                  },
+                ]}
+              />
+              <Text>
+                ※アドレスの先頭文字がZ:¥などのアルファベットの場合は下記のように修正してください。
+              </Text>
+              <Box maxW="500px" alignContent="center">
+                <ImageWithHighlight
+                  src="/images/0010/checkNetworkDrivePath.png"
+                  label={
+                    "*" +
+                    getMessage({
+                      ja: "フォルダ",
+                      us: "Folder",
+                      cn: "文件夹",
+                      language,
+                    }) +
+                    "(Win11.Explorer)"
+                  }
+                  highlights={[
+                    {
+                      top: "75%",
+                      left: "21%",
+                      w: "19%",
+                      h: "10%",
+                      borderRadius: "4px",
+                      animation: "blink",
+                    },
+                    {
+                      top: "22%",
+                      left: "46%",
+                      w: "3.5%",
+                      h: "10%",
+                      borderRadius: "4px",
+                      animation: "blink",
+                    },
+                  ]}
+                />
+              </Box>
+              <Box>
+                上図の場合は、
+                <Box
+                  as="span"
+                  bg="custom.theme.light.50"
+                  color="custom.theme.light.900"
+                  px={1}
+                >
+                  Y:
+                </Box>
+                を
+                <Box
+                  as="span"
+                  bg="custom.theme.light.50"
+                  color="custom.theme.light.900"
+                  px={1}
+                >
+                  ¥¥192.168.11.2
+                </Box>
+                に修正
+                <br />
+                <Box
+                  as="span"
+                  bg="custom.theme.light.50"
+                  color="custom.theme.light.900"
+                  px={1}
+                >
+                  Y:
+                </Box>
+                ¥docker¥example
+                <br />
+                ↓ <br />
+                <Box
+                  as="span"
+                  bg="custom.theme.light.50"
+                  color="custom.theme.light.900"
+                  px={1}
+                >
+                  ¥¥192.168.11.2
+                </Box>
+                ¥docker¥example
+                <br />
+              </Box>
+            </Box>
+
+            <Text mt={2}>
               {"3." +
                 getMessage({
                   ja: "接続テスト",
@@ -1341,7 +1460,6 @@ const BlogPage: React.FC = () => {
           sectionRefs={sectionRefs}
           sections={sections}
           mt="16px"
-          size="sm"
         >
           <Divider
             my={2}
@@ -1472,7 +1590,6 @@ const BlogPage: React.FC = () => {
           sectionRefs={sectionRefs}
           sections={sections}
           mt="16px"
-          size="sm"
         >
           <Divider
             my={2}
@@ -1712,7 +1829,7 @@ const BlogPage: React.FC = () => {
             })}
           </Text>
           <Center w="100%" my={6} flexDirection="column">
-            <Box position="relative">
+            <Box position="relative" maxW="230px">
               <Image src="/images/0010/yps-verup-select.webp" />
             </Box>
             <Box>

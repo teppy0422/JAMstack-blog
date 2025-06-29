@@ -170,6 +170,8 @@ change Adobe font setting from head to layout
 Correct header balance and design
 Added Tanabata animation
 -deploy 0022-
+Added Yps1.03
+Fixed SkillBolgs 0010
 
 #### to do now
 

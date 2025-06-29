@@ -1424,6 +1424,17 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          version: "1.03",
+                          date: "2025/06/29",
+                          reason: ["書き込めない"],
+                          change: [
+                            "MENUを閉じるタイミングの修正",
+                            "徳島のサーバー設定を反映",
+                            "設定一覧表のwritingNameを固定",
+                          ],
+                          inCharge: ["徳島", "桒原さん", "不具合"],
+                        },
+                        {
                           version: "1.01",
                           date: "2025/06/04",
                           reason: ["印鑑の設定が無い時にエラーが出る"],

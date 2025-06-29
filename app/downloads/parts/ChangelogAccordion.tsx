@@ -86,7 +86,7 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                 {changelog.map((item, index) => {
                   return (
                     <>
-                      <Box h="1px" width="100%" bg="gray.500" />
+                      <Box h="0.5px" width="100%" bg="gray.500" />
                       <ListItem key={index}>
                         <Box
                           as="span"
@@ -95,7 +95,7 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                           mr={2}
                           bg="gray"
                           color="white"
-                          p="2px"
+                          px="2px"
                           lineHeight={0.8}
                         >
                           {item.version}

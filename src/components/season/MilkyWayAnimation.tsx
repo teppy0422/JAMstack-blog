@@ -75,7 +75,7 @@ export default function MilkyWayPage() {
         width="auto"
         fontSize="sm"
       >
-        働き者の織姫と、のんびり屋の彦星。神様に「仕事しろ」と怒られ、年に一度しか会えなくなった2人の物語。会えるのは7月7日。ただし天気が悪ければ延期なしで中止。ブラック企業もびっくりの評価制度が光る行事。
+        働き者の織姫と、のんびり屋の彦星。神様に「仕事しろ」と怒られ、年に一度しか会えなくなった2人の物語。会えるのは7月7日。ただし天気が悪ければ延期なしで中止。ブラック企業並みの評価制度が光る行事。
       </Box>
       <Box
         px={1}
@@ -98,6 +98,7 @@ export default function MilkyWayPage() {
   );
 
   useEffect(() => {
+    if (colorMode !== "dark") return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");

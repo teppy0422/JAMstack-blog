@@ -105,6 +105,7 @@ const seasonalAnimations = {
   yae: dynamic(() => import("@/components/season/YaeAnimation")),
   firefly: dynamic(() => import("@/components/season/FireflyAnimation")),
   milkyway: dynamic(() => import("@/components/season/MilkyWayAnimation")),
+  firework: dynamic(() => import("@/components/season/FireworkAnimation")),
   // ochiba: dynamic(() => import("../../../components/OchibaAnimation")), // 落ち葉アニメーションのインポート
   // 他の季節のアニメーションをここに追加
 };
@@ -410,6 +411,7 @@ function ThreadContent(): JSX.Element {
   const [isYaeActive, setIsYaeActive] = useState(false);
   const [isFirefly, setIsFirefly] = useState(false);
   const [isMilkyWay, setIsMilkyWay] = useState(false);
+  const [isFirework, setIsFirework] = useState(false);
 
   //season判断
   useEffect(() => {
@@ -433,8 +435,12 @@ function ThreadContent(): JSX.Element {
     setIsFirefly(today >= FireflyStartDate && today <= FireflyEndDate);
 
     const MilkyWayDate = new Date(today.getFullYear(), 5, 27); // 6月27日
-    const MilkyWayEndDate = new Date(today.getFullYear(), 6, 16); // 7月16日
+    const MilkyWayEndDate = new Date(today.getFullYear(), 6, 7); // 7月7日
     setIsMilkyWay(today >= MilkyWayDate && today <= MilkyWayEndDate);
+
+    const FireworkDate = new Date(today.getFullYear(), 5, 27); // 6月27日
+    const FireworkEndDate = new Date(today.getFullYear(), 6, 7); // 7月7日
+    setIsFirework(today >= FireworkDate && today <= FireworkEndDate);
   }, []);
 
   // isAtBottomがtrueになった時に未読の投稿を全て既読にする
@@ -2132,7 +2138,7 @@ function ThreadContent(): JSX.Element {
                   color={
                     colorMode === "light" ? "custom.theme.light.900" : "white"
                   }
-                  bg={colorMode === "light" ? "white" : "gray.800"}
+                  bg={colorMode === "light" ? "white" : "custom.theme.dark.800"}
                   borderColor={
                     colorMode === "light"
                       ? "custom.theme.light.700"
@@ -2656,6 +2662,9 @@ function ThreadContent(): JSX.Element {
               {isYaeActive && <seasonalAnimations.yae />}
               {isFirefly && <seasonalAnimations.firefly />}
               {isMilkyWay && <seasonalAnimations.milkyway />}
+              {/* {isFirework && colorMode === "dark" && (
+                <seasonalAnimations.firework />
+              )} */}
               <Box
                 as="a"
                 href="#"
@@ -2953,10 +2962,16 @@ function ThreadContent(): JSX.Element {
                                   <HStack>
                                     <Divider borderColor="gray.500" />
                                     <Text
-                                      fontSize="14px"
+                                      fontSize="13px"
                                       whiteSpace="nowrap"
                                       mx="1"
                                       lineHeight="1.2"
+                                      zIndex={1000}
+                                      color={
+                                        colorMode === "light"
+                                          ? "custom.theme.light.900"
+                                          : "custom.theme.dark.200"
+                                      }
                                     >
                                       {formatDate(
                                         post.created_at,
