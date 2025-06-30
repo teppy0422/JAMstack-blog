@@ -174,6 +174,7 @@ Added Yps1.03
 Fixed SkillBolgs 0010
 Deploy 0023
 !Yps is old verstion
+Add Firework Animation
 Deploy 0024
 
 #### to do now
