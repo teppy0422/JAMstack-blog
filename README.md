@@ -173,6 +173,8 @@ Added Tanabata animation
 Added Yps1.03
 Fixed SkillBolgs 0010
 Deploy 0023
+!Yps is old verstion
+Deploy 0024
 
 #### to do now
 
