@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 
+// ===================== 型定義 =====================
 type Particle = {
   x: number;
   y: number;
@@ -26,7 +27,7 @@ type Firework = {
   maxFrame: number;
 };
 
-type FireworkType = "shidare" | "kiku" | "senrin";
+type FireworkType = "shidare" | "kiku" | "senrin" | "botan" | "yanagi" | "dora";
 
 type FireworkConfig = {
   color: string | string[];
@@ -44,21 +45,22 @@ type FireworkConfig = {
   duration: [number, number];
 };
 
+// ===================== 花火タイプ設定 =====================
 const FIREWORK_TYPES: Record<FireworkType, FireworkConfig> = {
   shidare: {
     color: "#ffaa33",
-    count: 400,
-    speed: [0, 1.5],
+    count: 800,
+    speed: [0, 2],
     size: [1, 2],
     gravity: 0.1,
     horizontalScale: 3,
     verticalScale: 3,
     angleRange: [0, Math.PI * 2],
-    lifeRange: [150, 250],
+    lifeRange: [1500, 2500],
     trailLength: 8,
     trailFade: 0.5,
     explodeHeightRange: [0.85, 0.95],
-    duration: [60, 80],
+    duration: [280, 300],
   },
   kiku: {
     color: "#ffd1dc",
@@ -69,7 +71,9 @@ const FIREWORK_TYPES: Record<FireworkType, FireworkConfig> = {
     horizontalScale: 1,
     verticalScale: 1,
     angleRange: [0, Math.PI * 2],
-    lifeRange: [80, 120],
+    lifeRange: [40, 50],
+    trailLength: 10,
+    trailFade: 0.7,
     explodeHeightRange: [0.4, 0.55],
     duration: [50, 70],
   },
@@ -82,14 +86,80 @@ const FIREWORK_TYPES: Record<FireworkType, FireworkConfig> = {
     horizontalScale: 1,
     verticalScale: 1,
     angleRange: [0, Math.PI * 2],
-    lifeRange: [40, 60],
-    trailLength: 5,
-    trailFade: 0.6,
+    lifeRange: [1000, 1800],
+    trailLength: 15,
+    trailFade: 0.8,
     explodeHeightRange: [0.75, 0.85],
     duration: [60, 80],
   },
+  botan: {
+    color: "#ffcc00",
+    count: 120,
+    speed: [0.5, 1.5],
+    size: [1.5, 2.5],
+    gravity: 0.06,
+    horizontalScale: 1,
+    verticalScale: 1,
+    angleRange: [0, Math.PI * 2],
+    lifeRange: [80, 120],
+    trailLength: 12,
+    trailFade: 0.6,
+    explodeHeightRange: [0.2, 0.45],
+    duration: [70, 90],
+  },
+  yanagi: {
+    color: "#77ff88",
+    count: 200,
+    speed: [0.3, 1],
+    size: [1, 2],
+    gravity: 0.1,
+    horizontalScale: 1,
+    verticalScale: 2,
+    angleRange: [Math.PI * 0.6, Math.PI * 1.4],
+    lifeRange: [80, 100],
+    trailLength: 16,
+    trailFade: 0.5,
+    explodeHeightRange: [0.4, 0.6],
+    duration: [90, 110],
+  },
+  dora: {
+    color: "#ff66ff",
+    count: 160,
+    speed: [0.4, 1.2],
+    size: [1.2, 2],
+    gravity: 0.05,
+    horizontalScale: 1.5,
+    verticalScale: 1.5,
+    angleRange: [0, Math.PI * 2],
+    lifeRange: [70, 100],
+    trailLength: 8,
+    trailFade: 0.4,
+    explodeHeightRange: [0.1, 0.3],
+    duration: [80, 100],
+  },
 };
 
+// ===================== 花火タイプの出現確率 =====================
+const FIREWORK_WEIGHTS: [FireworkType, number][] = [
+  ["shidare", 1],
+  ["kiku", 8],
+  ["senrin", 1],
+  ["botan", 6],
+  ["yanagi", 2],
+  ["dora", 6],
+];
+
+function chooseFireworkType(): FireworkType {
+  const totalWeight = FIREWORK_WEIGHTS.reduce((sum, [, w]) => sum + w, 0);
+  let rand = Math.random() * totalWeight;
+  for (const [type, weight] of FIREWORK_WEIGHTS) {
+    if (rand < weight) return type;
+    rand -= weight;
+  }
+  return "kiku"; // フォールバック
+}
+
+// ===================== メインコンポーネント =====================
 export default function FireworkAnimation() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fireworksRef = useRef<Firework[]>([]);
@@ -105,25 +175,17 @@ export default function FireworkAnimation() {
     let height = (canvas.height = window.innerHeight);
 
     const createFirework = (): Firework => {
-      const type: FireworkType =
-        Math.random() < 0.2
-          ? "senrin"
-          : Math.random() < 0.5
-          ? "shidare"
-          : "kiku";
+      const type = chooseFireworkType();
       const config = FIREWORK_TYPES[type];
-
       const x = Math.random() * width * 0.8 + width * 0.1;
       const explodeRatio =
         Math.random() *
           (config.explodeHeightRange[1] - config.explodeHeightRange[0]) +
         config.explodeHeightRange[0];
       const targetY = height * (1 - explodeRatio);
-
       const maxFrame =
         Math.floor(Math.random() * (config.duration[1] - config.duration[0])) +
         config.duration[0];
-
       return {
         x,
         y: height,
@@ -168,50 +230,52 @@ export default function FireworkAnimation() {
             ctx.beginPath();
             ctx.moveTo(start.x, start.y);
             ctx.lineTo(end.x, end.y);
-            const r = Math.floor(255 * fade);
-            const g = Math.floor(200 * fade);
-            const b = Math.floor(100 * fade);
-            ctx.strokeStyle = `rgba(${r},${g},${b},${fade})`;
+            ctx.strokeStyle = `rgba(255,200,100,${fade})`;
             ctx.lineWidth = 0.6;
             ctx.stroke();
           }
+
+          ctx.beginPath();
+          ctx.arc(fw.x, fw.y, 2, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255,220,120,0.8)";
+          ctx.shadowColor = "#fff";
+          ctx.shadowBlur = 8;
+          ctx.fill();
+          ctx.shadowBlur = 0;
 
           fw.frame++;
           if (fw.frame >= fw.maxFrame) {
             fw.state = "exploding";
             fw.y = fw.targetY;
 
-            if (fw.type === "senrin") {
+            const isMultiColor = Array.isArray(config.color);
+            if (fw.type === "senrin" || isMultiColor) {
+              const colors = config.color as string[];
+              const baseRadius = 30;
+              const step = (Math.PI * 2) / colors.length;
               fw.particles = [];
-              const colors = Array.isArray(config.color)
-                ? config.color
-                : [config.color];
-              for (let i = 0; i < config.count; i++) {
-                const angle =
-                  (Math.PI * 2 * i) / config.count + Math.random() * 0.2;
-                const radius = 30 + Math.random() * 20;
-                const cx = fw.x + Math.cos(angle) * radius;
-                const cy = fw.y + Math.sin(angle) * radius;
-                const particleColor = colors[i % colors.length];
-                const subParticles = Array.from({ length: 20 }, () => {
-                  const subAngle = Math.random() * 2 * Math.PI;
+              for (let i = 0; i < colors.length; i++) {
+                const angle = i * step;
+                const cx = fw.x + Math.cos(angle) * baseRadius;
+                const cy = fw.y + Math.sin(angle) * baseRadius;
+                for (let j = 0; j < config.count; j++) {
+                  const subAngle = Math.random() * Math.PI * 2;
                   const subSpeed = Math.random() * 1.5 + 0.5;
-                  return {
+                  fw.particles.push({
                     x: cx,
                     y: cy,
                     vx: Math.cos(subAngle) * subSpeed,
                     vy: Math.sin(subAngle) * subSpeed,
                     alpha: 1,
-                    color: particleColor,
+                    color: colors[i],
                     size: 1 + Math.random(),
-                    life: 40 + Math.random() * 20,
+                    life: 60 + Math.random() * 40,
                     trail: [],
-                  };
-                });
-                fw.particles.push(...subParticles);
+                  });
+                }
               }
             } else {
-              fw.particles = Array.from({ length: config.count }, () => {
+              fw.particles = Array.from({ length: config.count }, (_, i) => {
                 const angle =
                   Math.random() *
                     (config.angleRange[1] - config.angleRange[0]) +
@@ -221,21 +285,24 @@ export default function FireworkAnimation() {
                   config.speed[0];
                 const vx = Math.cos(angle) * speed * config.horizontalScale;
                 const vy = Math.sin(angle) * speed * config.verticalScale;
+                const colorArr = Array.isArray(config.color)
+                  ? config.color
+                  : [config.color];
+                const particleColor = colorArr[i % colorArr.length];
                 return {
                   x: fw.x,
                   y: fw.y,
                   vx,
                   vy,
                   alpha: 1,
-                  color: config.color as string,
+                  color: particleColor,
                   size:
                     Math.random() * (config.size[1] - config.size[0]) +
                     config.size[0],
-                  life: Math.floor(
+                  life:
                     Math.random() *
                       (config.lifeRange[1] - config.lifeRange[0]) +
-                      config.lifeRange[0]
-                  ),
+                    config.lifeRange[0],
                   trail: [],
                 };
               });
@@ -246,17 +313,20 @@ export default function FireworkAnimation() {
         if (fw.state === "exploding") {
           for (const p of fw.particles) {
             p.trail.push({ x: p.x, y: p.y });
-            if (config.trailLength && p.trail.length > config.trailLength) {
+            if (
+              config.trailLength !== undefined &&
+              p.trail.length > config.trailLength
+            ) {
               p.trail.shift();
             }
 
             p.x += p.vx;
             p.y += p.vy;
             p.vy += config.gravity;
-            p.alpha -= 0.01;
+            p.alpha -= 0.008;
             p.life--;
 
-            if (config.trailFade && p.trail.length > 1) {
+            if (config.trailFade !== undefined && p.trail.length > 1) {
               for (let i = 0; i < p.trail.length - 1; i++) {
                 const start = p.trail[i];
                 const end = p.trail[i + 1];
@@ -265,7 +335,7 @@ export default function FireworkAnimation() {
                 ctx.moveTo(start.x, start.y);
                 ctx.lineTo(end.x, end.y);
                 ctx.strokeStyle = `rgba(${hexToRGB(p.color)},${
-                  p.alpha * fade * (1 - config.trailFade!)
+                  p.alpha * fade * config.trailFade
                 })`;
                 ctx.lineWidth = p.size;
                 ctx.stroke();
@@ -275,7 +345,10 @@ export default function FireworkAnimation() {
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(${hexToRGB(p.color)},${p.alpha})`;
+            ctx.shadowColor = p.color;
+            ctx.shadowBlur = 10 * p.alpha;
             ctx.fill();
+            ctx.shadowBlur = 0;
           }
         }
       }
@@ -283,7 +356,7 @@ export default function FireworkAnimation() {
       fireworksRef.current = fireworksRef.current.filter(
         (fw) =>
           fw.state === "launching" ||
-          fw.particles.some((p) => p.life > 0 && p.alpha > 0)
+          fw.particles.some((p) => p.life > 0 && p.alpha > 0.01)
       );
 
       animationFrameId.current = requestAnimationFrame(animate);

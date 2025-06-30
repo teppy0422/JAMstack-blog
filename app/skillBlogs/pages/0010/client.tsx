@@ -640,7 +640,7 @@ const BlogPage: React.FC = () => {
                 />
               </Box>
               <Box>
-                上図の場合は、
+                上図のような場合は、
                 <Box
                   as="span"
                   bg="custom.theme.light.50"

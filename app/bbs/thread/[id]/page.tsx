@@ -105,8 +105,10 @@ const seasonalAnimations = {
   yae: dynamic(() => import("@/components/season/YaeAnimation")),
   firefly: dynamic(() => import("@/components/season/FireflyAnimation")),
   milkyway: dynamic(() => import("@/components/season/MilkyWayAnimation")),
-  firework: dynamic(() => import("@/components/season/FireworkAnimation")),
-  // ochiba: dynamic(() => import("../../../components/OchibaAnimation")), // 落ち葉アニメーションのインポート
+  firework: {
+    standard: dynamic(() => import("@/components/season/FireworkAnimation")),
+    senkou: dynamic(() => import("@/components/season/SenkouFirework")),
+  }, // ochiba: dynamic(() => import("../../../components/OchibaAnimation")), // 落ち葉アニメーションのインポート
   // 他の季節のアニメーションをここに追加
 };
 import { Global } from "@emotion/react";
@@ -434,12 +436,12 @@ function ThreadContent(): JSX.Element {
     const FireflyEndDate = new Date(today.getFullYear(), 5, 16); // 6月16日
     setIsFirefly(today >= FireflyStartDate && today <= FireflyEndDate);
 
-    const MilkyWayDate = new Date(today.getFullYear(), 5, 27); // 6月27日
+    const MilkyWayDate = new Date(today.getFullYear(), 5, 23); // 6月23日
     const MilkyWayEndDate = new Date(today.getFullYear(), 6, 7); // 7月7日
     setIsMilkyWay(today >= MilkyWayDate && today <= MilkyWayEndDate);
 
-    const FireworkDate = new Date(today.getFullYear(), 5, 27); // 6月27日
-    const FireworkEndDate = new Date(today.getFullYear(), 6, 7); // 7月7日
+    const FireworkDate = new Date(today.getFullYear(), 7, 10); // 8月10日
+    const FireworkEndDate = new Date(today.getFullYear(), 7, 30); // 8月30日
     setIsFirework(today >= FireworkDate && today <= FireworkEndDate);
   }, []);
 
@@ -2662,9 +2664,11 @@ function ThreadContent(): JSX.Element {
               {isYaeActive && <seasonalAnimations.yae />}
               {isFirefly && <seasonalAnimations.firefly />}
               {isMilkyWay && <seasonalAnimations.milkyway />}
-              {/* {isFirework && colorMode === "dark" && (
-                <seasonalAnimations.firework />
-              )} */}
+              {isFirework && <seasonalAnimations.firework.senkou />}
+              {isFirework && colorMode === "dark" && (
+                <seasonalAnimations.firework.standard />
+              )}
+
               <Box
                 as="a"
                 href="#"

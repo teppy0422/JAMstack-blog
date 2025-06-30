@@ -32,7 +32,6 @@ export default function MilkyWayPage() {
   const timeRef = useRef(0);
 
   const [isModalOpen, setModalOpen] = useState(false);
-
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
