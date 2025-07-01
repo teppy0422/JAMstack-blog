@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ latestFile: data.latestFile });
+    return NextResponse.json(data);
   } catch (err) {
     console.error("Error reading JSON file:", err);
     return NextResponse.json(
