@@ -47,14 +47,15 @@ export default function MilkyWayPage() {
     >
       <Box
         display="inline-block"
-        fontSize="20px"
+        fontSize="36px"
         px={1}
         lineHeight={1}
         borderRadius="5px"
         width="auto"
         my={4}
+        fontFamily="kokuryu"
       >
-        七夕
+        七夕祭
       </Box>
       <Box
         mb={2}
@@ -62,8 +63,9 @@ export default function MilkyWayPage() {
         borderRadius="5px"
         display="inline-block"
         width="auto"
+        fontFamily="kokuryu"
       >
-        たなばた
+        たなばたまつり
       </Box>
       <Box />
       <Box
@@ -293,7 +295,7 @@ export default function MilkyWayPage() {
           onClose={closeModal}
           onOpen={openModal}
           colorMode={colorMode}
-          title="源氏蛍"
+          title=""
           bgImage="url('/images/common/tanabata.webp')"
           body={modalBody}
         />

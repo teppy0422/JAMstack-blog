@@ -176,6 +176,8 @@ Deploy 0023
 !Yps is old verstion
 Add Firework Animation
 Deploy 0024
+Added app/api/version
+deploy 0025
 
 #### to do now
 
