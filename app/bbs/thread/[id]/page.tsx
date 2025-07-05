@@ -108,12 +108,12 @@ const seasonalAnimations = {
   firework: {
     standard: dynamic(() => import("@/components/season/FireworkAnimation")),
     senkou: dynamic(() => import("@/components/season/SenkouFirework")),
-  }, // ochiba: dynamic(() => import("../../../components/OchibaAnimation")), // 落ち葉アニメーションのインポート
-  // 他の季節のアニメーションをここに追加
+  },
 };
 import { Global } from "@emotion/react";
 import { CustomLoading } from "@/components/ui/CustomLoading";
 import { StatusDisplay } from "@/components/modals/NowStatusModal";
+import { CalendarDisplay } from "@/components/modals/CalendarModal";
 import { isatty } from "tty";
 import { useUnread } from "@/contexts/UnreadContext";
 import imageCompression from "browser-image-compression";
@@ -3928,7 +3928,7 @@ function ThreadContent(): JSX.Element {
               </Stack>
               <Box mb="10vh" />
             </Content>
-            <StatusDisplay />
+            <CalendarDisplay />
           </div>
         </>
       )}

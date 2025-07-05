@@ -370,7 +370,7 @@ export const StatusDisplay = () => {
         }}
         position="fixed"
         zIndex={1100}
-        top="46px"
+        top="80px"
         right="1px"
         borderRadius="md"
       >

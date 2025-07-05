@@ -179,6 +179,8 @@ Deploy 0024
 Added app/api/version
 deploy 0025
 deploy 0026
+Change Dates to Google Calendar
+deploy 0027
 
 #### to do now
 

@@ -1,3 +1,5 @@
+//src/theme/theme.ts
+
 import { extendTheme } from "@chakra-ui/react";
 
 // NB: Chakra gives you access to `colorMode` and `theme` in `props`
@@ -107,6 +109,7 @@ export const theme = extendTheme({
         },
       },
       system: {
+        50: "#d1cfcd", // ← 追加：とても明るいグレー（例）
         100: "#6f6e6c", // 明るめグレー
         200: "#575653", // 少し暗め
         300: "#3c3b39", // 指定値
@@ -115,6 +118,7 @@ export const theme = extendTheme({
         600: "#262523", // さらに暗く
         700: "#1f1e1c",
         800: "#181716",
+        850: "#141312", // ← 追加：800と900の間くらい
         900: "#121110", // 最も暗い
       },
       hippo: "#73c7c7",
