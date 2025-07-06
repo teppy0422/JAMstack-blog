@@ -37,7 +37,7 @@ import SidebarBBS from "./parts/bbsSidebar";
 import { ScrollText } from "@/components/ui/CustomText";
 import { ProjectLists, CategoryLists } from "@/components/ui/CustomBadge";
 import { AnimationImage } from "@/components/ui/CustomImage";
-import { StatusDisplay } from "@/components/modals/NowStatusModal";
+import { CalendarDisplay } from "@/components/modals/CalendarModal";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
@@ -247,12 +247,10 @@ export default function BBS() {
               </Text>
             </Box>
           </Stack>
-
           <SidebarBBS isMain={true} reload={reloadSidebar} />
-
           <NewThreadModal />
         </Container>
-        <StatusDisplay />
+        <CalendarDisplay />
       </Content>
     </UnreadProvider>
   );

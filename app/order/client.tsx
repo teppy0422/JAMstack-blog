@@ -103,7 +103,15 @@ const toKanjiNumberNatural = (num: number): string => {
 
   return result.join("");
 };
-
+function getDaysElapsed(from: Date | string | null | undefined): number | null {
+  if (!from) return null;
+  const date = typeof from === "string" ? new Date(from) : from;
+  if (isNaN(date.getTime())) return null; // 無効な日付ならnullを返す
+  const now = new Date();
+  const diffTime = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+}
 const getTodayInKanji = (): string => {
   const today = new Date();
   const year = today.getFullYear();
@@ -1464,6 +1472,11 @@ export default function OrderPage() {
                             minW={0} // ← overflowを効かせるために必要
                           >
                             {item.name}
+                            {item.brewingDate && (
+                              <Box as="span" fontSize="13px">
+                                ({getDaysElapsed(item.brewingDate)}日)
+                              </Box>
+                            )}
                           </Text>
                         </HStack>
 

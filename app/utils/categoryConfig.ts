@@ -1,5 +1,6 @@
 export interface MenuItem {
   id: number;
+  brewingDate: Date | null;
   name: string;
   price: number;
   category: string;

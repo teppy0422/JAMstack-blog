@@ -536,7 +536,6 @@ function ThreadContent(): JSX.Element {
     const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
     setStartX(clientX);
     setIsLongPressDisabled(false);
-
     const timeout = setTimeout(() => {
       if (!isLongPressDisabled) {
         setIsLongPress(true);
@@ -551,7 +550,6 @@ function ThreadContent(): JSX.Element {
     if (startX !== null) {
       const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       const moveDistance = Math.abs(clientX - startX);
-
       if (moveDistance > 30) {
         setIsLongPressDisabled(true);
         if (longPressTimeout) {
@@ -949,57 +947,6 @@ function ThreadContent(): JSX.Element {
         return [];
     }
   };
-  //投稿を20だけ表示
-  const fetchPosts = async (offset = 0) => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("posts")
-      .select("*")
-      .eq("thread_id", id)
-      .order("created_at", { ascending: false })
-      .range(offset, offset + postsPerPage - 1);
-
-    if (error) {
-      console.error("Error fetching posts:", error.message);
-    } else {
-      // ファイルサイズを取得して投稿データに追加
-      const newPosts = await Promise.all(
-        data.map(async (post) => {
-          if (post.file_url) {
-            try {
-              const response = await fetch(post.file_url, { method: "HEAD" });
-              if (response.ok) {
-                const contentLength = response.headers.get("content-length");
-                if (contentLength) {
-                  return { ...post, file_size: parseInt(contentLength) };
-                }
-              }
-            } catch (err) {
-              console.error("Error fetching file size:", err);
-            }
-          }
-          return post;
-        })
-      );
-
-      const firstPostTime = newPosts.length > 0 ? newPosts[0].created_at : null;
-      const fixedPosts = getFixedPostsByCategory(threadCategory, firstPostTime);
-      setPosts((prevPosts) => {
-        const existingPostIds = new Set(prevPosts.map((post) => post.id));
-        const uniqueNewPosts = newPosts.filter(
-          (post) => !existingPostIds.has(post.id)
-        );
-        return [...fixedPosts, ...uniqueNewPosts, ...prevPosts];
-      });
-      setHasMore(newPosts.length === postsPerPage);
-    }
-    setLoading(false);
-    window.scrollBy(0, 300);
-    if (!initialLoadComplete) {
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-      setInitialLoadComplete(true);
-    }
-  };
   // 投稿する
   const createPost = async (inputValue: string) => {
     let fileUrl: string = "";
@@ -1036,7 +983,6 @@ function ThreadContent(): JSX.Element {
     } else {
       // メール送信
       const is_email_notify = getUserById(threadUserId)?.is_email_notify;
-      console.log("is_email_notify", is_email_notify);
       if (is_email_notify) {
         if (!isSentNotify) {
           if (threadUserId !== currentUserId) {
@@ -1080,6 +1026,46 @@ function ThreadContent(): JSX.Element {
           }
         }
       }
+      // 管理者にメール送信
+      const adminId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0";
+      const adminEmail = "teppy@aol.jp";
+      if (String(email) !== adminEmail) {
+        const threadUrl = `https://teppy.link/bbs/thread/${id}`; // このページのパスを設定
+        let lastNotifiedAt = getUserById(adminId)?.last_notified_at;
+        let hoursDiff = 25;
+        const now = new Date();
+        if (lastNotifiedAt) {
+          const lastNotifiedDate = new Date(lastNotifiedAt);
+          const timeDiff = now.getTime() - lastNotifiedDate.getTime();
+          hoursDiff = timeDiff / (1000 * 60 * 60);
+        }
+        if (hoursDiff > 24) {
+          // メール送信
+          const senderAvatarUrl = getUserById(currentUserId)?.picture_url;
+          handleSendMail({
+            to: String(adminEmail),
+            subject: "📨 BBSの" + threadTitle + "に新着メッセージ",
+            text: threadTitle + " に新着メッセージ " + inputValue,
+            html: bbsNotifEmailHtml({
+              threadTitle,
+              inputValue,
+              threadUrl,
+              senderAvatarUrl: senderAvatarUrl ?? "",
+            }),
+          });
+          // 送信日時を保存
+          const { error: updateError } = await supabase
+            .from("table_users")
+            .update({ last_notified_at: now.toISOString() })
+            .eq("id", adminId);
+          if (updateError) {
+            console.error("❌ last_notified_at update error:", updateError);
+          }
+          setIsSentNotify(true);
+          console.log("send Email to ", String(email));
+        }
+      }
+
       setNewPostContent("");
       setSelectedFile(null);
       setSelectedFileName(null);
@@ -2393,7 +2379,6 @@ function ThreadContent(): JSX.Element {
             <Modal
               isOpen={fileModalOpen}
               onClose={() => setFileModalOpen(false)}
-              // size="full"
             >
               <ModalOverlay />
               <ModalContent

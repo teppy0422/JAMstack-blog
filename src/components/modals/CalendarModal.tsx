@@ -81,65 +81,70 @@ export const CalendarDisplay = () => {
         position="fixed"
         zIndex={1100}
         top="46px"
-        right="2px"
+        right="4px"
         borderRadius="md"
       >
         <Stack spacing={1}>
-          <Tooltip label="" placement="left" hasArrow>
-            <Box
-              p={0.5}
-              minWidth="0"
-              border="1px solid"
-              borderColor={
-                colorMode === "light"
-                  ? "custom.theme.light.800"
-                  : "custom.theme.dark.200"
-              }
-              borderRadius="md"
-              bgGradient={`linear(to-r, ${getActivityColor(
-                status
-              )}20, ${getActivityColor(status)}10)`}
-              backdropFilter="blur(10px)"
-              boxShadow="sm"
-              _hover={{
-                transform: "translateY(-2px)",
-                boxShadow: "md",
-                transition: "all 0.2s",
-                filter: "none",
-              }}
-              cursor="pointer"
-              onClick={() => onOpen()}
-              sx={{
-                filter: status === "online" ? "none" : "grayscale(100%)",
-                transition: "all 0.3s ease",
-              }}
-            >
-              <Flex textAlign="left" align="center" gap={1}>
-                <Avatar
-                  src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp"
-                  boxSize="20px"
-                  borderColor=""
-                />
-                <Box p={0.5}>
-                  {status === "loading" ? (
-                    <Spinner size="sm" />
-                  ) : (
-                    <Text
-                      fontSize="11px"
-                      fontWeight="600"
-                      color={
-                        colorMode === "light"
-                          ? "custom.theme.light.850"
-                          : "custom.theme.dark.200"
-                      }
-                    >
-                      {status === "online" ? "オンライン" : "オフライン"}
-                    </Text>
-                  )}
-                </Box>
-              </Flex>
-            </Box>
-          </Tooltip>
+          <Box
+            p={0.5}
+            maxWidth="89px"
+            border="1px solid"
+            borderColor={
+              colorMode === "light"
+                ? "custom.theme.light.800"
+                : "custom.theme.dark.200"
+            }
+            borderRadius="md"
+            bgGradient={`linear(to-r, ${getActivityColor(
+              status
+            )}20, ${getActivityColor(status)}10)`}
+            backdropFilter="blur(10px)"
+            boxShadow="sm"
+            _hover={{
+              transform: "translateY(-2px)",
+              boxShadow: "md",
+              transition: "all 0.2s",
+              filter: "none",
+            }}
+            cursor="pointer"
+            onClick={() => onOpen()}
+            sx={{
+              filter: status === "online" ? "none" : "grayscale(100%)",
+              transition: "all 0.3s ease",
+            }}
+          >
+            <Flex textAlign="left" align="center" gap={1}>
+              <Avatar
+                src="https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/avatars/public/f46e43c2-f4f0-4787-b34e-a310cecc221a.webp"
+                boxSize="20px"
+                borderColor=""
+              />
+              <Box
+                p={0.5}
+                maxH="20.5px"
+                w="100%"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                {status === "loading" ? (
+                  <Spinner size="xs" />
+                ) : (
+                  <Text
+                    fontSize="11px"
+                    fontWeight="600"
+                    color={
+                      colorMode === "light"
+                        ? "custom.theme.light.850"
+                        : "custom.theme.dark.200"
+                    }
+                  >
+                    {status === "online" ? "オンライン" : "オフライン"}
+                  </Text>
+                )}
+              </Box>
+            </Flex>
+          </Box>
         </Stack>
       </Box>
       <CustomModal

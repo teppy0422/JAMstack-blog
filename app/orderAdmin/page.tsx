@@ -53,6 +53,9 @@ import {
   MenuItem,
 } from "../utils/categoryConfig";
 
+import DatePickerButton from "@/components/ui/DatePickerButton";
+import DatePicker from "react-datepicker";
+
 interface Order {
   id: number;
   total: number;
@@ -112,6 +115,7 @@ export default function AdminPage() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [newItem, setNewItem] = useState<Partial<MenuItem>>({
     name: "",
+    brewingDate: null,
     price: undefined,
     category: "",
     imageUrl: "",
@@ -170,6 +174,17 @@ export default function AdminPage() {
   const [nutrientValues, setNutrientValues] = useState<Record<string, number>>(
     {}
   );
+  function getDaysElapsed(
+    from: Date | string | null | undefined
+  ): number | null {
+    if (!from) return null;
+    const date = typeof from === "string" ? new Date(from) : from;
+    if (isNaN(date.getTime())) return null; // 無効な日付ならnullを返す
+    const now = new Date();
+    const diffTime = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  }
 
   const handleCopyToClipboardNutrients = () => {
     const nutrients = Object.entries(NUTRIENTS_CONFIG_).map(
@@ -213,7 +228,6 @@ export default function AdminPage() {
     const ingredient = Object.entries(ingredientInputs).map(
       ([key, value]) => `${value}`
     );
-
     const textToCopy =
       "材料に、" +
       ingredient.join(", ") +
@@ -258,7 +272,62 @@ export default function AdminPage() {
         });
       });
   };
+  const handleDuplicate = async (item: MenuItem) => {
+    if (userData?.user_company !== "開発") {
+      toast({
+        title: "エラー",
+        description: "この機能はサブスク契約者のみ使用できます",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
 
+    // nutrients: string[] → { [key]: number } へ変換
+    const nutrientObj = item.nutrients.reduce((acc, cur) => {
+      const [key, val] = cur.split(":");
+      const num = parseFloat(val);
+      if (!isNaN(num)) acc[key] = num;
+      return acc;
+    }, {} as Record<string, number>);
+
+    setEditingItem(null); // 追加モード
+    setNewItem({
+      name: item.name?.endsWith("(複製)") ? item.name : `${item.name} (複製)`,
+      brewingDate: item.brewingDate ? new Date(item.brewingDate) : null,
+      price: item.price,
+      category: item.category,
+      imageUrl: item.imageUrl,
+      imageUrlSub: item.imageUrlSub,
+      ingredients: item.ingredients,
+      is_visible: item.is_visible,
+      recommendation_level: item.recommendation_level,
+      estimated_time: item.estimated_time,
+      recipe: item.recipe,
+      isSoldOut: false, // 複製時は売切でない状態に
+      nutrients: item.nutrients,
+    });
+    setPreviewImage(item.imageUrl);
+    setPreviewImageSub(item.imageUrlSub);
+    setIngredientInputs([...item.ingredients.map((ing) => ing.name), ""]);
+    setIngredientLocations(
+      item.ingredients.reduce(
+        (acc, ing) => ({
+          ...acc,
+          [ing.name]: ing.location,
+        }),
+        {}
+      )
+    );
+    setNutrientValues(nutrientObj);
+    onOpen();
+    setTimeout(() => {
+      if (textareaRef.current) {
+        adjustTextareaHeight(textareaRef.current);
+      }
+    }, 0);
+  };
   // 画像のプリロード関数
   const preloadImage = useCallback(
     (url: string) => {
@@ -674,6 +743,7 @@ export default function AdminPage() {
     // フォームをリセット
     setNewItem({
       name: "",
+      brewingDate: undefined,
       price: undefined,
       category: "",
       imageUrl: "",
@@ -728,7 +798,6 @@ export default function AdminPage() {
 
     const formattedNutrients = Object.entries(nutrientValues)
       .filter(([_, value]) => value != null && !isNaN(value))
-
       .map(([key, value]) => `${key}:${value}`);
 
     try {
@@ -740,6 +809,7 @@ export default function AdminPage() {
         // 更新するデータを準備
         const updateData: any = {
           name: newItem.name,
+          brewingDate: newItem.brewingDate,
           price: newItem.price,
           category: newItem.category,
           ingredients: validIngredients,
@@ -814,6 +884,7 @@ export default function AdminPage() {
         const { error } = await supabase.from("order_menu_items").insert([
           {
             name: newItem.name,
+            brewingDate: newItem.brewingDate,
             price: newItem.price,
             category: newItem.category,
             image_url: newItem.imageUrl,
@@ -879,11 +950,10 @@ export default function AdminPage() {
     setEditingItem(item);
     const formattedNutrients = Object.entries(nutrientValues)
       .filter(([_, value]) => value != null && !isNaN(value))
-
       .map(([key, value]) => `${key}:${value}`);
-
     setNewItem({
       name: item.name,
+      brewingDate: item.brewingDate ? new Date(item.brewingDate) : null,
       price: item.price,
       category: item.category,
       imageUrl: item.imageUrl,
@@ -969,7 +1039,6 @@ export default function AdminPage() {
         .from("order_menu_items")
         .delete()
         .eq("id", id);
-
       if (deleteItemError) {
         toast({
           title: "エラー",
@@ -980,7 +1049,6 @@ export default function AdminPage() {
         });
         return;
       }
-
       toast({
         title: "成功",
         description: "メニューアイテムを削除しました",
@@ -988,7 +1056,6 @@ export default function AdminPage() {
         duration: 3000,
         isClosable: true,
       });
-
       fetchMenuItems();
     } catch (error) {
       console.error("Error in delete process:", error);
@@ -1013,7 +1080,6 @@ export default function AdminPage() {
       });
       return;
     }
-
     const { error } = await supabase
       .from("order_menu_items")
       .update({ is_visible: isVisible })
@@ -1576,8 +1642,22 @@ export default function AdminPage() {
                     bg={searchCategoryBg(item.category)[0]}
                   />
                   <HStack justify="space-between">
-                    <Text fontWeight="600">{item.name}</Text>
-                    <Text>おすすめ度: {item.recommendation_level}</Text>
+                    <Text fontWeight="600">
+                      {item.name}
+                      {item.brewingDate && (
+                        <Box as="span" fontSize="13px">
+                          ({getDaysElapsed(item.brewingDate)}日)
+                        </Box>
+                      )}
+                    </Text>
+                    <Checkbox
+                      isChecked={item.is_visible}
+                      onChange={(e) =>
+                        handleVisibilityChange(item.id, e.target.checked)
+                      }
+                    >
+                      表示
+                    </Checkbox>
                   </HStack>
                   <HStack
                     key={item.id}
@@ -1633,6 +1713,8 @@ export default function AdminPage() {
                             }
                           )}
                         </Text>
+                        <Text>おすすめ度: {item.recommendation_level}</Text>
+
                         {item.user_id && (
                           <Avatar
                             src={getUserById(item.user_id)?.picture_url}
@@ -1666,14 +1748,6 @@ export default function AdminPage() {
                     </HStack>
                     <VStack align="flex-end">
                       <Checkbox
-                        isChecked={item.is_visible}
-                        onChange={(e) =>
-                          handleVisibilityChange(item.id, e.target.checked)
-                        }
-                      >
-                        表示
-                      </Checkbox>
-                      <Checkbox
                         isChecked={item.isSoldOut}
                         onChange={(e) =>
                           handleSoldOutChange(item.id, e.target.checked)
@@ -1684,6 +1758,8 @@ export default function AdminPage() {
                       </Checkbox>
                       <Button
                         size="sm"
+                        px={3}
+                        height="24px"
                         colorScheme="blue"
                         onClick={() => handleEdit(item)}
                       >
@@ -1691,6 +1767,17 @@ export default function AdminPage() {
                       </Button>
                       <Button
                         size="sm"
+                        px={3}
+                        height="24px"
+                        colorScheme="teal"
+                        onClick={() => handleDuplicate(item)}
+                      >
+                        複製
+                      </Button>
+                      <Button
+                        size="sm"
+                        px={3}
+                        height="24px"
                         colorScheme="red"
                         onClick={() => {
                           if (userData?.user_company !== "開発") {
@@ -1720,12 +1807,31 @@ export default function AdminPage() {
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>
-                メニューアイテムの{editingItem ? "編集" : "追加"}
+                {newItem.name}
+                {newItem.brewingDate && (
+                  <Box as="span" fontSize="15px">
+                    ({getDaysElapsed(newItem.brewingDate)}日)
+                  </Box>
+                )}
+                の{editingItem ? "編集" : "追加"}
               </ModalHeader>
               <ModalCloseButton />
               <form onSubmit={handleSubmit}>
                 <ModalBody>
                   <VStack spacing={4} align="stretch">
+                    <FormControl>
+                      <FormLabel>仕込日(仕込系のみ指定)</FormLabel>
+                      <DatePickerButton
+                        value={newItem.brewingDate ?? null}
+                        onChange={(date) =>
+                          setNewItem({
+                            ...newItem,
+                            brewingDate: date,
+                          })
+                        }
+                      />
+                    </FormControl>
+
                     <FormControl>
                       <FormLabel>商品名</FormLabel>
                       <Input
@@ -1768,7 +1874,7 @@ export default function AdminPage() {
                     </FormControl>
 
                     <FormControl>
-                      <FormLabel>画像1</FormLabel>
+                      <FormLabel>メイン画像</FormLabel>
                       <Input
                         type="file"
                         accept="image/*"
@@ -1782,7 +1888,7 @@ export default function AdminPage() {
                         variant="outline"
                         w="full"
                       >
-                        画像1を選択
+                        メイン画像を選択
                       </Button>
                       {previewImage && (
                         <Box mt={2}>
@@ -1797,7 +1903,7 @@ export default function AdminPage() {
                     </FormControl>
 
                     <FormControl>
-                      <FormLabel>画像2</FormLabel>
+                      <FormLabel>ホバー画像</FormLabel>
                       <Input
                         type="file"
                         accept="image/*"
@@ -1811,7 +1917,7 @@ export default function AdminPage() {
                         variant="outline"
                         w="full"
                       >
-                        画像2を選択
+                        ホバー画像を選択
                       </Button>
                       {previewImageSub && (
                         <Box mt={2}>

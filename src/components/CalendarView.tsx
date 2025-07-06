@@ -16,7 +16,6 @@ import {
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
-import CustomModal from "@/components/ui/CustomModal";
 
 const CALENDAR_ID = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID!;
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY!;
@@ -91,7 +90,6 @@ export default function CalendarView() {
         setLoading(false);
       }
     };
-
     fetchEvents();
   }, [year, month]);
 
@@ -226,17 +224,19 @@ export default function CalendarView() {
                         opacity="0.5"
                       />
                     )}
-                    <Box
-                      position="absolute"
-                      left="33.3%"
-                      w="36.7%"
-                      h="100%"
-                      bg="custom.system.700"
-                      borderStart="0.1px solid"
-                      borderStartColor="custom.system.300"
-                      borderEnd="0.1px solid"
-                      borderEndColor="custom.system.300"
-                    />
+                    {eventsByDate[dateStr]?.length && (
+                      <Box
+                        position="absolute"
+                        left="33.3%"
+                        w="36.7%"
+                        h="100%"
+                        // bg="custom.system.700"
+                        borderStart="0.1px solid"
+                        borderStartColor="custom.system.300"
+                        borderEnd="0.1px solid"
+                        borderEndColor="custom.system.300"
+                      />
+                    )}
                     <Box ml={1} fontSize="14px">
                       {date || ""}
                     </Box>

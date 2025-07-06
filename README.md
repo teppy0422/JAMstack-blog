@@ -181,6 +181,8 @@ deploy 0025
 deploy 0026
 Change Dates to Google Calendar
 deploy 0027
+Add stocking date to order
+deploy 0028
 
 #### to do now
 
