@@ -332,8 +332,6 @@ export default function OrderPage() {
               ? "売り切れちゃいました"
               : mode === 1
               ? "品切れとなりました"
-              : mode === 2
-              ? "ごめんなさい☕️ただいま売り切れです"
               : "品切れでございます"}
           </Box>
         ),
@@ -630,7 +628,9 @@ export default function OrderPage() {
     const data = menuItems
       // .filter((item) => item.recommendation_level > 0) // おすすめ度が0より大きいものだけを表示
       .map((item) => ({
-        text: item.name,
+        text:
+          item.name +
+          (item.brewingDate ? `${getDaysElapsed(item.brewingDate)}` : ""),
         value: Math.max(item.recommendation_level * 20, 16), // 最小サイズを10に設定
         category: item.category,
       }));
@@ -1123,7 +1123,7 @@ export default function OrderPage() {
               align="center"
               spacing={{ base: 0, sm: 1, md: 3 }}
             >
-              {mode === 0 || mode === 2 ? (
+              {mode === 0 ? (
                 <Image
                   src="/images/illust/obj/oden2.gif"
                   height="60px"
@@ -1148,8 +1148,6 @@ export default function OrderPage() {
                     fontSize="36px"
                     colorMode={colorMode}
                   />
-                ) : mode === 2 ? (
-                  <Text>カフェぼん</Text>
                 ) : (
                   <Text fontFamily="Kokuryu">料亭ぼん</Text>
                 )}
@@ -1158,7 +1156,7 @@ export default function OrderPage() {
                   mode={mode}
                 />
               </VStack>
-              {mode === 0 || mode === 2 ? (
+              {mode === 0 ? (
                 <Image
                   src="/images/illust/obj/oden2.gif"
                   height="60px"
@@ -1171,7 +1169,7 @@ export default function OrderPage() {
                   alt="カクテル"
                 />
               ) : (
-                mode === 3 && (
+                mode === 2 && (
                   <Image
                     src="/images/illust/obj/ryoutei_logo.webp"
                     height="40px"
@@ -1577,7 +1575,12 @@ export default function OrderPage() {
                                     IMAGE
                                   </Center>
                                 )}
-                                <Text fontWeight={600}>{tooltipData.text}</Text>
+                                <Text
+                                  fontWeight={600}
+                                  color="custom.theme.light.800"
+                                >
+                                  {tooltipData.text}
+                                </Text>
                                 <Text fontSize="sm" fontWeight={400}>
                                   {relatedItem.price}円
                                 </Text>
@@ -1611,58 +1614,6 @@ export default function OrderPage() {
               )}
 
               {mode === 2 && (
-                <Flex direction={{ base: "column", md: "row" }} gap={4} mt={4}>
-                  {/* 左カラム */}
-                  <Box flex={1} bg="custom.theme.light.300" p={4}>
-                    {leftCategories.map((category) => (
-                      <Box key={category} mb={4}>
-                        <Text
-                          fontWeight="600"
-                          fontSize="30px"
-                          mb={2}
-                          fontFamily="yomogi"
-                        >
-                          {category}
-                        </Text>
-                        <Flex direction="column" gap={1}>
-                          {menuItems
-                            .filter((item) => item.category === category)
-                            .map((item) => (
-                              <Box key={item.id} p={2} fontWeight="400">
-                                {item.name}
-                              </Box>
-                            ))}
-                        </Flex>
-                      </Box>
-                    ))}
-                  </Box>
-                  {/* 右カラム */}
-                  <Box flex={1} bg="green.100" p={4}>
-                    {rightCategories.map((category) => (
-                      <Box key={category} mb={4} fontFamily="Yomogi">
-                        <Text fontWeight="bold" mb={2}>
-                          {category}
-                        </Text>
-                        <Flex direction="column" gap={2}>
-                          {menuItems
-                            .filter((item) => item.category === category)
-                            .map((item) => (
-                              <Box
-                                key={item.id}
-                                bg="white"
-                                p={2}
-                                borderRadius="md"
-                              >
-                                {item.name}
-                              </Box>
-                            ))}
-                        </Flex>
-                      </Box>
-                    ))}
-                  </Box>
-                </Flex>
-              )}
-              {mode === 3 && (
                 <SimpleGrid columns={1}>
                   <Box
                     position="relative"
@@ -1992,6 +1943,15 @@ export default function OrderPage() {
                                     }
                                   >
                                     {item.name}
+                                    {item.brewingDate &&
+                                      (() => {
+                                        const days = getDaysElapsed(
+                                          item.brewingDate
+                                        );
+                                        return days !== null ? (
+                                          <>{toKanjiNumberNatural(days)}</>
+                                        ) : null;
+                                      })()}
                                   </Box>
                                   {isLast && (
                                     <Box

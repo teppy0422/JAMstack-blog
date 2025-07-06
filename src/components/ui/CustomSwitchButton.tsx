@@ -3,7 +3,7 @@ import { Box, useColorMode, Text } from "@chakra-ui/react";
 import { IoMoonOutline } from "react-icons/io5";
 import { FaCloud, FaMoon, FaSun } from "react-icons/fa";
 
-const labels = ["居酒屋", "バー", "カフェ", "料亭"];
+const labels = ["居酒屋", "バー", "料亭"];
 
 export const CustomSwitchMultiButton = ({ onClick, mode }) => {
   const { colorMode } = useColorMode();
@@ -18,7 +18,7 @@ export const CustomSwitchMultiButton = ({ onClick, mode }) => {
           : "custom.theme.dark.100"
       }
       h="1.2rem"
-      w="10rem"
+      w="8rem"
       borderRadius="2px"
       border="1px solid"
       borderColor="custom.theme.light.800"
