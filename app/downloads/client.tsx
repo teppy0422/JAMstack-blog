@@ -1424,6 +1424,13 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          version: "1.13",
+                          date: "2025/07/08",
+                          reason: ["エラー報告が手間"],
+                          change: ["WEBにエラー報告を追加"],
+                          inCharge: ["開発"],
+                        },
+                        {
                           version: "1.10",
                           date: "2025/07/04",
                           reason: ["エラー報告が手間"],
