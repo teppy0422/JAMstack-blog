@@ -183,6 +183,8 @@ Change Dates to Google Calendar
 deploy 0027
 Add stocking date to order
 deploy 0028
+Do not cache the latest Download links
+deploy 0029
 
 #### to do now
 

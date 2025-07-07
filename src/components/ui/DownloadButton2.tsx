@@ -66,7 +66,10 @@ const DownloadButton2 = ({
       const hasExtension = /\.[a-zA-Z0-9]+$/.test(url.split("/").pop() || "");
 
       if (!hasExtension) {
-        const res = await fetch("/download/download-meta.json");
+        const res = await fetch(
+          "/download/download-meta.json",
+          { cache: "no-store" } //キャッシュを使用しない
+        );
         const meta = await res.json();
 
         // デバッグ: metaの内容確認

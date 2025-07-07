@@ -1820,7 +1820,7 @@ export default function AdminPage() {
                 <ModalBody>
                   <VStack spacing={4} align="stretch">
                     <FormControl>
-                      <FormLabel>仕込日(仕込系のみ指定)</FormLabel>
+                      <FormLabel>発酵開始日(発酵系のみ指定)</FormLabel>
                       <DatePickerButton
                         value={newItem.brewingDate ?? null}
                         onChange={(date) =>
