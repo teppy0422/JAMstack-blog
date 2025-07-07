@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CustomToast } from "@/components/ui/CustomToast";
 import DownloadButton2 from "@/components/ui/DownloadButton2";
 import "@/styles/globals.css";
+
 const shake = keyframes`
   0% { transform: translateX(0); }
   25% { transform: translateX(-0.5px); }

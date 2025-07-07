@@ -25,6 +25,7 @@ import {
   Spacer,
   Center,
   useColorMode,
+  useToast,
 } from "@chakra-ui/react";
 
 import { PiAppWindowFill, PiArrowFatLineDownLight } from "react-icons/pi";
@@ -59,6 +60,7 @@ import VBATrustSettingsPage from "@/components/howto/office/VbaTrustSettings";
 
 import ModalYps from "app/downloads/tabs/yps/yps";
 import BorderBox from "@/components/ui/BorderBox";
+import { downloadLatestFile } from "@/lib/downloadLatestFile";
 
 const BlogPage: React.FC = () => {
   const {
@@ -93,7 +95,7 @@ const BlogPage: React.FC = () => {
     onOpen: onModalOpen,
     onClose: onModalClose,
   } = useDisclosure();
-
+  const toast = useToast();
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
 
@@ -107,7 +109,6 @@ const BlogPage: React.FC = () => {
   //右リストの読み込みをlanguage取得後にする
   if (!isLanguageLoaded) {
   }
-
   return (
     <>
       <Frame sections={sections} sectionRefs={sectionRefs}>
@@ -1090,7 +1091,7 @@ const BlogPage: React.FC = () => {
             })}
           </Text>
           <ImageWithHighlight
-            src="/images/0010/yps-masterfolder.webp"
+            src="/images/0010/yps-masterFolder.webp"
             label="※Explorer[setting_の場所]"
             highlights={[
               {
@@ -1936,7 +1937,7 @@ const BlogPage: React.FC = () => {
               <br />
               {"1." +
                 getMessage({
-                  ja: "200Pでの動作テストは未確認。実際に使用して不具合がある場合は連絡ください。",
+                  ja: "200Pでの動作テストは未確認。実際に使用して不具合がある場合は連絡ください。特に100Pの場合は72と73が入れ替わって点滅するという不具合が有りました。200Pでも同様の不具合がある可能性が高いです。",
                   us: "The 200P has not been held at the factory in operation, so its operation has not been tested.",
                   cn: "由于 200P 出厂时未进行运行测试。",
                   language,

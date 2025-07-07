@@ -185,6 +185,8 @@ Add stocking date to order
 deploy 0028
 Do not cache the latest Download links
 deploy 0029
+エラーログを更新する log-error を追加
+deploy 0030
 
 #### to do now
 
