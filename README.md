@@ -187,6 +187,8 @@ Do not cache the latest Download links
 deploy 0029
 エラーログを更新する log-error を追加
 deploy 0030
+Added yps1.13
+deploy 0031
 
 #### to do now
 
