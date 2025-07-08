@@ -1,4 +1,4 @@
-// app/api/log-error/route.ts
+// app/api/vba/log-error/route.ts
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/utils/supabase/admin";
 

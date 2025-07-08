@@ -125,14 +125,16 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                           </>
                         )}
                         {item.reason && item.reason.length > 0 && (
-                          <Box mt={1} pl={0}>
+                          <Box my={0.5} pl={0}>
                             <List spacing={1} pl={0}>
                               {item.reason.map((r, i) => (
                                 <ListItem key={i}>
                                   <ListIcon
                                     as={WarningTwoIcon}
+                                    position="relative"
                                     color="red.500"
                                     mr={1}
+                                    top="-2px"
                                   />
                                   {r}
                                 </ListItem>
@@ -141,14 +143,16 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                           </Box>
                         )}
                         {item.change && item.change.length > 0 && (
-                          <Box mt={1} pl={0}>
+                          <Box my={0.5} pl={0}>
                             <List spacing={1} pl={0}>
                               {item.change.map((c, i) => (
                                 <ListItem key={i}>
                                   <ListIcon
                                     as={CheckCircleIcon}
+                                    position="relative"
                                     color="green.500"
                                     mr={1}
+                                    top="-2px"
                                   />
                                   {c}
                                 </ListItem>

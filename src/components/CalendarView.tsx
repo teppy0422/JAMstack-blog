@@ -237,8 +237,31 @@ export default function CalendarView() {
                         borderEndColor="custom.system.300"
                       />
                     )}
-                    <Box ml={1} fontSize="14px">
-                      {date || ""}
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      px={1}
+                    >
+                      <Box fontSize="14px">{date || ""}</Box>
+                      <Box fontSize="10px">
+                        {(() => {
+                          if (!dateStr || !eventsByDate[dateStr]) return null;
+                          let totalMinutes = 0;
+                          eventsByDate[dateStr].forEach((event) => {
+                            if (event.start.dateTime && event.end.dateTime) {
+                              const start = new Date(event.start.dateTime);
+                              const end = new Date(event.end.dateTime);
+                              totalMinutes +=
+                                (end.getTime() - start.getTime()) / 60000;
+                            }
+                          });
+                          if (totalMinutes === 0) return null;
+                          const hoursRounded =
+                            Math.round((totalMinutes / 60) * 10) / 10;
+                          return hoursRounded.toFixed(1);
+                        })()}
+                      </Box>
                     </Box>
                     {date &&
                       eventsByDate[dateStr] &&
