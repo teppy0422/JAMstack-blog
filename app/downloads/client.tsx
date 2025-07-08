@@ -1424,6 +1424,17 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          version: "1.17",
+                          date: "2025/07/08",
+                          reason: ["1.04以降でVerupが出来ない"],
+                          change: [
+                            "Verupボタンの配置",
+                            "シートイベントを削除",
+                            "不具合報告ログを修正",
+                          ],
+                          inCharge: ["開発"],
+                        },
+                        {
                           version: "1.13",
                           date: "2025/07/08",
                           reason: ["エラー報告が手間"],
