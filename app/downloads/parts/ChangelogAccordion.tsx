@@ -71,7 +71,12 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
           <>
             <AccordionButton p="0" pl="7px">
               <Flex flex="1" textAlign="left" alignItems="center" fontSize="xs">
-                <Box fontSize="xs" py="1px" px="0">
+                <Box
+                  fontSize={isExpanded ? "sm" : "xs"}
+                  py="1px"
+                  px="0"
+                  transition="all 0.3s ease-in-out"
+                >
                   更新履歴
                 </Box>
                 <AccordionIcon

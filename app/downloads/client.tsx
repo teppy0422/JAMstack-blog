@@ -59,6 +59,8 @@ import Modal70 from "./tabs/70/Modal70";
 
 import ModalYps from "./tabs/yps/yps";
 import YouTubeModal from "./parts/YouTubeModal";
+import UsageLogSummaryView from "./parts/UsageLogSummaryView";
+import ErrorLogsView from "./parts/ErrorLogsView";
 
 export default function Ui({ filterId }: { filterId?: string }) {
   const { colorMode } = useColorMode();
@@ -1420,6 +1422,12 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         </Stack>
                       </Flex>
                     </Box>
+                    <Divider borderColor="gray.500" />
+                    <UsageLogSummaryView app="yps" />
+
+                    <Divider borderColor="gray.500" />
+                    <ErrorLogsView project="yps" />
+
                     <Divider borderColor="gray.500" />
                     <ChangelogAccordion
                       changelog={[
