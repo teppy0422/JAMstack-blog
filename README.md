@@ -195,11 +195,17 @@ Added yps1.17
 deploy 0033
 Added error log and execution history to download page
 deploy 0034
+Fixed a bug that caused the last update date of the download page to be today in production.
+deploy 0035
 
 #### to do now
 
 switch アイコンの向きを変える
 react-icons を利用しない
+
+過去の日程のテーブル削除
+
+ダッシュボードの作成
 
 ui をまとめる input とか button とか toast とか
 サブ自動立案
