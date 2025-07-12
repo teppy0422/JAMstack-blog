@@ -24,12 +24,10 @@ export default function LatestUpdateDate({
     if (!relativePath) return;
 
     getLatestFileMeta(relativePath).then((meta) => {
-      console.log("meta from getLatestFileMeta:", meta); // ← 追加
       if (!meta) return;
 
       if (meta.latestUpdated) {
         const date = new Date(meta.latestUpdated);
-        console.log("Parsed date:", date); // ← 追加
         const formatted = date.toLocaleDateString("ja-JP", {
           timeZone: "Asia/Tokyo",
         });

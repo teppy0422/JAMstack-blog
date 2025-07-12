@@ -149,7 +149,7 @@ export default function Header() {
       const rotate = () => {
         if (path) {
           angle = (angle + 0.1) % 360; // Adjust the increment for speed
-          path.setAttribute("transform", `rotate(${angle} 128.4 227.5)`); // Set the correct center
+          path.setAttribute("transform", `rotate(${angle} 250 250)`); // Set the correct center
         }
         animationFrameId = requestAnimationFrame(rotate);
       };
@@ -160,7 +160,7 @@ export default function Header() {
     };
     const timeoutId = setTimeout(fetchElement, 100);
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [isAlertModalOpen]);
   // 警告メッセージ(スケールが大小するアニメーション_内側)
   useEffect(() => {
     const fetchElement = () => {
@@ -197,7 +197,7 @@ export default function Header() {
     };
     const timeoutId = setTimeout(fetchElement, 100);
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [isAlertModalOpen]);
   // 警告メッセージ(スケールが大小するアニメーション_外側)
   useEffect(() => {
     const fetchElement = () => {
@@ -234,7 +234,7 @@ export default function Header() {
     };
     const timeoutId = setTimeout(fetchElement, 100);
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [isAlertModalOpen]);
   // 警告メッセージ(モグラの動作)
   useEffect(() => {
     const fetchElement = () => {
@@ -273,7 +273,7 @@ export default function Header() {
     // Use setTimeout to ensure the element is available
     const timeoutId = setTimeout(fetchElement, 100);
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [isAlertModalOpen]);
 
   return (
     <>
@@ -341,6 +341,10 @@ export default function Header() {
               <Box
                 display={{ base: "none", sm: "block" }}
                 sx={{ transform: "rotate(-18deg)" }}
+                cursor="pointer"
+                onClick={() => setAlertModalOpen(true)}
+                _hover={{ transform: "scale(1.1)" }}
+                transition="all 0.3s ease-in-out"
               >
                 <HippoFootPrintIcon
                   size="32px"

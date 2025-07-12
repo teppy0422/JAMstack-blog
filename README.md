@@ -1,48 +1,5 @@
-# Markdown の基本書き方ガイド
-
-Markdown は、シンプルな記法で文書を記述できるマークアップ言語です。ここでは基本的な構文を紹介します。
-
-## 見出し
-
-# 見出し 1
-
-## 見出し 2
-
-### 見出し 3
-
-_イタリック_
-**太字**
-~~打ち消し線~~
-
-- アイテム 1
-- アイテム 2
-  - サブアイテム
-
-1. 最初の項目
-2. 次の項目
-
-[リンクテキスト](https://google.com)
-
-![画像の代替テキスト](https://google.com)
-
-[SendGrid](https://app.sendgrid.com/email_activity?_gl=1*10mbfns*_gcl_au*MTgyMzcxNTA5Ni4xNzUwMzMwNTY4*_ga*MTIzNTgzODU3Ny4xNzUwMzMwNTY4*_ga_8W5LR442LD*czE3NTAzNTAyMjkkbzMkZzEkdDE3NTAzNTYxMzgkajYwJGwwJGgw&filters=%22%22&isAndOperator=true&page=1)
-
-> これは引用です。
-
-これは `console.log` を使った例です。
-
-```js
-function hello() {
-  console.log("Hello, Markdown!");
-}
-```
-
-| 名前 | 年齢 | 職業       |
-| ---- | ---- | ---------- |
-| 山田 | 30   | エンジニア |
-| 鈴木 | 25   | デザイナー |
-
-#### 2025/05/16. README.md に履歴を残す
+:2025-05-16:
+README.md に履歴を残す
 
 pages/skillBlogs/0000.tsx を app/skillBlogs/pages.tsx に移動
 silleBlogs を全て移動
@@ -50,16 +7,11 @@ silleBlogs を全て移動
 privacy と terms を移動
 pages/BBS.tsx を移動
 
-##### metadata を各ページに記載
-
-illust/
-
 ##### pages/api/auth/を app に移動は Edge と supabase が対応してないから断念して残しておく
 
 contexts に移動済み
 
-#### 05/17.
-
+:2025-05-17:
 components を src に移動開始
 youtube の menu を編集
 youtube の遷移先を修正
@@ -96,16 +48,6 @@ applList のデザイン修正
 
 toast のカスタム
 
-#### chakra-v3 に更新
-
-useColorMode が使えない ->自作コンテキストに変更
-Dvider が
-Motion が
-Modal が
-Progress が
-extendTheme が
-Modal が Dialog
-Accordion
 npx @chakra-ui/cli snippet add tooltip
 
 skillBlogs/0010/にサムネとかディスクリプションを設定する構造を追加
@@ -116,9 +58,11 @@ Review decision to scroll to the bottom in bbs/.
 Review the height at the bottom of skillBlogs/.
 Fix position of open/close icon in bbs preview.
 Click on a firefly to view the description page.
+:2025-06-10:
 Fix design of threadTitle in BBS.
 Review Stiky date label.
 -deploy 0006-
+:2025-06-11:
 Review design login infomation.
 Add three close button.
 Fix background color of currentDate.
@@ -131,8 +75,10 @@ CustomModalize the newly add button on bbs.
 fixed getMessage.
 Change all modals in downloads to customModal.
 -deploy 0009-
+:2025-06-16:
 Change youtube as a whole
 -deploy 0010-
+:2025-06-17:
 -deploy 0011-
 Add AspectRatio to YouTubeFrame
 Support YouTube Play in YouTubeFrame
@@ -141,14 +87,17 @@ Add icon if youtube.com to youtube
 Changed control to animate when mousing over video
 Fix youtube progress bar
 -deploy 0012-
+:2025-06-18:
 Added Play and Pause button animation to youtube page.
 Change Visible youtube's icon if thumbnail of included youtube.com
 -deploy 0013-
+:2025-06-19:
 Add icons to Mac-style 3-color buttons
 Added Screen for unauthenticated and not logged in
 Changed header icon when not logged in.
 Login information design changed to Liquid Glass.
 -deploy 0014-
+:2025-06-23:
 CustomModalize the login user icon.
 SendMail successfully with test/page.tsx
 SendMail embedded in bbs/[id]/page.tsx
@@ -157,95 +106,100 @@ Added html format to SendMail
 -deploy 0015-
 Re-create CustomToast and rewrite toast
 -deploy 0017-
+:2025-06-24:
 Modalize alert
 -deploy 0018-
+:2025-06-26:
 Fix get-email
 install ngrok to allow https connections even on localhost
 npm install @daily-co/daily-js
 Install daily Add voice chat
 -deploy 0019-
+:2025-06-27:
 -deploy 0020-
 change Adobe font setting from head to layout
 -deploy 0021-
 Correct header balance and design
 Added Tanabata animation
 -deploy 0022-
+:2025-06-28:
 Added Yps1.03
 Fixed SkillBolgs 0010
 Deploy 0023
+:2025-07-01:
 !Yps is old verstion
 Add Firework Animation
 Deploy 0024
+:2025-07-02:
 Added app/api/version
 deploy 0025
+:2025-07-04:
 deploy 0026
+:2025-07-05:
 Change Dates to Google Calendar
 deploy 0027
+:2025-07-06:
 Add stocking date to order
 deploy 0028
+:2025-07-07:
 Do not cache the latest Download links
 deploy 0029
-エラーログを更新する log-error を追加
+Added log-error to update error log
 deploy 0030
+:2025-07-08:
 Added yps1.13
 deploy 0031
 Change Api path
 deploy 0032
 Added yps1.17
 deploy 0033
+:2025-07-09:
 Added error log and execution history to download page
 deploy 0034
+:2025-07-10:
 Fixed a bug that caused the last update date of the download page to be today in production.
 deploy 0036
+:2025-07-12:
+Design modification of alert(this modal)
+deploy 0037
 
-#### to do now
+#### Doing Now
 
 switch アイコンの向きを変える
 react-icons を利用しない
 
-過去の日程のテーブル削除
-
-ダッシュボードの作成
-
 ui をまとめる input とか button とか toast とか
 サブ自動立案
 
-#### to do
+#### What's Next
 
+ダッシュボードの作成
 Changed our approach to this activity to customModal.
 
-新しく追加ボタンで画面が更新されない気がする
-
+I think the screen is not refreshing with the add new button.
 if is is useState, rendering will occur each time, so change it to useRef.
 
-#### confirmation required
+Add metadata to each page
+Update to chakra-v3
+1.useColorMode が使えない ->自作コンテキストに変更
+2.Dvider が
+3.Motion が
+4.Modal が
+5.Progress が
+6.extendTheme が
+7.Modal が Dialog
+8.Accordion
 
+#### Wait and See
+
+supabase 過去の日程のテーブル削除
 order/のサムネ変更が反映されないから様子見
 
-#### comming soon...
+voicechat の api 消費がヤバい
 
-全てのリンクをクリックして動作確認
+##### metadata を各ページに記載
 
-#### ngrok で localhost を https にする
-
-1.https://dashboard.ngrok.com にアクセスしてアカウントを作成（無料）
-
-2.ダッシュボードに表示されている「Auth Token」をコピー
-
-3.ngrok config add-authtoken <ここにトークン貼る>
-
-4.ngrok http 3000
-
-5.表示される Forwarding ではじまるアドレスで接続する
-
-npm run dev -- --hostname 0.0.0.0
-ngrok http 3000
-
-端末識別子は「板の上」に重ならず配置される
-各端末の位置は線長から推測する
-板は x と y で表現される。z は無い。
-端末は電線で接続されている
-電線は他の端末を跨がない（物理的に接触・交差しない）
-電線は分岐点を経由することがある
-電線に曲線は存在しない。必ず直線とする。
-分岐点は黒い点で表現する
+illust/
+order/
+orderAdmin/
+skillBlogs/

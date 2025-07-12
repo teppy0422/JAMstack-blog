@@ -17,12 +17,12 @@ import { FaLine } from "react-icons/fa";
 import { PhoneIcon } from "@/components/ui/icons";
 import { AnimationImage } from "@/components/ui/CustomImage";
 import { SunderText, ScrollText } from "@/components/ui/CustomText";
+import Readme from "../Readme";
 
 interface AlertModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
 export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose }) => {
   const { colorMode } = useColorMode();
   const dummyRef = useRef(null);
@@ -118,7 +118,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose }) => {
                   />
                 </svg>
                 <svg
-                  width="450"
+                  width="460"
                   height="500"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="70.9 170 115 115"
@@ -141,7 +141,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose }) => {
                   animation="nyoki 2s forwards"
                 />
                 <svg
-                  width="450"
+                  width="480"
                   height="500"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="70.9 170 115 115"
@@ -165,42 +165,80 @@ export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose }) => {
                   <AnimationImage
                     src="/images/illust/hippo/hippo_017_a.png"
                     width="70px"
-                    top="34px"
+                    top="18px"
                     left="162px"
                     rotate="-18deg"
                     animation="nyoki_mole 2s forwards"
                   />
                 </Box>
-                <svg
-                  id="rotating-svg"
-                  width="450"
-                  height="400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="70.9 170 115 115"
-                  style={{ position: "absolute", zIndex: 101 }}
-                >
-                  <path
-                    id="rotating-path"
-                    d="m 100.75502,265.1916 c -2.16308,-1.10542 -3.495995,-3.10693 -5.129849,-7.703 -2.17034,-6.10521 -2.672624,-6.82025 -7.240335,-10.30721 -3.464822,-2.645 -4.955033,-4.20358 -5.725751,-5.98841 -0.901572,-2.08788 -0.788166,-3.52146 0.711847,-8.99849 0.808263,-2.95123 1.304931,-5.26354 1.32251,-6.15715 0.01682,-0.85486 -0.517511,-3.34681 -1.327075,-6.18909 -2.368648,-8.3161 -1.878074,-9.82593 4.926281,-15.16153 2.325605,-1.82361 4.222617,-3.52557 4.711482,-4.22705 0.511028,-0.73327 1.468359,-2.89591 2.549152,-5.75859 2.005777,-5.3127 2.756667,-6.53915 4.713278,-7.69833 1.67262,-0.99096 3.79434,-1.37594 8.15213,-1.47923 5.74494,-0.13618 6.57159,-0.41942 11.91598,-4.08295 6.46761,-4.43348 8.51988,-4.39608 15.33151,0.27939 4.72345,3.24215 6.09207,3.70486 11.27986,3.8136 8.79102,0.18428 10.44075,1.29311 13.11462,8.81477 2.17033,6.1052 2.67262,6.82025 7.24033,10.3072 3.46482,2.64502 4.95503,4.20359 5.72574,5.98843 0.90158,2.08787 0.78817,3.52145 -0.71184,8.99847 -0.80826,2.95124 -1.30493,5.26355 -1.32251,6.15716 -0.0168,0.85485 0.51751,3.3468 1.32707,6.18909 2.36616,8.3073 1.87387,9.80901 -4.98223,15.19816 -2.27387,1.78734 -4.17056,3.49455 -4.65552,4.19042 -0.51103,0.73328 -1.46836,2.89592 -2.54915,5.75859 -2.00578,5.31269 -2.75667,6.53914 -4.71328,7.69834 -1.67262,0.99094 -3.79434,1.37594 -8.15213,1.47922 -5.74075,0.13607 -6.57387,0.42099 -11.89289,4.06712 -6.52163,4.47051 -8.52093,4.43654 -15.35547,-0.26092 -4.76078,-3.27214 -6.01383,-3.68538 -11.68428,-3.85324 -4.01838,-0.11896 -6.35848,-0.45078 -7.57947,-1.07475 z"
-                    // fill="#FFF"
-                    fill="#fcfcfc"
-                    stroke="#444"
-                    stroke-width="3"
-                  />
-                </svg>
-                <AnimationImage
-                  src="/images/illust/hippo/hippo_020.svg"
-                  width="152px"
-                  bottom="0px"
-                  animation="nyoki_rabit 2s forwards, moveAndRotate 5s infinite 5s"
-                />
-                <AnimationImage
-                  src="/images/illust/hippo/hippo_008.png"
-                  width="32px"
-                  left="80px"
-                  bottom="73px"
-                  animation="nyoki_rabit 2s forwards, rabitJump 10s infinite 7s"
-                />
+                <Box position="absolute">
+                  <Box
+                    position="relative"
+                    zIndex={101}
+                    w="500px"
+                    h="500px"
+                    overflow="hidden"
+                  >
+                    <svg width="0" height="0">
+                      <defs>
+                        <clipPath id="hippoClip" clipPathUnits="userSpaceOnUse">
+                          <path
+                            id="rotating-path"
+                            d="
+m 139.02,400.77 c -8.65,-4.42 -13.98,-12.43 -20.52,-30.81 -8.68,-24.42 -10.69,-27.28 -28.96,-41.23 -13.86,-10.58 -19.82,-16.81 -22.90,-23.95 -3.61,-8.35 -3.15,-14.09 2.85,-35.99 3.23,-11.80 5.22,-21.05 5.29,-24.63 0.07,-3.42 -2.07,-13.39 -5.31,-24.76 -9.47,-33.26 -7.51,-39.30 19.71,-60.65 9.30,-7.29 16.89,-14.10 18.85,-16.91 2.04,-2.93 5.87,-11.58 10.20,-23.03 8.02,-21.25 11.03,-26.16 18.85,-30.79 6.69,-3.96 15.18,-5.50 32.61,-5.92 22.98,-0.54 26.29,-1.68 47.66,-16.33 25.87,-17.73 34.08,-17.58 61.33,1.12 18.89,12.97 24.37,14.82 45.12,15.25 35.16,0.74 41.76,5.17 52.46,35.26 8.68,24.42 10.69,27.28 28.96,41.23 13.86,10.58 19.82,16.81 22.90,23.95 3.61,8.35 3.15,14.09 -2.85,35.99 -3.23,11.80 -5.22,21.05 -5.29,24.63 -0.07,3.42 2.07,13.39 5.31,24.76 9.46,33.23 7.50,39.24 -19.93,60.79 -9.10,7.15 -16.68,13.98 -18.62,16.76 -2.04,2.93 -5.87,11.58 -10.20,23.03 -8.02,21.25 -11.03,26.16 -18.85,30.79 -6.69,3.96 -15.18,5.50 -32.61,5.92 -22.96,0.54 -26.30,1.68 -47.57,16.27 -26.09,17.88 -34.08,17.75 -61.42,-1.04 -19.04,-13.09 -24.06,-14.74 -46.74,-15.41 -16.07,-0.48 -25.43,-1.80 -30.32,-4.30 z
+"
+                          />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    <Box
+                      position="absolute"
+                      w="500px"
+                      h="500px"
+                      sx={{
+                        animation: "spin 120s linear infinite",
+                        transformOrigin: "center",
+                        "@keyframes spin": {
+                          from: { transform: "rotate(0deg)" },
+                          to: { transform: "rotate(360deg)" },
+                        },
+                      }}
+                    >
+                      <svg
+                        id="rotating-svg"
+                        width="500"
+                        height="500"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="70.9 170 115 115"
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                        }}
+                      >
+                        <path
+                          // id="rotating-path"
+                          d="m 100.75502,265.1916 c -2.16308,-1.10542 -3.495995,-3.10693 -5.129849,-7.703 -2.17034,-6.10521 -2.672624,-6.82025 -7.240335,-10.30721 -3.464822,-2.645 -4.955033,-4.20358 -5.725751,-5.98841 -0.901572,-2.08788 -0.788166,-3.52146 0.711847,-8.99849 0.808263,-2.95123 1.304931,-5.26354 1.32251,-6.15715 0.01682,-0.85486 -0.517511,-3.34681 -1.327075,-6.18909 -2.368648,-8.3161 -1.878074,-9.82593 4.926281,-15.16153 2.325605,-1.82361 4.222617,-3.52557 4.711482,-4.22705 0.511028,-0.73327 1.468359,-2.89591 2.549152,-5.75859 2.005777,-5.3127 2.756667,-6.53915 4.713278,-7.69833 1.67262,-0.99096 3.79434,-1.37594 8.15213,-1.47923 5.74494,-0.13618 6.57159,-0.41942 11.91598,-4.08295 6.46761,-4.43348 8.51988,-4.39608 15.33151,0.27939 4.72345,3.24215 6.09207,3.70486 11.27986,3.8136 8.79102,0.18428 10.44075,1.29311 13.11462,8.81477 2.17033,6.1052 2.67262,6.82025 7.24033,10.3072 3.46482,2.64502 4.95503,4.20359 5.72574,5.98843 0.90158,2.08787 0.78817,3.52145 -0.71184,8.99847 -0.80826,2.95124 -1.30493,5.26355 -1.32251,6.15716 -0.0168,0.85485 0.51751,3.3468 1.32707,6.18909 2.36616,8.3073 1.87387,9.80901 -4.98223,15.19816 -2.27387,1.78734 -4.17056,3.49455 -4.65552,4.19042 -0.51103,0.73328 -1.46836,2.89592 -2.54915,5.75859 -2.00578,5.31269 -2.75667,6.53914 -4.71328,7.69834 -1.67262,0.99094 -3.79434,1.37594 -8.15213,1.47922 -5.74075,0.13607 -6.57387,0.42099 -11.89289,4.06712 -6.52163,4.47051 -8.52093,4.43654 -15.35547,-0.26092 -4.76078,-3.27214 -6.01383,-3.68538 -11.68428,-3.85324 -4.01838,-0.11896 -6.35848,-0.45078 -7.57947,-1.07475 z"
+                          fill="#777"
+                          stroke="#444"
+                          stroke-width="3"
+                        />
+                      </svg>
+                    </Box>
+                    <Box
+                      position="absolute"
+                      w="500px"
+                      h="500px"
+                      top="0px"
+                      sx={{
+                        clipPath: "url(#hippoClip)",
+                      }}
+                    >
+                      <Readme />
+                    </Box>
+                  </Box>
+                </Box>
+
                 <Box
                   position="fixed"
                   zIndex={100}
@@ -233,31 +271,37 @@ export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose }) => {
                   textAlign="center"
                   m={0}
                   p={0}
-                  top="90px"
+                  top="84px"
                 >
-                  <SunderText colorMode={colorMode} text="更新内容" />
-                  <Text
-                    fontSize="md"
-                    fontWeight="400"
-                    color={colorMode === "light" ? "#000" : "#000"}
-                    mt={-3}
-                    mb={1}
-                    display="inline-block"
-                  >
-                    ・5/8 注文システムの公開
-                    <br />
-                    ・5/8 タイピングをアプリ一覧に移動
-                    <br />
-                    ・5/18 より現代的なフォルダ構成に変更
-                    <br />
-                    <br />
-                    ・6/20 ヘッダーをリキッドグラスに変更
-                    <br />
-                    ・6/23 BBSチャットの通知機能を追加
-                    <br />
-                    ・6/24 モーダルのデザインを修正
-                  </Text>
+                  <SunderText
+                    colorMode={colorMode}
+                    text="更新内容"
+                    fontSize="60px"
+                  />
                 </Box>
+                <Box
+                  position="absolute"
+                  zIndex={101}
+                  textAlign="center"
+                  m={0}
+                  p={0}
+                  w="152px"
+                  bottom="0px"
+                >
+                  <AnimationImage
+                    src="/images/illust/hippo/hippo_020.svg"
+                    width="152px"
+                    bottom="0px"
+                    animation="nyoki_rabit 2s forwards, moveAndRotate 5s infinite 5s"
+                  />
+                </Box>
+                <AnimationImage
+                  src="/images/illust/hippo/hippo_008.png"
+                  width="32px"
+                  left="80px"
+                  bottom="73px"
+                  animation="nyoki_rabit 2s forwards, rabitJump 10s infinite 7s"
+                />
               </Box>
               <Text
                 fontSize="sm"
@@ -368,11 +412,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose }) => {
               />
             </Box>
           </ModalBody>
-          <ModalFooter>
-            {/* <Button colorScheme="blue" onClick={() => setAlertModalOpen(false)}>
-              閉じる
-            </Button> */}
-          </ModalFooter>
+          <ModalFooter></ModalFooter>
         </Box>
       </ModalContent>
     </Modal>

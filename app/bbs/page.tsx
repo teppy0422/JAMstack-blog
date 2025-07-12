@@ -118,7 +118,6 @@ export default function BBS() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const handleProjectClick = (clickedProject: string | null) => {
-    console.log("clickedProject: ", clickedProject);
     setClickedProject(clickedProject);
     if (clickedProject) {
       setProjectMessage("");
@@ -126,7 +125,6 @@ export default function BBS() {
     inputRef.current?.focus();
   };
   const handleCategoryClick = (clickedCategory: string | null) => {
-    console.log("clickedCategory: ", clickedCategory);
     setClickedCategory(clickedCategory);
     if (clickedCategory) {
       setCategoryMessage("");
