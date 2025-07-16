@@ -162,6 +162,8 @@ deploy 0036
 :2025-07-12:
 Design modification of alert(this modal)
 deploy 0037
+Fixed copying process of code and added title
+deploy 0038
 
 #### Doing Now
 

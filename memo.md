@@ -36,8 +36,7 @@ _イタリック_
 [SendGrid](https://app.sendgrid.com/email_activity?_gl=1*10mbfns*_gcl_au*MTgyMzcxNTA5Ni4xNzUwMzMwNTY4*_ga*MTIzNTgzODU3Ny4xNzUwMzMwNTY4*_ga_8W5LR442LD*czE3NTAzNTAyMjkkbzMkZzEkdDE3NTAzNTYxMzgkajYwJGwwJGgw&filters=%22%22&isAndOperator=true&page=1)
 
 > これは引用です。
-
-これは `console.log` を使った例です。
+> これは `console.log` を使った例です。
 
 ```js
 function hello() {
