@@ -46,7 +46,7 @@ export default function CodeBlock({ code, title }: Props) {
             fontWeight="600"
             color="custom.theme.light.850"
             pl="6px"
-            pt="7px"
+            pt="9px"
           >
             {title}
           </Text>
@@ -55,7 +55,7 @@ export default function CodeBlock({ code, title }: Props) {
         )}
         <IconButton
           right="0px"
-          pt="2px"
+          pt="3px"
           aria-label="Copy code"
           icon={copied ? <Text fontSize="xs">コピーした!</Text> : <CopyIcon />}
           size="sm"
@@ -68,7 +68,8 @@ export default function CodeBlock({ code, title }: Props) {
         whiteSpace="pre"
         display="block"
         fontSize="sm"
-        p={4}
+        px={4}
+        pt={5}
         borderRadius="md"
       >
         {code}

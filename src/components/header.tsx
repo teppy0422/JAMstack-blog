@@ -120,22 +120,7 @@ export default function Header() {
     fetchWeather();
   }, []);
 
-  // 警告メッセージ(一日一回だけ表示)
   const [isAlertModalOpen, setAlertModalOpen] = useState(false);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const today = new Date().toISOString().split("T")[0]; // 今日の日付を取得
-      const lastShownDate = localStorage.getItem("lastShownDate");
-      // const lastShownDate = "";
-      if (lastShownDate !== today) {
-        console.log("Show modal");
-        setAlertModalOpen(true);
-        localStorage.setItem("lastShownDate", today);
-      } else {
-        console.log("Modal already shown today");
-      }
-    }
-  }, []);
   // 警告メッセージ(回転)
   useEffect(() => {
     const fetchElement = () => {

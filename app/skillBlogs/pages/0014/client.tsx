@@ -215,6 +215,7 @@ const BlogPage: React.FC = () => {
           <Box mt={4} ml={4}>
             <Text mt={4}>1.プロジェクトの初期化</Text>
             <CodeBlock
+              title="Terminal"
               code={`npx create-nextron-app my-app --example with-typescript-chakra-ui
 cd my-app`}
             />
