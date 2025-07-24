@@ -27,7 +27,22 @@ import {
   useColorMode,
   useToast,
   OrderedList,
+  UnorderedList,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  Grid,
+  GridItem,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  useDisclosure,
 } from "@chakra-ui/react";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 import { PiAppWindowFill, PiArrowFatLineDownLight } from "react-icons/pi";
 import { LuPanelRightOpen } from "react-icons/lu";
@@ -36,7 +51,6 @@ import Content from "@/components/content";
 import SectionBox from "../../components/SectionBox";
 import BasicDrawer from "@/components/ui/BasicDrawer";
 import Frame from "../../components/frame";
-import { useDisclosure } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CustomBadge } from "@/components/ui/CustomBadge";
 import DownloadLink from "../../components/DownloadLink";
@@ -66,8 +80,18 @@ import CodeBlock from "@/components/CodeBlock";
 
 import SchedulePage from "./parts/SchedulePage";
 import DataFlowDiagram from "app/skillBlogs/pages/0015/parts/DataFlowDiagram";
+import { UrlModalButton } from "@/components/ui/UrlModalButton";
+import { ImageSelector } from "@/components/ui/ImageSelector";
+import PcSpecTable from "./parts/PcSpecTable";
+
+import dynamic from "next/dynamic";
+const FloorPlan = dynamic(() => import("./parts/FloorLayout/ueda"), {
+  ssr: false,
+});
 
 const BlogPage: React.FC = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const {
     currentUserId,
     currentUserName,
@@ -94,12 +118,7 @@ const BlogPage: React.FC = () => {
   const { colorMode } = useColorMode();
   const [showConfetti, setShowConfetti] = useState(false); // useStateをコンポーネント内に移動
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const { isOpen, onOpen, onClose } = useDisclosure(); // onOpenを追加
-  const {
-    isOpen: isModalOpen,
-    onOpen: onModalOpen,
-    onClose: onModalClose,
-  } = useDisclosure();
+
   const toast = useToast();
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
@@ -111,12 +130,31 @@ const BlogPage: React.FC = () => {
     100% { opacity: 1; }
   `;
   const blinkAnimation = `${blink} 0.8s infinite`;
+
+  function RequirementTable({
+    requirements,
+  }: {
+    requirements: Record<string, string>;
+  }) {
+    return (
+      <Grid templateColumns="150px 1fr" gap={1} fontSize="sm">
+        {Object.entries(requirements).map(([label, value]) => (
+          <React.Fragment key={label}>
+            <GridItem fontWeight="semibold" color="gray.600">
+              {label}
+            </GridItem>
+            <GridItem whiteSpace="pre-line">{value}</GridItem>
+          </React.Fragment>
+        ))}
+      </Grid>
+    );
+  }
   //右リストの読み込みをlanguage取得後にする
   if (!isLanguageLoaded) {
   }
   return (
     <>
-      <Frame sections={sections} sectionRefs={sectionRefs}>
+      <Frame sections={sections} sectionRefs={sectionRefs} isThrough>
         <Box w="100%">
           <HStack spacing={2} align="center" mb={1} ml={1}>
             <AvatarGroup size="sm" spacing={-1.5}>
@@ -160,7 +198,7 @@ const BlogPage: React.FC = () => {
               ja: "更新日",
               language,
             })}
-            :2025-07-18
+            :2025-07-22
           </Text>
         </Box>
         <SectionBox
@@ -180,22 +218,16 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Box>
-            <Text whiteSpace="pre-line">
-              {getMessage({
-                ja: "7/10に交付決定。",
-                us: "",
-                cn: "",
-                language,
-              })}
-            </Text>
-            <Text whiteSpace="pre-line">
-              {getMessage({
-                ja: "事業終了期限の9/30に間に合わない場合は片岡が社労士に連絡する。",
-                us: "",
-                cn: "",
-                language,
-              })}
-            </Text>
+            <UnorderedList spacing={1}>
+              <ListItem>7/10に交付決定</ListItem>
+              <ListItem>
+                事業終了期限は9/30。間に合わない場合は片岡が社労士に連絡する。
+              </ListItem>
+              <ListItem>
+                運用開始から3ヶ月間を無償サポート期間とさせて頂きます。
+              </ListItem>
+              <ListItem>以下の計画は作成途中で適宜変更していきます。</ListItem>
+            </UnorderedList>
           </Box>
         </SectionBox>
         <SectionBox
@@ -214,12 +246,45 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
+
           <SchedulePage />
         </SectionBox>
         <SectionBox
           id="section3"
           title={
             "3." +
+            getMessage({
+              ja: "必要物の購入について",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box>
+            <OrderedList spacing={2}>
+              <ListItem>購入方法</ListItem>
+              <UnorderedList>
+                <ListItem>システム開発に必要な物は片岡が各1点ずつ購入</ListItem>
+                <ListItem>残りは要相談</ListItem>
+              </UnorderedList>
+              <ListItem>購入品</ListItem>
+              <UnorderedList>
+                <ListItem>パソコン</ListItem>
+              </UnorderedList>
+              <PcSpecTable />
+            </OrderedList>
+            <Text></Text>
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section4"
+          title={
+            "4." +
             getMessage({
               ja: "アプリ開発の定義",
               language,
@@ -233,23 +298,186 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Box>
-            <Text>
-              ・ローカルアプリとして作成しインターネット接続しないオフライン運用とする
-            </Text>
-            <Text>・Windows/Macでのみ動作する</Text>
-            <Text>・CPUはIntelまたはAMD(64bit)のみ動作する</Text>
-            <Text>・ARMは別途対応が必要なので必要なら連絡してください</Text>
-            <Text>最近のSurfaceのCPUはWindowsじゃないので動作しません</Text>
-            <Text>Androidタブレットは動作しません</Text>
-            <Text>・1つのアプリに全ての機能を搭載して複数作成しない</Text>
+            <OrderedList spacing={2}>
+              <ListItem>基本的な考え方</ListItem>
+              <UnorderedList>
+                <ListItem>
+                  ローカルアプリとして作成しインターネット接続しないオフライン運用とする
+                  <Text fontSize="14px">
+                    └これによりWindows OSのサポート期間に影響されません
+                  </Text>
+                </ListItem>
+                <ListItem>
+                  1つのアプリに全ての機能をまとめる。複数は作成しない。
+                </ListItem>
+                <ListItem>バージョンアップの方法は未定</ListItem>
+              </UnorderedList>
+              <ListItem>アプリケーションの構成</ListItem>
+              <UnorderedList fontSize="15px">
+                <ListItem>
+                  Nextron（Next.js + Electron）を基盤とした構成
+                </ListItem>
+                <ListItem>Pages Router による構造的なルーティング</ListItem>
+                <ListItem>Chakra UI</ListItem>
+                <ListItem>PostgreSQL によるローカルデータベース管理</ListItem>
+                <ListItem>
+                  GitHub で引き継ぎ可能な体制を用意
+                  <br />
+                  <Button
+                    as="a"
+                    href="https://github.com/teppy0422/preharnesspro"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="link"
+                    colorScheme="blue"
+                    size="sm"
+                  >
+                    https://github.com/teppy0422/preharnesspro
+                  </Button>
+                  <Text>
+                    ※上記リンクを伝える事で他の開発者に引き継げるようにしておきます
+                    <br />
+                    ※.envの情報はNasのC:¥に保存しておきます
+                  </Text>
+                </ListItem>
+                <ListItem>ChatGPT等を利用する場合のプロンプト</ListItem>
+                <Box maxW="95%">
+                  <CodeBlock
+                    code={`Electron + Nextron + React + Chakra UI でアプリ開発。
+
+共通の型定義は renderer/types.ts
+- メインプロセスは main/background.ts
+- プリロードスクリプトは main/preload.ts
+- レンダラープロセスからの型は renderer/preload.d.ts
+
+以下について相談です：
+
+たとえば：
+・preload 経由で DB からデータを取得して表示したい  
+・共通の型を preload 経由で使いたい  
+・renderer からファイルを読み込みたい  
+・型の自動補完が効かないのはなぜ？
+
+制約：
+- レンダラでは Node.js API を直接使えない
+- 安全な IPC 経由で通信する必要がある
+- 型定義をすべての層で共通化したい
+
+`}
+                    title="txt"
+                  />
+                </Box>
+              </UnorderedList>
+              <ListItem>システム要件</ListItem>
+              <UnorderedList fontSize="14px">
+                <ListItem>Android OSは動作しません</ListItem>
+                <ListItem>Surfaceで専用OSの場合は動作しません</ListItem>
+                <ListItem>
+                  Andoroidタブレットが最も安価で入手しやすいですが、マイクロメーターを無線接続に変更が必要です。
+                </ListItem>
+              </UnorderedList>
+              <Tabs size="md" variant="enclosed">
+                <TabList>
+                  <Tab
+                    _selected={{
+                      color: "custom.theme.light.850",
+                      borderBottom: "2px solid",
+                      borderBottomColor: "custom.theme.light.850",
+                      fontWeight: "bold",
+                    }}
+                    fontSize="14px"
+                    color="gray.500"
+                    p={0}
+                  >
+                    Windows
+                  </Tab>
+                  <Tab
+                    _selected={{
+                      color: "custom.theme.light.850",
+                      borderBottom: "2px solid",
+                      borderBottomColor: "custom.theme.light.850",
+                      fontWeight: "bold",
+                    }}
+                    fontSize="14px"
+                    color="gray.500"
+                    p={0}
+                    mx={3}
+                  >
+                    macOS
+                  </Tab>
+                  <Tab
+                    _selected={{
+                      color: "custom.theme.light.850",
+                      borderBottom: "2px solid",
+                      borderBottomColor: "custom.theme.light.850",
+                      fontWeight: "bold",
+                    }}
+                    fontSize="14px"
+                    color="gray.500"
+                    p={0}
+                  >
+                    Linux
+                  </Tab>
+                </TabList>
+                <TabPanels bg="custom.theme.light.500">
+                  <TabPanel px={0}>
+                    <Box>
+                      <Text fontWeight="bold" mb={2} fontSize="xs">
+                        推奨:
+                      </Text>
+                      <RequirementTable
+                        requirements={{
+                          OS: "Windows 10以上 (64bit)\n※32bitは別途対応が必要",
+                          プロセッサー:
+                            "Intel Core i5-9700K または同等のAMD \n※ARMは別途対応が必要",
+                          メモリー: "8 GB RAM",
+                          ストレージ: "2 GB 利用可能",
+                        }}
+                      />
+                    </Box>
+                  </TabPanel>
+                  <TabPanel px={0}>
+                    <Box>
+                      <Text fontWeight="bold" mb={2} fontSize="xs">
+                        推奨:
+                      </Text>
+                      <RequirementTable
+                        requirements={{
+                          OS: "macOS 12 Monterey 以上",
+                          プロセッサー: "Apple M1以上 または Intel Core i5以上",
+                          メモリー: "8 GB RAM",
+                          ストレージ: "2 GB 利用可能",
+                        }}
+                      />
+                    </Box>
+                  </TabPanel>
+                  <TabPanel px={0}>
+                    <Box>
+                      <Text fontWeight="bold" mb={2} fontSize="xs">
+                        推奨:
+                      </Text>
+                      <RequirementTable
+                        requirements={{
+                          OS: "Ubuntu 20.04 以降\n※動作未確認",
+                          プロセッサー:
+                            "Intel Core i5-9700K または同等のAMD\n※ARM は別途対応が必要",
+                          メモリー: "8 GB RAM",
+                          ストレージ: "2 GB 利用可能",
+                        }}
+                      />
+                    </Box>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </OrderedList>
           </Box>
         </SectionBox>
         <SectionBox
-          id="section4"
+          id="section5"
           title={
-            "4." +
+            "5." +
             getMessage({
-              ja: "購入について",
+              ja: "デザイン",
               language,
             })
           }
@@ -260,15 +488,94 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Box>
-            <Text>・システム開発に必要な物は片岡が各1点ずつ購入</Text>
-            <Text>・残り必要なものは有限会社ウエダ様で購入</Text>
-          </Box>
+          <UnorderedList spacing={2}>
+            <ListItem>アイコン</ListItem>
+            <Box display="inline-block" mr={3}>
+              <Box
+                border="1.5px solid #666"
+                borderRadius="md"
+                overflow="hidden"
+                _hover={{ opacity: 0.9, transform: "scale(1.05)" }}
+              >
+                <Image
+                  src="/images/preharnesspro/icon.ico"
+                  alt="PreHarnessPro Icon"
+                  boxSize="40px"
+                  cursor="pointer"
+                  onClick={onOpen}
+                />
+              </Box>
+              <Modal isOpen={isOpen} onClose={onClose} size="2xl" isCentered>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalBody p={0}>
+                    <Image
+                      src="/images/preharnesspro/preharnesspro_sample.png"
+                      alt="拡大画像"
+                      width="100%"
+                    />
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
+            </Box>
+            <Box display="inline-block">
+              <Box
+                // border="1.5px solid #666"
+                borderRadius="md"
+                overflow="hidden"
+                _hover={{ opacity: 0.9, transform: "scale(1.05)" }}
+              >
+                <Image
+                  src="/images/preharnesspro/icon2.png"
+                  alt="PreHarnessPro Icon"
+                  boxSize="42px"
+                  cursor="pointer"
+                  onClick={onOpen}
+                />
+              </Box>
+              <Modal isOpen={isOpen} onClose={onClose} size="2xl" isCentered>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalBody p={0}>
+                    <Image
+                      src="/images/preharnesspro/preharnesspro_sample.png"
+                      alt="拡大画像"
+                      width="100%"
+                    />
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
+            </Box>
+            <ListItem>アプリ全体デザイン</ListItem>
+            <Text>
+              特に参考にしたいデザインがあればWEBページやアプリ名などを教えてください
+            </Text>
+            <ImageSelector
+              images={[
+                {
+                  id: 1,
+                  url: "/images/0015/2.png",
+                  comment: "・左にメニュー 右に中身という一般的なデザイン",
+                },
+                {
+                  id: 2,
+                  url: "/images/0015/1.png",
+                  comment:
+                    "・目の負担を考えてダークモードがメイン\n・注目箇所はハイライトで表示(上図では緑)",
+                },
+                {
+                  id: 3,
+                  url: "/images/0015/3.png",
+                  comment: "・たとえば奇抜なデザインも対応可能です",
+                },
+              ]}
+            />
+          </UnorderedList>
         </SectionBox>
         <SectionBox
-          id="section5"
+          id="section6"
           title={
-            "5." +
+            "6." +
             getMessage({
               ja: "アプリの機能",
               language,
@@ -281,18 +588,39 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Box>
-            <Text>・ログイン</Text>
-            <Text>・圧着作業実績</Text>
-            <Text>・出荷作業実績</Text>
-            <Text>・実績出力</Text>
-            <Text>・実績印刷</Text>
-          </Box>
+          <OrderedList spacing={2}>
+            <ListItem>圧着作業</ListItem>
+            <UnorderedList>
+              <ListItem>ログイン(PC毎)</ListItem>
+              <ListItem>単線データ読み込み</ListItem>
+              <ListItem>かんばんデータ読み込み</ListItem>
+              <ListItem>規格データ呼び出し</ListItem>
+              <ListItem>作業実績のDB保存</ListItem>
+            </UnorderedList>
+            <ListItem>出荷作業</ListItem>
+            <UnorderedList>
+              <ListItem>ログイン</ListItem>
+              <ListItem>照合チェック</ListItem>
+              <ListItem>作業実績のDB保存</ListItem>
+            </UnorderedList>
+            <ListItem>管理</ListItem>
+            <UnorderedList>
+              <ListItem>実績出力(.csv)</ListItem>
+              <ListItem>実績閲覧</ListItem>
+              <ListItem>かんばん印刷</ListItem>
+              <ListItem>作業者QR印刷</ListItem>
+            </UnorderedList>
+            <ListItem>対応外</ListItem>
+            <UnorderedList>
+              <ListItem>シールド切断実績</ListItem>
+              <ListItem>皮むき実績</ListItem>
+            </UnorderedList>
+          </OrderedList>
         </SectionBox>
         <SectionBox
-          id="section6"
+          id="section7"
           title={
-            "6." +
+            "7." +
             getMessage({
               ja: "機能の追加提案",
               language,
@@ -307,14 +635,14 @@ const BlogPage: React.FC = () => {
           />
           <Box>
             <Text>・外国語に対応</Text>
-            <Text>・過去の不良実績がある条件は警告を表示機能</Text>
+            <Text>・過去の不良実績がある条件は警告等を表示する機能</Text>
           </Box>
         </SectionBox>
 
         <SectionBox
-          id="section7"
+          id="section8"
           title={
-            "7." +
+            "8." +
             getMessage({
               ja: "データフロー",
               language,
@@ -337,17 +665,117 @@ const BlogPage: React.FC = () => {
               })}
             </Text>
             <DataFlowDiagram />
-            <OrderedList spacing={1} fontSize="xs">
-              <ListItem>切断データ(RLTF-AまたはB)</ListItem>
-              <ListItem>TCSSC</ListItem>
-              <ListItem>規格表画像</ListItem>
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section9"
+          title={
+            "9." +
+            getMessage({
+              ja: "必要なデータ",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <CustomBadge text="四国部品" />
+          <Text>それぞれのデータの受け渡しルールを決める必要があります</Text>
+          <Text fontSize="14px" color="gray.600">
+            例:毎日9:00まで 担当:鈴木 副担当:佐藤
+          </Text>
+          <Box>
+            <OrderedList spacing={2} mt={4}>
+              <ListItem>毎日追加</ListItem>
+              <UnorderedList spacing={1} fontSize="sm">
+                <ListItem>切断データ(RLTF-AまたはB?)</ListItem>
+              </UnorderedList>
+              <ListItem>更新都度の追加(月に1回程度?)</ListItem>
+              <UnorderedList spacing={1} fontSize="sm">
+                <ListItem>TCSSC</ListItem>
+                <ListItem>規格表画像</ListItem>
+              </UnorderedList>
+              <ListItem>変更都度</ListItem>
+              <UnorderedList spacing={1} fontSize="sm">
+                <ListItem>シールドかんばん</ListItem>
+                <ListItem>作業者QR</ListItem>
+              </UnorderedList>
             </OrderedList>
           </Box>
         </SectionBox>
         <SectionBox
-          id="section13"
+          id="section10"
           title={
-            "13." +
+            "10." +
+            getMessage({
+              ja: "レイアウト",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box>
+            <Text whiteSpace="pre-line">
+              {getMessage({
+                ja: "",
+                us: "",
+                cn: "",
+                language,
+              })}
+            </Text>
+            <FloorPlan />
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section11"
+          title={
+            "11." +
+            getMessage({
+              ja: "設置について",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box>
+            <Text whiteSpace="pre-line">
+              {getMessage({
+                ja: "",
+                us: "",
+                cn: "",
+                language,
+              })}
+            </Text>
+          </Box>
+          <CustomBadge text="四国部品" />
+
+          <OrderedList spacing={2} mt={4}>
+            <ListItem>圧着作業</ListItem>
+            <UnorderedList spacing={1} fontSize="sm">
+              <ListItem>
+                設置に専用ステー等が必要になります。通常、金属を溶接して作るのが強度が高くサイズも小さくなります。
+              </ListItem>
+            </UnorderedList>
+          </OrderedList>
+        </SectionBox>
+        <SectionBox
+          id="section12"
+          title={
+            "12." +
             getMessage({
               ja: "まとめ",
               language,
@@ -370,9 +798,8 @@ const BlogPage: React.FC = () => {
               position: "relative",
             }}
             borderRadius="10px"
-            pb="10vh"
           >
-            <Text
+            <Box
               px="13px"
               py="20px"
               style={{
@@ -383,13 +810,48 @@ const BlogPage: React.FC = () => {
               }}
               lineHeight={1.6}
             >
-              {getMessage({
-                ja: "外部データの利用には四国部品様の協力が必要で内容が変わる可能性が高いです。適宜更新していきます。",
-                us: "This system is actually in operation, but it is incomplete and contains the following problems",
-                cn: "该系统已实际运行，但并不完整，存在以下问题",
-                language,
-              })}
-            </Text>
+              <Text>✅ Androidタブレットに関して</Text>
+              <Text fontSize="15px">
+                現在、生産現場で使用するタッチ操作対応のWindows
+                PCは市場の縮小に伴い、以下のような課題が顕在化しております：
+              </Text>
+              <UnorderedList fontSize="14px" my={3}>
+                <ListItem>
+                  専用機の流通量が減少し、一般店頭ではほぼ入手困難
+                </ListItem>
+                <ListItem>
+                  入手可能な機種は価格が高騰し、選択肢も限られている
+                </ListItem>
+                <ListItem>
+                  通販では、**信頼性に不安のある海外製品（主に中華系）**が多く、長期運用には不安が残る
+                </ListItem>
+              </UnorderedList>
+              <Text fontSize="15px">
+                このような背景から、従来のWindowsベースの構成を継続することは、コスト・調達性・将来性の面で持続性が低いと判断いたしました。
+                そこで、今後の運用においては、以下の理由から
+                Androidタブレットをベースとしたシステム構成に移行することを提案・検討しております。
+              </Text>
+              <Text mt={8}>✅ Androidタブレットの利点</Text>
+
+              <UnorderedList fontSize="14px" my={3}>
+                <ListItem>
+                  安価かつ入手性が高い（市場規模が大きく流通が安定）
+                </ListItem>
+                <ListItem>
+                  タッチパネルが標準搭載されており、追加機器が不要
+                </ListItem>
+                <ListItem>
+                  スピーカー内蔵のため、音声ガイダンス等にも対応可能
+                </ListItem>
+                <ListItem>
+                  軽量・省スペース・可搬性が高い（生産現場に適した形状）
+                </ListItem>
+                <ListItem>今後も継続的に新機種が登場する見込み</ListItem>
+              </UnorderedList>
+              <Text fontSize="15px">
+                以降後のアプリケーションはAndroidだけじゃなくWindows/Mac/Linuxでも対応可能であり、現場で必要な機能（QRコード読み取り、USB機器接続、音声案内など）も十分実現可能です。
+              </Text>
+            </Box>
           </Box>
         </SectionBox>
       </Frame>

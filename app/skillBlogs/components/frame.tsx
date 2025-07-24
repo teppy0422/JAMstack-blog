@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext, use } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import Confetti from "react-confetti";
 import {
   Box,
@@ -353,15 +353,7 @@ const Frame: React.FC<{
               color="#FFF"
             />
           </Box>
-        ) : !isThrough && !currentUserId && !isLoading ? (
-          <Box h="30vh">
-            <UnAuthenticatedNotice
-              colorMode={colorMode}
-              currentUserId={currentUserId}
-              currentUserName={currentUserName}
-            />
-          </Box>
-        ) : !isThrough && !currentUserName && !isLoading ? (
+        ) : !isThrough && !isLoading && (!currentUserId || !currentUserName) ? (
           <Box h="30vh">
             <UnAuthenticatedNotice
               colorMode={colorMode}

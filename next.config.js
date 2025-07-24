@@ -23,7 +23,20 @@ module.exports = withPWA({
       },
     ];
   },
-  webpack: (config, options) => {
+  webpack: (config, { isServer }) => {
+    if (!config.resolve.fallback) config.resolve.fallback = {};
+
+    // ✅ canvasモジュールをfalseにして無視させる（クライアントのみで使う前提）
+    config.resolve.fallback.canvas = false;
+
+    // ✅ KonvaのNode用バージョンが使われないように除外（KonvaのNode向けを外す）
+    config.externals = config.externals || [];
+    if (isServer) {
+      config.externals.push({
+        "konva/lib/index-node": "commonjs konva/lib/index-node",
+      });
+    }
+
     config.resolve.alias["@"] = path.resolve(__dirname); // ← これを追加
     // glb/gltf/mp3用のloader
     config.module.rules.push({

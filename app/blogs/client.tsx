@@ -68,7 +68,6 @@ export default function ClientPage({ blog, category, tag }: Props) {
       setShowBlogs([]);
       setTimeout(() => setShowBlogs(filtered), 100);
     }
-
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
