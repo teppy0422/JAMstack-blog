@@ -888,6 +888,17 @@ const BlogPage: React.FC = () => {
               <Text fontSize="15px">
                 以降後のアプリケーションはAndroidだけじゃなくWindows/Mac/Linuxでも対応可能であり、現場で必要な機能（QRコード読み取り、USB機器接続、音声案内など）も十分実現可能です。
               </Text>
+
+              <Text mt={8}>✅ iPadの利点</Text>
+              <UnorderedList fontSize="14px" my={3}>
+                <ListItem>部品性能が高く使用期間が長い(10年以上)</ListItem>
+                <ListItem>動作の安定性が高い</ListItem>
+              </UnorderedList>
+              <Text mt={8}>🟥 iPadのデメリット</Text>
+              <UnorderedList fontSize="14px" my={3}>
+                <ListItem>アプリのバージョンアップにMacが必須</ListItem>
+                <ListItem>シリアル通信が使用不可</ListItem>
+              </UnorderedList>
             </Box>
           </Box>
         </SectionBox>
