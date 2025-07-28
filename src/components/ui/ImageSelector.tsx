@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Box, Image, Button, HStack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Image,
+  Button,
+  HStack,
+  Text,
+  useColorMode,
+} from "@chakra-ui/react";
 import { transform } from "lodash";
 
 type ImageItem = {
@@ -13,8 +20,8 @@ type Props = {
 };
 
 export const ImageSelector = ({ images }: Props) => {
+  const { colorMode } = useColorMode();
   const [selectedImageId, setSelectedImageId] = useState(images[0]?.id ?? 1);
-
   const selectedImage = images.find((img) => img.id === selectedImageId);
 
   return (
@@ -54,7 +61,12 @@ export const ImageSelector = ({ images }: Props) => {
             boxShadow="md"
           />
           {selectedImage.comment && (
-            <Text mt={2} fontSize="sm" color="gray.600" whiteSpace="pre-line">
+            <Text
+              mt={2}
+              fontSize="sm"
+              color={colorMode === "light" ? "gray.600" : "gray.100"}
+              whiteSpace="pre-line"
+            >
               {selectedImage.comment}
             </Text>
           )}

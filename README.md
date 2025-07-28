@@ -164,6 +164,13 @@ Design modification of alert(this modal)
 deploy 0037
 Fixed copying process of code and added title
 deploy 0038
+:2025-07-21:
+Add SkillGlog/0015 for new project
+:2025-07-24:
+deploy 0039
+:2026-07-28:
+Updated skillBlogs/0015
+deploy 0040
 
 #### Doing Now
 

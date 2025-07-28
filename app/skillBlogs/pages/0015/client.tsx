@@ -80,6 +80,7 @@ import CodeBlock from "@/components/CodeBlock";
 
 import SchedulePage from "./parts/SchedulePage";
 import DataFlowDiagram from "app/skillBlogs/pages/0015/parts/DataFlowDiagram";
+import DataFlowDiagram2 from "app/skillBlogs/pages/0015/parts/DataFlowDiagram2";
 import { UrlModalButton } from "@/components/ui/UrlModalButton";
 import { ImageSelector } from "@/components/ui/ImageSelector";
 import PcSpecTable from "./parts/PcSpecTable";
@@ -419,7 +420,13 @@ const BlogPage: React.FC = () => {
                     Linux
                   </Tab>
                 </TabList>
-                <TabPanels bg="custom.theme.light.500">
+                <TabPanels
+                  bg={
+                    colorMode === "light"
+                      ? "custom.theme.light.300"
+                      : "custom.theme.dark.600"
+                  }
+                >
                   <TabPanel px={0}>
                     <Box>
                       <Text fontWeight="bold" mb={2} fontSize="xs">
@@ -635,6 +642,7 @@ const BlogPage: React.FC = () => {
           />
           <Box>
             <Text>・外国語に対応</Text>
+            <Text>・前回使用したハイト調整ダイヤル値を表示する機能</Text>
             <Text>・過去の不良実績がある条件は警告等を表示する機能</Text>
           </Box>
         </SectionBox>
@@ -644,7 +652,7 @@ const BlogPage: React.FC = () => {
           title={
             "8." +
             getMessage({
-              ja: "データフロー",
+              ja: "データフロー図",
               language,
             })
           }
@@ -667,12 +675,13 @@ const BlogPage: React.FC = () => {
             <DataFlowDiagram />
           </Box>
         </SectionBox>
+
         <SectionBox
           id="section9"
           title={
             "9." +
             getMessage({
-              ja: "必要なデータ",
+              ja: "必要な外部ファイル",
               language,
             })
           }
@@ -684,7 +693,7 @@ const BlogPage: React.FC = () => {
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <CustomBadge text="四国部品" />
-          <Text>それぞれのデータの受け渡しルールを決める必要があります</Text>
+          <Text>それぞれのファイルの受け渡しルールを決める必要があります</Text>
           <Text fontSize="14px" color="gray.600">
             例:毎日9:00まで 担当:鈴木 副担当:佐藤
           </Text>
@@ -696,7 +705,7 @@ const BlogPage: React.FC = () => {
               </UnorderedList>
               <ListItem>更新都度の追加(月に1回程度?)</ListItem>
               <UnorderedList spacing={1} fontSize="sm">
-                <ListItem>TCSSC</ListItem>
+                <ListItem>TCSSC(規格データ)</ListItem>
                 <ListItem>規格表画像</ListItem>
               </UnorderedList>
               <ListItem>変更都度</ListItem>
@@ -776,6 +785,34 @@ const BlogPage: React.FC = () => {
           id="section12"
           title={
             "12." +
+            getMessage({
+              ja: "処理フロー図",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box>
+            <Text whiteSpace="pre-line">
+              {getMessage({
+                ja: "",
+                us: "",
+                cn: "",
+                language,
+              })}
+            </Text>
+            <DataFlowDiagram2 />
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section13"
+          title={
+            "13." +
             getMessage({
               ja: "まとめ",
               language,
