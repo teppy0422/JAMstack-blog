@@ -631,8 +631,11 @@ const BlogPage: React.FC = () => {
                 src="/images/0006/printF1.png"
                 maxWidth="90%"
                 alt="printF1.png"
-                mb={{ base: 4, md: 0 }}
+                mb={{ base: 0, md: 0 }}
               />
+              <Text fontSize="sm">
+                N712/5M392009917807001868211126L04D011N712/94.54.5325184039
+              </Text>
               <Text>
                 {getMessage({
                   ja: "※印刷システムが対応していない場合は1時間程度の修正が必要です",

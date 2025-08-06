@@ -83,7 +83,8 @@ import DataFlowDiagram from "app/skillBlogs/pages/0015/parts/DataFlowDiagram";
 import DataFlowDiagram2 from "app/skillBlogs/pages/0015/parts/DataFlowDiagram2";
 import { UrlModalButton } from "@/components/ui/UrlModalButton";
 import { ImageSelector } from "@/components/ui/ImageSelector";
-import PcSpecTable from "./parts/PcSpecTable";
+import SpecTable_terminal from "./parts/SpecTable_terminal";
+import SpecTable_sarver from "./parts/SpecTable_sarver";
 
 import dynamic from "next/dynamic";
 const FloorPlan = dynamic(() => import("./parts/FloorLayout/ueda"), {
@@ -273,11 +274,28 @@ const BlogPage: React.FC = () => {
                 <ListItem>システム開発に必要な物は片岡が各1点ずつ購入</ListItem>
                 <ListItem>残りは要相談</ListItem>
               </UnorderedList>
-              <ListItem>購入品</ListItem>
-              <UnorderedList>
-                <ListItem>パソコン</ListItem>
+              <ListItem>端末</ListItem>
+              <SpecTable_terminal />
+              <ListItem>サーバー(Nas)</ListItem>
+              <SpecTable_sarver />
+              <UnorderedList fontSize="14px">
+                <ListItem>使用パッケージ</ListItem>
+                <CodeBlock
+                  title="terminal"
+                  code={`npm install cors
+npm install express
+npm install pg
+npm install check-disk-space
+npm install dotenv
+npm install multer
+`}
+                />
+                <ListItem>テーブル一覧</ListItem>
+                <UnorderedList>
+                  <ListItem>users</ListItem>
+                  <ListItem>m_processing_conditions</ListItem>
+                </UnorderedList>
               </UnorderedList>
-              <PcSpecTable />
             </OrderedList>
             <Text></Text>
           </Box>
@@ -304,78 +322,88 @@ const BlogPage: React.FC = () => {
               <UnorderedList>
                 <ListItem>
                   ローカルアプリとして作成しインターネット接続しないオフライン運用とする
-                  <Text fontSize="14px">
-                    └これによりWindows OSのサポート期間に影響されません
-                  </Text>
+                  ※これによりOSのサポート期間に影響されません
                 </ListItem>
                 <ListItem>
                   1つのアプリに全ての機能をまとめる。複数は作成しない。
                 </ListItem>
-                <ListItem>バージョンアップの方法は未定</ListItem>
+                <ListItem>
+                  バージョンアップは専用サイトからAPKをダウンロードしてNasに配置。各端末からアップデートを実行ボタンを押す事を想定。
+                </ListItem>
               </UnorderedList>
               <ListItem>アプリケーションの構成</ListItem>
               <UnorderedList fontSize="15px">
                 <ListItem>
-                  Nextron（Next.js + Electron）を基盤とした構成
+                  Flutter（Dart）を基盤としたクロスプラットフォーム構成（Android中心）
                 </ListItem>
-                <ListItem>Pages Router による構造的なルーティング</ListItem>
-                <ListItem>Chakra UI</ListItem>
-                <ListItem>PostgreSQL によるローカルデータベース管理</ListItem>
+                <ListItem>
+                  画面遷移には Flutter の Navigator（`MaterialPageRoute`）を使用
+                </ListItem>
+                <ListItem>
+                  UI構築は Material Design + カスタムレイアウト
+                </ListItem>
+                <ListItem>
+                  ローカルDBは PostgreSQL を使用（Node.js
+                  APIサーバー経由でアクセス）
+                </ListItem>
+                <ListItem>
+                  NAS上のファイル操作は Node.js
+                  APIサーバーが担当し、HTTP経由でFlutterから通信
+                </ListItem>
                 <ListItem>
                   GitHub で引き継ぎ可能な体制を用意
                   <br />
                   <Button
                     as="a"
-                    href="https://github.com/teppy0422/preharnesspro"
+                    href="https://github.com/teppy0422/preharness"
                     target="_blank"
                     rel="noopener noreferrer"
                     variant="link"
                     colorScheme="blue"
                     size="sm"
                   >
-                    https://github.com/teppy0422/preharnesspro
+                    https://github.com/teppy0422/preharness
                   </Button>
                   <Text>
                     ※上記リンクを伝える事で他の開発者に引き継げるようにしておきます
                     <br />
-                    ※.envの情報はNasのC:¥に保存しておきます
+                    ※.env は Nas の C:\ に保存
                   </Text>
                 </ListItem>
                 <ListItem>ChatGPT等を利用する場合のプロンプト</ListItem>
                 <Box maxW="95%">
                   <CodeBlock
-                    code={`Electron + Nextron + React + Chakra UI でアプリ開発。
+                    code={`Flutter + Node.js + PostgreSQL による業務アプリ開発
 
-共通の型定義は renderer/types.ts
-- メインプロセスは main/background.ts
-- プリロードスクリプトは main/preload.ts
-- レンダラープロセスからの型は renderer/preload.d.ts
+前提：
+- Androidタブレットでローカル運用
+- NAS に格納された固定長ファイルを Node.js API経由で操作
+- APIサーバーが DB と NAS の橋渡しを担当
+- Flutter アプリは API に対して HTTP 通信を行う（Dio）
 
-以下について相談です：
+構成：
+- フロントエンド：Flutter（Material UI）
+- サーバー：Node.js + Express + pg（PostgreSQLドライバ）
+- NAS連携：fs/promises でファイル操作（移動・保存）
+- データベース：PostgreSQL
 
-たとえば：
-・preload 経由で DB からデータを取得して表示したい  
-・共通の型を preload 経由で使いたい  
-・renderer からファイルを読み込みたい  
-・型の自動補完が効かないのはなぜ？
+- アプリのアップデートを NAS 経由で配布したい（APK）
 
 制約：
-- レンダラでは Node.js API を直接使えない
-- 安全な IPC 経由で通信する必要がある
-- 型定義をすべての層で共通化したい
+- Flutter から直接 NAS は扱えない → Node.js API経由が必須
+- オフラインでも動作する設計が必要
+- Flutter は Android 権限設定が必要（READ/WRITE）
 
 `}
                     title="txt"
                   />
                 </Box>
               </UnorderedList>
+
               <ListItem>システム要件</ListItem>
               <UnorderedList fontSize="14px">
-                <ListItem>Android OSは動作しません</ListItem>
-                <ListItem>Surfaceで専用OSの場合は動作しません</ListItem>
-                <ListItem>
-                  Andoroidタブレットが最も安価で入手しやすいですが、マイクロメーターを無線接続に変更が必要です。
-                </ListItem>
+                <ListItem>Raspberry Piでのアプリ動作は実験的。</ListItem>
+                <ListItem>Android TV / Fire TVは制限あり。</ListItem>
               </UnorderedList>
               <Tabs size="md" variant="enclosed">
                 <TabList>
@@ -389,6 +417,35 @@ const BlogPage: React.FC = () => {
                     fontSize="14px"
                     color="gray.500"
                     p={0}
+                    mr={3}
+                  >
+                    Android
+                  </Tab>
+                  <Tab
+                    _selected={{
+                      color: "custom.theme.light.850",
+                      borderBottom: "2px solid",
+                      borderBottomColor: "custom.theme.light.850",
+                      fontWeight: "bold",
+                    }}
+                    fontSize="14px"
+                    color="gray.500"
+                    p={0}
+                    mr={3}
+                  >
+                    iOS/iPadOS
+                  </Tab>
+                  <Tab
+                    _selected={{
+                      color: "custom.theme.light.850",
+                      borderBottom: "2px solid",
+                      borderBottomColor: "custom.theme.light.850",
+                      fontWeight: "bold",
+                    }}
+                    fontSize="14px"
+                    color="gray.500"
+                    p={0}
+                    mr={3}
                   >
                     Windows
                   </Tab>
@@ -402,7 +459,7 @@ const BlogPage: React.FC = () => {
                     fontSize="14px"
                     color="gray.500"
                     p={0}
-                    mx={3}
+                    mr={3}
                   >
                     macOS
                   </Tab>
@@ -416,8 +473,23 @@ const BlogPage: React.FC = () => {
                     fontSize="14px"
                     color="gray.500"
                     p={0}
+                    mr={3}
                   >
                     Linux
+                  </Tab>
+                  <Tab
+                    _selected={{
+                      color: "custom.theme.light.850",
+                      borderBottom: "2px solid",
+                      borderBottomColor: "custom.theme.light.850",
+                      fontWeight: "bold",
+                    }}
+                    fontSize="14px"
+                    color="gray.500"
+                    p={0}
+                    mr={3}
+                  >
+                    Raspberry Pi
                   </Tab>
                 </TabList>
                 <TabPanels
@@ -434,11 +506,11 @@ const BlogPage: React.FC = () => {
                       </Text>
                       <RequirementTable
                         requirements={{
-                          OS: "Windows 10以上 (64bit)\n※32bitは別途対応が必要",
+                          OS: "Android 5.0（API 21）以上",
                           プロセッサー:
-                            "Intel Core i5-9700K または同等のAMD \n※ARMは別途対応が必要",
-                          メモリー: "8 GB RAM",
-                          ストレージ: "2 GB 利用可能",
+                            "ARM または ARM64\n※x86エミュレーターでも可（開発用途）",
+                          メモリー: "2 GB RAM 以上",
+                          ストレージ: "10 MB 以上",
                         }}
                       />
                     </Box>
@@ -450,10 +522,10 @@ const BlogPage: React.FC = () => {
                       </Text>
                       <RequirementTable
                         requirements={{
-                          OS: "macOS 12 Monterey 以上",
-                          プロセッサー: "Apple M1以上 または Intel Core i5以上",
-                          メモリー: "8 GB RAM",
-                          ストレージ: "2 GB 利用可能",
+                          OS: "iOS 12.0 以上",
+                          プロセッサー: "Apple A10 Fusion 以降（iPhone 7以降）",
+                          メモリー: "2 GB RAM 以上",
+                          ストレージ: "20 MB 以上",
                         }}
                       />
                     </Box>
@@ -465,11 +537,57 @@ const BlogPage: React.FC = () => {
                       </Text>
                       <RequirementTable
                         requirements={{
-                          OS: "Ubuntu 20.04 以降\n※動作未確認",
+                          OS: "Windows 10以上 (64bit)\n※32bitはFlutter未対応",
                           プロセッサー:
-                            "Intel Core i5-9700K または同等のAMD\n※ARM は別途対応が必要",
+                            "Intel Core i5-8250U 以上 または同等のAMD\n※ARM版Windowsは非推奨",
                           メモリー: "8 GB RAM",
-                          ストレージ: "2 GB 利用可能",
+                          ストレージ: "500 MB 以上",
+                        }}
+                      />
+                    </Box>
+                  </TabPanel>
+                  <TabPanel px={0}>
+                    <Box>
+                      <Text fontWeight="bold" mb={2} fontSize="xs">
+                        推奨:
+                      </Text>
+                      <RequirementTable
+                        requirements={{
+                          OS: "macOS 10.14 Mojave 以上",
+                          プロセッサー: "Intel または Apple Silicon (M1/M2)",
+                          メモリー: "8 GB RAM",
+                          ストレージ: "100 MB 以上",
+                        }}
+                      />
+                    </Box>
+                  </TabPanel>
+                  <TabPanel px={0}>
+                    <Box>
+                      <Text fontWeight="bold" mb={2} fontSize="xs">
+                        推奨:
+                      </Text>
+                      <RequirementTable
+                        requirements={{
+                          OS: "Ubuntu 20.04 LTS 以上\n※他のディストリビューションも可",
+                          プロセッサー: "x64ベースCPU",
+                          メモリー: "8 GB RAM",
+                          ストレージ: "200 MB 以上",
+                        }}
+                      />
+                    </Box>
+                  </TabPanel>
+                  <TabPanel px={0}>
+                    <Box>
+                      <Text fontWeight="bold" mb={2} fontSize="xs">
+                        推奨:
+                      </Text>
+                      <RequirementTable
+                        requirements={{
+                          OS: "Raspberry Pi OS Lite（GUIなし）",
+                          プロセッサー: "Raspberry Pi 4 Model B 推奨",
+                          メモリー: "2 GB RAM 以上（4 GB 推奨）",
+                          ストレージ:
+                            "100 MB 以上の空き容量（microSD 32GB以上推奨）",
                         }}
                       />
                     </Box>
@@ -555,7 +673,12 @@ const BlogPage: React.FC = () => {
             </Box>
             <ListItem>アプリ全体デザイン</ListItem>
             <Text>
-              特に参考にしたいデザインがあればWEBページやアプリ名などを教えてください
+              {getMessage({
+                ja: "特に参考にしたいデザインがあればWEBページやアプリ名などを教えてください",
+                us: "If you have a particular design you would like to refer to, please let us know the web page or the name of the application.",
+                cn: "如果您想参考某个设计，请提供网页或应用程序名称。",
+                language,
+              })}
             </Text>
             <ImageSelector
               images={[
@@ -574,6 +697,18 @@ const BlogPage: React.FC = () => {
                   id: 3,
                   url: "/images/0015/3.png",
                   comment: "・たとえば奇抜なデザインも対応可能です",
+                },
+                {
+                  id: 4,
+                  url: "/images/0015/001.webp",
+                  comment:
+                    "・圧着作業画面(作成途中)\n・実機の横幅は243mm(上図をズームして合わせてみてください)",
+                },
+                {
+                  id: 5,
+                  url: "/images/0015/002.webp",
+                  comment:
+                    "・ダークモードをオンにした画面\n・ハイライト色は緑に設定",
                 },
               ]}
             />
@@ -602,6 +737,7 @@ const BlogPage: React.FC = () => {
               <ListItem>単線データ読み込み</ListItem>
               <ListItem>かんばんデータ読み込み</ListItem>
               <ListItem>規格データ呼び出し</ListItem>
+              <ListItem>ダイヤル値の呼び出し</ListItem>
               <ListItem>作業実績のDB保存</ListItem>
             </UnorderedList>
             <ListItem>出荷作業</ListItem>
@@ -644,6 +780,7 @@ const BlogPage: React.FC = () => {
             <Text>・外国語に対応</Text>
             <Text>・前回使用したハイト調整ダイヤル値を表示する機能</Text>
             <Text>・過去の不良実績がある条件は警告等を表示する機能</Text>
+            <Text>・規格表の任意の場所をズームする機能</Text>
           </Box>
         </SectionBox>
 
@@ -714,6 +851,18 @@ const BlogPage: React.FC = () => {
                 <ListItem>作業者QR</ListItem>
               </UnorderedList>
             </OrderedList>
+            <Text mt={6}>切断データの候補一覧</Text>
+            <Text fontSize="sm">担当不在なので手探りで調査中</Text>
+            <UnorderedList spacing={2}>
+              <ListItem fontSize="sm">
+                10.7.120.31/東四国disk/program/製造指示書かんばん/data/Rlg29_0.txt
+                ←新見からの転送データ?
+              </ListItem>
+              <ListItem fontSize="sm">
+                10.7.120.31/東四国disk/program/製造指示書かんばん/data/kanban.txt
+                ←五十嵐さん作成?
+              </ListItem>
+            </UnorderedList>
           </Box>
         </SectionBox>
         <SectionBox

@@ -168,9 +168,14 @@ deploy 0038
 Add SkillGlog/0015 for new project
 :2025-07-24:
 deploy 0039
-:2026-07-28:
+:2025-07-28:
 Updated skillBlogs/0015
 deploy 0040
+:2025-08-04:
+Migration of development environment from windows to mac
+Change skillBlogs/pages/0015
+deploy 0041
+deploy 0042
 
 #### Doing Now
 
