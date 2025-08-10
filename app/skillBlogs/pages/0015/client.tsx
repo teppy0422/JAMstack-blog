@@ -368,6 +368,8 @@ npm install multer
                     ※上記リンクを伝える事で他の開発者に引き継げるようにしておきます
                     <br />
                     ※.env は Nas の C:\ に保存
+                    <br />
+                    ※サーバー側(node.js)も同様にする予定
                   </Text>
                 </ListItem>
                 <ListItem>ChatGPT等を利用する場合のプロンプト</ListItem>
@@ -402,7 +404,6 @@ npm install multer
 
               <ListItem>システム要件</ListItem>
               <UnorderedList fontSize="14px">
-                <ListItem>Raspberry Piでのアプリ動作は実験的。</ListItem>
                 <ListItem>Android TV / Fire TVは制限あり。</ListItem>
               </UnorderedList>
               <Tabs size="md" variant="enclosed">
@@ -476,20 +477,6 @@ npm install multer
                     mr={3}
                   >
                     Linux
-                  </Tab>
-                  <Tab
-                    _selected={{
-                      color: "custom.theme.light.850",
-                      borderBottom: "2px solid",
-                      borderBottomColor: "custom.theme.light.850",
-                      fontWeight: "bold",
-                    }}
-                    fontSize="14px"
-                    color="gray.500"
-                    p={0}
-                    mr={3}
-                  >
-                    Raspberry Pi
                   </Tab>
                 </TabList>
                 <TabPanels
@@ -572,22 +559,6 @@ npm install multer
                           プロセッサー: "x64ベースCPU",
                           メモリー: "8 GB RAM",
                           ストレージ: "200 MB 以上",
-                        }}
-                      />
-                    </Box>
-                  </TabPanel>
-                  <TabPanel px={0}>
-                    <Box>
-                      <Text fontWeight="bold" mb={2} fontSize="xs">
-                        推奨:
-                      </Text>
-                      <RequirementTable
-                        requirements={{
-                          OS: "Raspberry Pi OS Lite（GUIなし）",
-                          プロセッサー: "Raspberry Pi 4 Model B 推奨",
-                          メモリー: "2 GB RAM 以上（4 GB 推奨）",
-                          ストレージ:
-                            "100 MB 以上の空き容量（microSD 32GB以上推奨）",
                         }}
                       />
                     </Box>

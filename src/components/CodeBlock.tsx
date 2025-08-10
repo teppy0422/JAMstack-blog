@@ -6,6 +6,7 @@ import {
   useClipboard,
   useToast,
   Text,
+  useColorMode,
 } from "@chakra-ui/react";
 import { CopyIcon } from "@chakra-ui/icons";
 import { useState } from "react";
@@ -18,6 +19,7 @@ export default function CodeBlock({ code, title }: Props) {
   const { onCopy } = useClipboard(code);
   const toast = useToast();
   const [copied, setCopied] = useState(false);
+  const { colorMode } = useColorMode();
 
   const handleCopy = () => {
     onCopy();
@@ -33,7 +35,14 @@ export default function CodeBlock({ code, title }: Props) {
   };
 
   return (
-    <Box position="relative" overflowX="auto" fontFamily="mono" mt={1} mb={1}>
+    <Box
+      position="relative"
+      overflowX="auto"
+      fontFamily="mono"
+      mt={1}
+      mb={1}
+      bg={colorMode === "light" ? "gray.100" : "gray.800"}
+    >
       <Flex
         position="absolute"
         top={-1.5}
@@ -71,6 +80,7 @@ export default function CodeBlock({ code, title }: Props) {
         px={4}
         pt={5}
         borderRadius="md"
+        bg="transparent"
       >
         {code}
       </Code>
