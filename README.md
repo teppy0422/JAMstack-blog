@@ -176,6 +176,8 @@ Migration of development environment from windows to mac
 Change skillBlogs/pages/0015
 deploy 0041
 deploy 0042
+Change skillBlogs/pages/0015
+deploy 0043
 
 #### Doing Now
 

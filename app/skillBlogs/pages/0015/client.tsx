@@ -681,6 +681,22 @@ npm install multer
                   comment:
                     "・ダークモードをオンにした画面\n・ハイライト色は緑に設定",
                 },
+                {
+                  id: 6,
+                  url: "/images/0015/004.webp",
+                  comment: "・エフを読み込んだらダイヤル値と規格測定を表示",
+                },
+                {
+                  id: 7,
+                  url: "/images/0015/003.webp",
+                  comment:
+                    "・ダイヤル値の履歴が無ければ赤色で表示\n・タップでダイヤル値を保存",
+                },
+                {
+                  id: 8,
+                  url: "/images/0015/006.webp",
+                  comment: "・色一覧の表示などのテストページ",
+                },
               ]}
             />
           </UnorderedList>
