@@ -700,6 +700,36 @@ npm install multer
               ]}
             />
           </UnorderedList>
+          <UnorderedList>
+            <ListItem>動作イメージ30秒動画</ListItem>
+            <video
+              src="/images/0015/preHarness_demo.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              disablePictureInPicture
+              controls={false}
+              style={{
+                width: "100%",
+                height: "auto",
+                pointerEvents: "none", // ← タップ無効
+              }}
+            />
+            <UnorderedList>
+              <ListItem>1.QRコードでエフを読む</ListItem>
+              <ListItem>
+                2.規格測定でNGの場合は推奨ダイヤルが点滅(C/Hのみ)
+              </ListItem>
+              <ListItem>3.フットスイッチを検知してカウント</ListItem>
+              <ListItem>
+                4.規格表は2本指でズーム。タップでフルスクリーン表示。
+              </ListItem>
+              <ListItem>
+                ※動画は開発中のもので特にデザインは最後に作ります。
+              </ListItem>
+            </UnorderedList>
+          </UnorderedList>
         </SectionBox>
         <SectionBox
           id="section6"
