@@ -178,6 +178,7 @@ deploy 0041
 deploy 0042
 Change skillBlogs/pages/0015
 deploy 0043
+version up node
 
 #### Doing Now
 

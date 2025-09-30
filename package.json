@@ -11,6 +11,10 @@
     "name": "teppeikataoka",
     "email": "teppy@aol.jp"
   },
+  "engines": {
+    "node": "22.x",
+    "npm": ">=10.0.0"
+  },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^2.8.2",
