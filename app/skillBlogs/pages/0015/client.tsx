@@ -290,10 +290,25 @@ npm install dotenv
 npm install multer
 `}
                 />
-                <ListItem>テーブル一覧</ListItem>
+                <ListItem>データベース(Windows)</ListItem>
                 <UnorderedList>
-                  <ListItem>users</ListItem>
-                  <ListItem>m_processing_conditions</ListItem>
+                  <ListItem>PostgreSQL 15.13</ListItem>
+                  <ListItem>テーブル一覧</ListItem>
+                  <UnorderedList>
+                    <ListItem>users</ListItem>
+                    <ListItem>m_processing_conditions</ListItem>
+                  </UnorderedList>
+                </UnorderedList>
+                <ListItem>データベース(MacBook M4 Pro)</ListItem>
+                <UnorderedList>
+                  <ListItem>PostgreSQL 15.14</ListItem>
+                  <ListItem>コマンド</ListItem>
+                  <UnorderedList>
+                    <CodeBlock
+                      title="起動"
+                      code={"brew services start postgresql@15"}
+                    />
+                  </UnorderedList>
                 </UnorderedList>
               </UnorderedList>
             </OrderedList>
@@ -353,6 +368,8 @@ npm install multer
                 <ListItem>
                   GitHub で引き継ぎ可能な体制を用意
                   <br />
+                  クライアント(flutter):
+                  <br />
                   <Button
                     as="a"
                     href="https://github.com/teppy0422/preharness"
@@ -364,15 +381,27 @@ npm install multer
                   >
                     https://github.com/teppy0422/preharness
                   </Button>
+                  <br />
+                  サーバー(node.js):
+                  <br />
+                  <Button
+                    as="a"
+                    href="https://github.com/teppy0422/preharness-server"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="link"
+                    colorScheme="blue"
+                    size="sm"
+                  >
+                    https://github.com/teppy0422/preharness-server
+                  </Button>
                   <Text>
                     ※上記リンクを伝える事で他の開発者に引き継げるようにしておきます
                     <br />
                     ※.env は Nas の C:\ に保存
-                    <br />
-                    ※サーバー側(node.js)も同様にする予定
                   </Text>
                 </ListItem>
-                <ListItem>ChatGPT等を利用する場合のプロンプト</ListItem>
+                <ListItem>AI用プロンプト</ListItem>
                 <Box maxW="95%">
                   <CodeBlock
                     code={`Flutter + Node.js + PostgreSQL による業務アプリ開発
