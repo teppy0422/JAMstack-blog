@@ -179,6 +179,9 @@ deploy 0042
 Change skillBlogs/pages/0015
 deploy 0043
 version up node
+deploy 0044
+redeploy vercel
+deploy 0045
 
 #### Doing Now
 
