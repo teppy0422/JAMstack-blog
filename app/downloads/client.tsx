@@ -332,6 +332,22 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          downloadPath: "/download/sjp/sjp/Sjp3.101.26_.zip",
+                          version: "3.101.26",
+                          date: "2025/10/07",
+                          reason: [
+                            "生産準備+ファイル毎にサーバーアドレス変更が必要(現場対応)",
+                            "部品リスト作成時に新しいメーカーに無い項目がDSWにある場合エラー停止",
+                            "コネクタ座標登録で写真が無い場合に写真を選択するとエラー停止",
+                          ],
+                          change: [
+                            "メインサーバーを変更:新見→徳島",
+                            "各項目を必須じゃないように修正",
+                            "エラー停止をメッセージ表示に修正",
+                          ],
+                          inCharge: ["徳島", "山田さん"],
+                        },
+                        {
                           downloadPath: "/download/sjp/sjp/Sjp3.101.21_.zip",
                           version: "3.101.21",
                           date: "2025/06/07",
