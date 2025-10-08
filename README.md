@@ -185,6 +185,8 @@ upload sjp3.101.26
 deploy 0045
 Add a check to see if new articles have been published in microcms
 deploy 0046
+blogs/で google map リンクの場合のアイコンを修正
+deploy 0047
 
 #### Doing Now
 

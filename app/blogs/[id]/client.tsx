@@ -26,6 +26,18 @@ export default function BlogContent({ blog }: any) {
     if (codeBlocks.length > 0) {
       hljs.highlightAll();
     }
+
+    // リンクのアイコンをドメインごとに変更
+    const links = document.querySelectorAll("a");
+    console.log("Found links:", links.length);
+    links.forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      console.log("Checking href:", href);
+      if (href.includes("google.com/maps") || href.includes("google.co.jp/maps") || href.includes("maps.google.com") || href.includes("maps.app.goo.gl")) {
+        link.setAttribute("data-link-type", "google-maps");
+        console.log("Added google-maps attribute to:", href);
+      }
+    });
   }, []);
 
   return (
