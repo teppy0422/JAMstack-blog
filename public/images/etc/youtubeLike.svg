@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="b" data-name="レイヤー 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 318.71 246.72">
+  <g id="c" data-name="レイヤー 1">
+    <g>
+      <rect width="318.71" height="246.72" rx="73" ry="73" fill="currentColor"/>
+      <rect x="35.86" y="47.86" width="247" height="150" rx="43" ry="43" fill="#fff"/>
+      <g>
+        <ellipse cx="107.36" cy="107.36" rx="13.5" ry="25.5" fill="currentColor"/>
+        <ellipse cx="211.36" cy="107.36" rx="13.5" ry="25.5" fill="currentColor"/>
+      </g>
+      <ellipse cx="159.36" cy="170.86" rx="27" ry="6" fill="currentColor"/>
+    </g>
+  </g>
+</svg>

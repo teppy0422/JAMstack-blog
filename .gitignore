@@ -39,7 +39,6 @@ yarn-error.log*
 *.png
 *.jpeg
 *.jpg
-*.svg
 *.mp4
 *.mov
 *.mp3
