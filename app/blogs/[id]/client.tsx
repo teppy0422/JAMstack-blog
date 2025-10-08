@@ -20,6 +20,32 @@ export default function BlogContent({ blog }: any) {
   const myClass = useColorModeValue(styles.myLight, styles.myDark);
   const { colorMode } = useColorMode();
 
+  // カスタムタグ <pin:#FF0000> を処理（エンコードされている場合も対応）
+  const processedContent = blog.content
+    // HTMLエンティティをデコード
+    .replace(/&lt;pin:(#[0-9A-Fa-f]{6})&gt;/gi, "<pin:$1>")
+    // カスタムタグを置換
+    .replace(
+      /<pin:(#[0-9A-Fa-f]{6})>/gi,
+      (match: string, color: string) => `<span class="custom-pin" style="
+        display: inline-block;
+        width: 16px;
+        height: 18px;
+        mask-image: url('/images/pin.svg');
+        -webkit-mask-image: url('/images/pin.svg');
+        mask-size: contain;
+        -webkit-mask-size: contain;
+        mask-repeat: no-repeat;
+        -webkit-mask-repeat: no-repeat;
+        background-color: ${color};
+        vertical-align: middle;
+        margin: 0px;
+      "></span>`
+    );
+
+  console.log("Original content:", blog.content.substring(0, 200));
+  console.log("Processed content:", processedContent.substring(0, 200));
+
   // クライアント側でのみハイライト実行
   useEffect(() => {
     const codeBlocks = document.querySelectorAll("pre code");
@@ -31,7 +57,12 @@ export default function BlogContent({ blog }: any) {
     const links = document.querySelectorAll("a");
     links.forEach((link) => {
       const href = link.getAttribute("href") || "";
-      if (href.includes("google.com/maps") || href.includes("google.co.jp/maps") || href.includes("maps.google.com") || href.includes("maps.app.goo.gl")) {
+      if (
+        href.includes("google.com/maps") ||
+        href.includes("google.co.jp/maps") ||
+        href.includes("maps.google.com") ||
+        href.includes("maps.app.goo.gl")
+      ) {
         link.setAttribute("data-link-type", "google-maps");
       }
     });
@@ -43,7 +74,10 @@ export default function BlogContent({ blog }: any) {
       embedlyIframes.forEach((iframe) => {
         const src = iframe.getAttribute("src") || "";
 
-        if ((src.includes("google.com") || src.includes("maps")) && !iframe.parentElement?.classList.contains("responsive-embed-wrapper")) {
+        if (
+          (src.includes("google.com") || src.includes("maps")) &&
+          !iframe.parentElement?.classList.contains("responsive-embed-wrapper")
+        ) {
           // width/height属性を削除
           iframe.removeAttribute("width");
           iframe.removeAttribute("height");
@@ -153,7 +187,7 @@ export default function BlogContent({ blog }: any) {
 
         <div
           className={styles.post}
-          dangerouslySetInnerHTML={{ __html: blog.content }}
+          dangerouslySetInnerHTML={{ __html: processedContent }}
         />
       </Container>
     </main>

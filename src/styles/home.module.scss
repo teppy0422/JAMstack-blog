@@ -105,18 +105,7 @@
     transform: translateY(-2px);
   }
   a[data-link-type="google-maps"]:after {
-    content: " ";
-    display: inline-block;
-    background-image: url("/images/pin.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    vertical-align: middle;
-    background-color: transparent;
-    font-size: 18px;
-    width: 16px;
-    height: 18px;
-    margin-left: 0px;
-    transform: translate(1px, -0px);
+    content: none;
   }
 
   & > ol {

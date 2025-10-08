@@ -189,6 +189,8 @@ blogs/で google map リンクの場合のアイコンを修正
 deploy 0047
 blogs/で google map の埋め込みに対応+レスポンシブ
 deploy 0048
+microCMS で<pin:#FF0000>を書くと色付きのピンを表示
+deploy 0049
 
 #### Doing Now
 
