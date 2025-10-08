@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { client } from "@/utils/microcms/client";
 import BlogContent from "./client";
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   const data = await client.get({
     endpoint: "blog",
