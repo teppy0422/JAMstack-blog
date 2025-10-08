@@ -105,13 +105,18 @@
     transform: translateY(-2px);
   }
   a[data-link-type="google-maps"]:after {
-    content: "📍";
-    background-image: none;
+    content: " ";
+    display: inline-block;
+    background-image: url("/images/pin.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    vertical-align: middle;
     background-color: transparent;
     font-size: 18px;
-    width: 8px;
+    width: 16px;
     height: 18px;
-    transform: translate(-6px, -6px);
+    margin-left: 0px;
+    transform: translate(1px, -0px);
   }
 
   & > ol {
