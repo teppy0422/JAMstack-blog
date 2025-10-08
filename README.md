@@ -191,6 +191,8 @@ blogs/で google map の埋め込みに対応+レスポンシブ
 deploy 0048
 microCMS で<pin:#FF0000>を書くと色付きのピンを表示
 deploy 0049
+main にマージして gitignore を編集して色々修正
+deploy 0050
 
 #### Doing Now
 
