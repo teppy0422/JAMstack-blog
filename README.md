@@ -187,6 +187,8 @@ Add a check to see if new articles have been published in microcms
 deploy 0046
 blogs/で google map リンクの場合のアイコンを修正
 deploy 0047
+blogs/で google map の埋め込みに対応+レスポンシブ
+deploy 0048
 
 #### Doing Now
 

@@ -29,15 +29,50 @@ export default function BlogContent({ blog }: any) {
 
     // リンクのアイコンをドメインごとに変更
     const links = document.querySelectorAll("a");
-    console.log("Found links:", links.length);
     links.forEach((link) => {
       const href = link.getAttribute("href") || "";
-      console.log("Checking href:", href);
       if (href.includes("google.com/maps") || href.includes("google.co.jp/maps") || href.includes("maps.google.com") || href.includes("maps.app.goo.gl")) {
         link.setAttribute("data-link-type", "google-maps");
-        console.log("Added google-maps attribute to:", href);
       }
     });
+
+    // Google Maps埋め込み（embedly）のレスポンシブ化
+    setTimeout(() => {
+      const embedlyIframes = document.querySelectorAll("iframe.embedly-embed");
+
+      embedlyIframes.forEach((iframe) => {
+        const src = iframe.getAttribute("src") || "";
+
+        if (src.includes("google.com") || src.includes("maps")) {
+          // width/height属性を削除
+          iframe.removeAttribute("width");
+          iframe.removeAttribute("height");
+
+          // iframeを囲むdivを作成
+          const wrapper = document.createElement("div");
+          wrapper.style.position = "relative";
+          wrapper.style.width = "100%";
+          wrapper.style.maxWidth = "100%";
+          wrapper.style.paddingBottom = "100%"; // 1:1比率
+          wrapper.style.height = "0";
+          wrapper.style.overflow = "hidden";
+          wrapper.style.margin = "1em 0";
+
+          // iframeのスタイル設定
+          (iframe as HTMLElement).style.position = "absolute";
+          (iframe as HTMLElement).style.top = "0";
+          (iframe as HTMLElement).style.left = "0";
+          (iframe as HTMLElement).style.width = "100%";
+          (iframe as HTMLElement).style.maxWidth = "100%";
+          (iframe as HTMLElement).style.height = "100%";
+          (iframe as HTMLElement).style.border = "0";
+
+          // iframeを囲む
+          iframe.parentNode?.insertBefore(wrapper, iframe);
+          wrapper.appendChild(iframe);
+        }
+      });
+    }, 500);
   }, []);
 
   return (
