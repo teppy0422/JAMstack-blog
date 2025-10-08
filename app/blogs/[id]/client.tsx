@@ -37,19 +37,20 @@ export default function BlogContent({ blog }: any) {
     });
 
     // Google Maps埋め込み（embedly）のレスポンシブ化
-    setTimeout(() => {
+    const applyResponsiveEmbed = () => {
       const embedlyIframes = document.querySelectorAll("iframe.embedly-embed");
 
       embedlyIframes.forEach((iframe) => {
         const src = iframe.getAttribute("src") || "";
 
-        if (src.includes("google.com") || src.includes("maps")) {
+        if ((src.includes("google.com") || src.includes("maps")) && !iframe.parentElement?.classList.contains("responsive-embed-wrapper")) {
           // width/height属性を削除
           iframe.removeAttribute("width");
           iframe.removeAttribute("height");
 
           // iframeを囲むdivを作成
           const wrapper = document.createElement("div");
+          wrapper.className = "responsive-embed-wrapper";
           wrapper.style.position = "relative";
           wrapper.style.width = "100%";
           wrapper.style.maxWidth = "100%";
@@ -57,6 +58,7 @@ export default function BlogContent({ blog }: any) {
           wrapper.style.height = "0";
           wrapper.style.overflow = "hidden";
           wrapper.style.margin = "1em 0";
+          wrapper.style.boxSizing = "border-box";
 
           // iframeのスタイル設定
           (iframe as HTMLElement).style.position = "absolute";
@@ -66,13 +68,19 @@ export default function BlogContent({ blog }: any) {
           (iframe as HTMLElement).style.maxWidth = "100%";
           (iframe as HTMLElement).style.height = "100%";
           (iframe as HTMLElement).style.border = "0";
+          (iframe as HTMLElement).style.boxSizing = "border-box";
 
           // iframeを囲む
           iframe.parentNode?.insertBefore(wrapper, iframe);
           wrapper.appendChild(iframe);
         }
       });
-    }, 500);
+    };
+
+    // 複数回実行して確実に適用
+    setTimeout(applyResponsiveEmbed, 100);
+    setTimeout(applyResponsiveEmbed, 500);
+    setTimeout(applyResponsiveEmbed, 1000);
   }, []);
 
   return (

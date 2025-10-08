@@ -133,7 +133,7 @@
     position: relative;
     width: 100% !important;
     max-width: 100% !important;
-    padding-bottom: 0% !important; /* 16:9比率 */
+    padding-bottom: 0% !important;
     height: 0 !important;
     overflow: hidden !important;
     box-sizing: border-box !important;
@@ -158,6 +158,23 @@
       border: 0 !important;
       box-sizing: border-box !important;
     }
+  }
+
+  // Embedly埋め込み（Google Maps）のレスポンシブ対応
+  :global(iframe.embedly-embed) {
+    display: block !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    margin: 1em auto !important;
+    box-sizing: border-box !important;
+  }
+
+  // 念のため親要素も制御
+  p:has(> :global(iframe.embedly-embed)) {
+    max-width: 100% !important;
+    overflow: hidden !important;
   }
 }
 .blogList {
