@@ -135,7 +135,7 @@ export default function BlogContent({ blog }: any) {
         <Box className={styles.title} fontSize="20px">
           {blog.title}
         </Box>
-        <Box className={styles.title} fontSize="20px">
+        <Box className={styles.subtitle} fontSize="14px">
           {blog.subtitle}
         </Box>
         <Divider
@@ -172,12 +172,11 @@ export default function BlogContent({ blog }: any) {
 
               return (
                 <Box display="flex" alignItems="center">
-                  <RepeatClockIcon marginRight="5px" />
-                  更新:
+                  <RepeatClockIcon marginRight="3px" />
                   <Moment
                     format={sameYear ? "MM/DD HH:mm" : "YYYY/MM/DD"}
                     className={styles.publishedAt}
-                    style={{ marginLeft: "4px", marginBottom: "0px" }}
+                    style={{ marginLeft: "2px", marginBottom: "0px" }}
                   >
                     {blog.updatedAt}
                   </Moment>
