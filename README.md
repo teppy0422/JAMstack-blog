@@ -192,6 +192,7 @@ deploy 0048
 microCMS で<pin:#FF0000>を書くと色付きのピンを表示
 deploy 0049
 main にマージして gitignore を編集して色々修正
+Add supabase 3keys of vercel Environment Variables
 deploy 0050
 
 #### Doing Now

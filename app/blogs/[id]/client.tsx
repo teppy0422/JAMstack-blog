@@ -129,17 +129,62 @@ export default function BlogContent({ blog }: any) {
         className={styles.container}
         fontWeight="400"
         mx="auto"
-        mt="14px"
+        my="0px"
         p="10px"
       >
         <Box className={styles.title} fontSize="20px">
           {blog.title}
         </Box>
+        <Box className={styles.title} fontSize="20px">
+          {blog.subtitle}
+        </Box>
+        <Divider
+          borderColor={
+            colorMode === "light"
+              ? "custom.theme.light.900"
+              : "custom.theme.dark.100"
+          }
+          borderWidth="1px"
+        />
         <Divider className={myClass} />
-        <RepeatClockIcon marginRight="5px" />
-        <Moment format="YYYY/MM/DD" className={styles.publishedAt}>
-          {blog.publishedAt}
-        </Moment>
+        <Box
+          display="flex"
+          gap="16px"
+          flexWrap="wrap"
+          fontSize="14px"
+          justifyContent="space-between"
+        >
+          <Box display="flex" alignItems="center">
+            <Moment
+              format="YYYY/MM/DD"
+              className={styles.publishedAt}
+              style={{ marginLeft: "4px", marginBottom: "0px" }}
+            >
+              {blog.publishedAt}
+            </Moment>
+          </Box>
+          {blog.updatedAt &&
+            blog.updatedAt !== blog.publishedAt &&
+            (() => {
+              const publishYear = new Date(blog.publishedAt).getFullYear();
+              const updateYear = new Date(blog.updatedAt).getFullYear();
+              const sameYear = publishYear === updateYear;
+
+              return (
+                <Box display="flex" alignItems="center">
+                  <RepeatClockIcon marginRight="5px" />
+                  更新:
+                  <Moment
+                    format={sameYear ? "MM/DD HH:mm" : "YYYY/MM/DD"}
+                    className={styles.publishedAt}
+                    style={{ marginLeft: "4px", marginBottom: "0px" }}
+                  >
+                    {blog.updatedAt}
+                  </Moment>
+                </Box>
+              );
+            })()}
+        </Box>
 
         {blog.tags && blog.tags.length > 0 && (
           <Box display="flex" flexWrap="wrap" gap="8px" mt="8px" mb="16px">
