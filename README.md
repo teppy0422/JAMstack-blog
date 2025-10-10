@@ -191,9 +191,11 @@ blogs/で google map の埋め込みに対応+レスポンシブ
 deploy 0048
 microCMS で<pin:#FF0000>を書くと色付きのピンを表示
 deploy 0049
-main にマージして gitignore を編集して色々修正
+main に merge して gitignore を編集して色々修正
 Add supabase 3keys of vercel Environment Variables
 deploy 0050
+merge 時に git clean -fd - 未追跡ファイル（untracked files）を全て削除した事による欠損ファイルを復元
+deploy 0051
 
 #### Doing Now
 

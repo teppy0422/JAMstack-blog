@@ -1068,7 +1068,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           <Heading size="sm" mb="3px">
                             main
                           </Heading>
-
                           <BadgeList labels={["ACCESS2003", "ACCESS2010"]} />
                           <Text pt="3px" fontSize="sm">
                             {getMessage({
