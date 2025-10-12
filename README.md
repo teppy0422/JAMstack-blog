@@ -196,6 +196,8 @@ Add supabase 3keys of vercel Environment Variables
 deploy 0050
 merge 時に git clean -fd - 未追跡ファイル（untracked files）を全て削除した事による欠損ファイルを復元
 deploy 0051
+.gitignore の編集
+deploy 0052
 
 #### Doing Now
 

@@ -35,15 +35,15 @@ yarn-error.log*
 /.trash/
 
 # メディアファイル
-*.webp
-*.png
-*.jpeg
-*.jpg
-*.mp4
-*.mov
-*.mp3
-*.glb
-*.zip
-*.xlsm
-*.xlsx
-*.xls
+# *.webp
+# *.png
+# *.jpeg
+# *.jpg
+# *.mp4
+# *.mov
+# *.mp3
+# *.glb
+# *.zip
+# *.xlsm
+# *.xlsx
+# *.xls

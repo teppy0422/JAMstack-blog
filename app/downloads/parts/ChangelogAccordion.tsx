@@ -166,16 +166,25 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                           </Box>
                         )}
                         {item.downloadPath && (
-                          <DownloadButton
-                            currentUserName={currentUserName}
-                            url={item.downloadPath}
-                            bg="custom.excel"
-                            color={
+                          <Box
+                            borderTop=".5px solid"
+                            borderColor={
                               colorMode === "light"
-                                ? "custom.theme.light.900"
+                                ? "custom.theme.light.700"
                                 : "white"
                             }
-                          />
+                          >
+                            <DownloadButton
+                              currentUserName={currentUserName}
+                              url={item.downloadPath}
+                              bg="custom.excel"
+                              color={
+                                colorMode === "light"
+                                  ? "custom.theme.light.900"
+                                  : "white"
+                              }
+                            />
+                          </Box>
                         )}
                       </ListItem>
                       {item.htmlText && (
