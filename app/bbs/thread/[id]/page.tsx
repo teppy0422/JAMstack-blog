@@ -1185,7 +1185,7 @@ function ThreadContent(): JSX.Element {
         ]);
         const data = await ffmpeg.readFile(outputFileName);
         processedFile = new File(
-          [data],
+          [new Uint8Array(data as Uint8Array)],
           file.name.replace(/\.[^/.]+$/, ".webm"),
           {
             type: "video/webm",

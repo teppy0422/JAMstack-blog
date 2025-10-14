@@ -206,6 +206,10 @@ deploy 0053
 
 0054
 
+- SENDGRID_API_KEY を vercel に登録してメッセージ送信時にメール送信を本番で行えるように修正
+
+0055
+
 #### Doing Now
 
 switch アイコンの向きを変える
