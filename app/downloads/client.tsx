@@ -22,6 +22,7 @@ import {
   Link,
   Icon,
   useColorModeValue,
+  Tooltip,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 
@@ -220,12 +221,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       }}
                       onMouseEnter={() => setHoveredId("01")}
                     >
-                      <DownloadButton
-                        path="/download/sjp/sjp/"
-                        isHovered={hoverdId === "01"}
-                        backGroundColor="custom.excel"
-                        userName={currentUserName}
-                      />
+                      <Tooltip
+                        placement="left"
+                        label="最新バージョンのダウンロード"
+                        shouldWrapChildren
+                      >
+                        <DownloadButton
+                          path="/download/sjp/sjp/"
+                          isHovered={hoverdId === "01"}
+                          backGroundColor="custom.excel"
+                          userName={currentUserName}
+                        />
+                      </Tooltip>
                       <Flex
                         justifyContent="space-between"
                         alignItems="flex-start"
@@ -322,7 +329,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             initialVideoId="41"
                             isModal={true}
                           />
-
                           <Modal56 />
                           <Modal70 />
                         </Stack>
@@ -957,12 +963,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       minH={140}
                       onMouseEnter={() => setHoveredId("03")}
                     >
-                      <DownloadButton
-                        path="/download/bip/bip/"
-                        isHovered={hoverdId === "03"}
-                        backGroundColor="custom.excel"
-                        userName={currentUserName}
-                      />
+                      <Tooltip
+                        placement="left"
+                        label="最新バージョンのダウンロード"
+                        shouldWrapChildren
+                      >
+                        <DownloadButton
+                          path="/download/bip/bip/"
+                          isHovered={hoverdId === "03"}
+                          backGroundColor="custom.excel"
+                          userName={currentUserName}
+                        />
+                      </Tooltip>
                       <Flex
                         justifyContent="space-between"
                         alignItems="flex-start"
@@ -1050,12 +1062,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       }}
                       onMouseEnter={() => setHoveredId("04")}
                     >
-                      <DownloadButton
-                        path="/download/jdss/main"
-                        isHovered={hoverdId === "04"}
-                        backGroundColor="custom.access"
-                        userName={currentUserName}
-                      />
+                      <Tooltip
+                        placement="left"
+                        label="最新バージョンのダウンロード"
+                        shouldWrapChildren
+                      >
+                        <DownloadButton
+                          path="/download/jdss/main"
+                          isHovered={hoverdId === "04"}
+                          backGroundColor="custom.access"
+                          userName={currentUserName}
+                        />
+                      </Tooltip>
                       <Flex
                         justifyContent="space-between"
                         alignItems="flex-start"
@@ -1243,12 +1261,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         }}
                         onMouseEnter={() => setHoveredId("05")}
                       >
-                        <DownloadButton
-                          path="/download/jdss/main3/"
-                          isHovered={hoverdId === "05"}
-                          backGroundColor="custom.omron"
-                          userName={currentUserName}
-                        />
+                        <Tooltip
+                          placement="left"
+                          label="最新バージョンのダウンロード"
+                          shouldWrapChildren
+                        >
+                          <DownloadButton
+                            path="/download/jdss/main3/"
+                            isHovered={hoverdId === "05"}
+                            backGroundColor="custom.omron"
+                            userName={currentUserName}
+                          />
+                        </Tooltip>
                         <Flex
                           justifyContent="space-between"
                           alignItems="flex-start"
@@ -1380,12 +1404,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       minH={"9em"}
                       onMouseEnter={() => setHoveredId("07")}
                     >
-                      <DownloadButton
-                        path="/download/yps/yps/"
-                        isHovered={hoverdId === "07"}
-                        backGroundColor="custom.excel"
-                        userName={currentUserName}
-                      />
+                      <Tooltip
+                        placement="left"
+                        label="最新バージョンのダウンロード"
+                        shouldWrapChildren
+                      >
+                        <DownloadButton
+                          path="/download/yps/yps/"
+                          isHovered={hoverdId === "07"}
+                          backGroundColor="custom.excel"
+                          userName={currentUserName}
+                        />
+                      </Tooltip>
                       <Flex
                         justifyContent="space-between"
                         alignItems="flex-start"
@@ -1528,12 +1558,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         minH={"9em"}
                         onMouseEnter={() => setHoveredId("08")}
                       >
-                        <DownloadButton
-                          path="/download/yps/verup/"
-                          isHovered={hoverdId === "08"}
-                          backGroundColor="custom.excel"
-                          userName={currentUserName}
-                        />
+                        <Tooltip
+                          placement="left"
+                          label="最新バージョンのダウンロード"
+                          shouldWrapChildren
+                        >
+                          <DownloadButton
+                            path="/download/yps/verup/"
+                            isHovered={hoverdId === "08"}
+                            backGroundColor="custom.excel"
+                            userName={currentUserName}
+                          />
+                        </Tooltip>
                         <Flex
                           justifyContent="space-between"
                           alignItems="flex-start"
@@ -1628,12 +1664,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       minH={"9em"}
                       onMouseEnter={() => setHoveredId("06")}
                     >
-                      <DownloadButton
-                        path="/download/library/code39/"
-                        isHovered={hoverdId === "06"}
-                        backGroundColor="#555"
-                        userName={currentUserName}
-                      />
+                      <Tooltip
+                        placement="left"
+                        label="最新バージョンのダウンロード"
+                        shouldWrapChildren
+                      >
+                        <DownloadButton
+                          path="/download/library/code39/"
+                          isHovered={hoverdId === "06"}
+                          backGroundColor="#555"
+                          userName={currentUserName}
+                        />
+                      </Tooltip>
                       <Flex
                         justifyContent="space-between"
                         alignItems="flex-start"
@@ -1689,12 +1731,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       minH={"9em"}
                       onMouseEnter={() => setHoveredId("09")}
                     >
-                      <DownloadButton
-                        path="/download/library/MSCOMM32/"
-                        isHovered={hoverdId === "09"}
-                        backGroundColor="custom.windows"
-                        userName={currentUserName}
-                      />
+                      <Tooltip
+                        placement="left"
+                        label="最新バージョンのダウンロード"
+                        shouldWrapChildren
+                      >
+                        <DownloadButton
+                          path="/download/library/MSCOMM32/"
+                          isHovered={hoverdId === "09"}
+                          backGroundColor="custom.windows"
+                          userName={currentUserName}
+                        />
+                      </Tooltip>
                       <Flex
                         justifyContent="space-between"
                         alignItems="flex-start"

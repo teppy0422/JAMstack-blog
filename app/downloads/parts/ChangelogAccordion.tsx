@@ -93,99 +93,114 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                     <>
                       <Box h="0.5px" width="100%" bg="gray.500" />
                       <ListItem key={index}>
-                        <Box
-                          as="span"
-                          fontSize="13px"
-                          fontWeight="400"
-                          mr={2}
-                          bg="gray"
-                          color="white"
-                          px="2px"
-                          lineHeight={0.8}
-                        >
-                          {item.version}
-                        </Box>
-                        <Box as="span" fontWeight="bold">
-                          {item.date}
-                        </Box>
-                        {item.inCharge && item.inCharge.length > 0 && (
-                          <>
-                            {item.inCharge.map((name, i) => {
-                              const { bg, color, borderColor } = getColor(name);
-                              return (
-                                <Badge
-                                  key={i}
-                                  bg={bg}
-                                  color={color}
-                                  border={borderColor ? "1px solid" : "none"}
-                                  borderColor={borderColor}
-                                  fontWeight={600}
-                                  fontSize="0.6rem"
-                                  ml={1}
-                                >
-                                  {name}
-                                </Badge>
-                              );
-                            })}
-                          </>
-                        )}
-                        {item.reason && item.reason.length > 0 && (
-                          <Box my={0.5} pl={0}>
-                            <List spacing={1} pl={0}>
-                              {item.reason.map((r, i) => (
-                                <ListItem key={i}>
-                                  <ListIcon
-                                    as={WarningTwoIcon}
-                                    position="relative"
-                                    color="red.500"
-                                    mr={1}
-                                    top="-2px"
-                                  />
-                                  {r}
-                                </ListItem>
-                              ))}
-                            </List>
-                          </Box>
-                        )}
-                        {item.change && item.change.length > 0 && (
-                          <Box my={0.5} pl={0}>
-                            <List spacing={1} pl={0}>
-                              {item.change.map((c, i) => (
-                                <ListItem key={i}>
-                                  <ListIcon
-                                    as={CheckCircleIcon}
-                                    position="relative"
-                                    color="green.500"
-                                    mr={1}
-                                    top="-2px"
-                                  />
-                                  {c}
-                                </ListItem>
-                              ))}
-                            </List>
-                          </Box>
-                        )}
-                        {item.downloadPath && (
-                          <Box
-                            borderTop=".5px solid"
-                            borderColor={
-                              colorMode === "light"
-                                ? "custom.theme.light.700"
-                                : "white"
-                            }
-                          >
-                            <DownloadButton
-                              currentUserName={currentUserName}
-                              url={item.downloadPath}
-                              bg="custom.excel"
-                              color={
+                        <Flex>
+                          {item.downloadPath && (
+                            <Box
+                              width="18px"
+                              sx={{
+                                writingMode: "vertical-rl",
+                                transform: "rotate(180deg)",
+                                letterSpacing: "-2px", // 文字間を狭くする
+                                marginRight: "2px",
+                              }}
+                              borderRight=".5px solid"
+                              borderLeft=".5px solid"
+                              borderColor={
                                 colorMode === "light"
-                                  ? "custom.theme.light.900"
+                                  ? "custom.theme.light.700"
                                   : "white"
                               }
-                            />
+                            >
+                              <DownloadButton
+                                currentUserName={currentUserName}
+                                url={item.downloadPath}
+                                bg="custom.excel"
+                                color={
+                                  colorMode === "light"
+                                    ? "custom.theme.light.900"
+                                    : "white"
+                                }
+                              />
+                            </Box>
+                          )}
+                          <Box flex="1">
+                            <Box
+                              as="span"
+                              fontSize="13px"
+                              fontWeight="400"
+                              mr={2}
+                              bg="gray"
+                              color="white"
+                              px="2px"
+                              lineHeight={0.8}
+                            >
+                              {item.version}
+                            </Box>
+                            <Box as="span" fontWeight="bold">
+                              {item.date}
+                            </Box>
+                            {item.inCharge && item.inCharge.length > 0 && (
+                              <>
+                                {item.inCharge.map((name, i) => {
+                                  const { bg, color, borderColor } =
+                                    getColor(name);
+                                  return (
+                                    <Badge
+                                      key={i}
+                                      bg={bg}
+                                      color={color}
+                                      border={
+                                        borderColor ? "1px solid" : "none"
+                                      }
+                                      borderColor={borderColor}
+                                      fontWeight={600}
+                                      fontSize="0.6rem"
+                                      ml={1}
+                                    >
+                                      {name}
+                                    </Badge>
+                                  );
+                                })}
+                              </>
+                            )}
+                            {item.reason && item.reason.length > 0 && (
+                              <Box my={0.5} pl={0}>
+                                <List spacing={1} pl={0}>
+                                  {item.reason.map((r, i) => (
+                                    <ListItem key={i}>
+                                      <ListIcon
+                                        as={WarningTwoIcon}
+                                        position="relative"
+                                        color="red.500"
+                                        mr={1}
+                                        top="-2px"
+                                      />
+                                      {r}
+                                    </ListItem>
+                                  ))}
+                                </List>
+                              </Box>
+                            )}
+                            {item.change && item.change.length > 0 && (
+                              <Box my={0.5} pl={0}>
+                                <List spacing={1} pl={0}>
+                                  {item.change.map((c, i) => (
+                                    <ListItem key={i}>
+                                      <ListIcon
+                                        as={CheckCircleIcon}
+                                        position="relative"
+                                        color="green.500"
+                                        mr={1}
+                                        top="-2px"
+                                      />
+                                      {c}
+                                    </ListItem>
+                                  ))}
+                                </List>
+                              </Box>
+                            )}
                           </Box>
-                        )}
+                        </Flex>
                       </ListItem>
                       {item.htmlText && (
                         <>
@@ -260,7 +275,7 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                                         style={{
                                           cursor: "pointer",
                                           backgroundColor: "transparent",
-                                        }} // 追加
+                                        }}
                                       />
                                     </Box>
                                     <Box

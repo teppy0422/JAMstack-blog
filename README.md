@@ -198,6 +198,8 @@ merge 時に git clean -fd - 未追跡ファイル（untracked files）を全て
 deploy 0051
 .gitignore の編集
 deploy 0052
+ダウンロードページの修正
+deploy 0053
 
 #### Doing Now
 
