@@ -201,6 +201,11 @@ deploy 0052
 ダウンロードページの修正
 deploy 0053
 
+- google calender を修正
+- API キーがブラウザに露出しないように保護
+
+0054
+
 #### Doing Now
 
 switch アイコンの向きを変える

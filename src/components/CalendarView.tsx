@@ -17,9 +17,6 @@ import {
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 
-const CALENDAR_ID = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID!;
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY!;
-
 interface Event {
   id: string;
   summary: string;
@@ -80,12 +77,19 @@ export default function CalendarView() {
       try {
         const start = new Date(year, month, 1).toISOString();
         const end = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
-        const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&timeMin=${start}&timeMax=${end}&singleEvents=true&orderBy=startTime`;
+        const url = `/api/calendar/events?timeMin=${start}&timeMax=${end}`;
         const response = await fetch(url);
         const data = await response.json();
-        setEvents(data.items || []);
+
+        if (!response.ok) {
+          console.error("Error fetching calendar events:", data);
+          setEvents([]);
+        } else {
+          setEvents(data.items || []);
+        }
       } catch (error) {
         console.error("Error fetching calendar events:", error);
+        setEvents([]);
       } finally {
         setLoading(false);
       }
