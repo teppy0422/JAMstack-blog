@@ -4,7 +4,7 @@
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "clean": "rm -rf .next",
     "build:meta": "tsc -p tsconfig.scripts.json && node scripts/dist-scripts/buildFileMeta.js",
-    "build": "next build && next-sitemap --config sitemap.config.js",
+    "build": "npm run build:meta && next build && next-sitemap --config sitemap.config.js",
     "start": "next start"
   },
   "author": {

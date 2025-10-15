@@ -91,19 +91,23 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                 {changelog.map((item, index) => {
                   return (
                     <>
-                      <Box h="0.5px" width="100%" bg="gray.500" />
-                      <ListItem key={index}>
+                      <Box h="1.5px" width="100%" bg="gray.500" m={0} p={0} />
+                      <ListItem key={index} m={0} p={0}>
                         <Flex direction="column">
                           <Box flex="1">
                             <Box
                               as="span"
-                              fontSize="13px"
-                              fontWeight="400"
+                              fontSize="14px"
+                              fontWeight="900"
                               mr={2}
-                              bg="gray"
-                              color="white"
+                              mt={0}
+                              color={
+                                colorMode === "light"
+                                  ? "custom.theme.light.900"
+                                  : "white"
+                              }
                               px="2px"
-                              lineHeight={0.8}
+                              height="10px"
                             >
                               {item.version}
                             </Box>
@@ -177,11 +181,7 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                                 width="auto"
                                 height="20px"
                                 border=".5px solid"
-                                borderColor={
-                                  colorMode === "light"
-                                    ? "custom.theme.light.700"
-                                    : "tranceparant"
-                                }
+                                borderColor="transparent"
                                 overflow="hidden"
                                 bg="custom.excel"
                                 px={2}

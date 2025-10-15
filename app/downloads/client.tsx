@@ -173,13 +173,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                 cn: "进入说明页面",
                 language,
               })}
-              <br />
-              {getMessage({
-                ja: "過去のバージョンが必要な場合は連絡ください",
-                us: "Please contact us if you need previous versions.",
-                cn: "如果您需要以前的版本，请联系我们。",
-                language,
-              })}
               <Box
                 display="flex"
                 alignItems="center"

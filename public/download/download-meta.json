@@ -1,15 +1,15 @@
 {
   "bip/bip": {
     "latestFile": "Bip2.200.15_.zip",
-    "latestUpdated": "2025-01-23T09:28:42.000Z"
+    "latestUpdated": "2025-10-10T00:04:26.293Z"
   },
   "jdss/main": {
-    "latestFile": "main_165.zip",
-    "latestUpdated": "2025-03-18T02:03:06.908Z"
+    "latestFile": "main_164.zip",
+    "latestUpdated": "2025-10-10T00:18:58.089Z"
   },
   "jdss/main3": {
     "latestFile": "main3_17.zip",
-    "latestUpdated": "2024-10-11T15:35:55.225Z"
+    "latestUpdated": "2025-10-10T00:13:14.153Z"
   },
   "jdss": {
     "latestFile": ".DS_Store",
@@ -17,23 +17,27 @@
   },
   "library/MSCOMM32": {
     "latestFile": "MSCOMM32.OCX",
-    "latestUpdated": "2007-11-29T09:06:24.000Z"
+    "latestUpdated": "2025-10-08T14:33:03.280Z"
   },
   "library/code39": {
     "latestFile": "Code39Barcode.ttf",
-    "latestUpdated": "2025-06-03T07:42:28.616Z"
+    "latestUpdated": "2025-10-08T14:33:03.280Z"
   },
   "sjp/sjp": {
-    "latestFile": "Sjp3.101.21_.zip",
-    "latestUpdated": "2025-06-07T08:41:40.000Z"
+    "latestFile": "Sjp3.101.26_.zip",
+    "latestUpdated": "2025-10-07T01:10:38.000Z"
+  },
+  "sjp": {
+    "latestFile": ".DS_Store",
+    "latestUpdated": "2025-10-15T02:44:10.365Z"
   },
   "yps/verup": {
     "latestFile": "VerUp.zip",
-    "latestUpdated": "2025-05-26T04:33:42.333Z"
+    "latestUpdated": "2025-10-10T00:19:10.857Z"
   },
   "yps/yps": {
     "latestFile": "Yps1.17_.zip",
-    "latestUpdated": "2025-07-08T13:11:58.000Z"
+    "latestUpdated": "2025-10-10T00:19:07.908Z"
   },
   "yps": {
     "latestFile": ".DS_Store",
@@ -41,6 +45,6 @@
   },
   ".": {
     "latestFile": "download-meta.json",
-    "latestUpdated": "2025-07-07T16:55:22.964Z"
+    "latestUpdated": "2025-10-15T02:43:15.412Z"
   }
 }
