@@ -86,43 +86,14 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                 />
               </Flex>
             </AccordionButton>
-            <AccordionPanel fontSize="xs" pt={0} px={2} pb={2}>
+            <AccordionPanel fontSize="xs" pt={0} px={0} pb={2}>
               <List spacing={0} styleType="none" pl={0}>
                 {changelog.map((item, index) => {
                   return (
                     <>
                       <Box h="0.5px" width="100%" bg="gray.500" />
                       <ListItem key={index}>
-                        <Flex>
-                          {item.downloadPath && (
-                            <Box
-                              width="18px"
-                              sx={{
-                                writingMode: "vertical-rl",
-                                transform: "rotate(180deg)",
-                                letterSpacing: "-2px", // 文字間を狭くする
-                                marginRight: "2px",
-                              }}
-                              borderRight=".5px solid"
-                              borderLeft=".5px solid"
-                              borderColor={
-                                colorMode === "light"
-                                  ? "custom.theme.light.700"
-                                  : "white"
-                              }
-                            >
-                              <DownloadButton
-                                currentUserName={currentUserName}
-                                url={item.downloadPath}
-                                bg="custom.excel"
-                                color={
-                                  colorMode === "light"
-                                    ? "custom.theme.light.900"
-                                    : "white"
-                                }
-                              />
-                            </Box>
-                          )}
+                        <Flex direction="column">
                           <Box flex="1">
                             <Box
                               as="span"
@@ -164,7 +135,7 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                               </>
                             )}
                             {item.reason && item.reason.length > 0 && (
-                              <Box my={0.5} pl={0}>
+                              <Box my={0.5} pl={0} ml={1}>
                                 <List spacing={1} pl={0}>
                                   {item.reason.map((r, i) => (
                                     <ListItem key={i}>
@@ -182,7 +153,7 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                               </Box>
                             )}
                             {item.change && item.change.length > 0 && (
-                              <Box my={0.5} pl={0}>
+                              <Box my={0.5} pl={0} ml={1}>
                                 <List spacing={1} pl={0}>
                                   {item.change.map((c, i) => (
                                     <ListItem key={i}>
@@ -200,6 +171,30 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                               </Box>
                             )}
                           </Box>
+                          {item.downloadPath && (
+                            <Flex justifyContent="flex-end" mt={2}>
+                              <Box
+                                width="auto"
+                                height="20px"
+                                border=".5px solid"
+                                borderColor={
+                                  colorMode === "light"
+                                    ? "custom.theme.light.700"
+                                    : "tranceparant"
+                                }
+                                overflow="hidden"
+                                bg="custom.excel"
+                                px={2}
+                              >
+                                <DownloadButton
+                                  currentUserName={currentUserName}
+                                  url={item.downloadPath}
+                                  bg="custom.excel"
+                                  color="white"
+                                />
+                              </Box>
+                            </Flex>
+                          )}
                         </Flex>
                       </ListItem>
                       {item.htmlText && (
