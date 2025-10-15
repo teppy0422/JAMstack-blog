@@ -132,9 +132,9 @@ const DownloadButton2 = ({
                 description={
                   <>
                     <Box>
-                      {{ fileName } +
+                      {fileName +
                         getMessage({
-                          ja: " のダウンロードが完了しました",
+                          ja: " をダウンロードしました",
                           us: " download has been completed",
                           cn: " 的下载已完成",
                           language,

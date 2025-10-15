@@ -210,6 +210,12 @@ deploy 0053
 
 0055
 
+- CustomTooltip の作成
+- theme に Tooltip を追加
+- download メッセージを修正
+
+0056
+
 #### Doing Now
 
 switch アイコンの向きを変える

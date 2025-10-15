@@ -186,7 +186,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                 justifyContent="center"
                 width="auto"
                 mt={2}
-              ></Box>
+              >
+                <Text fontSize="13px">
+                  ※ExcelとAccessは32bitのみ対応。64bitに対応するには修正が必要
+                </Text>
+              </Box>
             </Box>
           </Box>
           <SimpleGrid

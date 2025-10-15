@@ -8,6 +8,19 @@ export const theme = extendTheme({
     initialColorMode: "light",
     useSystemColorMode: false,
   },
+  components: {
+    Tooltip: {
+      baseStyle: (props) => ({
+        bg: props.colorMode === "light" ? "#f0e4da" : "#202024",
+        color: props.colorMode === "light" ? "#121214" : "#ccc",
+        borderRadius: "md",
+        fontSize: "sm",
+        px: 3,
+        py: 2,
+        "--tooltip-bg": props.colorMode === "light" ? "#f0e4da" : "#202024",
+      }),
+    },
+  },
   fonts: {
     heading: "'Noto Sans JP', sans-serif",
     body: "'Noto Sans JP', sans-serif", // bodyのフォントを設定

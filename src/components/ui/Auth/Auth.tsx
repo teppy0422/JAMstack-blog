@@ -25,10 +25,12 @@ import {
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import { MdBusiness, MdEmail, MdHistory } from "react-icons/md";
+import { QuestionIcon } from "@chakra-ui/icons";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CustomAvatar } from "../CustomAvatar";
 import EmailNotifySwitch from "./emailNotifySwitch";
+import { CustomTooltip } from "../CustomTooltip";
 
 import getMessage from "@/utils/getMessage";
 
@@ -782,15 +784,28 @@ export default function Auth({ userData }: AuthProps) {
                 <Text fontSize="13px">{userData.userEmail}</Text>
               </Flex>
               <Box h="1px" w="100%" bg="#4c4b49" my={2} />
+              <Box h="8px" />
               <Flex justifyContent="space-between" alignItems="center">
-                <Text fontWeight="bold" fontSize="13px">
-                  {getMessage({
-                    ja: "通知の設定",
-                    us: "Notification Settings",
-                    cn: "通知设置",
-                    language,
-                  })}
-                </Text>
+                <Flex alignItems="center" gap={1}>
+                  <Text fontWeight="bold" fontSize="13px">
+                    {getMessage({
+                      ja: "通知の設定",
+                      us: "Notification Settings",
+                      cn: "通知设置",
+                      language,
+                    })}
+                  </Text>
+                  <CustomTooltip
+                    label={getMessage({
+                      ja: "新しいチャットが送られた場合メールアドレスに通知を送信します",
+                      us: "When a new chat is sent, a notification will be sent to your email address.",
+                      cn: "当收到新消息时，将向电子邮箱发送通知。",
+                      language,
+                    })}
+                  >
+                    <QuestionIcon boxSize={3} />
+                  </CustomTooltip>
+                </Flex>
                 <EmailNotifySwitch userId={user.id} />
               </Flex>
             </Box>
@@ -803,14 +818,40 @@ export default function Auth({ userData }: AuthProps) {
               mb={4}
             >
               <Flex justifyContent="space-between" alignItems="center">
-                <Text fontWeight="bold" fontSize="14px">
-                  {getMessage({
-                    ja: "言語選択",
-                    us: "Language",
-                    cn: "语言选择",
-                    language,
-                  })}
-                </Text>
+                <Flex justify="center" align="center" gap={1}>
+                  <Text fontWeight="bold" fontSize="13px">
+                    {getMessage({
+                      ja: "言語選択",
+                      us: "Language",
+                      cn: "语言选择",
+                      language,
+                    })}
+                  </Text>
+                  <CustomTooltip
+                    label={
+                      <Box>
+                        <Text>
+                          {getMessage({
+                            ja: "画像の翻訳は日本語以外は未対応です。",
+                            us: "Translation of images is not yet available except for Japanese.",
+                            cn: "除日语外，尚未提供图像翻译。",
+                            language,
+                          })}
+                        </Text>
+                        <Text>
+                          {getMessage({
+                            ja: "必要であれば対応するので連絡ください。",
+                            us: "Please contact me if you need assistance.",
+                            cn: "如有必要，请联系我们寻求帮助。",
+                            language,
+                          })}
+                        </Text>
+                      </Box>
+                    }
+                  >
+                    <QuestionIcon boxSize={3} />
+                  </CustomTooltip>
+                </Flex>
                 <HStack>
                   <Tooltip label={<Box>日本語</Box>} aria-label="ja">
                     <img
@@ -868,21 +909,6 @@ export default function Auth({ userData }: AuthProps) {
                   </Tooltip>
                 </HStack>
               </Flex>
-              <Box h="1px" w="100%" bg="#4c4b49" my={2} />
-              <Text fontSize="12px" mx="auto" textAlign="left">
-                {getMessage({
-                  ja: "画像の翻訳は日本語以外は未対応です。",
-                  us: "Translation of images is not yet available except for Japanese",
-                  cn: "除日语外，尚未提供图像翻译。",
-                  language,
-                })}
-                {getMessage({
-                  ja: "必要であれば対応するので連絡ください。",
-                  us: "Please contact me if you need assistance.",
-                  cn: "如有必要，请联系我们寻求帮助。",
-                  language,
-                })}
-              </Text>
             </Box>
             <Spacer h="10px" />
             <Box
@@ -895,20 +921,19 @@ export default function Auth({ userData }: AuthProps) {
             >
               <Flex justifyContent="space-between" alignItems="center">
                 <Box display="flex" justifyContent="center">
-                  <Tooltip
+                  <CustomTooltip
                     label={getMessage({
-                      ja: "ユーザーアイコンを変更",
-                      us: "Change user icon",
-                      cn: "更改用户图标",
+                      ja: "アイコンに使用するファイルを選択",
+                      us: "Select the file to use as the icon.",
+                      cn: "选择用于图标的文件",
                       language,
                     })}
                     aria-label={getMessage({
-                      ja: "ユーザーアイコンを変更",
-                      us: "Change user icon",
-                      cn: "更改用户图标",
+                      ja: "アイコンに使用するファイルを選択",
+                      us: "Select the file to use as the icon.",
+                      cn: "选择用于图标的文件",
                       language,
                     })}
-                    hasArrow
                     placement="top"
                   >
                     <Box
@@ -925,7 +950,7 @@ export default function Auth({ userData }: AuthProps) {
                         })}
                       </Box>
                     </Box>
-                  </Tooltip>
+                  </CustomTooltip>
                 </Box>
                 <Box h="1rem" width="1px" bg="#4c4b49" />
                 <Box display="flex" justifyContent="center">
