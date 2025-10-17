@@ -251,6 +251,10 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             labels={["EXCEL2010", "EXCEL2013", "EXCEL365"]}
                             useGetColor={[true, true, false]}
                           />
+                          <BadgeList
+                            labels={["32bit", "64bit"]}
+                            useGetColor={[true, false]}
+                          />
                           <Text pt="3px" fontSize="sm" textAlign="left">
                             {getMessage({
                               ja: "最初はこれから始めるのがおすすめです",
@@ -988,6 +992,10 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             labels={["EXCEL2010", "EXCEL2013", "EXCEL365"]}
                             useGetColor={[true, true, false]}
                           />
+                          <BadgeList
+                            labels={["32bit", "64bit"]}
+                            useGetColor={[true, false]}
+                          />
                           <Text pt="3px" fontSize="sm">
                             {getMessage({
                               ja: "全製品品番の使用部品リストの一覧表を作成",
@@ -1083,7 +1091,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           <Heading size="sm" mb="3px">
                             main
                           </Heading>
-                          <BadgeList labels={["ACCESS2003", "ACCESS2010"]} />
+                          <BadgeList
+                            labels={["ACCESS2003", "ACCESS2010"]}
+                            useGetColor={[true, true]}
+                          />
+                          <BadgeList
+                            labels={["32bit", "64bit"]}
+                            useGetColor={[true, false]}
+                          />
                           <Text pt="3px" fontSize="sm">
                             {getMessage({
                               ja: "一貫工程などの連続して生産する工程で有効",
@@ -1432,6 +1447,10 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             labels={["EXCEL2010", "EXCEL2013", "EXCEL365"]}
                             useGetColor={[true, true, false]}
                           />
+                          <BadgeList
+                            labels={["32bit", "64bit"]}
+                            useGetColor={[true, true]}
+                          />
                           <Text pt="3px" fontSize="sm">
                             {getMessage({
                               ja: "誘導ポイント設定一覧表(作業内容とインラインNo./忘れん棒番号/製品品番の使い分けを記した作業手順書)",
@@ -1593,6 +1612,10 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             <BadgeList
                               labels={["EXCEL2010", "EXCEL2013", "EXCEL365"]}
                               useGetColor={[true, true, false]}
+                            />
+                            <BadgeList
+                              labels={["32bit", "64bit"]}
+                              useGetColor={[true, true]}
                             />
                             <Text pt="3px" fontSize="sm">
                               {getMessage({

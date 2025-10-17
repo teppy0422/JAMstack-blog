@@ -400,6 +400,7 @@ export const StatusDisplay = () => {
                     fontWeight="medium"
                     boxShadow="sm"
                     minWidth="0"
+                    cursor="pointer"
                   >
                     {getActivityLabel(status.activity)}
                   </Box>

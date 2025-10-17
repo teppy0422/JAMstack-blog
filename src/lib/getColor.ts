@@ -55,6 +55,20 @@ export const getColor = (
       borderColor: "transparent",
     };
   }
+  if (upperText.includes("32BIT")) {
+    return {
+      bg: "custom.theme.dark.400",
+      color: "white",
+      borderColor: "transparent",
+    };
+  }
+  if (upperText.includes("64BIT")) {
+    return {
+      bg: "custom.theme.dark.400",
+      color: "white",
+      borderColor: "transparent",
+    };
+  }
 
   switch (upperText) {
     case "不具合":

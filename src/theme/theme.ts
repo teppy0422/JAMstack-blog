@@ -147,6 +147,8 @@ export const theme = extendTheme({
       mac: "#BFC1C2",
       linux: "#F47E00",
       omron: "#005cb3",
+      bit32: "#FFA726",
+      bit64: "#1976D2",
     },
   },
 });

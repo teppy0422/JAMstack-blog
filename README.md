@@ -224,6 +224,10 @@ deploy 0053
 
 0057
 
+- Add the representation of the corresponding bit to the download/page.
+
+0058
+
 #### Doing Now
 
 switch アイコンの向きを変える
