@@ -1474,6 +1474,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          downloadPath: "/download/yps/yps/Yps1.18_.zip",
+                          version: "1.18",
+                          date: "2025/10/17",
+                          reason: ["アップロードの修正", "64bitに対応"],
+                          change: ["FastONを追加", "宣言文の修正"],
+                          inCharge: ["不具合"],
+                        },
+                        {
                           version: "1.17",
                           date: "2025/07/08",
                           reason: ["1.04以降でVerupが出来ない"],
@@ -1621,8 +1629,9 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       <ChangelogAccordion
                         changelog={[
                           {
+                            downloadPath: "/download/yps/verup/VerUp.zip",
                             version: "1.00",
-                            date: "2025/06/02",
+                            date: "2025/05/28",
                             change: ["リリース"],
                           },
                         ]}

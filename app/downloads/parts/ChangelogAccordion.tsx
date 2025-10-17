@@ -92,7 +92,7 @@ export const ChangelogAccordion = ({ changelog }: ChangelogAccordionProps) => {
                   return (
                     <>
                       <Box h="1.5px" width="100%" bg="gray.500" m={0} p={0} />
-                      <ListItem key={index} m={0} p={0}>
+                      <ListItem key={index} m={0} pl={1} pt={0.5}>
                         <Flex direction="column">
                           <Box flex="1">
                             <Box

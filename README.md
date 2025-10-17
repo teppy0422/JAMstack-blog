@@ -220,6 +220,9 @@ deploy 0053
 0056
 
 - nowStatus を google calender から判断
+- Added Yps1.18
+
+0057
 
 #### Doing Now
 
