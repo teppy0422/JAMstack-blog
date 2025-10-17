@@ -207,8 +207,11 @@ deploy 0053
 0054
 
 - SENDGRID_API_KEY を vercel に登録してメッセージ送信時にメール送信を本番で行えるように修正
+  0055
 
-0055
+- ステータス表示を google calender に対応
+
+0056
 
 - CustomTooltip の作成
 - theme に Tooltip を追加
