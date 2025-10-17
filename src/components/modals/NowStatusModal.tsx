@@ -326,6 +326,8 @@ export const StatusDisplay = () => {
     setIsAnimating(true);
   };
 
+  const userData = getUserById(MASTER_USER_ID);
+
   return (
     <>
       <Box
@@ -385,7 +387,7 @@ export const StatusDisplay = () => {
                 <Flex textAlign="left" align="center" gap={1}>
                   {/* <Text>{status.user_id}</Text> */}
                   <Avatar
-                    src={status.picture_url ?? undefined}
+                    src={userData?.picture_url ?? undefined}
                     boxSize="20px"
                     borderColor={getActivityColor(status.activity)}
                   />
