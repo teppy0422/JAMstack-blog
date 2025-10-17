@@ -3913,7 +3913,8 @@ function ThreadContent(): JSX.Element {
               </Stack>
               <Box mb="10vh" />
             </Content>
-            <CalendarDisplay />
+            {/* <CalendarDisplay /> */}
+            <StatusDisplay />
           </div>
         </>
       )}

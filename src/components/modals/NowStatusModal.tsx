@@ -73,11 +73,13 @@ import {
   getProjectOptionsColor,
 } from "@/components/ui/CustomBadge";
 import CustomModal from "@/components/ui/CustomModal";
+import { CalendarDisplay } from "@/components/modals/CalendarModal";
 
 const activityOptions = [
   { value: "online", label: "オンライン", color: "#815ad6" },
   { value: "coding", label: "コーディング", color: "blue" },
-  { value: "visiting", label: "訪問", color: "orange" },
+  { value: "visiting", label: "訪問中", color: "orange" },
+  { value: "meeting", label: "会議中", color: "purple" },
   { value: "absent", label: "オフライン", color: "gray" },
   { value: "sleeping", label: "就寝", color: "gray" },
   { value: "other", label: "その他", color: "#555" },
@@ -93,8 +95,13 @@ const getActivityColor = (value: string) => {
   return option ? option.color : "transparent";
 };
 
+// 固定ユーザーID（常にこのユーザーのステータスを表示）
+const MASTER_USER_ID = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0";
+
 // ステータス表示用コンポーネント
 export const StatusDisplay = () => {
+  console.log("[StatusDisplay] Component mounted");
+
   const [schedules, setSchedules] = useState<
     Array<{
       user_id: string;
@@ -139,67 +146,59 @@ export const StatusDisplay = () => {
   const { currentUserId, getUserById } = useUserContext();
   const [targetDate, setTargetDate] = useState<Date | null>(null);
 
-  // ユーザーのスケジュールを取得する関数
-  const getUserSchedules = async (
-    selectedUserId: string | null,
-    selectedDate: Date
-  ) => {
-    const now = new Date();
+  // カレンダービューモーダル用の状態
+  const {
+    isOpen: isCalendarViewOpen,
+    onOpen: onCalendarViewOpen,
+    onClose: onCalendarViewClose,
+  } = useDisclosure();
 
-    // 与えられた日付が所属する週の月曜日と日曜日を計算
-    const firstDayOfWeek = new Date(selectedDate);
-    const lastDayOfWeek = new Date(selectedDate);
+  // ユーザーのスケジュールを取得する関数 (Google Calendarから)
+  const getUserSchedules = async (selectedDate: Date) => {
+    try {
+      const response = await fetch(
+        `/api/calendarStatus?mode=weekly&targetDate=${selectedDate.toISOString()}`
+      );
+      const data = await response.json();
 
-    // 月曜日を計算
-    firstDayOfWeek.setDate(
-      selectedDate.getDate() -
-        (selectedDate.getDay() === 0 ? 6 : selectedDate.getDay() - 0)
-    );
-    // 日曜日を計算
-    lastDayOfWeek.setDate(
-      selectedDate.getDate() +
-        (selectedDate.getDay() === 0 ? 0 : 7 - selectedDate.getDay())
-    );
+      if (!response.ok) {
+        console.error("Error fetching weekly schedules:", data);
+        return;
+      }
 
-    // ここでlastDayOfWeekを23:59:59に設定
-    lastDayOfWeek.setHours(23, 59, 59, 999);
-
-    // schedulesから該当ユーザーのデータをフィルタリング
-    const userSchedulesData = schedules.filter(
-      (schedule) =>
-        schedule.user_id === selectedUserId &&
-        new Date(schedule.startTime) >= firstDayOfWeek &&
-        new Date(schedule.startTime) <= lastDayOfWeek
-    );
-
-    const formattedSchedules = userSchedulesData.map((schedule) => ({
-      startTime: new Date(schedule.startTime).toLocaleString("ja-JP", {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        timeZone: "Asia/Tokyo",
-      }),
-      endTime: schedule.endTime
-        ? new Date(schedule.endTime).toLocaleString("ja-JP", {
+      const formattedSchedules = (data.schedules || []).map(
+        (schedule: any) => ({
+          startTime: new Date(schedule.startTime).toLocaleString("ja-JP", {
             year: "numeric",
             month: "numeric",
             day: "numeric",
             hour: "2-digit",
             minute: "2-digit",
             timeZone: "Asia/Tokyo",
-          })
-        : null,
-      activity: schedule.activity,
-      note: schedule.note,
-      project: schedule.project,
-    }));
-    setUserSchedules(formattedSchedules);
+          }),
+          endTime: schedule.endTime
+            ? new Date(schedule.endTime).toLocaleString("ja-JP", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                timeZone: "Asia/Tokyo",
+              })
+            : null,
+          activity: schedule.activity,
+          note: schedule.note,
+          project: schedule.project,
+        })
+      );
+      setUserSchedules(formattedSchedules);
+    } catch (error) {
+      console.error("Error fetching user schedules:", error);
+    }
   };
 
   // スケジュールモーダルを開く関数
-  const handleOpenScheduleModal = (userId: string, targetDate: Date) => {
+  const handleOpenScheduleModal = (targetDate: Date) => {
     // 与えられた日付が所属する週の月曜日を計算
     const mondayDate = new Date(targetDate);
     mondayDate.setDate(
@@ -207,9 +206,9 @@ export const StatusDisplay = () => {
         (targetDate.getDay() === 0 ? 6 : targetDate.getDay() - 1)
     );
 
-    setSelectedUserId(userId);
+    setSelectedUserId(MASTER_USER_ID); // 固定ユーザーIDを使用
     setTargetDate(mondayDate); // 月曜日の日付を設定
-    getUserSchedules(userId, mondayDate);
+    getUserSchedules(mondayDate);
     onScheduleModalOpen();
   };
 
@@ -219,136 +218,105 @@ export const StatusDisplay = () => {
       const previousWeekDate = new Date(targetDate);
       previousWeekDate.setDate(previousWeekDate.getDate() - 7);
       // ユーザーのスケジュールを取得
-      getUserSchedules(selectedUserId, previousWeekDate);
+      getUserSchedules(previousWeekDate);
       setTargetDate(previousWeekDate); // targetDateを更新
     }
   };
   const handleNextWeek = () => {
     if (targetDate) {
       // 1週間後の日付を計算
-      const previousWeekDate = new Date(targetDate);
-      previousWeekDate.setDate(previousWeekDate.getDate() + 7);
+      const nextWeekDate = new Date(targetDate);
+      nextWeekDate.setDate(nextWeekDate.getDate() + 7);
       // ユーザーのスケジュールを取得
-      getUserSchedules(selectedUserId, previousWeekDate);
-      setTargetDate(previousWeekDate); // targetDateを更新
+      getUserSchedules(nextWeekDate);
+      setTargetDate(nextWeekDate); // targetDateを更新
     }
   };
   const [isAnimating, setIsAnimating] = useState(false); // アニメーションの状態を管理
 
-  // スケジュールを取得する関数
+  // スケジュールを取得する関数 (Google Calendarから)
   const fetchSchedules = async () => {
-    // 現在の月の最初の日と最後の日を取得（日本時間）
-    // const now = new Date();
-    // const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    // const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    try {
+      console.log(
+        "[NowStatusModal] Fetching calendar status from /api/calendarStatus"
+      );
+      const response = await fetch(`/api/calendarStatus`);
+      const data = await response.json();
 
-    // ここでlastDayOfMonthを23:59:59に設定
-    // lastDayOfMonth.setHours(23, 59, 59, 999);
+      console.log("[NowStatusModal] API response:", {
+        ok: response.ok,
+        status: response.status,
+        data,
+      });
 
-    const { data, error } = await supabase
-      .from("admin_status")
-      .select("*")
-      // .gte("startTime", new Date(firstDayOfMonth).toISOString())
-      // .lte("startTime", new Date(lastDayOfMonth).toISOString())
-      .order("startTime", { ascending: true });
-
-    if (error) {
-      console.error("Error fetching schedules:", error);
-    } else {
-      setSchedules(data || []);
-      calculateCurrentStatus();
-    }
-  };
-
-  // 現在のステータスを計算する関数
-  const calculateCurrentStatus = () => {
-    const now = new Date();
-    const currentSchedules = schedules.filter((schedule) => {
-      const start = new Date(schedule.startTime);
-      const end = schedule.endTime ? new Date(schedule.endTime) : null;
-      return now >= start && (!end || now <= end);
-    });
-    // ユーザーIDごとにグループ化
-    const userStatuses = currentSchedules.reduce(
-      (acc, schedule) => {
-        if (!acc[schedule.user_id]) {
-          acc[schedule.user_id] = {
-            activity: schedule.activity,
-            note: schedule.note,
-            picture_url: schedule.user_id
-              ? getUserById(schedule.user_id)?.picture_url ?? null
-              : null,
-            created_at: schedule.created_at,
-            startTime: schedule.startTime,
-            endTime: schedule.endTime,
-            user_id: schedule.user_id,
-            project: schedule.project,
-          };
-        }
-        return acc;
-      },
-      {} as Record<
-        string,
-        {
-          activity: string;
-          note: string;
-          picture_url: string | null;
-          created_at: string;
-          startTime: string;
-          endTime: string | null;
-          user_id: string;
-          project: string;
-        }
-      >
-    );
-    // オフラインのユーザーを追加
-    schedules.forEach((schedule) => {
-      if (!userStatuses[schedule.user_id]) {
-        userStatuses[schedule.user_id] = {
-          activity: "absent",
-          note: "",
-          picture_url: schedule.user_id
-            ? getUserById(schedule.user_id)?.picture_url ?? null
-            : null,
-          created_at: schedule.created_at,
-          startTime: "",
-          endTime: "",
-          user_id: schedule.user_id,
-          project: schedule.project,
-        };
+      if (!response.ok) {
+        console.error("Error fetching calendar status:", data);
+        return;
       }
-    });
-    setCurrentStatus(userStatuses);
+
+      // Google Calendarからイベントを取得できているかチェック
+      const hasActiveEvent = Object.keys(data.userStatuses || {}).length > 0;
+
+      if (!hasActiveEvent) {
+        console.log(
+          "[NowStatusModal] No active events - setting offline status"
+        );
+        // オフラインステータスを設定
+        const userInfo = getUserById(MASTER_USER_ID);
+        setCurrentStatus({
+          [MASTER_USER_ID]: {
+            activity: "absent",
+            note: "",
+            created_at: new Date().toISOString(),
+            startTime: "",
+            endTime: "",
+            user_id: MASTER_USER_ID,
+            picture_url: userInfo?.picture_url ?? null,
+            project: "",
+          },
+        });
+        return;
+      }
+
+      // Google CalendarのユーザーIDは無視して、固定ユーザー(MASTER_USER_ID)のステータスとして表示
+      // 最初のイベント情報を取得（どのuserIdでも構わない）
+      const firstEventStatus = Object.values(data.userStatuses)[0] as any;
+
+      // 固定ユーザーの情報を取得
+      const userInfo = getUserById(MASTER_USER_ID);
+      console.log("[NowStatusModal] User info for master user:", userInfo);
+
+      // 固定ユーザーのIDで、Google Calendarのステータスを表示
+      const statusesWithPictures: { [key: string]: any } = {
+        [MASTER_USER_ID]: {
+          ...firstEventStatus,
+          user_id: MASTER_USER_ID,
+          picture_url: userInfo?.picture_url ?? null,
+          created_at: new Date().toISOString(),
+        },
+      };
+
+      console.log(
+        "[NowStatusModal] Setting current status:",
+        statusesWithPictures
+      );
+      setCurrentStatus(statusesWithPictures);
+    } catch (error) {
+      console.error(
+        "[NowStatusModal] Error fetching calendar schedules:",
+        error
+      );
+    }
   };
 
   // 初期ロードとリアルタイム更新の設定
   useEffect(() => {
+    console.log("[StatusDisplay] useEffect triggered");
     fetchSchedules();
-    const subscription = supabase
-      .channel("admin_status_changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "admin_status",
-        },
-        (payload) => {
-          fetchSchedules();
-        }
-      )
-      .subscribe();
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
-  // 1分ごとに現在のステータスを更新
-  useEffect(() => {
-    calculateCurrentStatus();
-    const interval = setInterval(calculateCurrentStatus, 60000);
+    // 5分ごとに更新（キャッシュと現在時刻を比較）
+    const interval = setInterval(fetchSchedules, 300000);
     return () => clearInterval(interval);
-  }, [schedules]);
+  }, []);
 
   if (!currentStatus) return null;
   let previousDate = "";
@@ -370,7 +338,7 @@ export const StatusDisplay = () => {
         }}
         position="fixed"
         zIndex={1100}
-        top="80px"
+        top="46px"
         right="1px"
         borderRadius="md"
       >
@@ -407,10 +375,10 @@ export const StatusDisplay = () => {
                 }}
                 color={colorMode === "light" ? "#000" : "#FFF"}
                 cursor="pointer"
-                onClick={() => handleOpenScheduleModal(userId, new Date())}
+                onClick={onCalendarViewOpen}
                 sx={{
                   filter:
-                    status.activity === "online" ? "none" : "grayscale(100%)",
+                    status.activity === "absent" ? "grayscale(100%)" : "none",
                   transition: "all 0.3s ease",
                 }}
               >
@@ -424,8 +392,9 @@ export const StatusDisplay = () => {
                   <Box
                     fontSize="11px"
                     bg={getActivityColor(status.activity)}
-                    px={0.5}
+                    px={1}
                     py={0}
+                    minW={10}
                     borderRadius="4px"
                     color="white"
                     fontWeight="medium"
@@ -476,17 +445,16 @@ export const StatusDisplay = () => {
               <Text fontSize="16px" fontWeight="bold">
                 {getUserById(selectedUserId)?.user_metadata.name}
               </Text>
-              {currentUserId === selectedUserId && (
+              {currentUserId === MASTER_USER_ID && (
                 <NowStatus
                   schedules={schedules}
                   onSchedulesUpdate={(newSchedules) => {
                     setSchedules(newSchedules);
-                    getUserSchedules(selectedUserId, new Date());
+                    getUserSchedules(new Date());
                   }}
                   userId={currentUserId}
                 />
               )}
-
               <Spacer />
               <Text fontSize="12px" fontWeight={600}>
                 {new Date().toLocaleDateString("ja-JP", {
@@ -819,6 +787,13 @@ export const StatusDisplay = () => {
           </Stack>
         </Box>
       </CustomModal>
+      {/* カレンダービューモーダル */}
+      <CalendarDisplay
+        externalIsOpen={isCalendarViewOpen}
+        externalOnOpen={onCalendarViewOpen}
+        externalOnClose={onCalendarViewClose}
+        hideStatusBox={true}
+      />
     </>
   );
 };
@@ -828,6 +803,8 @@ export const NowStatus = ({
   schedules,
   onSchedulesUpdate,
   userId,
+  externalIsOpen,
+  externalOnClose,
 }: {
   schedules: Array<{
     user_id: string;
@@ -850,10 +827,26 @@ export const NowStatus = ({
     }>
   ) => void;
   userId: string | null;
+  externalIsOpen?: boolean;
+  externalOnClose?: () => void;
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: internalIsOpen,
+    onOpen,
+    onClose: internalOnClose,
+  } = useDisclosure();
   const { colorMode } = useColorMode();
   const { language } = useLanguage();
+
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const onClose = externalOnClose || internalOnClose;
+
+  // 外部からモーダルを開く処理
+  useEffect(() => {
+    if (externalIsOpen) {
+      onOpen();
+    }
+  }, [externalIsOpen, onOpen]);
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedDaySchedules, setSelectedDaySchedules] = useState<

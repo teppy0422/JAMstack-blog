@@ -216,6 +216,8 @@ deploy 0053
 
 0056
 
+- nowStatus を google calender から判断
+
 #### Doing Now
 
 switch アイコンの向きを変える

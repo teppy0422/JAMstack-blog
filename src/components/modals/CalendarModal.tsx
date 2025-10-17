@@ -44,7 +44,17 @@ const getActivityColor = (value: string) => {
   return option ? option.color : "transparent";
 };
 // ステータス表示用コンポーネント
-export const CalendarDisplay = () => {
+export const CalendarDisplay = ({
+  externalIsOpen,
+  externalOnOpen,
+  externalOnClose,
+  hideStatusBox = false,
+}: {
+  externalIsOpen?: boolean;
+  externalOnOpen?: () => void;
+  externalOnClose?: () => void;
+  hideStatusBox?: boolean;
+} = {}) => {
   const [status, setStatus] = useState<"online" | "offline" | "loading">(
     "loading"
   );
@@ -66,26 +76,35 @@ export const CalendarDisplay = () => {
   }, []);
 
   const { colorMode } = useColorMode();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: internalIsOpen,
+    onOpen: internalOnOpen,
+    onClose: internalOnClose,
+  } = useDisclosure();
+
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const onOpen = externalOnOpen || internalOnOpen;
+  const onClose = externalOnClose || internalOnClose;
 
   return (
     <>
-      <Box
-        display={{
-          base: "block",
-          sm: "block",
-          md: "block",
-          lg: "block",
-          xl: "block",
-        }}
-        position="fixed"
-        zIndex={1100}
-        top="46px"
-        right="4px"
-        borderRadius="md"
-      >
-        <Stack spacing={1}>
-          <Box
+      {!hideStatusBox && (
+        <Box
+          display={{
+            base: "block",
+            sm: "block",
+            md: "block",
+            lg: "block",
+            xl: "block",
+          }}
+          position="fixed"
+          zIndex={1100}
+          top="46px"
+          right="4px"
+          borderRadius="md"
+        >
+          <Stack spacing={1}>
+            <Box
             p={0.5}
             maxWidth="89px"
             border="1px solid"
@@ -147,6 +166,7 @@ export const CalendarDisplay = () => {
           </Box>
         </Stack>
       </Box>
+      )}
       <CustomModal
         title="日程"
         isOpen={isOpen}
