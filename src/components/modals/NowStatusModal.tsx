@@ -76,7 +76,7 @@ import CustomModal from "@/components/ui/CustomModal";
 import { CalendarDisplay } from "@/components/modals/CalendarModal";
 
 const activityOptions = [
-  { value: "online", label: "オンライン", color: "#815ad6" },
+  { value: "online", label: "オンライン", color: "#009900" },
   { value: "coding", label: "コーディング", color: "blue" },
   { value: "visiting", label: "訪問中", color: "orange" },
   { value: "meeting", label: "会議中", color: "purple" },
@@ -362,12 +362,20 @@ export const StatusDisplay = () => {
                 p={1}
                 minWidth="0"
                 border="1px solid"
-                borderColor={colorMode === "light" ? "#bfb0a4" : "gray.500"}
+                borderColor={
+                  colorMode === "light"
+                    ? getActivityColor(status.activity)
+                    : "gray.500"
+                }
                 borderRadius="md"
-                bgGradient={`linear(to-r, ${getActivityColor(
-                  status.activity
-                )}20, ${getActivityColor(status.activity)}10)`}
-                backdropFilter="blur(10px)"
+                bgGradient={
+                  colorMode === "light"
+                    ? `linear(to-r, ${getActivityColor(
+                        status.activity
+                      )}60, ${getActivityColor(status.activity)}A0)`
+                    : "transparent"
+                }
+                // backgroundColor={`${getActivityColor(status.activity)}60`} // backdropFilter="blur(10px)"
                 boxShadow="sm"
                 _hover={{
                   transform: "translateY(-2px)",
@@ -375,7 +383,7 @@ export const StatusDisplay = () => {
                   transition: "all 0.2s",
                   filter: "none",
                 }}
-                color={colorMode === "light" ? "#000" : "#FFF"}
+                color={colorMode === "light" ? "#FFF" : "#FFF"}
                 cursor="pointer"
                 onClick={onCalendarViewOpen}
                 sx={{
@@ -392,15 +400,20 @@ export const StatusDisplay = () => {
                     borderColor={getActivityColor(status.activity)}
                   />
                   <Box
-                    fontSize="11px"
-                    bg={getActivityColor(status.activity)}
-                    px={1}
+                    fontSize="10px"
+                    // bg={getActivityColor(status.activity)}
+                    px={0}
                     py={0}
                     minW={10}
                     borderRadius="4px"
-                    color="white"
-                    fontWeight="medium"
-                    boxShadow="sm"
+                    color={
+                      colorMode === "light"
+                        ? status.activity === "absent"
+                          ? "black"
+                          : "white"
+                        : "white"
+                    }
+                    fontWeight="900"
                     minWidth="0"
                     cursor="pointer"
                   >
@@ -408,7 +421,7 @@ export const StatusDisplay = () => {
                   </Box>
                 </Flex>
                 {status.startTime && (
-                  <Text fontSize="11px" color="gray.500" fontStyle="italic">
+                  <Text fontSize="11px" color="white" fontStyle="italic">
                     {new Date(status.startTime).toLocaleString("ja-JP", {
                       // month: "numeric",
                       // day: "numeric",
