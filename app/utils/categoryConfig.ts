@@ -33,8 +33,8 @@ export const CATEGORY_CONFIG = {
   アルコール: { bg: "#a07aeb", color: "#fff", order: 9 },
   ドリンク: { bg: "#2a6bb0", color: "#fff", order: 10 },
   デザート: { bg: "#fd94c6", color: "#fff", order: 11 }, // pink.500
-  離乳食: { bg: "#fdc4f6", color: "#fff", order: 11 }, // pink.500
-  その他: { bg: "#888", color: "#fff", order: 12 },
+  離乳食: { bg: "#fdc4f6", color: "#fff", order: 12 }, // pink.500
+  その他: { bg: "#888", color: "#fff", order: 13 },
 } as const;
 
 export const NUTRIENTS_CONFIG_ = {

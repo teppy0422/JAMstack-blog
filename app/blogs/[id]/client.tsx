@@ -43,16 +43,13 @@ export default function BlogContent({ blog }: any) {
       "></span>`
     )
     // imgタグのHTMLエンティティをデコード（styleも含む）
-    .replace(
-      /&lt;img\s+([^&]+)&gt;/gi,
-      (match: string, attributes: string) => {
-        // 属性内の &quot; を " に変換
-        const decodedAttrs = attributes
-          .replace(/&quot;/g, '"')
-          .replace(/&amp;/g, '&');
-        return `<img ${decodedAttrs}>`;
-      }
-    );
+    .replace(/&lt;img\s+([^&]+)&gt;/gi, (match: string, attributes: string) => {
+      // 属性内の &quot; を " に変換
+      const decodedAttrs = attributes
+        .replace(/&quot;/g, '"')
+        .replace(/&amp;/g, "&");
+      return `<img ${decodedAttrs}>`;
+    });
 
   console.log("Original content:", blog.content.substring(0, 200));
   console.log("Processed content:", processedContent.substring(0, 200));
@@ -234,7 +231,7 @@ export default function BlogContent({ blog }: any) {
         )}
 
         <Image
-          height={{ base: "", sm: "200px", md: "200px", xl: "200px" }}
+          height="full"
           objectFit="cover"
           alt={blog.title}
           src={blog.eyecatch?.url}
