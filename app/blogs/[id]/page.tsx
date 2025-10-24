@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { client } from "@/utils/microcms/client";
-import BlogContent from "./client";
+import BlogContentWithMap from "./BlogContentWithMap";
 
 export const revalidate = 60;
 
@@ -31,5 +31,5 @@ export default async function BlogDetailPage({
     return notFound();
   }
 
-  return <BlogContent blog={blog} />;
+  return <BlogContentWithMap blog={blog} />;
 }

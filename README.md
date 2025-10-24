@@ -228,6 +228,10 @@ deploy 0053
 
 0058
 
+- Add JapanMap
+
+0059
+
 #### Doing Now
 
 switch アイコンの向きを変える
