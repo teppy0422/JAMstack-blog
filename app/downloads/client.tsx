@@ -339,6 +339,16 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          downloadPath: "/download/sjp/sjp/Sjp3.101.27_.zip",
+                          version: "3.101.27",
+                          date: "2025/10/30",
+                          reason: [
+                            "有線と無線などのIPアドレスが複数ある場合に意図しない無線のIPを取得してしまう事があり実行できない",
+                          ],
+                          change: ["10系を優先するように修正"],
+                          inCharge: ["徳島", "秋山さん"],
+                        },
+                        {
                           downloadPath: "/download/sjp/sjp/Sjp3.101.26_.zip",
                           version: "3.101.26",
                           date: "2025/10/07",

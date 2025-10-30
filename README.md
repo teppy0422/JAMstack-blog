@@ -229,6 +229,7 @@ deploy 0053
 0058
 
 - Add JapanMap
+- Add Sjp3.101.27\_.zip
 
 0059
 

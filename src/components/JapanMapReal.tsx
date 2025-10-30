@@ -182,7 +182,7 @@ export const JapanMapReal = ({
               const okinawaProjection = d3
                 .geoMercator()
                 .center([127.5, 26.5]) // 沖縄の中心座標
-                .scale(svgWidth * 6) // より大きくスケール
+                .scale(svgWidth * 4) // より大きくスケール
                 .translate([svgWidth * 0.18, svgHeight * 0.15]); // 左上に配置
 
               const okinawaPath = d3.geoPath().projection(okinawaProjection);
