@@ -222,6 +222,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         placement="left"
                         label="最新バージョンのダウンロード"
                         shouldWrapChildren
+                        display="inline"
                       >
                         <DownloadButton
                           path="/download/sjp/sjp/"
@@ -239,7 +240,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb="3px">
+                          <Heading size="sm" mb="3px" mt="-20px">
                             {getMessage({
                               ja: "Sjp+ 本体",
                               us: "Sjp+ main unit",
@@ -301,6 +302,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           spacing={1}
                           direction="column"
                           alignItems="flex-start"
+                          mt="-20px"
                         >
                           <Flex justifyContent="flex-end" width="100%">
                             <Box fontSize="xs" textAlign="right">
@@ -995,7 +997,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb="3px">
+                          <Heading size="sm" mb="3px" mt="-20px">
                             Bip+
                           </Heading>
                           <BadgeList
@@ -1027,7 +1029,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           direction="column"
                           alignItems="flex-start"
                         >
-                          <Flex justifyContent="flex-end" width="100%">
+                          <Flex
+                            justifyContent="flex-end"
+                            width="100%"
+                            mt="-20px"
+                          >
                             <Box fontSize="xs" textAlign="right">
                               <LatestUpdateDate
                                 folderPath="/download/bip/bip/"
@@ -1098,7 +1104,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb="3px">
+                          <Heading size="sm" mb="3px" mt="-20px">
                             main
                           </Heading>
                           <BadgeList
@@ -1151,7 +1157,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           direction="column"
                           alignItems="flex-start"
                         >
-                          <Flex justifyContent="flex-end" width="100%">
+                          <Flex
+                            justifyContent="flex-end"
+                            width="100%"
+                            mt="-20px"
+                          >
                             <Box fontSize="xs" textAlign="right">
                               <LatestUpdateDate
                                 folderPath="./download/jdss/main"
@@ -1447,7 +1457,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb="3px">
+                          <Heading size="sm" mb="3px" mt="-20px">
                             {getMessage({
                               ja: "誘導ポイント設定一覧表",
                               language,
@@ -1481,7 +1491,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           direction="column"
                           alignItems="flex-start"
                         >
-                          <Flex justifyContent="flex-end" width="100%">
+                          <Flex
+                            justifyContent="flex-end"
+                            width="100%"
+                            mt="-20px"
+                          >
                             <Box fontSize="xs" textAlign="right">
                               <LatestUpdateDate
                                 folderPath="./download/yps/yps/"
@@ -1613,7 +1627,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             alignItems="flex-start"
                             flex={1}
                           >
-                            <Heading size="sm" mb="3px">
+                            <Heading size="sm" mb="3px" mt="-20px">
                               {getMessage({
                                 ja: "バージョンアップ",
                                 language,
@@ -1647,7 +1661,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                           >
-                            <Flex justifyContent="flex-end" width="100%">
+                            <Flex
+                              justifyContent="flex-end"
+                              width="100%"
+                              mt="-20px"
+                            >
                               <Box fontSize="xs" textAlign="right">
                                 <LatestUpdateDate
                                   folderPath="./download/yps/verup/"
@@ -1724,7 +1742,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb="3px">
+                          <Heading size="sm" mb="3px" mt="-20px">
                             {getMessage({
                               ja: "バーコードフォント",
                               us: "bar code font",
@@ -1749,7 +1767,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           direction="column"
                           alignItems="flex-start"
                         >
-                          <Flex justifyContent="flex-end" width="100%">
+                          <Flex
+                            justifyContent="flex-end"
+                            width="100%"
+                            mt="-20px"
+                          >
                             <Box fontSize="xs" textAlign="right">
                               <LatestUpdateDate
                                 folderPath="/download/library/code39/"
@@ -1791,7 +1813,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           alignItems="flex-start"
                           flex={1}
                         >
-                          <Heading size="sm" mb="3px">
+                          <Heading size="sm" mb="3px" mt="-20px">
                             {getMessage({
                               ja: "シリアル通信用ライブラリ",
                               us: "",
@@ -1819,7 +1841,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           direction="column"
                           alignItems="flex-start"
                         >
-                          <Flex justifyContent="flex-end" width="100%">
+                          <Flex
+                            justifyContent="flex-end"
+                            width="100%"
+                            mt="-20px"
+                          >
                             <Box fontSize="xs" textAlign="right">
                               <LatestUpdateDate
                                 folderPath="/download/library/MSCOMM32/"
