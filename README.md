@@ -230,6 +230,7 @@ deploy 0053
 
 - Add JapanMap
 - Add Sjp3.101.27\_.zip
+- Add Yps1.19\_.zip
 
 0059
 
