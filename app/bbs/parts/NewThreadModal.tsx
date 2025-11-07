@@ -15,6 +15,13 @@ import {
   HStack,
   useColorMode,
 } from "@chakra-ui/react";
+import {
+  HomeIcon,
+  CheckBoxIcon,
+  CheckBoxOutlineBlankIcon,
+} from "@/components/ui/icons";
+import { RiChatNewFill } from "react-icons/ri";
+
 import { supabase } from "@/utils/supabase/client";
 
 import QRCode from "qrcode.react";
@@ -110,30 +117,37 @@ export default function NewThreadModal() {
   };
   return (
     <>
-      <Flex justify="center" align="center" w="100%" mt={4}>
-        <Box
-          onClick={onOpen}
-          display="inline-flex"
-          alignItems="center"
-          justifyContent="center"
-          px={2}
-          py={1}
-          borderRadius="md"
-          border="1px solid"
-          borderColor="#000"
-          bg="#f0f0f0"
-          cursor="pointer"
-          transition="background-color 0.2s"
-          _hover={{
-            bg: "#d5d5d5",
-          }}
-          _active={{
-            bg: "#c0c0c0",
-          }}
-        >
-          <Text fontSize="14px" fontWeight="500" color="#222">
+      <Flex
+        onClick={onOpen}
+        align="center"
+        gap="1px"
+        userSelect="none"
+        cursor="pointer"
+        my={1}
+        _active={{
+          bg: "#c0c0c0",
+        }}
+      >
+        <Box width="0px" />
+        <RiChatNewFill
+          size="18px"
+          fill={
+            colorMode === "light"
+              ? "custom.theme.light.900"
+              : "custom.theme.dark.100"
+          }
+        />
+        <Box display="inline-flex" alignItems="center" justifyContent="center">
+          <Box
+            as="span"
+            fontSize="13px"
+            lineHeight="1"
+            display="flex"
+            alignItems="center"
+            ml="1px"
+          >
             新しく追加
-          </Text>
+          </Box>
         </Box>
       </Flex>
       <CustomModal

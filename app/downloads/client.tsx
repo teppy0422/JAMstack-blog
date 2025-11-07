@@ -184,6 +184,17 @@ export default function Ui({ filterId }: { filterId?: string }) {
                   ※ExcelとAccessは32bitのみ対応。64bitに対応するには修正が必要
                 </Text>
               </Box>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width="auto"
+                mt={2}
+              >
+                <Text fontSize="13px">
+                  ※Office365は月額制なので対応が困難(時間が掛かる)
+                </Text>
+              </Box>
             </Box>
           </Box>
           <SimpleGrid

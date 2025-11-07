@@ -234,6 +234,10 @@ deploy 0053
 
 0059
 
+- Changed Position New thread in BBS
+
+0060
+
 #### Doing Now
 
 switch アイコンの向きを変える

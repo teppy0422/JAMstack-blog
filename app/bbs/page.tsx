@@ -246,7 +246,6 @@ export default function BBS() {
             </Box>
           </Stack>
           <SidebarBBS isMain={true} reload={reloadSidebar} />
-          <NewThreadModal />
         </Container>
         <CalendarDisplay />
       </Content>

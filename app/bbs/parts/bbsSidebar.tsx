@@ -38,6 +38,7 @@ import { CustomAvatar } from "@/components/ui/CustomAvatar";
 
 import { useUserContext } from "@/contexts/useUserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import NewThreadModal from "./NewThreadModal";
 
 // import { AppContext } from "../pages/_app";
 
@@ -601,6 +602,7 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
                   完了済みを表示
                 </Box>
               </Flex>
+              <NewThreadModal />
             </Box>
           </Box>
         </>
