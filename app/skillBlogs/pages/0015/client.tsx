@@ -248,7 +248,6 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-
           <SchedulePage />
         </SectionBox>
         <SectionBox
@@ -256,7 +255,7 @@ const BlogPage: React.FC = () => {
           title={
             "3." +
             getMessage({
-              ja: "必要物の購入について",
+              ja: "必要な物",
               language,
             })
           }
@@ -274,9 +273,18 @@ const BlogPage: React.FC = () => {
                 <ListItem>システム開発に必要な物は片岡が各1点ずつ購入</ListItem>
                 <ListItem>残りは要相談</ListItem>
               </UnorderedList>
-              <ListItem>端末</ListItem>
+              <ListItem>端末(プレス毎に1台)</ListItem>
               <SpecTable_terminal />
-              <ListItem>サーバー(Nas)</ListItem>
+              <ListItem>DBサーバー(1台)</ListItem>
+              <Text fontSize="13px">
+                API用のPCは用意せずにDBサーバーで併用
+                <br />
+                サーバーはデータ保守を優先して4ベイを採用
+                <br />
+                APIを動作させる為にCPUは上位モデルでメモリは2→8GBに増設
+                <br />
+                不都合があればPCを用意
+              </Text>
               <SpecTable_sarver />
               <UnorderedList fontSize="14px">
                 <ListItem>使用パッケージ</ListItem>
@@ -309,6 +317,10 @@ npm install multer
                       code={"brew services start postgresql@15"}
                     />
                   </UnorderedList>
+                </UnorderedList>
+                <ListItem>データベース(DSM)←本番</ListItem>
+                <UnorderedList>
+                  <ListItem>PostgreSQL ?.?</ListItem>
                 </UnorderedList>
               </UnorderedList>
             </OrderedList>
@@ -630,48 +642,8 @@ npm install multer
                   onClick={onOpen}
                 />
               </Box>
-              <Modal isOpen={isOpen} onClose={onClose} size="2xl" isCentered>
-                <ModalOverlay />
-                <ModalContent>
-                  <ModalBody p={0}>
-                    <Image
-                      src="/images/preharnesspro/preharnesspro_sample.png"
-                      alt="拡大画像"
-                      width="100%"
-                    />
-                  </ModalBody>
-                </ModalContent>
-              </Modal>
             </Box>
-            <Box display="inline-block">
-              <Box
-                // border="1.5px solid #666"
-                borderRadius="md"
-                overflow="hidden"
-                _hover={{ opacity: 0.9, transform: "scale(1.05)" }}
-              >
-                <Image
-                  src="/images/preharnesspro/icon2.png"
-                  alt="PreHarnessPro Icon"
-                  boxSize="42px"
-                  cursor="pointer"
-                  onClick={onOpen}
-                />
-              </Box>
-              <Modal isOpen={isOpen} onClose={onClose} size="2xl" isCentered>
-                <ModalOverlay />
-                <ModalContent>
-                  <ModalBody p={0}>
-                    <Image
-                      src="/images/preharnesspro/preharnesspro_sample.png"
-                      alt="拡大画像"
-                      width="100%"
-                    />
-                  </ModalBody>
-                </ModalContent>
-              </Modal>
-            </Box>
-            <ListItem>アプリ全体デザイン</ListItem>
+            <ListItem>アプリのデザイン</ListItem>
             <Text>
               {getMessage({
                 ja: "特に参考にしたいデザインがあればWEBページやアプリ名などを教えてください",
@@ -684,53 +656,49 @@ npm install multer
               images={[
                 {
                   id: 1,
-                  url: "/images/0015/2.png",
+                  url: "/images/0015/1.webp",
                   comment: "・左にメニュー 右に中身という一般的なデザイン",
                 },
                 {
                   id: 2,
-                  url: "/images/0015/1.png",
+                  url: "/images/0015/2.webp",
                   comment:
                     "・目の負担を考えてダークモードがメイン\n・注目箇所はハイライトで表示(上図では緑)",
                 },
                 {
                   id: 3,
-                  url: "/images/0015/3.png",
+                  url: "/images/0015/3.webp",
                   comment: "・たとえば奇抜なデザインも対応可能です",
                 },
                 {
                   id: 4,
-                  url: "/images/0015/001.webp",
+                  url: "/images/0015/4.webp",
                   comment:
                     "・圧着作業画面(作成途中)\n・実機の横幅は243mm(上図をズームして合わせてみてください)",
                 },
                 {
                   id: 5,
-                  url: "/images/0015/002.webp",
+                  url: "/images/0015/5.webp",
                   comment:
                     "・ダークモードをオンにした画面\n・ハイライト色は緑に設定",
                 },
                 {
                   id: 6,
-                  url: "/images/0015/004.webp",
-                  comment: "・エフを読み込んだらダイヤル値と規格測定を表示",
+                  url: "/images/0015/6.mp4",
+                  comment:
+                    "・計測時に範囲に入っていない場合は、\n中央値により近いダイヤルを点滅表示",
                 },
                 {
                   id: 7,
-                  url: "/images/0015/003.webp",
+                  url: "/images/0015/7.mp4",
                   comment:
-                    "・ダイヤル値の履歴が無ければ赤色で表示\n・タップでダイヤル値を保存",
-                },
-                {
-                  id: 8,
-                  url: "/images/0015/006.webp",
-                  comment: "・色一覧の表示などのテストページ",
+                    "・規格表は任意の位置をズームで表示\n・ピンチで移動\n・タップで全画面表示\n※規格表画像データの自動取得は開発トライ中",
                 },
               ]}
             />
           </UnorderedList>
           <UnorderedList>
-            <ListItem>動作イメージ30秒動画</ListItem>
+            <ListItem>動作イメージ</ListItem>
             <video
               src="/images/0015/preHarness_demo.mp4"
               autoPlay

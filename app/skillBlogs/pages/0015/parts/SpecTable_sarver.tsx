@@ -8,25 +8,46 @@ import {
   Td,
   TableContainer,
   Link,
+  Tfoot,
 } from "@chakra-ui/react";
 
 const pcData = [
   {
+    select: "⚫︎",
+    category: "本体",
     os: "DSM 7.x",
     name: "Synology",
-    series: "4ベイ",
-    type: "423+",
-    cpu: "Intel Celeron J4125",
-    memory: "2GB(最大6GB)",
-    speaker: "12.3-28.3W",
-    screen: "USB3.2 Gen1 ×2",
-    cost: "84,700",
+    series: "4",
+    type: "DS423+",
+    cpu: "AMD Ryzen R1600 Dual",
+    memory: "8GB(最大32GB)",
+    cost: "202,628",
     other: "",
-    link: "https://www.amazon.co.jp/KUU-Windows11-Pro%E3%82%BF%E3%83%96%E3%83%AC%E3%83%83%E3%83%88PC-14-0%E3%82%A4%E3%83%B3%E3%83%81-%E3%83%8E%E3%83%BC%E3%83%88%E3%83%91%E3%82%BD%E3%82%B3%E3%83%B31920x1200%E8%A7%A3%E5%83%8F%E5%BA%A6/dp/B0CW9Q3LPJ/ref=sr_1_2?dib=eyJ2IjoiMSJ9._7QLPopp6hM-racTgJtUbuHUPWr7CbwEyfL49q5dQG9jtvPVmi_1s6fo1k_IzMHMfz4r8m5q1JPZCCLOKyUPyU7ITPhBSZmxwWoC8F9P9fksczwGGG1kTxP1kuQ7Mjk1s3Z3Gqc6pJeS4hxVSN0wXR8beGymzw7rRm4UxpUJq0Q.jk1zsuNxoytLpolLwFUbEFfcJUiMLOVRwNhqZRHVwFY&dib_tag=se&qid=1753257466&refinements=p_89%3AKUU&sr=8-2&srs=2765617051",
+    link: "https://www.amazon.co.jp/Synology-DiskStation-DS923-4%E3%83%99%E3%82%A4NAS%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B8%E3%83%A3%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC-HDD%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%AA%E3%81%97/dp/B0CC2327GF?source=ps-sl-shoppingads-lpcontext&ref_=fplfs&ref_=fplfs&psc=1&smid=A1Q5MW17M8OA18&utm_source=chatgpt.com",
+  },
+  {
+    select: "⚫︎",
+    category: "HDD",
+    os: "",
+    name: "Western Digital",
+    series: "",
+    type: "WD40EFPX",
+    etc: "4TB × 4台",
+    cpu: "",
+    memory: "",
+    cost: "84,680",
+    other: "",
+    link: "https://www.amazon.co.jp/WD40EFPX-Plus%EF%BC%884TB-3-5%E3%82%A4%E3%83%B3%E3%83%81-5400rpm-256MB/dp/B0BDXSK2K7/ref=pd_day0fbt_thbs_d_sccl_1/358-7624311-3967655?pd_rd_w=E7Gla&content-id=amzn1.sym.2aa98752-dde7-48b0-9ad1-5637428d9be1&pf_rd_p=2aa98752-dde7-48b0-9ad1-5637428d9be1&pf_rd_r=Q3J38V2FE8R93SSVGTAP&pd_rd_wg=KChJU&pd_rd_r=db80d4b1-3118-4cda-8361-cae75941375a&pd_rd_i=B0BDXSK2K7&th=1",
   },
 ];
 
 export default function SpecTable_sarver() {
+  const totalCost = pcData
+    .filter((pc) => pc.select === "⚫︎")
+    .reduce((sum, pc) => {
+      const cost = parseInt(pc.cost.replace(/,/g, ""), 10);
+      return sum + cost;
+    }, 0);
   return (
     <Box p={0}>
       <TableContainer>
@@ -42,15 +63,16 @@ export default function SpecTable_sarver() {
         >
           <Thead bg="gray.100" p={0}>
             <Tr>
-              <Th>OS</Th>
+              <Th>使用</Th>
+              <Th>カテゴリ</Th>
               <Th>メーカー</Th>
-              <Th>シリーズ</Th>
-              <Th>タイプ</Th>
+              <Th>品名</Th>
+              <Th>金額</Th>
+              <Th>備考</Th>
+              <Th>ベイ数</Th>
+              <Th>OS</Th>
               <Th>CPU</Th>
               <Th>メモリ</Th>
-              <Th>スピーカー</Th>
-              <Th>画面サイズ</Th>
-              <Th>金額</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -61,18 +83,30 @@ export default function SpecTable_sarver() {
                 }
                 _hover={{ opacity: "0.7", cursor: "pointer" }}
               >
-                <Td>{pc.os}</Td>
+                <Td textAlign="center">{pc.select}</Td>
+                <Td>{pc.category}</Td>
                 <Td fontWeight="bold">{pc.name}</Td>
-                <Td>{pc.series}</Td>
                 <Td>{pc.type}</Td>
+                <Td>{pc.cost}</Td>
+                <Td>{pc.etc}</Td>
+                <Td>{pc.series}</Td>
+                <Td>{pc.os}</Td>
                 <Td>{pc.cpu}</Td>
                 <Td>{pc.memory}</Td>
-                <Td>{pc.speaker}</Td>
-                <Td>{pc.screen}</Td>
-                <Td>{pc.cost}</Td>
               </Tr>
             ))}
           </Tbody>
+          <Tfoot>
+            <Tr>
+              <Td colSpan={4} textAlign="right" fontWeight="bold">
+                ⚫︎の合計
+              </Td>
+              <Td textAlign="right" fontWeight="bold">
+                {totalCost.toLocaleString()}
+              </Td>
+              <Td colSpan={5}></Td>
+            </Tr>
+          </Tfoot>
         </Table>
       </TableContainer>
     </Box>

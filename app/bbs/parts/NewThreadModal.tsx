@@ -131,7 +131,7 @@ export default function NewThreadModal() {
         <Box width="0px" />
         <RiChatNewFill
           size="18px"
-          fill={
+          color={
             colorMode === "light"
               ? "custom.theme.light.900"
               : "custom.theme.dark.100"
