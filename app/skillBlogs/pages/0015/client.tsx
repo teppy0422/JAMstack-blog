@@ -697,6 +697,7 @@ npm install multer
               ]}
             />
           </UnorderedList>
+          <Box height="100px" />
           <UnorderedList>
             <ListItem>動作イメージ</ListItem>
             <video

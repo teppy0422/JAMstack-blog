@@ -26,8 +26,8 @@ export const ImageSelector = ({ images }: Props) => {
 
   // URLから拡張子を判定して動画かどうかを判定
   const isVideo = (url: string) => {
-    const videoExtensions = ['.mp4', '.webm', '.mov', '.avi'];
-    return videoExtensions.some(ext => url.toLowerCase().endsWith(ext));
+    const videoExtensions = [".mp4", ".webm", ".mov", ".avi"];
+    return videoExtensions.some((ext) => url.toLowerCase().endsWith(ext));
   };
 
   return (
@@ -58,6 +58,16 @@ export const ImageSelector = ({ images }: Props) => {
       </HStack>
       {selectedImage && (
         <>
+          {selectedImage.comment && (
+            <Text
+              mt={2}
+              fontSize="sm"
+              color={colorMode === "light" ? "gray.600" : "gray.100"}
+              whiteSpace="pre-line"
+            >
+              {selectedImage.comment}
+            </Text>
+          )}
           {isVideo(selectedImage.url) ? (
             <Box
               as="video"
@@ -81,16 +91,6 @@ export const ImageSelector = ({ images }: Props) => {
               mx="auto"
               boxShadow="md"
             />
-          )}
-          {selectedImage.comment && (
-            <Text
-              mt={2}
-              fontSize="sm"
-              color={colorMode === "light" ? "gray.600" : "gray.100"}
-              whiteSpace="pre-line"
-            >
-              {selectedImage.comment}
-            </Text>
           )}
         </>
       )}
