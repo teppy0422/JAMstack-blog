@@ -352,6 +352,19 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          downloadPath: "/download/sjp/sjp/Sjp3.101.28_.zip",
+                          version: "3.101.28",
+                          date: "2025/11/12",
+                          reason: [
+                            "PVSWに必要なフィールドが含まれていない場合にエラー停止する",
+                          ],
+                          change: [
+                            "とりあえずエラー停止しないように修正",
+                            "本当は必要なフィールド名が無い事の警告を実装するべき",
+                          ],
+                          inCharge: ["徳島", "秋山さん"],
+                        },
+                        {
                           downloadPath: "/download/sjp/sjp/Sjp3.101.27_.zip",
                           version: "3.101.27",
                           date: "2025/10/30",
@@ -1527,6 +1540,20 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <Divider borderColor="gray.500" />
                     <ChangelogAccordion
                       changelog={[
+                        {
+                          downloadPath: "/download/yps/yps/Yps1.22_.zip",
+                          version: "1.22",
+                          date: "2025/11/12",
+                          reason: [
+                            "エラー都度がメッセージが表示される",
+                            "COM.txtがフォルダとして作成される",
+                          ],
+                          change: [
+                            "エラー送信とメッセージは最後のエラーのみに変更",
+                            "作成の最後がファイルの場合はファイルを作成",
+                          ],
+                          inCharge: ["不具合"],
+                        },
                         {
                           downloadPath: "/download/yps/yps/Yps1.19_.zip",
                           version: "1.19",

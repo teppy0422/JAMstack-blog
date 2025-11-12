@@ -232,7 +232,7 @@ export default function NewThreadModal() {
               placeholder="ハメ図に治具座標を表示したい : 等"
               _placeholder={{ color: "custom.system.100" }}
               size="sm"
-              color="#000"
+              color="#ddd"
               border="none"
               borderRadius={0}
               mb={0}

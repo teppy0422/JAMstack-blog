@@ -24,8 +24,8 @@
     "latestUpdated": "2025-10-08T14:33:03.280Z"
   },
   "sjp/sjp": {
-    "latestFile": "Sjp3.101.27_.zip",
-    "latestUpdated": "2025-10-30T08:37:28.000Z"
+    "latestFile": "Sjp3.101.28_.zip",
+    "latestUpdated": "2025-11-12T02:41:56.000Z"
   },
   "sjp": {
     "latestFile": ".DS_Store",
@@ -36,8 +36,8 @@
     "latestUpdated": "2025-10-17T03:26:50.000Z"
   },
   "yps/yps": {
-    "latestFile": "Yps1.20_.zip",
-    "latestUpdated": "2025-11-07T05:01:50.000Z"
+    "latestFile": "Yps1.22_.zip",
+    "latestUpdated": "2025-11-12T02:36:00.000Z"
   },
   "yps": {
     "latestFile": ".DS_Store",
@@ -45,6 +45,6 @@
   },
   ".": {
     "latestFile": "download-meta.json",
-    "latestUpdated": "2025-11-06T07:14:49.065Z"
+    "latestUpdated": "2025-11-07T05:03:03.274Z"
   }
 }
