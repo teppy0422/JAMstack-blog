@@ -1555,7 +1555,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           inCharge: ["不具合"],
                         },
                         {
-                          downloadPath: "/download/yps/yps/Yps1.19_.zip",
                           version: "1.19",
                           date: "2025/11/06",
                           reason: ["365 32bitで.CodeModuleにアクセスできない"],
@@ -1565,7 +1564,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           inCharge: ["365不具合"],
                         },
                         {
-                          downloadPath: "/download/yps/yps/Yps1.18_.zip",
                           version: "1.18",
                           date: "2025/10/17",
                           reason: ["アップロードの修正", "64bitに対応"],

@@ -188,7 +188,12 @@ const Frame: React.FC<{
 
   const [accordionIndex, setAccordionIndex] = useState<number[]>([]);
 
-  const createLinkPanel = (path: string, text: string, isMain?: boolean) => {
+  const createLinkPanel = (
+    path: string,
+    text: string,
+    isMain?: boolean,
+    isIncludingLink?: boolean
+  ) => {
     const pathSplit = path.split("/").filter(Boolean);
     const pathUrl = pathSplit[2];
 
@@ -210,10 +215,12 @@ const Frame: React.FC<{
     return (
       <AccordionPanel m={0} p={0}>
         <Link
-          href={path}
+          href={isIncludingLink ? path : ""}
           {...linkStyles}
           color={
-            isMain
+            !isIncludingLink
+              ? "gray.400"
+              : isMain
               ? "#FFF"
               : colorMode === "light"
               ? "black"
@@ -221,6 +228,8 @@ const Frame: React.FC<{
               ? "black"
               : ""
           }
+          cursor={isIncludingLink ? linkStyles.cursor : "not-allowed"}
+          pointerEvents={isIncludingLink ? "auto" : "none"}
           display="block"
           my={0.5}
         >
@@ -429,7 +438,8 @@ const Frame: React.FC<{
                           cn: "开发人员",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                     </>
                   )}
@@ -465,7 +475,8 @@ const Frame: React.FC<{
                           cn: "什么是生产准备+？",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                       {createLinkPanel(
                         "/skillBlogs/pages/0009/",
@@ -475,7 +486,8 @@ const Frame: React.FC<{
                           cn: "引进的影响",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                       {createLinkPanel(
                         "/skillBlogs/pages/0007/",
@@ -485,7 +497,8 @@ const Frame: React.FC<{
                           cn: "实践（初级）",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                       {createLinkPanel(
                         "/skillBlogs/pages/0008/",
@@ -495,7 +508,8 @@ const Frame: React.FC<{
                           cn: "实践（中级）",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                       {createLinkPanel(
                         "/skillBlogs/pages/0002/",
@@ -505,7 +519,19 @@ const Frame: React.FC<{
                           cn: "登记连接器拍摄的坐标",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
+                      )}
+                      {createLinkPanel(
+                        "/",
+                        getMessage({
+                          ja: "治具座標の作り方",
+                          us: "How to Create Fixture Coordinates",
+                          cn: "治具坐标的制作方法",
+                          language,
+                        }),
+                        isMain,
+                        false
                       )}
                       {createLinkPanel(
                         "/skillBlogs/pages/0005/",
@@ -515,7 +541,8 @@ const Frame: React.FC<{
                           cn: "移动子编号",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                       {createLinkPanel(
                         "/skillBlogs/pages/0001/",
@@ -525,7 +552,8 @@ const Frame: React.FC<{
                           cn: "计划说明",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                     </>
                   )}
@@ -561,7 +589,8 @@ const Frame: React.FC<{
                           cn: "电脑首次设置程序",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                       {createLinkPanel(
                         "#",
@@ -571,7 +600,8 @@ const Frame: React.FC<{
                           cn: "模式1（规划）。",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                     </>
                   )}
@@ -607,7 +637,8 @@ const Frame: React.FC<{
                           cn: "待遇",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                     </>
                   )}
@@ -643,7 +674,8 @@ const Frame: React.FC<{
                           cn: "参考事例集",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                     </>
                   )}
@@ -679,7 +711,8 @@ const Frame: React.FC<{
                           cn: "网站/应用程序",
                           language,
                         }),
-                        isMain
+                        isMain,
+                        true
                       )}
                     </>
                   )}
