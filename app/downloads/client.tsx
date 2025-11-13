@@ -540,6 +540,109 @@ export default function Ui({ filterId }: { filterId?: string }) {
                   isShown={showAllMap[3]}
                   toggleShowAll={toggleShowAll}
                 >
+                  <Card
+                    bg={bg}
+                    border="1px solid"
+                    borderColor="gray.500"
+                    mb="20px"
+                  >
+                    <CustomCardHeader
+                      text={getMessage({
+                        ja: "回路マトリクス+",
+                        language,
+                      })}
+                      textSize="sm"
+                    />
+                    <Divider borderColor="gray.500" />
+                    <CardBody p={0}>
+                      <Box
+                        key="10"
+                        position="relative"
+                        px={2}
+                        pl={7}
+                        py={1}
+                        _hover={{
+                          boxShadow: "dark-lg",
+                        }}
+                        onMouseEnter={() => setHoveredId("10")}
+                      >
+                        <Box
+                          position="absolute"
+                          top={0}
+                          left={0}
+                          bottom={0}
+                          width="1.4rem"
+                          backgroundColor="transparent"
+                          borderRight="2px dotted"
+                          borderColor="gray.500"
+                        />
+                        <Flex
+                          justifyContent="space-between"
+                          alignItems="flex-start"
+                        >
+                          <Flex
+                            direction="column"
+                            alignItems="flex-start"
+                            flex={1}
+                          >
+                            <BadgeList
+                              labels={["EXCEL2010", "EXCEL2013", "EXCEL365"]}
+                              useGetColor={[true, true, false]}
+                            />
+                            <BadgeList
+                              labels={["32bit", "64bit"]}
+                              useGetColor={[true, false]}
+                            />
+                            <Text pt="3px" fontSize="sm">
+                              {getMessage({
+                                ja: "製造指示書印刷システムのサブナンバーを変更するSub.txtを管理するシステム",
+                                us: "System for managing Sub.txt files that change sub-numbers in the manufacturing instruction printing system.",
+                                cn: "用于管理Sub.txt文件的系统，该文件用于更改制造指示书打印系统的子编号",
+                                language,
+                              })}
+                              <br />
+                              {getMessage({
+                                ja: "生産準備+からもサブナンバーを変更できるけどこっちの方が都合が良い場合に使用",
+                                us: "You can also change the sub-number from Production Preparation+, but use this method when it's more convenient.",
+                                cn: "虽然也可以从生产准备阶段开始更改子编号，但当此方式更方便时使用。",
+                                language,
+                              })}
+                            </Text>
+                          </Flex>
+                          <Stack
+                            spacing={1}
+                            direction="column"
+                            alignItems="flex-start"
+                          >
+                            <Flex justifyContent="flex-end" width="100%">
+                              <Text fontSize="xs" textAlign="right">
+                                #????/??/??
+                                <br />
+                                10
+                              </Text>
+                            </Flex>
+                          </Stack>
+                        </Flex>
+                      </Box>
+                      <Divider borderColor="gray.500" />
+                      <ChangelogAccordion
+                        changelog={[
+                          {
+                            version: "10",
+                            date: "????/??/??",
+                            reason: [
+                              "撮影環境が異なる場合、コネクタ写真の色が異なる",
+                              "コネクタ写真の登録が面倒",
+                            ],
+                            change: [
+                              "撮影するとコネクタ品番を付けて写真を生産準備+に渡す",
+                            ],
+                            inCharge: ["徳島", "補給品"],
+                          },
+                        ]}
+                      />
+                    </CardBody>
+                  </Card>
                   <Card bg={bg} border="1px solid" borderColor="gray.500">
                     <CustomCardHeader
                       text={getMessage({
@@ -658,22 +761,13 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       />
                     </CardBody>
                   </Card>
-                  <Box position="relative" h="20px" w="100%" m="0">
-                    <Box
-                      position="absolute"
-                      left="50%"
-                      top="0"
-                      bottom="0"
-                      borderLeft="1px solid"
-                      borderColor="gray.500"
-                      transform="translateX(-50%)"
-                    />
-                  </Box>
+                  <Box position="relative" h="20px" w="100%" m="0" />
+
                   <Card
                     bg={bg}
                     border="1px solid"
                     borderColor="gray.500"
-                    mx="24px"
+                    mx="0px"
                   >
                     <CustomCardHeader
                       text={getMessage({
@@ -850,22 +944,12 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       </Box>
                     </CardBody>
                   </Card>
-                  <Box position="relative" h="20px" w="100%" m="0">
-                    <Box
-                      position="absolute"
-                      left="50%"
-                      top="0"
-                      bottom="0"
-                      borderLeft="1px solid"
-                      borderColor="gray.500"
-                      transform="translateX(-50%)"
-                    />
-                  </Box>
+                  <Box position="relative" h="20px" w="100%" m="0" />
                   <Card
                     bg={bg}
                     border="1px solid"
                     borderColor="gray.500"
-                    mx="24px"
+                    mx="0px"
                   >
                     <CardBody p={0}>
                       <Box
@@ -1084,341 +1168,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                 </Card>
               </>
             )}
-            {(!filterId || filterId === "jdss") && (
-              <>
-                <Card bg={bg} border="1px solid" borderColor="gray.500">
-                  <CustomCardHeader
-                    text={getMessage({
-                      ja: "順立生産システム",
-                      language,
-                    })}
-                    textSize="md"
-                  />
-                  <Divider borderColor="gray.500" />
-                  <CardBody p={0}>
-                    <Box
-                      key="04"
-                      position="relative"
-                      px={2}
-                      pl={7}
-                      py={1}
-                      _hover={{
-                        boxShadow: "dark-lg",
-                      }}
-                      onMouseEnter={() => setHoveredId("04")}
-                    >
-                      <Tooltip
-                        placement="left"
-                        label="最新バージョンのダウンロード"
-                        shouldWrapChildren
-                      >
-                        <DownloadButton
-                          path="/download/jdss/main"
-                          isHovered={hoverdId === "04"}
-                          backGroundColor="custom.access"
-                          userName={currentUserName}
-                        />
-                      </Tooltip>
-                      <Flex
-                        justifyContent="space-between"
-                        alignItems="flex-start"
-                      >
-                        <Flex
-                          direction="column"
-                          alignItems="flex-start"
-                          flex={1}
-                        >
-                          <Heading size="sm" mb="3px" mt="-20px">
-                            main
-                          </Heading>
-                          <BadgeList
-                            labels={["ACCESS2003", "ACCESS2010"]}
-                            useGetColor={[true, true]}
-                          />
-                          <BadgeList
-                            labels={["32bit", "64bit"]}
-                            useGetColor={[true, false]}
-                          />
-                          <Text pt="3px" fontSize="sm">
-                            {getMessage({
-                              ja: "一貫工程などの連続して生産する工程で有効",
-                              us: "Effective in continuous production processes such as integrated processes.",
-                              cn: "适用于连续生产工艺，如集成工艺",
-                              language,
-                            })}
-                            <br />
-                            {getMessage({
-                              ja: "かんばん等のデータを読み込んでその順番で各作業場所で生産指示を行う",
-                              us: "Reads Kanban and other data and gives production instructions at each work location in that order.",
-                              cn: "读取来自看板和其他来源的数据，并按顺序在每个工作地点下达生产指令。",
-                              language,
-                            })}
-                            <br />
-                            {getMessage({
-                              ja: "生産指示の対象は[作業者] [自動機(SA,AS)] ",
-                              us: "The subject of the production order is [Operator] [automatic(SA,AS)] ",
-                              cn: "生产订单受 [工人] [自动(SA,AS)] ",
-                              language,
-                            }) + "[CB10,70] [YSS]."}
-                            <br />
-                            {getMessage({
-                              ja: "※宮崎部品が委託開発した3つのシステムを統合して機能追加しました",
-                              us: "*Miyazaki Parts has integrated three systems developed on consignment and added functionality.",
-                              cn: "*宮崎部品 整合了由 委托开发的三个系统，并增加了其他功能",
-                              language,
-                            })}
-                            <br />
-                            {getMessage({
-                              ja: "※QRラベル印刷に桜咲くQR、RS232C変換にRS-reciiverLightが必要",
-                              us: "*Cherry Blossom QR for QR label printing, RS-reciiverLight for RS232C conversion required.",
-                              cn: "*需要使用用于 QR 标签打印的樱花 QR 和用于 RS232C 转换的 RS-reciiverLight",
-                              language,
-                            })}
-                          </Text>
-                        </Flex>
-                        <Stack
-                          spacing={1}
-                          direction="column"
-                          alignItems="flex-start"
-                        >
-                          <Flex
-                            justifyContent="flex-end"
-                            width="100%"
-                            mt="-20px"
-                          >
-                            <Box fontSize="xs" textAlign="right">
-                              <LatestUpdateDate
-                                folderPath="./download/jdss/main"
-                                removeStrings={[]}
-                              />
-                            </Box>
-                          </Flex>
-                          <CustomModalTab
-                            path=""
-                            media=""
-                            text={
-                              "main1." +
-                              getMessage({
-                                ja: "指示",
-                                us: "directives",
-                                cn: "指示",
-                                language,
-                              })
-                            }
-                          />
-                          <YouTubeModal
-                            text={getMessage({
-                              ja: "MAIN2.SSC",
-                              us: "MAIN2.SSC",
-                              cn: "MAIN2.SSC",
-                              language,
-                            })}
-                            initialVideoId="jdss_main2"
-                            isModal={true}
-                          />
-                          <CustomModalTab path="" media="" text="main3.CB" />
-                          <YouTubeModal
-                            text={getMessage({
-                              ja: "MAIN3.PLC",
-                              us: "MAIN3.PLC",
-                              cn: "MAIN3.PLC",
-                              language,
-                            })}
-                            initialVideoId="jdss_main3_plc"
-                            isModal={true}
-                          />
-                        </Stack>
-                      </Flex>
-                    </Box>
-                    <Divider borderColor="gray.500" />
-                    <ChangelogAccordion
-                      changelog={[
-                        {
-                          version: "165",
-                          date: "2025/03/18",
-                          reason: [
-                            "access2003のみ(?)で送信/印刷ボタンを押すと設定枚数以上に処理される",
-                          ],
-                          change: [
-                            "送信/印刷ボタンを押した時のみ処理完了までこのボタンを無効",
-                            "test",
-                          ],
-                          inCharge: ["徳島", "小松さん", "不具合"],
-                        },
-                        {
-                          version: "164",
-                          date: "2025/02/05",
-                          reason: [],
-                          change: [
-                            "軽微な不具合の修正",
-                            "送信/印刷の数量の初期値を設定に追加",
-                          ],
-                          inCharge: ["徳島", "作業者さん"],
-                        },
-                        {
-                          version: "163",
-                          date: "2025/02/04",
-                          reason: ["access2003で開くとaccessが強制終了する"],
-                          change: ["Form!F_main2_settingが破損=>作り直し"],
-                          inCharge: ["徳島", "訪問対応", "小松さん"],
-                        },
-                        {
-                          html: "/html/Jdss/",
-                          htmlText: "デザインの変更",
-                          version: "158",
-                          date: "2025/02/03",
-                          reason: [],
-                          change: ["不要なコードの削除", "デザインの変更"],
-                          inCharge: ["徳島"],
-                        },
-                        {
-                          html: "/html/Jdss/",
-                          htmlText:
-                            "自動機を使用しない場合にラベル印刷だけ行えるように修正",
-                          version: "123",
-                          date: "2024/10/07",
-                          reason: ["main2_次回QRラベルが飛ぶ時がある"],
-                          change: ["SQLクエリ->専用関数に書き直し"],
-                          inCharge: ["徳島", "小松さん", "藤原さん"],
-                        },
-                      ]}
-                    />
-                  </CardBody>
-                </Card>
-                <ToggleSection
-                  id={2}
-                  isShown={showAllMap[2]}
-                  toggleShowAll={toggleShowAll}
-                >
-                  <Card
-                    bg={bg}
-                    border="1px solid"
-                    borderColor="gray.500"
-                    mx="20px"
-                    overflow="hidden"
-                  >
-                    <CustomCardHeader
-                      text={getMessage({
-                        ja: "PLCとの連携",
-                        language,
-                      })}
-                      textSize="sm"
-                    />
-                    <Divider borderColor="gray.500" />
-                    <CardBody p={0}>
-                      <Box
-                        key="05"
-                        position="relative"
-                        px={2}
-                        pl={7}
-                        py={1}
-                        _hover={{
-                          boxShadow: "dark-lg",
-                        }}
-                        onMouseEnter={() => setHoveredId("05")}
-                      >
-                        <Tooltip
-                          placement="left"
-                          label="最新バージョンのダウンロード"
-                          shouldWrapChildren
-                        >
-                          <DownloadButton
-                            path="/download/jdss/main3/"
-                            isHovered={hoverdId === "05"}
-                            backGroundColor="custom.omron"
-                            userName={currentUserName}
-                          />
-                        </Tooltip>
-                        <Flex
-                          justifyContent="space-between"
-                          alignItems="flex-start"
-                        >
-                          <Flex
-                            direction="column"
-                            alignItems="flex-start"
-                            flex={1}
-                          >
-                            <Heading size="sm" mb="3px">
-                              {getMessage({
-                                ja: "main3用ラダー図",
-                                us: "PLC for main3",
-                                cn: "main3 的梯形图",
-                                language,
-                              })}
-                            </Heading>
-                            <BadgeList labels={["OMRON CP**"]} />
-                            <Text pt="3px" fontSize="sm">
-                              {getMessage({
-                                ja: "main3からPLCへデータを送信して部品セットを行う",
-                                us: "Send data from main3 to PLC to set parts",
-                                cn: "从 main3 向 PLC 发送数据以设置部件。",
-                                language,
-                              })}
-                              <br />
-                              {getMessage({
-                                ja: "main3からシリアル送信するデータは2進数でPLC受信で対応した内部リレーをON/OFFする",
-                                us: "Data sent serially from main3 is binary and turns on/off the internal relay corresponding to the PLC reception.",
-                                cn: "从 main3 串行发送的数据为二进制数，在 PLC 接收到这些数据时会打开/关闭相应的内部继电器。",
-                                language,
-                              })}
-                              <br />
-                              {getMessage({
-                                ja: "このラダー図そのままでは使用できるケースは少ないですが部品セットの参考になると思います",
-                                us: "This ladder diagram can be used as is in only a few cases, but it can be used as a reference for the parts set.",
-                                cn: "这种梯形图只能在少数情况下使用，但可以作为组件集的参考。",
-                                language,
-                              })}
-                              <br />
-                              {getMessage({
-                                ja: "PLCへの書込みにはオムロン社のCX-Programmerが必要です",
-                                us: "Requires Omron's CX-Programmer",
-                                cn: "需要使用 Omron 的 CX-Programmer",
-                                language,
-                              })}
-                              <br />
-                              {getMessage({
-                                ja: "ダウンロードファイルには配線図とPLCシリアル設定の説明が含まれます。",
-                                us: "The download file contains wiring diagrams and instructions for PLC serial configuration.",
-                                cn: "下载文件包含 PLC 串行配置的接线图和说明。",
-                                language,
-                              })}
-                            </Text>
-                          </Flex>
-                          <Stack
-                            spacing={1}
-                            direction="column"
-                            alignItems="flex-start"
-                          >
-                            <Flex justifyContent="flex-end" width="100%">
-                              <Box fontSize="xs" textAlign="right">
-                                <LatestUpdateDate
-                                  folderPath="/download/jdss/main3/"
-                                  removeStrings={[]}
-                                />
-                              </Box>
-                            </Flex>
-                            <Flex>
-                              <Flex direction="column" mr={2}></Flex>
-                              <Flex direction="column"></Flex>
-                            </Flex>
-                          </Stack>
-                        </Flex>
-                      </Box>
-                      <Divider borderColor="gray.500" />
-                      <ChangelogAccordion
-                        changelog={[
-                          {
-                            version: "17",
-                            date: "2024/03/13",
-                            change: ["内部タイマーの調整"],
-                          },
-                        ]}
-                      />
-                    </CardBody>
-                  </Card>
-                </ToggleSection>
-              </>
-            )}
             {(!filterId || filterId === "yps") && (
               <>
                 <Card
@@ -1483,7 +1232,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         >
                           <Heading size="sm" mb="3px" mt="-20px">
                             {getMessage({
-                              ja: "誘導ポイント設定一覧表",
+                              ja: "Yps",
                               language,
                             })}
                           </Heading>
@@ -1736,8 +1485,352 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     </CardBody>
                   </Card>
                 </ToggleSection>
+                <Box mb="20px" />
               </>
             )}
+            {(!filterId || filterId === "jdss") && (
+              <>
+                <Card bg={bg} border="1px solid" borderColor="gray.500">
+                  <CustomCardHeader
+                    text={getMessage({
+                      ja: "順立生産システム",
+                      language,
+                    })}
+                    textSize="md"
+                  />
+                  <Divider borderColor="gray.500" />
+                  <CardBody p={0}>
+                    <Box
+                      key="04"
+                      position="relative"
+                      px={2}
+                      pl={7}
+                      py={1}
+                      _hover={{
+                        boxShadow: "dark-lg",
+                      }}
+                      onMouseEnter={() => setHoveredId("04")}
+                    >
+                      <Tooltip
+                        placement="left"
+                        label="最新バージョンのダウンロード"
+                        shouldWrapChildren
+                      >
+                        <DownloadButton
+                          path="/download/jdss/main"
+                          isHovered={hoverdId === "04"}
+                          backGroundColor="custom.access"
+                          userName={currentUserName}
+                        />
+                      </Tooltip>
+                      <Flex
+                        justifyContent="space-between"
+                        alignItems="flex-start"
+                      >
+                        <Flex
+                          direction="column"
+                          alignItems="flex-start"
+                          flex={1}
+                        >
+                          <Heading size="sm" mb="3px" mt="-20px">
+                            main
+                          </Heading>
+                          <BadgeList
+                            labels={["ACCESS2003", "ACCESS2010"]}
+                            useGetColor={[true, true]}
+                          />
+                          <BadgeList
+                            labels={["32bit", "64bit"]}
+                            useGetColor={[true, false]}
+                          />
+                          <Text pt="3px" fontSize="sm">
+                            {getMessage({
+                              ja: "一貫工程などの連続して生産する工程で有効",
+                              us: "Effective in continuous production processes such as integrated processes.",
+                              cn: "适用于连续生产工艺，如集成工艺",
+                              language,
+                            })}
+                            <br />
+                            {getMessage({
+                              ja: "かんばん等のデータを読み込んでその順番で各作業場所で生産指示を行う",
+                              us: "Reads Kanban and other data and gives production instructions at each work location in that order.",
+                              cn: "读取来自看板和其他来源的数据，并按顺序在每个工作地点下达生产指令。",
+                              language,
+                            })}
+                            <br />
+                            {getMessage({
+                              ja: "生産指示の対象は[作業者] [自動機(SA,AS)] ",
+                              us: "The subject of the production order is [Operator] [automatic(SA,AS)] ",
+                              cn: "生产订单受 [工人] [自动(SA,AS)] ",
+                              language,
+                            }) + "[CB10,70] [YSS]."}
+                            <br />
+                            {getMessage({
+                              ja: "※宮崎部品が委託開発した3つのシステムを統合して機能追加しました",
+                              us: "*Miyazaki Parts has integrated three systems developed on consignment and added functionality.",
+                              cn: "*宮崎部品 整合了由 委托开发的三个系统，并增加了其他功能",
+                              language,
+                            })}
+                            <br />
+                            {getMessage({
+                              ja: "※QRラベル印刷に桜咲くQRが必要",
+                              us: "*Cherry Blossom QR for QR label printing.",
+                              cn: "*QR标签打印需使用樱花绽放QR",
+                              language,
+                            })}
+                            <br />
+                            {getMessage({
+                              ja: "※バーコードリーダーがシリアルタイプの場合は、RS232C変換にRS-reciiverLightが必要",
+                              us: "*If the barcode reader is a serial type, an RS-ReceiverLight is required for RS232C conversion.",
+                              cn: "*若条码阅读器为串行类型，则需使用RS-reciiverLight进行RS232C转换",
+                              language,
+                            })}
+                          </Text>
+                        </Flex>
+                        <Stack
+                          spacing={1}
+                          direction="column"
+                          alignItems="flex-start"
+                        >
+                          <Flex
+                            justifyContent="flex-end"
+                            width="100%"
+                            mt="-20px"
+                          >
+                            <Box fontSize="xs" textAlign="right">
+                              <LatestUpdateDate
+                                folderPath="./download/jdss/main"
+                                removeStrings={[]}
+                              />
+                            </Box>
+                          </Flex>
+                          <CustomModalTab
+                            path=""
+                            media=""
+                            text={
+                              "main1." +
+                              getMessage({
+                                ja: "指示",
+                                us: "directives",
+                                cn: "指示",
+                                language,
+                              })
+                            }
+                          />
+                          <YouTubeModal
+                            text={getMessage({
+                              ja: "MAIN2.SSC",
+                              us: "MAIN2.SSC",
+                              cn: "MAIN2.SSC",
+                              language,
+                            })}
+                            initialVideoId="jdss_main2"
+                            isModal={true}
+                          />
+                          <CustomModalTab path="" media="" text="main3.CB" />
+                          <YouTubeModal
+                            text={getMessage({
+                              ja: "MAIN3.PLC",
+                              us: "MAIN3.PLC",
+                              cn: "MAIN3.PLC",
+                              language,
+                            })}
+                            initialVideoId="jdss_main3_plc"
+                            isModal={true}
+                          />
+                        </Stack>
+                      </Flex>
+                    </Box>
+                    <Divider borderColor="gray.500" />
+                    <ChangelogAccordion
+                      changelog={[
+                        {
+                          version: "165",
+                          date: "2025/03/18",
+                          reason: [
+                            "access2003のみ(?)で送信/印刷ボタンを押すと設定枚数以上に処理される",
+                          ],
+                          change: [
+                            "送信/印刷ボタンを押した時のみ処理完了までこのボタンを無効",
+                            "test",
+                          ],
+                          inCharge: ["徳島", "小松さん", "不具合"],
+                        },
+                        {
+                          version: "164",
+                          date: "2025/02/05",
+                          reason: [],
+                          change: [
+                            "軽微な不具合の修正",
+                            "送信/印刷の数量の初期値を設定に追加",
+                          ],
+                          inCharge: ["徳島", "作業者さん"],
+                        },
+                        {
+                          version: "163",
+                          date: "2025/02/04",
+                          reason: ["access2003で開くとaccessが強制終了する"],
+                          change: ["Form!F_main2_settingが破損=>作り直し"],
+                          inCharge: ["徳島", "訪問対応", "小松さん"],
+                        },
+                        {
+                          html: "/html/Jdss/",
+                          htmlText: "デザインの変更",
+                          version: "158",
+                          date: "2025/02/03",
+                          reason: [],
+                          change: ["不要なコードの削除", "デザインの変更"],
+                          inCharge: ["徳島"],
+                        },
+                        {
+                          html: "/html/Jdss/",
+                          htmlText:
+                            "自動機を使用しない場合にラベル印刷だけ行えるように修正",
+                          version: "123",
+                          date: "2024/10/07",
+                          reason: ["main2_次回QRラベルが飛ぶ時がある"],
+                          change: ["SQLクエリ->専用関数に書き直し"],
+                          inCharge: ["徳島", "小松さん", "藤原さん"],
+                        },
+                      ]}
+                    />
+                  </CardBody>
+                </Card>
+                <ToggleSection
+                  id={2}
+                  isShown={showAllMap[2]}
+                  toggleShowAll={toggleShowAll}
+                >
+                  <Card
+                    bg={bg}
+                    border="1px solid"
+                    borderColor="gray.500"
+                    mx="0px"
+                    overflow="hidden"
+                  >
+                    <CustomCardHeader
+                      text={getMessage({
+                        ja: "PLCとの連携",
+                        language,
+                      })}
+                      textSize="sm"
+                    />
+                    <Divider borderColor="gray.500" />
+                    <CardBody p={0}>
+                      <Box
+                        key="05"
+                        position="relative"
+                        px={2}
+                        pl={7}
+                        py={1}
+                        _hover={{
+                          boxShadow: "dark-lg",
+                        }}
+                        onMouseEnter={() => setHoveredId("05")}
+                      >
+                        <Tooltip
+                          placement="left"
+                          label="最新バージョンのダウンロード"
+                          shouldWrapChildren
+                        >
+                          <DownloadButton
+                            path="/download/jdss/main3/"
+                            isHovered={hoverdId === "05"}
+                            backGroundColor="custom.omron"
+                            userName={currentUserName}
+                          />
+                        </Tooltip>
+                        <Flex
+                          justifyContent="space-between"
+                          alignItems="flex-start"
+                        >
+                          <Flex
+                            direction="column"
+                            alignItems="flex-start"
+                            flex={1}
+                          >
+                            <Heading size="sm" mb="3px">
+                              {getMessage({
+                                ja: "main3用ラダー図",
+                                us: "PLC for main3",
+                                cn: "main3 的梯形图",
+                                language,
+                              })}
+                            </Heading>
+                            <BadgeList labels={["OMRON CP**"]} />
+                            <Text pt="3px" fontSize="sm">
+                              {getMessage({
+                                ja: "main3からPLCへデータを送信して部品セットを行う",
+                                us: "Send data from main3 to PLC to set parts",
+                                cn: "从 main3 向 PLC 发送数据以设置部件。",
+                                language,
+                              })}
+                              <br />
+                              {getMessage({
+                                ja: "main3からシリアル送信するデータは2進数でPLC受信で対応した内部リレーをON/OFFする",
+                                us: "Data sent serially from main3 is binary and turns on/off the internal relay corresponding to the PLC reception.",
+                                cn: "从 main3 串行发送的数据为二进制数，在 PLC 接收到这些数据时会打开/关闭相应的内部继电器。",
+                                language,
+                              })}
+                              <br />
+                              {getMessage({
+                                ja: "このラダー図そのままでは使用できるケースは少ないですが部品セットの参考になると思います",
+                                us: "This ladder diagram can be used as is in only a few cases, but it can be used as a reference for the parts set.",
+                                cn: "这种梯形图只能在少数情况下使用，但可以作为组件集的参考。",
+                                language,
+                              })}
+                              <br />
+                              {getMessage({
+                                ja: "PLCへの書込みにはオムロン社のCX-Programmerが必要です",
+                                us: "Requires Omron's CX-Programmer",
+                                cn: "需要使用 Omron 的 CX-Programmer",
+                                language,
+                              })}
+                              <br />
+                              {getMessage({
+                                ja: "ダウンロードファイルには配線図とPLCシリアル設定の説明が含まれます。",
+                                us: "The download file contains wiring diagrams and instructions for PLC serial configuration.",
+                                cn: "下载文件包含 PLC 串行配置的接线图和说明。",
+                                language,
+                              })}
+                            </Text>
+                          </Flex>
+                          <Stack
+                            spacing={1}
+                            direction="column"
+                            alignItems="flex-start"
+                          >
+                            <Flex justifyContent="flex-end" width="100%">
+                              <Box fontSize="xs" textAlign="right">
+                                <LatestUpdateDate
+                                  folderPath="/download/jdss/main3/"
+                                  removeStrings={[]}
+                                />
+                              </Box>
+                            </Flex>
+                            <Flex>
+                              <Flex direction="column" mr={2}></Flex>
+                              <Flex direction="column"></Flex>
+                            </Flex>
+                          </Stack>
+                        </Flex>
+                      </Box>
+                      <Divider borderColor="gray.500" />
+                      <ChangelogAccordion
+                        changelog={[
+                          {
+                            version: "17",
+                            date: "2024/03/13",
+                            change: ["内部タイマーの調整"],
+                          },
+                        ]}
+                      />
+                    </CardBody>
+                  </Card>
+                </ToggleSection>
+              </>
+            )}
+
             {(!filterId || filterId === "library") && (
               <>
                 <Card
@@ -1873,9 +1966,15 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           />
                           <Text pt="3px" fontSize="sm">
                             {getMessage({
-                              ja: "VBの環境でシリアル通信を行うためのライブラリ",
-                              us: "",
-                              cn: "",
+                              ja: "VBの環境でシリアル通信を行うためのライブラリ。",
+                              us: "Library for serial communication in the VB environment",
+                              cn: "用于在VB环境中进行串行通信的库",
+                              language,
+                            })}
+                            {getMessage({
+                              ja: "PCが新しくなったら無い場合があるのでその際にダウンロードして使用してください",
+                              us: "If your PC is new, it may not be installed, so please download and use it at that time.",
+                              cn: "更换新电脑时可能无法使用，届时请下载后使用。",
                               language,
                             })}
                             <br />

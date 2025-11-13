@@ -58,6 +58,8 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
     後ハメ誘導: { us: "Post-Fitting  Guidance", cn: "后装引导" },
     ハメ図: { us: "Fittingfigure", cn: "装图" },
     竿レイアウト: { us: "Rod layout", cn: "杆件布局" },
+    回路マトリクス: { us: "Circuit Matrix", cn: "电路矩阵" },
+    "回路マトリクス+": { us: "Circuit Matrix+", cn: "电路矩阵+" },
     サブ図: { us: "Subfigure", cn: "子图" },
     作業工数: {
       us: "Person-hours",
@@ -79,6 +81,7 @@ const getMessage = ({ ja, us, cn, language }: MessageDisplayProps): string => {
     小崎さん: { us: "Ms.kosaki", cn: "小崎女士" },
     Win10zip: { us: "Win10zip", cn: "Win10zip" },
     山田さん: { us: "Ms.yamada", cn: "山田女士" },
+    桒原さん: { us: "Mr.kuwahara", cn: "桒原先生" },
     小松さん: { us: "Mr.komatsu", cn: "小松先生" },
     緒方さん: { us: "Mr.ogata", cn: "緒方先生" },
     書き直し: { us: "rewrite", cn: "重拟" },
