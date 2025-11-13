@@ -687,11 +687,29 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         px={2}
                         pl={7}
                         py={1}
+                        overflow="hidden"
                         _hover={{
                           boxShadow: "dark-lg",
                         }}
                         onMouseEnter={() => setHoveredId("12")}
                       >
+                        <Box
+                          position="absolute"
+                          top={0}
+                          left={0}
+                          right={0}
+                          bottom={0}
+                          backgroundImage="url('/images/illust/hippo/hippo_019.png')"
+                          backgroundSize="152px"
+                          backgroundPosition="88% -3%"
+                          backgroundRepeat="no-repeat"
+                          opacity={0.1}
+                          sx={{
+                            filter: "grayscale(100%)",
+                          }}
+                          zIndex={0}
+                          pointerEvents="none"
+                        />
                         <Tooltip
                           placement="left"
                           label="最新バージョンのダウンロード"
@@ -708,6 +726,8 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         <Flex
                           justifyContent="space-between"
                           alignItems="flex-start"
+                          position="relative"
+                          zIndex={1}
                         >
                           <Flex
                             direction="column"
@@ -751,14 +771,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               })}
                               <br />
                               {getMessage({
-                                ja: "クリックで座標を取得してくれたりする機能を適当に作ってみました。",
+                                ja: "クリックで座標を取得してくれたりする機能を想像で作ってみました。",
                                 us: "",
                                 cn: "",
                                 language,
                               })}
                               <br />
                               {getMessage({
-                                ja: "想像で作ったので実際に使ってみて改善案があれば連絡ください",
+                                ja: "実際に使ってみて改善案があれば連絡ください",
                                 us: "",
                                 cn: "",
                                 language,
@@ -839,12 +859,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             flex={1}
                           >
                             <Flex alignItems="center" gap={2} mb="3px">
-                              <Heading size="sm">
-                                CAMERA+
-                              </Heading>
+                              <Heading size="sm">CAMERA+</Heading>
                               <Tooltip label="VB.NET" placement="top">
                                 <Box display="flex" alignItems="center">
-                                  <Icon as={SiDotnet} color="#512BD4" boxSize={5} />
+                                  <Icon
+                                    as={SiDotnet}
+                                    color="#512BD4"
+                                    boxSize={5}
+                                  />
                                 </Box>
                               </Tooltip>
                             </Flex>
@@ -969,12 +991,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             flex={1}
                           >
                             <Flex alignItems="center" gap={2} mb="3px">
-                              <Heading size="sm">
-                                yudo.net
-                              </Heading>
+                              <Heading size="sm">yudo.net</Heading>
                               <Tooltip label="VB.NET" placement="top">
                                 <Box display="flex" alignItems="center">
-                                  <Icon as={SiDotnet} color="#512BD4" boxSize={5} />
+                                  <Icon
+                                    as={SiDotnet}
+                                    color="#512BD4"
+                                    boxSize={5}
+                                  />
                                 </Box>
                               </Tooltip>
                             </Flex>

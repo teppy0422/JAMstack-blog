@@ -315,9 +315,9 @@ const BusinessCardModal: React.FC = () => {
                   />
                   <Text color="#FFF">
                     {getMessage({
-                      ja: "090-8971-4946",
-                      us: "(+81)090-8971-4946",
-                      cn: "(+81)090-8971-4946",
+                      ja: "070-9133-6256",
+                      us: "(+81)070-9133-6256",
+                      cn: "(+81)070-9133-6256",
                       language,
                     })}
                   </Text>
