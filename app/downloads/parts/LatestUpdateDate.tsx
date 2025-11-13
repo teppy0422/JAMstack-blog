@@ -48,7 +48,7 @@ export default function LatestUpdateDate({
 
   return (
     <span>
-      {dateStr}
+      #{dateStr}
       <br />
       {fileName}
     </span>

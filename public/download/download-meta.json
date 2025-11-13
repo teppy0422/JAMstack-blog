@@ -23,6 +23,10 @@
     "latestFile": "Code39Barcode.ttf",
     "latestUpdated": "2025-10-08T14:33:03.280Z"
   },
+  "sjp/kairo": {
+    "latestFile": "回路マトリクス+_0.011.zip",
+    "latestUpdated": "2025-11-13T02:04:18.000Z"
+  },
   "sjp/sjp": {
     "latestFile": "Sjp3.101.28_.zip",
     "latestUpdated": "2025-11-12T02:41:56.000Z"
@@ -45,6 +49,6 @@
   },
   ".": {
     "latestFile": "download-meta.json",
-    "latestUpdated": "2025-11-07T05:03:03.274Z"
+    "latestUpdated": "2025-11-13T02:20:12.936Z"
   }
 }

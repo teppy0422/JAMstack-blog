@@ -253,9 +253,9 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         >
                           <Heading size="sm" mb="3px" mt="-20px">
                             {getMessage({
-                              ja: "Sjp+ 本体",
-                              us: "Sjp+ main unit",
-                              cn: "Sjp+ 机构",
+                              ja: "Sjp",
+                              us: "Sjp",
+                              cn: "Sjp",
                               language,
                             })}
                           </Heading>
@@ -286,6 +286,13 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               ja: "PVSW.csvとRLTF.txtが必須",
                               us: "PVSW.csv and RLTF.txt are required",
                               cn: "需要 PVSW.csv 和 RLTF.txt 文件",
+                              language,
+                            })}
+                            <br />
+                            {getMessage({
+                              ja: "配策誘導とか検査履歴ポイント点滅はこのシステムが作成",
+                              us: "This system generates the distribution strategy guidance and inspection history point flashes.",
+                              cn: "策略引导和检查记录点闪烁功能由本系统生成",
                               language,
                             })}
                             <br />
@@ -566,16 +573,19 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         }}
                         onMouseEnter={() => setHoveredId("10")}
                       >
-                        <Box
-                          position="absolute"
-                          top={0}
-                          left={0}
-                          bottom={0}
-                          width="1.4rem"
-                          backgroundColor="transparent"
-                          borderRight="2px dotted"
-                          borderColor="gray.500"
-                        />
+                        <Tooltip
+                          placement="left"
+                          label="最新バージョンのダウンロード"
+                          shouldWrapChildren
+                          display="inline"
+                        >
+                          <DownloadButton
+                            path="/download/sjp/kairo/"
+                            isHovered={hoverdId === "10"}
+                            backGroundColor="custom.excel"
+                            userName={currentUserName}
+                          />
+                        </Tooltip>
                         <Flex
                           justifyContent="space-between"
                           alignItems="flex-start"
@@ -584,6 +594,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                             flex={1}
+                            mt="-20px"
                           >
                             <BadgeList
                               labels={["EXCEL2010", "EXCEL2013", "EXCEL365"]}
@@ -595,18 +606,25 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             />
                             <Text pt="3px" fontSize="sm">
                               {getMessage({
-                                ja: "製造指示書印刷システムのサブナンバーを変更するSub.txtを管理するシステム",
+                                ja: "製造指示書印刷システムのサブナンバーを変更するSub.txtを管理するシステム。",
                                 us: "System for managing Sub.txt files that change sub-numbers in the manufacturing instruction printing system.",
-                                cn: "用于管理Sub.txt文件的系统，该文件用于更改制造指示书打印系统的子编号",
+                                cn: "用于管理Sub.txt文件的系统，该文件用于更改制造指示书打印系统的子编号。",
                                 language,
                               })}
-                              <br />
                               {getMessage({
-                                ja: "生産準備+からもサブナンバーを変更できるけどこっちの方が都合が良い場合に使用",
+                                ja: "生産準備+からもサブナンバーを変更できるけどこっちの方が都合が良い場合に使用。",
                                 us: "You can also change the sub-number from Production Preparation+, but use this method when it's more convenient.",
                                 cn: "虽然也可以从生产准备阶段开始更改子编号，但当此方式更方便时使用。",
                                 language,
                               })}
+                              <br />
+                              {getMessage({
+                                ja: "生産準備+から回路マトリクスを作成する方がスマートで無駄が無いが徳島では困難なので現状に合わせるために作成。",
+                                us: "Creating a circuit matrix from production preparation is smarter and more efficient, but since it's difficult in Tokushima, we created it to fit the current situation.",
+                                cn: "虽然创建电路矩阵更为智能且无浪费，但在德岛难以实现，因此为适应现状而创建。",
+                                language,
+                              })}
+                              <br />
                             </Text>
                           </Flex>
                           <Stack
@@ -614,12 +632,17 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                           >
-                            <Flex justifyContent="flex-end" width="100%">
-                              <Text fontSize="xs" textAlign="right">
-                                #????/??/??
-                                <br />
-                                10
-                              </Text>
+                            <Flex
+                              justifyContent="flex-end"
+                              width="100%"
+                              mt="-20px"
+                            >
+                              <Box fontSize="xs" textAlign="right">
+                                <LatestUpdateDate
+                                  folderPath="/download/sjp/kairo/"
+                                  removeStrings={[]}
+                                />
+                              </Box>
                             </Flex>
                           </Stack>
                         </Flex>
@@ -628,16 +651,20 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       <ChangelogAccordion
                         changelog={[
                           {
-                            version: "10",
-                            date: "????/??/??",
+                            downloadPath: "/download/sjp/sjp/Sjp3.101.18_.zip",
+                            version: "0.011",
+                            date: "2025/11/13",
+                            change: ["公開用に修正"],
+                            inCharge: ["開発", "片岡"],
+                          },
+                          {
+                            version: "0.010",
+                            date: "2019/07/02",
                             reason: [
-                              "撮影環境が異なる場合、コネクタ写真の色が異なる",
-                              "コネクタ写真の登録が面倒",
+                              "生産準備+の端末毎のサブナンバーをここから取得したい",
                             ],
-                            change: [
-                              "撮影するとコネクタ品番を付けて写真を生産準備+に渡す",
-                            ],
-                            inCharge: ["徳島", "補給品"],
+                            change: ["端末毎のサブナンバーの出力機能を追加"],
+                            inCharge: ["徳島", "山田さん"],
                           },
                         ]}
                       />
@@ -1580,9 +1607,15 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             })}
                             <br />
                             {getMessage({
-                              ja: "※バーコードリーダーがシリアルタイプの場合は、RS232C変換にRS-reciiverLightが必要",
+                              ja: "※バーコードリーダーがシリアルタイプの場合は、RS232C変換にRS-reciiverLightが必要。",
                               us: "*If the barcode reader is a serial type, an RS-ReceiverLight is required for RS232C conversion.",
-                              cn: "*若条码阅读器为串行类型，则需使用RS-reciiverLight进行RS232C转换",
+                              cn: "*若条码阅读器为串行类型，则需使用RS-reciiverLight进行RS232C转换. ",
+                              language,
+                            })}
+                            {getMessage({
+                              ja: "USBタイプの場合は不要です。",
+                              us: "*Not required for USB types.",
+                              cn: "*USB类型的则不需要。 ",
                               language,
                             })}
                           </Text>
