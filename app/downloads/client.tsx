@@ -25,6 +25,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { SiPython, SiDotnet } from "react-icons/si";
 
 import { FocusableElement } from "@chakra-ui/utils"; // FocusableElement をインポート
 import NextImage from "next/image";
@@ -714,9 +715,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             flex={1}
                             mt="-24px"
                           >
-                            <Heading size="sm" mb="3px">
-                              PDFXyViewer.exe
-                            </Heading>
+                            <Flex alignItems="center" gap={2} mb="3px">
+                              <Heading size="sm">PDFXyViewer.exe</Heading>
+                              <Tooltip label="Python" placement="top">
+                                <Box display="flex" alignItems="center">
+                                  <Icon
+                                    as={SiPython}
+                                    color="#3776AB"
+                                    boxSize={5}
+                                  />
+                                </Box>
+                              </Tooltip>
+                            </Flex>
                             <BadgeList
                               labels={["WINDOWS10", "WINDOWS11"]}
                               useGetColor={[true, true]}
@@ -828,9 +838,16 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             alignItems="flex-start"
                             flex={1}
                           >
-                            <Heading size="sm" mb="3px">
-                              CAMERA+
-                            </Heading>
+                            <Flex alignItems="center" gap={2} mb="3px">
+                              <Heading size="sm">
+                                CAMERA+
+                              </Heading>
+                              <Tooltip label="VB.NET" placement="top">
+                                <Box display="flex" alignItems="center">
+                                  <Icon as={SiDotnet} color="#512BD4" boxSize={5} />
+                                </Box>
+                              </Tooltip>
+                            </Flex>
                             <BadgeList labels={["VB.net"]} />
                             <Text pt="3px" fontSize="sm">
                               {getMessage({
@@ -951,9 +968,16 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             alignItems="flex-start"
                             flex={1}
                           >
-                            <Heading size="sm" mb="3px">
-                              yudo.net
-                            </Heading>
+                            <Flex alignItems="center" gap={2} mb="3px">
+                              <Heading size="sm">
+                                yudo.net
+                              </Heading>
+                              <Tooltip label="VB.NET" placement="top">
+                                <Box display="flex" alignItems="center">
+                                  <Icon as={SiDotnet} color="#512BD4" boxSize={5} />
+                                </Box>
+                              </Tooltip>
+                            </Flex>
                             <BadgeList labels={["VB.net"]} />
                             <Text pt="3px" fontSize="sm">
                               {getMessage({

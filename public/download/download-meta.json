@@ -4,16 +4,12 @@
     "latestUpdated": "2025-10-10T00:04:26.293Z"
   },
   "jdss/main": {
-    "latestFile": "main_164.zip",
-    "latestUpdated": "2025-10-10T00:18:58.089Z"
+    "latestFile": "main_165.zip",
+    "latestUpdated": "2025-10-10T00:12:55.584Z"
   },
   "jdss/main3": {
     "latestFile": "main3_17.zip",
     "latestUpdated": "2025-10-10T00:13:14.153Z"
-  },
-  "jdss": {
-    "latestFile": ".DS_Store",
-    "latestUpdated": "2025-05-18T12:17:38.547Z"
   },
   "library/MSCOMM32": {
     "latestFile": "MSCOMM32.OCX",
@@ -29,7 +25,7 @@
   },
   "sjp/pdf": {
     "latestFile": "PDFXyViewer.zip",
-    "latestUpdated": "2025-11-13T09:51:13.321Z"
+    "latestUpdated": "2025-11-13T13:52:12.000Z"
   },
   "sjp/sjp": {
     "latestFile": "Sjp3.101.28_.zip",
@@ -39,10 +35,6 @@
     "latestFile": "i_000L6470_SPI_stepMoter_sketch_18.zip",
     "latestUpdated": "2025-11-13T04:32:33.276Z"
   },
-  "sjp": {
-    "latestFile": ".DS_Store",
-    "latestUpdated": "2025-11-13T10:17:54.840Z"
-  },
   "yps/verup": {
     "latestFile": "VerUp.zip",
     "latestUpdated": "2025-10-17T03:26:50.000Z"
@@ -50,13 +42,5 @@
   "yps/yps": {
     "latestFile": "Yps1.22_.zip",
     "latestUpdated": "2025-11-12T02:36:00.000Z"
-  },
-  "yps": {
-    "latestFile": ".DS_Store",
-    "latestUpdated": "2025-06-08T16:39:25.363Z"
-  },
-  ".": {
-    "latestFile": ".DS_Store",
-    "latestUpdated": "2025-11-13T10:17:54.842Z"
   }
 }

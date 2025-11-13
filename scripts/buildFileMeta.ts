@@ -16,6 +16,16 @@ function processFolderRecursively(folderPath: string, relativePath: string) {
   let latestDate: Date | null = null;
 
   for (const entry of entries) {
+    // 隠しファイルやシステムファイルをスキップ
+    if (
+      entry.name === ".DS_Store" ||
+      entry.name === "Thumbs.db" ||
+      entry.name === "download-meta.json" ||
+      entry.name.startsWith(".")
+    ) {
+      continue;
+    }
+
     const fullPath = path.join(folderPath, entry.name);
     const relPath = path.join(relativePath, entry.name);
 

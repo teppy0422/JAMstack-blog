@@ -13,6 +13,13 @@ function processFolderRecursively(folderPath, relativePath) {
     let latestFile = null;
     let latestDate = null;
     for (const entry of entries) {
+        // 隠しファイルやシステムファイルをスキップ
+        if (entry.name === ".DS_Store" ||
+            entry.name === "Thumbs.db" ||
+            entry.name === "download-meta.json" ||
+            entry.name.startsWith(".")) {
+            continue;
+        }
         const fullPath = path_1.default.join(folderPath, entry.name);
         const relPath = path_1.default.join(relativePath, entry.name);
         if (entry.isDirectory()) {
