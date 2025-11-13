@@ -673,6 +673,124 @@ export default function Ui({ filterId }: { filterId?: string }) {
                   <Card bg={bg} border="1px solid" borderColor="gray.500">
                     <CustomCardHeader
                       text={getMessage({
+                        ja: "画像ビューワー",
+                        language,
+                      })}
+                      textSize="sm"
+                    />
+                    <Divider borderColor="gray.500" />
+                    <CardBody p={0}>
+                      <Box
+                        key="12"
+                        position="relative"
+                        px={2}
+                        pl={7}
+                        py={1}
+                        _hover={{
+                          boxShadow: "dark-lg",
+                        }}
+                        onMouseEnter={() => setHoveredId("12")}
+                      >
+                        <Tooltip
+                          placement="left"
+                          label="最新バージョンのダウンロード"
+                          shouldWrapChildren
+                          display="inline"
+                        >
+                          <DownloadButton
+                            path="/download/sjp/pdf/"
+                            isHovered={hoverdId === "12"}
+                            backGroundColor="custom.windows"
+                            userName={currentUserName}
+                          />
+                        </Tooltip>
+                        <Flex
+                          justifyContent="space-between"
+                          alignItems="flex-start"
+                        >
+                          <Flex
+                            direction="column"
+                            alignItems="flex-start"
+                            flex={1}
+                            mt="-24px"
+                          >
+                            <Heading size="sm" mb="3px">
+                              PDFXyViewer.exe
+                            </Heading>
+                            <BadgeList
+                              labels={["WINDOWS10", "WINDOWS11"]}
+                              useGetColor={[true, true]}
+                            />
+                            <BadgeList
+                              labels={["32bit", "64bit"]}
+                              useGetColor={[false, true]}
+                            />
+                            <Text pt="3px" fontSize="sm">
+                              {getMessage({
+                                ja: "配策図の治具データを効率良く作成する為だけの専用ソフト",
+                                us: "",
+                                cn: "",
+                                language,
+                              })}
+                              <br />
+                              {getMessage({
+                                ja: "インストール不要で動作します(たぶん)",
+                                us: "",
+                                cn: "",
+                                language,
+                              })}
+                              <br />
+                              {getMessage({
+                                ja: "クリックで座標を取得してくれたりする機能を適当に作ってみました。",
+                                us: "",
+                                cn: "",
+                                language,
+                              })}
+                              <br />
+                              {getMessage({
+                                ja: "想像で作ったので実際に使ってみて改善案があれば連絡ください",
+                                us: "",
+                                cn: "",
+                                language,
+                              })}
+                            </Text>
+                          </Flex>
+                          <Stack
+                            spacing={1}
+                            direction="column"
+                            alignItems="flex-start"
+                          >
+                            <Flex justifyContent="flex-end" width="100%">
+                              <Text fontSize="xs" textAlign="right" mt="-24px">
+                                #2025/11/13
+                                <br />
+                                1.0.0
+                              </Text>
+                            </Flex>
+                          </Stack>
+                        </Flex>
+                      </Box>
+                      <Divider borderColor="gray.500" />
+                      <ChangelogAccordion
+                        changelog={[
+                          {
+                            version: "1.0.0",
+                            date: "2025/11/13",
+                            reason: [
+                              "配策図を作成する時に.pdfの座標が出る軽いソフトがあったらいいな",
+                              "GIMPは重くて操作が複雑",
+                            ],
+                            change: ["新規開発"],
+                            inCharge: ["徳島", "山田さん"],
+                          },
+                        ]}
+                      />
+                    </CardBody>
+                  </Card>
+                  <Box position="relative" h="20px" w="100%" m="0" />
+                  <Card bg={bg} border="1px solid" borderColor="gray.500">
+                    <CustomCardHeader
+                      text={getMessage({
                         ja: "コネクタ撮影",
                         language,
                       })}
@@ -813,7 +931,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         _hover={{
                           boxShadow: "dark-lg",
                         }}
-                        onMouseEnter={() => setIsHovered(true)}
                       >
                         <Box
                           position="absolute"
@@ -896,6 +1013,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       </Box>
                       <Divider borderColor="gray.500" />
                       <Box
+                        key="11"
                         position="relative"
                         px={2}
                         pl={7}
@@ -903,18 +1021,21 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         _hover={{
                           boxShadow: "dark-lg",
                         }}
-                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseEnter={() => setHoveredId("11")}
                       >
-                        <Box
-                          position="absolute"
-                          top={0}
-                          left={0}
-                          bottom={0}
-                          width="1.4rem"
-                          backgroundColor="transparent"
-                          borderRight="2px dotted"
-                          borderColor="gray.500"
-                        />
+                        <Tooltip
+                          placement="left"
+                          label="最新バージョンのダウンロード"
+                          shouldWrapChildren
+                          display="inline"
+                        >
+                          <DownloadButton
+                            path="/download/sjp/yudo/sketch"
+                            isHovered={hoverdId === "11"}
+                            backGroundColor="custom.arduino"
+                            userName={currentUserName}
+                          />
+                        </Tooltip>
                         <Flex
                           justifyContent="space-between"
                           alignItems="flex-start"
@@ -923,7 +1044,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                             flex={1}
-                            maxW={{ base: "40vw" }}
+                            mt="-24px"
                           >
                             <Heading size="sm" mb="3px" maxW="100%">
                               i_000L6470_SPI_stepMoter_sketch
@@ -931,16 +1052,22 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             <BadgeList labels={["Arduino"]} />
                             <Text pt="3px" fontSize="sm">
                               {getMessage({
-                                ja: "yudo.netから信号を受けて配策誘導のディスプレイを移動させるArduinoのスケッチ",
+                                ja: "yudo.netから信号を受けて配策誘導のディスプレイを移動させるArduinoのスケッチ。",
                                 us: "Sketch of an Arduino that receives a signal from yudo.net and moves the display of the routing guidance.",
                                 cn: "接收来自 yudo.net 的信号并移动分发指南显示屏的 Arduino 的草图。",
                                 language,
                               })}
-                              <br />
                               {getMessage({
-                                ja: "ArduinoのATmega328P系にプログラムを書き込む事で動作可能",
+                                ja: "ArduinoのATmega328P系にArduino IDEをつかってこのプログラムを書き込む事で動作可能。",
                                 us: "Can be operated by writing a program to Arduino's ATmega328P series.",
                                 cn: "可通过向 Arduino ATmega328P 系列编写程序来操作。",
+                                language,
+                              })}
+                              <br />
+                              {getMessage({
+                                ja: "配線図などが必要な場合は連絡ください。",
+                                us: "Please contact us if you require wiring diagrams or similar documents.",
+                                cn: "如需配线图等资料，请随时联系我们。",
                                 language,
                               })}
                             </Text>
@@ -950,10 +1077,15 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                           >
-                            <Flex justifyContent="flex-end" width="100%">
+                            <Flex
+                              justifyContent="flex-end"
+                              width="100%"
+                              mt="-24px"
+                            >
                               <Text fontSize="xs" textAlign="right">
-                                #0000/00/00
-                                <br />0
+                                #2020/07/13
+                                <br />
+                                18
                               </Text>
                             </Flex>
                             <YouTubeModal

@@ -27,13 +27,21 @@
     "latestFile": "回路マトリクス+_0.011.zip",
     "latestUpdated": "2025-11-13T02:04:18.000Z"
   },
+  "sjp/pdf": {
+    "latestFile": "PDFXyViewer.zip",
+    "latestUpdated": "2025-11-13T09:51:13.321Z"
+  },
   "sjp/sjp": {
     "latestFile": "Sjp3.101.28_.zip",
     "latestUpdated": "2025-11-12T02:41:56.000Z"
   },
+  "sjp/yudo/sketch": {
+    "latestFile": "i_000L6470_SPI_stepMoter_sketch_18.zip",
+    "latestUpdated": "2025-11-13T04:32:33.276Z"
+  },
   "sjp": {
     "latestFile": ".DS_Store",
-    "latestUpdated": "2025-10-15T02:44:10.365Z"
+    "latestUpdated": "2025-11-13T10:17:54.840Z"
   },
   "yps/verup": {
     "latestFile": "VerUp.zip",
@@ -48,7 +56,7 @@
     "latestUpdated": "2025-06-08T16:39:25.363Z"
   },
   ".": {
-    "latestFile": "download-meta.json",
-    "latestUpdated": "2025-11-13T02:20:12.936Z"
+    "latestFile": ".DS_Store",
+    "latestUpdated": "2025-11-13T10:17:54.842Z"
   }
 }

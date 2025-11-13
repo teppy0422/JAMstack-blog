@@ -244,6 +244,10 @@ deploy 0053
 
 0061
 
+- Add PDFXyViewer.exe in downloads
+
+0062
+
 #### Doing Now
 
 switch アイコンの向きを変える
