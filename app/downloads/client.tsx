@@ -45,6 +45,11 @@ import ResponsiveModal from "@/components/responsiveModal";
 
 import LatestUpdateDate from "./parts/LatestUpdateDate";
 import { ChangelogAccordion } from "./parts/ChangelogAccordion";
+import {
+  TechStackAccordion,
+  TechIcons,
+  TechColors,
+} from "./parts/TechStackAccordion";
 import UploadSjp from "@/components/howto/UploadSjp";
 import BadgeList from "@/components/ui/BadgeList";
 import customcardHeader from "./parts/CustomCardHeader";
@@ -737,15 +742,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           >
                             <Flex alignItems="center" gap={2} mb="3px">
                               <Heading size="sm">PDFXyViewer.exe</Heading>
-                              <Tooltip label="Python" placement="top">
-                                <Box display="flex" alignItems="center">
-                                  <Icon
-                                    as={SiPython}
-                                    color="#3776AB"
-                                    boxSize={5}
-                                  />
-                                </Box>
-                              </Tooltip>
                             </Flex>
                             <BadgeList
                               labels={["WINDOWS10", "WINDOWS11"]}
@@ -801,6 +797,28 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         </Flex>
                       </Box>
                       <Divider borderColor="gray.500" />
+                      <TechStackAccordion
+                        techStack={[
+                          {
+                            category: "言語",
+                            name: "Python",
+                            version: "3.131",
+                            description:
+                              "32bit版を作成するには32bitのOSでビルドする必要があるよ。必要ならやってください",
+                            githubUrl:
+                              "https://github.com/teppy0422/PDFXYViewer",
+                            icon: TechIcons.Python,
+                            iconColor: TechColors.Python,
+                            libraries: [
+                              "PyMuPDF,1.23.0",
+                              "Pillow,10.0.0",
+                              "pyperclip,1.8.2",
+                              "tkinterdnd2,0.3.0",
+                            ],
+                          },
+                        ]}
+                      />
+                      <Divider borderColor="gray.500" />
                       <ChangelogAccordion
                         changelog={[
                           {
@@ -829,7 +847,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <Divider borderColor="gray.500" />
                     <CardBody p={0}>
                       <Box
-                        key="02"
+                        key="13"
                         position="relative"
                         px={2}
                         pl={7}
@@ -837,18 +855,38 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         _hover={{
                           boxShadow: "dark-lg",
                         }}
-                        onMouseEnter={() => setHoveredId("02")}
+                        onMouseEnter={() => setHoveredId("13")}
                       >
                         <Box
                           position="absolute"
                           top={0}
                           left={0}
+                          right={0}
                           bottom={0}
-                          width="1.4rem"
-                          backgroundColor="transparent"
-                          borderRight="2px dotted"
-                          borderColor="gray.500"
+                          backgroundImage="url('/images/illust/obj/obj_004.png')"
+                          backgroundSize="220px"
+                          backgroundPosition="5% 20%"
+                          backgroundRepeat="no-repeat"
+                          opacity={0.1}
+                          sx={{
+                            filter: "grayscale(100%)",
+                          }}
+                          zIndex={0}
+                          pointerEvents="none"
                         />
+                        <Tooltip
+                          placement="left"
+                          label="最新バージョンのダウンロード"
+                          shouldWrapChildren
+                          display="inline"
+                        >
+                          <DownloadButton
+                            path="/download/sjp/camera/"
+                            isHovered={hoverdId === "13"}
+                            backGroundColor="custom.windows"
+                            userName={currentUserName}
+                          />
+                        </Tooltip>
                         <Flex
                           justifyContent="space-between"
                           alignItems="flex-start"
@@ -857,46 +895,46 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                             flex={1}
+                            mt="-24px"
                           >
                             <Flex alignItems="center" gap={2} mb="3px">
                               <Heading size="sm">CAMERA+</Heading>
-                              <Tooltip label="VB.NET" placement="top">
-                                <Box display="flex" alignItems="center">
-                                  <Icon
-                                    as={SiDotnet}
-                                    color="#512BD4"
-                                    boxSize={5}
-                                  />
-                                </Box>
-                              </Tooltip>
                             </Flex>
-                            <BadgeList labels={["VB.net"]} />
+                            <BadgeList
+                              labels={["WINDOWS7以上"]}
+                              useGetColor={[true]}
+                            />
+                            <BadgeList
+                              labels={["32bit", "64bit"]}
+                              useGetColor={[true, true]}
+                            />
+                            <BadgeList
+                              labels={["高知", "徳島"]}
+                              useGetColor={[true, true]}
+                            />
                             <Text pt="3px" fontSize="sm">
                               {getMessage({
-                                ja: "コネクタを撮影するアプリケーション",
-                                us: "Application to shoot connectors",
-                                cn: "应用于拍摄连接器",
+                                ja: "コネクタを撮影するだけの専用アプリケーション。",
+                                us: "Application to shoot connectors.",
+                                cn: "应用于拍摄连接器。",
                                 language,
                               })}
-                              <br />
                               {getMessage({
-                                ja: "SONYのカメラのみ対応",
+                                ja: "SONYのカメラのみ対応。",
                                 us: "Only SONY cameras are supported.",
                                 cn: "仅与 SONY 相机兼容。",
                                 language,
                               })}
-                              <br />
                               {getMessage({
-                                ja: "生産準備+で写真撮影を実行時に自動インストールされるので使用には必要ありません",
-                                us: "Automatically installed when running a photo shoot in Production Preparation+, so not required for use.",
-                                cn: "无需使用，因为在 生产准备+ 中运行照片拍摄时会自动安装。",
+                                ja: "カメラをWifiの親機としてワイヤレス通信でカメラを制御。",
+                                us: "Control the camera wirelessly by using it as a Wi-Fi access point.",
+                                cn: "将相机作为Wi-Fi路由器，通过无线通信控制相机。",
                                 language,
                               })}
-                              <br />
                               {getMessage({
-                                ja: "アプリケーションを修正したい場合のみダウンロードしてください",
-                                us: "Download only if you want to modify your application",
-                                cn: "仅在要修改应用程序时下载",
+                                ja: "生産準備+で自動インストールされるので通常はダウンロードは必要ありません",
+                                us: "Automatically installed when running a photo shoot in Production Preparation+, so not required for use.",
+                                cn: "无需使用，因为在 生产准备+ 中运行照片拍摄时会自动安装。",
                                 language,
                               })}
                             </Text>
@@ -906,7 +944,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                           >
-                            <Flex justifyContent="flex-end" width="100%">
+                            <Flex
+                              justifyContent="flex-end"
+                              width="100%"
+                              mt="-24px"
+                            >
                               <Text fontSize="xs" textAlign="right">
                                 #2019/09/02
                                 <br />
@@ -926,6 +968,26 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           </Stack>
                         </Flex>
                       </Box>
+                      <Divider borderColor="gray.500" />
+                      <TechStackAccordion
+                        techStack={[
+                          {
+                            category: "言語",
+                            name: "VB.NET",
+                            version: "Framework 4.8",
+                            description:
+                              "Sony camera SDKでAPIを確認してVB.NETで送るだけの専用アプリケーション",
+                            githubUrl: "https://github.com/teppy0422/camera",
+                            libraries: [
+                              "Newtonsoft.Json,6.0.0.0",
+                              "System,4.8.x",
+                              "System.Data,4.8.x",
+                            ],
+                            icon: TechIcons.VBNet,
+                            iconColor: TechColors.VBNet,
+                          },
+                        ]}
+                      />
                       <Divider borderColor="gray.500" />
                       <ChangelogAccordion
                         changelog={[
@@ -963,6 +1025,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <Divider borderColor="gray.500" />
                     <CardBody p={0}>
                       <Box
+                        key="14"
                         position="relative"
                         px={2}
                         pl={7}
@@ -970,17 +1033,38 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         _hover={{
                           boxShadow: "dark-lg",
                         }}
+                        onMouseEnter={() => setHoveredId("14")}
                       >
                         <Box
                           position="absolute"
                           top={0}
                           left={0}
+                          right={0}
                           bottom={0}
-                          width="1.4rem"
-                          backgroundColor="transparent"
-                          borderRight="2px dotted"
-                          borderColor="gray.500"
+                          backgroundImage="url('/images/illust/hippo/hippo_001_cir.png')"
+                          backgroundSize="160px"
+                          backgroundPosition="105% 10%"
+                          backgroundRepeat="no-repeat"
+                          opacity={0.08}
+                          sx={{
+                            filter: "grayscale(100%)",
+                          }}
+                          zIndex={0}
+                          pointerEvents="none"
                         />
+                        <Tooltip
+                          placement="left"
+                          label="最新バージョンのダウンロード"
+                          shouldWrapChildren
+                          display="inline"
+                        >
+                          <DownloadButton
+                            path="/download/sjp/yudo/yudo/"
+                            isHovered={hoverdId === "14"}
+                            backGroundColor="custom.windows"
+                            userName={currentUserName}
+                          />
+                        </Tooltip>
                         <Flex
                           justifyContent="space-between"
                           alignItems="flex-start"
@@ -989,20 +1073,19 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                             flex={1}
+                            mt="-24px"
                           >
                             <Flex alignItems="center" gap={2} mb="3px">
                               <Heading size="sm">yudo.net</Heading>
-                              <Tooltip label="VB.NET" placement="top">
-                                <Box display="flex" alignItems="center">
-                                  <Icon
-                                    as={SiDotnet}
-                                    color="#512BD4"
-                                    boxSize={5}
-                                  />
-                                </Box>
-                              </Tooltip>
                             </Flex>
-                            <BadgeList labels={["VB.net"]} />
+                            <BadgeList
+                              labels={["WINDOWS7以上"]}
+                              useGetColor={[true]}
+                            />
+                            <BadgeList
+                              labels={["32bit", "64bit"]}
+                              useGetColor={[true, true]}
+                            />
                             <Text pt="3px" fontSize="sm">
                               {getMessage({
                                 ja: "",
@@ -1023,21 +1106,21 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                   })}
                               </Badge>
                               {getMessage({
-                                ja: " の表示とディスプレイ移動の為のアプリケーション",
+                                ja: " の表示とディスプレイ移動の為のアプリケーション。",
                                 us: " and moving the display.",
                                 cn: " 和移动显示屏",
                                 language,
                               })}
                               <br />
                               {getMessage({
-                                ja: "ブラウザではCOMポートへのアクセス許可がページ毎に必要なので作成しました",
+                                ja: "ディスプレイ移動が必要無い場合は不要です。",
                                 us: "Created because the browser requires permission to access the COM port on a page-by-page basis.",
                                 cn: "创建的原因是浏览器需要逐页访问 COM 端口的权限",
                                 language,
                               })}
                               <br />
                               {getMessage({
-                                ja: ".NetFrameWork4.8はインストーラーに含まれます",
+                                ja: ".NetFrameWork4.8はインストーラーに含まれますが初回はオンラインでの実行。もしくは.NET FrameWork 4.8のオフラインインストールが必要。",
                                 us: ".NetFrameWork4.8 is included in the installer.",
                                 cn: "安装程序中包含 .NetFrameWork4.8",
                                 language,
@@ -1049,7 +1132,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                           >
-                            <Flex justifyContent="flex-end" width="100%">
+                            <Flex
+                              justifyContent="flex-end"
+                              width="100%"
+                              mt="-24px"
+                            >
                               <Text fontSize="xs" textAlign="right" right={0}>
                                 #2018/11/26
                                 <br />
@@ -1059,6 +1146,22 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           </Stack>
                         </Flex>
                       </Box>
+                      <Divider borderColor="gray.500" />
+                      <TechStackAccordion
+                        techStack={[
+                          {
+                            category: "言語",
+                            name: "VB.NET",
+                            version: "Framework 4.8",
+                            description:
+                              "ブラウザはIE11ベースでHTML5/CSS3は動作しない。生産準備+の配策誘導のVer3に対応するにはWebView2への更新が必要。",
+                            githubUrl: "https://github.com/teppy0422/yudo",
+                            libraries: ["標準ライブラリのみ"],
+                            icon: TechIcons.VBNet,
+                            iconColor: TechColors.VBNet,
+                          },
+                        ]}
+                      />
                       <Divider borderColor="gray.500" />
                       <Box
                         key="11"
@@ -1793,9 +1896,16 @@ export default function Ui({ filterId }: { filterId?: string }) {
                               language,
                             })}
                             {getMessage({
-                              ja: "USBタイプの場合は不要です。",
+                              ja: "※USBタイプの場合は不要です。",
                               us: "*Not required for USB types.",
                               cn: "*USB类型的则不需要。 ",
+                              language,
+                            })}
+                            <br />
+                            {getMessage({
+                              ja: "QR印刷やUSBシリアル変換のためにソフトをインストールする為、セットアップが若干複雑",
+                              us: "Setup is somewhat complex due to the need to install software for QR printing and USB-to-serial conversion.",
+                              cn: "由于需要安装软件以实现QR码打印和USB串口转换功能，设置过程稍显复杂。",
                               language,
                             })}
                           </Text>
@@ -1858,6 +1968,56 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          version: "168",
+                          date: "2025/11/17",
+                          downloadPath: "/download/jdss/main/main_168.zip",
+                          reason: [
+                            "SSC側の照合OKが最後の一つの時に読み込むとそのレコードが重複して複製される不具合",
+                          ],
+                          change: ["claudeに投げて修正"],
+                          inCharge: [
+                            "徳島",
+                            "小松さん",
+                            "藤原さん",
+                            "川原さん",
+                            "不具合",
+                          ],
+                        },
+                        {
+                          version: "167",
+                          date: "2025/11/14",
+                          reason: [
+                            "ネーム読み取り形式になってメーカー不明エラーstop",
+                          ],
+                          change: ["QR背番号読み込みに変更"],
+                          inCharge: [
+                            "徳島",
+                            "小松さん",
+                            "藤原さん",
+                            "川原さん",
+                            "不具合",
+                          ],
+                        },
+                        {
+                          version: "166",
+                          date: "2025/11/14",
+                          reason: [
+                            "SSC側が照合前1件で自動機送信前データが0の時にループする",
+                            "ループの結果オーバースタックを起こしてカレントエラー",
+                          ],
+                          change: [
+                            "ループを避ける為にカウントを追加の暫定対応",
+                            "SSC側最終レコードが増える不具合が発生中",
+                          ],
+                          inCharge: [
+                            "徳島",
+                            "小松さん",
+                            "藤原さん",
+                            "川原さん",
+                            "不具合",
+                          ],
+                        },
+                        {
                           version: "165",
                           date: "2025/03/18",
                           reason: [
@@ -1865,7 +2025,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           ],
                           change: [
                             "送信/印刷ボタンを押した時のみ処理完了までこのボタンを無効",
-                            "test",
                           ],
                           inCharge: ["徳島", "小松さん", "不具合"],
                         },
@@ -1961,6 +2120,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                             flex={1}
+                            mt="-24px"
                           >
                             <Heading size="sm" mb="3px">
                               {getMessage({
@@ -2013,7 +2173,11 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                           >
-                            <Flex justifyContent="flex-end" width="100%">
+                            <Flex
+                              justifyContent="flex-end"
+                              width="100%"
+                              mt="-24px"
+                            >
                               <Box fontSize="xs" textAlign="right">
                                 <LatestUpdateDate
                                   folderPath="/download/jdss/main3/"

@@ -4,8 +4,8 @@
     "latestUpdated": "2025-10-10T00:04:26.293Z"
   },
   "jdss/main": {
-    "latestFile": "main_165.zip",
-    "latestUpdated": "2025-10-10T00:12:55.584Z"
+    "latestFile": "main_168.zip",
+    "latestUpdated": "2025-11-17T05:36:56.563Z"
   },
   "jdss/main3": {
     "latestFile": "main3_17.zip",
@@ -18,6 +18,10 @@
   "library/code39": {
     "latestFile": "Code39Barcode.ttf",
     "latestUpdated": "2025-10-08T14:33:03.280Z"
+  },
+  "sjp/camera": {
+    "latestFile": "camera.zip",
+    "latestUpdated": "2025-11-16T09:06:02.000Z"
   },
   "sjp/kairo": {
     "latestFile": "回路マトリクス+_0.011.zip",
@@ -34,6 +38,10 @@
   "sjp/yudo/sketch": {
     "latestFile": "i_000L6470_SPI_stepMoter_sketch_18.zip",
     "latestUpdated": "2025-11-13T04:32:33.276Z"
+  },
+  "sjp/yudo/yudo": {
+    "latestFile": "setup.zip",
+    "latestUpdated": "2025-11-16T14:45:18.000Z"
   },
   "yps/verup": {
     "latestFile": "VerUp.zip",
