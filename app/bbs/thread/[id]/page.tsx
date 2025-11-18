@@ -983,6 +983,20 @@ function ThreadContent(): JSX.Element {
     } else {
       // メール送信
       const is_email_notify = getUserById(threadUserId)?.is_email_notify;
+      console.log("📧 メール通知チェック開始");
+      console.log("  - threadUserId:", threadUserId);
+      console.log("  - currentUserId:", currentUserId);
+      console.log("  - is_email_notify:", is_email_notify);
+      console.log("  - isSentNotify:", isSentNotify);
+
+      if (!is_email_notify) {
+        console.log("❌ is_email_notifyがfalseのため通知をスキップ");
+      } else if (isSentNotify) {
+        console.log("❌ 既に通知送信済みのためスキップ");
+      } else if (threadUserId === currentUserId) {
+        console.log("❌ 自分の投稿のため通知をスキップ");
+      }
+
       if (is_email_notify) {
         if (!isSentNotify) {
           if (threadUserId !== currentUserId) {
@@ -996,11 +1010,25 @@ function ThreadContent(): JSX.Element {
               const timeDiff = now.getTime() - lastNotifiedDate.getTime();
               hoursDiff = timeDiff / (1000 * 60 * 60);
             }
-            console.log("hoursDiff", hoursDiff);
+            console.log("  - lastNotifiedAt:", lastNotifiedAt);
+            console.log("  - hoursDiff:", hoursDiff);
+
+            if (hoursDiff <= 24) {
+              console.log("❌ 24時間以内に通知送信済みのためスキップ（残り時間:", (24 - hoursDiff).toFixed(1), "時間）");
+            }
+
             if (hoursDiff > 24 && threadUserId) {
               // メール送信
               const email = await handleFetchEmail(threadUserId);
+              console.log("  - 取得したメールアドレス:", email);
+
+              if (!email) {
+                console.error("❌ メールアドレスの取得に失敗");
+                return;
+              }
+
               const senderAvatarUrl = getUserById(currentUserId)?.picture_url;
+              console.log("✅ メール送信を実行します");
               handleSendMail({
                 to: String(email),
                 subject: "📨 BBSの" + threadTitle + "に新着メッセージ",

@@ -136,7 +136,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
             language,
           })}
         >
-          <Box textAlign="center" mb={8}>
+          <Box textAlign="center" mb={6}>
             <HStack
               spacing={2}
               alignItems="center"
@@ -199,6 +199,17 @@ export default function Ui({ filterId }: { filterId?: string }) {
               >
                 <Text fontSize="13px">
                   ※Office365は月額制なので対応が困難(時間が掛かる)
+                </Text>
+              </Box>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width="auto"
+                mt={2}
+              >
+                <Text fontSize="13px">
+                  ※コンパイル型言語はGitHubにソースをアップロードしています
                 </Text>
               </Box>
             </Box>
@@ -804,7 +815,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             name: "Python",
                             version: "3.131",
                             description:
-                              "32bit版を作成するには32bitのOSでビルドする必要があるよ。必要ならやってください",
+                              "32bit版を作成するには32bitのOSでビルドする必要があります。必要ならやってください",
                             githubUrl:
                               "https://github.com/teppy0422/PDFXYViewer",
                             icon: TechIcons.Python,
@@ -1042,7 +1053,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           right={0}
                           bottom={0}
                           backgroundImage="url('/images/illust/hippo/hippo_001_cir.png')"
-                          backgroundSize="160px"
+                          backgroundSize="180px"
                           backgroundPosition="105% 10%"
                           backgroundRepeat="no-repeat"
                           opacity={0.08}
@@ -1208,17 +1219,24 @@ export default function Ui({ filterId }: { filterId?: string }) {
                                 cn: "接收来自 yudo.net 的信号并移动分发指南显示屏的 Arduino 的草图。",
                                 language,
                               })}
+                              <br />
                               {getMessage({
                                 ja: "ArduinoのATmega328P系にArduino IDEをつかってこのプログラムを書き込む事で動作可能。",
                                 us: "Can be operated by writing a program to Arduino's ATmega328P series.",
                                 cn: "可通过向 Arduino ATmega328P 系列编写程序来操作。",
                                 language,
                               })}
-                              <br />
                               {getMessage({
                                 ja: "配線図などが必要な場合は連絡ください。",
                                 us: "Please contact us if you require wiring diagrams or similar documents.",
                                 cn: "如需配线图等资料，请随时联系我们。",
+                                language,
+                              })}
+                              <br />
+                              {getMessage({
+                                ja: "書き込みにはArduinoのインストールが必要。",
+                                us: "Installing Arduino is required for writing.",
+                                cn: "写入操作需要安装Arduino。",
                                 language,
                               })}
                             </Text>
@@ -1600,7 +1618,19 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
-                          downloadPath: "/download/yps/yps/Yps1.22_.zip",
+                          downloadPath: "/download/yps/yps/Yps1.23_.zip",
+                          version: "1.23",
+                          date: "2025/11/18",
+                          reason: [
+                            "アップロード時にエラー停止",
+                            "1.19あたりの更新が原因",
+                          ],
+                          change: [
+                            "フォルダ作成とファイル作成を分けて扱うように修正",
+                          ],
+                          inCharge: ["桒原さん", "不具合"],
+                        },
+                        {
                           version: "1.22",
                           date: "2025/11/12",
                           reason: [
