@@ -1,54 +1,67 @@
 {
   "bip/bip": {
     "latestFile": "Bip2.200.15_.zip",
-    "latestUpdated": "2025-10-10T00:04:26.293Z"
+    "latestUpdated": "2025-10-10T00:04:26.293Z",
+    "fileSize": 1962836
   },
   "jdss/main": {
     "latestFile": "main_168.zip",
-    "latestUpdated": "2025-11-17T05:36:56.563Z"
+    "latestUpdated": "2025-11-17T05:36:56.563Z",
+    "fileSize": 593453
   },
   "jdss/main3": {
     "latestFile": "main3_17.zip",
-    "latestUpdated": "2025-10-10T00:13:14.153Z"
+    "latestUpdated": "2025-10-10T00:13:14.153Z",
+    "fileSize": 121706
   },
   "library/MSCOMM32": {
     "latestFile": "MSCOMM32.OCX",
-    "latestUpdated": "2025-10-08T14:33:03.280Z"
+    "latestUpdated": "2025-10-08T14:33:03.280Z",
+    "fileSize": 103744
   },
   "library/code39": {
     "latestFile": "Code39Barcode.ttf",
-    "latestUpdated": "2025-10-08T14:33:03.280Z"
+    "latestUpdated": "2025-10-08T14:33:03.280Z",
+    "fileSize": 7127
   },
   "sjp/camera": {
     "latestFile": "camera.zip",
-    "latestUpdated": "2025-11-16T09:06:02.000Z"
+    "latestUpdated": "2025-11-16T09:06:02.000Z",
+    "fileSize": 398266
   },
   "sjp/kairo": {
     "latestFile": "回路マトリクス+_0.011.zip",
-    "latestUpdated": "2025-11-13T02:04:18.000Z"
+    "latestUpdated": "2025-11-13T02:04:18.000Z",
+    "fileSize": 214720
   },
   "sjp/pdf": {
     "latestFile": "PDFXyViewer.zip",
-    "latestUpdated": "2025-11-13T13:52:12.000Z"
+    "latestUpdated": "2025-11-13T13:52:12.000Z",
+    "fileSize": 35993433
   },
   "sjp/sjp": {
     "latestFile": "Sjp3.101.28_.zip",
-    "latestUpdated": "2025-11-12T02:41:56.000Z"
+    "latestUpdated": "2025-11-12T02:41:56.000Z",
+    "fileSize": 1829034
   },
   "sjp/yudo/sketch": {
     "latestFile": "i_000L6470_SPI_stepMoter_sketch_18.zip",
-    "latestUpdated": "2025-11-13T04:32:33.276Z"
+    "latestUpdated": "2025-11-13T04:32:33.276Z",
+    "fileSize": 8212
   },
   "sjp/yudo/yudo": {
     "latestFile": "setup.zip",
-    "latestUpdated": "2025-11-16T14:45:18.000Z"
+    "latestUpdated": "2025-11-16T14:45:18.000Z",
+    "fileSize": 267355
   },
   "yps/verup": {
     "latestFile": "VerUp.zip",
-    "latestUpdated": "2025-10-17T03:26:50.000Z"
+    "latestUpdated": "2025-10-17T03:26:50.000Z",
+    "fileSize": 40035
   },
   "yps/yps": {
     "latestFile": "Yps1.23_.zip",
-    "latestUpdated": "2025-11-18T02:02:42.000Z"
+    "latestUpdated": "2025-11-18T02:02:42.000Z",
+    "fileSize": 217774
   }
 }

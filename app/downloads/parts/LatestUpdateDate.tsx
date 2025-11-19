@@ -14,6 +14,7 @@ export default function LatestUpdateDate({
 }: Props) {
   const [dateStr, setDateStr] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
+  const [fileSize, setFileSize] = useState<string>("");
 
   useEffect(() => {
     // public/download/ 以下の相対パスに変換（例: "sjp/nested"）
@@ -41,6 +42,20 @@ export default function LatestUpdateDate({
         }
         setFileName(name);
       }
+
+      if (meta.fileSize) {
+        // ファイルサイズを人間が読みやすい形式に変換
+        const bytes = meta.fileSize;
+        if (bytes < 1024) {
+          setFileSize(`${bytes} B`);
+        } else if (bytes < 1024 * 1024) {
+          setFileSize(`${(bytes / 1024).toFixed(1)} KB`);
+        } else if (bytes < 1024 * 1024 * 1024) {
+          setFileSize(`${(bytes / (1024 * 1024)).toFixed(1)} MB`);
+        } else {
+          setFileSize(`${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`);
+        }
+      }
     });
   }, [folderPath, removeStrings]);
 
@@ -51,6 +66,12 @@ export default function LatestUpdateDate({
       #{dateStr}
       <br />
       {fileName}
+      {fileSize && (
+        <>
+          <br />
+          {fileSize}
+        </>
+      )}
     </span>
   );
 }

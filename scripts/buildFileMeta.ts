@@ -5,7 +5,11 @@ const downloadDir = path.resolve("public/download");
 
 const result: Record<
   string,
-  { latestFile: string | null; latestUpdated: string | null }
+  {
+    latestFile: string | null;
+    latestUpdated: string | null;
+    fileSize: number | null;
+  }
 > = {};
 
 // 再帰的に処理する関数
@@ -14,6 +18,7 @@ function processFolderRecursively(folderPath: string, relativePath: string) {
 
   let latestFile: string | null = null;
   let latestDate: Date | null = null;
+  let latestFileSize: number | null = null;
 
   for (const entry of entries) {
     // 隠しファイルやシステムファイルをスキップ
@@ -36,6 +41,7 @@ function processFolderRecursively(folderPath: string, relativePath: string) {
       if (!latestDate || stat.mtime > latestDate) {
         latestDate = stat.mtime;
         latestFile = entry.name;
+        latestFileSize = stat.size;
       }
     }
   }
@@ -45,6 +51,7 @@ function processFolderRecursively(folderPath: string, relativePath: string) {
     result[relativePath] = {
       latestFile,
       latestUpdated: latestDate ? latestDate.toISOString() : null,
+      fileSize: latestFileSize,
     };
   }
 }

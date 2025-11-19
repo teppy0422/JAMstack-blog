@@ -12,6 +12,7 @@ function processFolderRecursively(folderPath, relativePath) {
     const entries = fs_1.default.readdirSync(folderPath, { withFileTypes: true });
     let latestFile = null;
     let latestDate = null;
+    let latestFileSize = null;
     for (const entry of entries) {
         // 隠しファイルやシステムファイルをスキップ
         if (entry.name === ".DS_Store" ||
@@ -30,6 +31,7 @@ function processFolderRecursively(folderPath, relativePath) {
             if (!latestDate || stat.mtime > latestDate) {
                 latestDate = stat.mtime;
                 latestFile = entry.name;
+                latestFileSize = stat.size;
             }
         }
     }
@@ -38,6 +40,7 @@ function processFolderRecursively(folderPath, relativePath) {
         result[relativePath] = {
             latestFile,
             latestUpdated: latestDate ? latestDate.toISOString() : null,
+            fileSize: latestFileSize,
         };
     }
 }

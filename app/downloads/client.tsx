@@ -209,7 +209,12 @@ export default function Ui({ filterId }: { filterId?: string }) {
                 mt={2}
               >
                 <Text fontSize="13px">
-                  ※コンパイル型言語はGitHubにソースをアップロードしています
+                  {getMessage({
+                    ja: "※コンパイル型言語はGitHubにソースをアップロードしています",
+                    us: "※Compiled languages have their source code uploaded to GitHub.",
+                    cn: "※编译型语言的源代码已上传至GitHub",
+                    language,
+                  })}
                 </Text>
               </Box>
             </Box>
@@ -797,12 +802,17 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             direction="column"
                             alignItems="flex-start"
                           >
-                            <Flex justifyContent="flex-end" width="100%">
-                              <Text fontSize="xs" textAlign="right" mt="-24px">
-                                #2025/11/13
-                                <br />
-                                1.0.0
-                              </Text>
+                            <Flex
+                              justifyContent="flex-end"
+                              width="100%"
+                              mt="-20px"
+                            >
+                              <Box fontSize="xs" textAlign="right">
+                                <LatestUpdateDate
+                                  folderPath="/download/sjp/pdf/"
+                                  removeStrings={[]}
+                                />
+                              </Box>
                             </Flex>
                           </Stack>
                         </Flex>
@@ -815,7 +825,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             name: "Python",
                             version: "3.131",
                             description:
-                              "32bit版を作成するには32bitのOSでビルドする必要があります。必要ならやってください",
+                              "32bit版は32bitのOSでビルドする必要があります。Macも同じです。",
                             githubUrl:
                               "https://github.com/teppy0422/PDFXYViewer",
                             icon: TechIcons.Python,
@@ -958,13 +968,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             <Flex
                               justifyContent="flex-end"
                               width="100%"
-                              mt="-24px"
+                              mt="-20px"
                             >
-                              <Text fontSize="xs" textAlign="right">
-                                #2019/09/02
-                                <br />
-                                1.0.0.4
-                              </Text>
+                              <Box fontSize="xs" textAlign="right">
+                                <LatestUpdateDate
+                                  folderPath="/download/sjp/camera/"
+                                  removeStrings={[]}
+                                />
+                              </Box>
                             </Flex>
                             <CustomModalTab
                               path=""
@@ -1146,13 +1157,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             <Flex
                               justifyContent="flex-end"
                               width="100%"
-                              mt="-24px"
+                              mt="-20px"
                             >
-                              <Text fontSize="xs" textAlign="right" right={0}>
-                                #2018/11/26
-                                <br />
-                                1.0.0.10
-                              </Text>
+                              <Box fontSize="xs" textAlign="right">
+                                <LatestUpdateDate
+                                  folderPath="/download/sjp/yudo/yudo/"
+                                  removeStrings={[]}
+                                />
+                              </Box>
                             </Flex>
                           </Stack>
                         </Flex>
@@ -1185,6 +1197,23 @@ export default function Ui({ filterId }: { filterId?: string }) {
                         }}
                         onMouseEnter={() => setHoveredId("11")}
                       >
+                        <Box
+                          position="absolute"
+                          top={0}
+                          left={0}
+                          right={0}
+                          bottom={0}
+                          backgroundImage="url('/images/illust/obj/arduino.webp')"
+                          backgroundSize="300px"
+                          backgroundPosition="30% 40%"
+                          backgroundRepeat="no-repeat"
+                          opacity={0.08}
+                          sx={{
+                            filter: "grayscale(100%)",
+                          }}
+                          zIndex={0}
+                          pointerEvents="none"
+                        />
                         <Tooltip
                           placement="left"
                           label="最新バージョンのダウンロード"
@@ -1249,13 +1278,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
                             <Flex
                               justifyContent="flex-end"
                               width="100%"
-                              mt="-24px"
+                              mt="-20px"
                             >
-                              <Text fontSize="xs" textAlign="right">
-                                #2020/07/13
-                                <br />
-                                18
-                              </Text>
+                              <Box fontSize="xs" textAlign="right">
+                                <LatestUpdateDate
+                                  folderPath="/download/sjp/yudo/sketch/"
+                                  removeStrings={["SPI_stepMoter_sketch_"]}
+                                />
+                              </Box>
                             </Flex>
                             <YouTubeModal
                               text={getMessage({
@@ -1537,6 +1567,23 @@ export default function Ui({ filterId }: { filterId?: string }) {
                       minH={"9em"}
                       onMouseEnter={() => setHoveredId("07")}
                     >
+                      <Box
+                        position="absolute"
+                        top={0}
+                        left={0}
+                        right={0}
+                        bottom={0}
+                        backgroundImage="url('/images/illust/obj/suzume.webp')"
+                        backgroundSize="190px"
+                        backgroundPosition="100% 30%"
+                        backgroundRepeat="no-repeat"
+                        opacity={0.1}
+                        sx={{
+                          filter: "grayscale(100%)",
+                        }}
+                        zIndex={0}
+                        pointerEvents="none"
+                      />
                       <Tooltip
                         placement="left"
                         label="最新バージョンのダウンロード"
@@ -2417,7 +2464,7 @@ export default function Ui({ filterId }: { filterId?: string }) {
                 <Image
                   src="/images/illust/hippo/hippo_001.png"
                   alt="hippo_001.png"
-                  height={200}
+                  height={100}
                   style={{ marginTop: "40px" }}
                 />
               </HStack>
