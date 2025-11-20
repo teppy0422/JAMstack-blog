@@ -8,6 +8,8 @@ import { Global } from "@emotion/react";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
+import SupabaseUsage from "../../app/bbs/components/SupabaseUsage";
+import VercelUsage from "@/components/VercelUsage";
 // import { AppContext } from "../pages/_app";
 
 export default function Content({
@@ -92,6 +94,16 @@ export default function Content({
             }
             minH="10vh"
           >
+            <Center py="4px">
+              <Box maxW="600px" w="100%" px={0}>
+                <VercelUsage />
+              </Box>
+            </Center>
+            <Center py="4px">
+              <Box maxW="600px" w="100%" px={0}>
+                <SupabaseUsage />
+              </Box>
+            </Center>
             <Center
               py="12px"
               color={colorMode === "light" ? "gray.500" : "white"}
@@ -129,6 +141,7 @@ export default function Content({
             >
               ©︎ 2022-2025 Teppei Kataoka. All rights Reserved.
             </Center>
+            <Box height="60px" />
           </Box>
         </>
       ) : (
