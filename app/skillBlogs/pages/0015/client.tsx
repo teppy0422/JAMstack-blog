@@ -87,6 +87,7 @@ import SpecTable_terminal from "./parts/SpecTable_terminal";
 import SpecTable_sarver from "./parts/SpecTable_sarver";
 
 import dynamic from "next/dynamic";
+import QR_Payload from "./parts/QrPayloadTable";
 const FloorPlan = dynamic(() => import("./parts/FloorLayout/ueda"), {
   ssr: false,
 });
@@ -977,6 +978,34 @@ npm install multer
           id="section13"
           title={
             "13." +
+            getMessage({
+              ja: "その他",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box>
+            <OrderedList spacing={2}>
+              <ListItem>必要なファイル一覧</ListItem>
+              <UnorderedList>
+                <ListItem>RLTFA</ListItem>
+              </UnorderedList>
+              <ListItem>QRコードのデータ(ペイロード)</ListItem>
+              <QR_Payload />
+            </OrderedList>
+            <Text></Text>
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section14"
+          title={
+            "14." +
             getMessage({
               ja: "まとめ",
               language,

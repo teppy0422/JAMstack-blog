@@ -26,10 +26,18 @@ export const growthRecords: GrowthRecord[] = [
   {
     id: "record-1-1",
     childId: "child-1",
+    recordDate: "2024-03-05",
+    heightCm: 65.0,
+    weightKg: 7.5,
+    notes: "はじめての胎動",
+  },
+  {
+    id: "record-1-1",
+    childId: "child-1",
     recordDate: "2024-07-29",
     heightCm: 65.0,
     weightKg: 7.5,
-    notes: "6ヶ月健診。順調に成長しています。",
+    notes: "保育器期間中",
     photoUrl: "/images/children/haru_20240729.webp", // 仮パス
   },
   {
