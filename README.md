@@ -252,6 +252,14 @@ deploy 0053
 
 0063
 
+- forgeted
+
+0064
+
+- app/scoreの追加
+
+0065
+
 #### Doing Now
 
 switch アイコンの向きを変える
