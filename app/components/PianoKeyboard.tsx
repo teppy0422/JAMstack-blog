@@ -4,6 +4,7 @@ interface Note {
   step: string;
   octave: number;
   alter: number;
+  staff?: number;
 }
 
 interface PianoKeyboardProps {
@@ -87,12 +88,21 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
   console.log("PianoKeyboard received notes:", notes);
   console.log("PianoKeyboard range:", startMidi, "-", endMidi);
 
-  // ハイライトする鍵盤のMIDI番号を取得
-  const highlightedMidis = notes
+  // ハイライトする鍵盤のMIDI番号とstaff情報をマッピング
+  const midiToStaffMap = new Map<number, number>();
+  notes
     .filter((note) => note.step && typeof note.octave === 'number')
-    .map((note) => noteToMidi(note.step, note.octave, note.alter));
+    .forEach((note) => {
+      const midi = noteToMidi(note.step, note.octave, note.alter);
+      if (note.staff !== undefined) {
+        midiToStaffMap.set(midi, note.staff);
+      }
+    });
+
+  const highlightedMidis = Array.from(midiToStaffMap.keys());
 
   console.log("Highlighted MIDI numbers:", highlightedMidis);
+  console.log("MIDI to staff map:", Array.from(midiToStaffMap.entries()));
 
   // 白鍵の数を数える
   let whiteKeyCount = 0;
@@ -110,6 +120,13 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
   for (let midi = startMidi; midi <= endMidi; midi++) {
     const isHighlighted = highlightedMidis.includes(midi);
     const isBlack = isBlackKey(midi);
+    const staff = midiToStaffMap.get(midi);
+
+    // staff 0 = 右手（緑色 #4CAF50）, staff 1 = 左手（濃い緑 #2E7D32）
+    let whiteKeyColor = "#ffffff";
+    if (isHighlighted) {
+      whiteKeyColor = staff === 1 ? "#2E7D32" : "#4CAF50";
+    }
 
     if (!isBlack) {
       whiteKeys.push(
@@ -119,7 +136,7 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
             position: "relative",
             width: `${100 / whiteKeyCount}%`,
             height: "100%",
-            backgroundColor: isHighlighted ? "#4CAF50" : "#ffffff",
+            backgroundColor: whiteKeyColor,
             border: "1px solid #333",
             boxSizing: "border-box",
             display: "flex",
@@ -144,6 +161,13 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
   for (let midi = startMidi; midi <= endMidi; midi++) {
     const isHighlighted = highlightedMidis.includes(midi);
     const isBlack = isBlackKey(midi);
+    const staff = midiToStaffMap.get(midi);
+
+    // staff 0 = 右手（青色 #2196F3）, staff 1 = 左手（濃い青 #1565C0）
+    let blackKeyColor = "#000";
+    if (isHighlighted) {
+      blackKeyColor = staff === 1 ? "#1565C0" : "#2196F3";
+    }
 
     if (isBlack) {
       const position =
@@ -156,7 +180,7 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
             left: `${position}%`,
             width: `${(100 / whiteKeyCount) * 0.6}%`,
             height: "60%",
-            backgroundColor: isHighlighted ? "#2196F3" : "#000",
+            backgroundColor: blackKeyColor,
             border: "1px solid #000",
             boxSizing: "border-box",
             zIndex: 1,

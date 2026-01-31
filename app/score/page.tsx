@@ -23,6 +23,7 @@ interface Note {
   step: string;
   octave: number;
   alter: number;
+  staff?: number;
 }
 
 export default function ScorePage() {

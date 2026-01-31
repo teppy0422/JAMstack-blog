@@ -11,7 +11,7 @@ import {
 interface SheetMusicProps {
   musicXmlPath: string;
   onNotesChange?: (
-    notes: Array<{ step: string; octave: number; alter: number }>,
+    notes: Array<{ step: string; octave: number; alter: number; staff?: number }>,
   ) => void;
   onRangeChange?: (minMidi: number, maxMidi: number) => void;
 }
@@ -23,154 +23,16 @@ export interface SheetMusicRef {
   getNotesAtPosition: (
     x: number,
     y: number,
-  ) => Array<{ step: string; octave: number; alter: number }>;
+  ) => Array<{ step: string; octave: number; alter: number; staff?: number }>;
 }
 
 const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
   ({ musicXmlPath, onNotesChange, onRangeChange }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const parentRef = useRef<HTMLDivElement>(null);
     const osmdRef = useRef<any>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const highlightedNotesRef = useRef<Set<Element>>(new Set());
-
-    const clearHighlights = () => {
-      highlightedNotesRef.current.forEach((element) => {
-        const className = (element as any).className?.baseVal || "";
-        if (className.includes("vf-stem")) {
-          const paths = element.querySelectorAll("path");
-          paths.forEach((path) => {
-            path.setAttribute("stroke", "#000000");
-            (path as SVGPathElement).style.stroke = "#000000";
-          });
-        } else {
-          const paths = element.querySelectorAll("path");
-          paths.forEach((path) => {
-            path.setAttribute("fill", "#000000");
-            path.setAttribute("stroke", "#000000");
-            (path as SVGPathElement).style.fill = "#000000";
-            (path as SVGPathElement).style.stroke = "#000000";
-          });
-        }
-      });
-      highlightedNotesRef.current.clear();
-    };
-
-    const highlightCurrentNotes = () => {
-      if (!osmdRef.current?.cursor || !containerRef.current) {
-        return;
-      }
-
-      try {
-        clearHighlights();
-
-        const cursorElement = osmdRef.current.cursor.cursorElement;
-        if (!cursorElement) {
-          return;
-        }
-
-        const cursorRect = cursorElement.getBoundingClientRect();
-        if (cursorRect.width === 0 && cursorRect.height === 0) {
-          return; // Don't highlight if cursor isn't ready
-        }
-
-        const noteheads = containerRef.current.querySelectorAll(
-          '[class*="vf-notehead"]',
-        );
-
-        const horizontalCandidates: { element: Element; rect: DOMRect }[] = [];
-
-        // 1. Find all notes that overlap horizontally with the cursor
-        noteheads.forEach((notehead) => {
-          const className =
-            (notehead as any).className?.baseVal ||
-            (notehead as any).className ||
-            "";
-          // Safety check: ensure className is a string
-          if (typeof className !== 'string') {
-            return;
-          }
-          if (
-            className.includes("vf-clef") ||
-            className.includes("vf-timesignature")
-          ) {
-            return;
-          }
-          const noteRect = notehead.getBoundingClientRect();
-          const noteCenterX = noteRect.left + noteRect.width / 2;
-          // Use a small buffer for horizontal check
-          if (
-            noteCenterX >= cursorRect.left - 0 &&
-            noteCenterX <= cursorRect.right + 0
-          ) {
-            horizontalCandidates.push({ element: notehead, rect: noteRect });
-          }
-        });
-
-        if (horizontalCandidates.length === 0) {
-          return;
-        }
-
-        // 2. Find the candidate vertically closest to the cursor
-        let anchorCandidate = horizontalCandidates[0];
-        let minVerticalDistance = Math.abs(
-          anchorCandidate.rect.top - cursorRect.top,
-        );
-
-        for (let i = 1; i < horizontalCandidates.length; i++) {
-          const distance = Math.abs(
-            horizontalCandidates[i].rect.top - cursorRect.top,
-          );
-          if (distance < minVerticalDistance) {
-            minVerticalDistance = distance;
-            anchorCandidate = horizontalCandidates[i];
-          }
-        }
-
-        // 3. Use the anchor to define a vertical cluster
-        const anchorTop = anchorCandidate.rect.top;
-        const verticalClusterTolerance = 80; // Tolerance to group notes from same staff only (not both treble + bass)
-
-        const finalCandidates: Element[] = [];
-
-        // 4. Filter to include all notes that are vertically clustered around the anchor
-        horizontalCandidates.forEach((candidate) => {
-          if (
-            Math.abs(candidate.rect.top - anchorTop) < verticalClusterTolerance
-          ) {
-            finalCandidates.push(candidate.element);
-          }
-        });
-
-        const highlightNoteAndStem = (notehead: Element) => {
-          const paths = notehead.querySelectorAll("path");
-          paths.forEach((path) => {
-            path.setAttribute("fill", "red");
-            path.setAttribute("stroke", "red");
-            (path as SVGPathElement).style.fill = "red";
-            (path as SVGPathElement).style.stroke = "red";
-          });
-          highlightedNotesRef.current.add(notehead);
-          const parent = notehead.parentElement;
-          if (parent) {
-            const stems = parent.querySelectorAll(".vf-stem path");
-            stems.forEach((stem) => {
-              stem.setAttribute("stroke", "red");
-              (stem as SVGPathElement).style.stroke = "red";
-              const stemGroup = stem.parentElement;
-              if (stemGroup) {
-                highlightedNotesRef.current.add(stemGroup);
-              }
-            });
-          }
-        };
-
-        finalCandidates.forEach(highlightNoteAndStem);
-      } catch (err) {
-        console.error("Error in final highlightCurrentNotes:", err);
-      }
-    };
-
     const getCurrentNotes = () => {
       if (!osmdRef.current?.cursor) {
         return [];
@@ -246,13 +108,18 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
           try {
             const musicSheet = iterator.musicSheet;
-            if (musicSheet?.SourceMeasures) {
+            const currentMeasure = iterator.CurrentMeasure;
+            if (musicSheet?.SourceMeasures && currentMeasure) {
               console.log("SourceMeasures count:", musicSheet.SourceMeasures.length);
 
+              // Get the measure number from CurrentMeasure
+              const measureNumber = (currentMeasure as any).MeasureNumber;
+              const measureIndex = measureNumber !== undefined ? measureNumber - 1 : iterator.currentMeasureIndex;
+
               // Get the current source measure
-              const sourceMeasure = musicSheet.SourceMeasures[iterator.currentMeasureIndex];
+              const sourceMeasure = musicSheet.SourceMeasures[measureIndex];
               if (sourceMeasure) {
-                console.log("Found source measure:", iterator.currentMeasureIndex);
+                console.log("Found source measure index:", measureIndex, "measure number:", measureNumber);
 
                 // Iterate through all staff entries in this measure
                 for (const staffEntry of sourceMeasure.VerticalSourceStaffEntryContainers || []) {
@@ -260,6 +127,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                     if (!sourceStaffEntry) continue;
                     const entryTimestamp = sourceStaffEntry.Timestamp;
                     const voiceEntries = sourceStaffEntry.VoiceEntries;
+                    const staffNumber = (sourceStaffEntry as any).ParentStaff?.idInMusicSheet;
 
                     if (voiceEntries && entryTimestamp) {
                       // Check if this entry is currently sounding
@@ -269,8 +137,10 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                           const entryStart = entryTimestamp.RealValue;
 
                           // Only detect notes that START at current timestamp, not sustained notes
-                          if (entryStart === currentTimestamp.RealValue) {
-                            console.log("Found note starting at timestamp:", entryStart, "duration:", duration);
+                          // Use tolerance for floating point comparison
+                          const tolerance = 0.001;
+                          if (Math.abs(entryStart - currentTimestamp.RealValue) < tolerance) {
+                            console.log("Found note starting at timestamp:", entryStart, "current:", currentTimestamp.RealValue, "duration:", duration, "staff:", staffNumber);
 
                             for (const note of voiceEntry.Notes) {
                               const noteAny = note as any;
@@ -281,18 +151,29 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                                 pitch = noteAny.sourceNote.Pitch;
                               }
                               if (pitch) {
-                                const semitone = pitch.halfTone % 12;
-                                const noteNames = [
-                                  "C", "C#", "D", "D#", "E", "F",
-                                  "F#", "G", "G#", "A", "A#", "B",
-                                ];
-                                const step = noteNames[semitone] || "C";
-                                const octave = pitch.halfTone !== undefined
-                                  ? Math.floor(pitch.halfTone / 12)
-                                  : 4;
-                                const noteData = { step, octave, alter: pitch.Alter || 0 };
-                                console.log("Adding sounding note:", noteData);
-                                notes.push(noteData);
+                                console.log("Pitch object:", pitch);
+                                console.log("Pitch keys:", Object.keys(pitch));
+
+                                // Use halfTone to calculate everything
+                                // halfTone in OSMD is the actual MIDI note number
+                                const halfTone = pitch.halfTone;
+                                if (typeof halfTone === 'number') {
+                                  // MIDI to note conversion
+                                  const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
+                                  const semitoneToNote = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6]; // C, C#, D, D#, E, F, F#, G, G#, A, A#, B
+                                  const semitoneToAlter = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0]; // 0=natural, 1=sharp
+
+                                  const octave = Math.floor(halfTone / 12) - 1;
+                                  const semitone = halfTone % 12;
+                                  const noteIndex = semitoneToNote[semitone];
+                                  const step = noteNames[noteIndex];
+                                  const alter = semitoneToAlter[semitone];
+
+                                  const noteData = { step, octave, alter, staff: staffNumber };
+                                  console.log("halfTone:", halfTone, "→ MIDI note:", step + (alter === 1 ? "#" : ""), octave, "staff:", staffNumber);
+                                  console.log("Adding sounding note:", noteData);
+                                  notes.push(noteData);
+                                }
                               }
                             }
                           }
@@ -340,27 +221,13 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                           pitch = noteAny.sourceNote.Pitch;
                         }
                         if (pitch) {
-                          const semitone = pitch.halfTone % 12;
-                          const noteNames = [
-                            "C",
-                            "C#",
-                            "D",
-                            "D#",
-                            "E",
-                            "F",
-                            "F#",
-                            "G",
-                            "G#",
-                            "A",
-                            "A#",
-                            "B",
-                          ];
-                          const step = noteNames[semitone] || "C";
-                          const octave =
-                            pitch.halfTone !== undefined
-                              ? Math.floor(pitch.halfTone / 12)
-                              : 4;
-                          const noteData = { step, octave, alter: pitch.Alter || 0 };
+                          const fundamentalNote = pitch.fundamentalNote;
+                          const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
+                          const step = fundamentalNote !== undefined ? noteNames[fundamentalNote] : "C";
+                          const octave = pitch.octave !== undefined ? pitch.octave : 4;
+                          const alter = pitch.accidental || 0;
+                          const staffNumber = (staffEntry as any)?.parentStaffEntry?.ParentStaff?.idInMusicSheet;
+                          const noteData = { step, octave, alter, staff: staffNumber };
                           console.log("Adding note from staff:", noteData);
                           notes.push(noteData);
                         }
@@ -406,27 +273,13 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                             pitch = noteAny.sourceNote.Pitch;
                           }
                           if (pitch) {
-                            const semitone = pitch.halfTone % 12;
-                            const noteNames = [
-                              "C",
-                              "C#",
-                              "D",
-                              "D#",
-                              "E",
-                              "F",
-                              "F#",
-                              "G",
-                              "G#",
-                              "A",
-                              "A#",
-                              "B",
-                            ];
-                            const step = noteNames[semitone] || "C";
-                            const octave =
-                              pitch.halfTone !== undefined
-                                ? Math.floor(pitch.halfTone / 12)
-                                : 4;
-                            const noteData = { step, octave, alter: pitch.Alter || 0 };
+                            const fundamentalNote = pitch.fundamentalNote;
+                            const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
+                            const step = fundamentalNote !== undefined ? noteNames[fundamentalNote] : "C";
+                            const octave = pitch.octave !== undefined ? pitch.octave : 4;
+                            const alter = pitch.accidental || 0;
+                            const staffNumber = (staffEntry as any)?.parentStaffEntry?.ParentStaff?.idInMusicSheet;
+                            const noteData = { step, octave, alter, staff: staffNumber };
                             console.log("Adding sustained note:", noteData);
                             notes.push(noteData);
                           }
@@ -454,27 +307,13 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   pitch = noteAny.sourceNote.Pitch;
                 }
                 if (pitch) {
-                  const semitone = pitch.halfTone % 12;
-                  const noteNames = [
-                    "C",
-                    "C#",
-                    "D",
-                    "D#",
-                    "E",
-                    "F",
-                    "F#",
-                    "G",
-                    "G#",
-                    "A",
-                    "A#",
-                    "B",
-                  ];
-                  const step = noteNames[semitone] || "C";
-                  const octave =
-                    pitch.halfTone !== undefined
-                      ? Math.floor(pitch.halfTone / 12)
-                      : 4;
-                  const noteData = { step, octave, alter: pitch.Alter || 0 };
+                  const fundamentalNote = pitch.fundamentalNote;
+                  const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
+                  const step = fundamentalNote !== undefined ? noteNames[fundamentalNote] : "C";
+                  const octave = pitch.octave !== undefined ? pitch.octave : 4;
+                  const alter = pitch.accidental || 0;
+                  const staffNumber = (voiceEntry as any)?.ParentStaffEntry?.ParentStaff?.idInMusicSheet;
+                  const noteData = { step, octave, alter, staff: staffNumber };
                   notes.push(noteData);
                 }
               }
@@ -498,22 +337,31 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       next: () => {
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.next();
-          highlightCurrentNotes();
           onNotesChange?.(getCurrentNotes());
+          // Update custom cursor position
+          if ((osmdRef.current as any).updateCustomCursor) {
+            (osmdRef.current as any).updateCustomCursor();
+          }
         }
       },
       previous: () => {
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.previous();
-          highlightCurrentNotes();
           onNotesChange?.(getCurrentNotes());
+          // Update custom cursor position
+          if ((osmdRef.current as any).updateCustomCursor) {
+            (osmdRef.current as any).updateCustomCursor();
+          }
         }
       },
       reset: () => {
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.reset();
-          highlightCurrentNotes();
           onNotesChange?.(getCurrentNotes());
+          // Update custom cursor position
+          if ((osmdRef.current as any).updateCustomCursor) {
+            (osmdRef.current as any).updateCustomCursor();
+          }
         }
       },
       getNotesAtPosition,
@@ -543,6 +391,147 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           if (osmd.cursor) {
             osmd.cursor.show();
             osmd.cursor.hidden = false;
+
+            setTimeout(() => {
+              const cursorElement = (osmd.cursor as any).cursorElement;
+              console.log("Setting up custom cursor...");
+
+              if (cursorElement && containerRef.current && parentRef.current) {
+                // Hide the default cursor image
+                cursorElement.style.opacity = "0";
+
+                // Get cursor position
+                const cursorRect = cursorElement.getBoundingClientRect();
+                const parentRect = parentRef.current.getBoundingClientRect();
+
+                // Find all staves that overlap with the cursor
+                const allStaves = containerRef.current.querySelectorAll('[class*="vf-stave"]');
+                console.log("Found staves:", allStaves.length);
+
+                const overlappingStaves: DOMRect[] = [];
+
+                // Calculate cursor center point
+                const cursorCenterY = (cursorRect.top + cursorRect.bottom) / 2;
+
+                allStaves.forEach((stave) => {
+                  const staveRect = stave.getBoundingClientRect();
+
+                  // Horizontal: cursor should be within or near the stave
+                  const horizontalTolerance = 50;
+                  const horizontalOverlap =
+                    cursorRect.left >= staveRect.left - horizontalTolerance &&
+                    cursorRect.left <= staveRect.right;
+
+                  // Vertical: check if cursor center point is within stave bounds
+                  const verticalTolerance = 50;
+                  const verticalOverlap =
+                    cursorCenterY >= staveRect.top - verticalTolerance &&
+                    cursorCenterY <= staveRect.bottom + verticalTolerance;
+
+                  if (horizontalOverlap && verticalOverlap) {
+                    overlappingStaves.push(staveRect);
+                    console.log("Matching stave:", {
+                      staveTop: staveRect.top,
+                      staveBottom: staveRect.bottom,
+                      cursorCenterY,
+                    });
+                  }
+                });
+
+                console.log("Overlapping staves:", overlappingStaves.length);
+
+                let measureTop = cursorRect.top;
+                let measureHeight = cursorRect.height;
+
+                if (overlappingStaves.length > 0) {
+                  // Find the topmost and bottommost staves
+                  const topMost = Math.min(...overlappingStaves.map(r => r.top));
+                  const bottomMost = Math.max(...overlappingStaves.map(r => r.bottom));
+                  measureTop = topMost;
+                  measureHeight = bottomMost - topMost;
+                }
+
+                // Calculate position relative to parent
+                const cursorLeft = cursorRect.left - parentRect.left;
+                const cursorTop = measureTop - parentRect.top;
+
+                console.log("Cursor position:", { top: cursorTop, left: cursorLeft, height: measureHeight });
+
+                // Create a custom red cursor line
+                const customCursor = document.createElement("div");
+                customCursor.id = "custom-cursor";
+                customCursor.style.position = "absolute";
+                customCursor.style.backgroundColor = "red";
+                customCursor.style.width = "3px";
+                customCursor.style.height = measureHeight + "px";
+                customCursor.style.top = cursorTop + "px";
+                customCursor.style.left = cursorLeft + "px";
+                customCursor.style.zIndex = "1000";
+                customCursor.style.pointerEvents = "none";
+
+                // Add the custom cursor to the parent
+                parentRef.current.appendChild(customCursor);
+                console.log("Appended custom cursor to parent");
+
+                // Update custom cursor position whenever the default cursor moves
+                const updateCustomCursor = () => {
+                  if (customCursor && cursorElement && containerRef.current && parentRef.current) {
+                    const updatedCursorRect = cursorElement.getBoundingClientRect();
+                    const updatedParentRect = parentRef.current.getBoundingClientRect();
+
+                    // Find all staves that overlap with the cursor
+                    const updatedAllStaves = containerRef.current.querySelectorAll('[class*="vf-stave"]');
+
+                    // Calculate cursor center point
+                    const updatedCursorCenterY = (updatedCursorRect.top + updatedCursorRect.bottom) / 2;
+
+                    const updatedOverlappingStaves: DOMRect[] = [];
+                    updatedAllStaves.forEach((stave) => {
+                      const staveRect = stave.getBoundingClientRect();
+
+                      const horizontalTolerance = 50;
+                      const horizontalOverlap =
+                        updatedCursorRect.left >= staveRect.left - horizontalTolerance &&
+                        updatedCursorRect.left <= staveRect.right;
+
+                      // Vertical: check if cursor center point is within stave bounds
+                      const verticalTolerance = 50;
+                      const verticalOverlap =
+                        updatedCursorCenterY >= staveRect.top - verticalTolerance &&
+                        updatedCursorCenterY <= staveRect.bottom + verticalTolerance;
+
+                      if (horizontalOverlap && verticalOverlap) {
+                        updatedOverlappingStaves.push(staveRect);
+                      }
+                    });
+
+                    let updatedMeasureTop = updatedCursorRect.top;
+                    let updatedMeasureHeight = updatedCursorRect.height;
+
+                    if (updatedOverlappingStaves.length > 0) {
+                      const topMost = Math.min(...updatedOverlappingStaves.map(r => r.top));
+                      const bottomMost = Math.max(...updatedOverlappingStaves.map(r => r.bottom));
+                      updatedMeasureTop = topMost;
+                      updatedMeasureHeight = bottomMost - topMost;
+                    }
+
+                    const updatedLeft = updatedCursorRect.left - updatedParentRect.left;
+                    const updatedTop = updatedMeasureTop - updatedParentRect.top;
+
+                    customCursor.style.top = updatedTop + "px";
+                    customCursor.style.left = updatedLeft + "px";
+                    customCursor.style.height = updatedMeasureHeight + "px";
+
+                    console.log("Updated custom cursor position:", { top: updatedTop, left: updatedLeft, height: updatedMeasureHeight });
+                  }
+                };
+
+                // Store the update function so we can call it on cursor movement
+                (osmdRef.current as any).updateCustomCursor = updateCustomCursor;
+              } else {
+                console.error("Cannot create custom cursor - missing element or container");
+              }
+            }, 200);
 
             // Calculate the range of all notes in the score
             if (onRangeChange) {
@@ -609,13 +598,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               }
             }
 
-            setTimeout(() => {
-              const cursorElement = (osmd.cursor as any).cursorElement;
-              if (cursorElement) {
-                cursorElement.style.opacity = "0";
-              }
-              highlightCurrentNotes();
-            }, 200);
+
             onNotesChange?.(getCurrentNotes());
           }
           setIsLoading(false);
@@ -671,6 +654,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
     return (
       <div
+        ref={parentRef}
         style={{
           position: "relative",
           width: "100%",
