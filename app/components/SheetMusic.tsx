@@ -113,13 +113,15 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               console.log("SourceMeasures count:", musicSheet.SourceMeasures.length);
 
               // Get the measure number from CurrentMeasure
-              const measureNumber = (currentMeasure as any).MeasureNumber;
-              const measureIndex = measureNumber !== undefined ? measureNumber - 1 : iterator.currentMeasureIndex;
-
+              const measureIndex = iterator.currentMeasureIndex;
               // Get the current source measure
               const sourceMeasure = musicSheet.SourceMeasures[measureIndex];
               if (sourceMeasure) {
-                console.log("Found source measure index:", measureIndex, "measure number:", measureNumber);
+                console.log("Found source measure index:", measureIndex);
+
+                // Get the absolute timestamp at the start of the current measure
+                const measureStartTimestamp = (sourceMeasure as any).AbsoluteTimestamp?.RealValue || 0;
+                console.log("Measure start timestamp:", measureStartTimestamp, "current timestamp:", currentTimestamp.RealValue);
 
                 // Iterate through all staff entries in this measure
                 for (const staffEntry of sourceMeasure.VerticalSourceStaffEntryContainers || []) {
@@ -134,7 +136,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                       for (const voiceEntry of voiceEntries) {
                         if (voiceEntry?.Notes) {
                           const duration = voiceEntry.Notes[0]?.Length?.RealValue || 0;
-                          const entryStart = entryTimestamp.RealValue;
+                          // Convert measure-relative timestamp to absolute timestamp
+                          const entryStart = measureStartTimestamp + entryTimestamp.RealValue;
 
                           // Only detect notes that START at current timestamp, not sustained notes
                           // Use tolerance for floating point comparison
