@@ -49,18 +49,33 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         console.log("--- DEBUGGING CURSOR STYLES (Applying) ---");
         console.log("Cursor Element exists:", cursorElement);
         console.log("Cursor Element Parent:", cursorElement.parentNode);
-        console.log("Cursor Element Bounding Rect (before forced style):", cursorElement.getBoundingClientRect());
+        console.log(
+          "Cursor Element Bounding Rect (before forced style):",
+          cursorElement.getBoundingClientRect(),
+        );
 
         // Apply demo-like styling directly to the cursor image element
-        cursorElement.style.backgroundColor = '#FFD700'; // Demo yellow
-        cursorElement.style.opacity = '0.4'; // Semi-transparent
-        cursorElement.style.zIndex = '1000'; // Bring to front
+        cursorElement.style.backgroundColor = "#FFD700"; // Demo yellow
+        cursorElement.style.opacity = "0.4"; // Semi-transparent
+        cursorElement.style.zIndex = "1000"; // Bring to front
         // Reverted: Do not manipulate src or backgroundImage here. Let OSMD manage it.
 
-        console.log("Cursor Element forced background-color:", cursorElement.style.backgroundColor);
-        console.log("Cursor Element forced opacity:", cursorElement.style.opacity);
-        console.log("Cursor Element forced z-index:", cursorElement.style.zIndex);
-        console.log("Cursor Element Computed Style (after forced style):", getComputedStyle(cursorElement));
+        console.log(
+          "Cursor Element forced background-color:",
+          cursorElement.style.backgroundColor,
+        );
+        console.log(
+          "Cursor Element forced opacity:",
+          cursorElement.style.opacity,
+        );
+        console.log(
+          "Cursor Element forced z-index:",
+          cursorElement.style.zIndex,
+        );
+        console.log(
+          "Cursor Element Computed Style (after forced style):",
+          getComputedStyle(cursorElement),
+        );
       } else {
         console.log("Cursor Element does NOT exist when applying styles.");
       }
@@ -358,7 +373,15 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                           }
                           if (pitch) {
                             const fundamentalNote = pitch.fundamentalNote;
-                            const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
+                            const noteNames = [
+                              "C",
+                              "D",
+                              "E",
+                              "F",
+                              "G",
+                              "A",
+                              "B",
+                            ];
                             const step =
                               fundamentalNote !== undefined
                                 ? noteNames[fundamentalNote]
@@ -489,9 +512,15 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           console.log("osmd.cursor exists:", !!osmd.cursor);
 
           if (osmd.cursor) {
-            console.log("Cursor hidden status before show():", osmd.cursor.hidden);
+            console.log(
+              "Cursor hidden status before show():",
+              osmd.cursor.hidden,
+            );
             osmd.cursor.show();
-            console.log("Cursor hidden status after show():", osmd.cursor.hidden);
+            console.log(
+              "Cursor hidden status after show():",
+              osmd.cursor.hidden,
+            );
             osmd.cursor.reset();
             osmd.cursor.update(); // Calculate initial cursor position
 
@@ -582,9 +611,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                             const semitone = pitch.halfTone % 12;
                             const octave = Math.floor(pitch.halfTone / 12);
                             const midi =
-                              (octave + 1) * 12 +
-                              semitone +
-                              (pitch.Alter || 0);
+                              (octave + 1) * 12 + semitone + (pitch.Alter || 0);
                             console.log(
                               "Found note with halfTone:",
                               pitch.halfTone,

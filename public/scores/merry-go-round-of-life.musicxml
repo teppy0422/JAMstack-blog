@@ -7,7 +7,7 @@
   <identification>
     <creator type="composer">Composed by JOE HISAISHI</creator>
     <creator type="lyricist">Transcribed by DROD</creator>
-    <rights>Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</rights>
+    <rights>Arranged by E. DAVIS / KYLE LANDRY</rights>
     <encoding>
       <software>MuseScore Studio 4.6.5</software>
       <encoding-date>2026-01-29</encoding-date>
@@ -76,10 +76,6 @@
     <credit-words default-x="600.241935" default-y="1611.210312" justify="center" valign="top" font-size="22">Merry go Round of Life</credit-words>
     </credit>
   <credit page="1">
-    <credit-type>subtitle</credit-type>
-    <credit-words default-x="600.241935" default-y="1554.060198" justify="center" valign="top" font-size="14">Howl's Moving Castle OST.</credit-words>
-    </credit>
-  <credit page="1">
     <credit-type>composer</credit-type>
     <credit-words default-x="1114.7587" default-y="1433.704149" justify="right" valign="bottom">Composed by Joe Hisaishi.</credit-words>
     </credit>
@@ -92,53 +88,11 @@
   <credit page="1">
     <credit-words default-x="85.725171" default-y="1611.210312" justify="left" valign="top">Piano</credit-words>
     </credit>
-  <credit page="2">
-    <credit-words default-x="600.241935" default-y="1218.641714" justify="center" valign="top" font-family="Edwin">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
-    </credit>
   <credit page="1">
     <credit-type>rights</credit-type>
-    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
+    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY</credit-words>
     </credit>
-  <credit page="2">
-    <credit-type>rights</credit-type>
-    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
-    </credit>
-  <credit page="3">
-    <credit-type>rights</credit-type>
-    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
-    </credit>
-  <credit page="4">
-    <credit-type>rights</credit-type>
-    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
-    </credit>
-  <credit page="5">
-    <credit-type>rights</credit-type>
-    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
-    </credit>
-  <credit page="6">
-    <credit-type>rights</credit-type>
-    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
-    </credit>
-  <credit page="7">
-    <credit-type>rights</credit-type>
-    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
-    </credit>
-  <credit page="8">
-    <credit-type>rights</credit-type>
-    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
-    </credit>
-  <credit page="9">
-    <credit-type>rights</credit-type>
-    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
-    </credit>
-  <credit page="10">
-    <credit-type>rights</credit-type>
-    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
-    </credit>
-  <credit page="11">
-    <credit-type>rights</credit-type>
-    <credit-words default-x="600.241935" default-y="85.725171" justify="center" valign="bottom">Arranged by E. DAVIS / KYLE LANDRY(原: JOE HISAISHI)</credit-words>
-    </credit>
+  
   <part-list>
     <score-part id="P1">
       <part-name>Piano</part-name>
@@ -197,7 +151,6 @@
       </harmony>  
       <direction placement="below">
         <direction-type>
-          <words default-y="-60.37" relative-y="-25">Arranged by E. DAVIS / KYLE LANDRY</words>
           </direction-type>
         <staff>1</staff>
         </direction>
