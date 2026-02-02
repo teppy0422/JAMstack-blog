@@ -560,6 +560,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             backend: "svg",
             drawingParameters: "default", // Use default instead of compacttight
             disableCursor: false, // Explicitly enable cursor
+            followCursor: true, // Auto-scroll when cursor moves to new system
           });
 
           // Enable chord symbols BEFORE loading the MusicXML
