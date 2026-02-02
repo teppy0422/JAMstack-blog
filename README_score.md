@@ -158,15 +158,24 @@ public/
 - 音符情報の抽出とMIDI番号への変換
 - 鍵盤範囲の自動調整（楽譜の音域に合わせて表示範囲を自動設定）
 - ヘッダーにカバアイコン表示
+- OSMDカーソルの可視化（緑色半透明カーソル）
 
 ### 技術的な実装詳細
+
+#### OpenSheetMusicDisplay (OSMD)
+
+- 公式GitHub: https://github.com/opensheetmusicdisplay/opensheetmusicdisplay
+- デモページ: https://opensheetmusicdisplay.github.io/demo/
+- バージョン: v1.9.4
+- カーソルAPI: `osmd.cursor.show()`, `osmd.cursor.next()`, `osmd.cursor.previous()`, `osmd.cursor.reset()`, `osmd.cursor.update()`
 
 #### ファイル構成
 
 ```
 app/
 ├── score/
-│   └── page.tsx                    # メインページ（楽譜選択とコントロール）
+│   ├── page.tsx                    # メインページ（楽譜選択とコントロール）
+│   └── score.css                   # OSMDカーソルのスタイル定義
 └── components/
     ├── SheetMusic.tsx              # 楽譜表示コンポーネント（OSMD使用）
     └── PianoKeyboard.tsx           # ピアノ鍵盤表示コンポーネント
@@ -355,6 +364,72 @@ if (maxSemitone !== 11) {
 - 最高音がB以外の場合、次のBまで範囲を拡張
 - 結果として常にC〜Bのオクターブ境界で範囲が決定される
 
+#### OSMDカーソルの可視化
+
+OSMDのデフォルトカーソルは1px幅のIMG要素でほぼ見えないため、CSSで可視化:
+
+**実装方法:**
+
+1. `app/score/score.css` でカーソルスタイルを定義:
+   ```css
+   .osmdCursor {
+     background-color: #33e02f !important;  /* 緑色 */
+     opacity: 0.5 !important;                /* 半透明 */
+     width: 30px !important;                 /* 幅30px */
+     display: block !important;
+     visibility: visible !important;
+     aspect-ratio: none !important;          /* アスペクト比の自動計算を無効化 */
+     height: attr(height px) !important;     /* HTML属性のheightを読み取る */
+   }
+   ```
+
+2. `SheetMusic.tsx` でカーソル要素にクラスを追加:
+   ```typescript
+   const cursorElement = (osmd.cursor as any).cursorElement;
+   if (cursorElement) {
+     cursorElement.classList.add("osmdCursor");
+   }
+   ```
+
+**技術的ポイント:**
+
+- `height: attr(height px)` を使用してHTML属性の高さ値をCSSで読み取る
+  - OSMDが動的に設定する `<img height="251" width="30" ...>` の高さを利用
+  - これにより各段の高さに自動対応
+- `aspect-ratio: none` で画像のアスペクト比計算を無効化
+  - これがないとwidth指定時に高さが1pxになってしまう
+
+**参考:**
+- OSMD公式デモ: https://opensheetmusicdisplay.github.io/demo/ の「Cursor」セクション
+- カーソルは初期状態で非表示なので `osmd.cursor.show()` で表示する必要がある
+
+**重要な知見: OSMD要素のスタイル制御はCSSクラスが最も確実**
+
+OSMD要素の見た目を動的に変更する際は、JavaScriptのインラインスタイルよりもCSSクラスの追加/削除が有効:
+
+```css
+/* カーソルを非表示にするクラス */
+.osmdCursor.cursor-hidden {
+  display: none !important;
+}
+```
+
+```typescript
+// JavaScript側での制御
+cursorElement.classList.add("cursor-hidden");    // 非表示
+cursorElement.classList.remove("cursor-hidden"); // 表示
+```
+
+理由:
+- OSMDのCSSルールは `!important` を多用しているため、インラインスタイルでは上書きできない
+- CSSクラスで `!important` を使うことで確実に上書き可能
+- 状態管理もクラスの有無で明確に判断できる
+
+応用例:
+- ローディング中のカーソル非表示
+- ズーム変更時の一時的な非表示
+- 状態に応じた見た目の切り替え
+
 #### ピアノ鍵盤の表示
 
 現在位置の音符に対応する鍵盤をハイライト表示:
@@ -409,6 +484,11 @@ for (let midi = startMidi; midi <= endMidi; midi++) {
 4. **範囲調整の不具合**
    - 原因: `maxMidi = maxOctave * 12 + 11` の計算ミス
    - 解決: `maxMidi = maxMidi + (11 - maxSemitone)` で正しく次のBまで拡張
+
+5. **OSMDカーソルが見えない問題**
+   - 原因: デフォルトカーソルは1px幅のIMG要素で視認困難
+   - 解決: CSS `attr(height px)` でHTML属性を読み取り、緑色半透明(#33e02f, opacity 0.5)、幅30pxに設定
+   - ポイント: `aspect-ratio: none` で画像の自動アスペクト比計算を無効化することで高さが正しく適用される
 
 ### 楽譜の追加方法
 

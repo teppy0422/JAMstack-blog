@@ -45,6 +45,7 @@ export default function ScorePage() {
     max: number;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false); // Add isLoading state
+  const [zoom, setZoom] = useState(1.0); // Add zoom state (1.0 = 100%)
   const sheetMusicRef = useRef<SheetMusicRef>(null);
 
   // Memoize handleScoreChange to avoid unnecessary re-renders and issues with useEffect dependency
@@ -65,12 +66,21 @@ export default function ScorePage() {
 
   useEffect(() => {
     const lastOpenedScoreId = localStorage.getItem("lastOpenedScoreId");
+    const lastZoomLevel = localStorage.getItem("lastZoomLevel");
+
     if (lastOpenedScoreId) {
       const scoreToLoad = availableScores.find(
         (score) => score.id === lastOpenedScoreId,
       );
       if (scoreToLoad) {
         handleScoreChange(scoreToLoad.path);
+      }
+    }
+
+    if (lastZoomLevel) {
+      const zoomValue = parseFloat(lastZoomLevel);
+      if (!isNaN(zoomValue) && zoomValue >= 0.5 && zoomValue <= 1.75) {
+        setZoom(zoomValue);
       }
     }
   }, [handleScoreChange]); // Add handleScoreChange to dependency array
@@ -99,6 +109,29 @@ export default function ScorePage() {
 
   const handleReset = () => {
     sheetMusicRef.current?.reset();
+  };
+
+  const handleZoomPreset = async (presetZoom: number) => {
+    console.log("handleZoomPreset called with:", presetZoom);
+    setZoom(presetZoom);
+    localStorage.setItem("lastZoomLevel", presetZoom.toString());
+
+    // Hide cursor immediately before showing loading
+    sheetMusicRef.current?.hideCursor();
+
+    setIsLoading(true); // Show loading indicator
+
+    // Wait for React to render the loading state
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    try {
+      await sheetMusicRef.current?.setZoom(presetZoom);
+    } finally {
+      setIsLoading(false); // Hide loading indicator
+      // Show cursor after loading is complete
+      sheetMusicRef.current?.showCursor();
+    }
+    console.log("After setZoom, state will update on next render");
   };
 
   return (
@@ -167,45 +200,93 @@ export default function ScorePage() {
         </div>
 
         {selectedScore && (
-          <div style={{ display: "flex", gap: "10px" }}>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            {/* Zoom preset buttons - 2 rows x 3 columns */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "3px",
+              }}
+            >
+              {[0.5, 0.75, 1.0, 1.25, 1.5, 1.75].map((presetZoom) => (
+                <button
+                  key={presetZoom}
+                  onClick={() => handleZoomPreset(presetZoom)}
+                  disabled={isLoading}
+                  style={{
+                    padding: "0px 8px",
+                    fontSize: "10px",
+                    borderRadius: "4px",
+                    border: "1px solid #ccc",
+                    backgroundColor:
+                      zoom === presetZoom
+                        ? "#d0d0d0"
+                        : isLoading
+                          ? "#f0f0f0"
+                          : "#fff",
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    opacity: isLoading ? 0.5 : 1,
+                    fontWeight: zoom === presetZoom ? "bold" : "normal",
+                  }}
+                  title={`${Math.round(presetZoom * 100)}%`}
+                >
+                  {Math.round(presetZoom * 100)}%
+                </button>
+              ))}
+            </div>
+            <div
+              style={{
+                width: "1px",
+                height: "24px",
+                backgroundColor: "#ccc",
+                margin: "0 5px",
+              }}
+            />
             <button
               onClick={handleReset}
+              disabled={isLoading}
               style={{
                 padding: "8px 16px",
                 fontSize: "16px",
                 borderRadius: "4px",
                 border: "1px solid #ccc",
-                backgroundColor: "#fff",
-                cursor: "pointer",
+                backgroundColor: isLoading ? "#f0f0f0" : "#fff",
+                cursor: isLoading ? "not-allowed" : "pointer",
+                opacity: isLoading ? 0.5 : 1,
               }}
             >
-              ⏮ 最初に戻る
+              ⏮
             </button>
             <button
               onClick={handlePrevious}
+              disabled={isLoading}
               style={{
                 padding: "8px 16px",
                 fontSize: "16px",
                 borderRadius: "4px",
                 border: "1px solid #ccc",
-                backgroundColor: "#fff",
-                cursor: "pointer",
+                backgroundColor: isLoading ? "#f0f0f0" : "#fff",
+                cursor: isLoading ? "not-allowed" : "pointer",
+                opacity: isLoading ? 0.5 : 1,
               }}
             >
-              ⬅ 前へ
+              ⬅
             </button>
             <button
               onClick={handleNext}
+              disabled={isLoading}
               style={{
                 padding: "8px 16px",
                 fontSize: "16px",
                 borderRadius: "4px",
                 border: "1px solid #ccc",
-                backgroundColor: "#fff",
-                cursor: "pointer",
+                backgroundColor: isLoading ? "#f0f0f0" : "#fff",
+                cursor: isLoading ? "not-allowed" : "pointer",
+                opacity: isLoading ? 0.5 : 1,
               }}
             >
-              次へ ➡
+              ➡
             </button>
           </div>
         )}

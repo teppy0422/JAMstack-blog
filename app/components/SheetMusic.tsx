@@ -28,6 +28,9 @@ export interface SheetMusicRef {
   next: () => void;
   previous: () => void;
   reset: () => void;
+  setZoom: (zoom: number) => Promise<void>;
+  hideCursor: () => void;
+  showCursor: () => void;
   getNotesAtPosition: (
     x: number,
     y: number,
@@ -475,6 +478,66 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           osmdRef.current.cursor.reset();
           osmdRef.current.cursor.update(); // Update visual position after reset
           onNotesChange?.(getCurrentNotes());
+        }
+      },
+      hideCursor: () => {
+        if (osmdRef.current?.cursor) {
+          const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+          if (cursorElement) {
+            cursorElement.classList.add("cursor-hidden");
+            console.log("Cursor hidden with class");
+          }
+        }
+      },
+      showCursor: () => {
+        if (osmdRef.current?.cursor) {
+          osmdRef.current.cursor.show();
+          const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+          if (cursorElement) {
+            cursorElement.classList.remove("cursor-hidden");
+            cursorElement.classList.add("osmdCursor");
+            cursorElement.style.backgroundColor = "#33e02f";
+            cursorElement.style.opacity = "0.5";
+            cursorElement.style.width = "10px";
+            cursorElement.style.display = "block";
+            cursorElement.style.visibility = "visible";
+          }
+          console.log("Cursor shown");
+        }
+      },
+      setZoom: async (zoom: number) => {
+        console.log("setZoom called with:", zoom);
+        if (osmdRef.current) {
+          console.log("osmdRef.current exists, setting Zoom to:", zoom);
+
+          osmdRef.current.Zoom = zoom;
+          console.log("Calling render...");
+
+          // Wrap render in Promise to wait for completion
+          await new Promise<void>((resolve) => {
+            osmdRef.current.render();
+            // Use setTimeout to ensure render is complete
+            setTimeout(() => {
+              console.log("Render complete");
+
+              // Re-apply cursor styles after render
+              if (osmdRef.current.cursor) {
+                const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+                if (cursorElement) {
+                  cursorElement.classList.add("osmdCursor");
+                  cursorElement.style.backgroundColor = "#33e02f";
+                  cursorElement.style.opacity = "0.5";
+                  cursorElement.style.width = "10px";
+                  cursorElement.style.display = "block";
+                  cursorElement.style.visibility = "visible";
+                  console.log("Cursor styles re-applied after zoom");
+                }
+              }
+              resolve();
+            }, 100);
+          });
+        } else {
+          console.log("osmdRef.current is null!");
         }
       },
       getNotesAtPosition,

@@ -3,18 +3,23 @@
 .osmdCursor {
   background-color: #33e02f !important;
   opacity: 0.5 !important;
-  width: 30px !important;
+  width: attr(width px) !important;
   display: block !important;
   visibility: visible !important;
   aspect-ratio: none !important;
   height: attr(height px) !important;
 }
 
+/* カーソルを非表示にするクラス */
+.osmdCursor.cursor-hidden {
+  display: none !important;
+}
+
 /* カーソルが確実に表示されるようにする */
 img.osmdCursor {
   background-color: #33e02f !important;
   opacity: 0.5 !important;
-  width: 30px !important;
+  width: attr(width px) !important;
 }
 
 /* 横並び用コンテナ */
