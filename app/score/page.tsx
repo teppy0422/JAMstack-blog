@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import SheetMusic, { SheetMusicRef } from "../components/SheetMusic";
 import PianoKeyboard from "../components/PianoKeyboard";
+import "./score.css";
 
 const availableScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
@@ -15,6 +16,16 @@ const availableScores = [
     id: "mery",
     name: "人生のメリーゴーランド",
     path: "/scores/merry-go-round-of-life.musicxml",
+  },
+  {
+    id: "summer",
+    name: "summer",
+    path: "/scores/summer-jiu-shi-rang.musicxml",
+  },
+  {
+    id: "sample",
+    name: "sample",
+    path: "/scores/BrahWiMeSample.musicxml",
   },
   // 将来的に他の楽譜を追加可能
 ];

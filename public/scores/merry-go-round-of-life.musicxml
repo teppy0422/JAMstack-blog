@@ -189,6 +189,12 @@
           <line>2</line>
           </clef>
         </attributes>
+              <harmony>                    ← ここから追加
+        <root>
+          <root-step>G</root-step>
+        </root>
+        <kind>minor</kind>
+      </harmony>  
       <direction placement="below">
         <direction-type>
           <words default-y="-60.37" relative-y="-25">Arranged by E. DAVIS / KYLE LANDRY</words>

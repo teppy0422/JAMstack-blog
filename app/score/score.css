@@ -1,0 +1,19 @@
+/* OSMD カーソルのスタイル */
+/* デモと同じ緑色の半透明カーソル */
+.osmdCursor {
+  background-color: #33e02f !important;
+  opacity: 0.5 !important;
+  width: 10px !important;
+  display: block !important;
+  visibility: visible !important;
+  height: 265px !important;
+  aspect-ratio: none;
+  /* ← これが超重要 */
+}
+
+/* カーソルが確実に表示されるようにする */
+img.osmdCursor {
+  background-color: #33e02f !important;
+  opacity: 0.5 !important;
+  width: 10px !important;
+}

@@ -13,6 +13,17 @@ interface PianoKeyboardProps {
   maxMidi?: number;
 }
 
+// 音符データから表記名を取得（フラット・シャープの区別を保持）
+const noteToDisplayName = (note: Note): string => {
+  let noteName = note.step;
+  if (note.alter === 1) {
+    noteName += "#";
+  } else if (note.alter === -1) {
+    noteName += "b";
+  }
+  return `${noteName}${note.octave}`;
+};
+
 // 音符をMIDI番号に変換
 const noteToMidi = (
   step: string | number,
@@ -85,11 +96,9 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
     }
   }
 
-  console.log("PianoKeyboard received notes:", notes);
-  console.log("PianoKeyboard range:", startMidi, "-", endMidi);
-
-  // ハイライトする鍵盤のMIDI番号とstaff情報をマッピング
+  // ハイライトする鍵盤のMIDI番号とstaff情報、表記名をマッピング
   const midiToStaffMap = new Map<number, number>();
+  const midiToDisplayNameMap = new Map<number, string>();
   notes
     .filter((note) => note.step && typeof note.octave === 'number')
     .forEach((note) => {
@@ -97,12 +106,11 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
       if (note.staff !== undefined) {
         midiToStaffMap.set(midi, note.staff);
       }
+      // 元の音符データから表記名を保存（フラット・シャープを区別）
+      midiToDisplayNameMap.set(midi, noteToDisplayName(note));
     });
 
   const highlightedMidis = Array.from(midiToStaffMap.keys());
-
-  console.log("Highlighted MIDI numbers:", highlightedMidis);
-  console.log("MIDI to staff map:", Array.from(midiToStaffMap.entries()));
 
   // 白鍵の数を数える
   let whiteKeyCount = 0;
@@ -121,6 +129,7 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
     const isHighlighted = highlightedMidis.includes(midi);
     const isBlack = isBlackKey(midi);
     const staff = midiToStaffMap.get(midi);
+    const displayName = midiToDisplayNameMap.get(midi) || midiToNoteName(midi);
 
     // staff 0 = 右手（緑色 #4CAF50）, staff 1 = 左手（濃い緑 #2E7D32）
     let whiteKeyColor = "#ffffff";
@@ -149,7 +158,17 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
             transition: "background-color 0.2s",
           }}
         >
-          {isHighlighted && midiToNoteName(midi)}
+          {isHighlighted && (
+            <span
+              style={{
+                display: "inline-block",
+                transform: "rotate(90deg)",
+                transformOrigin: "center",
+              }}
+            >
+              {displayName}
+            </span>
+          )}
         </div>,
       );
       whiteKeyIndex++;
@@ -162,6 +181,7 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
     const isHighlighted = highlightedMidis.includes(midi);
     const isBlack = isBlackKey(midi);
     const staff = midiToStaffMap.get(midi);
+    const displayName = midiToDisplayNameMap.get(midi) || midiToNoteName(midi);
 
     // staff 0 = 右手（青色 #2196F3）, staff 1 = 左手（濃い青 #1565C0）
     let blackKeyColor = "#000";
@@ -194,7 +214,17 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
             transition: "background-color 0.2s",
           }}
         >
-          {isHighlighted && midiToNoteName(midi)}
+          {isHighlighted && (
+            <span
+              style={{
+                display: "inline-block",
+                transform: "rotate(90deg)",
+                transformOrigin: "center",
+              }}
+            >
+              {displayName}
+            </span>
+          )}
         </div>,
       );
     } else {
