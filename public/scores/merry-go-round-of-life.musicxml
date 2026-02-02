@@ -6,7 +6,7 @@
     </work>
   <identification>
     <creator type="composer">Composed by JOE HISAISHI</creator>
-    <creator type="lyricist">Transcribed by DROD</creator>
+    <creator type="lyricist">Key:Gm</creator>
     <rights>Arranged by E. DAVIS / KYLE LANDRY</rights>
     <encoding>
       <software>MuseScore Studio 4.6.5</software>
@@ -128,7 +128,7 @@
         <divisions>18480</divisions>
         <key>
           <fifths>-2</fifths>
-          </key>
+        </key>
         <time>
           <beats>3</beats>
           <beat-type>4</beat-type>
@@ -143,12 +143,12 @@
           <line>2</line>
           </clef>
         </attributes>
-              <harmony>                    ← ここから追加
-        <root>
-          <root-step>G</root-step>
-        </root>
-        <kind>minor</kind>
-      </harmony>  
+        <harmony>
+          <root>
+            <root-step>G</root-step>
+          </root>
+          <kind text="m7">minor-seventh</kind>
+        </harmony>  
       <direction placement="below">
         <direction-type>
           </direction-type>
@@ -247,7 +247,7 @@
         <stem>down</stem>
         <staff>1</staff>
         <beam number="1">begin</beam>
-        </note>
+        </note>       
       <note default-x="288.69" default-y="-5">
         <pitch>
           <step>E</step>
@@ -280,6 +280,7 @@
           <slur type="start" bezier-x="122.236528" bezier-y="48.277127" number="2"/>
           </notations>
         </note>
+        
       <note default-x="144.74" default-y="-142.25">
         <pitch>
           <step>C</step>
@@ -354,6 +355,12 @@
         <staff>1</staff>
         <sound tempo="110"/>
         </direction>
+      <harmony print-style="yes">
+  <root>
+    <root-step>C</root-step>
+  </root>
+  <kind text="m7">minor-seventh</kind>
+</harmony>
       <note default-x="12.5" default-y="-15">
         <pitch>
           <step>C</step>

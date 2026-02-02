@@ -149,6 +149,7 @@ public/
 ## 実装状況（2026年1月）
 
 ### 完了した機能
+
 - MusicXML表示（twinkle.musicxml, Billie's_Bounce.musicxml, merry-go-round-of-life.musicxml）
 - 楽譜選択ドロップダウン
 - 手動カーソル操作（次へ/前へ/リセット）ボタン
@@ -161,6 +162,7 @@ public/
 ### 技術的な実装詳細
 
 #### ファイル構成
+
 ```
 app/
 ├── score/
@@ -176,29 +178,23 @@ public/
     └── merry-go-round-of-life.musicxml     # 人生のメリーゴーランド
 ```
 
-#### 音符ハイライト方式
-OSMDの標準カーソルは細い線のため視認性が低かったため、音符自体を着色する方式に変更:
-
-1. カーソル要素は `opacity: '0'` で透明化（`display: 'none'` にすると getBoundingClientRect() が正しく機能しない）
-2. カーソルの位置範囲を取得
-3. VexFlowが描画する音符要素 `[class*="vf-notehead"]` を検索
-4. カーソル範囲内の音符のうち、垂直方向で最も近い音符を基準に同じ段（staff）の音符のみをグループ化
-5. 対象音符と符幹の fill/stroke を赤色に変更
-6. カーソル移動時に前回の音符を黒色に戻す
-
 実装の工夫点:
+
 - **水平方向**: カーソルと重なる音符をすべて抽出
 - **垂直方向**: 最も近い音符を基準に、一定範囲内（80px）の音符のみをグループ化
   - これにより2段譜（グランドスタッフ）で高音部と低音部が同時に選択されないように制御
   - 和音は同じ段内であれば複数同時にハイライト可能
 
 コード例:
+
 ```typescript
 const highlightCurrentNotes = () => {
   clearHighlights();
 
   const cursorRect = cursorElement.getBoundingClientRect();
-  const noteheads = containerRef.current.querySelectorAll('[class*="vf-notehead"]');
+  const noteheads = containerRef.current.querySelectorAll(
+    '[class*="vf-notehead"]',
+  );
 
   // 1. 水平方向でカーソルと重なる音符を抽出
   const horizontalCandidates = [];
@@ -215,7 +211,9 @@ const highlightCurrentNotes = () => {
   let minVerticalDistance = Math.abs(anchorCandidate.rect.top - cursorRect.top);
 
   for (let i = 1; i < horizontalCandidates.length; i++) {
-    const distance = Math.abs(horizontalCandidates[i].rect.top - cursorRect.top);
+    const distance = Math.abs(
+      horizontalCandidates[i].rect.top - cursorRect.top,
+    );
     if (distance < minVerticalDistance) {
       minVerticalDistance = distance;
       anchorCandidate = horizontalCandidates[i];
@@ -235,6 +233,7 @@ const highlightCurrentNotes = () => {
 ```
 
 #### 音符データ取得
+
 OSMDの内部構造から音符情報を抽出。複数のフォールバック方式を実装:
 
 ```typescript
@@ -244,7 +243,8 @@ const getCurrentNotes = () => {
   // 方法1: SourceMeasures から取得（最も確実）
   const musicSheet = iterator.musicSheet;
   if (musicSheet?.SourceMeasures) {
-    const sourceMeasure = musicSheet.SourceMeasures[iterator.currentMeasureIndex];
+    const sourceMeasure =
+      musicSheet.SourceMeasures[iterator.currentMeasureIndex];
     for (const staffEntry of sourceMeasure.VerticalSourceStaffEntryContainers) {
       for (const sourceStaffEntry of staffEntry.StaffEntries) {
         const entryTimestamp = sourceStaffEntry.Timestamp;
@@ -280,12 +280,14 @@ const getCurrentNotes = () => {
 ```
 
 **重要な修正点:**
+
 - **持続音の問題を解決**: `entryStart === currentTimestamp` で完全一致のみ検出
   - 修正前: `entryStart <= currentTimestamp && currentTimestamp < entryEnd`
   - 問題: 全音符などの持続音が毎拍検出されていた
   - 解決: タイムスタンプが完全一致する音符のみを検出することで、音符の開始時のみハイライト
 
 #### MIDI番号の計算
+
 OSMDの `halfTone` 値から正しいMIDI番号への変換:
 
 ```typescript
@@ -296,16 +298,19 @@ const midi = (octave + 1) * 12 + semitone + (pitch.Alter || 0);
 ```
 
 例:
+
 - C4 (中央のド) = (4 + 1) × 12 + 0 = 60
 - A4 (ラ) = (4 + 1) × 12 + 9 = 69
 - C#5 = (5 + 1) × 12 + 0 + 1 = 73
 
 **重要な修正点:**
+
 - **範囲計算の問題を解決**: OSMDの `halfTone` 値を直接MIDI番号として使用していた問題を修正
   - 修正前: `minMidi = pitch.halfTone` （誤り）
   - 修正後: 上記の正しい変換式を使用
 
 #### 鍵盤範囲の自動調整
+
 楽譜全体をスキャンして音域を検出し、表示範囲を自動調整:
 
 ```typescript
@@ -345,11 +350,13 @@ if (maxSemitone !== 11) {
 ```
 
 この調整により:
+
 - 最低音がC以外の場合、1つ下のCまで範囲を拡張
 - 最高音がB以外の場合、次のBまで範囲を拡張
 - 結果として常にC〜Bのオクターブ境界で範囲が決定される
 
 #### ピアノ鍵盤の表示
+
 現在位置の音符に対応する鍵盤をハイライト表示:
 
 ```typescript
@@ -415,6 +422,7 @@ for (let midi = startMidi; midi <= endMidi; midi++) {
    ```
 
 ### 次のステップ
+
 1. **MIDI入力機能の実装** （最優先）
    - Web MIDI APIを使用
    - Note Onイベントで `osmd.cursor.next()` を呼び出し

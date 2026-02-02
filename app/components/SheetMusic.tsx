@@ -7,6 +7,7 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
+import React from "react"; // Import React for React.CSSProperties
 
 interface SheetMusicProps {
   musicXmlPath: string;
@@ -19,6 +20,8 @@ interface SheetMusicProps {
     }>,
   ) => void;
   onRangeChange?: (minMidi: number, maxMidi: number) => void;
+  onLoad?: () => void;
+  style?: React.CSSProperties; // Added style prop
 }
 
 export interface SheetMusicRef {
@@ -32,7 +35,7 @@ export interface SheetMusicRef {
 }
 
 const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
-  ({ musicXmlPath, onNotesChange, onRangeChange }, ref) => {
+  ({ musicXmlPath, onNotesChange, onRangeChange, onLoad, style }, ref) => { // Destructure style
     const containerRef = useRef<HTMLDivElement>(null);
     const parentRef = useRef<HTMLDivElement>(null);
     const osmdRef = useRef<any>(null);
@@ -548,16 +551,15 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               console.log("- backgroundColor:", computedStyle.backgroundColor);
               console.log("- BoundingRect:", rect);
 
-              // CSSクラスを追加（デモと同じスタイル）
-              cursorElement.classList.add("osmdCursor");
-
-              // 念のため直接スタイルも設定
-              cursorElement.style.backgroundColor = "#33e02f";
-              cursorElement.style.opacity = "0.5";
-              cursorElement.style.width = "10px";
-              cursorElement.style.display = "block";
-              cursorElement.style.visibility = "visible";
-
+                          // CSSクラスを追加（デモと同じスタイル）
+                          cursorElement.classList.add("osmdCursor");
+              
+                          // 念のため直接スタイルも設定
+                          cursorElement.style.backgroundColor = "#33e02f";
+                          cursorElement.style.opacity = "0.5";
+                          cursorElement.style.width = "10px";
+                          cursorElement.style.display = "block";
+                          cursorElement.style.visibility = "visible";
               // スタイル適用後の状態も確認
               setTimeout(() => {
                 const newRect = cursorElement.getBoundingClientRect();
@@ -655,6 +657,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
           onNotesChange?.(getCurrentNotes());
           setIsLoading(false);
+          onLoad?.(); // Call onLoad when loading and rendering are complete
         } catch (err) {
           console.error("Error loading music:", err);
           if (mounted) {
@@ -669,6 +672,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             }
             setError(errorMessage);
             setIsLoading(false);
+            onLoad?.(); // Also call onLoad on error to ensure parent can react
           }
         }
       };
@@ -686,7 +690,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         }
         osmdRef.current = null;
       };
-    }, [musicXmlPath]);
+    }, [musicXmlPath, onNotesChange, onRangeChange, onLoad]);
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
       const rect = e.currentTarget.getBoundingClientRect();
@@ -713,16 +717,16 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
     }
 
     return (
-      <div
-        ref={parentRef}
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          padding: "20px",
-        }}
-      >
-        {isLoading && (
+                <div
+                  ref={parentRef}
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    height: "100%",
+                    padding: "20px",
+                    ...style, // Apply passed style prop
+                  }}
+                >        {isLoading && (
           <div
             style={{
               position: "absolute",

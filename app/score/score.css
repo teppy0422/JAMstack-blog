@@ -16,3 +16,76 @@ img.osmdCursor {
   opacity: 0.5 !important;
   width: 30px !important;
 }
+
+/* 横並び用コンテナ */
+.loading-hippo-container {
+  display: flex;
+  gap: 10px;
+  /* カバ同士の間隔 */
+}
+
+/* 共通サイズ */
+.loading-hippo {
+  height: 42px;
+  width: auto;
+  animation: bounce 1s infinite ease-in-out;
+  animation-duration: 0.9s;
+}
+
+/* ずらして跳ねる */
+.hippo-1 {
+  animation-delay: 0s;
+}
+
+.hippo-2 {
+  animation-delay: 0.15s;
+}
+
+.hippo-3 {
+  animation-delay: 0.3s;
+}
+
+/* 読み込み中のHippoアニメーション */
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+    /* opacity: 0.7; */
+  }
+
+  50% {
+    transform: translateY(-20px);
+    opacity: 1;
+  }
+}
+
+/* スケルトン表示テキスト */
+.skeleton-text {
+  color: #e0e0e0;
+  /* Gray background */
+  /* color: transparent; */
+  /* Hide actual text */
+  border-radius: 4px;
+  width: 120px;
+  /* Approximate width for "Loading..." */
+  height: 1.2em;
+  /* Approximate height for text */
+  animation: pulse 1.5s infinite ease-in-out;
+  margin-top: 20px;
+  /* Keep spacing from hippos */
+  font-size: 1.2em;
+  /* Match original font size */
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    color: #000000;
+  }
+
+  50% {
+    color: #505050;
+  }
+}

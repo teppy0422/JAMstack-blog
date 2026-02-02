@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import SheetMusic, { SheetMusicRef } from "../components/SheetMusic";
 import PianoKeyboard from "../components/PianoKeyboard";
 import "./score.css";
@@ -44,23 +44,50 @@ export default function ScorePage() {
     min: number;
     max: number;
   } | null>(null);
+  const [isLoading, setIsLoading] = useState(false); // Add isLoading state
   const sheetMusicRef = useRef<SheetMusicRef>(null);
 
-  const handleNotesChange = (notes: Note[]) => {
-    console.log("handleNotesChange called with:", notes);
-    setCurrentNotes(notes);
-  };
-
-  const handleRangeChange = (minMidi: number, maxMidi: number) => {
-    console.log("handleRangeChange called with:", minMidi, maxMidi);
-    setKeyboardRange({ min: minMidi, max: maxMidi });
-  };
-
-  const handleScoreChange = (path: string) => {
+  // Memoize handleScoreChange to avoid unnecessary re-renders and issues with useEffect dependency
+  const handleScoreChange = useCallback((path: string) => {
+    setIsLoading(true); // Set loading to true when a score is selected
     setSelectedScore(path);
     setCurrentNotes([]);
     setKeyboardRange(null);
-  };
+    if (path) {
+      const selected = availableScores.find((score) => score.path === path);
+      if (selected) {
+        localStorage.setItem("lastOpenedScoreId", selected.id);
+      }
+    } else {
+      localStorage.removeItem("lastOpenedScoreId");
+    }
+  }, []); // Dependencies are stable (setSelectedScore, setCurrentNotes, setKeyboardRange)
+
+  useEffect(() => {
+    const lastOpenedScoreId = localStorage.getItem("lastOpenedScoreId");
+    if (lastOpenedScoreId) {
+      const scoreToLoad = availableScores.find(
+        (score) => score.id === lastOpenedScoreId,
+      );
+      if (scoreToLoad) {
+        handleScoreChange(scoreToLoad.path);
+      }
+    }
+  }, [handleScoreChange]); // Add handleScoreChange to dependency array
+
+  const handleNotesChange = useCallback((notes: Note[]) => {
+    console.log("handleNotesChange called with:", notes);
+    setCurrentNotes(notes);
+  }, []);
+
+  const handleRangeChange = useCallback((minMidi: number, maxMidi: number) => {
+    console.log("handleRangeChange called with:", minMidi, maxMidi);
+    setKeyboardRange({ min: minMidi, max: maxMidi });
+  }, []);
+
+  const handleSheetMusicLoad = useCallback(() => {
+    setIsLoading(false); // Set loading to false when SheetMusic reports it's done
+  }, []);
 
   const handleNext = () => {
     sheetMusicRef.current?.next();
@@ -190,14 +217,53 @@ export default function ScorePage() {
           flex: 1,
           overflow: "auto",
           minHeight: 0,
+          position: "relative", // Added for positioning loading overlay
         }}
       >
+        {isLoading && ( // Show loading animation when isLoading is true
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(255, 255, 255, 0.8)", // Semi-transparent white overlay
+              zIndex: 10, // Ensure it's above the sheet music
+            }}
+          >
+            <div className="loading-hippo-container">
+              <img
+                src="/images/illust/hippo/hippo_beat.png"
+                alt="Loading..."
+                className="loading-hippo hippo-1"
+              />
+              <img
+                src="/images/illust/hippo/hippo_beat.png"
+                alt="Loading..."
+                className="loading-hippo hippo-2"
+              />
+              <img
+                src="/images/illust/hippo/hippo_beat.png"
+                alt="Loading..."
+                className="loading-hippo hippo-3"
+              />
+            </div>
+            <p className="skeleton-text">Loading...</p>
+          </div>
+        )}
         {selectedScore ? (
           <SheetMusic
             ref={sheetMusicRef}
             musicXmlPath={selectedScore}
             onNotesChange={handleNotesChange}
             onRangeChange={handleRangeChange}
+            onLoad={handleSheetMusicLoad} // Pass the onLoad handler
+            style={{ visibility: isLoading ? "hidden" : "visible" }} // Hide SheetMusic content while loading
           />
         ) : (
           <div
