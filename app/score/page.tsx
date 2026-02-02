@@ -4,8 +4,15 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import SheetMusic, { SheetMusicRef } from "../components/SheetMusic";
 import PianoKeyboard from "../components/PianoKeyboard";
 import "./score.css";
+import {
+  saveScore,
+  getAllScores,
+  deleteScore,
+  isValidMusicXML,
+  type StoredScore,
+} from "../lib/scoreDB";
 
-const availableScores = [
+const sampleScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
   {
     id: "bounce",
@@ -27,7 +34,6 @@ const availableScores = [
     name: "sample",
     path: "/scores/BrahWiMeSample.musicxml",
   },
-  // 将来的に他の楽譜を追加可能
 ];
 
 interface Note {
@@ -37,6 +43,14 @@ interface Note {
   staff?: number;
 }
 
+interface ScoreItem {
+  id: string;
+  name: string;
+  path?: string; // For sample scores (URL path)
+  dbId?: number; // For user scores (IndexedDB ID)
+  isUserScore: boolean;
+}
+
 export default function ScorePage() {
   const [selectedScore, setSelectedScore] = useState<string | null>(null);
   const [currentNotes, setCurrentNotes] = useState<Note[]>([]);
@@ -44,36 +58,106 @@ export default function ScorePage() {
     min: number;
     max: number;
   } | null>(null);
-  const [isLoading, setIsLoading] = useState(false); // Add isLoading state
-  const [zoom, setZoom] = useState(1.0); // Add zoom state (1.0 = 100%)
+  const [isLoading, setIsLoading] = useState(false);
+  const [zoom, setZoom] = useState(1.0);
+  const [userScores, setUserScores] = useState<StoredScore[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [selectedScoreId, setSelectedScoreId] = useState<string | null>(null);
+  const [selectedScoreContent, setSelectedScoreContent] = useState<
+    string | null
+  >(null);
   const sheetMusicRef = useRef<SheetMusicRef>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Memoize handleScoreChange to avoid unnecessary re-renders and issues with useEffect dependency
-  const handleScoreChange = useCallback((path: string) => {
-    setIsLoading(true); // Set loading to true when a score is selected
-    setSelectedScore(path);
-    setCurrentNotes([]);
-    setKeyboardRange(null);
-    if (path) {
-      const selected = availableScores.find((score) => score.path === path);
-      if (selected) {
-        localStorage.setItem("lastOpenedScoreId", selected.id);
+  // Load user scores from IndexedDB on mount
+  useEffect(() => {
+    const loadUserScores = async () => {
+      try {
+        const scores = await getAllScores();
+        setUserScores(scores);
+      } catch (error) {
+        console.error("Failed to load user scores:", error);
       }
-    } else {
-      localStorage.removeItem("lastOpenedScoreId");
-    }
-  }, []); // Dependencies are stable (setSelectedScore, setCurrentNotes, setKeyboardRange)
+    };
+    loadUserScores();
+  }, []);
+
+  // Combine sample and user scores
+  const allScores: ScoreItem[] = [
+    ...sampleScores.map((s) => ({
+      id: s.id,
+      name: s.name,
+      path: s.path,
+      isUserScore: false,
+    })),
+    ...userScores.map((s) => ({
+      id: `user-${s.id}`,
+      name: s.name,
+      dbId: s.id,
+      isUserScore: true,
+    })),
+  ];
+
+  const handleScoreChange = useCallback(
+    async (scoreId: string) => {
+      setIsLoading(true);
+      setCurrentNotes([]);
+      setKeyboardRange(null);
+      setSelectedScoreId(scoreId);
+
+      if (!scoreId) {
+        setSelectedScore(null);
+        setSelectedScoreContent(null);
+        localStorage.removeItem("lastOpenedScoreId");
+        setIsLoading(false);
+        return;
+      }
+
+      // Find the score
+      const score = allScores.find((s) => s.id === scoreId);
+      if (!score) {
+        setIsLoading(false);
+        return;
+      }
+
+      // Save to localStorage
+      localStorage.setItem("lastOpenedScoreId", scoreId);
+
+      if (score.isUserScore && score.dbId) {
+        // Load from IndexedDB
+        try {
+          const storedScore = userScores.find((s) => s.id === score.dbId);
+          if (storedScore) {
+            setSelectedScoreContent(storedScore.xmlContent);
+            setSelectedScore(`indexeddb:${score.dbId}`);
+          } else {
+            setIsLoading(false);
+          }
+        } catch (error) {
+          console.error("Failed to load score from IndexedDB:", error);
+          alert("楽譜の読み込みに失敗しました");
+          setIsLoading(false);
+        }
+      } else if (score.path) {
+        // Load from public folder
+        setSelectedScore(score.path);
+        setSelectedScoreContent(null);
+      } else {
+        setIsLoading(false);
+      }
+    },
+    [allScores, userScores],
+  );
 
   useEffect(() => {
     const lastOpenedScoreId = localStorage.getItem("lastOpenedScoreId");
     const lastZoomLevel = localStorage.getItem("lastZoomLevel");
 
-    if (lastOpenedScoreId) {
-      const scoreToLoad = availableScores.find(
-        (score) => score.id === lastOpenedScoreId,
-      );
-      if (scoreToLoad) {
-        handleScoreChange(scoreToLoad.path);
+    // Only run once on mount and when userScores changes
+    if (lastOpenedScoreId && userScores.length >= 0) {
+      const scoreToLoad = allScores.find((s) => s.id === lastOpenedScoreId);
+      if (scoreToLoad && !selectedScoreId) {
+        handleScoreChange(lastOpenedScoreId);
       }
     }
 
@@ -83,7 +167,8 @@ export default function ScorePage() {
         setZoom(zoomValue);
       }
     }
-  }, [handleScoreChange]); // Add handleScoreChange to dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userScores.length]);
 
   const handleNotesChange = useCallback((notes: Note[]) => {
     console.log("handleNotesChange called with:", notes);
@@ -116,22 +201,115 @@ export default function ScorePage() {
     setZoom(presetZoom);
     localStorage.setItem("lastZoomLevel", presetZoom.toString());
 
-    // Hide cursor immediately before showing loading
     sheetMusicRef.current?.hideCursor();
-
-    setIsLoading(true); // Show loading indicator
-
-    // Wait for React to render the loading state
+    setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 50));
 
     try {
       await sheetMusicRef.current?.setZoom(presetZoom);
     } finally {
-      setIsLoading(false); // Hide loading indicator
-      // Show cursor after loading is complete
+      setIsLoading(false);
       sheetMusicRef.current?.showCursor();
     }
-    console.log("After setZoom, state will update on next render");
+  };
+
+  // Handle file upload
+  const handleFileUpload = async (file: File) => {
+    if (!file.name.endsWith(".musicxml") && !file.name.endsWith(".xml")) {
+      alert("MusicXMLファイル (.musicxml または .xml) を選択してください");
+      return;
+    }
+
+    try {
+      const content = await file.text();
+
+      if (!isValidMusicXML(content)) {
+        alert("無効なMusicXMLファイルです");
+        return;
+      }
+
+      // Extract name from filename (remove extension)
+      const name = file.name.replace(/\.(musicxml|xml)$/, "");
+
+      // Save to IndexedDB
+      const id = await saveScore(name, content);
+
+      // Reload user scores
+      const scores = await getAllScores();
+      setUserScores(scores);
+
+      // Auto-select the newly uploaded score
+      await handleScoreChange(`user-${id}`);
+
+      console.log("Score uploaded successfully:", name);
+    } catch (error) {
+      console.error("Failed to upload score:", error);
+      alert("楽譜のアップロードに失敗しました");
+    }
+  };
+
+  // Handle drag and drop
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      await handleFileUpload(files[0]);
+    }
+  };
+
+  // Handle file input change
+  const handleFileInputChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      await handleFileUpload(files[0]);
+    }
+    // Reset input value to allow selecting the same file again
+    e.target.value = "";
+  };
+
+  // Handle delete user score
+  const handleDeleteScore = async (dbId: number) => {
+    if (!confirm("この楽譜を削除しますか？")) {
+      return;
+    }
+
+    try {
+      await deleteScore(dbId);
+
+      // Reload user scores
+      const scores = await getAllScores();
+      setUserScores(scores);
+
+      // If deleted score was selected, clear selection
+      if (selectedScoreId === `user-${dbId}`) {
+        setSelectedScore(null);
+        setSelectedScoreContent(null);
+        setSelectedScoreId(null);
+        localStorage.removeItem("lastOpenedScoreId");
+      }
+
+      console.log("Score deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete score:", error);
+      alert("楽譜の削除に失敗しました");
+    }
   };
 
   return (
@@ -141,8 +319,54 @@ export default function ScorePage() {
         flexDirection: "column",
         height: "100vh",
         backgroundColor: "#ffffff",
+        position: "relative",
       }}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
+      {/* Drag and drop overlay */}
+      {isDragging && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(51, 224, 47, 0.2)",
+            border: "4px dashed #33e02f",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#fff",
+              padding: "30px 50px",
+              borderRadius: "10px",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#33e02f",
+            }}
+          >
+            📁 ここにMusicXMLファイルをドロップ
+          </div>
+        </div>
+      )}
+
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".musicxml,.xml"
+        onChange={handleFileInputChange}
+        style={{ display: "none" }}
+      />
       {/* ヘッダー */}
       <header
         style={{
@@ -172,31 +396,99 @@ export default function ScorePage() {
           flexWrap: "wrap",
         }}
       >
-        <div>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <label
             htmlFor="score-select"
-            style={{ marginRight: "10px", fontWeight: "bold" }}
+            style={{ fontWeight: "bold", whiteSpace: "nowrap" }}
           >
             楽譜:
           </label>
           <select
             id="score-select"
-            value={selectedScore || ""}
+            value={selectedScoreId || ""}
             onChange={(e) => handleScoreChange(e.target.value)}
             style={{
               padding: "8px 12px",
               fontSize: "16px",
               borderRadius: "4px",
               border: "1px solid #ccc",
+              minWidth: "200px",
             }}
           >
             <option value="">-- 選択してください --</option>
-            {availableScores.map((score) => (
-              <option key={score.id} value={score.path}>
-                {score.name}
-              </option>
-            ))}
+
+            {/* Sample scores section */}
+            {sampleScores.length > 0 && (
+              <>
+                <optgroup label="サンプル楽譜">
+                  {sampleScores.map((score) => (
+                    <option key={score.id} value={score.id}>
+                      {score.name}
+                    </option>
+                  ))}
+                </optgroup>
+              </>
+            )}
+
+            {/* User scores section */}
+            {userScores.length > 0 && (
+              <>
+                <optgroup label="マイ楽譜">
+                  {userScores.map((score) => (
+                    <option key={`user-${score.id}`} value={`user-${score.id}`}>
+                      {score.name}
+                    </option>
+                  ))}
+                </optgroup>
+              </>
+            )}
           </select>
+
+          {/* File selection button */}
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isLoading}
+            style={{
+              padding: "8px 16px",
+              fontSize: "16px",
+              borderRadius: "4px",
+              border: "1px solid #ccc",
+              backgroundColor: isLoading ? "#f0f0f0" : "#fff",
+              cursor: isLoading ? "not-allowed" : "pointer",
+              opacity: isLoading ? 0.5 : 1,
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+              whiteSpace: "nowrap",
+            }}
+            title="ファイルを選択してアップロード"
+          >
+            📁
+          </button>
+
+          {/* Delete button for user scores */}
+          {selectedScoreId?.startsWith("user-") && (
+            <button
+              onClick={() => {
+                const dbId = parseInt(selectedScoreId.replace("user-", ""));
+                handleDeleteScore(dbId);
+              }}
+              disabled={isLoading}
+              style={{
+                padding: "8px 16px",
+                fontSize: "16px",
+                borderRadius: "4px",
+                border: "1px solid #ff4444",
+                backgroundColor: isLoading ? "#f0f0f0" : "#fff",
+                color: "#ff4444",
+                cursor: isLoading ? "not-allowed" : "pointer",
+                opacity: isLoading ? 0.5 : 1,
+              }}
+              title="この楽譜を削除"
+            >
+              🗑️
+            </button>
+          )}
         </div>
 
         {selectedScore && (
@@ -341,10 +633,11 @@ export default function ScorePage() {
           <SheetMusic
             ref={sheetMusicRef}
             musicXmlPath={selectedScore}
+            musicXmlContent={selectedScoreContent || undefined}
             onNotesChange={handleNotesChange}
             onRangeChange={handleRangeChange}
-            onLoad={handleSheetMusicLoad} // Pass the onLoad handler
-            style={{ visibility: isLoading ? "hidden" : "visible" }} // Hide SheetMusic content while loading
+            onLoad={handleSheetMusicLoad}
+            style={{ visibility: isLoading ? "hidden" : "visible" }}
           />
         ) : (
           <div

@@ -48,7 +48,7 @@ const noteToMidi = (
   };
   const stepKey = typeof step === "string" ? step.toUpperCase() : String(step);
   const semitone = stepToSemitone[stepKey] || 0;
-  const safeAlter = typeof alter === 'number' ? alter : 0;
+  const safeAlter = typeof alter === "number" ? alter : 0;
   return (octave + 1) * 12 + semitone + safeAlter;
 };
 
@@ -75,14 +75,18 @@ const midiToNoteName = (midi: number): string => {
 
 // 黒鍵かどうか判定
 const isBlackKey = (midi: number): boolean => {
-  if (typeof midi !== 'number' || isNaN(midi)) {
+  if (typeof midi !== "number" || isNaN(midi)) {
     return false;
   }
   const semitone = midi % 12;
   return [1, 3, 6, 8, 10].includes(semitone);
 };
 
-export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboardProps) {
+export default function PianoKeyboard({
+  notes,
+  minMidi,
+  maxMidi,
+}: PianoKeyboardProps) {
   // 表示する鍵盤の範囲（デフォルト: C1-C7: MIDI 24-96）
   // If minMidi/maxMidi are provided but seem incorrect, use defaults
   let startMidi = 24;
@@ -100,7 +104,7 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
   const midiToStaffMap = new Map<number, number>();
   const midiToDisplayNameMap = new Map<number, string>();
   notes
-    .filter((note) => note.step && typeof note.octave === 'number')
+    .filter((note) => note.step && typeof note.octave === "number")
     .forEach((note) => {
       const midi = noteToMidi(note.step, note.octave, note.alter);
       if (note.staff !== undefined) {
@@ -111,6 +115,8 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
     });
 
   const highlightedMidis = Array.from(midiToStaffMap.keys());
+  console.log("PianoKeyboard - highlightedMidis:", highlightedMidis);
+  console.log("PianoKeyboard - midiToStaffMap:", Array.from(midiToStaffMap.entries()));
 
   // 白鍵の数を数える
   let whiteKeyCount = 0;
@@ -134,7 +140,7 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
     // staff 0 = 右手（緑色 #4CAF50）, staff 1 = 左手（濃い緑 #2E7D32）
     let whiteKeyColor = "#ffffff";
     if (isHighlighted) {
-      whiteKeyColor = staff === 1 ? "#2E7D32" : "#4CAF50";
+      whiteKeyColor = staff === 1 ? "#33e02f" : "#33e02f";
     }
 
     if (!isBlack) {
@@ -146,6 +152,7 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
             width: `${100 / whiteKeyCount}%`,
             height: "100%",
             backgroundColor: whiteKeyColor,
+            opacity: 0.6,
             border: "1px solid #333",
             boxSizing: "border-box",
             display: "flex",
@@ -153,7 +160,7 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
             justifyContent: "center",
             fontSize: "10px",
             paddingBottom: "5px",
-            color: isHighlighted ? "#fff" : "#999",
+            color: isHighlighted ? "#000" : "#999",
             fontWeight: isHighlighted ? "bold" : "normal",
             transition: "background-color 0.2s",
           }}
@@ -186,7 +193,7 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
     // staff 0 = 右手（青色 #2196F3）, staff 1 = 左手（濃い青 #1565C0）
     let blackKeyColor = "#000";
     if (isHighlighted) {
-      blackKeyColor = staff === 1 ? "#1565C0" : "#2196F3";
+      blackKeyColor = staff === 1 ? "#85EC82" : "#85EC82";
     }
 
     if (isBlack) {
@@ -201,15 +208,16 @@ export default function PianoKeyboard({ notes, minMidi, maxMidi }: PianoKeyboard
             width: `${(100 / whiteKeyCount) * 0.6}%`,
             height: "60%",
             backgroundColor: blackKeyColor,
+            opacity: 1,
             border: "1px solid #000",
             boxSizing: "border-box",
             zIndex: 1,
             display: "flex",
             alignItems: "flex-end",
             justifyContent: "center",
-            fontSize: "9px",
+            fontSize: "6px",
             paddingBottom: "5px",
-            color: "#fff",
+            color: "#000",
             fontWeight: isHighlighted ? "bold" : "normal",
             transition: "background-color 0.2s",
           }}

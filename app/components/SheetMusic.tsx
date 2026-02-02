@@ -11,6 +11,7 @@ import React from "react"; // Import React for React.CSSProperties
 
 interface SheetMusicProps {
   musicXmlPath: string;
+  musicXmlContent?: string; // Optional: direct XML content instead of path
   onNotesChange?: (
     notes: Array<{
       step: string;
@@ -21,7 +22,7 @@ interface SheetMusicProps {
   ) => void;
   onRangeChange?: (minMidi: number, maxMidi: number) => void;
   onLoad?: () => void;
-  style?: React.CSSProperties; // Added style prop
+  style?: React.CSSProperties;
 }
 
 export interface SheetMusicRef {
@@ -38,7 +39,17 @@ export interface SheetMusicRef {
 }
 
 const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
-  ({ musicXmlPath, onNotesChange, onRangeChange, onLoad, style }, ref) => { // Destructure style
+  (
+    {
+      musicXmlPath,
+      musicXmlContent,
+      onNotesChange,
+      onRangeChange,
+      onLoad,
+      style,
+    },
+    ref,
+  ) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const parentRef = useRef<HTMLDivElement>(null);
     const osmdRef = useRef<any>(null);
@@ -569,7 +580,16 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           }
 
           osmdRef.current = osmd;
-          await osmd.load(musicXmlPath);
+
+          // Load from either XML content or file path
+          if (musicXmlContent) {
+            // Load from direct XML content
+            await osmd.load(musicXmlContent);
+          } else {
+            // Load from file path
+            await osmd.load(musicXmlPath);
+          }
+
           if (!mounted) return;
 
           osmd.render();
@@ -697,11 +717,12 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               console.log("Raw range before adjustment:", minMidi, maxMidi);
 
               if (minMidi !== Infinity && maxMidi !== -Infinity) {
-                // Adjust minMidi to start from C (semitone 0)
+                // Adjust minMidi to start from C (semitone 0) and extend 1 octave lower
                 const minSemitone = minMidi % 12;
                 if (minSemitone !== 0) {
                   minMidi = minMidi - minSemitone;
                 }
+                minMidi = minMidi - 12; // Extend 1 octave lower
 
                 // Adjust maxMidi to end at B (semitone 11)
                 // Extend to include the highest note by finding the next B at or after maxMidi
@@ -754,7 +775,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         }
         osmdRef.current = null;
       };
-    }, [musicXmlPath, onNotesChange, onRangeChange, onLoad]);
+    }, [musicXmlPath, musicXmlContent, onNotesChange, onRangeChange, onLoad]);
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
       const rect = e.currentTarget.getBoundingClientRect();
