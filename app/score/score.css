@@ -3,17 +3,18 @@
 .osmdCursor {
   background-color: #33e02f !important;
   opacity: 0.5 !important;
-  width: 10px !important;
+  width: 20px !important;
   display: block !important;
   visibility: visible !important;
-  height: 265px !important;
-  aspect-ratio: none;
-  /* ← これが超重要 */
+  aspect-ratio: none !important;
+  /* ← これだけでは不十分 */
+  height: attr(height px) !important;
+  /* ← これは使えない（未対応） */
 }
 
 /* カーソルが確実に表示されるようにする */
 img.osmdCursor {
   background-color: #33e02f !important;
   opacity: 0.5 !important;
-  width: 10px !important;
+  width: 30px !important;
 }
