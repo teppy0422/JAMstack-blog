@@ -8,6 +8,7 @@ import {
   forwardRef,
 } from "react";
 import React from "react"; // Import React for React.CSSProperties
+import { isMusicTerm } from "../score/musicTerms";
 
 interface SheetMusicProps {
   musicXmlPath: string;
@@ -22,6 +23,7 @@ interface SheetMusicProps {
   ) => void;
   onRangeChange?: (minMidi: number, maxMidi: number) => void;
   onLoad?: () => void;
+  onMusicTermClick?: (term: string) => void; // Callback when a music term is clicked
   style?: React.CSSProperties;
   showChords?: boolean; // Whether to display chord symbols
 }
@@ -48,6 +50,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       onNotesChange,
       onRangeChange,
       onLoad,
+      onMusicTermClick,
       style,
       showChords = true,
     },
@@ -785,6 +788,98 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           }
 
           onNotesChange?.(getCurrentNotes());
+
+          // Add click handlers to music term text elements (vf-text) and clef elements (vf-clef)
+          // Use setTimeout to ensure OSMD has finished rendering all SVG elements
+          setTimeout(() => {
+            if (onMusicTermClick && containerRef.current) {
+              // Handle text elements (楽語)
+              const textElements = containerRef.current.querySelectorAll(".vf-text");
+              console.log("Found vf-text elements:", textElements.length);
+              textElements.forEach((element) => {
+                // Get text from the inner <text> element
+                const textEl = element.querySelector("text");
+                const text = textEl?.textContent?.trim() || element.textContent?.trim();
+                console.log("vf-text element text:", text);
+                // Only add click handler if the term exists in the dictionary
+                if (text && isMusicTerm(text)) {
+                  // For SVG elements, use setAttribute for styling
+                  element.setAttribute("style", "cursor: pointer;");
+                  element.classList.add("music-term-clickable");
+                  // Also style the inner text element
+                  if (textEl) {
+                    textEl.setAttribute("style", (textEl.getAttribute("style") || "") + "; cursor: pointer;");
+                  }
+                  element.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    console.log("Music term clicked:", text);
+                    onMusicTermClick(text);
+                  });
+                }
+              });
+
+              // Handle clef elements (音部記号)
+              const clefElements = containerRef.current.querySelectorAll(".vf-clef");
+              console.log("Found vf-clef elements:", clefElements.length);
+              clefElements.forEach((element) => {
+                const pathEl = element.querySelector("path");
+                if (pathEl) {
+                  const d = pathEl.getAttribute("d") || "";
+                  // Count M commands in the path
+                  const mCount = (d.match(/M/g) || []).length;
+
+                  let clefType: string;
+                  if (d.length > 5000) {
+                    // ト音記号: very long path (complex treble clef shape)
+                    clefType = "__treble-clef__";
+                  } else if (mCount >= 3) {
+                    // ヘ音記号: 3 M commands (body + 2 dots)
+                    clefType = "__bass-clef__";
+                  } else {
+                    // ハ音記号: everything else
+                    clefType = "__alto-clef__";
+                  }
+
+                  console.log("Clef detected:", clefType, "d.length:", d.length, "mCount:", mCount);
+
+                  // Get bounding box for rectangular click area
+                  const bbox = (element as SVGGraphicsElement).getBBox();
+
+                  // Create a transparent rectangle overlay for easier clicking
+                  const svgNS = "http://www.w3.org/2000/svg";
+                  const rectOverlay = document.createElementNS(svgNS, "rect");
+                  rectOverlay.setAttribute("x", String(bbox.x));
+                  rectOverlay.setAttribute("y", String(bbox.y));
+                  rectOverlay.setAttribute("width", String(bbox.width));
+                  rectOverlay.setAttribute("height", String(bbox.height));
+                  rectOverlay.setAttribute("fill", "transparent");
+                  rectOverlay.setAttribute("style", "cursor: pointer;");
+
+                  // Add click handler to the rectangle overlay
+                  rectOverlay.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    console.log("Clef clicked:", clefType);
+                    onMusicTermClick(clefType);
+                  });
+
+                  // Add hover effect to change path fill color
+                  rectOverlay.addEventListener("mouseenter", () => {
+                    pathEl.style.fill = "#4CAF50";
+                  });
+                  rectOverlay.addEventListener("mouseleave", () => {
+                    pathEl.style.fill = "";
+                  });
+
+                  // Append the rectangle to the clef group
+                  element.appendChild(rectOverlay);
+
+                  // Also keep cursor style on original element for visual feedback
+                  element.setAttribute("style", "cursor: pointer;");
+                }
+              });
+            }
+          }, 200);
+
           setIsLoading(false);
           onLoad?.(); // Call onLoad when loading and rendering are complete
         } catch (err) {
@@ -819,7 +914,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         }
         osmdRef.current = null;
       };
-    }, [musicXmlPath, musicXmlContent, onNotesChange, onRangeChange, onLoad]);
+    }, [musicXmlPath, musicXmlContent, onNotesChange, onRangeChange, onLoad, onMusicTermClick, showChords]);
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
       const rect = e.currentTarget.getBoundingClientRect();
@@ -870,7 +965,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         )}
         <div
           ref={containerRef}
-          style={{ width: "100%", height: "100%", cursor: "pointer" }}
+          style={{ width: "100%", height: "100%" }}
           onClick={handleClick}
         />
       </div>

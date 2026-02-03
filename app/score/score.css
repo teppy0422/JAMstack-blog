@@ -65,36 +65,6 @@ img.osmdCursor {
   }
 }
 
-/* スケルトン表示テキスト */
-.skeleton-text {
-  color: #e0e0e0;
-  /* Gray background */
-  /* color: transparent; */
-  /* Hide actual text */
-  border-radius: 4px;
-  width: 120px;
-  /* Approximate width for "Loading..." */
-  height: 1.2em;
-  /* Approximate height for text */
-  animation: pulse 1.5s infinite ease-in-out;
-  margin-top: 20px;
-  /* Keep spacing from hippos */
-  font-size: 1.2em;
-  /* Match original font size */
-}
-
-@keyframes pulse {
-
-  0%,
-  100% {
-    color: #000000;
-  }
-
-  50% {
-    color: #505050;
-  }
-}
-
 /* 印刷用スタイル */
 @media print {
   /* ヘッダー、コントロール、フッター（鍵盤）を非表示 */
@@ -119,4 +89,22 @@ img.osmdCursor {
   .osmdCursor {
     display: none !important;
   }
+}
+
+/* 楽語クリック可能スタイル */
+.music-term-clickable {
+  cursor: pointer !important;
+  transition: stroke 0.2s ease;
+}
+
+.music-term-clickable:hover {
+  stroke: #4CAF50 !important;
+  stroke-width: 1px !important;
+}
+
+/* 子要素のpath, textにもstrokeを適用 */
+.music-term-clickable:hover path,
+.music-term-clickable:hover text {
+  stroke: #4CAF50 !important;
+  stroke-width: 0.5px !important;
 }

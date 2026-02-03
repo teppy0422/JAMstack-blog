@@ -1,0 +1,475 @@
+/**
+ * 楽語辞書
+ * 楽譜に表示される音楽用語とその意味を定義
+ * 追加・編集はこのファイルを修正してください
+ */
+
+export interface MusicTerm {
+  term: string; // 楽語（大文字小文字を区別しない）
+  name?: string; // 表示名（termと異なる場合に使用）
+  meaning: string; // 日本語での意味
+  description?: string; // 詳細な説明（任意）
+}
+
+export const musicTerms: MusicTerm[] = [
+  // テンポ記号
+  {
+    term: "pp",
+    name: "pianissimo",
+    meaning: "とても弱く",
+    description: "息をひそめて話すような、ほとんど消え入りそうな音量",
+  },
+  {
+    term: "p",
+    name: "piano",
+    meaning: "弱く",
+    description: "落ち着いて静かに話すような控えめな音量",
+  },
+  {
+    term: "mp",
+    name: "mezzo piano",
+    meaning: "やや弱く",
+    description: "控えめだがはっきり聞こえる、丁寧に話すような音量",
+  },
+  {
+    term: "mf",
+    name: "mezzo forte",
+    meaning: "ふつうに強く",
+    description: "強すぎず弱すぎない、地声で堂々と話すような自然な音量",
+  },
+  {
+    term: "f",
+    name: "forte",
+    meaning: "強く",
+    description: "感情を込めてはっきり主張するような力のある音量",
+  },
+  {
+    term: "ff",
+    name: "fortissimo",
+    meaning: "とても強く",
+    description: "叫ぶ一歩手前のような、最大限に迫力のある音量",
+  },
+  {
+    term: "sfz",
+    name: "sforzando",
+    meaning: "鋭く強く",
+    description: "一瞬だけ強くアクセントをつける、強調された音量",
+  },
+  {
+    term: "cresc.",
+    name: "crescendo",
+    meaning: "だんだん強く",
+    description: "徐々に声を大きくしていくように音量を上げていく",
+  },
+  {
+    term: "dim.",
+    name: "diminuendo",
+    meaning: "だんだん弱く",
+    description: "徐々に声を落としていくように音量を下げていく",
+  },
+  {
+    term: "decresc.",
+    name: "decrescendo",
+    meaning: "だんだん弱く",
+    description: "音をフェードアウトさせるように少しずつ弱めていく",
+  },
+  {
+    term: "meno mosso",
+    name: "meno mosso",
+    meaning: "少し遅く",
+    description: "それまでのテンポより動きを抑え、落ち着いた速さにする指示",
+  },
+  {
+    term: "Andante",
+    meaning: "歩くような速さで",
+    description: "♩= 76-108 程度。落ち着いた歩行のテンポ。",
+  },
+  {
+    term: "Allegro",
+    meaning: "速く、快活に",
+    description: "♩= 120-168 程度。明るく軽快なテンポ。",
+  },
+  {
+    term: "Adagio",
+    meaning: "ゆっくりと",
+    description: "♩= 66-76 程度。ゆったりとした静かなテンポ。",
+  },
+  {
+    term: "Largo",
+    meaning: "幅広く、ゆるやかに",
+    description: "♩= 40-60 程度。非常にゆっくりとした荘厳なテンポ。",
+  },
+  {
+    term: "Lento",
+    meaning: "遅く",
+    description: "♩= 45-60 程度。ゆっくりとしたテンポ。",
+  },
+  {
+    term: "Moderato",
+    meaning: "中くらいの速さで",
+    description: "♩= 108-120 程度。適度な速さ。",
+  },
+  {
+    term: "Presto",
+    meaning: "非常に速く",
+    description: "♩= 168-200 程度。とても速いテンポ。",
+  },
+  {
+    term: "Vivace",
+    meaning: "活発に、生き生きと",
+    description: "♩= 140-176 程度。元気よく快活に。",
+  },
+  {
+    term: "Grave",
+    meaning: "重々しく、荘厳に",
+    description: "♩= 25-45 程度。非常にゆっくりで重厚なテンポ。",
+  },
+  {
+    term: "Andantino",
+    meaning: "Andanteよりやや速く",
+    description: "Andanteより少し速めのテンポ。",
+  },
+  {
+    term: "Allegretto",
+    meaning: "やや速く",
+    description: "Allegroより少し遅めの、軽やかなテンポ。",
+  },
+
+  // 強弱記号
+  {
+    term: "piano",
+    meaning: "弱く",
+    description: "p と表記。静かに、柔らかく演奏する。",
+  },
+  {
+    term: "forte",
+    meaning: "強く",
+    description: "f と表記。力強く、大きな音で演奏する。",
+  },
+  {
+    term: "mezzo piano",
+    meaning: "やや弱く",
+    description: "mp と表記。pianoより少し強く。",
+  },
+  {
+    term: "mezzo forte",
+    meaning: "やや強く",
+    description: "mf と表記。forteより少し弱く。",
+  },
+  {
+    term: "pianissimo",
+    meaning: "非常に弱く",
+    description: "pp と表記。とても静かに演奏する。",
+  },
+  {
+    term: "fortissimo",
+    meaning: "非常に強く",
+    description: "ff と表記。とても力強く演奏する。",
+  },
+  {
+    term: "crescendo",
+    meaning: "だんだん強く",
+    description: "cresc. と表記。徐々に音量を上げていく。",
+  },
+  {
+    term: "decrescendo",
+    meaning: "だんだん弱く",
+    description: "decresc. と表記。徐々に音量を下げていく。",
+  },
+  {
+    term: "diminuendo",
+    meaning: "だんだん弱く",
+    description: "dim. と表記。decrescendoと同じ意味。",
+  },
+
+  // 速度変化
+  {
+    term: "ritardando",
+    meaning: "だんだん遅く",
+    description: "rit. と表記。徐々にテンポを落としていく。",
+  },
+  {
+    term: "rallentando",
+    meaning: "だんだん遅く",
+    description: "rall. と表記。ritardandoと同じ意味。",
+  },
+  {
+    term: "accelerando",
+    meaning: "だんだん速く",
+    description: "accel. と表記。徐々にテンポを上げていく。",
+  },
+  {
+    term: "a tempo",
+    meaning: "元の速さで",
+    description: "テンポが変化した後、元のテンポに戻る。",
+  },
+  {
+    term: "rubato",
+    meaning: "テンポを自由に",
+    description:
+      "tempo rubatoとも。テンポを自由に伸縮させて表現豊かに演奏する。",
+  },
+  {
+    term: "fermata",
+    meaning: "延長記号",
+    description: "音符や休符を適度に延ばす。",
+  },
+
+  // 表現記号
+  {
+    term: "dolce",
+    meaning: "甘く、柔らかく",
+    description: "優しく甘美な表現で演奏する。",
+  },
+  {
+    term: "espressivo",
+    meaning: "表情豊かに",
+    description: "espr. と表記。感情を込めて表現豊かに。",
+  },
+  {
+    term: "cantabile",
+    meaning: "歌うように",
+    description: "旋律を歌うように美しく演奏する。",
+  },
+  {
+    term: "legato",
+    meaning: "なめらかに",
+    description: "音を切れ目なくつなげて演奏する。",
+  },
+  {
+    term: "staccato",
+    meaning: "短く切って",
+    description: "音を短く切り離して演奏する。",
+  },
+  {
+    term: "tenuto",
+    meaning: "音を保って",
+    description: "ten. と表記。音の長さを十分に保って演奏する。",
+  },
+  {
+    term: "marcato",
+    meaning: "はっきりと",
+    description: "marc. と表記。一音一音をはっきり強調して。",
+  },
+  {
+    term: "sforzando",
+    meaning: "特に強く",
+    description: "sfz, sf と表記。その音を突然強く演奏する。",
+  },
+  {
+    term: "con brio",
+    meaning: "生き生きと",
+    description: "活気を持って、精力的に演奏する。",
+  },
+  {
+    term: "con fuoco",
+    meaning: "火のように、情熱的に",
+    description: "熱烈に、激しく演奏する。",
+  },
+  {
+    term: "con moto",
+    meaning: "動きをつけて",
+    description: "テンポに動きを持たせて演奏する。",
+  },
+  {
+    term: "grazioso",
+    meaning: "優雅に",
+    description: "上品で優美な表現で演奏する。",
+  },
+  {
+    term: "maestoso",
+    meaning: "荘厳に、威厳をもって",
+    description: "堂々とした雄大な表現で演奏する。",
+  },
+  {
+    term: "pesante",
+    meaning: "重々しく",
+    description: "重い感じで、力強く演奏する。",
+  },
+  {
+    term: "leggiero",
+    meaning: "軽く",
+    description: "legg. と表記。軽やかに、繊細に演奏する。",
+  },
+  {
+    term: "tranquillo",
+    meaning: "静かに、穏やかに",
+    description: "落ち着いた穏やかな表現で演奏する。",
+  },
+  {
+    term: "agitato",
+    meaning: "激しく、興奮して",
+    description: "興奮した、動揺した感じで演奏する。",
+  },
+  {
+    term: "animato",
+    meaning: "生き生きと、活気をもって",
+    description: "元気よく活発に演奏する。",
+  },
+  {
+    term: "appassionato",
+    meaning: "熱情的に",
+    description: "情熱を込めて感情豊かに演奏する。",
+  },
+
+  // その他
+  {
+    term: "Zart",
+    meaning: "優しく、繊細に",
+    description:
+      "ドイツ語。弱々しいだけでなく、愛おしさを込めた「柔らかさ」や「上品さ」を伴う表現。",
+  },
+  {
+    term: "cresc",
+    meaning: "だんだん強く",
+    description:
+      "音のエネルギーを徐々に高め、盛り上がりや広がりを作っていく表現。",
+  },
+  {
+    term: "Da Capo",
+    meaning: "曲の最初から",
+    description: "D.C. と表記。曲の冒頭に戻って演奏する。",
+  },
+  {
+    term: "Dal Segno",
+    meaning: "記号から",
+    description: "D.S. と表記。セーニョ記号（𝄋）から演奏する。",
+  },
+  {
+    term: "Fine",
+    meaning: "終わり",
+    description: "曲の終わりを示す。D.C.やD.S.と組み合わせて使用。",
+  },
+  {
+    term: "Coda",
+    meaning: "終結部",
+    description: "曲の終わりに付け加えられる部分。",
+  },
+  {
+    term: "simile",
+    meaning: "同様に",
+    description: "直前と同じ奏法・表現で続ける。",
+  },
+  {
+    term: "sempre",
+    meaning: "常に",
+    description: "指示された表現をずっと続ける。",
+  },
+  {
+    term: "poco",
+    meaning: "少し",
+    description: "poco a poco = 少しずつ。",
+  },
+  {
+    term: "molto",
+    meaning: "非常に、とても",
+    description: "molto espressivo = 非常に表情豊かに。",
+  },
+  {
+    term: "più",
+    meaning: "より、もっと",
+    description: "più forte = より強く。",
+  },
+  {
+    term: "meno",
+    meaning: "より少なく",
+    description: "meno mosso = より遅く。",
+  },
+  {
+    term: "subito",
+    meaning: "突然に",
+    description: "subito piano = 突然弱く。",
+  },
+  {
+    term: "attacca",
+    meaning: "続けて",
+    description: "休まずに次の楽章や曲に続ける。",
+  },
+  {
+    term: "tacet",
+    meaning: "休み",
+    description: "その楽章または曲の間、演奏しない。",
+  },
+  {
+    term: "ossia",
+    meaning: "または",
+    description: "別の演奏方法を示す。",
+  },
+  {
+    term: "8va",
+    meaning: "1オクターブ高く",
+    description: "ottava alta。記譜より1オクターブ高く演奏。",
+  },
+  {
+    term: "8vb",
+    meaning: "1オクターブ低く",
+    description: "ottava bassa。記譜より1オクターブ低く演奏。",
+  },
+  {
+    term: "con pedale",
+    meaning: "ペダルを使って",
+    description: "ped. と表記。ピアノのダンパーペダルを使用する。",
+  },
+  {
+    term: "senza pedale",
+    meaning: "ペダルなしで",
+    description: "ペダルを使わずに演奏する。",
+  },
+  {
+    term: "una corda",
+    meaning: "弱音ペダルで",
+    description: "ピアノの左ペダル（ソフトペダル）を使用する。",
+  },
+  {
+    term: "tre corde",
+    meaning: "弱音ペダルを離して",
+    description: "una cordaの指示を解除する。",
+  },
+
+  // 音部記号（内部識別子）
+  {
+    term: "__treble-clef__",
+    name: "ト音記号",
+    meaning: "G clef（高音部記号）",
+    description:
+      "第2線がG（ソ）の音を示す。ピアノの右手、ヴァイオリン、フルートなど高音域の楽器で使用される。",
+  },
+  {
+    term: "__bass-clef__",
+    name: "ヘ音記号",
+    meaning: "F clef（低音部記号）",
+    description:
+      "第4線がF（ファ）の音を示す。ピアノの左手、チェロ、コントラバス、ファゴットなど低音域の楽器で使用される。",
+  },
+  {
+    term: "__alto-clef__",
+    name: "ハ音記号",
+    meaning: "C clef（中音部記号）",
+    description:
+      "中央の線がC（ド）の音を示す。ヴィオラ（アルト記号）、チェロやファゴットの高音域（テノール記号）で使用される。",
+  },
+];
+
+/**
+ * テキストを正規化する（小文字化、トリム、末尾のピリオド除去）
+ */
+function normalizeTermText(text: string): string {
+  return text.toLowerCase().trim().replace(/\.+$/, "");
+}
+
+/**
+ * 楽語を検索する（大文字小文字を区別しない、末尾のピリオドも無視）
+ */
+export function findMusicTerm(text: string): MusicTerm | undefined {
+  const normalizedText = normalizeTermText(text);
+  return musicTerms.find(
+    (term) => normalizeTermText(term.term) === normalizedText,
+  );
+}
+
+/**
+ * テキストが楽語辞書に存在するかチェック
+ */
+export function isMusicTerm(text: string): boolean {
+  return findMusicTerm(text) !== undefined;
+}

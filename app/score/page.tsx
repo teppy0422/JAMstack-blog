@@ -11,6 +11,8 @@ import {
   isValidMusicXML,
   type StoredScore,
 } from "../lib/scoreDB";
+import { famousSayings } from "./famousSayings";
+import { findMusicTerm, type MusicTerm } from "./musicTerms";
 
 const sampleScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
@@ -72,6 +74,11 @@ export default function ScorePage() {
     string | null
   >(null);
   const [showChords, setShowChords] = useState(false);
+  const [currentQuote, setCurrentQuote] = useState<{
+    quote: string;
+    author: string;
+  } | null>(null);
+  const [musicTermModal, setMusicTermModal] = useState<MusicTerm | null>(null);
   const sheetMusicRef = useRef<SheetMusicRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -107,6 +114,8 @@ export default function ScorePage() {
   const handleScoreChange = useCallback(
     async (scoreId: string) => {
       setIsLoading(true);
+      const randomIndex = Math.floor(Math.random() * famousSayings.length);
+      setCurrentQuote(famousSayings[randomIndex]);
       setCurrentNotes([]);
       setKeyboardRange(null);
       setSelectedScoreId(scoreId);
@@ -339,6 +348,14 @@ export default function ScorePage() {
       alert("楽譜の削除に失敗しました");
     }
   };
+
+  // Handle music term click
+  const handleMusicTermClick = useCallback((term: string) => {
+    const foundTerm = findMusicTerm(term);
+    if (foundTerm) {
+      setMusicTermModal(foundTerm);
+    }
+  }, []);
 
   // Handle chord visibility toggle
   const handleChordToggle = async () => {
@@ -744,7 +761,36 @@ export default function ScorePage() {
                 className="loading-hippo hippo-3"
               />
             </div>
-            <p className="skeleton-text">Loading...</p>
+            {currentQuote && (
+              <div
+                style={{
+                  textAlign: "center",
+                  marginTop: "20px",
+                  padding: "0 20px",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: "1.1em",
+                    color: "#555",
+                    margin: 0,
+                    whiteSpace: "pre-wrap",
+                  }}
+                >
+                  {currentQuote.quote}
+                </p>
+                <p
+                  style={{
+                    fontSize: "0.9em",
+                    color: "#777",
+                    fontStyle: "italic",
+                    marginTop: "8px",
+                  }}
+                >
+                  – {currentQuote.author}
+                </p>
+              </div>
+            )}
           </div>
         )}
         {selectedScore ? (
@@ -755,6 +801,7 @@ export default function ScorePage() {
             onNotesChange={handleNotesChange}
             onRangeChange={handleRangeChange}
             onLoad={handleSheetMusicLoad}
+            onMusicTermClick={handleMusicTermClick}
             style={{ visibility: isLoading ? "hidden" : "visible" }}
             showChords={showChords}
           />
@@ -805,6 +852,89 @@ export default function ScorePage() {
           </div>
         )}
       </footer>
+
+      {/* 楽語説明モーダル */}
+      {musicTermModal && (
+        <div
+          className="music-term-modal-overlay"
+          onClick={() => setMusicTermModal(null)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            className="music-term-modal"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: "12px",
+              padding: "24px",
+              maxWidth: "400px",
+              width: "90%",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            <h3
+              style={{
+                margin: "0 0 12px 0",
+                fontSize: "24px",
+                color: "#333",
+                borderBottom: "2px solid #4CAF50",
+                paddingBottom: "8px",
+              }}
+            >
+              {musicTermModal.name || musicTermModal.term}
+            </h3>
+            <p
+              style={{
+                margin: "0 0 8px 0",
+                fontSize: "18px",
+                fontWeight: "bold",
+                color: "#4CAF50",
+              }}
+            >
+              {musicTermModal.meaning}
+            </p>
+            {musicTermModal.description && (
+              <p
+                style={{
+                  margin: "0",
+                  fontSize: "14px",
+                  color: "#666",
+                  lineHeight: "1.6",
+                }}
+              >
+                {musicTermModal.description}
+              </p>
+            )}
+            <button
+              onClick={() => setMusicTermModal(null)}
+              style={{
+                marginTop: "16px",
+                padding: "8px 24px",
+                fontSize: "14px",
+                borderRadius: "6px",
+                border: "none",
+                backgroundColor: "#4CAF50",
+                color: "#fff",
+                cursor: "pointer",
+                width: "100%",
+              }}
+            >
+              閉じる
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
