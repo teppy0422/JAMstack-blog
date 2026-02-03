@@ -195,7 +195,15 @@ export default function ScorePage() {
     setKeyboardRange({ min: minMidi, max: maxMidi });
   }, []);
 
-  const handleSheetMusicLoad = useCallback(() => {
+  const handleSheetMusicLoad = useCallback(async () => {
+    // Apply cached zoom level after sheet music loads
+    const cachedZoom = localStorage.getItem("lastZoomLevel");
+    if (cachedZoom) {
+      const zoomValue = parseFloat(cachedZoom);
+      if (!isNaN(zoomValue) && zoomValue !== 1.0 && zoomValue >= 0.5 && zoomValue <= 1.75) {
+        await sheetMusicRef.current?.setZoom(zoomValue);
+      }
+    }
     setIsLoading(false); // Set loading to false when SheetMusic reports it's done
   }, []);
 
@@ -483,7 +491,7 @@ export default function ScorePage() {
             onClick={() => fileInputRef.current?.click()}
             disabled={isLoading}
             style={{
-              padding: "8px 16px",
+              padding: "6px 14px",
               fontSize: "16px",
               borderRadius: "4px",
               border: "1px solid #ccc",
@@ -615,7 +623,7 @@ export default function ScorePage() {
                   }}
                   title="印刷 / PDF保存"
                 >
-                  🖨️ 印刷
+                  🖨️
                 </button>
               </>
             )}
@@ -742,9 +750,7 @@ export default function ScorePage() {
               height: "100%",
               color: "#666",
             }}
-          >
-            楽譜を選択してください
-          </div>
+          ></div>
         )}
       </main>
 
