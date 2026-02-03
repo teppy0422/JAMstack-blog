@@ -344,7 +344,15 @@ export default function ScorePage() {
     const newShowChords = !showChords;
     setShowChords(newShowChords);
     localStorage.setItem("lastShowChords", newShowChords.toString());
-    await sheetMusicRef.current?.setChordVisibility(newShowChords);
+
+    setIsLoading(true);
+    sheetMusicRef.current?.hideCursor();
+    try {
+      await sheetMusicRef.current?.setChordVisibility(newShowChords);
+    } finally {
+      setIsLoading(false);
+      sheetMusicRef.current?.showCursor();
+    }
   };
 
   // Handle print
