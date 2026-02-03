@@ -349,6 +349,10 @@ export default function ScorePage() {
     sheetMusicRef.current?.hideCursor();
     try {
       await sheetMusicRef.current?.setChordVisibility(newShowChords);
+      // Re-apply zoom after chord visibility change (which reloads the MusicXML)
+      if (zoom !== 1.0) {
+        await sheetMusicRef.current?.setZoom(zoom);
+      }
     } finally {
       setIsLoading(false);
       sheetMusicRef.current?.showCursor();
