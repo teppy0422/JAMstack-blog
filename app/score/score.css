@@ -94,3 +94,29 @@ img.osmdCursor {
     color: #505050;
   }
 }
+
+/* 印刷用スタイル */
+@media print {
+  /* ヘッダー、コントロール、フッター（鍵盤）を非表示 */
+  .no-print {
+    display: none !important;
+  }
+
+  /* 楽譜エリアを印刷用に最適化 */
+  main {
+    overflow: visible !important;
+    height: auto !important;
+    flex: none !important;
+  }
+
+  /* ページ全体のレイアウト調整 */
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* カーソルを非表示 */
+  .osmdCursor {
+    display: none !important;
+  }
+}

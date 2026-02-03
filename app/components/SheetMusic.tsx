@@ -23,6 +23,7 @@ interface SheetMusicProps {
   onRangeChange?: (minMidi: number, maxMidi: number) => void;
   onLoad?: () => void;
   style?: React.CSSProperties;
+  showChords?: boolean; // Whether to display chord symbols
 }
 
 export interface SheetMusicRef {
@@ -36,6 +37,7 @@ export interface SheetMusicRef {
     x: number,
     y: number,
   ) => Array<{ step: string; octave: number; alter: number; staff?: number }>;
+  setChordVisibility: (visible: boolean) => Promise<void>;
 }
 
 const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
@@ -47,6 +49,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       onRangeChange,
       onLoad,
       style,
+      showChords = true,
     },
     ref,
   ) => {
@@ -552,6 +555,47 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         }
       },
       getNotesAtPosition,
+      setChordVisibility: async (visible: boolean) => {
+        console.log("setChordVisibility called with:", visible);
+        if (osmdRef.current) {
+          // Set the rule before re-rendering
+          if (osmdRef.current.EngravingRules) {
+            osmdRef.current.EngravingRules.RenderChordSymbols = visible;
+            console.log("RenderChordSymbols set to:", visible);
+          }
+
+          // Need to reload the music XML for chord visibility changes to take effect
+          try {
+            if (musicXmlContent) {
+              await osmdRef.current.load(musicXmlContent);
+            } else if (musicXmlPath) {
+              await osmdRef.current.load(musicXmlPath);
+            }
+
+            osmdRef.current.render();
+
+            // Re-apply cursor styles after render
+            setTimeout(() => {
+              console.log("Chord visibility changed, render complete");
+              if (osmdRef.current?.cursor) {
+                osmdRef.current.cursor.show();
+                osmdRef.current.cursor.reset();
+                const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+                if (cursorElement) {
+                  cursorElement.classList.add("osmdCursor");
+                  cursorElement.style.backgroundColor = "#33e02f";
+                  cursorElement.style.opacity = "0.5";
+                  cursorElement.style.width = "10px";
+                  cursorElement.style.display = "block";
+                  cursorElement.style.visibility = "visible";
+                }
+              }
+            }, 100);
+          } catch (error) {
+            console.error("Error reloading for chord visibility:", error);
+          }
+        }
+      },
     }));
 
     useEffect(() => {
@@ -574,9 +618,9 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             followCursor: true, // Auto-scroll when cursor moves to new system
           });
 
-          // Enable chord symbols BEFORE loading the MusicXML
+          // Enable/disable chord symbols BEFORE loading the MusicXML
           if (osmd.EngravingRules) {
-            osmd.EngravingRules.RenderChordSymbols = true;
+            osmd.EngravingRules.RenderChordSymbols = showChords;
           }
 
           osmdRef.current = osmd;

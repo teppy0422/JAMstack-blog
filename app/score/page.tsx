@@ -30,6 +30,11 @@ const sampleScores = [
     path: "/scores/summer-jiu-shi-rang.musicxml",
   },
   {
+    id: "summer-chords",
+    name: "summer (コード付き)",
+    path: "/scores/summer-jiu-shi-rang-with-chords.musicxml",
+  },
+  {
     id: "sample",
     name: "sample",
     path: "/scores/BrahWiMeSample.musicxml",
@@ -66,6 +71,7 @@ export default function ScorePage() {
   const [selectedScoreContent, setSelectedScoreContent] = useState<
     string | null
   >(null);
+  const [showChords, setShowChords] = useState(false);
   const sheetMusicRef = useRef<SheetMusicRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -104,6 +110,10 @@ export default function ScorePage() {
       setCurrentNotes([]);
       setKeyboardRange(null);
       setSelectedScoreId(scoreId);
+      // Restore chord visibility from cache
+      const cachedShowChords =
+        localStorage.getItem("lastShowChords") === "true";
+      setShowChords(cachedShowChords);
 
       if (!scoreId) {
         setSelectedScore(null);
@@ -152,6 +162,7 @@ export default function ScorePage() {
   useEffect(() => {
     const lastOpenedScoreId = localStorage.getItem("lastOpenedScoreId");
     const lastZoomLevel = localStorage.getItem("lastZoomLevel");
+    const lastShowChords = localStorage.getItem("lastShowChords");
 
     // Only run once on mount and when userScores changes
     if (lastOpenedScoreId && userScores.length >= 0) {
@@ -166,6 +177,10 @@ export default function ScorePage() {
       if (!isNaN(zoomValue) && zoomValue >= 0.5 && zoomValue <= 1.75) {
         setZoom(zoomValue);
       }
+    }
+
+    if (lastShowChords === "true") {
+      setShowChords(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userScores.length]);
@@ -312,6 +327,23 @@ export default function ScorePage() {
     }
   };
 
+  // Handle chord visibility toggle
+  const handleChordToggle = async () => {
+    if (!selectedScoreId) {
+      return;
+    }
+
+    const newShowChords = !showChords;
+    setShowChords(newShowChords);
+    localStorage.setItem("lastShowChords", newShowChords.toString());
+    await sheetMusicRef.current?.setChordVisibility(newShowChords);
+  };
+
+  // Handle print
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div
       style={{
@@ -369,6 +401,7 @@ export default function ScorePage() {
       />
       {/* ヘッダー */}
       <header
+        className="no-print"
         style={{
           padding: "15px 20px",
           borderBottom: "1px solid #ddd",
@@ -387,6 +420,7 @@ export default function ScorePage() {
 
       {/* コントロール部分 */}
       <div
+        className="no-print"
         style={{
           padding: "15px 20px",
           borderBottom: "1px solid #ddd",
@@ -527,6 +561,65 @@ export default function ScorePage() {
                 </button>
               ))}
             </div>
+
+            {/* Chord toggle button - for all scores */}
+            {selectedScoreId && (
+              <>
+                <div
+                  style={{
+                    width: "1px",
+                    height: "24px",
+                    backgroundColor: "#ccc",
+                    margin: "0 5px",
+                  }}
+                />
+                <button
+                  onClick={handleChordToggle}
+                  disabled={isLoading}
+                  style={{
+                    padding: "8px 12px",
+                    fontSize: "14px",
+                    borderRadius: "4px",
+                    border: showChords ? "2px solid #4CAF50" : "1px solid #ccc",
+                    backgroundColor: showChords
+                      ? "#e8f5e9"
+                      : isLoading
+                        ? "#f0f0f0"
+                        : "#fff",
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    opacity: isLoading ? 0.5 : 1,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    whiteSpace: "nowrap",
+                  }}
+                  title={showChords ? "コード非表示" : "コード表示"}
+                >
+                  {showChords ? "🎵 コード ON" : "🎵 コード OFF"}
+                </button>
+                <button
+                  onClick={handlePrint}
+                  disabled={isLoading}
+                  style={{
+                    padding: "8px 12px",
+                    fontSize: "14px",
+                    borderRadius: "4px",
+                    border: "1px solid #ccc",
+                    backgroundColor: isLoading ? "#f0f0f0" : "#fff",
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    opacity: isLoading ? 0.5 : 1,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    whiteSpace: "nowrap",
+                  }}
+                  title="印刷 / PDF保存"
+                >
+                  🖨️ 印刷
+                </button>
+              </>
+            )}
+
             <div
               style={{
                 width: "1px",
@@ -638,6 +731,7 @@ export default function ScorePage() {
             onRangeChange={handleRangeChange}
             onLoad={handleSheetMusicLoad}
             style={{ visibility: isLoading ? "hidden" : "visible" }}
+            showChords={showChords}
           />
         ) : (
           <div
@@ -656,6 +750,7 @@ export default function ScorePage() {
 
       {/* 鍵盤ガイド表示エリア */}
       <footer
+        className="no-print"
         style={{
           height: "20vh",
           minHeight: "120px",

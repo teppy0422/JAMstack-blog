@@ -6,6 +6,7 @@ export interface StoredScore {
   xmlContent: string;
   timestamp: number;
   fileSize: number;
+  hasChords?: boolean; // Flag indicating if chords have been added
 }
 
 const DB_NAME = "ScoreDB";
@@ -112,4 +113,43 @@ export function isValidMusicXML(content: string): boolean {
   const hasMusicXMLTag =
     content.includes("<score-partwise") || content.includes("<score-timewise");
   return hasXMLDeclaration && hasMusicXMLTag;
+}
+
+// Update a score's XML content (for adding chords)
+export async function updateScoreContent(
+  id: number,
+  xmlContent: string,
+  hasChords: boolean = false,
+): Promise<void> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+
+    // First get the existing score
+    const getRequest = store.get(id);
+
+    getRequest.onsuccess = () => {
+      const existingScore = getRequest.result as StoredScore;
+      if (!existingScore) {
+        reject(new Error("Score not found"));
+        return;
+      }
+
+      // Update the score
+      const updatedScore: StoredScore = {
+        ...existingScore,
+        xmlContent,
+        fileSize: new Blob([xmlContent]).size,
+        hasChords,
+      };
+
+      const putRequest = store.put(updatedScore);
+      putRequest.onsuccess = () => resolve();
+      putRequest.onerror = () => reject(putRequest.error);
+    };
+
+    getRequest.onerror = () => reject(getRequest.error);
+    transaction.oncomplete = () => db.close();
+  });
 }
