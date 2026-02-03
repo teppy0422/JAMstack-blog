@@ -200,7 +200,12 @@ export default function ScorePage() {
     const cachedZoom = localStorage.getItem("lastZoomLevel");
     if (cachedZoom) {
       const zoomValue = parseFloat(cachedZoom);
-      if (!isNaN(zoomValue) && zoomValue !== 1.0 && zoomValue >= 0.5 && zoomValue <= 1.75) {
+      if (
+        !isNaN(zoomValue) &&
+        zoomValue !== 1.0 &&
+        zoomValue >= 0.5 &&
+        zoomValue <= 1.75
+      ) {
         await sheetMusicRef.current?.setZoom(zoomValue);
       }
     }
@@ -724,17 +729,17 @@ export default function ScorePage() {
           >
             <div className="loading-hippo-container">
               <img
-                src="/images/illust/hippo/hippo_beat.png"
+                src="/images/illust/hippo/hippo_beat4.svg"
                 alt="Loading..."
                 className="loading-hippo hippo-1"
               />
               <img
-                src="/images/illust/hippo/hippo_beat.png"
+                src="/images/illust/hippo/hippo_beat8.svg"
                 alt="Loading..."
                 className="loading-hippo hippo-2"
               />
               <img
-                src="/images/illust/hippo/hippo_beat.png"
+                src="/images/illust/hippo/hippo_beat16.svg"
                 alt="Loading..."
                 className="loading-hippo hippo-3"
               />
