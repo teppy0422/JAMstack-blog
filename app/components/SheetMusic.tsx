@@ -40,6 +40,7 @@ export interface SheetMusicRef {
     y: number,
   ) => Array<{ step: string; octave: number; alter: number; staff?: number }>;
   setChordVisibility: (visible: boolean) => Promise<void>;
+  jumpToTimestamp: (measureIndex: number, timestampInMeasure: number) => void;
 }
 
 const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
@@ -61,6 +62,226 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
     const osmdRef = useRef<any>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    // Store position map in a ref so it can be updated after zoom changes
+    const positionToTimestampMapRef = useRef<
+      Array<{
+        x: number;
+        y: number;
+        measureIndex: number;
+        timestamp: number;
+      }>
+    >([]);
+
+    // Store onMusicTermClick in ref for use in setupClickHandlers
+    const onMusicTermClickRef = useRef(onMusicTermClick);
+    onMusicTermClickRef.current = onMusicTermClick;
+
+    // Store onNotesChange in ref for use in setupClickHandlers
+    const onNotesChangeRef = useRef(onNotesChange);
+    onNotesChangeRef.current = onNotesChange;
+
+    // Function to build position-to-timestamp map for note click functionality
+    const buildPositionToTimestampMap = () => {
+      const map: Array<{
+        x: number;
+        y: number;
+        measureIndex: number;
+        timestamp: number;
+      }> = [];
+
+      if (osmdRef.current?.cursor && containerRef.current) {
+        const cursor = osmdRef.current.cursor;
+
+        // Save current scroll position
+        const scrollContainer = containerRef.current.closest("main");
+        const savedScrollTop = scrollContainer?.scrollTop || 0;
+
+        // Temporarily disable follow cursor to prevent scrolling during map building
+        const originalFollowCursor = osmdRef.current.FollowCursor;
+        osmdRef.current.FollowCursor = false;
+
+        cursor.reset();
+
+        while (!cursor.Iterator.EndReached) {
+          const cursorElement = (cursor as any).cursorElement;
+          if (cursorElement) {
+            const rect = cursorElement.getBoundingClientRect();
+            const containerRect = containerRef.current.getBoundingClientRect();
+            const x = rect.left - containerRect.left + rect.width / 2;
+            const y = rect.top - containerRect.top + rect.height / 2;
+
+            map.push({
+              x,
+              y,
+              measureIndex: cursor.Iterator.currentMeasureIndex,
+              timestamp: cursor.Iterator.currentTimeStamp?.RealValue || 0,
+            });
+          }
+          cursor.next();
+        }
+
+        // Reset cursor to beginning
+        cursor.reset();
+        cursor.update();
+
+        // Restore follow cursor setting
+        osmdRef.current.FollowCursor = originalFollowCursor;
+
+        // Restore scroll position
+        if (scrollContainer) {
+          scrollContainer.scrollTop = savedScrollTop;
+        }
+
+        console.log("Built positionToTimestampMap with", map.length, "entries");
+      }
+
+      positionToTimestampMapRef.current = map;
+      return map;
+    };
+
+    // Function to setup note click handlers (called after render and zoom changes)
+    const setupNoteClickHandlers = () => {
+      if (!containerRef.current || !osmdRef.current?.cursor) return;
+
+      const staveNoteElements =
+        containerRef.current.querySelectorAll(".vf-stavenote");
+      console.log(
+        "Setting up click handlers for",
+        staveNoteElements.length,
+        "vf-stavenote elements",
+      );
+
+      // Get cursor height for click area
+      const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+      const cursorHeight = cursorElement
+        ? cursorElement.getBoundingClientRect().height
+        : 100;
+
+      staveNoteElements.forEach((element) => {
+        const noteElement = element as SVGGraphicsElement;
+
+        // Get all path elements within the note for hover effect
+        const paths = noteElement.querySelectorAll("path");
+
+        // Get bounding box for the note
+        const bbox = noteElement.getBBox();
+
+        // Create a transparent rectangle overlay for easier clicking
+        // Width: same as note, Height: same as cursor highlight
+        const svgNS = "http://www.w3.org/2000/svg";
+        const rectOverlay = document.createElementNS(svgNS, "rect");
+
+        // Calculate the center Y of the note and extend to cursor height
+        const noteCenterY = bbox.y + bbox.height / 2;
+        const overlayHeight = cursorHeight;
+        const overlayY = noteCenterY - overlayHeight / 2;
+
+        rectOverlay.setAttribute("x", String(bbox.x));
+        rectOverlay.setAttribute("y", String(overlayY));
+        rectOverlay.setAttribute("width", String(bbox.width));
+        rectOverlay.setAttribute("height", String(overlayHeight));
+        rectOverlay.setAttribute("fill", "transparent");
+        rectOverlay.setAttribute("style", "cursor: pointer;");
+
+        // Add hover effect
+        rectOverlay.addEventListener("mouseenter", () => {
+          paths.forEach((path) => {
+            (path as SVGPathElement).style.fill = "#4CAF50";
+          });
+        });
+
+        rectOverlay.addEventListener("mouseleave", () => {
+          paths.forEach((path) => {
+            (path as SVGPathElement).style.fill = "";
+          });
+        });
+
+        // Add click handler
+        rectOverlay.addEventListener("click", (e) => {
+          e.stopPropagation();
+
+          // Get the X,Y position of the clicked note using screen coordinates (same as map)
+          const noteRect = noteElement.getBoundingClientRect();
+          const currentContainerRect =
+            containerRef.current?.getBoundingClientRect();
+          if (!currentContainerRect) return;
+          const noteX =
+            noteRect.left - currentContainerRect.left + noteRect.width / 2;
+          const noteY =
+            noteRect.top - currentContainerRect.top + noteRect.height / 2;
+
+          console.log("Note clicked at X:", noteX, "Y:", noteY);
+
+          // Find the closest timestamp in the map using both X and Y coordinates
+          const positionMap = positionToTimestampMapRef.current;
+          let closest = positionMap[0];
+          let minDist = Infinity;
+
+          for (const entry of positionMap) {
+            // Calculate 2D distance
+            const distX = Math.abs(entry.x - noteX);
+            const distY = Math.abs(entry.y - noteY);
+            const dist = Math.sqrt(distX * distX + distY * distY);
+            if (dist < minDist) {
+              minDist = dist;
+              closest = entry;
+            }
+          }
+
+          if (closest) {
+            console.log(
+              "Jumping to measure:",
+              closest.measureIndex,
+              "timestamp:",
+              closest.timestamp,
+            );
+
+            // Jump cursor to the position
+            if (osmdRef.current?.cursor) {
+              const cursor = osmdRef.current.cursor;
+              const startTime = performance.now();
+
+              cursor.reset();
+              let stepCount = 0;
+              const maxSteps = 10000;
+
+              while (!cursor.Iterator.EndReached && stepCount < maxSteps) {
+                const currentMeasureIndex = cursor.Iterator.currentMeasureIndex;
+                const currentTimestamp =
+                  cursor.Iterator.currentTimeStamp?.RealValue || 0;
+
+                if (
+                  currentMeasureIndex === closest.measureIndex &&
+                  Math.abs(currentTimestamp - closest.timestamp) < 0.001
+                ) {
+                  break;
+                }
+
+                if (currentMeasureIndex > closest.measureIndex) {
+                  cursor.previous();
+                  break;
+                }
+
+                cursor.next();
+                stepCount++;
+              }
+
+              cursor.update();
+              onNotesChangeRef.current?.(getCurrentNotes());
+
+              const endTime = performance.now();
+              console.log(
+                `Cursor jump completed in ${(endTime - startTime).toFixed(2)}ms, steps: ${stepCount}`,
+              );
+            }
+          }
+        });
+
+        // Append the rectangle overlay to the note group
+        noteElement.appendChild(rectOverlay);
+      });
+    };
 
     const applyCursorStyles = () => {
       const osmd = osmdRef.current;
@@ -539,7 +760,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
               // Re-apply cursor styles after render
               if (osmdRef.current.cursor) {
-                const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+                const cursorElement = (osmdRef.current.cursor as any)
+                  .cursorElement;
                 if (cursorElement) {
                   cursorElement.classList.add("osmdCursor");
                   cursorElement.style.backgroundColor = "#33e02f";
@@ -550,6 +772,12 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   console.log("Cursor styles re-applied after zoom");
                 }
               }
+
+              // Rebuild position-to-timestamp map and click handlers after zoom change
+              buildPositionToTimestampMap();
+              setupNoteClickHandlers();
+              console.log("Position map and click handlers rebuilt after zoom");
+
               resolve();
             }, 100);
           });
@@ -583,7 +811,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               if (osmdRef.current?.cursor) {
                 osmdRef.current.cursor.show();
                 osmdRef.current.cursor.reset();
-                const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+                const cursorElement = (osmdRef.current.cursor as any)
+                  .cursorElement;
                 if (cursorElement) {
                   cursorElement.classList.add("osmdCursor");
                   cursorElement.style.backgroundColor = "#33e02f";
@@ -598,6 +827,57 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             console.error("Error reloading for chord visibility:", error);
           }
         }
+      },
+      jumpToTimestamp: (measureIndex: number, timestampInMeasure: number) => {
+        console.log(
+          "jumpToTimestamp called:",
+          measureIndex,
+          timestampInMeasure,
+        );
+        const startTime = performance.now();
+
+        if (!osmdRef.current?.cursor) {
+          console.log("No cursor available");
+          return;
+        }
+
+        const cursor = osmdRef.current.cursor;
+        cursor.reset();
+
+        let stepCount = 0;
+        const maxSteps = 10000; // Safety limit
+
+        while (!cursor.Iterator.EndReached && stepCount < maxSteps) {
+          const currentMeasureIndex = cursor.Iterator.currentMeasureIndex;
+          const currentTimestamp =
+            cursor.Iterator.currentTimeStamp?.RealValue || 0;
+
+          // Check if we've reached the target position
+          if (
+            currentMeasureIndex === measureIndex &&
+            Math.abs(currentTimestamp - timestampInMeasure) < 0.001
+          ) {
+            break;
+          }
+
+          // If we've passed the target measure, stop
+          if (currentMeasureIndex > measureIndex) {
+            // Go back one step
+            cursor.previous();
+            break;
+          }
+
+          cursor.next();
+          stepCount++;
+        }
+
+        cursor.update();
+        onNotesChange?.(getCurrentNotes());
+
+        const endTime = performance.now();
+        console.log(
+          `jumpToTimestamp completed in ${(endTime - startTime).toFixed(2)}ms, steps: ${stepCount}`,
+        );
       },
     }));
 
@@ -682,15 +962,15 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               console.log("- backgroundColor:", computedStyle.backgroundColor);
               console.log("- BoundingRect:", rect);
 
-                          // CSSクラスを追加（デモと同じスタイル）
-                          cursorElement.classList.add("osmdCursor");
-              
-                          // 念のため直接スタイルも設定
-                          cursorElement.style.backgroundColor = "#33e02f";
-                          cursorElement.style.opacity = "0.5";
-                          cursorElement.style.width = "10px";
-                          cursorElement.style.display = "block";
-                          cursorElement.style.visibility = "visible";
+              // CSSクラスを追加（デモと同じスタイル）
+              cursorElement.classList.add("osmdCursor");
+
+              // 念のため直接スタイルも設定
+              cursorElement.style.backgroundColor = "#33e02f";
+              cursorElement.style.opacity = "0.5";
+              cursorElement.style.width = "10px";
+              cursorElement.style.display = "block";
+              cursorElement.style.visibility = "visible";
               // スタイル適用後の状態も確認
               setTimeout(() => {
                 const newRect = cursorElement.getBoundingClientRect();
@@ -794,12 +1074,14 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           setTimeout(() => {
             if (onMusicTermClick && containerRef.current) {
               // Handle text elements (楽語)
-              const textElements = containerRef.current.querySelectorAll(".vf-text");
+              const textElements =
+                containerRef.current.querySelectorAll(".vf-text");
               console.log("Found vf-text elements:", textElements.length);
               textElements.forEach((element) => {
                 // Get text from the inner <text> element
                 const textEl = element.querySelector("text");
-                const text = textEl?.textContent?.trim() || element.textContent?.trim();
+                const text =
+                  textEl?.textContent?.trim() || element.textContent?.trim();
                 console.log("vf-text element text:", text);
                 // Only add click handler if the term exists in the dictionary
                 if (text && isMusicTerm(text)) {
@@ -808,7 +1090,11 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   element.classList.add("music-term-clickable");
                   // Also style the inner text element
                   if (textEl) {
-                    textEl.setAttribute("style", (textEl.getAttribute("style") || "") + "; cursor: pointer;");
+                    textEl.setAttribute(
+                      "style",
+                      (textEl.getAttribute("style") || "") +
+                        "; cursor: pointer;",
+                    );
                   }
                   element.addEventListener("click", (e) => {
                     e.stopPropagation();
@@ -819,7 +1105,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               });
 
               // Handle clef elements (音部記号)
-              const clefElements = containerRef.current.querySelectorAll(".vf-clef");
+              const clefElements =
+                containerRef.current.querySelectorAll(".vf-clef");
               console.log("Found vf-clef elements:", clefElements.length);
               clefElements.forEach((element) => {
                 const pathEl = element.querySelector("path");
@@ -840,7 +1127,14 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                     clefType = "__alto-clef__";
                   }
 
-                  console.log("Clef detected:", clefType, "d.length:", d.length, "mCount:", mCount);
+                  console.log(
+                    "Clef detected:",
+                    clefType,
+                    "d.length:",
+                    d.length,
+                    "mCount:",
+                    mCount,
+                  );
 
                   // Get bounding box for rectangular click area
                   const bbox = (element as SVGGraphicsElement).getBBox();
@@ -877,6 +1171,11 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   element.setAttribute("style", "cursor: pointer;");
                 }
               });
+
+              // Handle note clicks for cursor jump
+              // Build the initial position-to-timestamp map and setup click handlers
+              buildPositionToTimestampMap();
+              setupNoteClickHandlers();
             }
           }, 200);
 
@@ -914,7 +1213,15 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         }
         osmdRef.current = null;
       };
-    }, [musicXmlPath, musicXmlContent, onNotesChange, onRangeChange, onLoad, onMusicTermClick, showChords]);
+    }, [
+      musicXmlPath,
+      musicXmlContent,
+      onNotesChange,
+      onRangeChange,
+      onLoad,
+      onMusicTermClick,
+      showChords,
+    ]);
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
       const rect = e.currentTarget.getBoundingClientRect();
@@ -941,16 +1248,18 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
     }
 
     return (
-                <div
-                  ref={parentRef}
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100%",
-                    padding: "20px",
-                    ...style, // Apply passed style prop
-                  }}
-                >        {isLoading && (
+      <div
+        ref={parentRef}
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          ...style, // Apply passed style prop
+        }}
+      >
+        {" "}
+        {isLoading && (
           <div
             style={{
               position: "absolute",
