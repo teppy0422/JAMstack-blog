@@ -149,6 +149,7 @@ export const theme = extendTheme({
       omron: "#005cb3",
       bit32: "#FFA726",
       bit64: "#1976D2",
+      pianoHighlight: "#4CAF50",
     },
   },
 });

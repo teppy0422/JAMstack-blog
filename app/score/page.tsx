@@ -3,6 +3,14 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import SheetMusic, { SheetMusicRef } from "../components/SheetMusic";
 import PianoKeyboard from "../components/PianoKeyboard";
+import { border, useColorMode } from "@chakra-ui/react";
+import Header from "@/components/header";
+import { useTheme } from "@chakra-ui/react";
+import { RiCodeSLine, RiCodeSSlashFill } from "react-icons/ri";
+import { TiPrinter } from "react-icons/ti";
+import { FaRegFile } from "react-icons/fa6";
+import { IoPlayOutline, IoPlaySkipBackOutline } from "react-icons/io5";
+
 import "./score.css";
 import {
   saveScore,
@@ -13,6 +21,7 @@ import {
 } from "../lib/scoreDB";
 import { famousSayings } from "./famousSayings";
 import { findMusicTerm, type MusicTerm } from "./musicTerms";
+import { MdDeleteOutline } from "react-icons/md";
 
 const sampleScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
@@ -81,6 +90,7 @@ export default function ScorePage() {
   const [musicTermModal, setMusicTermModal] = useState<MusicTerm | null>(null);
   const sheetMusicRef = useRef<SheetMusicRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { colorMode } = useColorMode();
 
   // Load user scores from IndexedDB on mount
   useEffect(() => {
@@ -326,14 +336,11 @@ export default function ScorePage() {
     if (!confirm("この楽譜を削除しますか？")) {
       return;
     }
-
     try {
       await deleteScore(dbId);
-
       // Reload user scores
       const scores = await getAllScores();
       setUserScores(scores);
-
       // If deleted score was selected, clear selection
       if (selectedScoreId === `user-${dbId}`) {
         setSelectedScore(null);
@@ -341,7 +348,6 @@ export default function ScorePage() {
         setSelectedScoreId(null);
         localStorage.removeItem("lastOpenedScoreId");
       }
-
       console.log("Score deleted successfully");
     } catch (error) {
       console.error("Failed to delete score:", error);
@@ -362,7 +368,6 @@ export default function ScorePage() {
     if (!selectedScoreId) {
       return;
     }
-
     const newShowChords = !showChords;
     setShowChords(newShowChords);
     localStorage.setItem("lastShowChords", newShowChords.toString());
@@ -386,349 +391,56 @@ export default function ScorePage() {
     window.print();
   };
 
+  const theme = useTheme();
+  const bgColor =
+    colorMode === "dark"
+      ? theme.colors.custom.theme.dark[900]
+      : theme.colors.custom.theme.light[500];
+  const borderColor =
+    colorMode === "dark"
+      ? theme.colors.custom.theme.light[200]
+      : theme.colors.custom.theme.dark[400];
+  const frColor =
+    colorMode === "dark"
+      ? theme.colors.custom.theme.light[50]
+      : theme.colors.custom.theme.dark[500];
+  const highlightColor =
+    colorMode === "dark"
+      ? theme.colors.custom.theme.orange[500]
+      : theme.colors.custom.pianoHighlight;
   return (
     <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        backgroundColor: "#ffffff",
-        position: "relative",
-      }}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
+      style={{ backgroundColor: bgColor, height: "100vh", overflow: "hidden" }}
     >
-      {/* Drag and drop overlay */}
-      {isDragging && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(51, 224, 47, 0.2)",
-            border: "4px dashed #33e02f",
-            zIndex: 1000,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            pointerEvents: "none",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#fff",
-              padding: "30px 50px",
-              borderRadius: "10px",
-              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-              fontSize: "24px",
-              fontWeight: "bold",
-              color: "#33e02f",
-            }}
-          >
-            📁 ここにMusicXMLファイルをドロップ
-          </div>
-        </div>
-      )}
-
-      {/* Hidden file input */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".musicxml,.xml"
-        onChange={handleFileInputChange}
-        style={{ display: "none" }}
-      />
-      {/* ヘッダー */}
-      <header
-        className="no-print"
-        style={{
-          padding: "15px 20px",
-          borderBottom: "1px solid #ddd",
-          backgroundColor: "#f9f9f9",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-          <h1 style={{ fontSize: "24px", margin: 0 }}>Web楽譜追従アプリ</h1>
-          <img
-            src="/images/illust/hippo/hippo_speaker.svg"
-            alt="Hippo"
-            style={{ width: "48px", height: "48px", objectFit: "contain" }}
-          />
-        </div>
-      </header>
-
-      {/* コントロール部分 */}
+      {/* ヘッダー背景用の固定レイヤー（LiquidGlassの後ろに表示） */}
       <div
-        className="no-print"
         style={{
-          padding: "15px 20px",
-          borderBottom: "1px solid #ddd",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "42px",
+          backgroundColor: bgColor,
+          zIndex: 1999, // LiquidGlassのzIndex(2000)より下
+        }}
+      />
+      <div
+        style={{
           display: "flex",
-          gap: "15px",
-          alignItems: "center",
-          flexWrap: "wrap",
+          flexDirection: "column",
+          height: "calc(100vh - 42px)",
+          marginTop: "42px",
+          backgroundColor: bgColor,
+          position: "relative",
+          borderTop: ".5px solid",
+          borderTopColor: borderColor,
         }}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
       >
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <label
-            htmlFor="score-select"
-            style={{ fontWeight: "bold", whiteSpace: "nowrap" }}
-          >
-            楽譜:
-          </label>
-          <select
-            id="score-select"
-            value={selectedScoreId || ""}
-            onChange={(e) => handleScoreChange(e.target.value)}
-            style={{
-              padding: "8px 12px",
-              fontSize: "16px",
-              borderRadius: "4px",
-              border: "1px solid #ccc",
-              minWidth: "200px",
-            }}
-          >
-            <option value="">-- 選択してください --</option>
-
-            {/* Sample scores section */}
-            {sampleScores.length > 0 && (
-              <>
-                <optgroup label="サンプル楽譜">
-                  {sampleScores.map((score) => (
-                    <option key={score.id} value={score.id}>
-                      {score.name}
-                    </option>
-                  ))}
-                </optgroup>
-              </>
-            )}
-
-            {/* User scores section */}
-            {userScores.length > 0 && (
-              <>
-                <optgroup label="マイ楽譜">
-                  {userScores.map((score) => (
-                    <option key={`user-${score.id}`} value={`user-${score.id}`}>
-                      {score.name}
-                    </option>
-                  ))}
-                </optgroup>
-              </>
-            )}
-          </select>
-
-          {/* File selection button */}
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isLoading}
-            style={{
-              padding: "6px 14px",
-              fontSize: "16px",
-              borderRadius: "4px",
-              border: "1px solid #ccc",
-              backgroundColor: isLoading ? "#f0f0f0" : "#fff",
-              cursor: isLoading ? "not-allowed" : "pointer",
-              opacity: isLoading ? 0.5 : 1,
-              display: "flex",
-              alignItems: "center",
-              gap: "5px",
-              whiteSpace: "nowrap",
-            }}
-            title="ファイルを選択してアップロード"
-          >
-            📁
-          </button>
-
-          {/* Delete button for user scores */}
-          {selectedScoreId?.startsWith("user-") && (
-            <button
-              onClick={() => {
-                const dbId = parseInt(selectedScoreId.replace("user-", ""));
-                handleDeleteScore(dbId);
-              }}
-              disabled={isLoading}
-              style={{
-                padding: "8px 16px",
-                fontSize: "16px",
-                borderRadius: "4px",
-                border: "1px solid #ff4444",
-                backgroundColor: isLoading ? "#f0f0f0" : "#fff",
-                color: "#ff4444",
-                cursor: isLoading ? "not-allowed" : "pointer",
-                opacity: isLoading ? 0.5 : 1,
-              }}
-              title="この楽譜を削除"
-            >
-              🗑️
-            </button>
-          )}
-        </div>
-
-        {selectedScore && (
-          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-            {/* Zoom preset buttons - 2 rows x 3 columns */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: "3px",
-              }}
-            >
-              {[0.5, 0.75, 1.0, 1.25, 1.5, 1.75].map((presetZoom) => (
-                <button
-                  key={presetZoom}
-                  onClick={() => handleZoomPreset(presetZoom)}
-                  disabled={isLoading}
-                  style={{
-                    padding: "0px 8px",
-                    fontSize: "10px",
-                    borderRadius: "4px",
-                    border: "1px solid #ccc",
-                    backgroundColor:
-                      zoom === presetZoom
-                        ? "#d0d0d0"
-                        : isLoading
-                          ? "#f0f0f0"
-                          : "#fff",
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    opacity: isLoading ? 0.5 : 1,
-                    fontWeight: zoom === presetZoom ? "bold" : "normal",
-                  }}
-                  title={`${Math.round(presetZoom * 100)}%`}
-                >
-                  {Math.round(presetZoom * 100)}%
-                </button>
-              ))}
-            </div>
-
-            {/* Chord toggle button - for all scores */}
-            {selectedScoreId && (
-              <>
-                <div
-                  style={{
-                    width: "1px",
-                    height: "24px",
-                    backgroundColor: "#ccc",
-                    margin: "0 5px",
-                  }}
-                />
-                <button
-                  onClick={handleChordToggle}
-                  disabled={isLoading}
-                  style={{
-                    padding: "8px 12px",
-                    fontSize: "14px",
-                    borderRadius: "4px",
-                    border: showChords ? "2px solid #4CAF50" : "1px solid #ccc",
-                    backgroundColor: showChords
-                      ? "#e8f5e9"
-                      : isLoading
-                        ? "#f0f0f0"
-                        : "#fff",
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    opacity: isLoading ? 0.5 : 1,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    whiteSpace: "nowrap",
-                  }}
-                  title={showChords ? "コード非表示" : "コード表示"}
-                >
-                  {showChords ? "🎵 コード ON" : "🎵 コード OFF"}
-                </button>
-                <button
-                  onClick={handlePrint}
-                  disabled={isLoading}
-                  style={{
-                    padding: "8px 12px",
-                    fontSize: "14px",
-                    borderRadius: "4px",
-                    border: "1px solid #ccc",
-                    backgroundColor: isLoading ? "#f0f0f0" : "#fff",
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    opacity: isLoading ? 0.5 : 1,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    whiteSpace: "nowrap",
-                  }}
-                  title="印刷 / PDF保存"
-                >
-                  🖨️
-                </button>
-              </>
-            )}
-
-            <div
-              style={{
-                width: "1px",
-                height: "24px",
-                backgroundColor: "#ccc",
-                margin: "0 5px",
-              }}
-            />
-            <button
-              onClick={handleReset}
-              disabled={isLoading}
-              style={{
-                padding: "8px 16px",
-                fontSize: "16px",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-                backgroundColor: isLoading ? "#f0f0f0" : "#fff",
-                cursor: isLoading ? "not-allowed" : "pointer",
-                opacity: isLoading ? 0.5 : 1,
-              }}
-            >
-              ⏮
-            </button>
-            <button
-              onClick={handlePrevious}
-              disabled={isLoading}
-              style={{
-                padding: "8px 16px",
-                fontSize: "16px",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-                backgroundColor: isLoading ? "#f0f0f0" : "#fff",
-                cursor: isLoading ? "not-allowed" : "pointer",
-                opacity: isLoading ? 0.5 : 1,
-              }}
-            >
-              ⬅
-            </button>
-            <button
-              onClick={handleNext}
-              disabled={isLoading}
-              style={{
-                padding: "8px 16px",
-                fontSize: "16px",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-                backgroundColor: isLoading ? "#f0f0f0" : "#fff",
-                cursor: isLoading ? "not-allowed" : "pointer",
-                opacity: isLoading ? 0.5 : 1,
-              }}
-            >
-              ➡
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* 楽譜表示エリア */}
-      <main
-        style={{
-          flex: 1,
-          overflow: "auto",
-          minHeight: 0,
-          position: "relative", // Added for positioning loading overlay
-        }}
-      >
-        {isLoading && ( // Show loading animation when isLoading is true
+        {/* Drag and drop overlay */}
+        {isDragging && (
           <div
             style={{
               position: "absolute",
@@ -736,205 +448,562 @@ export default function ScorePage() {
               left: 0,
               right: 0,
               bottom: 0,
+              backgroundColor: "rgba(51, 224, 47, 0.2)",
+              border: "4px dashed #33e02f",
+              zIndex: 1000,
               display: "flex",
-              flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "rgba(255, 255, 255, 0.8)", // Semi-transparent white overlay
-              zIndex: 10, // Ensure it's above the sheet music
+              pointerEvents: "none",
             }}
           >
-            <div className="loading-hippo-container">
-              <img
-                src="/images/illust/hippo/hippo_beat4.svg"
-                alt="Loading..."
-                className="loading-hippo hippo-1"
-              />
-              <img
-                src="/images/illust/hippo/hippo_beat8.svg"
-                alt="Loading..."
-                className="loading-hippo hippo-2"
-              />
-              <img
-                src="/images/illust/hippo/hippo_beat16.svg"
-                alt="Loading..."
-                className="loading-hippo hippo-3"
-              />
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: "30px 50px",
+                borderRadius: "10px",
+                boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                fontSize: "24px",
+                fontWeight: "bold",
+                color: "#33e02f",
+              }}
+            >
+              📁 ここにMusicXMLファイルをドロップ
             </div>
-            {currentQuote && (
-              <div
-                style={{
-                  textAlign: "center",
-                  marginTop: "20px",
-                  padding: "0 20px",
-                }}
-              >
-                <p
-                  style={{
-                    fontSize: "1.1em",
-                    color: "#555",
-                    margin: 0,
-                    whiteSpace: "pre-wrap",
-                  }}
-                >
-                  {currentQuote.quote}
-                </p>
-                <p
-                  style={{
-                    fontSize: "0.9em",
-                    color: "#777",
-                    fontStyle: "italic",
-                    marginTop: "8px",
-                  }}
-                >
-                  – {currentQuote.author}
-                </p>
-              </div>
-            )}
           </div>
         )}
-        {selectedScore ? (
-          <SheetMusic
-            ref={sheetMusicRef}
-            musicXmlPath={selectedScore}
-            musicXmlContent={selectedScoreContent || undefined}
-            onNotesChange={handleNotesChange}
-            onRangeChange={handleRangeChange}
-            onLoad={handleSheetMusicLoad}
-            onMusicTermClick={handleMusicTermClick}
-            style={{ visibility: isLoading ? "hidden" : "visible" }}
-            showChords={showChords}
-          />
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "100%",
-              color: "#666",
-            }}
-          ></div>
-        )}
-      </main>
 
-      {/* 鍵盤ガイド表示エリア */}
-      <footer
-        className="no-print"
-        style={{
-          height: "20vh",
-          minHeight: "120px",
-          borderTop: "2px solid #333",
-          padding: "10px",
-          backgroundColor: "#f5f5f5",
-        }}
-      >
-        {selectedScore ? (
-          <PianoKeyboard
-            notes={currentNotes}
-            minMidi={keyboardRange?.min}
-            maxMidi={keyboardRange?.max}
-          />
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "100%",
-              color: "#999",
-              fontSize: "14px",
-            }}
-          >
-            {selectedScore
-              ? "楽譜をクリックまたはカーソルを進めてください"
-              : "鍵盤ガイド"}
-          </div>
-        )}
-      </footer>
-
-      {/* 楽語説明モーダル */}
-      {musicTermModal && (
+        {/* Hidden file input */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".musicxml,.xml"
+          onChange={handleFileInputChange}
+          style={{ display: "none" }}
+        />
+        {/* ヘッダー */}
+        <Header />
+        {/* コントロール部分 */}
         <div
-          className="music-term-modal-overlay"
-          onClick={() => setMusicTermModal(null)}
+          className="no-print"
           style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            padding: "5px 10px",
+            borderBottom: ".5px solid",
+            borderBottomColor: borderColor,
             display: "flex",
+            gap: "10px",
             alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
+            flexWrap: "wrap",
           }}
         >
-          <div
-            className="music-term-modal"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: "12px",
-              padding: "24px",
-              maxWidth: "400px",
-              width: "90%",
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
-            }}
-          >
-            <h3
-              style={{
-                margin: "0 0 12px 0",
-                fontSize: "24px",
-                color: "#333",
-                borderBottom: "2px solid #4CAF50",
-                paddingBottom: "8px",
-              }}
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <label
+              htmlFor="score-select"
+              style={{ fontWeight: "bold", whiteSpace: "nowrap" }}
             >
-              {musicTermModal.name || musicTermModal.term}
-            </h3>
-            <p
-              style={{
-                margin: "0 0 8px 0",
-                fontSize: "18px",
-                fontWeight: "bold",
-                color: "#4CAF50",
-              }}
-            >
-              {musicTermModal.meaning}
-            </p>
-            {musicTermModal.description && (
-              <p
+              <img
+                src="/images/illust/hippo/hippo_speaker.svg"
                 style={{
-                  margin: "0",
-                  fontSize: "14px",
-                  color: "#666",
-                  lineHeight: "1.6",
+                  height: "32px",
+                  filter:
+                    colorMode === "dark"
+                      ? "invert(58%) sepia(50%) saturate(350%) hue-rotate(320deg) brightness(105%)"
+                      : "none",
+                }}
+              />
+            </label>
+            <select
+              id="score-select"
+              value={selectedScoreId || ""}
+              onChange={(e) => handleScoreChange(e.target.value)}
+              style={{
+                padding: "8px 8px",
+                fontSize: "16px",
+                borderRadius: "4px",
+                borderWidth: ".5px",
+                borderColor: borderColor,
+                minWidth: "200px",
+                backgroundColor: bgColor,
+                outline: "none", // フォーカス時の青い枠を無効化
+              }}
+            >
+              <option value="">-- 選択してください --</option>
+              {/* Sample scores section */}
+              {sampleScores.length > 0 && (
+                <>
+                  <optgroup label="サンプル楽譜">
+                    {sampleScores.map((score) => (
+                      <option key={score.id} value={score.id}>
+                        {score.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                </>
+              )}
+
+              {/* User scores section */}
+              {userScores.length > 0 && (
+                <>
+                  <optgroup label="マイ楽譜">
+                    {userScores.map((score) => (
+                      <option
+                        key={`user-${score.id}`}
+                        value={`user-${score.id}`}
+                      >
+                        {score.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                </>
+              )}
+            </select>
+
+            {/* File selection button */}
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isLoading}
+              style={{
+                height: "36px",
+                width: "26px",
+                fontSize: "16px",
+                borderRadius: "4px",
+                borderWidth: ".5px",
+                borderColor: borderColor,
+                backgroundColor: isLoading ? "#f0f0f0" : bgColor,
+                cursor: isLoading ? "not-allowed" : "pointer",
+                opacity: isLoading ? 0.5 : 1,
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+                whiteSpace: "nowrap",
+                justifyContent: "center",
+              }}
+              title="ファイルを選択してアップロード"
+            >
+              <FaRegFile />
+            </button>
+
+            {/* Delete button for user scores */}
+            {selectedScoreId?.startsWith("user-") && (
+              <button
+                onClick={() => {
+                  const dbId = parseInt(selectedScoreId.replace("user-", ""));
+                  handleDeleteScore(dbId);
+                }}
+                disabled={isLoading}
+                style={{
+                  height: "36px",
+                  width: "26px",
+                  fontSize: "24px",
+                  borderRadius: "4px",
+                  borderWidth: "1px",
+                  borderColor: borderColor,
+                  color: "#ff4444",
+                  cursor: isLoading ? "not-allowed" : "pointer",
+                  opacity: isLoading ? 0.5 : 1,
+                  justifyContent: "center",
+                }}
+                title="この楽譜を削除"
+              >
+                <MdDeleteOutline />
+              </button>
+            )}
+          </div>
+          <div
+            style={{
+              width: ".5px",
+              height: "24px",
+              backgroundColor: borderColor,
+              margin: "0 3px",
+            }}
+          />
+          {selectedScore && (
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+              {/* Zoom preset buttons - 2 rows x 3 columns */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "3px",
                 }}
               >
-                {musicTermModal.description}
-              </p>
-            )}
-            <button
-              onClick={() => setMusicTermModal(null)}
+                {[0.5, 0.75, 1.0, 1.25, 1.5, 1.75].map((presetZoom) => (
+                  <button
+                    key={presetZoom}
+                    onClick={() => handleZoomPreset(presetZoom)}
+                    disabled={isLoading}
+                    style={{
+                      padding: "0px 8px",
+                      fontSize: "10px",
+                      color: frColor,
+                      // backgroundColor:
+                      //   zoom === presetZoom ? highlightColor : "transparent",
+                      borderRadius: "4px",
+                      borderWidth: ".5px",
+                      borderColor: zoom === presetZoom ? borderColor : frColor,
+                      backgroundColor:
+                        zoom === presetZoom && colorMode === "dark"
+                          ? `${highlightColor}bb`
+                          : zoom === presetZoom && colorMode === "light"
+                            ? `${highlightColor}50`
+                            : "none",
+                      cursor: isLoading ? "not-allowed" : "pointer",
+                      opacity: isLoading ? 0.5 : 1,
+                      fontWeight: "bold",
+                    }}
+                    title={`${Math.round(presetZoom * 100)}%`}
+                  >
+                    {Math.round(presetZoom * 100)}%
+                  </button>
+                ))}
+              </div>
+              {/* Chord toggle button - for all scores */}
+              {selectedScoreId && (
+                <>
+                  <button
+                    onClick={handleChordToggle}
+                    disabled={isLoading}
+                    style={{
+                      height: "40px",
+                      width: "36px",
+                      fontSize: "14px",
+                      borderRadius: "4px",
+                      borderWidth: ".5px",
+                      borderColor: borderColor,
+                      color: frColor,
+                      cursor: isLoading ? "not-allowed" : "pointer",
+                      opacity: isLoading ? 0.5 : 1,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      whiteSpace: "nowrap",
+                      justifyContent: "center",
+                    }}
+                    title={showChords ? "コード非表示" : "コード表示"}
+                  >
+                    {showChords ? <RiCodeSLine /> : <RiCodeSSlashFill />}
+                  </button>
+                  <button
+                    onClick={handlePrint}
+                    disabled={isLoading}
+                    style={{
+                      height: "40px",
+                      width: "36px",
+                      fontSize: "24px",
+                      borderRadius: "4px",
+                      borderWidth: ".5px",
+                      borderColor: borderColor,
+                      color: frColor,
+                      cursor: isLoading ? "not-allowed" : "pointer",
+                      opacity: isLoading ? 0.5 : 1,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      whiteSpace: "nowrap",
+                      justifyContent: "center",
+                    }}
+                    title="印刷 / PDF保存"
+                  >
+                    <TiPrinter />
+                  </button>
+                </>
+              )}
+              <div
+                style={{
+                  width: ".5px",
+                  height: "24px",
+                  backgroundColor: borderColor,
+                  margin: "0 3px",
+                }}
+              />
+              <button
+                onClick={handleReset}
+                disabled={isLoading}
+                style={{
+                  height: "40px",
+                  width: "24px",
+                  fontSize: "16px",
+                  borderRadius: "4px",
+                  borderWidth: ".5px",
+                  borderColor: borderColor,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "flex",
+                  color: frColor,
+                  cursor: isLoading ? "not-allowed" : "pointer",
+                  opacity: isLoading ? 0.5 : 1,
+                }}
+              >
+                <IoPlaySkipBackOutline />
+              </button>
+              <button
+                onClick={handlePrevious}
+                disabled={isLoading}
+                style={{
+                  height: "40px",
+                  width: "32px",
+                  fontSize: "16px",
+                  borderRadius: "4px",
+                  borderWidth: ".5px",
+                  borderColor: borderColor,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "flex",
+                  color: frColor,
+                  cursor: isLoading ? "not-allowed" : "pointer",
+                  opacity: isLoading ? 0.5 : 1,
+                }}
+              >
+                <IoPlayOutline style={{ transform: "rotate(180deg)" }} />
+              </button>
+              <button
+                onClick={handleNext}
+                disabled={isLoading}
+                style={{
+                  height: "40px",
+                  width: "32px",
+                  fontSize: "16px",
+                  borderRadius: "4px",
+                  borderWidth: ".5px",
+                  borderColor: borderColor,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "flex",
+                  color: frColor,
+                  cursor: isLoading ? "not-allowed" : "pointer",
+                  opacity: isLoading ? 0.5 : 1,
+                }}
+              >
+                <IoPlayOutline />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* 楽譜表示エリア */}
+        <main
+          style={{
+            flex: 1,
+            overflow: "auto",
+            minHeight: 0,
+            position: "relative", // Added for positioning loading overlay
+          }}
+        >
+          {isLoading && ( // Show loading animation when isLoading is true
+            <div
               style={{
-                marginTop: "16px",
-                padding: "8px 24px",
-                fontSize: "14px",
-                borderRadius: "6px",
-                border: "none",
-                backgroundColor: "#4CAF50",
-                color: "#fff",
-                cursor: "pointer",
-                width: "100%",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 10, // Ensure it's above the sheet music
               }}
             >
-              閉じる
-            </button>
+              <div className="loading-hippo-container">
+                <img
+                  src="/images/illust/hippo/hippo_beat4.svg"
+                  alt="Loading..."
+                  className="loading-hippo hippo-1"
+                  style={{
+                    filter: colorMode === "dark" ? "invert(1)" : "none",
+                  }}
+                />
+                <img
+                  src="/images/illust/hippo/hippo_beat8.svg"
+                  alt="Loading..."
+                  className="loading-hippo hippo-2"
+                  style={{
+                    filter: colorMode === "dark" ? "invert(1)" : "none",
+                  }}
+                />
+                <img
+                  src="/images/illust/hippo/hippo_beat16.svg"
+                  alt="Loading..."
+                  className="loading-hippo hippo-3"
+                  style={{
+                    filter: colorMode === "dark" ? "invert(1)" : "none",
+                  }}
+                />
+              </div>
+              {currentQuote && (
+                <div
+                  style={{
+                    textAlign: "center",
+                    marginTop: "20px",
+                    padding: "0 20px",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: "1.1em",
+                      color: frColor,
+                      margin: 0,
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
+                    {currentQuote.quote}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: "0.9em",
+                      color: frColor,
+                      fontStyle: "italic",
+                      marginTop: "8px",
+                    }}
+                  >
+                    – {currentQuote.author}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+          {selectedScore ? (
+            <SheetMusic
+              ref={sheetMusicRef}
+              musicXmlPath={selectedScore}
+              musicXmlContent={selectedScoreContent || undefined}
+              onNotesChange={handleNotesChange}
+              onRangeChange={handleRangeChange}
+              onLoad={handleSheetMusicLoad}
+              onMusicTermClick={handleMusicTermClick}
+              style={{ visibility: isLoading ? "hidden" : "visible" }}
+              showChords={showChords}
+              darkMode={colorMode === "dark"}
+            />
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                color: "#666",
+              }}
+            ></div>
+          )}
+        </main>
+
+        {/* 鍵盤ガイド表示エリア */}
+        <footer
+          className="no-print"
+          style={{
+            height: "16vh",
+            minHeight: "120px",
+            padding: "0 0 0 0",
+            backgroundColor: "#f5f5f5",
+          }}
+        >
+          {selectedScore ? (
+            <PianoKeyboard
+              notes={currentNotes}
+              minMidi={keyboardRange?.min}
+              maxMidi={keyboardRange?.max}
+            />
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                color: "#999",
+                fontSize: "14px",
+              }}
+            >
+              {selectedScore
+                ? "楽譜をクリックまたはカーソルを進めてください"
+                : "鍵盤ガイド"}
+            </div>
+          )}
+        </footer>
+
+        {/* 楽語説明モーダル */}
+        {musicTermModal && (
+          <div
+            className="music-term-modal-overlay"
+            onClick={() => setMusicTermModal(null)}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.6)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              className="music-term-modal"
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                backgroundColor: bgColor,
+                borderRadius: "12px",
+                padding: "24px",
+                maxWidth: "400px",
+                width: "90%",
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              <h3
+                style={{
+                  margin: "0 0 12px 0",
+                  fontSize: "24px",
+                  color: frColor,
+                  paddingBottom: "8px",
+                }}
+              >
+                {musicTermModal.name || musicTermModal.term}
+              </h3>
+              <p
+                style={{
+                  margin: "0 0 8px 0",
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  color: highlightColor,
+                }}
+              >
+                {musicTermModal.meaning}
+              </p>
+              {musicTermModal.description && (
+                <p
+                  style={{
+                    margin: "0",
+                    fontSize: "14px",
+                    color: frColor,
+                    lineHeight: "1.6",
+                  }}
+                >
+                  {musicTermModal.description}
+                </p>
+              )}
+              <button
+                onClick={() => setMusicTermModal(null)}
+                style={{
+                  marginTop: "16px",
+                  padding: "8px 24px",
+                  fontSize: "14px",
+                  borderRadius: "6px",
+                  border: "none",
+                  backgroundColor: highlightColor,
+                  color: colorMode === "dark" ? bgColor : bgColor,
+                  cursor: "pointer",
+                  width: "100%",
+                }}
+              >
+                閉じる
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

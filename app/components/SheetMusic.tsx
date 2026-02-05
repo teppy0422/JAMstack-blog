@@ -9,6 +9,8 @@ import {
 } from "react";
 import React from "react"; // Import React for React.CSSProperties
 import { isMusicTerm } from "../score/musicTerms";
+import { useTheme } from "@chakra-ui/react";
+import { border, useColorMode } from "@chakra-ui/react";
 
 interface SheetMusicProps {
   musicXmlPath: string;
@@ -26,6 +28,7 @@ interface SheetMusicProps {
   onMusicTermClick?: (term: string) => void; // Callback when a music term is clicked
   style?: React.CSSProperties;
   showChords?: boolean; // Whether to display chord symbols
+  darkMode?: boolean; // Dark mode for score colors
 }
 
 export interface SheetMusicRef {
@@ -54,6 +57,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       onMusicTermClick,
       style,
       showChords = true,
+      darkMode = false,
     },
     ref,
   ) => {
@@ -62,7 +66,17 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
     const osmdRef = useRef<any>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const theme = useTheme();
+    const { colorMode } = useColorMode();
 
+    const highlightColor =
+      colorMode === "dark"
+        ? theme.colors.custom.theme.orange[500]
+        : theme.colors.custom.pianoHighlight;
+    const bgColor =
+      colorMode === "dark"
+        ? theme.colors.custom.theme.dark[900]
+        : theme.colors.custom.theme.light[500];
     // Store position map in a ref so it can be updated after zoom changes
     const positionToTimestampMapRef = useRef<
       Array<{
@@ -184,19 +198,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         rectOverlay.setAttribute("fill", "transparent");
         rectOverlay.setAttribute("style", "cursor: pointer;");
 
-        // Add hover effect
-        rectOverlay.addEventListener("mouseenter", () => {
-          paths.forEach((path) => {
-            (path as SVGPathElement).style.fill = "#4CAF50";
-          });
-        });
-
-        rectOverlay.addEventListener("mouseleave", () => {
-          paths.forEach((path) => {
-            (path as SVGPathElement).style.fill = "";
-          });
-        });
-
         // Add click handler
         rectOverlay.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -268,6 +269,22 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               }
 
               cursor.update();
+              // ダークモード時はオーバーレイを同期
+              if (darkMode) {
+                const cursorElement = (cursor as any).cursorElement;
+                const cursorOverlay =
+                  cursorElement?.parentElement?.querySelector(
+                    ".cursor-overlay-orange",
+                  ) as HTMLDivElement;
+                if (cursorOverlay && cursorElement) {
+                  cursorOverlay.style.top = cursorElement.style.top;
+                  cursorOverlay.style.left = cursorElement.style.left;
+                  cursorOverlay.style.height =
+                    cursorElement.getAttribute("height") + "px";
+                  cursorOverlay.style.width =
+                    cursorElement.getAttribute("width") + "px";
+                }
+              }
               onNotesChangeRef.current?.(getCurrentNotes());
 
               const endTime = performance.now();
@@ -277,7 +294,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             }
           }
         });
-
         // Append the rectangle overlay to the note group
         noteElement.appendChild(rectOverlay);
       });
@@ -684,7 +700,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             }
           }
         }
-
         return notes;
       } catch (err) {
         console.error("Error getting current notes:", err);
@@ -701,6 +716,21 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.next();
           osmdRef.current.cursor.update(); // Update visual position after movement
+          // ダークモード時はオーバーレイを同期
+          if (darkMode) {
+            const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+            const cursorOverlay = cursorElement?.parentElement?.querySelector(
+              ".cursor-overlay-orange",
+            ) as HTMLDivElement;
+            if (cursorOverlay && cursorElement) {
+              cursorOverlay.style.top = cursorElement.style.top;
+              cursorOverlay.style.left = cursorElement.style.left;
+              cursorOverlay.style.height =
+                cursorElement.getAttribute("height") + "px";
+              cursorOverlay.style.width =
+                cursorElement.getAttribute("width") + "px";
+            }
+          }
           onNotesChange?.(getCurrentNotes());
         }
       },
@@ -708,6 +738,21 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.previous();
           osmdRef.current.cursor.update(); // Update visual position after movement
+          // ダークモード時はオーバーレイを同期
+          if (darkMode) {
+            const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+            const cursorOverlay = cursorElement?.parentElement?.querySelector(
+              ".cursor-overlay-orange",
+            ) as HTMLDivElement;
+            if (cursorOverlay && cursorElement) {
+              cursorOverlay.style.top = cursorElement.style.top;
+              cursorOverlay.style.left = cursorElement.style.left;
+              cursorOverlay.style.height =
+                cursorElement.getAttribute("height") + "px";
+              cursorOverlay.style.width =
+                cursorElement.getAttribute("width") + "px";
+            }
+          }
           onNotesChange?.(getCurrentNotes());
         }
       },
@@ -715,6 +760,21 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.reset();
           osmdRef.current.cursor.update(); // Update visual position after reset
+          // ダークモード時はオーバーレイを同期
+          if (darkMode) {
+            const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+            const cursorOverlay = cursorElement?.parentElement?.querySelector(
+              ".cursor-overlay-orange",
+            ) as HTMLDivElement;
+            if (cursorOverlay && cursorElement) {
+              cursorOverlay.style.top = cursorElement.style.top;
+              cursorOverlay.style.left = cursorElement.style.left;
+              cursorOverlay.style.height =
+                cursorElement.getAttribute("height") + "px";
+              cursorOverlay.style.width =
+                cursorElement.getAttribute("width") + "px";
+            }
+          }
           onNotesChange?.(getCurrentNotes());
         }
       },
@@ -734,8 +794,39 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           if (cursorElement) {
             cursorElement.classList.remove("cursor-hidden");
             cursorElement.classList.add("osmdCursor");
-            cursorElement.style.backgroundColor = "#33e02f";
-            cursorElement.style.opacity = "0.5";
+            cursorElement.classList.remove("cursor-dark", "cursor-light");
+            cursorElement.classList.add(
+              darkMode ? "cursor-dark" : "cursor-light",
+            );
+            if (darkMode) {
+              // ダークモード時はオーバーレイを同期（IMGのスタイルをコピー）
+              const parentForOverlay =
+                cursorElement.parentElement || containerRef.current;
+              let cursorOverlay = parentForOverlay?.querySelector(
+                ".cursor-overlay-orange",
+              ) as HTMLDivElement;
+              // オーバーレイが存在しない場合は新規作成
+              if (!cursorOverlay && parentForOverlay) {
+                cursorOverlay = document.createElement("div");
+                cursorOverlay.className = "cursor-overlay-orange";
+                parentForOverlay.appendChild(cursorOverlay);
+                console.log("Created new cursor overlay in showCursor");
+              }
+              if (cursorOverlay) {
+                cursorOverlay.style.cssText = cursorElement.style.cssText;
+                cursorOverlay.style.height =
+                  cursorElement.getAttribute("height") + "px";
+                cursorOverlay.style.width =
+                  cursorElement.getAttribute("width") + "px";
+                cursorOverlay.style.backgroundColor = "#F89173";
+                cursorOverlay.style.opacity = "0.5";
+                cursorOverlay.style.pointerEvents = "none";
+                cursorOverlay.style.zIndex = "-1";
+                cursorOverlay.style.display = "block";
+              }
+            } else {
+              cursorElement.style.opacity = "0.5";
+            }
             cursorElement.style.width = "10px";
             cursorElement.style.display = "block";
             cursorElement.style.visibility = "visible";
@@ -764,8 +855,39 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   .cursorElement;
                 if (cursorElement) {
                   cursorElement.classList.add("osmdCursor");
-                  cursorElement.style.backgroundColor = "#33e02f";
-                  cursorElement.style.opacity = "0.5";
+                  cursorElement.classList.remove("cursor-dark", "cursor-light");
+                  cursorElement.classList.add(
+                    darkMode ? "cursor-dark" : "cursor-light",
+                  );
+                  if (darkMode) {
+                    // ダークモード時はオーバーレイを同期（IMGのスタイルをコピー）
+                    const parentForOverlay =
+                      cursorElement.parentElement || containerRef.current;
+                    let cursorOverlay = parentForOverlay?.querySelector(
+                      ".cursor-overlay-orange",
+                    ) as HTMLDivElement;
+                    // オーバーレイが存在しない場合は新規作成
+                    if (!cursorOverlay && parentForOverlay) {
+                      cursorOverlay = document.createElement("div");
+                      cursorOverlay.className = "cursor-overlay-orange";
+                      parentForOverlay.appendChild(cursorOverlay);
+                      console.log("Created new cursor overlay after zoom");
+                    }
+                    if (cursorOverlay) {
+                      cursorOverlay.style.cssText = cursorElement.style.cssText;
+                      cursorOverlay.style.height =
+                        cursorElement.getAttribute("height") + "px";
+                      cursorOverlay.style.width =
+                        cursorElement.getAttribute("width") + "px";
+                      cursorOverlay.style.backgroundColor = highlightColor;
+                      cursorOverlay.style.opacity = "0.4";
+                      cursorOverlay.style.pointerEvents = "none";
+                      cursorOverlay.style.zIndex = "-1";
+                      cursorOverlay.style.display = "block";
+                    }
+                  } else {
+                    cursorElement.style.opacity = "0.5";
+                  }
                   cursorElement.style.width = "10px";
                   cursorElement.style.display = "block";
                   cursorElement.style.visibility = "visible";
@@ -802,9 +924,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             } else if (musicXmlPath) {
               await osmdRef.current.load(musicXmlPath);
             }
-
             osmdRef.current.render();
-
             // Re-apply cursor styles after render
             setTimeout(() => {
               console.log("Chord visibility changed, render complete");
@@ -815,8 +935,41 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   .cursorElement;
                 if (cursorElement) {
                   cursorElement.classList.add("osmdCursor");
-                  cursorElement.style.backgroundColor = "#33e02f";
-                  cursorElement.style.opacity = "0.5";
+                  cursorElement.classList.remove("cursor-dark", "cursor-light");
+                  cursorElement.classList.add(
+                    darkMode ? "cursor-dark" : "cursor-light",
+                  );
+                  if (darkMode) {
+                    // ダークモード時はオーバーレイを同期（IMGのスタイルをコピー）
+                    const parentForOverlay =
+                      cursorElement.parentElement || containerRef.current;
+                    let cursorOverlay = parentForOverlay?.querySelector(
+                      ".cursor-overlay-orange",
+                    ) as HTMLDivElement;
+                    // オーバーレイが存在しない場合は新規作成
+                    if (!cursorOverlay && parentForOverlay) {
+                      cursorOverlay = document.createElement("div");
+                      cursorOverlay.className = "cursor-overlay-orange";
+                      parentForOverlay.appendChild(cursorOverlay);
+                      console.log(
+                        "Created new cursor overlay after chord visibility change",
+                      );
+                    }
+                    if (cursorOverlay) {
+                      cursorOverlay.style.cssText = cursorElement.style.cssText;
+                      cursorOverlay.style.height =
+                        cursorElement.getAttribute("height") + "px";
+                      cursorOverlay.style.width =
+                        cursorElement.getAttribute("width") + "px";
+                      cursorOverlay.style.backgroundColor = "#F89173";
+                      cursorOverlay.style.opacity = "0.7";
+                      cursorOverlay.style.pointerEvents = "none";
+                      cursorOverlay.style.zIndex = "-1";
+                      cursorOverlay.style.display = "block";
+                    }
+                  } else {
+                    cursorElement.style.opacity = "0.5";
+                  }
                   cursorElement.style.width = "10px";
                   cursorElement.style.display = "block";
                   cursorElement.style.visibility = "visible";
@@ -872,6 +1025,21 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         }
 
         cursor.update();
+        // ダークモード時はオーバーレイを同期
+        if (darkMode) {
+          const cursorElement = (cursor as any).cursorElement;
+          const cursorOverlay = cursorElement?.parentElement?.querySelector(
+            ".cursor-overlay-orange",
+          ) as HTMLDivElement;
+          if (cursorOverlay && cursorElement) {
+            cursorOverlay.style.top = cursorElement.style.top;
+            cursorOverlay.style.left = cursorElement.style.left;
+            cursorOverlay.style.height =
+              cursorElement.getAttribute("height") + "px";
+            cursorOverlay.style.width =
+              cursorElement.getAttribute("width") + "px";
+          }
+        }
         onNotesChange?.(getCurrentNotes());
 
         const endTime = performance.now();
@@ -883,6 +1051,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
     useEffect(() => {
       let mounted = true;
+      console.log("useEffect triggered, darkMode:", darkMode);
       const loadOSMD = async () => {
         try {
           setIsLoading(true);
@@ -893,17 +1062,37 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           if (osmdRef.current) {
             containerRef.current.innerHTML = "";
           }
+          // ダークモード時はオレンジ色、ライトモード時は緑色のカーソル
+          const cursorColor = darkMode ? "#F89173" : "#33e02f";
+          const cursorAlpha = darkMode ? 0.5 : 0.5;
+
           const osmd = new OpenSheetMusicDisplay(containerRef.current, {
             autoResize: true,
             backend: "svg",
             drawingParameters: "default", // Use default instead of compacttight
             disableCursor: false, // Explicitly enable cursor
             followCursor: true, // Auto-scroll when cursor moves to new system
+            cursorsOptions: [
+              { type: 0, color: cursorColor, alpha: cursorAlpha, follow: true },
+            ],
           });
 
           // Enable/disable chord symbols BEFORE loading the MusicXML
           if (osmd.EngravingRules) {
             osmd.EngravingRules.RenderChordSymbols = showChords;
+
+            // Apply dark mode colors
+            if (darkMode) {
+              const darkColor = "#d0d0d0";
+              osmd.EngravingRules.DefaultColorNotehead = darkColor;
+              osmd.EngravingRules.DefaultColorStem = darkColor;
+              osmd.EngravingRules.DefaultColorRest = darkColor;
+              osmd.EngravingRules.DefaultColorLabel = darkColor;
+              osmd.EngravingRules.DefaultColorTitle = darkColor;
+              osmd.EngravingRules.DefaultColorMusic = darkColor;
+              osmd.EngravingRules.LedgerLineColorDefault = darkColor; // 加線の色
+              console.log("Dark mode colors applied to OSMD");
+            }
           }
 
           osmdRef.current = osmd;
@@ -964,10 +1153,96 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
               // CSSクラスを追加（デモと同じスタイル）
               cursorElement.classList.add("osmdCursor");
+              // ダークモード/ライトモード用クラスを切り替え
+              cursorElement.classList.remove("cursor-dark", "cursor-light");
+              cursorElement.classList.add(
+                darkMode ? "cursor-dark" : "cursor-light",
+              );
+              console.log(
+                "Cursor class set:",
+                darkMode ? "cursor-dark" : "cursor-light",
+              );
 
-              // 念のため直接スタイルも設定
-              cursorElement.style.backgroundColor = "#33e02f";
-              cursorElement.style.opacity = "0.5";
+              // ダークモード時はIMG要素を完全に隠してDIVオーバーレイでオレンジを表示
+              if (darkMode) {
+                console.log("Dark mode: creating cursor overlay");
+                console.log(
+                  "cursorElement.parentElement:",
+                  cursorElement.parentElement,
+                );
+
+                // parentElementがない場合はcontainerRefを使う
+                const parentForOverlay =
+                  cursorElement.parentElement || containerRef.current;
+                console.log("parentForOverlay:", parentForOverlay);
+
+                if (!parentForOverlay) {
+                  console.error("No parent element found for cursor overlay!");
+                  return;
+                }
+
+                // オレンジ色のDIVオーバーレイを作成
+                let cursorOverlay = parentForOverlay.querySelector(
+                  ".cursor-overlay-orange",
+                ) as HTMLDivElement;
+                console.log("Existing cursorOverlay:", cursorOverlay);
+
+                if (!cursorOverlay) {
+                  cursorOverlay = document.createElement("div");
+                  cursorOverlay.className = "cursor-overlay-orange";
+                  cursorOverlay.style.pointerEvents = "none";
+                  parentForOverlay.appendChild(cursorOverlay);
+                  console.log("Created new cursor overlay:", cursorOverlay);
+                }
+
+                // IMGのstyle属性を完全にコピーしてオレンジ背景を追加
+                const syncOverlay = () => {
+                  if (cursorOverlay && cursorElement) {
+                    // IMGのstyle属性をコピー
+                    cursorOverlay.style.cssText = cursorElement.style.cssText;
+                    // height属性もコピー
+                    cursorOverlay.style.height =
+                      cursorElement.getAttribute("height") + "px";
+                    cursorOverlay.style.width =
+                      cursorElement.getAttribute("width") + "px";
+                    // オレンジ背景と透明度を設定
+                    cursorOverlay.style.backgroundColor = "#F89173";
+                    cursorOverlay.style.opacity = "0.7";
+                    cursorOverlay.style.pointerEvents = "none";
+                    // z-indexを正の値に上書き（IMGのz-index: -1を上書きして前面に表示）
+                    cursorOverlay.style.zIndex = "-1";
+                    // 表示状態を設定（IMGがdisplay:noneでもDIVは表示する、ただしhideCursor時は非表示）
+                    if (cursorElement.classList.contains("cursor-hidden")) {
+                      cursorOverlay.style.display = "none";
+                    } else {
+                      cursorOverlay.style.display = "block";
+                    }
+                  }
+                };
+
+                // MutationObserverでIMG要素のstyle変更を監視してオーバーレイを同期
+                const cursorObserver = new MutationObserver(() => {
+                  syncOverlay();
+                });
+                cursorObserver.observe(cursorElement, {
+                  attributes: true,
+                  attributeFilter: ["style", "height", "width"],
+                });
+
+                // 初回同期
+                syncOverlay();
+                console.log("Cursor overlay created for dark mode");
+              } else {
+                cursorElement.style.opacity = "0.5";
+                // ライトモード時はオーバーレイを非表示
+                const cursorOverlay =
+                  cursorElement.parentElement?.querySelector(
+                    ".cursor-overlay-orange",
+                  ) as HTMLDivElement;
+                if (cursorOverlay) {
+                  cursorOverlay.style.display = "none";
+                }
+              }
               cursorElement.style.width = "10px";
               cursorElement.style.display = "block";
               cursorElement.style.visibility = "visible";
@@ -1088,6 +1363,10 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   // For SVG elements, use setAttribute for styling
                   element.setAttribute("style", "cursor: pointer;");
                   element.classList.add("music-term-clickable");
+                  // ダークモード時はdark-modeクラスを追加（CSSでホバー色をオレンジにする）
+                  if (darkMode) {
+                    element.classList.add("dark-mode");
+                  }
                   // Also style the inner text element
                   if (textEl) {
                     textEl.setAttribute(
@@ -1158,13 +1437,70 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
                   // Add hover effect to change path fill color
                   rectOverlay.addEventListener("mouseenter", () => {
-                    pathEl.style.fill = "#4CAF50";
+                    pathEl.style.fill = highlightColor;
                   });
                   rectOverlay.addEventListener("mouseleave", () => {
                     pathEl.style.fill = "";
                   });
 
                   // Append the rectangle to the clef group
+                  element.appendChild(rectOverlay);
+
+                  // Also keep cursor style on original element for visual feedback
+                  element.setAttribute("style", "cursor: pointer;");
+                }
+              });
+
+              // Handle time signature elements (拍子記号)
+              const timeSignatureElements =
+                containerRef.current.querySelectorAll(".vf-timesignature");
+              console.log(
+                "Found vf-timesignature elements:",
+                timeSignatureElements.length,
+              );
+              timeSignatureElements.forEach((element) => {
+                const pathElements = element.querySelectorAll("path");
+                if (pathElements.length >= 2) {
+                  // 拍子記号は通常2つのpath要素（分子と分母）で構成される
+                  // path要素の数から拍子を推測
+                  // 4/4などの一般的な拍子を識別
+                  const bbox = (element as SVGGraphicsElement).getBBox();
+
+                  // 拍子記号の種類を判定（pathの数とサイズから推測）
+                  // 実際の値はOSMDのデータから取得できないため、一般的な4/4として扱う
+                  // より正確な判定が必要な場合はMusicXMLを解析する必要がある
+                  let timeSignatureType = "__time-4/4__"; // デフォルト
+
+                  // Create a transparent rectangle overlay for easier clicking
+                  const svgNS = "http://www.w3.org/2000/svg";
+                  const rectOverlay = document.createElementNS(svgNS, "rect");
+                  rectOverlay.setAttribute("x", String(bbox.x));
+                  rectOverlay.setAttribute("y", String(bbox.y));
+                  rectOverlay.setAttribute("width", String(bbox.width));
+                  rectOverlay.setAttribute("height", String(bbox.height));
+                  rectOverlay.setAttribute("fill", "transparent");
+                  rectOverlay.setAttribute("style", "cursor: pointer;");
+
+                  // Add click handler to the rectangle overlay
+                  rectOverlay.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    console.log("Time signature clicked:", timeSignatureType);
+                    onMusicTermClick(timeSignatureType);
+                  });
+
+                  // Add hover effect to change path fill color
+                  rectOverlay.addEventListener("mouseenter", () => {
+                    pathElements.forEach((pathEl) => {
+                      (pathEl as SVGPathElement).style.fill = highlightColor;
+                    });
+                  });
+                  rectOverlay.addEventListener("mouseleave", () => {
+                    pathElements.forEach((pathEl) => {
+                      (pathEl as SVGPathElement).style.fill = "";
+                    });
+                  });
+
+                  // Append the rectangle to the time signature group
                   element.appendChild(rectOverlay);
 
                   // Also keep cursor style on original element for visual feedback
@@ -1221,6 +1557,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       onLoad,
       onMusicTermClick,
       showChords,
+      darkMode,
     ]);
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {

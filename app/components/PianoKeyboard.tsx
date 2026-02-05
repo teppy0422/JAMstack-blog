@@ -1,4 +1,6 @@
 "use client";
+import { border, useColorMode } from "@chakra-ui/react";
+import { useTheme } from "@chakra-ui/react";
 
 interface Note {
   step: string;
@@ -91,6 +93,8 @@ export default function PianoKeyboard({
   // If minMidi/maxMidi are provided but seem incorrect, use defaults
   let startMidi = 24;
   let endMidi = 96;
+  const { colorMode } = useColorMode();
+  const theme = useTheme();
 
   if (minMidi !== undefined && maxMidi !== undefined) {
     // Only use provided range if it seems valid
@@ -116,7 +120,10 @@ export default function PianoKeyboard({
 
   const highlightedMidis = Array.from(midiToStaffMap.keys());
   console.log("PianoKeyboard - highlightedMidis:", highlightedMidis);
-  console.log("PianoKeyboard - midiToStaffMap:", Array.from(midiToStaffMap.entries()));
+  console.log(
+    "PianoKeyboard - midiToStaffMap:",
+    Array.from(midiToStaffMap.entries()),
+  );
 
   // 白鍵の数を数える
   let whiteKeyCount = 0;
@@ -138,11 +145,13 @@ export default function PianoKeyboard({
     const displayName = midiToDisplayNameMap.get(midi) || midiToNoteName(midi);
 
     // staff 0 = 右手（緑色 #4CAF50）, staff 1 = 左手（濃い緑 #2E7D32）
-    let whiteKeyColor = "#ffffff";
+    let highlightKeyColor = "#ffffff";
     if (isHighlighted) {
-      whiteKeyColor = staff === 1 ? "#33e02f" : "#33e02f";
+      highlightKeyColor =
+        colorMode === "dark"
+          ? theme.colors.custom.theme.orange[500]
+          : theme.colors.custom.pianoHighlight;
     }
-
     if (!isBlack) {
       whiteKeys.push(
         <div
@@ -151,8 +160,10 @@ export default function PianoKeyboard({
             position: "relative",
             width: `${100 / whiteKeyCount}%`,
             height: "100%",
-            backgroundColor: whiteKeyColor,
-            opacity: 0.6,
+            backgroundColor:
+              colorMode === "dark"
+                ? `${highlightKeyColor}99`
+                : `${highlightKeyColor}77`,
             border: "1px solid #333",
             boxSizing: "border-box",
             display: "flex",
@@ -191,11 +202,13 @@ export default function PianoKeyboard({
     const displayName = midiToDisplayNameMap.get(midi) || midiToNoteName(midi);
 
     // staff 0 = 右手（青色 #2196F3）, staff 1 = 左手（濃い青 #1565C0）
-    let blackKeyColor = "#000";
+    let highlightKeyColor = "#000";
     if (isHighlighted) {
-      blackKeyColor = staff === 1 ? "#85EC82" : "#85EC82";
+      highlightKeyColor =
+        colorMode === "dark"
+          ? theme.colors.custom.theme.orange[500]
+          : theme.colors.custom.pianoHighlight;
     }
-
     if (isBlack) {
       const position =
         whiteKeyIndex * (100 / whiteKeyCount) - (100 / whiteKeyCount) * 0.3;
@@ -207,8 +220,7 @@ export default function PianoKeyboard({
             left: `${position}%`,
             width: `${(100 / whiteKeyCount) * 0.6}%`,
             height: "60%",
-            backgroundColor: blackKeyColor,
-            opacity: 1,
+            backgroundColor: highlightKeyColor,
             border: "1px solid #000",
             boxSizing: "border-box",
             zIndex: 1,

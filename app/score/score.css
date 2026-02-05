@@ -1,25 +1,29 @@
 /* OSMD カーソルのスタイル */
-/* デモと同じ緑色の半透明カーソル */
 .osmdCursor {
-  background-color: #33e02f !important;
-  opacity: 0.5 !important;
-  width: attr(width px) !important;
   display: block !important;
   visibility: visible !important;
   aspect-ratio: none !important;
   height: attr(height px) !important;
 }
 
+/* ライトモード用カーソル色（緑: デフォルト画像を使用） */
+.osmdCursor.cursor-light {
+  opacity: 0.5 !important;
+  width: attr(width px) !important;
+  filter: none !important;
+}
+
+/* ダークモード用カーソル色（オレンジ: #F89173 - 鍵盤ハイライトと同じ色） */
+/* IMG要素は透明にして、DIVオーバーレイでオレンジを表示 */
+.osmdCursor.cursor-dark {
+  opacity: 0 !important;
+  width: attr(width px) !important;
+  filter: none !important;
+}
+
 /* カーソルを非表示にするクラス */
 .osmdCursor.cursor-hidden {
   display: none !important;
-}
-
-/* カーソルが確実に表示されるようにする */
-img.osmdCursor {
-  background-color: #33e02f !important;
-  opacity: 0.5 !important;
-  width: attr(width px) !important;
 }
 
 /* 横並び用コンテナ */
@@ -67,6 +71,7 @@ img.osmdCursor {
 
 /* 印刷用スタイル */
 @media print {
+
   /* ヘッダー、コントロール、フッター（鍵盤）を非表示 */
   .no-print {
     display: none !important;
@@ -95,16 +100,20 @@ img.osmdCursor {
 .music-term-clickable {
   cursor: pointer !important;
   transition: stroke 0.2s ease;
+  --highlight-color: #4CAF50; /* デフォルト（ライトモード）は緑 */
+}
+
+/* ダークモード時はオレンジ色 */
+.music-term-clickable.dark-mode {
+  --highlight-color: #F89173;
 }
 
 .music-term-clickable:hover {
-  stroke: #4CAF50 !important;
-  stroke-width: 1px !important;
+  fill: var(--highlight-color) !important;
 }
 
-/* 子要素のpath, textにもstrokeを適用 */
+/* 子要素のpath, textにもfillを適用 */
 .music-term-clickable:hover path,
 .music-term-clickable:hover text {
-  stroke: #4CAF50 !important;
-  stroke-width: 0.5px !important;
+  fill: var(--highlight-color) !important;
 }
