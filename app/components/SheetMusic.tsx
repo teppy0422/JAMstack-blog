@@ -95,6 +95,24 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
     const onNotesChangeRef = useRef(onNotesChange);
     onNotesChangeRef.current = onNotesChange;
 
+    // Fix chord symbol text (e.g., "maj7" -> "Maj7") after OSMD renders
+    // OSMD may render "maj7" in lowercase, but the standard notation uses "Maj7"
+    const fixChordSymbolText = () => {
+      if (!containerRef.current) return;
+      const textElements = containerRef.current.querySelectorAll("text");
+      textElements.forEach((textEl) => {
+        const content = textEl.textContent;
+        if (content && /maj/i.test(content)) {
+          // Replace "maj" with "Maj" (case-sensitive: only fix lowercase "maj")
+          const fixed = content.replace(/maj/g, "Maj");
+          if (fixed !== content) {
+            textEl.textContent = fixed;
+            console.log("Fixed chord symbol:", content, "->", fixed);
+          }
+        }
+      });
+    };
+
     // Function to build position-to-timestamp map for note click functionality
     const buildPositionToTimestampMap = () => {
       const map: Array<{
@@ -783,6 +801,15 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           const cursorElement = (osmdRef.current.cursor as any).cursorElement;
           if (cursorElement) {
             cursorElement.classList.add("cursor-hidden");
+            // ダークモード時はオーバーレイも非表示にする
+            if (darkMode) {
+              const cursorOverlay = cursorElement.parentElement?.querySelector(
+                ".cursor-overlay-orange",
+              ) as HTMLDivElement;
+              if (cursorOverlay) {
+                cursorOverlay.style.display = "none";
+              }
+            }
             console.log("Cursor hidden with class");
           }
         }
@@ -895,6 +922,9 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                 }
               }
 
+              // Fix chord symbols after zoom re-render
+              fixChordSymbolText();
+
               // Rebuild position-to-timestamp map and click handlers after zoom change
               buildPositionToTimestampMap();
               setupNoteClickHandlers();
@@ -927,6 +957,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             osmdRef.current.render();
             // Re-apply cursor styles after render
             setTimeout(() => {
+              fixChordSymbolText();
               console.log("Chord visibility changed, render complete");
               if (osmdRef.current?.cursor) {
                 osmdRef.current.cursor.show();
@@ -1347,6 +1378,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           // Add click handlers to music term text elements (vf-text) and clef elements (vf-clef)
           // Use setTimeout to ensure OSMD has finished rendering all SVG elements
           setTimeout(() => {
+            fixChordSymbolText();
             if (onMusicTermClick && containerRef.current) {
               // Handle text elements (楽語)
               const textElements =

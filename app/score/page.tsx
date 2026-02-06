@@ -26,8 +26,13 @@ import { MdDeleteOutline } from "react-icons/md";
 const sampleScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
   {
+    id: "autumn-leaves",
+    name: "Autumn Leaves",
+    path: "/scores/Autumn_Leaves.musicxml",
+  },
+  {
     id: "bounce",
-    name: "枯葉",
+    name: "Billie's Bounce",
     path: "/scores/Billie's_Bounce.musicxml",
   },
   {
@@ -90,6 +95,8 @@ export default function ScorePage() {
   const [musicTermModal, setMusicTermModal] = useState<MusicTerm | null>(null);
   const sheetMusicRef = useRef<SheetMusicRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
+  const loadingStartTimeRef = useRef<number>(0);
   const { colorMode } = useColorMode();
 
   // Load user scores from IndexedDB on mount
@@ -124,6 +131,7 @@ export default function ScorePage() {
   const handleScoreChange = useCallback(
     async (scoreId: string) => {
       setIsLoading(true);
+      loadingStartTimeRef.current = Date.now();
       const randomIndex = Math.floor(Math.random() * famousSayings.length);
       setCurrentQuote(famousSayings[randomIndex]);
       setCurrentNotes([]);
@@ -228,7 +236,15 @@ export default function ScorePage() {
         await sheetMusicRef.current?.setZoom(zoomValue);
       }
     }
-    setIsLoading(false); // Set loading to false when SheetMusic reports it's done
+    // 最低2秒間はローディングを表示
+    const elapsed = Date.now() - loadingStartTimeRef.current;
+    const minLoadingTime = 2000;
+    if (elapsed < minLoadingTime) {
+      await new Promise((resolve) =>
+        setTimeout(resolve, minLoadingTime - elapsed),
+      );
+    }
+    setIsLoading(false);
   }, []);
 
   const handleNext = () => {
@@ -248,6 +264,10 @@ export default function ScorePage() {
     setZoom(presetZoom);
     localStorage.setItem("lastZoomLevel", presetZoom.toString());
 
+    // スクロール位置を保存
+    const scrollTop = mainRef.current?.scrollTop || 0;
+    const scrollLeft = mainRef.current?.scrollLeft || 0;
+
     sheetMusicRef.current?.hideCursor();
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 50));
@@ -257,6 +277,11 @@ export default function ScorePage() {
     } finally {
       setIsLoading(false);
       sheetMusicRef.current?.showCursor();
+      // スクロール位置を復元
+      if (mainRef.current) {
+        mainRef.current.scrollTop = scrollTop;
+        mainRef.current.scrollLeft = scrollLeft;
+      }
     }
   };
 
@@ -395,7 +420,7 @@ export default function ScorePage() {
   const bgColor =
     colorMode === "dark"
       ? theme.colors.custom.theme.dark[900]
-      : theme.colors.custom.theme.light[500];
+      : theme.colors.custom.theme.light[100];
   const borderColor =
     colorMode === "dark"
       ? theme.colors.custom.theme.light[200]
@@ -643,10 +668,10 @@ export default function ScorePage() {
                       borderColor: zoom === presetZoom ? borderColor : frColor,
                       backgroundColor:
                         zoom === presetZoom && colorMode === "dark"
-                          ? `${highlightColor}bb`
+                          ? `${highlightColor}70`
                           : zoom === presetZoom && colorMode === "light"
-                            ? `${highlightColor}50`
-                            : "none",
+                            ? `${highlightColor}40`
+                            : "transparent",
                       cursor: isLoading ? "not-allowed" : "pointer",
                       opacity: isLoading ? 0.5 : 1,
                       fontWeight: "bold",
@@ -782,6 +807,7 @@ export default function ScorePage() {
 
         {/* 楽譜表示エリア */}
         <main
+          ref={mainRef}
           style={{
             flex: 1,
             overflow: "auto",

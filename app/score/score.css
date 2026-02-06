@@ -77,21 +77,55 @@
     display: none !important;
   }
 
+  /* ページ全体のレイアウト調整 */
+  html, body {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* ルートコンテナのリセット */
+  body > div {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
   /* 楽譜エリアを印刷用に最適化 */
   main {
     overflow: visible !important;
     height: auto !important;
     flex: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
-  /* ページ全体のレイアウト調整 */
-  body {
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
+  /* 楽譜コンテナのサイズ調整 */
+  main > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+
+  /* OSMD SVGを印刷サイズに合わせる */
+  svg {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
   }
 
   /* カーソルを非表示 */
   .osmdCursor {
+    display: none !important;
+  }
+
+  /* カーソルオーバーレイも非表示 */
+  .cursor-overlay-orange {
     display: none !important;
   }
 }

@@ -425,7 +425,13 @@ export const musicTerms: MusicTerm[] = [
     meaning: "弱音ペダルを離して",
     description: "una cordaの指示を解除する。",
   },
-
+  {
+    term: "rit",
+    name: "ritardando",
+    meaning: "だんだん遅く",
+    description:
+      "曲の流れの中で徐々にテンポを落とし、自然にスピードを緩めていく指示",
+  },
   // 音部記号（内部識別子）
   {
     term: "__treble-clef__",
