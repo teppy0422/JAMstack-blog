@@ -21,6 +21,8 @@ export interface MidiConfig {
   velocitySensitivity: boolean;
   /** ベロシティ閾値 (1-127): この値未満のNote Onを無視 */
   velocityThreshold: number;
+  /** 判定対象の譜表: "both"=両手, 1=右手のみ, 2=左手のみ */
+  staffFilter: "both" | 1 | 2;
 }
 
 export type MidiPresetName = "performance" | "practice" | "exact";
@@ -37,6 +39,7 @@ export const midiPresets: Record<MidiPresetName, MidiConfig> = {
     octaveIgnore: false,
     velocitySensitivity: false,
     velocityThreshold: 20,
+    staffFilter: "both",
   },
   /** 練習モード: 必要な音が含まれていれば進む（余分な音はOK） */
   practice: {
@@ -49,6 +52,7 @@ export const midiPresets: Record<MidiPresetName, MidiConfig> = {
     octaveIgnore: true,
     velocitySensitivity: false,
     velocityThreshold: 20,
+    staffFilter: "both",
   },
   /** 完全一致モード: 余分な音もNG */
   exact: {
@@ -61,6 +65,7 @@ export const midiPresets: Record<MidiPresetName, MidiConfig> = {
     octaveIgnore: false,
     velocitySensitivity: false,
     velocityThreshold: 20,
+    staffFilter: "both",
   },
 };
 

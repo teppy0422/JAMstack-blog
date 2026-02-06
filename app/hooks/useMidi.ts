@@ -178,21 +178,18 @@ export function useMidi({
       // 最初に見つかった入力デバイスに接続
       let connected = false;
       for (const input of access.inputs.values()) {
-        console.log("MIDI input found:", input.name, input.id);
         input.onmidimessage = onMidiMessage;
         inputHandlersRef.current.set(input, onMidiMessage);
         if (!connected) {
           setDeviceName(input.name || "Unknown MIDI Device");
           setConnectionStatus("connected");
           connected = true;
-          console.log("MIDI connected to:", input.name);
         }
       }
 
       if (!connected) {
         setDeviceName(null);
         setConnectionStatus("disconnected");
-        console.log("No MIDI input devices found");
       }
     },
     [onMidiMessage],
@@ -228,7 +225,6 @@ export function useMidi({
 
         // デバイスの接続/切断を監視
         access.onstatechange = () => {
-          console.log("MIDI state changed");
           setupMidiInputs(access);
         };
       })

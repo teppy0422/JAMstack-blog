@@ -9,7 +9,7 @@ import { useTheme } from "@chakra-ui/react";
 import { RiCodeSLine, RiCodeSSlashFill } from "react-icons/ri";
 import { TiPrinter } from "react-icons/ti";
 import { FaRegFile } from "react-icons/fa6";
-import { IoPlayOutline, IoPlaySkipBackOutline, IoSettingsOutline } from "react-icons/io5";
+import { IoPlayOutline, IoPlaySkipBackOutline, IoSettingsOutline, IoExpandOutline, IoContractOutline } from "react-icons/io5";
 
 import "./score.css";
 import {
@@ -104,9 +104,11 @@ export default function ScorePage() {
   const [midiEnabled, setMidiEnabled] = useState(true);
   const [wrongNotes, setWrongNotes] = useState<number[]>([]);
   const [showMidiSettings, setShowMidiSettings] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const sheetMusicRef = useRef<SheetMusicRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
+  const pageContainerRef = useRef<HTMLDivElement>(null);
   const loadingStartTimeRef = useRef<number>(0);
   const { colorMode } = useColorMode();
 
@@ -163,6 +165,7 @@ export default function ScorePage() {
 
   const expectedMidiNotes = currentNotes
     .filter((n) => n.step && typeof n.octave === "number")
+    .filter((n) => midiConfig.staffFilter === "both" || n.staff === midiConfig.staffFilter)
     .map((n) => noteToMidi(n.step, n.octave, n.alter));
 
   // MIDI判定成功時: カーソルを進めて間違い表示をクリア
@@ -181,9 +184,6 @@ export default function ScorePage() {
       if (notes.length > 0) break;
       ref.next();
       skipCount++;
-    }
-    if (skipCount > 0) {
-      console.log("Auto-skipped", skipCount, "rest/tie positions");
     }
   }, []);
 
@@ -316,12 +316,10 @@ export default function ScorePage() {
   }, [userScores.length]);
 
   const handleNotesChange = useCallback((notes: Note[]) => {
-    console.log("handleNotesChange called with:", notes);
     setCurrentNotes(notes);
   }, []);
 
   const handleRangeChange = useCallback((minMidi: number, maxMidi: number) => {
-    console.log("handleRangeChange called with:", minMidi, maxMidi);
     setKeyboardRange({ min: minMidi, max: maxMidi });
   }, []);
 
@@ -366,7 +364,6 @@ export default function ScorePage() {
   };
 
   const handleZoomPreset = async (presetZoom: number) => {
-    console.log("handleZoomPreset called with:", presetZoom);
     setZoom(presetZoom);
     localStorage.setItem("lastZoomLevel", presetZoom.toString());
 
@@ -419,7 +416,6 @@ export default function ScorePage() {
       // Auto-select the newly uploaded score
       await handleScoreChange(`user-${id}`);
 
-      console.log("Score uploaded successfully:", name);
     } catch (error) {
       console.error("Failed to upload score:", error);
       alert("楽譜のアップロードに失敗しました");
@@ -479,7 +475,6 @@ export default function ScorePage() {
         setSelectedScoreId(null);
         localStorage.removeItem("lastOpenedScoreId");
       }
-      console.log("Score deleted successfully");
     } catch (error) {
       console.error("Failed to delete score:", error);
       alert("楽譜の削除に失敗しました");
@@ -522,6 +517,27 @@ export default function ScorePage() {
     window.print();
   };
 
+  // Handle fullscreen toggle
+  const handleFullscreenToggle = useCallback(() => {
+    if (!pageContainerRef.current) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      pageContainerRef.current.requestFullscreen();
+    }
+  }, []);
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", onFullscreenChange);
+    };
+  }, []);
+
   const theme = useTheme();
   const bgColor =
     colorMode === "dark"
@@ -541,6 +557,7 @@ export default function ScorePage() {
       : theme.colors.custom.pianoHighlight;
   return (
     <div
+      ref={pageContainerRef}
       style={{ backgroundColor: bgColor, height: "100vh", overflow: "hidden" }}
     >
       {/* ヘッダー背景用の固定レイヤー（LiquidGlassの後ろに表示） */}
@@ -960,6 +977,27 @@ export default function ScorePage() {
                 >
                   <IoSettingsOutline />
                 </button>
+                <button
+                  onClick={handleFullscreenToggle}
+                  disabled={isLoading}
+                  style={{
+                    height: "40px",
+                    width: "32px",
+                    fontSize: "18px",
+                    borderRadius: "4px",
+                    borderWidth: ".5px",
+                    borderColor: borderColor,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    display: "flex",
+                    color: frColor,
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    opacity: isLoading ? 0.5 : 1,
+                  }}
+                  title={isFullscreen ? "全画面解除" : "全画面"}
+                >
+                  {isFullscreen ? <IoContractOutline /> : <IoExpandOutline />}
+                </button>
               </div>
             </div>
           )}
@@ -1086,7 +1124,11 @@ export default function ScorePage() {
         >
           {selectedScore ? (
             <PianoKeyboard
-              notes={currentNotes}
+              notes={
+                midiConfig.staffFilter === "both"
+                  ? currentNotes
+                  : currentNotes.filter((n) => n.staff === midiConfig.staffFilter)
+              }
               minMidi={keyboardRange?.min}
               maxMidi={keyboardRange?.max}
               wrongNotes={wrongNotes}
@@ -1265,6 +1307,43 @@ export default function ScorePage() {
                       }}
                     >
                       {ms}ms
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 判定対象（譜表フィルタ） */}
+              <div style={{ marginBottom: "16px" }}>
+                <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px", fontWeight: "bold" }}>
+                  判定対象
+                </div>
+                <div style={{ display: "flex", gap: "4px" }}>
+                  {([
+                    { value: "both" as const, label: "両手" },
+                    { value: 1 as const, label: "右手のみ" },
+                    { value: 2 as const, label: "左手のみ" },
+                  ]).map((opt) => (
+                    <button
+                      key={String(opt.value)}
+                      onClick={() => updateMidiConfig({ staffFilter: opt.value })}
+                      style={{
+                        flex: 1,
+                        padding: "6px 8px",
+                        fontSize: "12px",
+                        borderRadius: "4px",
+                        borderWidth: "1px",
+                        borderStyle: "solid",
+                        borderColor: midiConfig.staffFilter === opt.value ? highlightColor : borderColor,
+                        backgroundColor:
+                          midiConfig.staffFilter === opt.value
+                            ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
+                            : "transparent",
+                        color: frColor,
+                        cursor: "pointer",
+                        fontWeight: midiConfig.staffFilter === opt.value ? "bold" : "normal",
+                      }}
+                    >
+                      {opt.label}
                     </button>
                   ))}
                 </div>

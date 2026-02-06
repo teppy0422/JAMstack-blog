@@ -111,7 +111,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           const fixed = content.replace(/maj/g, "Maj");
           if (fixed !== content) {
             textEl.textContent = fixed;
-            console.log("Fixed chord symbol:", content, "->", fixed);
           }
         }
       });
@@ -169,7 +168,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           scrollContainer.scrollTop = savedScrollTop;
         }
 
-        console.log("Built positionToTimestampMap with", map.length, "entries");
       }
 
       positionToTimestampMapRef.current = map;
@@ -182,11 +180,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
       const staveNoteElements =
         containerRef.current.querySelectorAll(".vf-stavenote");
-      console.log(
-        "Setting up click handlers for",
-        staveNoteElements.length,
-        "vf-stavenote elements",
-      );
 
       // Get cursor height for click area
       const cursorElement = (osmdRef.current.cursor as any).cursorElement;
@@ -234,8 +227,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           const noteY =
             noteRect.top - currentContainerRect.top + noteRect.height / 2;
 
-          console.log("Note clicked at X:", noteX, "Y:", noteY);
-
           // Find the closest timestamp in the map using both X and Y coordinates
           const positionMap = positionToTimestampMapRef.current;
           let closest = positionMap[0];
@@ -253,17 +244,9 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           }
 
           if (closest) {
-            console.log(
-              "Jumping to measure:",
-              closest.measureIndex,
-              "timestamp:",
-              closest.timestamp,
-            );
-
             // Jump cursor to the position
             if (osmdRef.current?.cursor) {
               const cursor = osmdRef.current.cursor;
-              const startTime = performance.now();
 
               cursor.reset();
               let stepCount = 0;
@@ -308,11 +291,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                 }
               }
               onNotesChangeRef.current?.(getCurrentNotes());
-
-              const endTime = performance.now();
-              console.log(
-                `Cursor jump completed in ${(endTime - startTime).toFixed(2)}ms, steps: ${stepCount}`,
-              );
             }
           }
         });
@@ -328,41 +306,11 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       }
       const cursorElement = (osmd.cursor as any).cursorElement;
       if (cursorElement) {
-        console.log("--- DEBUGGING CURSOR STYLES (Applying) ---");
-        console.log("Cursor Element exists:", cursorElement);
-        console.log("Cursor Element Parent:", cursorElement.parentNode);
-        console.log(
-          "Cursor Element Bounding Rect (before forced style):",
-          cursorElement.getBoundingClientRect(),
-        );
-
         // Apply demo-like styling directly to the cursor image element
         cursorElement.style.backgroundColor = "#FFD700"; // Demo yellow
         cursorElement.style.opacity = "0.4"; // Semi-transparent
         cursorElement.style.zIndex = "1000"; // Bring to front
-        // Reverted: Do not manipulate src or backgroundImage here. Let OSMD manage it.
-
-        console.log(
-          "Cursor Element forced background-color:",
-          cursorElement.style.backgroundColor,
-        );
-        console.log(
-          "Cursor Element forced opacity:",
-          cursorElement.style.opacity,
-        );
-        console.log(
-          "Cursor Element forced z-index:",
-          cursorElement.style.zIndex,
-        );
-        console.log(
-          "Cursor Element Computed Style (after forced style):",
-          getComputedStyle(cursorElement),
-        );
-      } else {
-        console.log("Cursor Element does NOT exist when applying styles.");
       }
-      console.log("OSMD Cursor is hidden:", osmd.cursor.hidden);
-      console.log("--- END DEBUGGING CURSOR STYLES ---");
     };
 
     const getCurrentNotes = () => {
@@ -376,7 +324,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           return [];
         }
 
-        const notes: Array<{ step: string; octave: number; alter: number }> =
+        const notes: Array<{ step: string; octave: number; alter: number; staff?: number }> =
           [];
 
         // Get all voices at current timestep, not just CurrentVoiceEntries
@@ -427,12 +375,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                         octave,
                         alter: pitch.Alter || 0,
                       };
-                      console.log(
-                        "Adding note:",
-                        noteData,
-                        "halfTone:",
-                        pitch.halfTone,
-                      );
                       notes.push(noteData);
                     }
                   }
@@ -461,8 +403,10 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                     if (!sourceStaffEntry) continue;
                     const entryTimestamp = sourceStaffEntry.Timestamp;
                     const voiceEntries = sourceStaffEntry.VoiceEntries;
-                    const staffNumber = (sourceStaffEntry as any).ParentStaff
+                    const staffId = (sourceStaffEntry as any).ParentStaff
                       ?.idInMusicSheet;
+                    // idInMusicSheet is 0-based, convert to 1-based (1=右手, 2=左手)
+                    const staffNumber = typeof staffId === "number" ? staffId + 1 : undefined;
 
                     if (voiceEntries && entryTimestamp) {
                       for (const voiceEntry of voiceEntries) {
@@ -541,18 +485,10 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
         // Try to get all voices under cursor from all staffs
         if (notes.length === 0) {
-          console.log("Trying to get notes from graphical measure");
-
           if (graphicalMeasure?.staffEntries) {
             for (const staffEntry of graphicalMeasure.staffEntries) {
               // Check if this staff entry is at the current timestamp
               const staffTimestamp = (staffEntry as any)?.timestamp;
-              console.log(
-                "StaffEntry timestamp:",
-                staffTimestamp?.RealValue,
-                "vs current:",
-                currentTimestamp?.RealValue,
-              );
 
               if (staffTimestamp?.RealValue === currentTimestamp?.RealValue) {
                 if (staffEntry?.graphicalVoiceEntries) {
@@ -561,11 +497,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                       ?.parentVoiceEntry;
 
                     if (voiceEntry?.Notes) {
-                      console.log(
-                        "Found voice with notes:",
-                        voiceEntry.Notes.length,
-                      );
-
                       for (const note of voiceEntry.Notes) {
                         const noteAny = note as any;
                         let pitch: any = null;
@@ -584,13 +515,14 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                           const octave =
                             pitch.octave !== undefined ? pitch.octave : 4;
                           const alter = pitch.accidental || 0;
-                          const staffNumber = (staffEntry as any)
+                          const staffId3 = (staffEntry as any)
                             ?.parentStaffEntry?.ParentStaff?.idInMusicSheet;
+                          const staffNumber3 = typeof staffId3 === "number" ? staffId3 + 1 : undefined;
                           const noteData = {
                             step,
                             octave,
                             alter,
-                            staff: staffNumber,
+                            staff: staffNumber3,
                           };
                           notes.push(noteData);
                         }
@@ -605,10 +537,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
         // Try checking all staff entries that overlap with current time (not just exact timestamp)
         if (notes.length === 0 && currentMeasure && currentTimestamp) {
-          console.log(
-            "Trying to find all sounding notes (including sustained notes)",
-          );
-
           if (graphicalMeasure?.staffEntries) {
             for (const staffEntry of graphicalMeasure.staffEntries) {
               const entryTimestamp = (staffEntry as any)?.timestamp;
@@ -622,17 +550,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   !entryEndTimestamp ||
                   entryEndTimestamp.RealValue > currentTimestamp.RealValue;
 
-                console.log(
-                  "Entry timestamp:",
-                  entryTimestamp.RealValue,
-                  "Current:",
-                  currentTimestamp.RealValue,
-                  "Starts:",
-                  starts,
-                  "NotEnded:",
-                  notEnded,
-                );
-
                 if (starts && notEnded) {
                   if (staffEntry?.graphicalVoiceEntries) {
                     for (const graphicalVoiceEntry of staffEntry.graphicalVoiceEntries) {
@@ -640,11 +557,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                         ?.parentVoiceEntry;
 
                       if (voiceEntry?.Notes) {
-                        console.log(
-                          "Found sustained voice with notes:",
-                          voiceEntry.Notes.length,
-                        );
-
                         for (const note of voiceEntry.Notes) {
                           const noteAny = note as any;
                           let pitch: any = null;
@@ -671,15 +583,15 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                             const octave =
                               pitch.octave !== undefined ? pitch.octave : 4;
                             const alter = pitch.accidental || 0;
-                            const staffNumber = (staffEntry as any)
+                            const staffId4 = (staffEntry as any)
                               ?.parentStaffEntry?.ParentStaff?.idInMusicSheet;
+                            const staffNumber4 = typeof staffId4 === "number" ? staffId4 + 1 : undefined;
                             const noteData = {
                               step,
                               octave,
                               alter,
-                              staff: staffNumber,
+                              staff: staffNumber4,
                             };
-                            console.log("Adding sustained note:", noteData);
                             notes.push(noteData);
                           }
                         }
@@ -713,9 +625,10 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                       : "C";
                   const octave = pitch.octave !== undefined ? pitch.octave : 4;
                   const alter = pitch.accidental || 0;
-                  const staffNumber = (voiceEntry as any)?.ParentStaffEntry
+                  const staffId5 = (voiceEntry as any)?.ParentStaffEntry
                     ?.ParentStaff?.idInMusicSheet;
-                  const noteData = { step, octave, alter, staff: staffNumber };
+                  const staffNumber5 = typeof staffId5 === "number" ? staffId5 + 1 : undefined;
+                  const noteData = { step, octave, alter, staff: staffNumber5 };
                   notes.push(noteData);
                 }
               }
@@ -814,7 +727,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                 cursorOverlay.style.display = "none";
               }
             }
-            console.log("Cursor hidden with class");
           }
         }
       },
@@ -841,7 +753,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                 cursorOverlay = document.createElement("div");
                 cursorOverlay.className = "cursor-overlay-orange";
                 parentForOverlay.appendChild(cursorOverlay);
-                console.log("Created new cursor overlay in showCursor");
               }
               if (cursorOverlay) {
                 cursorOverlay.style.cssText = cursorElement.style.cssText;
@@ -862,24 +773,17 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             cursorElement.style.display = "block";
             cursorElement.style.visibility = "visible";
           }
-          console.log("Cursor shown");
         }
       },
       setZoom: async (zoom: number) => {
-        console.log("setZoom called with:", zoom);
         if (osmdRef.current) {
-          console.log("osmdRef.current exists, setting Zoom to:", zoom);
-
           osmdRef.current.Zoom = zoom;
-          console.log("Calling render...");
 
           // Wrap render in Promise to wait for completion
           await new Promise<void>((resolve) => {
             osmdRef.current.render();
             // Use setTimeout to ensure render is complete
             setTimeout(() => {
-              console.log("Render complete");
-
               // Re-apply cursor styles after render
               if (osmdRef.current.cursor) {
                 const cursorElement = (osmdRef.current.cursor as any)
@@ -902,8 +806,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                       cursorOverlay = document.createElement("div");
                       cursorOverlay.className = "cursor-overlay-orange";
                       parentForOverlay.appendChild(cursorOverlay);
-                      console.log("Created new cursor overlay after zoom");
-                    }
+                      }
                     if (cursorOverlay) {
                       cursorOverlay.style.cssText = cursorElement.style.cssText;
                       cursorOverlay.style.height =
@@ -922,7 +825,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   cursorElement.style.width = "10px";
                   cursorElement.style.display = "block";
                   cursorElement.style.visibility = "visible";
-                  console.log("Cursor styles re-applied after zoom");
                 }
               }
 
@@ -932,23 +834,18 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               // Rebuild position-to-timestamp map and click handlers after zoom change
               buildPositionToTimestampMap();
               setupNoteClickHandlers();
-              console.log("Position map and click handlers rebuilt after zoom");
 
               resolve();
             }, 100);
           });
-        } else {
-          console.log("osmdRef.current is null!");
         }
       },
       getNotesAtPosition,
       setChordVisibility: async (visible: boolean) => {
-        console.log("setChordVisibility called with:", visible);
         if (osmdRef.current) {
           // Set the rule before re-rendering
           if (osmdRef.current.EngravingRules) {
             osmdRef.current.EngravingRules.RenderChordSymbols = visible;
-            console.log("RenderChordSymbols set to:", visible);
           }
 
           // Need to reload the music XML for chord visibility changes to take effect
@@ -962,7 +859,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             // Re-apply cursor styles after render
             setTimeout(() => {
               fixChordSymbolText();
-              console.log("Chord visibility changed, render complete");
               if (osmdRef.current?.cursor) {
                 osmdRef.current.cursor.show();
                 osmdRef.current.cursor.reset();
@@ -986,9 +882,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                       cursorOverlay = document.createElement("div");
                       cursorOverlay.className = "cursor-overlay-orange";
                       parentForOverlay.appendChild(cursorOverlay);
-                      console.log(
-                        "Created new cursor overlay after chord visibility change",
-                      );
                     }
                     if (cursorOverlay) {
                       cursorOverlay.style.cssText = cursorElement.style.cssText;
@@ -1017,15 +910,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         }
       },
       jumpToTimestamp: (measureIndex: number, timestampInMeasure: number) => {
-        console.log(
-          "jumpToTimestamp called:",
-          measureIndex,
-          timestampInMeasure,
-        );
-        const startTime = performance.now();
-
         if (!osmdRef.current?.cursor) {
-          console.log("No cursor available");
           return;
         }
 
@@ -1076,11 +961,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           }
         }
         onNotesChange?.(getCurrentNotes());
-
-        const endTime = performance.now();
-        console.log(
-          `jumpToTimestamp completed in ${(endTime - startTime).toFixed(2)}ms, steps: ${stepCount}`,
-        );
       },
       getCurrentNotes: () => {
         return getCurrentNotes();
@@ -1092,7 +972,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
     useEffect(() => {
       let mounted = true;
-      console.log("useEffect triggered, darkMode:", darkMode);
       const loadOSMD = async () => {
         try {
           setIsLoading(true);
@@ -1132,7 +1011,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               osmd.EngravingRules.DefaultColorTitle = darkColor;
               osmd.EngravingRules.DefaultColorMusic = darkColor;
               osmd.EngravingRules.LedgerLineColorDefault = darkColor; // 加線の色
-              console.log("Dark mode colors applied to OSMD");
             }
           }
 
@@ -1152,46 +1030,15 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           osmd.render();
 
           // Initialize cursor after rendering (like the demo does)
-          console.log("=== CURSOR INITIALIZATION ===");
-          console.log("osmd.cursor exists:", !!osmd.cursor);
-
           if (osmd.cursor) {
-            console.log(
-              "Cursor hidden status before show():",
-              osmd.cursor.hidden,
-            );
             osmd.cursor.show();
-            console.log(
-              "Cursor hidden status after show():",
-              osmd.cursor.hidden,
-            );
             osmd.cursor.reset();
             osmd.cursor.update(); // Calculate initial cursor position
 
             // デフォルトのカーソル要素にスタイルを適用する
             const cursorElement = (osmd.cursor as any).cursorElement;
-            console.log("cursorElement exists:", !!cursorElement);
 
             if (cursorElement) {
-              console.log("Cursor element found:", cursorElement);
-              console.log("Cursor element tagName:", cursorElement.tagName);
-
-              // カーソル要素の現在の状態を詳しく確認
-              const rect = cursorElement.getBoundingClientRect();
-              const computedStyle = window.getComputedStyle(cursorElement);
-
-              console.log("カーソル要素の詳細情報:");
-              console.log("- display:", computedStyle.display);
-              console.log("- visibility:", computedStyle.visibility);
-              console.log("- opacity:", computedStyle.opacity);
-              console.log("- width:", computedStyle.width);
-              console.log("- height:", computedStyle.height);
-              console.log("- position:", computedStyle.position);
-              console.log("- left:", computedStyle.left);
-              console.log("- top:", computedStyle.top);
-              console.log("- backgroundColor:", computedStyle.backgroundColor);
-              console.log("- BoundingRect:", rect);
-
               // CSSクラスを追加（デモと同じスタイル）
               cursorElement.classList.add("osmdCursor");
               // ダークモード/ライトモード用クラスを切り替え
@@ -1199,26 +1046,14 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               cursorElement.classList.add(
                 darkMode ? "cursor-dark" : "cursor-light",
               );
-              console.log(
-                "Cursor class set:",
-                darkMode ? "cursor-dark" : "cursor-light",
-              );
 
               // ダークモード時はIMG要素を完全に隠してDIVオーバーレイでオレンジを表示
               if (darkMode) {
-                console.log("Dark mode: creating cursor overlay");
-                console.log(
-                  "cursorElement.parentElement:",
-                  cursorElement.parentElement,
-                );
-
                 // parentElementがない場合はcontainerRefを使う
                 const parentForOverlay =
                   cursorElement.parentElement || containerRef.current;
-                console.log("parentForOverlay:", parentForOverlay);
 
                 if (!parentForOverlay) {
-                  console.error("No parent element found for cursor overlay!");
                   return;
                 }
 
@@ -1226,14 +1061,12 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                 let cursorOverlay = parentForOverlay.querySelector(
                   ".cursor-overlay-orange",
                 ) as HTMLDivElement;
-                console.log("Existing cursorOverlay:", cursorOverlay);
 
                 if (!cursorOverlay) {
                   cursorOverlay = document.createElement("div");
                   cursorOverlay.className = "cursor-overlay-orange";
                   cursorOverlay.style.pointerEvents = "none";
                   parentForOverlay.appendChild(cursorOverlay);
-                  console.log("Created new cursor overlay:", cursorOverlay);
                 }
 
                 // IMGのstyle属性を完全にコピーしてオレンジ背景を追加
@@ -1272,7 +1105,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
                 // 初回同期
                 syncOverlay();
-                console.log("Cursor overlay created for dark mode");
               } else {
                 cursorElement.style.opacity = "0.5";
                 // ライトモード時はオーバーレイを非表示
@@ -1287,26 +1119,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               cursorElement.style.width = "10px";
               cursorElement.style.display = "block";
               cursorElement.style.visibility = "visible";
-              // スタイル適用後の状態も確認
-              setTimeout(() => {
-                const newRect = cursorElement.getBoundingClientRect();
-                const newStyle = window.getComputedStyle(cursorElement);
-                console.log("スタイル適用後:");
-                console.log("- display:", newStyle.display);
-                console.log("- width:", newStyle.width);
-                console.log("- backgroundColor:", newStyle.backgroundColor);
-                console.log("- opacity:", newStyle.opacity);
-                console.log("- BoundingRect:", newRect);
-              }, 100);
-
-              console.log("✅ Cursor styled");
-            } else {
-              console.log("ERROR: cursorElement is null or undefined");
             }
-          } else {
-            console.log("ERROR: osmd.cursor is null or undefined");
           }
-          console.log("=== END CURSOR INITIALIZATION ===");
 
           // Calculate the range of all notes in the score
           if (onRangeChange) {
@@ -1317,14 +1131,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
               // Iterate through all parts, measures, and voices to find all notes
               if (sheet?.Instruments) {
-                console.log("Instruments count:", sheet.Instruments.length);
                 for (const instrument of sheet.Instruments) {
-                  console.log("Voices count:", instrument.Voices?.length);
                   for (const voice of instrument.Voices) {
-                    console.log(
-                      "VoiceEntries count:",
-                      voice.VoiceEntries?.length,
-                    );
                     for (const voiceEntry of voice.VoiceEntries) {
                       if (voiceEntry?.Notes) {
                         for (const note of voiceEntry.Notes) {
@@ -1341,12 +1149,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                             const octave = Math.floor(pitch.halfTone / 12);
                             const midi =
                               (octave + 1) * 12 + semitone + (pitch.Alter || 0);
-                            console.log(
-                              "Found note with halfTone:",
-                              pitch.halfTone,
-                              "-> MIDI:",
-                              midi,
-                            );
                             minMidi = Math.min(minMidi, midi);
                             maxMidi = Math.max(maxMidi, midi);
                           }
@@ -1356,8 +1158,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   }
                 }
               }
-
-              console.log("Raw range before adjustment:", minMidi, maxMidi);
 
               if (minMidi !== Infinity && maxMidi !== -Infinity) {
                 // Adjust minMidi to start from C (semitone 0) and extend 1 octave lower
@@ -1375,7 +1175,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   maxMidi = maxMidi + (11 - maxSemitone);
                 }
 
-                console.log("Range detected:", minMidi, maxMidi);
                 onRangeChange(minMidi, maxMidi);
               }
             } catch (err) {
@@ -1393,13 +1192,11 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               // Handle text elements (楽語)
               const textElements =
                 containerRef.current.querySelectorAll(".vf-text");
-              console.log("Found vf-text elements:", textElements.length);
               textElements.forEach((element) => {
                 // Get text from the inner <text> element
                 const textEl = element.querySelector("text");
                 const text =
                   textEl?.textContent?.trim() || element.textContent?.trim();
-                console.log("vf-text element text:", text);
                 // Only add click handler if the term exists in the dictionary
                 if (text && isMusicTerm(text)) {
                   // For SVG elements, use setAttribute for styling
@@ -1419,7 +1216,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   }
                   element.addEventListener("click", (e) => {
                     e.stopPropagation();
-                    console.log("Music term clicked:", text);
                     onMusicTermClick(text);
                   });
                 }
@@ -1428,7 +1224,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               // Handle clef elements (音部記号)
               const clefElements =
                 containerRef.current.querySelectorAll(".vf-clef");
-              console.log("Found vf-clef elements:", clefElements.length);
               clefElements.forEach((element) => {
                 const pathEl = element.querySelector("path");
                 if (pathEl) {
@@ -1448,15 +1243,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                     clefType = "__alto-clef__";
                   }
 
-                  console.log(
-                    "Clef detected:",
-                    clefType,
-                    "d.length:",
-                    d.length,
-                    "mCount:",
-                    mCount,
-                  );
-
                   // Get bounding box for rectangular click area
                   const bbox = (element as SVGGraphicsElement).getBBox();
 
@@ -1473,7 +1259,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   // Add click handler to the rectangle overlay
                   rectOverlay.addEventListener("click", (e) => {
                     e.stopPropagation();
-                    console.log("Clef clicked:", clefType);
                     onMusicTermClick(clefType);
                   });
 
@@ -1496,10 +1281,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               // Handle time signature elements (拍子記号)
               const timeSignatureElements =
                 containerRef.current.querySelectorAll(".vf-timesignature");
-              console.log(
-                "Found vf-timesignature elements:",
-                timeSignatureElements.length,
-              );
               timeSignatureElements.forEach((element) => {
                 const pathElements = element.querySelectorAll("path");
                 if (pathElements.length >= 2) {
@@ -1526,7 +1307,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   // Add click handler to the rectangle overlay
                   rectOverlay.addEventListener("click", (e) => {
                     e.stopPropagation();
-                    console.log("Time signature clicked:", timeSignatureType);
                     onMusicTermClick(timeSignatureType);
                   });
 

@@ -122,11 +122,6 @@ export default function PianoKeyboard({
     });
 
   const highlightedMidis = Array.from(midiToStaffMap.keys());
-  console.log("PianoKeyboard - highlightedMidis:", highlightedMidis);
-  console.log(
-    "PianoKeyboard - midiToStaffMap:",
-    Array.from(midiToStaffMap.entries()),
-  );
 
   // 白鍵の数を数える
   let whiteKeyCount = 0;
