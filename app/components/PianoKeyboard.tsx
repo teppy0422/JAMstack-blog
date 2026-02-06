@@ -13,6 +13,8 @@ interface PianoKeyboardProps {
   notes: Note[];
   minMidi?: number;
   maxMidi?: number;
+  /** 間違えて押した鍵盤のMIDI番号配列（赤く表示される） */
+  wrongNotes?: number[];
 }
 
 // 音符データから表記名を取得（フラット・シャープの区別を保持）
@@ -88,6 +90,7 @@ export default function PianoKeyboard({
   notes,
   minMidi,
   maxMidi,
+  wrongNotes = [],
 }: PianoKeyboardProps) {
   // 表示する鍵盤の範囲（デフォルト: C1-C7: MIDI 24-96）
   // If minMidi/maxMidi are provided but seem incorrect, use defaults
@@ -138,15 +141,20 @@ export default function PianoKeyboard({
   const blackKeys: JSX.Element[] = [];
   let whiteKeyIndex = 0;
 
+  const wrongNoteSet = new Set(wrongNotes);
+
   for (let midi = startMidi; midi <= endMidi; midi++) {
     const isHighlighted = highlightedMidis.includes(midi);
+    const isWrong = wrongNoteSet.has(midi);
     const isBlack = isBlackKey(midi);
     const staff = midiToStaffMap.get(midi);
     const displayName = midiToDisplayNameMap.get(midi) || midiToNoteName(midi);
 
-    // staff 0 = 右手（緑色 #4CAF50）, staff 1 = 左手（濃い緑 #2E7D32）
+    // 間違い音は赤、正しい音はハイライト色、それ以外は白
     let highlightKeyColor = "#ffffff";
-    if (isHighlighted) {
+    if (isWrong) {
+      highlightKeyColor = "#FF4444";
+    } else if (isHighlighted) {
       highlightKeyColor =
         colorMode === "dark"
           ? theme.colors.custom.theme.orange[500]
@@ -171,12 +179,12 @@ export default function PianoKeyboard({
             justifyContent: "center",
             fontSize: "10px",
             paddingBottom: "5px",
-            color: isHighlighted ? "#000" : "#999",
-            fontWeight: isHighlighted ? "bold" : "normal",
+            color: isHighlighted || isWrong ? "#000" : "#999",
+            fontWeight: isHighlighted || isWrong ? "bold" : "normal",
             transition: "background-color 0.2s",
           }}
         >
-          {isHighlighted && (
+          {(isHighlighted || isWrong) && (
             <span
               style={{
                 display: "inline-block",
@@ -197,13 +205,16 @@ export default function PianoKeyboard({
   whiteKeyIndex = 0;
   for (let midi = startMidi; midi <= endMidi; midi++) {
     const isHighlighted = highlightedMidis.includes(midi);
+    const isWrong = wrongNoteSet.has(midi);
     const isBlack = isBlackKey(midi);
     const staff = midiToStaffMap.get(midi);
     const displayName = midiToDisplayNameMap.get(midi) || midiToNoteName(midi);
 
-    // staff 0 = 右手（青色 #2196F3）, staff 1 = 左手（濃い青 #1565C0）
+    // 間違い音は赤、正しい音はハイライト色、それ以外は黒
     let highlightKeyColor = "#000";
-    if (isHighlighted) {
+    if (isWrong) {
+      highlightKeyColor = "#FF4444";
+    } else if (isHighlighted) {
       highlightKeyColor =
         colorMode === "dark"
           ? theme.colors.custom.theme.orange[500]
@@ -230,11 +241,11 @@ export default function PianoKeyboard({
             fontSize: "6px",
             paddingBottom: "5px",
             color: "#000",
-            fontWeight: isHighlighted ? "bold" : "normal",
+            fontWeight: isHighlighted || isWrong ? "bold" : "normal",
             transition: "background-color 0.2s",
           }}
         >
-          {isHighlighted && (
+          {(isHighlighted || isWrong) && (
             <span
               style={{
                 display: "inline-block",

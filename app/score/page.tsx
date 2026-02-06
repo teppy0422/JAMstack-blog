@@ -22,6 +22,11 @@ import {
 import { famousSayings } from "./famousSayings";
 import { findMusicTerm, type MusicTerm } from "./musicTerms";
 import { MdDeleteOutline } from "react-icons/md";
+import { useMidi } from "../hooks/useMidi";
+import {
+  MidiConfig,
+  defaultMidiConfig,
+} from "../lib/midiConfig";
 
 const sampleScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
@@ -93,11 +98,48 @@ export default function ScorePage() {
     author: string;
   } | null>(null);
   const [musicTermModal, setMusicTermModal] = useState<MusicTerm | null>(null);
+  const [midiConfig, setMidiConfig] = useState<MidiConfig>(defaultMidiConfig);
+  const [midiEnabled, setMidiEnabled] = useState(true);
+  const [wrongNotes, setWrongNotes] = useState<number[]>([]);
   const sheetMusicRef = useRef<SheetMusicRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
   const loadingStartTimeRef = useRef<number>(0);
   const { colorMode } = useColorMode();
+
+  // 現在の音符からMIDI番号の配列を計算
+  const noteToMidi = (step: string, octave: number, alter: number): number => {
+    const stepToSemitone: Record<string, number> = {
+      C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11,
+    };
+    const semitone = stepToSemitone[step.toUpperCase()] || 0;
+    return (octave + 1) * 12 + semitone + (alter || 0);
+  };
+
+  const expectedMidiNotes = currentNotes
+    .filter((n) => n.step && typeof n.octave === "number")
+    .map((n) => noteToMidi(n.step, n.octave, n.alter));
+
+  // MIDI判定成功時: カーソルを進めて間違い表示をクリア
+  const handleMidiMatch = useCallback(() => {
+    setWrongNotes([]);
+    sheetMusicRef.current?.next();
+  }, []);
+
+  // MIDI判定失敗時: 間違い鍵盤を赤く表示
+  const handleMidiMismatch = useCallback((wrong: number[]) => {
+    setWrongNotes(wrong);
+  }, []);
+
+  // MIDI接続
+  const { connectionStatus: midiConnectionStatus, deviceName: midiDeviceName } =
+    useMidi({
+      config: midiConfig,
+      expectedMidiNotes,
+      onMatch: handleMidiMatch,
+      onMismatch: handleMidiMismatch,
+      enabled: midiEnabled && !!selectedScore && !isLoading,
+    });
 
   // Load user scores from IndexedDB on mount
   useEffect(() => {
@@ -248,14 +290,17 @@ export default function ScorePage() {
   }, []);
 
   const handleNext = () => {
+    setWrongNotes([]);
     sheetMusicRef.current?.next();
   };
 
   const handlePrevious = () => {
+    setWrongNotes([]);
     sheetMusicRef.current?.previous();
   };
 
   const handleReset = () => {
+    setWrongNotes([]);
     sheetMusicRef.current?.reset();
   };
 
@@ -929,6 +974,7 @@ export default function ScorePage() {
               notes={currentNotes}
               minMidi={keyboardRange?.min}
               maxMidi={keyboardRange?.max}
+              wrongNotes={wrongNotes}
             />
           ) : (
             <div

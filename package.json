@@ -109,6 +109,7 @@
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^18.19.100",
+    "@types/webmidi": "^2.1.0",
     "next-sitemap": "^2.5.28",
     "react-infinite-scroller": "^1.2.6",
     "topojson-client": "^3.1.0",

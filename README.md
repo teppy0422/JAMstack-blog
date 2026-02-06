@@ -304,6 +304,10 @@ deploy 0053
 
 0071
 
+- midiの完全一致モードを追加
+
+0072
+
 #### Doing Now
 
 react-icons を利用しない
