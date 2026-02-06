@@ -44,6 +44,10 @@ export interface SheetMusicRef {
   ) => Array<{ step: string; octave: number; alter: number; staff?: number }>;
   setChordVisibility: (visible: boolean) => Promise<void>;
   jumpToTimestamp: (measureIndex: number, timestampInMeasure: number) => void;
+  /** 現在のカーソル位置の音符を取得 */
+  getCurrentNotes: () => Array<{ step: string; octave: number; alter: number; staff?: number }>;
+  /** カーソルが終端に達しているか */
+  isEndReached: () => boolean;
 }
 
 const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
@@ -1077,6 +1081,12 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         console.log(
           `jumpToTimestamp completed in ${(endTime - startTime).toFixed(2)}ms, steps: ${stepCount}`,
         );
+      },
+      getCurrentNotes: () => {
+        return getCurrentNotes();
+      },
+      isEndReached: () => {
+        return osmdRef.current?.cursor?.Iterator?.EndReached ?? true;
       },
     }));
 

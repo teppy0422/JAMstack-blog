@@ -9,7 +9,7 @@ import { useTheme } from "@chakra-ui/react";
 import { RiCodeSLine, RiCodeSSlashFill } from "react-icons/ri";
 import { TiPrinter } from "react-icons/ti";
 import { FaRegFile } from "react-icons/fa6";
-import { IoPlayOutline, IoPlaySkipBackOutline } from "react-icons/io5";
+import { IoPlayOutline, IoPlaySkipBackOutline, IoSettingsOutline } from "react-icons/io5";
 
 import "./score.css";
 import {
@@ -26,6 +26,8 @@ import { useMidi } from "../hooks/useMidi";
 import {
   MidiConfig,
   defaultMidiConfig,
+  midiPresets,
+  MidiPresetName,
 } from "../lib/midiConfig";
 
 const sampleScores = [
@@ -101,11 +103,54 @@ export default function ScorePage() {
   const [midiConfig, setMidiConfig] = useState<MidiConfig>(defaultMidiConfig);
   const [midiEnabled, setMidiEnabled] = useState(true);
   const [wrongNotes, setWrongNotes] = useState<number[]>([]);
+  const [showMidiSettings, setShowMidiSettings] = useState(false);
   const sheetMusicRef = useRef<SheetMusicRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
   const loadingStartTimeRef = useRef<number>(0);
   const { colorMode } = useColorMode();
+
+  // localStorage からMIDI設定をロード
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("midiConfig");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setMidiConfig({ ...defaultMidiConfig, ...parsed });
+      }
+    } catch (e) {
+      console.warn("Failed to load midiConfig from localStorage:", e);
+    }
+  }, []);
+
+  // MIDI設定変更ヘルパー（stateとlocalStorageを同時に更新）
+  const updateMidiConfig = useCallback((update: Partial<MidiConfig>) => {
+    setMidiConfig((prev) => {
+      const next = { ...prev, ...update };
+      localStorage.setItem("midiConfig", JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
+  // プリセット適用
+  const applyPreset = useCallback((presetName: MidiPresetName) => {
+    const preset = midiPresets[presetName];
+    setMidiConfig(preset);
+    localStorage.setItem("midiConfig", JSON.stringify(preset));
+  }, []);
+
+  // 現在の設定がどのプリセットに一致するか検出
+  const detectPreset = useCallback((config: MidiConfig): MidiPresetName | null => {
+    for (const [name, preset] of Object.entries(midiPresets) as [MidiPresetName, MidiConfig][]) {
+      const match = (Object.keys(preset) as (keyof MidiConfig)[]).every(
+        (key) => config[key] === preset[key],
+      );
+      if (match) return name;
+    }
+    return null;
+  }, []);
+
+  const currentPreset = detectPreset(midiConfig);
 
   // 現在の音符からMIDI番号の配列を計算
   const noteToMidi = (step: string, octave: number, alter: number): number => {
@@ -121,9 +166,25 @@ export default function ScorePage() {
     .map((n) => noteToMidi(n.step, n.octave, n.alter));
 
   // MIDI判定成功時: カーソルを進めて間違い表示をクリア
+  // 休符・タイ（音符が空）の位置は自動スキップ
   const handleMidiMatch = useCallback(() => {
     setWrongNotes([]);
     sheetMusicRef.current?.next();
+
+    // 次の位置が休符/タイなら自動スキップ（最大100回で安全制限）
+    let skipCount = 0;
+    const maxSkips = 100;
+    while (skipCount < maxSkips) {
+      const ref = sheetMusicRef.current;
+      if (!ref || ref.isEndReached()) break;
+      const notes = ref.getCurrentNotes();
+      if (notes.length > 0) break;
+      ref.next();
+      skipCount++;
+    }
+    if (skipCount > 0) {
+      console.log("Auto-skipped", skipCount, "rest/tie positions");
+    }
   }, []);
 
   // MIDI判定失敗時: 間違い鍵盤を赤く表示
@@ -846,6 +907,60 @@ export default function ScorePage() {
               >
                 <IoPlayOutline />
               </button>
+              <div
+                style={{
+                  width: ".5px",
+                  height: "24px",
+                  backgroundColor: borderColor,
+                  margin: "0 3px",
+                }}
+              />
+              {/* MIDI接続状態ドット + 設定ボタン */}
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    backgroundColor:
+                      midiConnectionStatus === "connected"
+                        ? "#4CAF50"
+                        : midiConnectionStatus === "unsupported"
+                          ? "#FF9800"
+                          : "#999",
+                  }}
+                  title={
+                    midiConnectionStatus === "connected"
+                      ? `MIDI接続中: ${midiDeviceName}`
+                      : midiConnectionStatus === "unsupported"
+                        ? "MIDI非対応ブラウザ"
+                        : midiConnectionStatus === "connecting"
+                          ? "MIDI接続中..."
+                          : "MIDI未接続"
+                  }
+                />
+                <button
+                  onClick={() => setShowMidiSettings(true)}
+                  disabled={isLoading}
+                  style={{
+                    height: "40px",
+                    width: "32px",
+                    fontSize: "18px",
+                    borderRadius: "4px",
+                    borderWidth: ".5px",
+                    borderColor: borderColor,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    display: "flex",
+                    color: frColor,
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    opacity: isLoading ? 0.5 : 1,
+                  }}
+                  title="MIDI設定"
+                >
+                  <IoSettingsOutline />
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -993,6 +1108,328 @@ export default function ScorePage() {
             </div>
           )}
         </footer>
+
+        {/* MIDI設定モーダル */}
+        {showMidiSettings && (
+          <div
+            onClick={() => setShowMidiSettings(false)}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.6)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                backgroundColor: bgColor,
+                borderRadius: "12px",
+                padding: "24px",
+                maxWidth: "420px",
+                width: "90%",
+                maxHeight: "80vh",
+                overflowY: "auto",
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              <h3
+                style={{
+                  margin: "0 0 16px 0",
+                  fontSize: "20px",
+                  color: frColor,
+                }}
+              >
+                MIDI設定
+              </h3>
+
+              {/* 接続状態バナー */}
+              <div
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: "6px",
+                  backgroundColor:
+                    midiConnectionStatus === "connected"
+                      ? colorMode === "dark" ? "rgba(76, 175, 80, 0.2)" : "rgba(76, 175, 80, 0.1)"
+                      : colorMode === "dark" ? "rgba(153, 153, 153, 0.2)" : "rgba(153, 153, 153, 0.1)",
+                  marginBottom: "16px",
+                  fontSize: "13px",
+                  color: frColor,
+                }}
+              >
+                {midiConnectionStatus === "connected"
+                  ? `接続中: ${midiDeviceName}`
+                  : midiConnectionStatus === "unsupported"
+                    ? "このブラウザはWeb MIDI APIに対応していません"
+                    : midiConnectionStatus === "connecting"
+                      ? "MIDI接続中..."
+                      : "MIDIデバイス未接続"}
+              </div>
+
+              {/* プリセットボタン */}
+              <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
+                {(["practice", "exact"] as MidiPresetName[]).map((presetName) => (
+                  <button
+                    key={presetName}
+                    onClick={() => applyPreset(presetName)}
+                    style={{
+                      flex: 1,
+                      padding: "8px 12px",
+                      fontSize: "13px",
+                      borderRadius: "6px",
+                      borderWidth: "1px",
+                      borderStyle: "solid",
+                      borderColor: currentPreset === presetName ? highlightColor : borderColor,
+                      backgroundColor:
+                        currentPreset === presetName
+                          ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
+                          : "transparent",
+                      color: frColor,
+                      cursor: "pointer",
+                      fontWeight: currentPreset === presetName ? "bold" : "normal",
+                    }}
+                  >
+                    {presetName === "practice" ? "練習モード" : "完全一致モード"}
+                  </button>
+                ))}
+              </div>
+
+              {/* 判定方式 */}
+              <div style={{ marginBottom: "16px" }}>
+                <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px", fontWeight: "bold" }}>
+                  判定方式
+                </div>
+                <div style={{ display: "flex", gap: "4px" }}>
+                  {([
+                    { value: "any" as const, label: "何でもOK" },
+                    { value: "contains" as const, label: "含む" },
+                    { value: "exact" as const, label: "完全一致" },
+                  ]).map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => updateMidiConfig({ matchMode: opt.value })}
+                      style={{
+                        flex: 1,
+                        padding: "6px 8px",
+                        fontSize: "12px",
+                        borderRadius: "4px",
+                        borderWidth: "1px",
+                        borderStyle: "solid",
+                        borderColor: midiConfig.matchMode === opt.value ? highlightColor : borderColor,
+                        backgroundColor:
+                          midiConfig.matchMode === opt.value
+                            ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
+                            : "transparent",
+                        color: frColor,
+                        cursor: "pointer",
+                        fontWeight: midiConfig.matchMode === opt.value ? "bold" : "normal",
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 和音判定の時間窓 */}
+              <div style={{ marginBottom: "16px" }}>
+                <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px", fontWeight: "bold" }}>
+                  和音判定の時間窓
+                </div>
+                <div style={{ display: "flex", gap: "4px" }}>
+                  {[30, 50, 80, 100].map((ms) => (
+                    <button
+                      key={ms}
+                      onClick={() => updateMidiConfig({ chordTimeWindow: ms })}
+                      style={{
+                        flex: 1,
+                        padding: "6px 8px",
+                        fontSize: "12px",
+                        borderRadius: "4px",
+                        borderWidth: "1px",
+                        borderStyle: "solid",
+                        borderColor: midiConfig.chordTimeWindow === ms ? highlightColor : borderColor,
+                        backgroundColor:
+                          midiConfig.chordTimeWindow === ms
+                            ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
+                            : "transparent",
+                        color: frColor,
+                        cursor: "pointer",
+                        fontWeight: midiConfig.chordTimeWindow === ms ? "bold" : "normal",
+                      }}
+                    >
+                      {ms}ms
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* トグルスイッチ群 */}
+              {([
+                { key: "skipRests" as const, label: "休符の自動スキップ" },
+                { key: "showWrongNotes" as const, label: "間違い音の表示" },
+                { key: "octaveIgnore" as const, label: "オクターブ無視モード" },
+                { key: "velocitySensitivity" as const, label: "ベロシティ感度" },
+              ]).map((opt) => (
+                <div
+                  key={opt.key}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "10px",
+                    padding: "4px 0",
+                  }}
+                >
+                  <span style={{ fontSize: "13px", color: frColor }}>{opt.label}</span>
+                  <button
+                    onClick={() => updateMidiConfig({ [opt.key]: !midiConfig[opt.key] })}
+                    style={{
+                      width: "44px",
+                      height: "24px",
+                      borderRadius: "12px",
+                      border: "none",
+                      backgroundColor: midiConfig[opt.key] ? highlightColor : "#ccc",
+                      position: "relative",
+                      cursor: "pointer",
+                      transition: "background-color 0.2s",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "50%",
+                        backgroundColor: "#fff",
+                        position: "absolute",
+                        top: "2px",
+                        left: midiConfig[opt.key] ? "22px" : "2px",
+                        transition: "left 0.2s",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                      }}
+                    />
+                  </button>
+                </div>
+              ))}
+
+              {/* ベロシティ閾値スライダー（ベロシティ感度ON時のみ） */}
+              {midiConfig.velocitySensitivity && (
+                <div style={{ marginBottom: "16px", paddingLeft: "8px" }}>
+                  <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px" }}>
+                    ベロシティ閾値: {midiConfig.velocityThreshold}
+                  </div>
+                  <input
+                    type="range"
+                    min={1}
+                    max={127}
+                    value={midiConfig.velocityThreshold}
+                    onChange={(e) => updateMidiConfig({ velocityThreshold: parseInt(e.target.value) })}
+                    style={{ width: "100%", accentColor: highlightColor }}
+                  />
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", color: "#999" }}>
+                    <span>1 (超敏感)</span>
+                    <span>127 (最強のみ)</span>
+                  </div>
+                </div>
+              )}
+
+              {/* 間違い表示のクリア */}
+              <div style={{ marginBottom: "16px" }}>
+                <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px", fontWeight: "bold" }}>
+                  間違い表示のクリア
+                </div>
+                <div style={{ display: "flex", gap: "4px" }}>
+                  {([
+                    { value: "nextNoteOn" as const, label: "次の音入力時" },
+                    { value: "timeout" as const, label: "一定時間後" },
+                  ]).map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => updateMidiConfig({ wrongNoteResetOn: opt.value })}
+                      style={{
+                        flex: 1,
+                        padding: "6px 8px",
+                        fontSize: "12px",
+                        borderRadius: "4px",
+                        borderWidth: "1px",
+                        borderStyle: "solid",
+                        borderColor: midiConfig.wrongNoteResetOn === opt.value ? highlightColor : borderColor,
+                        backgroundColor:
+                          midiConfig.wrongNoteResetOn === opt.value
+                            ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
+                            : "transparent",
+                        color: frColor,
+                        cursor: "pointer",
+                        fontWeight: midiConfig.wrongNoteResetOn === opt.value ? "bold" : "normal",
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* クリアまでの時間（一定時間後選択時のみ） */}
+              {midiConfig.wrongNoteResetOn === "timeout" && (
+                <div style={{ marginBottom: "16px", paddingLeft: "8px" }}>
+                  <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px" }}>
+                    クリアまでの時間
+                  </div>
+                  <div style={{ display: "flex", gap: "4px" }}>
+                    {[500, 1000, 2000].map((ms) => (
+                      <button
+                        key={ms}
+                        onClick={() => updateMidiConfig({ wrongNoteTimeout: ms })}
+                        style={{
+                          flex: 1,
+                          padding: "6px 8px",
+                          fontSize: "12px",
+                          borderRadius: "4px",
+                          borderWidth: "1px",
+                          borderStyle: "solid",
+                          borderColor: midiConfig.wrongNoteTimeout === ms ? highlightColor : borderColor,
+                          backgroundColor:
+                            midiConfig.wrongNoteTimeout === ms
+                              ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
+                              : "transparent",
+                          color: frColor,
+                          cursor: "pointer",
+                          fontWeight: midiConfig.wrongNoteTimeout === ms ? "bold" : "normal",
+                        }}
+                      >
+                        {ms}ms
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 閉じるボタン */}
+              <button
+                onClick={() => setShowMidiSettings(false)}
+                style={{
+                  marginTop: "8px",
+                  padding: "8px 24px",
+                  fontSize: "14px",
+                  borderRadius: "6px",
+                  border: "none",
+                  backgroundColor: highlightColor,
+                  color: bgColor,
+                  cursor: "pointer",
+                  width: "100%",
+                }}
+              >
+                閉じる
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* 楽語説明モーダル */}
         {musicTermModal && (

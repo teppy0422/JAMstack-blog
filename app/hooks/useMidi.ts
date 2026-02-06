@@ -90,31 +90,34 @@ export function useMidi({
       return;
     }
 
-    const expectedSet = new Set(expected);
-    const inputSet = new Set(inputNotes);
+    // オクターブ無視モード: ピッチクラス(n % 12)で比較
+    const toCompare = cfg.octaveIgnore ? (n: number) => n % 12 : (n: number) => n;
+
+    const expectedCompare = new Set(expected.map(toCompare));
+    const inputCompare = new Set(inputNotes.map(toCompare));
 
     if (cfg.matchMode === "contains") {
       // 必要な音が全て含まれていれば成功（余分な音はOK）
-      const allExpectedPresent = expected.every((n) => inputSet.has(n));
+      const allExpectedPresent = expected.every((n) => inputCompare.has(toCompare(n)));
       if (allExpectedPresent) {
         onMatchRef.current();
       } else {
-        // 間違い: 期待される音のうち入力に含まれなかったものと、入力のうち期待に含まれなかったもの
-        const wrongNotes = inputNotes.filter((n) => !expectedSet.has(n));
+        // 間違い: 期待に含まれない入力音（実際のMIDI番号で返す）
+        const wrongNotes = inputNotes.filter((n) => !expectedCompare.has(toCompare(n)));
         if (cfg.showWrongNotes) {
           onMismatchRef.current(wrongNotes.length > 0 ? wrongNotes : inputNotes);
         }
       }
     } else if (cfg.matchMode === "exact") {
       // 完全一致: 期待される音と入力が完全に一致
-      const allExpectedPresent = expected.every((n) => inputSet.has(n));
-      const noExtraNotes = inputNotes.every((n) => expectedSet.has(n));
+      const allExpectedPresent = expected.every((n) => inputCompare.has(toCompare(n)));
+      const noExtraNotes = inputNotes.every((n) => expectedCompare.has(toCompare(n)));
 
       if (allExpectedPresent && noExtraNotes) {
         onMatchRef.current();
       } else {
-        // 間違い: 期待に含まれない入力音
-        const wrongNotes = inputNotes.filter((n) => !expectedSet.has(n));
+        // 間違い: 期待に含まれない入力音（実際のMIDI番号で返す）
+        const wrongNotes = inputNotes.filter((n) => !expectedCompare.has(toCompare(n)));
         if (cfg.showWrongNotes) {
           onMismatchRef.current(wrongNotes.length > 0 ? wrongNotes : inputNotes);
         }
@@ -150,6 +153,11 @@ export function useMidi({
       const [status, note, velocity] = e.data;
       const isNoteOn = (status & 0xf0) === 0x90 && velocity > 0;
       if (isNoteOn) {
+        // ベロシティフィルタ: 閾値未満の入力を無視
+        const cfg = configRef.current;
+        if (cfg.velocitySensitivity && velocity < cfg.velocityThreshold) {
+          return;
+        }
         handleNoteOn(note);
       }
     },

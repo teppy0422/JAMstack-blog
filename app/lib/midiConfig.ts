@@ -15,6 +15,12 @@ export interface MidiConfig {
   wrongNoteResetOn: "nextNoteOn" | "timeout";
   /** wrongNoteResetOn が "timeout" の場合のミリ秒 */
   wrongNoteTimeout: number;
+  /** オクターブ無視モード: ピッチクラス(音名)のみで比較 */
+  octaveIgnore: boolean;
+  /** ベロシティ感度: 弱い入力を無視する */
+  velocitySensitivity: boolean;
+  /** ベロシティ閾値 (1-127): この値未満のNote Onを無視 */
+  velocityThreshold: number;
 }
 
 export type MidiPresetName = "performance" | "practice" | "exact";
@@ -28,6 +34,9 @@ export const midiPresets: Record<MidiPresetName, MidiConfig> = {
     showWrongNotes: false,
     wrongNoteResetOn: "nextNoteOn",
     wrongNoteTimeout: 1000,
+    octaveIgnore: false,
+    velocitySensitivity: false,
+    velocityThreshold: 20,
   },
   /** 練習モード: 必要な音が含まれていれば進む（余分な音はOK） */
   practice: {
@@ -37,6 +46,9 @@ export const midiPresets: Record<MidiPresetName, MidiConfig> = {
     showWrongNotes: true,
     wrongNoteResetOn: "nextNoteOn",
     wrongNoteTimeout: 1000,
+    octaveIgnore: true,
+    velocitySensitivity: false,
+    velocityThreshold: 20,
   },
   /** 完全一致モード: 余分な音もNG */
   exact: {
@@ -46,6 +58,9 @@ export const midiPresets: Record<MidiPresetName, MidiConfig> = {
     showWrongNotes: true,
     wrongNoteResetOn: "nextNoteOn",
     wrongNoteTimeout: 1000,
+    octaveIgnore: false,
+    velocitySensitivity: false,
+    velocityThreshold: 20,
   },
 };
 
