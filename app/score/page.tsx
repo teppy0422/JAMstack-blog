@@ -9,7 +9,13 @@ import { useTheme } from "@chakra-ui/react";
 import { RiCodeSLine, RiCodeSSlashFill } from "react-icons/ri";
 import { TiPrinter } from "react-icons/ti";
 import { FaRegFile } from "react-icons/fa6";
-import { IoPlayOutline, IoPlaySkipBackOutline, IoSettingsOutline, IoExpandOutline, IoContractOutline } from "react-icons/io5";
+import {
+  IoPlayOutline,
+  IoPlaySkipBackOutline,
+  IoSettingsOutline,
+  IoExpandOutline,
+  IoContractOutline,
+} from "react-icons/io5";
 
 import "./score.css";
 import {
@@ -142,22 +148,34 @@ export default function ScorePage() {
   }, []);
 
   // 現在の設定がどのプリセットに一致するか検出
-  const detectPreset = useCallback((config: MidiConfig): MidiPresetName | null => {
-    for (const [name, preset] of Object.entries(midiPresets) as [MidiPresetName, MidiConfig][]) {
-      const match = (Object.keys(preset) as (keyof MidiConfig)[]).every(
-        (key) => config[key] === preset[key],
-      );
-      if (match) return name;
-    }
-    return null;
-  }, []);
+  const detectPreset = useCallback(
+    (config: MidiConfig): MidiPresetName | null => {
+      for (const [name, preset] of Object.entries(midiPresets) as [
+        MidiPresetName,
+        MidiConfig,
+      ][]) {
+        const match = (Object.keys(preset) as (keyof MidiConfig)[]).every(
+          (key) => config[key] === preset[key],
+        );
+        if (match) return name;
+      }
+      return null;
+    },
+    [],
+  );
 
   const currentPreset = detectPreset(midiConfig);
 
   // 現在の音符からMIDI番号の配列を計算
   const noteToMidi = (step: string, octave: number, alter: number): number => {
     const stepToSemitone: Record<string, number> = {
-      C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11,
+      C: 0,
+      D: 2,
+      E: 4,
+      F: 5,
+      G: 7,
+      A: 9,
+      B: 11,
     };
     const semitone = stepToSemitone[step.toUpperCase()] || 0;
     return (octave + 1) * 12 + semitone + (alter || 0);
@@ -165,7 +183,10 @@ export default function ScorePage() {
 
   const expectedMidiNotes = currentNotes
     .filter((n) => n.step && typeof n.octave === "number")
-    .filter((n) => midiConfig.staffFilter === "both" || n.staff === midiConfig.staffFilter)
+    .filter(
+      (n) =>
+        midiConfig.staffFilter === "both" || n.staff === midiConfig.staffFilter,
+    )
     .map((n) => noteToMidi(n.step, n.octave, n.alter));
 
   // MIDI判定成功時: カーソルを進めて間違い表示をクリア
@@ -415,7 +436,6 @@ export default function ScorePage() {
 
       // Auto-select the newly uploaded score
       await handleScoreChange(`user-${id}`);
-
     } catch (error) {
       console.error("Failed to upload score:", error);
       alert("楽譜のアップロードに失敗しました");
@@ -933,7 +953,9 @@ export default function ScorePage() {
                 }}
               />
               {/* MIDI接続状態ドット + 設定ボタン */}
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "6px" }}
+              >
                 <div
                   style={{
                     width: "8px",
@@ -1127,7 +1149,9 @@ export default function ScorePage() {
               notes={
                 midiConfig.staffFilter === "both"
                   ? currentNotes
-                  : currentNotes.filter((n) => n.staff === midiConfig.staffFilter)
+                  : currentNotes.filter(
+                      (n) => n.staff === midiConfig.staffFilter,
+                    )
               }
               minMidi={keyboardRange?.min}
               maxMidi={keyboardRange?.max}
@@ -1198,8 +1222,12 @@ export default function ScorePage() {
                   borderRadius: "6px",
                   backgroundColor:
                     midiConnectionStatus === "connected"
-                      ? colorMode === "dark" ? "rgba(76, 175, 80, 0.2)" : "rgba(76, 175, 80, 0.1)"
-                      : colorMode === "dark" ? "rgba(153, 153, 153, 0.2)" : "rgba(153, 153, 153, 0.1)",
+                      ? colorMode === "dark"
+                        ? "rgba(76, 175, 80, 0.2)"
+                        : "rgba(76, 175, 80, 0.1)"
+                      : colorMode === "dark"
+                        ? "rgba(153, 153, 153, 0.2)"
+                        : "rgba(153, 153, 153, 0.1)",
                   marginBottom: "16px",
                   fontSize: "13px",
                   color: frColor,
@@ -1215,44 +1243,63 @@ export default function ScorePage() {
               </div>
 
               {/* プリセットボタン */}
-              <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
-                {(["practice", "exact"] as MidiPresetName[]).map((presetName) => (
-                  <button
-                    key={presetName}
-                    onClick={() => applyPreset(presetName)}
-                    style={{
-                      flex: 1,
-                      padding: "8px 12px",
-                      fontSize: "13px",
-                      borderRadius: "6px",
-                      borderWidth: "1px",
-                      borderStyle: "solid",
-                      borderColor: currentPreset === presetName ? highlightColor : borderColor,
-                      backgroundColor:
-                        currentPreset === presetName
-                          ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
-                          : "transparent",
-                      color: frColor,
-                      cursor: "pointer",
-                      fontWeight: currentPreset === presetName ? "bold" : "normal",
-                    }}
-                  >
-                    {presetName === "practice" ? "練習モード" : "完全一致モード"}
-                  </button>
-                ))}
+              <div
+                style={{ display: "flex", gap: "8px", marginBottom: "20px" }}
+              >
+                {(["practice", "exact"] as MidiPresetName[]).map(
+                  (presetName) => (
+                    <button
+                      key={presetName}
+                      onClick={() => applyPreset(presetName)}
+                      style={{
+                        flex: 1,
+                        padding: "8px 12px",
+                        fontSize: "13px",
+                        borderRadius: "6px",
+                        borderWidth: "1px",
+                        borderStyle: "solid",
+                        borderColor:
+                          currentPreset === presetName
+                            ? highlightColor
+                            : borderColor,
+                        backgroundColor:
+                          currentPreset === presetName
+                            ? colorMode === "dark"
+                              ? `${highlightColor}40`
+                              : `${highlightColor}20`
+                            : "transparent",
+                        color: frColor,
+                        cursor: "pointer",
+                        fontWeight:
+                          currentPreset === presetName ? "bold" : "normal",
+                      }}
+                    >
+                      {presetName === "practice"
+                        ? "練習モード"
+                        : "完全一致モード"}
+                    </button>
+                  ),
+                )}
               </div>
 
               {/* 判定方式 */}
               <div style={{ marginBottom: "16px" }}>
-                <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px", fontWeight: "bold" }}>
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: frColor,
+                    marginBottom: "6px",
+                    fontWeight: "bold",
+                  }}
+                >
                   判定方式
                 </div>
                 <div style={{ display: "flex", gap: "4px" }}>
-                  {([
+                  {[
                     { value: "any" as const, label: "何でもOK" },
                     { value: "contains" as const, label: "含む" },
                     { value: "exact" as const, label: "完全一致" },
-                  ]).map((opt) => (
+                  ].map((opt) => (
                     <button
                       key={opt.value}
                       onClick={() => updateMidiConfig({ matchMode: opt.value })}
@@ -1263,14 +1310,22 @@ export default function ScorePage() {
                         borderRadius: "4px",
                         borderWidth: "1px",
                         borderStyle: "solid",
-                        borderColor: midiConfig.matchMode === opt.value ? highlightColor : borderColor,
+                        borderColor:
+                          midiConfig.matchMode === opt.value
+                            ? highlightColor
+                            : borderColor,
                         backgroundColor:
                           midiConfig.matchMode === opt.value
-                            ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
+                            ? colorMode === "dark"
+                              ? `${highlightColor}40`
+                              : `${highlightColor}20`
                             : "transparent",
                         color: frColor,
                         cursor: "pointer",
-                        fontWeight: midiConfig.matchMode === opt.value ? "bold" : "normal",
+                        fontWeight:
+                          midiConfig.matchMode === opt.value
+                            ? "bold"
+                            : "normal",
                       }}
                     >
                       {opt.label}
@@ -1281,7 +1336,14 @@ export default function ScorePage() {
 
               {/* 和音判定の時間窓 */}
               <div style={{ marginBottom: "16px" }}>
-                <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px", fontWeight: "bold" }}>
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: frColor,
+                    marginBottom: "6px",
+                    fontWeight: "bold",
+                  }}
+                >
                   和音判定の時間窓
                 </div>
                 <div style={{ display: "flex", gap: "4px" }}>
@@ -1296,14 +1358,20 @@ export default function ScorePage() {
                         borderRadius: "4px",
                         borderWidth: "1px",
                         borderStyle: "solid",
-                        borderColor: midiConfig.chordTimeWindow === ms ? highlightColor : borderColor,
+                        borderColor:
+                          midiConfig.chordTimeWindow === ms
+                            ? highlightColor
+                            : borderColor,
                         backgroundColor:
                           midiConfig.chordTimeWindow === ms
-                            ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
+                            ? colorMode === "dark"
+                              ? `${highlightColor}40`
+                              : `${highlightColor}20`
                             : "transparent",
                         color: frColor,
                         cursor: "pointer",
-                        fontWeight: midiConfig.chordTimeWindow === ms ? "bold" : "normal",
+                        fontWeight:
+                          midiConfig.chordTimeWindow === ms ? "bold" : "normal",
                       }}
                     >
                       {ms}ms
@@ -1314,18 +1382,27 @@ export default function ScorePage() {
 
               {/* 判定対象（譜表フィルタ） */}
               <div style={{ marginBottom: "16px" }}>
-                <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px", fontWeight: "bold" }}>
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: frColor,
+                    marginBottom: "6px",
+                    fontWeight: "bold",
+                  }}
+                >
                   判定対象
                 </div>
                 <div style={{ display: "flex", gap: "4px" }}>
-                  {([
+                  {[
                     { value: "both" as const, label: "両手" },
                     { value: 1 as const, label: "右手のみ" },
                     { value: 2 as const, label: "左手のみ" },
-                  ]).map((opt) => (
+                  ].map((opt) => (
                     <button
                       key={String(opt.value)}
-                      onClick={() => updateMidiConfig({ staffFilter: opt.value })}
+                      onClick={() =>
+                        updateMidiConfig({ staffFilter: opt.value })
+                      }
                       style={{
                         flex: 1,
                         padding: "6px 8px",
@@ -1333,14 +1410,22 @@ export default function ScorePage() {
                         borderRadius: "4px",
                         borderWidth: "1px",
                         borderStyle: "solid",
-                        borderColor: midiConfig.staffFilter === opt.value ? highlightColor : borderColor,
+                        borderColor:
+                          midiConfig.staffFilter === opt.value
+                            ? highlightColor
+                            : borderColor,
                         backgroundColor:
                           midiConfig.staffFilter === opt.value
-                            ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
+                            ? colorMode === "dark"
+                              ? `${highlightColor}40`
+                              : `${highlightColor}20`
                             : "transparent",
                         color: frColor,
                         cursor: "pointer",
-                        fontWeight: midiConfig.staffFilter === opt.value ? "bold" : "normal",
+                        fontWeight:
+                          midiConfig.staffFilter === opt.value
+                            ? "bold"
+                            : "normal",
                       }}
                     >
                       {opt.label}
@@ -1350,12 +1435,15 @@ export default function ScorePage() {
               </div>
 
               {/* トグルスイッチ群 */}
-              {([
+              {[
                 { key: "skipRests" as const, label: "休符の自動スキップ" },
                 { key: "showWrongNotes" as const, label: "間違い音の表示" },
                 { key: "octaveIgnore" as const, label: "オクターブ無視モード" },
-                { key: "velocitySensitivity" as const, label: "ベロシティ感度" },
-              ]).map((opt) => (
+                {
+                  key: "velocitySensitivity" as const,
+                  label: "ベロシティ感度",
+                },
+              ].map((opt) => (
                 <div
                   key={opt.key}
                   style={{
@@ -1366,15 +1454,21 @@ export default function ScorePage() {
                     padding: "4px 0",
                   }}
                 >
-                  <span style={{ fontSize: "13px", color: frColor }}>{opt.label}</span>
+                  <span style={{ fontSize: "13px", color: frColor }}>
+                    {opt.label}
+                  </span>
                   <button
-                    onClick={() => updateMidiConfig({ [opt.key]: !midiConfig[opt.key] })}
+                    onClick={() =>
+                      updateMidiConfig({ [opt.key]: !midiConfig[opt.key] })
+                    }
                     style={{
                       width: "44px",
                       height: "24px",
                       borderRadius: "12px",
                       border: "none",
-                      backgroundColor: midiConfig[opt.key] ? highlightColor : "#ccc",
+                      backgroundColor: midiConfig[opt.key]
+                        ? highlightColor
+                        : "#ccc",
                       position: "relative",
                       cursor: "pointer",
                       transition: "background-color 0.2s",
@@ -1400,7 +1494,13 @@ export default function ScorePage() {
               {/* ベロシティ閾値スライダー（ベロシティ感度ON時のみ） */}
               {midiConfig.velocitySensitivity && (
                 <div style={{ marginBottom: "16px", paddingLeft: "8px" }}>
-                  <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px" }}>
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      color: frColor,
+                      marginBottom: "6px",
+                    }}
+                  >
                     ベロシティ閾値: {midiConfig.velocityThreshold}
                   </div>
                   <input
@@ -1408,10 +1508,21 @@ export default function ScorePage() {
                     min={1}
                     max={127}
                     value={midiConfig.velocityThreshold}
-                    onChange={(e) => updateMidiConfig({ velocityThreshold: parseInt(e.target.value) })}
+                    onChange={(e) =>
+                      updateMidiConfig({
+                        velocityThreshold: parseInt(e.target.value),
+                      })
+                    }
                     style={{ width: "100%", accentColor: highlightColor }}
                   />
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", color: "#999" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      fontSize: "10px",
+                      color: "#999",
+                    }}
+                  >
                     <span>1 (超敏感)</span>
                     <span>127 (最強のみ)</span>
                   </div>
@@ -1420,17 +1531,26 @@ export default function ScorePage() {
 
               {/* 間違い表示のクリア */}
               <div style={{ marginBottom: "16px" }}>
-                <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px", fontWeight: "bold" }}>
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: frColor,
+                    marginBottom: "6px",
+                    fontWeight: "bold",
+                  }}
+                >
                   間違い表示のクリア
                 </div>
                 <div style={{ display: "flex", gap: "4px" }}>
-                  {([
+                  {[
                     { value: "nextNoteOn" as const, label: "次の音入力時" },
                     { value: "timeout" as const, label: "一定時間後" },
-                  ]).map((opt) => (
+                  ].map((opt) => (
                     <button
                       key={opt.value}
-                      onClick={() => updateMidiConfig({ wrongNoteResetOn: opt.value })}
+                      onClick={() =>
+                        updateMidiConfig({ wrongNoteResetOn: opt.value })
+                      }
                       style={{
                         flex: 1,
                         padding: "6px 8px",
@@ -1438,14 +1558,22 @@ export default function ScorePage() {
                         borderRadius: "4px",
                         borderWidth: "1px",
                         borderStyle: "solid",
-                        borderColor: midiConfig.wrongNoteResetOn === opt.value ? highlightColor : borderColor,
+                        borderColor:
+                          midiConfig.wrongNoteResetOn === opt.value
+                            ? highlightColor
+                            : borderColor,
                         backgroundColor:
                           midiConfig.wrongNoteResetOn === opt.value
-                            ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
+                            ? colorMode === "dark"
+                              ? `${highlightColor}40`
+                              : `${highlightColor}20`
                             : "transparent",
                         color: frColor,
                         cursor: "pointer",
-                        fontWeight: midiConfig.wrongNoteResetOn === opt.value ? "bold" : "normal",
+                        fontWeight:
+                          midiConfig.wrongNoteResetOn === opt.value
+                            ? "bold"
+                            : "normal",
                       }}
                     >
                       {opt.label}
@@ -1457,14 +1585,22 @@ export default function ScorePage() {
               {/* クリアまでの時間（一定時間後選択時のみ） */}
               {midiConfig.wrongNoteResetOn === "timeout" && (
                 <div style={{ marginBottom: "16px", paddingLeft: "8px" }}>
-                  <div style={{ fontSize: "12px", color: frColor, marginBottom: "6px" }}>
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      color: frColor,
+                      marginBottom: "6px",
+                    }}
+                  >
                     クリアまでの時間
                   </div>
                   <div style={{ display: "flex", gap: "4px" }}>
                     {[500, 1000, 2000].map((ms) => (
                       <button
                         key={ms}
-                        onClick={() => updateMidiConfig({ wrongNoteTimeout: ms })}
+                        onClick={() =>
+                          updateMidiConfig({ wrongNoteTimeout: ms })
+                        }
                         style={{
                           flex: 1,
                           padding: "6px 8px",
@@ -1472,14 +1608,22 @@ export default function ScorePage() {
                           borderRadius: "4px",
                           borderWidth: "1px",
                           borderStyle: "solid",
-                          borderColor: midiConfig.wrongNoteTimeout === ms ? highlightColor : borderColor,
+                          borderColor:
+                            midiConfig.wrongNoteTimeout === ms
+                              ? highlightColor
+                              : borderColor,
                           backgroundColor:
                             midiConfig.wrongNoteTimeout === ms
-                              ? colorMode === "dark" ? `${highlightColor}40` : `${highlightColor}20`
+                              ? colorMode === "dark"
+                                ? `${highlightColor}40`
+                                : `${highlightColor}20`
                               : "transparent",
                           color: frColor,
                           cursor: "pointer",
-                          fontWeight: midiConfig.wrongNoteTimeout === ms ? "bold" : "normal",
+                          fontWeight:
+                            midiConfig.wrongNoteTimeout === ms
+                              ? "bold"
+                              : "normal",
                         }}
                       >
                         {ms}ms

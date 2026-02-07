@@ -106,7 +106,13 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       const textElements = containerRef.current.querySelectorAll("text");
       textElements.forEach((textEl) => {
         const content = textEl.textContent;
-        if (content && /maj/i.test(content)) {
+        if (!content) return;
+        // Hide unwanted annotations (e.g., "Time stretch: 5.0", "(Hands shake)")
+        if (/Time stretch/i.test(content) || /Hands shake/i.test(content)) {
+          (textEl as SVGElement).style.display = "none";
+          return;
+        }
+        if (/maj/i.test(content)) {
           // Replace "maj" with "Maj" (case-sensitive: only fix lowercase "maj")
           const fixed = content.replace(/maj/g, "Maj");
           if (fixed !== content) {
@@ -228,6 +234,10 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             noteRect.top - currentContainerRect.top + noteRect.height / 2;
 
           // Find the closest timestamp in the map using both X and Y coordinates
+          // 遅延構築: 初回クリック時にposMapを構築
+          if (positionToTimestampMapRef.current.length === 0) {
+            buildPositionToTimestampMap();
+          }
           const positionMap = positionToTimestampMapRef.current;
           let closest = positionMap[0];
           let minDist = Infinity;
@@ -831,8 +841,9 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               // Fix chord symbols after zoom re-render
               fixChordSymbolText();
 
-              // Rebuild position-to-timestamp map and click handlers after zoom change
-              buildPositionToTimestampMap();
+              // Rebuild click handlers after zoom change
+              // posMapはキャッシュクリアして次回クリック時に遅延再構築
+              positionToTimestampMapRef.current = [];
               setupNoteClickHandlers();
 
               resolve();
@@ -997,9 +1008,13 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             ],
           });
 
-          // Enable/disable chord symbols BEFORE loading the MusicXML
+          // Enable/disable chord symbols and optimize rendering BEFORE loading the MusicXML
           if (osmd.EngravingRules) {
             osmd.EngravingRules.RenderChordSymbols = showChords;
+            // ペダル記号の描画を無効化（大きな楽譜の高速化）
+            osmd.EngravingRules.RenderPedals = false;
+            // フィンガリング（指番号）の描画を無効化
+            osmd.EngravingRules.RenderFingerings = false;
 
             // Apply dark mode colors
             if (darkMode) {
@@ -1331,8 +1346,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               });
 
               // Handle note clicks for cursor jump
-              // Build the initial position-to-timestamp map and setup click handlers
-              buildPositionToTimestampMap();
+              // posMapは初回クリック時に遅延構築される（高速化のため）
               setupNoteClickHandlers();
             }
           }, 200);
