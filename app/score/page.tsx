@@ -35,6 +35,10 @@ import {
   midiPresets,
   MidiPresetName,
 } from "../lib/midiConfig";
+import { noteToMidi } from "../lib/noteUtils";
+import SightReadingFlashcard, {
+  type SightReadingFlashcardRef,
+} from "../components/SightReadingFlashcard";
 
 const sampleScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
@@ -111,6 +115,9 @@ export default function ScorePage() {
   const [wrongNotes, setWrongNotes] = useState<number[]>([]);
   const [showMidiSettings, setShowMidiSettings] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [appMode, setAppMode] = useState<"score" | "sightreading">("score");
+  const [sightReadingExpectedNotes, setSightReadingExpectedNotes] = useState<number[]>([]);
+  const sightReadingRef = useRef<SightReadingFlashcardRef>(null);
   const sheetMusicRef = useRef<SheetMusicRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -166,22 +173,7 @@ export default function ScorePage() {
 
   const currentPreset = detectPreset(midiConfig);
 
-  // 現在の音符からMIDI番号の配列を計算
-  const noteToMidi = (step: string, octave: number, alter: number): number => {
-    const stepToSemitone: Record<string, number> = {
-      C: 0,
-      D: 2,
-      E: 4,
-      F: 5,
-      G: 7,
-      A: 9,
-      B: 11,
-    };
-    const semitone = stepToSemitone[step.toUpperCase()] || 0;
-    return (octave + 1) * 12 + semitone + (alter || 0);
-  };
-
-  const expectedMidiNotes = currentNotes
+  const scoreExpectedMidiNotes = currentNotes
     .filter((n) => n.step && typeof n.octave === "number")
     .filter(
       (n) =>
@@ -189,10 +181,16 @@ export default function ScorePage() {
     )
     .map((n) => noteToMidi(n.step, n.octave, n.alter));
 
-  // MIDI判定成功時: カーソルを進めて間違い表示をクリア
-  // 休符・タイ（音符が空）の位置は自動スキップ
+  const expectedMidiNotes =
+    appMode === "sightreading" ? sightReadingExpectedNotes : scoreExpectedMidiNotes;
+
+  // MIDI判定成功時: モードに応じて処理を分岐
   const handleMidiMatch = useCallback(() => {
     setWrongNotes([]);
+    if (appMode === "sightreading") {
+      sightReadingRef.current?.handleCorrectAnswer();
+      return;
+    }
     sheetMusicRef.current?.next();
 
     // 次の位置が休符/タイなら自動スキップ（最大100回で安全制限）
@@ -206,7 +204,7 @@ export default function ScorePage() {
       ref.next();
       skipCount++;
     }
-  }, []);
+  }, [appMode]);
 
   // MIDI判定失敗時: 間違い鍵盤を赤く表示
   const handleMidiMismatch = useCallback((wrong: number[]) => {
@@ -220,7 +218,7 @@ export default function ScorePage() {
       expectedMidiNotes,
       onMatch: handleMidiMatch,
       onMismatch: handleMidiMismatch,
-      enabled: midiEnabled && !!selectedScore && !isLoading,
+      enabled: midiEnabled && (appMode === "sightreading" || (!!selectedScore && !isLoading)),
     });
 
   // Load user scores from IndexedDB on mount
@@ -665,6 +663,26 @@ export default function ScorePage() {
           }}
         >
           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            {/* モード切り替え */}
+            <select
+              value={appMode}
+              onChange={(e) => setAppMode(e.target.value as "score" | "sightreading")}
+              style={{
+                padding: "8px 8px",
+                fontSize: "14px",
+                borderRadius: "4px",
+                borderWidth: ".5px",
+                borderColor: borderColor,
+                backgroundColor: bgColor,
+                outline: "none",
+                fontWeight: "bold",
+              }}
+            >
+              <option value="score">楽譜練習</option>
+              <option value="sightreading">譜読み練習</option>
+            </select>
+            {appMode === "score" && (
+            <>
             <label
               htmlFor="score-select"
               style={{ fontWeight: "bold", whiteSpace: "nowrap" }}
@@ -776,7 +794,11 @@ export default function ScorePage() {
                 <MdDeleteOutline />
               </button>
             )}
+          </>
+          )}
           </div>
+          {appMode === "score" && (
+          <>
           <div
             style={{
               width: ".5px",
@@ -1023,6 +1045,73 @@ export default function ScorePage() {
               </div>
             </div>
           )}
+          </>
+          )}
+          {/* 譜読みモード時のMIDI接続ドット + 設定 + 全画面 */}
+          {appMode === "sightreading" && (
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginLeft: "auto" }}>
+              <div
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  backgroundColor:
+                    midiConnectionStatus === "connected"
+                      ? "#4CAF50"
+                      : midiConnectionStatus === "unsupported"
+                        ? "#FF9800"
+                        : "#999",
+                }}
+                title={
+                  midiConnectionStatus === "connected"
+                    ? `MIDI接続中: ${midiDeviceName}`
+                    : midiConnectionStatus === "unsupported"
+                      ? "MIDI非対応ブラウザ"
+                      : midiConnectionStatus === "connecting"
+                        ? "MIDI接続中..."
+                        : "MIDI未接続"
+                }
+              />
+              <button
+                onClick={() => setShowMidiSettings(true)}
+                style={{
+                  height: "40px",
+                  width: "32px",
+                  fontSize: "18px",
+                  borderRadius: "4px",
+                  borderWidth: ".5px",
+                  borderColor: borderColor,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "flex",
+                  color: frColor,
+                  cursor: "pointer",
+                }}
+                title="MIDI設定"
+              >
+                <IoSettingsOutline />
+              </button>
+              <button
+                onClick={handleFullscreenToggle}
+                style={{
+                  height: "40px",
+                  width: "32px",
+                  fontSize: "18px",
+                  borderRadius: "4px",
+                  borderWidth: ".5px",
+                  borderColor: borderColor,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "flex",
+                  color: frColor,
+                  cursor: "pointer",
+                }}
+                title={isFullscreen ? "全画面解除" : "全画面"}
+              >
+                {isFullscreen ? <IoContractOutline /> : <IoExpandOutline />}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 楽譜表示エリア */}
@@ -1035,7 +1124,7 @@ export default function ScorePage() {
             position: "relative", // Added for positioning loading overlay
           }}
         >
-          {isLoading && ( // Show loading animation when isLoading is true
+          {appMode === "score" && isLoading && ( // Show loading animation when isLoading is true
             <div
               style={{
                 position: "absolute",
@@ -1108,7 +1197,19 @@ export default function ScorePage() {
               )}
             </div>
           )}
-          {selectedScore ? (
+          {appMode === "sightreading" ? (
+            <SightReadingFlashcard
+              ref={sightReadingRef}
+              onExpectedNotesChange={setSightReadingExpectedNotes}
+              wrongNotes={wrongNotes}
+              onWrongNotesReset={() => setWrongNotes([])}
+              darkMode={colorMode === "dark"}
+              highlightColor={highlightColor}
+              borderColor={borderColor}
+              frColor={frColor}
+              bgColor={bgColor}
+            />
+          ) : selectedScore ? (
             <SheetMusic
               ref={sheetMusicRef}
               musicXmlPath={selectedScore}
@@ -1144,7 +1245,19 @@ export default function ScorePage() {
             backgroundColor: "#f5f5f5",
           }}
         >
-          {selectedScore ? (
+          {appMode === "sightreading" ? (
+            <PianoKeyboard
+              notes={sightReadingExpectedNotes.map((midi) => {
+                const semitone = midi % 12;
+                const octave = Math.floor(midi / 12) - 1;
+                const stepMap: Record<number, string> = { 0: "C", 2: "D", 4: "E", 5: "F", 7: "G", 9: "A", 11: "B" };
+                const step = stepMap[semitone] || "C";
+                const alter = stepMap[semitone] ? 0 : 1;
+                return { step, octave, alter };
+              })}
+              wrongNotes={wrongNotes}
+            />
+          ) : selectedScore ? (
             <PianoKeyboard
               notes={
                 midiConfig.staffFilter === "both"
@@ -1168,9 +1281,7 @@ export default function ScorePage() {
                 fontSize: "14px",
               }}
             >
-              {selectedScore
-                ? "楽譜をクリックまたはカーソルを進めてください"
-                : "鍵盤ガイド"}
+              鍵盤ガイド
             </div>
           )}
         </footer>

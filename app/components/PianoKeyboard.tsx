@@ -1,6 +1,7 @@
 "use client";
 import { border, useColorMode } from "@chakra-ui/react";
 import { useTheme } from "@chakra-ui/react";
+import { noteToMidi, midiToNoteName, isBlackKey } from "../lib/noteUtils";
 
 interface Note {
   step: string;
@@ -26,64 +27,6 @@ const noteToDisplayName = (note: Note): string => {
     noteName += "b";
   }
   return `${noteName}${note.octave}`;
-};
-
-// 音符をMIDI番号に変換
-const noteToMidi = (
-  step: string | number,
-  octave: number,
-  alter: number,
-): number => {
-  const stepToSemitone: { [key: string]: number } = {
-    C: 0,
-    D: 2,
-    E: 4,
-    F: 5,
-    G: 7,
-    A: 9,
-    B: 11,
-    "0": 0,
-    "1": 2,
-    "2": 4,
-    "3": 5,
-    "4": 7,
-    "5": 9,
-    "6": 11, // 数値の場合（0=C, 1=D, etc）
-  };
-  const stepKey = typeof step === "string" ? step.toUpperCase() : String(step);
-  const semitone = stepToSemitone[stepKey] || 0;
-  const safeAlter = typeof alter === "number" ? alter : 0;
-  return (octave + 1) * 12 + semitone + safeAlter;
-};
-
-// MIDI番号から音符名を取得
-const midiToNoteName = (midi: number): string => {
-  const noteNames = [
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-    "A",
-    "A#",
-    "B",
-  ];
-  const octave = Math.floor(midi / 12) - 1;
-  const note = noteNames[midi % 12];
-  return `${note}${octave}`;
-};
-
-// 黒鍵かどうか判定
-const isBlackKey = (midi: number): boolean => {
-  if (typeof midi !== "number" || isNaN(midi)) {
-    return false;
-  }
-  const semitone = midi % 12;
-  return [1, 3, 6, 8, 10].includes(semitone);
 };
 
 export default function PianoKeyboard({

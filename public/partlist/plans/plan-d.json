@@ -1,0 +1,13 @@
+{
+  "planName": "プランD",
+  "note": "→無線通信に既存の機材を使用\n→サーバーの代用で既存のMacBookPro2019を使用",
+  "projects": [
+    { "path": "server.json", "sets": 0 },
+    { "path": "wired.json", "sets": 0 },
+    { "path": "wireless.json", "sets": 0 },
+    { "path": "cm20.json", "sets": 5 },
+    { "path": "strip.json", "sets": 0 },
+    { "path": "shield.json", "sets": 0 },
+    { "path": "shipping.json", "sets": 0 }
+  ]
+}

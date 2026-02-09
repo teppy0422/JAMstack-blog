@@ -1,0 +1,10 @@
+{
+  "projectName": "出荷チェック",
+  "parts": [
+    { "id": 7, "quantity": 1 },
+    { "id": 8, "quantity": 1 },
+    { "id": 9, "quantity": 1 },
+    { "id": 10, "quantity": 1 },
+    { "id": 12, "quantity": 1 }
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "title": "部品リスト/分類1台あたり",
+  "note": "金額は全て税込み",
+  "parts": [
+    {
+      "id": 1,
+      "maker": "Synology",
+      "name": "NAS本体",
+      "unitPrice": 204600,
+      "model": "DS923+HDD4台付",
+      "url": "https://x.gd/YwUQD",
+      "power": 20,
+      "memo": ""
+    },
+    {
+      "id": 2,
+      "maker": "Cisco",
+      "name": "LAN HUB 24ポート",
+      "unitPrice": 32780,
+      "model": "CBS110-24T-JP",
+      "url": "https://x.gd/22NMO",
+      "power": 11,
+      "memo": ""
+    },
+    {
+      "id": 3,
+      "maker": "elecom",
+      "name": "LANケーブルCAT6A",
+      "unitPrice": 14080,
+      "model": "KB-T6A-CB100W",
+      "url": "https://x.gd/n2Ox0",
+      "power": 0,
+      "memo": "100m"
+    },
+    {
+      "id": 4,
+      "maker": "サンワ",
+      "name": "LANケーブルカシメ",
+      "unitPrice": 16500,
+      "model": "LAN-TLKIT3",
+      "url": "https://x.gd/5Bsck",
+      "power": 0,
+      "memo": ""
+    },
+    {
+      "id": 5,
+      "maker": "Tsdrena",
+      "name": "LANコネクタCAT6A",
+      "unitPrice": 10780,
+      "model": "ADT-6ARJKNH-100",
+      "url": "https://x.gd/VmsQg",
+      "power": 0,
+      "memo": "RJ45 100個"
+    },
+    {
+      "id": 6,
+      "maker": "Baffalo",
+      "name": "無線LANルーター",
+      "unitPrice": 43780,
+      "model": "WXR-11000XE12",
+      "url": "https://x.gd/aAn41",
+      "power": 15,
+      "memo": "32台まで"
+    },
+    {
+      "id": 7,
+      "maker": "TCL",
+      "name": "Androidタブレット",
+      "unitPrice": 31840,
+      "model": "NXTPAPER 11 Plus",
+      "url": "https://x.gd/kIJYO",
+      "power": null,
+      "memo": "非光沢"
+    },
+    {
+      "id": 8,
+      "maker": "Anker",
+      "name": "USBハブ",
+      "unitPrice": 4990,
+      "model": "Nano 7-in-1",
+      "url": "https://x.gd/IgeDC",
+      "power": null,
+      "memo": ""
+    },
+    {
+      "id": 9,
+      "maker": "NETUM",
+      "name": "QRリーダー",
+      "unitPrice": 7599,
+      "model": "C750",
+      "url": "https://x.gd/99ylK",
+      "power": null,
+      "memo": ""
+    },
+    {
+      "id": 10,
+      "maker": "ミツトヨ",
+      "name": "インプットツール",
+      "unitPrice": 15136,
+      "model": "IT-020U",
+      "url": "",
+      "power": 0,
+      "memo": ""
+    },
+    {
+      "id": 11,
+      "maker": "ミツトヨ",
+      "name": "インプットツール用コード",
+      "unitPrice": 3870,
+      "model": "05CZA662",
+      "url": "",
+      "power": 0,
+      "memo": ""
+    },
+    {
+      "id": 12,
+      "maker": "ミツトヨ",
+      "name": "インプットツール用コード",
+      "unitPrice": 3663,
+      "model": "937387",
+      "url": "",
+      "power": 0,
+      "memo": ""
+    },
+    {
+      "id": 13,
+      "maker": "FILMEXT",
+      "name": "非光沢フィルム",
+      "unitPrice": 1760,
+      "model": "HAPN00045",
+      "url": "https://x.gd/GHUlj",
+      "power": 0,
+      "memo": ""
+    },
+    {
+      "id": 14,
+      "maker": "AIMEX",
+      "name": "QRリーダー",
+      "unitPrice": 24800,
+      "model": "BCR-BT2D3W",
+      "url": "https://x.gd/TKjCV",
+      "power": 0,
+      "memo": ""
+    },
+    {
+      "id": 15,
+      "maker": "I-O DATA",
+      "name": "USBシリアル変換",
+      "unitPrice": 9207,
+      "model": "USB-RSAQ7R",
+      "url": "https://x.gd/1iO2c",
+      "power": 1,
+      "memo": ""
+    }
+  ],
+  "power": {
+    "totalWh": 49,
+    "totalKwh": 0.049,
+    "operatingHours": 8,
+    "dailyUsageKwh": 0.392,
+    "electricityRate": 40,
+    "dailyCost": 15.68
+  },
+  "summary": {
+    "partsTotal": 1458121,
+    "development": 1820500,
+    "total": 3278621,
+    "revisedPartsTotal": 760288,
+    "revisedDevelopment": 2686200,
+    "revisedTotal": 3446488
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "planName": "プランA",
+  "note": "・最終的に展開できそうな設備全てを対象としたプラン\n・ノートパソコン購入をタブレットに変更済み",
+  "projects": [
+    { "path": "server.json", "sets": 1 },
+    { "path": "wired.json", "sets": 1 },
+    { "path": "wireless.json", "sets": 1 },
+    { "path": "cm20.json", "sets": 7 },
+    { "path": "strip.json", "sets": 3 },
+    { "path": "shield.json", "sets": 1 },
+    { "path": "shipping.json", "sets": 1 }
+  ]
+}

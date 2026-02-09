@@ -1,0 +1,13 @@
+{
+  "planName": "プランE",
+  "note": "→全て既存(購入済み)の設備で対応",
+  "projects": [
+    { "path": "server.json", "sets": 0 },
+    { "path": "wired.json", "sets": 0 },
+    { "path": "wireless.json", "sets": 0 },
+    { "path": "cm20.json", "sets": 1 },
+    { "path": "strip.json", "sets": 0 },
+    { "path": "shield.json", "sets": 0 },
+    { "path": "shipping.json", "sets": 0 }
+  ]
+}

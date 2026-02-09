@@ -1,0 +1,9 @@
+{
+  "projectName": "有線通信",
+  "parts": [
+    { "id": 2, "quantity": 1 },
+    { "id": 3, "quantity": 1 },
+    { "id": 4, "quantity": 1 },
+    { "id": 5, "quantity": 1 }
+  ]
+}

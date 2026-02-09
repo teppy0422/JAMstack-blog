@@ -1,0 +1,13 @@
+{
+  "planName": "プランC",
+  "note": "→無線が安定しない場合の有線通信を削除\n→ジョイント圧着1→0台に変更",
+  "projects": [
+    { "path": "server.json", "sets": 1 },
+    { "path": "wired.json", "sets": 0 },
+    { "path": "wireless.json", "sets": 1 },
+    { "path": "cm20.json", "sets": 5 },
+    { "path": "strip.json", "sets": 0 },
+    { "path": "shield.json", "sets": 0 },
+    { "path": "shipping.json", "sets": 0 }
+  ]
+}

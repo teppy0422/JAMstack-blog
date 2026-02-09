@@ -85,6 +85,8 @@ import { UrlModalButton } from "@/components/ui/UrlModalButton";
 import { ImageSelector } from "@/components/ui/ImageSelector";
 import SpecTable_terminal from "./parts/SpecTable_terminal";
 import SpecTable_sarver from "./parts/SpecTable_sarver";
+import PartListTable from "../../../components/PartListTable";
+import PartListPlan from "../../../components/PartListPlan";
 
 import dynamic from "next/dynamic";
 import QR_Payload from "./parts/QrPayloadTable";
@@ -204,7 +206,7 @@ const BlogPage: React.FC = () => {
             :2025-07-22
           </Text>
         </Box>
-        <SectionBox
+        {/* <SectionBox
           id="section1"
           title={
             "1." +
@@ -231,6 +233,33 @@ const BlogPage: React.FC = () => {
               </ListItem>
               <ListItem>以下の計画は作成途中で適宜変更していきます。</ListItem>
             </UnorderedList>
+          </Box>
+        </SectionBox> */}
+        <SectionBox
+          id="section1"
+          title={
+            "1." +
+            getMessage({
+              ja: "プランと購入品",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Box mt={4}>
+            <PartListPlan
+              planPaths={[
+                "/partlist/plans/plan-a.json",
+                "/partlist/plans/plan-b.json",
+                "/partlist/plans/plan-c.json",
+                "/partlist/plans/plan-d.json",
+                "/partlist/plans/plan-e.json",
+              ]}
+            />
+          </Box>
+          <Box mt={4}>
+            <PartListTable />
           </Box>
         </SectionBox>
         <SectionBox

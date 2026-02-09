@@ -1,0 +1,13 @@
+{
+  "planName": "プランB",
+  "note": "・前回と同じ設備と台数\n・ノートパソコン購入をタブレットに変更済み",
+  "projects": [
+    { "path": "server.json", "sets": 1 },
+    { "path": "wired.json", "sets": 1 },
+    { "path": "wireless.json", "sets": 1 },
+    { "path": "cm20.json", "sets": 6 },
+    { "path": "strip.json", "sets": 0 },
+    { "path": "shield.json", "sets": 0 },
+    { "path": "shipping.json", "sets": 1 }
+  ]
+}

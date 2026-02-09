@@ -1,0 +1,9 @@
+{
+  "projectName": "シールド切断",
+  "parts": [
+    { "id": 7, "quantity": 1 },
+    { "id": 8, "quantity": 1 },
+    { "id": 9, "quantity": 1 },
+    { "id": 15, "quantity": 1 }
+  ]
+}

@@ -151,3 +151,15 @@
 .music-term-clickable:hover text {
   fill: var(--highlight-color) !important;
 }
+
+/* 譜読みフラッシュカード フィードバックアニメーション */
+@keyframes flashGreen {
+  0% { background-color: rgba(76, 175, 80, 0.3); }
+  100% { background-color: transparent; }
+}
+@keyframes flashRed {
+  0% { background-color: rgba(255, 68, 68, 0.3); }
+  100% { background-color: transparent; }
+}
+.flashcard-correct { animation: flashGreen 0.5s ease; }
+.flashcard-incorrect { animation: flashRed 0.5s ease; }
