@@ -1,6 +1,7 @@
 {
   "planName": "プランE",
   "note": "→全て既存(購入済み)の設備で対応",
+  "notice": "",
   "projects": [
     { "path": "server.json", "sets": 0 },
     { "path": "wired.json", "sets": 0 },

@@ -258,9 +258,9 @@ const BlogPage: React.FC = () => {
               ]}
             />
           </Box>
-          <Box mt={4}>
+          {/* <Box mt={4}>
             <PartListTable />
-          </Box>
+          </Box> */}
         </SectionBox>
         <SectionBox
           id="section2"

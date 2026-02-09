@@ -1,6 +1,7 @@
 {
   "planName": "プランB",
   "note": "・前回と同じ設備と台数\n・ノートパソコン購入をタブレットに変更済み",
+  "notice": "△ジョイント圧着用にアプリ修正\n△出荷チェックモードを追加",
   "projects": [
     { "path": "server.json", "sets": 1 },
     { "path": "wired.json", "sets": 1 },

@@ -47,6 +47,7 @@ interface ProjectData {
 interface PlanData {
   planName: string;
   note?: string;
+  notice?: string;
   projects: { path: string; sets: number }[];
 }
 
@@ -165,7 +166,7 @@ export default function PartListPlan({
   const borderColor = isDark ? "gray.600" : "gray.200";
   const totalBg = isDark ? "blue.800" : "blue.50";
   const detailBg = isDark ? "gray.750" : "gray.50";
-  const activeBtnBg = isDark ? "blue.600" : "blue.500";
+  const activeBtnBg = isDark ? "#E3836D" : "#503F35";
 
   return (
     <Box>
@@ -191,8 +192,13 @@ export default function PartListPlan({
         {activePlan.planName}
       </Heading> */}
       {activePlan.note && (
-        <Text fontSize="sm" color="gray.500" mb={4} whiteSpace="pre-line">
+        <Text fontSize="sm" color="gray.500" mb={activePlan.notice ? 1 : 4} whiteSpace="pre-line">
           {activePlan.note}
+        </Text>
+      )}
+      {activePlan.notice && (
+        <Text fontSize="sm" color="red.500" mb={4} whiteSpace="pre-line">
+          {activePlan.notice}
         </Text>
       )}
 
