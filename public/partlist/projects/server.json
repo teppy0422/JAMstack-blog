@@ -1,4 +1,7 @@
 {
   "projectName": "サーバー",
-  "parts": [{ "id": 1, "quantity": 1 }]
+  "parts": [
+    { "id": 1, "quantity": 1 },
+    { "id": 1.1, "quantity": 4 }
+  ]
 }

@@ -6,9 +6,19 @@
       "id": 1,
       "maker": "Synology",
       "name": "NAS本体",
-      "unitPrice": 204600,
-      "model": "DS923+HDD4台付",
-      "url": "https://x.gd/YwUQD",
+      "unitPrice": 103518,
+      "model": "DS925+[4bay]",
+      "url": "https://sl1nk.com/v11xS",
+      "power": 20,
+      "memo": ""
+    },
+    {
+      "id": 1.1,
+      "maker": "Synology",
+      "name": "HDD",
+      "unitPrice": 29798,
+      "model": "HAT3300-4T[4TB]",
+      "url": "https://l1nq.com/JEvjy",
       "power": 20,
       "memo": ""
     },
