@@ -192,7 +192,12 @@ export default function PartListPlan({
         {activePlan.planName}
       </Heading> */}
       {activePlan.note && (
-        <Text fontSize="sm" color="gray.500" mb={activePlan.notice ? 1 : 4} whiteSpace="pre-line">
+        <Text
+          fontSize="sm"
+          color="gray.500"
+          mb={activePlan.notice ? 1 : 4}
+          whiteSpace="pre-line"
+        >
           {activePlan.note}
         </Text>
       )}
@@ -211,9 +216,11 @@ export default function PartListPlan({
       >
         <Table size="sm">
           <Thead>
-            <Tr bg={bgHeader}>
+            <Tr bg={bgHeader} fontSize={{ base: "11px", sm: "14px" }}>
               <Th>プロジェクト</Th>
-              <Th isNumeric>セット単価</Th>
+              <Th isNumeric display={{ base: "none", md: "table-cell" }}>
+                セット単価
+              </Th>
               <Th isNumeric>セット数</Th>
               <Th isNumeric>小計</Th>
             </Tr>
@@ -226,12 +233,12 @@ export default function PartListPlan({
               const sets = getSets(proj.path);
               const subtotal = perSet * sets;
               const isExpanded = expandedProjects.has(proj.path);
-
               return (
                 <React.Fragment key={proj.path}>
                   <Tr>
                     <Td
                       fontWeight="bold"
+                      fontSize={{ base: "11px", sm: "14px" }}
                       cursor="pointer"
                       onClick={() => toggleExpand(proj.path)}
                       userSelect="none"
@@ -243,11 +250,13 @@ export default function PartListPlan({
                       )}
                       {project.projectName}
                     </Td>
-                    <Td isNumeric>{perSet.toLocaleString()}</Td>
+                    <Td isNumeric display={{ base: "none", md: "table-cell" }}>
+                      {perSet.toLocaleString()}
+                    </Td>
                     <Td isNumeric>
                       <NumberInput
                         size="xs"
-                        w="70px"
+                        w={{ base: "50px", sm: "70px" }}
                         min={0}
                         max={999}
                         value={sets}
@@ -263,7 +272,11 @@ export default function PartListPlan({
                         </NumberInputStepper>
                       </NumberInput>
                     </Td>
-                    <Td isNumeric fontWeight="bold">
+                    <Td
+                      isNumeric
+                      fontWeight="bold"
+                      fontSize={{ base: "11px", sm: "14px" }}
+                    >
                       {subtotal.toLocaleString()}
                     </Td>
                   </Tr>
@@ -290,7 +303,11 @@ export default function PartListPlan({
                               ({part.maker})
                             </Text>
                           </Td>
-                          <Td isNumeric fontSize="xs">
+                          <Td
+                            isNumeric
+                            fontSize="xs"
+                            display={{ base: "none", md: "table-cell" }}
+                          >
                             {part.unitPrice.toLocaleString()}
                           </Td>
                           <Td isNumeric fontSize="xs">
@@ -310,10 +327,16 @@ export default function PartListPlan({
               );
             })}
             <Tr bg={totalBg}>
-              <Td colSpan={3} textAlign="right" fontWeight="bold" fontSize="md">
+              <Td fontWeight="bold" fontSize={{ base: "11px", sm: "14px" }}>
                 合計
               </Td>
-              <Td isNumeric fontWeight="bold" fontSize="md">
+              <Td display={{ base: "none", md: "table-cell" }} />
+              <Td />
+              <Td
+                isNumeric
+                fontWeight="bold"
+                fontSize={{ base: "11px", sm: "14px" }}
+              >
                 {grandTotal.toLocaleString()}
               </Td>
             </Tr>
