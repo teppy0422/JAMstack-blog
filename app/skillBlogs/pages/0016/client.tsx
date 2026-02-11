@@ -247,6 +247,7 @@ const BlogPage: React.FC = () => {
           sectionRefs={sectionRefs}
           sections={sections}
         >
+          <Text fontSize="sm">確認日:2026/2/10</Text>
           <Box mt={4}>
             <PartListPlan
               planPaths={[

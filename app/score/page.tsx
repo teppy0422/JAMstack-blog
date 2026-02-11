@@ -39,6 +39,12 @@ import { noteToMidi } from "../lib/noteUtils";
 import SightReadingFlashcard, {
   type SightReadingFlashcardRef,
 } from "../components/SightReadingFlashcard";
+import { CustomSwitchColorModeButton } from "@/components/ui/CustomSwitchButton";
+import { useSession, signOut } from "next-auth/react";
+import { CustomAvatar } from "@/components/ui/CustomAvatar";
+import { useUserContext } from "@/contexts/useUserContext";
+import Auth from "@/components/ui/Auth/Auth";
+import { CustomModal } from "@/components/ui/CustomModal";
 
 const sampleScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
@@ -58,19 +64,19 @@ const sampleScores = [
     path: "/scores/merry-go-round-of-life.musicxml",
   },
   {
-    id: "summer",
-    name: "summer",
-    path: "/scores/summer-jiu-shi-rang.musicxml",
-  },
-  {
     id: "summer-chords",
-    name: "summer (コード付き)",
+    name: "summer",
     path: "/scores/summer-jiu-shi-rang-with-chords.musicxml",
   },
   {
     id: "sample",
     name: "sample",
     path: "/scores/BrahWiMeSample.musicxml",
+  },
+  {
+    id: "friend-in-me",
+    name: "You've Got a Friend in Me",
+    path: "/scores/youve-got-a-friend-in-me.musicxml",
   },
 ];
 
@@ -116,7 +122,17 @@ export default function ScorePage() {
   const [showMidiSettings, setShowMidiSettings] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [appMode, setAppMode] = useState<"score" | "sightreading">("score");
-  const [sightReadingExpectedNotes, setSightReadingExpectedNotes] = useState<number[]>([]);
+
+  // マウント後にlocalStorageから復元
+  useEffect(() => {
+    const saved = localStorage.getItem("scoreAppMode");
+    if (saved === "score" || saved === "sightreading") {
+      setAppMode(saved);
+    }
+  }, []);
+  const [sightReadingExpectedNotes, setSightReadingExpectedNotes] = useState<
+    number[]
+  >([]);
   const sightReadingRef = useRef<SightReadingFlashcardRef>(null);
   const sheetMusicRef = useRef<SheetMusicRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -124,6 +140,16 @@ export default function ScorePage() {
   const pageContainerRef = useRef<HTMLDivElement>(null);
   const loadingStartTimeRef = useRef<number>(0);
   const { colorMode } = useColorMode();
+  const { data: session } = useSession();
+  const {
+    currentUserName,
+    currentUserCompany,
+    currentUserMainCompany,
+    currentUserPictureUrl,
+    currentUserEmail,
+    currentUserCreatedAt,
+  } = useUserContext();
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 
   // localStorage からMIDI設定をロード
   useEffect(() => {
@@ -182,7 +208,9 @@ export default function ScorePage() {
     .map((n) => noteToMidi(n.step, n.octave, n.alter));
 
   const expectedMidiNotes =
-    appMode === "sightreading" ? sightReadingExpectedNotes : scoreExpectedMidiNotes;
+    appMode === "sightreading"
+      ? sightReadingExpectedNotes
+      : scoreExpectedMidiNotes;
 
   // MIDI判定成功時: モードに応じて処理を分岐
   const handleMidiMatch = useCallback(() => {
@@ -218,7 +246,9 @@ export default function ScorePage() {
       expectedMidiNotes,
       onMatch: handleMidiMatch,
       onMismatch: handleMidiMismatch,
-      enabled: midiEnabled && (appMode === "sightreading" || (!!selectedScore && !isLoading)),
+      enabled:
+        midiEnabled &&
+        (appMode === "sightreading" || (!!selectedScore && !isLoading)),
     });
 
   // Load user scores from IndexedDB on mount
@@ -538,21 +568,40 @@ export default function ScorePage() {
   // Handle fullscreen toggle
   const handleFullscreenToggle = useCallback(() => {
     if (!pageContainerRef.current) return;
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
+    const doc = document as Document & {
+      webkitFullscreenElement?: Element;
+      webkitExitFullscreen?: () => void;
+    };
+    const el = pageContainerRef.current as HTMLElement & {
+      webkitRequestFullscreen?: () => void;
+    };
+    if (doc.fullscreenElement || doc.webkitFullscreenElement) {
+      if (doc.exitFullscreen) doc.exitFullscreen();
+      else if (doc.webkitExitFullscreen) doc.webkitExitFullscreen();
     } else {
-      pageContainerRef.current.requestFullscreen();
+      if (el.requestFullscreen) el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
     }
   }, []);
 
   // Listen for fullscreen changes
   useEffect(() => {
     const onFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const doc = document as Document & { webkitFullscreenElement?: Element };
+      setIsFullscreen(!!(doc.fullscreenElement || doc.webkitFullscreenElement));
+      // 全画面切り替え後にカーソルを再表示（DOMレイアウト完了を待つ）
+      setTimeout(() => {
+        sheetMusicRef.current?.showCursor();
+      }, 100);
     };
     document.addEventListener("fullscreenchange", onFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", onFullscreenChange);
     return () => {
       document.removeEventListener("fullscreenchange", onFullscreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        onFullscreenChange,
+      );
     };
   }, []);
 
@@ -578,24 +627,12 @@ export default function ScorePage() {
       ref={pageContainerRef}
       style={{ backgroundColor: bgColor, height: "100vh", overflow: "hidden" }}
     >
-      {/* ヘッダー背景用の固定レイヤー（LiquidGlassの後ろに表示） */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: "42px",
-          backgroundColor: bgColor,
-          zIndex: 1999, // LiquidGlassのzIndex(2000)より下
-        }}
-      />
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          height: "calc(100vh - 42px)",
-          marginTop: "42px",
+          height: isFullscreen ? "100vh" : "calc(100vh - 42px)",
+          marginTop: 0,
           backgroundColor: bgColor,
           position: "relative",
           borderTop: ".5px solid",
@@ -647,8 +684,6 @@ export default function ScorePage() {
           onChange={handleFileInputChange}
           style={{ display: "none" }}
         />
-        {/* ヘッダー */}
-        <Header />
         {/* コントロール部分 */}
         <div
           className="no-print"
@@ -662,13 +697,25 @@ export default function ScorePage() {
             flexWrap: "wrap",
           }}
         >
-          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              alignItems: "center",
+              flex: 1,
+              minWidth: 0,
+            }}
+          >
             {/* モード切り替え */}
             <select
               value={appMode}
-              onChange={(e) => setAppMode(e.target.value as "score" | "sightreading")}
+              onChange={(e) => {
+                const mode = e.target.value as "score" | "sightreading";
+                setAppMode(mode);
+                localStorage.setItem("scoreAppMode", mode);
+              }}
               style={{
-                padding: "8px 8px",
+                padding: "6px 8px",
                 fontSize: "14px",
                 borderRadius: "4px",
                 borderWidth: ".5px",
@@ -682,374 +729,410 @@ export default function ScorePage() {
               <option value="sightreading">譜読み練習</option>
             </select>
             {appMode === "score" && (
-            <>
-            <label
-              htmlFor="score-select"
-              style={{ fontWeight: "bold", whiteSpace: "nowrap" }}
-            >
-              <img
-                src="/images/illust/hippo/hippo_speaker.svg"
-                style={{
-                  height: "32px",
-                  filter:
-                    colorMode === "dark"
-                      ? "invert(58%) sepia(50%) saturate(350%) hue-rotate(320deg) brightness(105%)"
-                      : "none",
-                }}
-              />
-            </label>
-            <select
-              id="score-select"
-              value={selectedScoreId || ""}
-              onChange={(e) => handleScoreChange(e.target.value)}
-              style={{
-                padding: "8px 8px",
-                fontSize: "16px",
-                borderRadius: "4px",
-                borderWidth: ".5px",
-                borderColor: borderColor,
-                minWidth: "200px",
-                backgroundColor: bgColor,
-                outline: "none", // フォーカス時の青い枠を無効化
-              }}
-            >
-              <option value="">-- 選択してください --</option>
-              {/* Sample scores section */}
-              {sampleScores.length > 0 && (
-                <>
-                  <optgroup label="サンプル楽譜">
-                    {sampleScores.map((score) => (
-                      <option key={score.id} value={score.id}>
-                        {score.name}
-                      </option>
-                    ))}
-                  </optgroup>
-                </>
-              )}
-
-              {/* User scores section */}
-              {userScores.length > 0 && (
-                <>
-                  <optgroup label="マイ楽譜">
-                    {userScores.map((score) => (
-                      <option
-                        key={`user-${score.id}`}
-                        value={`user-${score.id}`}
-                      >
-                        {score.name}
-                      </option>
-                    ))}
-                  </optgroup>
-                </>
-              )}
-            </select>
-
-            {/* File selection button */}
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isLoading}
-              style={{
-                height: "36px",
-                width: "26px",
-                fontSize: "16px",
-                borderRadius: "4px",
-                borderWidth: ".5px",
-                borderColor: borderColor,
-                backgroundColor: isLoading ? "#f0f0f0" : bgColor,
-                cursor: isLoading ? "not-allowed" : "pointer",
-                opacity: isLoading ? 0.5 : 1,
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                whiteSpace: "nowrap",
-                justifyContent: "center",
-              }}
-              title="ファイルを選択してアップロード"
-            >
-              <FaRegFile />
-            </button>
-
-            {/* Delete button for user scores */}
-            {selectedScoreId?.startsWith("user-") && (
-              <button
-                onClick={() => {
-                  const dbId = parseInt(selectedScoreId.replace("user-", ""));
-                  handleDeleteScore(dbId);
-                }}
-                disabled={isLoading}
-                style={{
-                  height: "36px",
-                  width: "26px",
-                  fontSize: "24px",
-                  borderRadius: "4px",
-                  borderWidth: "1px",
-                  borderColor: borderColor,
-                  color: "#ff4444",
-                  cursor: isLoading ? "not-allowed" : "pointer",
-                  opacity: isLoading ? 0.5 : 1,
-                  justifyContent: "center",
-                }}
-                title="この楽譜を削除"
-              >
-                <MdDeleteOutline />
-              </button>
-            )}
-          </>
-          )}
-          </div>
-          {appMode === "score" && (
-          <>
-          <div
-            style={{
-              width: ".5px",
-              height: "24px",
-              backgroundColor: borderColor,
-              margin: "0 3px",
-            }}
-          />
-          {selectedScore && (
-            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              {/* Zoom preset buttons - 2 rows x 3 columns */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "3px",
-                }}
-              >
-                {[0.5, 0.75, 1.0, 1.25, 1.5, 1.75].map((presetZoom) => (
-                  <button
-                    key={presetZoom}
-                    onClick={() => handleZoomPreset(presetZoom)}
-                    disabled={isLoading}
+              <>
+                <label
+                  htmlFor="score-select"
+                  style={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+                >
+                  <img
+                    src="/images/illust/hippo/hippo_speaker.svg"
                     style={{
-                      padding: "0px 8px",
-                      fontSize: "10px",
-                      color: frColor,
-                      // backgroundColor:
-                      //   zoom === presetZoom ? highlightColor : "transparent",
-                      borderRadius: "4px",
-                      borderWidth: ".5px",
-                      borderColor: zoom === presetZoom ? borderColor : frColor,
-                      backgroundColor:
-                        zoom === presetZoom && colorMode === "dark"
-                          ? `${highlightColor}70`
-                          : zoom === presetZoom && colorMode === "light"
-                            ? `${highlightColor}40`
-                            : "transparent",
-                      cursor: isLoading ? "not-allowed" : "pointer",
-                      opacity: isLoading ? 0.5 : 1,
-                      fontWeight: "bold",
+                      height: "32px",
+                      filter: colorMode === "dark" ? "invert(100%)" : "none",
                     }}
-                    title={`${Math.round(presetZoom * 100)}%`}
-                  >
-                    {Math.round(presetZoom * 100)}%
-                  </button>
-                ))}
-              </div>
-              {/* Chord toggle button - for all scores */}
-              {selectedScoreId && (
-                <>
+                  />
+                </label>
+                <select
+                  id="score-select"
+                  value={selectedScoreId || ""}
+                  onChange={(e) => handleScoreChange(e.target.value)}
+                  style={{
+                    padding: "4px 8px",
+                    fontSize: "16px",
+                    borderRadius: "4px",
+                    borderWidth: ".5px",
+                    borderColor: borderColor,
+                    flex: 1,
+                    minWidth: "120px",
+                    backgroundColor: bgColor,
+                    outline: "none", // フォーカス時の青い枠を無効化
+                  }}
+                >
+                  <option value="">-- 選択してください --</option>
+                  {/* Sample scores section */}
+                  {sampleScores.length > 0 && (
+                    <>
+                      <optgroup label="サンプル楽譜">
+                        {sampleScores.map((score) => (
+                          <option key={score.id} value={score.id}>
+                            {score.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    </>
+                  )}
+
+                  {/* User scores section */}
+                  {userScores.length > 0 && (
+                    <>
+                      <optgroup label="マイ楽譜">
+                        {userScores.map((score) => (
+                          <option
+                            key={`user-${score.id}`}
+                            value={`user-${score.id}`}
+                          >
+                            {score.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    </>
+                  )}
+                </select>
+
+                {/* File selection button */}
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isLoading}
+                  style={{
+                    height: "34px",
+                    width: "26px",
+                    fontSize: "16px",
+                    borderRadius: "4px",
+                    borderWidth: ".5px",
+                    borderColor: borderColor,
+                    backgroundColor: isLoading ? "#f0f0f0" : bgColor,
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    opacity: isLoading ? 0.5 : 1,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    whiteSpace: "nowrap",
+                    justifyContent: "center",
+                  }}
+                  title="ファイルを選択してアップロード"
+                >
+                  <FaRegFile />
+                </button>
+
+                {/* Delete button for user scores */}
+                {selectedScoreId?.startsWith("user-") && (
                   <button
-                    onClick={handleChordToggle}
-                    disabled={isLoading}
-                    style={{
-                      height: "40px",
-                      width: "36px",
-                      fontSize: "14px",
-                      borderRadius: "4px",
-                      borderWidth: ".5px",
-                      borderColor: borderColor,
-                      color: frColor,
-                      cursor: isLoading ? "not-allowed" : "pointer",
-                      opacity: isLoading ? 0.5 : 1,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                      whiteSpace: "nowrap",
-                      justifyContent: "center",
+                    onClick={() => {
+                      const dbId = parseInt(
+                        selectedScoreId.replace("user-", ""),
+                      );
+                      handleDeleteScore(dbId);
                     }}
-                    title={showChords ? "コード非表示" : "コード表示"}
-                  >
-                    {showChords ? <RiCodeSLine /> : <RiCodeSSlashFill />}
-                  </button>
-                  <button
-                    onClick={handlePrint}
                     disabled={isLoading}
                     style={{
-                      height: "40px",
-                      width: "36px",
+                      height: "34px",
+                      width: "26px",
                       fontSize: "24px",
                       borderRadius: "4px",
+                      borderWidth: "1px",
+                      borderColor: borderColor,
+                      color: "#ff4444",
+                      cursor: isLoading ? "not-allowed" : "pointer",
+                      opacity: isLoading ? 0.5 : 1,
+                      justifyContent: "center",
+                    }}
+                    title="この楽譜を削除"
+                  >
+                    <MdDeleteOutline />
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+          {appMode === "score" && (
+            <>
+              <div
+                style={{
+                  width: ".5px",
+                  height: "24px",
+                  backgroundColor: borderColor,
+                  margin: "0 3px",
+                }}
+              />
+              {selectedScore && (
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                    flex: 1,
+                  }}
+                >
+                  {/* Zoom preset buttons - 2 rows x 3 columns */}
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(3, 1fr)",
+                      gap: "3px",
+                    }}
+                  >
+                    {[0.5, 0.75, 1.0, 1.25, 1.5, 1.75].map((presetZoom) => (
+                      <button
+                        key={presetZoom}
+                        onClick={() => handleZoomPreset(presetZoom)}
+                        disabled={isLoading}
+                        style={{
+                          padding: "1px 8px",
+                          fontSize: "10px",
+                          color: frColor,
+                          // backgroundColor:
+                          //   zoom === presetZoom ? highlightColor : "transparent",
+                          borderRadius: "4px",
+                          borderWidth: ".5px",
+                          borderColor:
+                            zoom === presetZoom ? borderColor : frColor,
+                          backgroundColor:
+                            zoom === presetZoom && colorMode === "dark"
+                              ? `${highlightColor}70`
+                              : zoom === presetZoom && colorMode === "light"
+                                ? `${highlightColor}40`
+                                : "transparent",
+                          cursor: isLoading ? "not-allowed" : "pointer",
+                          opacity: isLoading ? 0.5 : 1,
+                          fontWeight: "bold",
+                        }}
+                        title={`${Math.round(presetZoom * 100)}%`}
+                      >
+                        {Math.round(presetZoom * 100)}%
+                      </button>
+                    ))}
+                  </div>
+                  {/* Chord toggle button - for all scores */}
+                  {selectedScoreId && (
+                    <>
+                      <button
+                        onClick={handleChordToggle}
+                        disabled={isLoading}
+                        style={{
+                          height: "40px",
+                          width: "36px",
+                          fontSize: "14px",
+                          borderRadius: "4px",
+                          borderWidth: ".5px",
+                          borderColor: borderColor,
+                          color: frColor,
+                          cursor: isLoading ? "not-allowed" : "pointer",
+                          opacity: isLoading ? 0.5 : 1,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          whiteSpace: "nowrap",
+                          justifyContent: "center",
+                        }}
+                        title={showChords ? "コード非表示" : "コード表示"}
+                      >
+                        {showChords ? <RiCodeSLine /> : <RiCodeSSlashFill />}
+                      </button>
+                      <button
+                        onClick={handlePrint}
+                        disabled={isLoading}
+                        style={{
+                          height: "40px",
+                          width: "36px",
+                          fontSize: "24px",
+                          borderRadius: "4px",
+                          borderWidth: ".5px",
+                          borderColor: borderColor,
+                          color: frColor,
+                          cursor: isLoading ? "not-allowed" : "pointer",
+                          opacity: isLoading ? 0.5 : 1,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          whiteSpace: "nowrap",
+                          justifyContent: "center",
+                        }}
+                        title="印刷 / PDF保存"
+                      >
+                        <TiPrinter />
+                      </button>
+                    </>
+                  )}
+                  <div
+                    style={{
+                      width: ".5px",
+                      height: "24px",
+                      backgroundColor: borderColor,
+                      margin: "0 3px",
+                    }}
+                  />
+                  <button
+                    onClick={handleReset}
+                    disabled={isLoading}
+                    style={{
+                      height: "40px",
+                      width: "24px",
+                      fontSize: "16px",
+                      borderRadius: "4px",
                       borderWidth: ".5px",
                       borderColor: borderColor,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      display: "flex",
                       color: frColor,
                       cursor: isLoading ? "not-allowed" : "pointer",
                       opacity: isLoading ? 0.5 : 1,
+                    }}
+                  >
+                    <IoPlaySkipBackOutline />
+                  </button>
+                  <button
+                    onClick={handlePrevious}
+                    disabled={isLoading}
+                    style={{
+                      height: "40px",
+                      width: "32px",
+                      fontSize: "16px",
+                      borderRadius: "4px",
+                      borderWidth: ".5px",
+                      borderColor: borderColor,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      display: "flex",
+                      color: frColor,
+                      cursor: isLoading ? "not-allowed" : "pointer",
+                      opacity: isLoading ? 0.5 : 1,
+                    }}
+                  >
+                    <IoPlayOutline style={{ transform: "rotate(180deg)" }} />
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    disabled={isLoading}
+                    style={{
+                      height: "40px",
+                      width: "32px",
+                      fontSize: "16px",
+                      borderRadius: "4px",
+                      borderWidth: ".5px",
+                      borderColor: borderColor,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      display: "flex",
+                      color: frColor,
+                      cursor: isLoading ? "not-allowed" : "pointer",
+                      opacity: isLoading ? 0.5 : 1,
+                    }}
+                  >
+                    <IoPlayOutline />
+                  </button>
+                  <div
+                    style={{
+                      width: ".5px",
+                      height: "24px",
+                      backgroundColor: borderColor,
+                      margin: "0 3px",
+                    }}
+                  />
+                  {/* MIDI接続状態ドット + 設定ボタン */}
+                  <div
+                    style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: "5px",
-                      whiteSpace: "nowrap",
-                      justifyContent: "center",
+                      gap: "6px",
+                      marginLeft: "auto",
                     }}
-                    title="印刷 / PDF保存"
                   >
-                    <TiPrinter />
-                  </button>
-                </>
+                    <div
+                      style={{
+                        width: "8px",
+                        height: "8px",
+                        borderRadius: "50%",
+                        backgroundColor:
+                          midiConnectionStatus === "connected"
+                            ? "#4CAF50"
+                            : midiConnectionStatus === "unsupported"
+                              ? "#FF9800"
+                              : "#999",
+                      }}
+                      title={
+                        midiConnectionStatus === "connected"
+                          ? `MIDI接続中: ${midiDeviceName}`
+                          : midiConnectionStatus === "unsupported"
+                            ? "MIDI非対応ブラウザ"
+                            : midiConnectionStatus === "connecting"
+                              ? "MIDI接続中..."
+                              : "MIDI未接続"
+                      }
+                    />
+                    <button
+                      onClick={() => setShowMidiSettings(true)}
+                      disabled={isLoading}
+                      style={{
+                        height: "40px",
+                        width: "32px",
+                        fontSize: "18px",
+                        borderRadius: "4px",
+                        borderWidth: ".5px",
+                        borderColor: borderColor,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        display: "flex",
+                        color: frColor,
+                        cursor: isLoading ? "not-allowed" : "pointer",
+                        opacity: isLoading ? 0.5 : 1,
+                      }}
+                      title="MIDI設定"
+                    >
+                      <IoSettingsOutline />
+                    </button>
+                    <button
+                      onClick={handleFullscreenToggle}
+                      disabled={isLoading}
+                      style={{
+                        height: "40px",
+                        width: "32px",
+                        fontSize: "18px",
+                        borderRadius: "4px",
+                        borderWidth: ".5px",
+                        borderColor: borderColor,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        display: "flex",
+                        color: frColor,
+                        cursor: isLoading ? "not-allowed" : "pointer",
+                        opacity: isLoading ? 0.5 : 1,
+                      }}
+                      title={isFullscreen ? "全画面解除" : "全画面"}
+                    >
+                      {isFullscreen ? (
+                        <IoContractOutline />
+                      ) : (
+                        <IoExpandOutline />
+                      )}
+                    </button>
+                    <CustomSwitchColorModeButton />
+                    <div
+                      onClick={() =>
+                        session?.user ? signOut() : setLoginModalOpen(true)
+                      }
+                      style={{ cursor: "pointer" }}
+                    >
+                      <CustomAvatar
+                        src={currentUserPictureUrl ?? undefined}
+                        boxSize="30px"
+                      />
+                    </div>
+                  </div>
+                </div>
               )}
-              <div
-                style={{
-                  width: ".5px",
-                  height: "24px",
-                  backgroundColor: borderColor,
-                  margin: "0 3px",
-                }}
-              />
-              <button
-                onClick={handleReset}
-                disabled={isLoading}
-                style={{
-                  height: "40px",
-                  width: "24px",
-                  fontSize: "16px",
-                  borderRadius: "4px",
-                  borderWidth: ".5px",
-                  borderColor: borderColor,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  display: "flex",
-                  color: frColor,
-                  cursor: isLoading ? "not-allowed" : "pointer",
-                  opacity: isLoading ? 0.5 : 1,
-                }}
-              >
-                <IoPlaySkipBackOutline />
-              </button>
-              <button
-                onClick={handlePrevious}
-                disabled={isLoading}
-                style={{
-                  height: "40px",
-                  width: "32px",
-                  fontSize: "16px",
-                  borderRadius: "4px",
-                  borderWidth: ".5px",
-                  borderColor: borderColor,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  display: "flex",
-                  color: frColor,
-                  cursor: isLoading ? "not-allowed" : "pointer",
-                  opacity: isLoading ? 0.5 : 1,
-                }}
-              >
-                <IoPlayOutline style={{ transform: "rotate(180deg)" }} />
-              </button>
-              <button
-                onClick={handleNext}
-                disabled={isLoading}
-                style={{
-                  height: "40px",
-                  width: "32px",
-                  fontSize: "16px",
-                  borderRadius: "4px",
-                  borderWidth: ".5px",
-                  borderColor: borderColor,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  display: "flex",
-                  color: frColor,
-                  cursor: isLoading ? "not-allowed" : "pointer",
-                  opacity: isLoading ? 0.5 : 1,
-                }}
-              >
-                <IoPlayOutline />
-              </button>
-              <div
-                style={{
-                  width: ".5px",
-                  height: "24px",
-                  backgroundColor: borderColor,
-                  margin: "0 3px",
-                }}
-              />
-              {/* MIDI接続状態ドット + 設定ボタン */}
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "6px" }}
-              >
-                <div
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    backgroundColor:
-                      midiConnectionStatus === "connected"
-                        ? "#4CAF50"
-                        : midiConnectionStatus === "unsupported"
-                          ? "#FF9800"
-                          : "#999",
-                  }}
-                  title={
-                    midiConnectionStatus === "connected"
-                      ? `MIDI接続中: ${midiDeviceName}`
-                      : midiConnectionStatus === "unsupported"
-                        ? "MIDI非対応ブラウザ"
-                        : midiConnectionStatus === "connecting"
-                          ? "MIDI接続中..."
-                          : "MIDI未接続"
-                  }
-                />
-                <button
-                  onClick={() => setShowMidiSettings(true)}
-                  disabled={isLoading}
-                  style={{
-                    height: "40px",
-                    width: "32px",
-                    fontSize: "18px",
-                    borderRadius: "4px",
-                    borderWidth: ".5px",
-                    borderColor: borderColor,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    display: "flex",
-                    color: frColor,
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    opacity: isLoading ? 0.5 : 1,
-                  }}
-                  title="MIDI設定"
-                >
-                  <IoSettingsOutline />
-                </button>
-                <button
-                  onClick={handleFullscreenToggle}
-                  disabled={isLoading}
-                  style={{
-                    height: "40px",
-                    width: "32px",
-                    fontSize: "18px",
-                    borderRadius: "4px",
-                    borderWidth: ".5px",
-                    borderColor: borderColor,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    display: "flex",
-                    color: frColor,
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    opacity: isLoading ? 0.5 : 1,
-                  }}
-                  title={isFullscreen ? "全画面解除" : "全画面"}
-                >
-                  {isFullscreen ? <IoContractOutline /> : <IoExpandOutline />}
-                </button>
-              </div>
-            </div>
-          )}
-          </>
+            </>
           )}
           {/* 譜読みモード時のMIDI接続ドット + 設定 + 全画面 */}
           {appMode === "sightreading" && (
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginLeft: "auto" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                marginLeft: "auto",
+              }}
+            >
               <div
                 style={{
                   width: "8px",
@@ -1110,6 +1193,18 @@ export default function ScorePage() {
               >
                 {isFullscreen ? <IoContractOutline /> : <IoExpandOutline />}
               </button>
+              <CustomSwitchColorModeButton />
+              <div
+                onClick={() =>
+                  session?.user ? signOut() : setLoginModalOpen(true)
+                }
+                style={{ cursor: "pointer" }}
+              >
+                <CustomAvatar
+                  src={currentUserPictureUrl ?? undefined}
+                  boxSize="30px"
+                />
+              </div>
             </div>
           )}
         </div>
@@ -1124,79 +1219,80 @@ export default function ScorePage() {
             position: "relative", // Added for positioning loading overlay
           }}
         >
-          {appMode === "score" && isLoading && ( // Show loading animation when isLoading is true
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 10, // Ensure it's above the sheet music
-              }}
-            >
-              <div className="loading-hippo-container">
-                <img
-                  src="/images/illust/hippo/hippo_beat4.svg"
-                  alt="Loading..."
-                  className="loading-hippo hippo-1"
-                  style={{
-                    filter: colorMode === "dark" ? "invert(1)" : "none",
-                  }}
-                />
-                <img
-                  src="/images/illust/hippo/hippo_beat8.svg"
-                  alt="Loading..."
-                  className="loading-hippo hippo-2"
-                  style={{
-                    filter: colorMode === "dark" ? "invert(1)" : "none",
-                  }}
-                />
-                <img
-                  src="/images/illust/hippo/hippo_beat16.svg"
-                  alt="Loading..."
-                  className="loading-hippo hippo-3"
-                  style={{
-                    filter: colorMode === "dark" ? "invert(1)" : "none",
-                  }}
-                />
-              </div>
-              {currentQuote && (
-                <div
-                  style={{
-                    textAlign: "center",
-                    marginTop: "20px",
-                    padding: "0 20px",
-                  }}
-                >
-                  <p
+          {appMode === "score" &&
+            isLoading && ( // Show loading animation when isLoading is true
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 10, // Ensure it's above the sheet music
+                }}
+              >
+                <div className="loading-hippo-container">
+                  <img
+                    src="/images/illust/hippo/hippo_beat4.svg"
+                    alt="Loading..."
+                    className="loading-hippo hippo-1"
                     style={{
-                      fontSize: "1.1em",
-                      color: frColor,
-                      margin: 0,
-                      whiteSpace: "pre-wrap",
+                      filter: colorMode === "dark" ? "invert(1)" : "none",
                     }}
-                  >
-                    {currentQuote.quote}
-                  </p>
-                  <p
+                  />
+                  <img
+                    src="/images/illust/hippo/hippo_beat8.svg"
+                    alt="Loading..."
+                    className="loading-hippo hippo-2"
                     style={{
-                      fontSize: "0.9em",
-                      color: frColor,
-                      fontStyle: "italic",
-                      marginTop: "8px",
+                      filter: colorMode === "dark" ? "invert(1)" : "none",
                     }}
-                  >
-                    – {currentQuote.author}
-                  </p>
+                  />
+                  <img
+                    src="/images/illust/hippo/hippo_beat16.svg"
+                    alt="Loading..."
+                    className="loading-hippo hippo-3"
+                    style={{
+                      filter: colorMode === "dark" ? "invert(1)" : "none",
+                    }}
+                  />
                 </div>
-              )}
-            </div>
-          )}
+                {currentQuote && (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      marginTop: "20px",
+                      padding: "0 20px",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontSize: "1.1em",
+                        color: frColor,
+                        margin: 0,
+                        whiteSpace: "pre-wrap",
+                      }}
+                    >
+                      {currentQuote.quote}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "0.9em",
+                        color: frColor,
+                        fontStyle: "italic",
+                        marginTop: "8px",
+                      }}
+                    >
+                      – {currentQuote.author}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           {appMode === "sightreading" ? (
             <SightReadingFlashcard
               ref={sightReadingRef}
@@ -1250,7 +1346,15 @@ export default function ScorePage() {
               notes={sightReadingExpectedNotes.map((midi) => {
                 const semitone = midi % 12;
                 const octave = Math.floor(midi / 12) - 1;
-                const stepMap: Record<number, string> = { 0: "C", 2: "D", 4: "E", 5: "F", 7: "G", 9: "A", 11: "B" };
+                const stepMap: Record<number, string> = {
+                  0: "C",
+                  2: "D",
+                  4: "E",
+                  5: "F",
+                  7: "G",
+                  9: "A",
+                  11: "B",
+                };
                 const step = stepMap[semitone] || "C";
                 const alter = stepMap[semitone] ? 0 : 1;
                 return { step, octave, alter };
@@ -1847,6 +1951,27 @@ export default function ScorePage() {
           </div>
         )}
       </div>
+
+      {/* 全画面時ログインモーダル */}
+      <CustomModal
+        title=""
+        isOpen={isLoginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+        modalSize="lg"
+        macCloseButtonHandlers={[() => setLoginModalOpen(false)]}
+        footer={<></>}
+      >
+        <Auth
+          userData={{
+            userName: currentUserName,
+            userCompany: currentUserCompany,
+            pictureUrl: currentUserPictureUrl,
+            userMainCompany: currentUserMainCompany,
+            userEmail: currentUserEmail,
+            created_at: currentUserCreatedAt,
+          }}
+        />
+      </CustomModal>
     </div>
   );
 }

@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
+    "dev:https": "NODE_OPTIONS='--inspect' next dev --experimental-https",
     "clean": "rm -rf .next",
     "build:meta": "tsc -p tsconfig.scripts.json && node scripts/dist-scripts/buildFileMeta.js && node scripts/dist-scripts/buildVercelSize.js",
     "build": "npm run build:meta && next build && next-sitemap --config sitemap.config.js",

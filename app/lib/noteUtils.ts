@@ -74,6 +74,7 @@ export const NATURAL_STEPS = ["C", "D", "E", "F", "G", "A", "B"] as const;
 export const generateRandomNote = (
   clef: "treble" | "bass",
   includeAccidentals: boolean = false,
+  prevMidi?: number,
 ): StaffNote => {
   // ト音記号: C4(60)〜C6(84) / ヘ音記号: C2(36)〜C4(60)
   const minMidi = clef === "treble" ? 60 : 36;
@@ -85,7 +86,11 @@ export const generateRandomNote = (
     for (let m = minMidi; m <= maxMidi; m++) {
       if (!isBlackKey(m)) naturals.push(m);
     }
-    const midi = naturals[Math.floor(Math.random() * naturals.length)];
+    // 前回と同じ音を除外（候補が2つ以上ある場合）
+    const candidates = prevMidi !== undefined && naturals.length > 1
+      ? naturals.filter((m) => m !== prevMidi)
+      : naturals;
+    const midi = candidates[Math.floor(Math.random() * candidates.length)];
     const semitone = midi % 12;
     const octave = Math.floor(midi / 12) - 1;
     const step = SEMITONE_TO_STEP[semitone] || "C";
@@ -93,7 +98,15 @@ export const generateRandomNote = (
   }
 
   // シャープ・フラット込み
-  const midi = minMidi + Math.floor(Math.random() * (maxMidi - minMidi + 1));
+  const total = maxMidi - minMidi + 1;
+  let midi: number;
+  if (prevMidi !== undefined && total > 1) {
+    do {
+      midi = minMidi + Math.floor(Math.random() * total);
+    } while (midi === prevMidi);
+  } else {
+    midi = minMidi + Math.floor(Math.random() * total);
+  }
   const semitone = midi % 12;
   const octave = Math.floor(midi / 12) - 1;
   const step = SEMITONE_TO_STEP[semitone];

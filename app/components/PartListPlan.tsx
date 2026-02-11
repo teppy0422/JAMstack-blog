@@ -171,11 +171,12 @@ export default function PartListPlan({
   return (
     <Box>
       {plans.length > 1 && (
-        <HStack mb={4} flexWrap="wrap" gap={2}>
+        <HStack mb={4} flexWrap="wrap" gap={0.5}>
           {plans.map((plan, i) => (
             <Button
               key={i}
-              size="sm"
+              size={{ base: "xs", sm: "sm" }}
+              p="0px"
               bg={i === activePlanIndex ? activeBtnBg : undefined}
               color={i === activePlanIndex ? "white" : undefined}
               variant={i === activePlanIndex ? "solid" : "outline"}

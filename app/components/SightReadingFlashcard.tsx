@@ -56,6 +56,8 @@ const SightReadingFlashcard = forwardRef<
     return "treble";
   });
   const [currentNote, setCurrentNote] = useState<StaffNote | null>(null);
+  const currentNoteRef = useRef<StaffNote | null>(null);
+  const [animKey, setAnimKey] = useState(0);
   const [feedbackState, setFeedbackState] = useState<
     "none" | "correct" | "incorrect"
   >("none");
@@ -70,11 +72,13 @@ const SightReadingFlashcard = forwardRef<
     return clefMode;
   }, [clefMode]);
 
-  // 次の音符を生成
+  // 次の音符を生成（前回と同じ音を避ける）
   const nextNote = useCallback(() => {
     const clef = getClef();
-    const note = generateRandomNote(clef);
+    const note = generateRandomNote(clef, false, currentNoteRef.current?.midi);
     setCurrentNote(note);
+    currentNoteRef.current = note;
+    setAnimKey((k) => k + 1);
     setFeedbackState("none");
     onExpectedNotesChange([note.midi]);
     onWrongNotesReset();
@@ -94,8 +98,10 @@ const SightReadingFlashcard = forwardRef<
       // 新しい音符を即座に生成
       const clef =
         mode === "both" ? (Math.random() < 0.5 ? "treble" : "bass") : mode;
-      const note = generateRandomNote(clef);
+      const note = generateRandomNote(clef, false, currentNoteRef.current?.midi);
       setCurrentNote(note);
+      currentNoteRef.current = note;
+      setAnimKey((k) => k + 1);
       setFeedbackState("none");
       setStats({ correct: 0, total: 0 });
       onExpectedNotesChange([note.midi]);
@@ -176,8 +182,25 @@ const SightReadingFlashcard = forwardRef<
         height: "100%",
         padding: "20px",
         gap: "16px",
+        perspective: "600px",
       }}
     >
+      {/* カードアニメーション用キーフレーム */}
+      <style>{`
+        @keyframes cardFlipIn {
+          0% {
+            opacity: 0;
+            transform: rotateY(-90deg) scale(0.9);
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 1;
+            transform: rotateY(0deg) scale(1);
+          }
+        }
+      `}</style>
       {/* 音部記号セレクタ */}
       <div style={{ display: "flex", gap: "6px" }}>
         {(
@@ -214,13 +237,15 @@ const SightReadingFlashcard = forwardRef<
         ))}
       </div>
 
-      {/* 五線譜表示 */}
+      {/* 五線譜表示（カードアニメーション） */}
       <div
+        key={animKey}
         style={{
           width: "100%",
           maxWidth: "400px",
           display: "flex",
           justifyContent: "center",
+          animation: "cardFlipIn 0.35s ease-out",
         }}
       >
         {currentNote && (
