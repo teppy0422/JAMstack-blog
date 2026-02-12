@@ -15,7 +15,9 @@ import {
   IoSettingsOutline,
   IoExpandOutline,
   IoContractOutline,
+  IoQrCodeOutline,
 } from "react-icons/io5";
+import QRCode from "qrcode.react";
 
 import "./score.css";
 import {
@@ -40,11 +42,11 @@ import SightReadingFlashcard, {
   type SightReadingFlashcardRef,
 } from "../components/SightReadingFlashcard";
 import { CustomSwitchColorModeButton } from "@/components/ui/CustomSwitchButton";
-import { useSession, signOut } from "next-auth/react";
 import { CustomAvatar } from "@/components/ui/CustomAvatar";
 import { useUserContext } from "@/contexts/useUserContext";
 import Auth from "@/components/ui/Auth/Auth";
 import { CustomModal } from "@/components/ui/CustomModal";
+import AccountSwitcher from "../components/AccountSwitcher";
 
 const sampleScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
@@ -140,8 +142,8 @@ export default function ScorePage() {
   const pageContainerRef = useRef<HTMLDivElement>(null);
   const loadingStartTimeRef = useRef<number>(0);
   const { colorMode } = useColorMode();
-  const { data: session } = useSession();
   const {
+    currentUserId,
     currentUserName,
     currentUserCompany,
     currentUserMainCompany,
@@ -150,6 +152,21 @@ export default function ScorePage() {
     currentUserCreatedAt,
   } = useUserContext();
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const [isAccountSwitcherOpen, setAccountSwitcherOpen] = useState(false);
+  const [showQr, setShowQr] = useState(false);
+
+  // 古いsw-score.jsの登録解除
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then((regs) => {
+        for (const reg of regs) {
+          if (reg.active?.scriptURL.includes("sw-score.js")) {
+            reg.unregister();
+          }
+        }
+      });
+    }
+  }, []);
 
   // localStorage からMIDI設定をロード
   useEffect(() => {
@@ -725,7 +742,7 @@ export default function ScorePage() {
                 fontWeight: "bold",
               }}
             >
-              <option value="score">楽譜練習</option>
+              <option value="score">楽譜</option>
               <option value="sightreading">譜読み練習</option>
             </select>
             {appMode === "score" && (
@@ -1061,6 +1078,25 @@ export default function ScorePage() {
                       }
                     />
                     <button
+                      onClick={() => setShowQr(true)}
+                      style={{
+                        height: "40px",
+                        width: "32px",
+                        fontSize: "18px",
+                        borderRadius: "4px",
+                        borderWidth: ".5px",
+                        borderColor: borderColor,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        display: "flex",
+                        color: frColor,
+                        cursor: "pointer",
+                      }}
+                      title="QRコード"
+                    >
+                      <IoQrCodeOutline />
+                    </button>
+                    <button
                       onClick={() => setShowMidiSettings(true)}
                       disabled={isLoading}
                       style={{
@@ -1108,9 +1144,7 @@ export default function ScorePage() {
                     </button>
                     <CustomSwitchColorModeButton />
                     <div
-                      onClick={() =>
-                        session?.user ? signOut() : setLoginModalOpen(true)
-                      }
+                      onClick={() => setAccountSwitcherOpen(true)}
                       style={{ cursor: "pointer" }}
                     >
                       <CustomAvatar
@@ -1156,6 +1190,25 @@ export default function ScorePage() {
                 }
               />
               <button
+                onClick={() => setShowQr(true)}
+                style={{
+                  height: "40px",
+                  width: "32px",
+                  fontSize: "18px",
+                  borderRadius: "4px",
+                  borderWidth: ".5px",
+                  borderColor: borderColor,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "flex",
+                  color: frColor,
+                  cursor: "pointer",
+                }}
+                title="QRコード"
+              >
+                <IoQrCodeOutline />
+              </button>
+              <button
                 onClick={() => setShowMidiSettings(true)}
                 style={{
                   height: "40px",
@@ -1195,9 +1248,7 @@ export default function ScorePage() {
               </button>
               <CustomSwitchColorModeButton />
               <div
-                onClick={() =>
-                  session?.user ? signOut() : setLoginModalOpen(true)
-                }
+                onClick={() => setAccountSwitcherOpen(true)}
                 style={{ cursor: "pointer" }}
               >
                 <CustomAvatar
@@ -1304,6 +1355,7 @@ export default function ScorePage() {
               borderColor={borderColor}
               frColor={frColor}
               bgColor={bgColor}
+              userId={currentUserId}
             />
           ) : selectedScore ? (
             <SheetMusic
@@ -1952,7 +2004,20 @@ export default function ScorePage() {
         )}
       </div>
 
-      {/* 全画面時ログインモーダル */}
+      {/* アカウント切替ポップアップ */}
+      <AccountSwitcher
+        isOpen={isAccountSwitcherOpen}
+        onClose={() => setAccountSwitcherOpen(false)}
+        onOpenLogin={() => setLoginModalOpen(true)}
+        currentUserId={currentUserId}
+        darkMode={colorMode === "dark"}
+        highlightColor={highlightColor}
+        borderColor={borderColor}
+        frColor={frColor}
+        bgColor={bgColor}
+      />
+
+      {/* ログインモーダル（全画面対応: portalをpageContainer内に配置） */}
       <CustomModal
         title=""
         isOpen={isLoginModalOpen}
@@ -1960,6 +2025,7 @@ export default function ScorePage() {
         modalSize="lg"
         macCloseButtonHandlers={[() => setLoginModalOpen(false)]}
         footer={<></>}
+        portalContainerRef={pageContainerRef}
       >
         <Auth
           userData={{

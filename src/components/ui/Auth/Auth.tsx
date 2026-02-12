@@ -34,6 +34,70 @@ import { CustomTooltip } from "../CustomTooltip";
 
 import getMessage from "@/utils/getMessage";
 
+// アカウント切替用: 認証情報をlocalStorageに保存
+export interface SavedAccount {
+  email: string;
+  password: string; // 簡易エンコード済み
+  userId: string;
+  name?: string;
+  pictureUrl?: string;
+}
+
+const SAVED_ACCOUNTS_KEY = "savedAccounts";
+
+export function getSavedAccounts(): SavedAccount[] {
+  try {
+    const raw = localStorage.getItem(SAVED_ACCOUNTS_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
+export function saveAccountToLocalStorage(
+  email: string,
+  password: string,
+  userId: string,
+  name?: string,
+  pictureUrl?: string,
+) {
+  const accounts = getSavedAccounts();
+  const existing = accounts.findIndex((a) => a.email === email);
+  const entry: SavedAccount = {
+    email,
+    password: btoa(password), // 簡易エンコード（家庭内用）
+    userId,
+    name,
+    pictureUrl,
+  };
+  if (existing >= 0) {
+    accounts[existing] = entry;
+  } else {
+    accounts.push(entry);
+  }
+  localStorage.setItem(SAVED_ACCOUNTS_KEY, JSON.stringify(accounts));
+}
+
+export function removeSavedAccount(email: string) {
+  const accounts = getSavedAccounts().filter((a) => a.email !== email);
+  localStorage.setItem(SAVED_ACCOUNTS_KEY, JSON.stringify(accounts));
+}
+
+export function updateSavedAccountProfile(
+  userId: string,
+  name?: string,
+  pictureUrl?: string,
+) {
+  const accounts = getSavedAccounts();
+  const idx = accounts.findIndex((a) => a.userId === userId);
+  if (idx >= 0) {
+    if (name !== undefined) accounts[idx].name = name;
+    if (pictureUrl !== undefined) accounts[idx].pictureUrl = pictureUrl;
+    localStorage.setItem(SAVED_ACCOUNTS_KEY, JSON.stringify(accounts));
+  }
+}
+
 interface AuthProps {
   userData: {
     pictureUrl: string | undefined;
@@ -166,6 +230,8 @@ export default function Auth({ userData }: AuthProps) {
     } else {
       console.log("User signed in:", data);
       setMessage(null); // 成功時にはメッセージをリセット
+      // 認証情報をlocalStorageに記憶（アカウント切替用）
+      saveAccountToLocalStorage(email, password, data.user.id);
       // ユーザーがログインした後にtable_usersを確認
       const userId = data.user.id; // ユーザーIDを取得
       const { data: userData, error: userError } = await supabase
@@ -187,6 +253,19 @@ export default function Auth({ userData }: AuthProps) {
         if (insertError) {
           console.error("Error adding new user:", insertError.message);
         }
+      }
+      // savedAccountのプロフィール情報を更新
+      const { data: profileData } = await supabase
+        .from("table_users")
+        .select("user_metadata, picture_url")
+        .eq("id", userId)
+        .single();
+      if (profileData) {
+        updateSavedAccountProfile(
+          userId,
+          profileData.user_metadata?.name,
+          profileData.picture_url,
+        );
       }
       // サインイン後にページをリロード
       window.location.reload();

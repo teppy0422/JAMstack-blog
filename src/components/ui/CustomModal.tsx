@@ -25,6 +25,7 @@ type CustomModalProps = {
   footer?: React.ReactNode;
   title?: string;
   marginTop?: string;
+  portalContainerRef?: React.RefObject<HTMLElement>;
 };
 export function CustomModal({
   isOpen,
@@ -35,11 +36,12 @@ export function CustomModal({
   footer,
   title,
   marginTop = "64px",
+  portalContainerRef,
 }: CustomModalProps) {
   const dragControls = useDragControls();
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={modalSize}>
+    <Modal isOpen={isOpen} onClose={onClose} size={modalSize} portalProps={portalContainerRef ? { containerRef: portalContainerRef } : undefined}>
       <ModalOverlay />
       <MotionModalContent
         drag

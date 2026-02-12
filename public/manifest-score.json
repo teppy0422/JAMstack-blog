@@ -1,0 +1,17 @@
+{
+  "name": "譜読み練習",
+  "short_name": "譜読み",
+  "start_url": "/score/",
+  "scope": "/score/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "description": "譜読み練習・MIDI楽譜アプリ",
+  "icons": [
+    {
+      "src": "/images/ico/score-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
