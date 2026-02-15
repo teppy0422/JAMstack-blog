@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import SheetMusic, { SheetMusicRef } from "../components/SheetMusic";
-import PianoKeyboard from "../components/PianoKeyboard";
+import SheetMusic, { SheetMusicRef } from "./components/SheetMusic";
+import PianoKeyboard from "./components/PianoKeyboard";
 import { border, useColorMode } from "@chakra-ui/react";
 import Header from "@/components/header";
 import { useTheme } from "@chakra-ui/react";
@@ -15,9 +15,8 @@ import {
   IoSettingsOutline,
   IoExpandOutline,
   IoContractOutline,
-  IoQrCodeOutline,
 } from "react-icons/io5";
-import QRCode from "qrcode.react";
+import QrModal from "@/components/modals/QrModal";
 
 import "./score.css";
 import {
@@ -26,27 +25,33 @@ import {
   deleteScore,
   isValidMusicXML,
   type StoredScore,
-} from "../lib/scoreDB";
-import { famousSayings } from "./famousSayings";
-import { findMusicTerm, type MusicTerm } from "./musicTerms";
+} from "./lib/scoreDB";
+import { famousSayings } from "./lib/famousSayings";
+import { findMusicTerm, type MusicTerm } from "./lib/musicTerms";
 import { MdDeleteOutline } from "react-icons/md";
-import { useMidi } from "../hooks/useMidi";
+import { useMidi } from "./lib/useMidi";
 import {
   MidiConfig,
   defaultMidiConfig,
   midiPresets,
   MidiPresetName,
-} from "../lib/midiConfig";
-import { noteToMidi } from "../lib/noteUtils";
+} from "./lib/midiConfig";
+import { noteToMidi } from "./lib/noteUtils";
 import SightReadingFlashcard, {
   type SightReadingFlashcardRef,
-} from "../components/SightReadingFlashcard";
+} from "./components/SightReadingFlashcard";
+import ChordPracticeFlashcard, {
+  type ChordPracticeFlashcardRef,
+} from "./components/ChordPracticeFlashcard";
+import RhythmPracticeFlashcard, {
+  type RhythmPracticeFlashcardRef,
+} from "./components/RhythmPracticeFlashcard";
 import { CustomSwitchColorModeButton } from "@/components/ui/CustomSwitchButton";
 import { CustomAvatar } from "@/components/ui/CustomAvatar";
 import { useUserContext } from "@/contexts/useUserContext";
 import Auth from "@/components/ui/Auth/Auth";
 import { CustomModal } from "@/components/ui/CustomModal";
-import AccountSwitcher from "../components/AccountSwitcher";
+import AccountSwitcher from "./components/AccountSwitcher";
 
 const sampleScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
@@ -79,6 +84,11 @@ const sampleScores = [
     id: "friend-in-me",
     name: "You've Got a Friend in Me",
     path: "/scores/youve-got-a-friend-in-me.musicxml",
+  },
+  {
+    id: "hanon-1-30",
+    name: "hanon1-30",
+    path: "/scores/hanon-ning-suo-ban-lian-xi-qu-1-kara-30.musicxml",
   },
 ];
 
@@ -123,12 +133,19 @@ export default function ScorePage() {
   const [wrongNotes, setWrongNotes] = useState<number[]>([]);
   const [showMidiSettings, setShowMidiSettings] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [appMode, setAppMode] = useState<"score" | "sightreading">("score");
+  const [appMode, setAppMode] = useState<
+    "score" | "sightreading" | "chordpractice" | "rhythmpractice"
+  >("score");
 
   // マウント後にlocalStorageから復元
   useEffect(() => {
     const saved = localStorage.getItem("scoreAppMode");
-    if (saved === "score" || saved === "sightreading") {
+    if (
+      saved === "score" ||
+      saved === "sightreading" ||
+      saved === "chordpractice" ||
+      saved === "rhythmpractice"
+    ) {
       setAppMode(saved);
     }
   }, []);
@@ -136,6 +153,11 @@ export default function ScorePage() {
     number[]
   >([]);
   const sightReadingRef = useRef<SightReadingFlashcardRef>(null);
+  const chordPracticeRef = useRef<ChordPracticeFlashcardRef>(null);
+  const [chordPracticeExpectedNotes, setChordPracticeExpectedNotes] = useState<
+    number[]
+  >([]);
+  const rhythmPracticeRef = useRef<RhythmPracticeFlashcardRef>(null);
   const sheetMusicRef = useRef<SheetMusicRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -153,7 +175,6 @@ export default function ScorePage() {
   } = useUserContext();
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isAccountSwitcherOpen, setAccountSwitcherOpen] = useState(false);
-  const [showQr, setShowQr] = useState(false);
 
   // 古いsw-score.jsの登録解除
   useEffect(() => {
@@ -227,13 +248,23 @@ export default function ScorePage() {
   const expectedMidiNotes =
     appMode === "sightreading"
       ? sightReadingExpectedNotes
-      : scoreExpectedMidiNotes;
+      : appMode === "chordpractice"
+        ? chordPracticeExpectedNotes
+        : scoreExpectedMidiNotes;
 
   // MIDI判定成功時: モードに応じて処理を分岐
   const handleMidiMatch = useCallback(() => {
     setWrongNotes([]);
+    if (appMode === "rhythmpractice") {
+      rhythmPracticeRef.current?.handlePress();
+      return;
+    }
     if (appMode === "sightreading") {
       sightReadingRef.current?.handleCorrectAnswer();
+      return;
+    }
+    if (appMode === "chordpractice") {
+      chordPracticeRef.current?.handleCorrectAnswer();
       return;
     }
     sheetMusicRef.current?.next();
@@ -251,21 +282,50 @@ export default function ScorePage() {
     }
   }, [appMode]);
 
-  // MIDI判定失敗時: 間違い鍵盤を赤く表示
-  const handleMidiMismatch = useCallback((wrong: number[]) => {
-    setWrongNotes(wrong);
-  }, []);
+  // MIDI判定失敗時: 間違い鍵盤を赤く表示 + 譜読みモードでは不正解処理
+  const handleMidiMismatch = useCallback(
+    (wrong: number[]) => {
+      if (appMode === "rhythmpractice") {
+        // リズムモードではどんな音でもプレスとして扱う
+        rhythmPracticeRef.current?.handlePress();
+        return;
+      }
+      setWrongNotes(wrong);
+      if (appMode === "sightreading") {
+        sightReadingRef.current?.handleIncorrectAnswer();
+      }
+      if (appMode === "chordpractice") {
+        chordPracticeRef.current?.handleIncorrectAnswer();
+      }
+    },
+    [appMode],
+  );
 
-  // MIDI接続
+  // MIDI NoteOff: リズム練習でキーリリースを通知
+  const handleMidiNoteOff = useCallback(() => {
+    if (appMode === "rhythmpractice") {
+      rhythmPracticeRef.current?.handleRelease();
+    }
+  }, [appMode]);
+
+  // MIDI接続（和音練習モードではオクターブ無視+contains判定）
+  const effectiveMidiConfig =
+    appMode === "chordpractice"
+      ? { ...midiConfig, octaveIgnore: true, matchMode: "contains" as const }
+      : midiConfig;
   const { connectionStatus: midiConnectionStatus, deviceName: midiDeviceName } =
     useMidi({
-      config: midiConfig,
+      config: effectiveMidiConfig,
       expectedMidiNotes,
       onMatch: handleMidiMatch,
       onMismatch: handleMidiMismatch,
+      onNoteOff: handleMidiNoteOff,
       enabled:
         midiEnabled &&
-        (appMode === "sightreading" || (!!selectedScore && !isLoading)),
+        (appMode === "sightreading" ||
+          appMode === "chordpractice" ||
+          appMode === "rhythmpractice" ||
+          (!!selectedScore && !isLoading)),
     });
 
   // Load user scores from IndexedDB on mount
@@ -642,13 +702,13 @@ export default function ScorePage() {
   return (
     <div
       ref={pageContainerRef}
-      style={{ backgroundColor: bgColor, height: "100vh", overflow: "hidden" }}
+      style={{ backgroundColor: bgColor, height: "100dvh", overflow: "hidden" }}
     >
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          height: isFullscreen ? "100vh" : "calc(100vh - 42px)",
+          height: "100dvh",
           marginTop: 0,
           backgroundColor: bgColor,
           position: "relative",
@@ -727,7 +787,11 @@ export default function ScorePage() {
             <select
               value={appMode}
               onChange={(e) => {
-                const mode = e.target.value as "score" | "sightreading";
+                const mode = e.target.value as
+                  | "score"
+                  | "sightreading"
+                  | "chordpractice"
+                  | "rhythmpractice";
                 setAppMode(mode);
                 localStorage.setItem("scoreAppMode", mode);
               }}
@@ -744,6 +808,8 @@ export default function ScorePage() {
             >
               <option value="score">楽譜</option>
               <option value="sightreading">譜読み練習</option>
+              <option value="chordpractice">和音練習</option>
+              <option value="rhythmpractice">リズム練習</option>
             </select>
             {appMode === "score" && (
               <>
@@ -1077,25 +1143,7 @@ export default function ScorePage() {
                               : "MIDI未接続"
                       }
                     />
-                    <button
-                      onClick={() => setShowQr(true)}
-                      style={{
-                        height: "40px",
-                        width: "32px",
-                        fontSize: "18px",
-                        borderRadius: "4px",
-                        borderWidth: ".5px",
-                        borderColor: borderColor,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        display: "flex",
-                        color: frColor,
-                        cursor: "pointer",
-                      }}
-                      title="QRコード"
-                    >
-                      <IoQrCodeOutline />
-                    </button>
+                    <QrModal />
                     <button
                       onClick={() => setShowMidiSettings(true)}
                       disabled={isLoading}
@@ -1157,8 +1205,10 @@ export default function ScorePage() {
               )}
             </>
           )}
-          {/* 譜読みモード時のMIDI接続ドット + 設定 + 全画面 */}
-          {appMode === "sightreading" && (
+          {/* 譜読み/和音/リズムモード時のMIDI接続ドット + 設定 + 全画面 */}
+          {(appMode === "sightreading" ||
+            appMode === "chordpractice" ||
+            appMode === "rhythmpractice") && (
             <div
               style={{
                 display: "flex",
@@ -1189,25 +1239,7 @@ export default function ScorePage() {
                         : "MIDI未接続"
                 }
               />
-              <button
-                onClick={() => setShowQr(true)}
-                style={{
-                  height: "40px",
-                  width: "32px",
-                  fontSize: "18px",
-                  borderRadius: "4px",
-                  borderWidth: ".5px",
-                  borderColor: borderColor,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  display: "flex",
-                  color: frColor,
-                  cursor: "pointer",
-                }}
-                title="QRコード"
-              >
-                <IoQrCodeOutline />
-              </button>
+              <QrModal />
               <button
                 onClick={() => setShowMidiSettings(true)}
                 style={{
@@ -1344,7 +1376,30 @@ export default function ScorePage() {
                 )}
               </div>
             )}
-          {appMode === "sightreading" ? (
+          {appMode === "rhythmpractice" ? (
+            <RhythmPracticeFlashcard
+              ref={rhythmPracticeRef}
+              darkMode={colorMode === "dark"}
+              highlightColor={highlightColor}
+              borderColor={borderColor}
+              frColor={frColor}
+              bgColor={bgColor}
+              userId={currentUserId}
+            />
+          ) : appMode === "chordpractice" ? (
+            <ChordPracticeFlashcard
+              ref={chordPracticeRef}
+              onExpectedNotesChange={setChordPracticeExpectedNotes}
+              wrongNotes={wrongNotes}
+              onWrongNotesReset={() => setWrongNotes([])}
+              darkMode={colorMode === "dark"}
+              highlightColor={highlightColor}
+              borderColor={borderColor}
+              frColor={frColor}
+              bgColor={bgColor}
+              userId={currentUserId}
+            />
+          ) : appMode === "sightreading" ? (
             <SightReadingFlashcard
               ref={sightReadingRef}
               onExpectedNotesChange={setSightReadingExpectedNotes}
@@ -1387,15 +1442,30 @@ export default function ScorePage() {
         <footer
           className="no-print"
           style={{
-            height: "16vh",
-            minHeight: "120px",
+            height: "120px",
             padding: "0 0 0 0",
             backgroundColor: "#f5f5f5",
           }}
         >
-          {appMode === "sightreading" ? (
+          {appMode === "rhythmpractice" ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                color: "#999",
+                fontSize: "14px",
+              }}
+            >
+              MIDI鍵盤 / スペースキー / 画面タップでリズムを入力
+            </div>
+          ) : appMode === "sightreading" || appMode === "chordpractice" ? (
             <PianoKeyboard
-              notes={sightReadingExpectedNotes.map((midi) => {
+              notes={(appMode === "chordpractice"
+                ? chordPracticeExpectedNotes
+                : sightReadingExpectedNotes
+              ).map((midi) => {
                 const semitone = midi % 12;
                 const octave = Math.floor(midi / 12) - 1;
                 const stepMap: Record<number, string> = {

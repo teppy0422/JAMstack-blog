@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { MidiConfig, defaultMidiConfig } from "../lib/midiConfig";
+import { MidiConfig, defaultMidiConfig } from "./midiConfig";
 
 /** MIDI接続状態 */
 export type MidiConnectionStatus =
@@ -29,6 +29,8 @@ interface UseMidiOptions {
   onMatch: () => void;
   /** 判定失敗時のコールバック（間違い音のMIDI番号を渡す） */
   onMismatch: (wrongNotes: number[]) => void;
+  /** NoteOff時のコールバック（リズム練習用） */
+  onNoteOff?: () => void;
   /** MIDI有効フラグ */
   enabled: boolean;
 }
@@ -41,6 +43,7 @@ export function useMidi({
   expectedMidiNotes,
   onMatch,
   onMismatch,
+  onNoteOff,
   enabled,
 }: UseMidiOptions) {
   const [connectionStatus, setConnectionStatus] =
@@ -56,6 +59,8 @@ export function useMidi({
   onMatchRef.current = onMatch;
   const onMismatchRef = useRef(onMismatch);
   onMismatchRef.current = onMismatch;
+  const onNoteOffRef = useRef(onNoteOff);
+  onNoteOffRef.current = onNoteOff;
 
   // Buffer for chord time window
   const noteBufferRef = useRef<number[]>([]);
@@ -152,6 +157,9 @@ export function useMidi({
       if (!e.data || e.data.length < 3) return;
       const [status, note, velocity] = e.data;
       const isNoteOn = (status & 0xf0) === 0x90 && velocity > 0;
+      const isNoteOff =
+        (status & 0xf0) === 0x80 ||
+        ((status & 0xf0) === 0x90 && velocity === 0);
       if (isNoteOn) {
         // ベロシティフィルタ: 閾値未満の入力を無視
         const cfg = configRef.current;
@@ -159,6 +167,8 @@ export function useMidi({
           return;
         }
         handleNoteOn(note);
+      } else if (isNoteOff) {
+        onNoteOffRef.current?.();
       }
     },
     [handleNoteOn],

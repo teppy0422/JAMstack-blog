@@ -29,6 +29,8 @@ if (typeof window !== "undefined") {
 export interface SightReadingFlashcardRef {
   /** MIDI経由で正解した時に呼ばれる */
   handleCorrectAnswer: () => void;
+  /** MIDI経由で不正解した時に呼ばれる */
+  handleIncorrectAnswer: () => void;
 }
 
 type ClefMode = "treble" | "bass" | "both";
@@ -350,15 +352,18 @@ const SightReadingFlashcard = forwardRef<
     [currentNote, feedbackState, handleCorrect, handleIncorrect],
   );
 
-  // MIDI経由の正解
+  // MIDI経由の正解/不正解
   useImperativeHandle(
     ref,
     () => ({
       handleCorrectAnswer: () => {
         handleCorrect();
       },
+      handleIncorrectAnswer: () => {
+        handleIncorrect();
+      },
     }),
-    [handleCorrect],
+    [handleCorrect, handleIncorrect],
   );
 
   // クリーンアップ

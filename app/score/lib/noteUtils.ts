@@ -21,7 +21,20 @@ const STEP_TO_SEMITONE: Record<string, number> = {
   B: 11,
 };
 
-const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const NOTE_NAMES = [
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#",
+  "A",
+  "A#",
+  "B",
+];
 
 // ナチュラル音のみのMIDI番号→ステップ名マッピング
 const SEMITONE_TO_STEP: Record<number, string> = {
@@ -43,7 +56,13 @@ export const noteToMidi = (
   const stepKey = typeof step === "string" ? step.toUpperCase() : String(step);
   // 数値ステップもサポート (0=C, 1=D, etc.)
   const numericSteps: Record<string, number> = {
-    "0": 0, "1": 2, "2": 4, "3": 5, "4": 7, "5": 9, "6": 11,
+    "0": 0,
+    "1": 2,
+    "2": 4,
+    "3": 5,
+    "4": 7,
+    "5": 9,
+    "6": 11,
   };
   const semitone = STEP_TO_SEMITONE[stepKey] ?? numericSteps[stepKey] ?? 0;
   const safeAlter = typeof alter === "number" ? alter : 0;
@@ -87,9 +106,10 @@ export const generateRandomNote = (
       if (!isBlackKey(m)) naturals.push(m);
     }
     // 前回と同じ音を除外（候補が2つ以上ある場合）
-    const candidates = prevMidi !== undefined && naturals.length > 1
-      ? naturals.filter((m) => m !== prevMidi)
-      : naturals;
+    const candidates =
+      prevMidi !== undefined && naturals.length > 1
+        ? naturals.filter((m) => m !== prevMidi)
+        : naturals;
     const midi = candidates[Math.floor(Math.random() * candidates.length)];
     const semitone = midi % 12;
     const octave = Math.floor(midi / 12) - 1;
@@ -159,4 +179,119 @@ export const midiToStaffPosition = (
   const refPos = clef === "treble" ? 30 : 18;
 
   return absolutePos - refPos;
+};
+
+// ─── 和音練習用 ───
+
+export interface ChordDefinition {
+  type: string;
+  label: string;
+  intervals: number[];
+}
+
+export const PRACTICE_CHORDS: ChordDefinition[] = [
+  { type: "major", label: "", intervals: [0, 4, 7] },
+  { type: "minor", label: "m", intervals: [0, 3, 7] },
+  { type: "dim", label: "dim", intervals: [0, 3, 6] },
+  { type: "aug", label: "aug", intervals: [0, 4, 8] },
+  { type: "maj7", label: "Maj7", intervals: [0, 4, 7, 11] },
+  { type: "m7", label: "m7", intervals: [0, 3, 7, 10] },
+  { type: "7", label: "7", intervals: [0, 4, 7, 10] },
+];
+
+export interface ChordQuestion {
+  root: StaffNote;
+  notes: StaffNote[];
+  midiNotes: number[];
+  chordType: string;
+  chordLabel: string;
+  rootStep: string;
+  clef: "treble" | "bass";
+}
+
+/**
+ * 指定されたルート音とコードタイプで和音を生成
+ */
+export const generateChord = (
+  rootMidi: number,
+  chordDef: ChordDefinition,
+  clef: "treble" | "bass",
+): ChordQuestion => {
+  const rootSemitone = rootMidi % 12;
+  const rootStep = SEMITONE_TO_STEP[rootSemitone] || "C";
+
+  const midiNotes = chordDef.intervals.map((iv) => rootMidi + iv);
+  const notes: StaffNote[] = midiNotes.map((midi) => {
+    const semitone = midi % 12;
+    const octave = Math.floor(midi / 12) - 1;
+    const step = SEMITONE_TO_STEP[semitone];
+    if (step) {
+      return { step, octave, alter: 0, midi, clef };
+    }
+    const sharpStep = SEMITONE_TO_STEP[semitone - 1] || "C";
+    return { step: sharpStep, octave, alter: 1, midi, clef };
+  });
+
+  return {
+    root: notes[0],
+    notes,
+    midiNotes,
+    chordType: chordDef.type,
+    chordLabel: `${rootStep}${chordDef.label}`,
+    rootStep,
+    clef,
+  };
+};
+
+/**
+ * ランダムな和音を生成
+ * ルートはナチュラル音のみ。全構成音がclef範囲内に収まるよう制限。
+ */
+export const generateRandomChord = (
+  clef: "treble" | "bass",
+  chordTypes: ChordDefinition[] = PRACTICE_CHORDS,
+  prevRootMidi?: number,
+): ChordQuestion => {
+  const minMidi = clef === "treble" ? 60 : 36;
+  const maxMidi = clef === "treble" ? 84 : 60;
+
+  const chordDef = chordTypes[Math.floor(Math.random() * chordTypes.length)];
+  const maxInterval = Math.max(...chordDef.intervals);
+  const rootMax = maxMidi - maxInterval;
+
+  const naturalRoots: number[] = [];
+  for (let m = minMidi; m <= rootMax; m++) {
+    if (!isBlackKey(m)) naturalRoots.push(m);
+  }
+
+  const candidates =
+    prevRootMidi !== undefined && naturalRoots.length > 1
+      ? naturalRoots.filter((m) => m !== prevRootMidi)
+      : naturalRoots;
+
+  const rootMidi = candidates[Math.floor(Math.random() * candidates.length)];
+  const rootSemitone = rootMidi % 12;
+  const rootStep = SEMITONE_TO_STEP[rootSemitone] || "C";
+
+  const midiNotes = chordDef.intervals.map((iv) => rootMidi + iv);
+  const notes: StaffNote[] = midiNotes.map((midi) => {
+    const semitone = midi % 12;
+    const octave = Math.floor(midi / 12) - 1;
+    const step = SEMITONE_TO_STEP[semitone];
+    if (step) {
+      return { step, octave, alter: 0, midi, clef };
+    }
+    const sharpStep = SEMITONE_TO_STEP[semitone - 1] || "C";
+    return { step: sharpStep, octave, alter: 1, midi, clef };
+  });
+
+  return {
+    root: notes[0],
+    notes,
+    midiNotes,
+    chordType: chordDef.type,
+    chordLabel: `${rootStep}${chordDef.label}`,
+    rootStep,
+    clef,
+  };
 };

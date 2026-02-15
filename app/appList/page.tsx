@@ -30,10 +30,10 @@ import Content from "@/components/content";
 import Sidebar from "@/components/sidebar";
 import { sr } from "date-fns/locale";
 import { useUserContext } from "@/contexts/useUserContext";
-import YoutubeLike from "/public/images/etc/youtubeLike.svg";
 import { CustomToast } from "@/components/ui/CustomToast";
 import getMessage from "@/utils/getMessage";
 import { useLanguage } from "../../src/contexts/LanguageContext";
+import YoutubeLike from "@/public/images/etc/youtubeLike.svg";
 
 const MotionBox = motion(Box);
 
@@ -84,7 +84,7 @@ const apps = [
     title: "絵本アプリ",
     href: "/storybook",
     description:
-      "1-2歳向けの絵本アプリ。iPhoneでホームアプリにして閲覧予定。作成途中。",
+      "1-2歳向けの絵本アプリ。iPhoneでホームアプリにして閲覧予定。イラスト作成が退屈で頓挫中。",
     src: "/images/ico/storybook-cover.png",
     rate: 1,
   },
@@ -95,6 +95,15 @@ const apps = [
     src: "/images/etc/youtubeLike.svg",
     rate: 2,
     limitTag: "閲覧",
+    useSvgComponent: true,
+  },
+  {
+    title: "ピアノ学習",
+    href: "/score",
+    description: "MIDI出力が可能な電子ピアノで学習",
+    src: "/images/ico/score-logo.svg",
+    rate: 5,
+    limitTag: "",
   },
 ];
 
@@ -196,17 +205,17 @@ export default function AppList() {
                 >
                   <CardBody p={2}>
                     <Box display="flex" justifyContent="center">
-                      {app.src.endsWith(".svg") ? (
+                      {app.useSvgComponent ? (
                         <Box
-                          w="120px"
-                          h="120px"
                           color={colorMode === "light" ? "#D13030" : "#F89173"}
+                          width="120px"
+                          height="120px"
                         >
                           <YoutubeLike
                             style={{
+                              fill: "currentColor",
                               width: "100%",
                               height: "100%",
-                              fill: "currentColor",
                             }}
                           />
                         </Box>
@@ -216,6 +225,14 @@ export default function AppList() {
                           alt="image"
                           width="120px"
                           height="120px"
+                          style={
+                            app.src.endsWith(".svg")
+                              ? {
+                                  filter:
+                                    colorMode === "dark" ? "invert(1)" : "none",
+                                }
+                              : undefined
+                          }
                         />
                       )}
                     </Box>

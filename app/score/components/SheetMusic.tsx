@@ -8,7 +8,7 @@ import {
   forwardRef,
 } from "react";
 import React from "react"; // Import React for React.CSSProperties
-import { isMusicTerm } from "../score/musicTerms";
+import { isMusicTerm } from "../lib/musicTerms";
 import { useTheme } from "@chakra-ui/react";
 import { border, useColorMode } from "@chakra-ui/react";
 
