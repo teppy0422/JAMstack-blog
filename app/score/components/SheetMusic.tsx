@@ -11,6 +11,7 @@ import React from "react"; // Import React for React.CSSProperties
 import { isMusicTerm } from "../lib/musicTerms";
 import { useTheme } from "@chakra-ui/react";
 import { border, useColorMode } from "@chakra-ui/react";
+import type { PlaybackEvent } from "../lib/usePlayback";
 
 interface SheetMusicProps {
   musicXmlPath: string;
@@ -48,6 +49,10 @@ export interface SheetMusicRef {
   getCurrentNotes: () => Array<{ step: string; octave: number; alter: number; staff?: number }>;
   /** カーソルが終端に達しているか */
   isEndReached: () => boolean;
+  /** 全音符を抽出（再生用） */
+  extractAllNotes: () => PlaybackEvent[];
+  /** 現在のカーソル位置の絶対時間（秒）を取得 */
+  getCurrentTimeSeconds: () => number;
 }
 
 const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
@@ -652,6 +657,69 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       }
     };
 
+    const extractAllNotes = (): PlaybackEvent[] => {
+      const osmd = osmdRef.current;
+      if (!osmd) return [];
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sheet = (osmd as any).sheet;
+      if (!sheet?.SourceMeasures) return [];
+
+      const bpm = sheet.DefaultTempoInBpm || 120;
+      // OSMD の RealValue は全音符基準（1.0 = 全音符 = 4拍）なので
+      // 秒変換には 240/bpm を使う（60/bpm × 4）
+      const secondsPerWholeNote = 240 / bpm;
+      const events: PlaybackEvent[] = [];
+
+      for (let mi = 0; mi < sheet.SourceMeasures.length; mi++) {
+        const measure = sheet.SourceMeasures[mi];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const measureAbsTime = (measure as any).AbsoluteTimestamp?.RealValue || 0;
+
+        for (const container of measure.VerticalSourceStaffEntryContainers || []) {
+          for (const staffEntry of container.StaffEntries || []) {
+            if (!staffEntry) continue;
+
+            const entryTimestamp = staffEntry.Timestamp?.RealValue || 0;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const staffId = (staffEntry as any).ParentStaff?.idInMusicSheet;
+            const staffNumber = typeof staffId === "number" ? staffId + 1 : undefined;
+
+            for (const voiceEntry of staffEntry.VoiceEntries || []) {
+              if (!voiceEntry?.Notes) continue;
+
+              const durationBeats = voiceEntry.Duration?.RealValue || 0.25;
+
+              for (const note of voiceEntry.Notes) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const noteAny = note as any;
+
+                // 休符をスキップ
+                if (noteAny.isRest?.() || noteAny.IsRest) continue;
+
+                let pitch = noteAny.Pitch || noteAny.sourceNote?.Pitch;
+                if (!pitch || pitch.halfTone === undefined) continue;
+
+                const absoluteTimeBeats = measureAbsTime + entryTimestamp;
+
+                events.push({
+                  timeSeconds: absoluteTimeBeats * secondsPerWholeNote,
+                  durationSeconds: durationBeats * secondsPerWholeNote,
+                  midiNote: pitch.halfTone,
+                  staff: staffNumber,
+                  measureIndex: mi,
+                  timestampInMeasure: entryTimestamp,
+                });
+              }
+            }
+          }
+        }
+      }
+
+      events.sort((a, b) => a.timeSeconds - b.timeSeconds || a.midiNote - b.midiNote);
+      return events;
+    };
+
     const getNotesAtPosition = (_x: number, _y: number) => {
       return getCurrentNotes();
     };
@@ -925,28 +993,36 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           return;
         }
 
+        // 絶対タイムスタンプを算出（OSMD の currentTimeStamp は曲頭からの絶対値）
+        const sheet = (osmdRef.current as any).sheet;
+        let targetAbsTime = timestampInMeasure; // フォールバック
+        if (sheet?.SourceMeasures?.[measureIndex]) {
+          const measureAbsTime = sheet.SourceMeasures[measureIndex].AbsoluteTimestamp?.RealValue || 0;
+          targetAbsTime = measureAbsTime + timestampInMeasure;
+        }
+
         const cursor = osmdRef.current.cursor;
+
+        // カーソル移動中のスクロールを抑止（reset→next のたびにスクロールが走るのを防ぐ）
+        const originalFollowCursor = osmdRef.current.FollowCursor;
+        osmdRef.current.FollowCursor = false;
+
         cursor.reset();
 
         let stepCount = 0;
         const maxSteps = 10000; // Safety limit
 
         while (!cursor.Iterator.EndReached && stepCount < maxSteps) {
-          const currentMeasureIndex = cursor.Iterator.currentMeasureIndex;
           const currentTimestamp =
             cursor.Iterator.currentTimeStamp?.RealValue || 0;
 
           // Check if we've reached the target position
-          if (
-            currentMeasureIndex === measureIndex &&
-            Math.abs(currentTimestamp - timestampInMeasure) < 0.001
-          ) {
+          if (Math.abs(currentTimestamp - targetAbsTime) < 0.001) {
             break;
           }
 
-          // If we've passed the target measure, stop
-          if (currentMeasureIndex > measureIndex) {
-            // Go back one step
+          // If we've passed the target, go back
+          if (currentTimestamp > targetAbsTime + 0.001) {
             cursor.previous();
             break;
           }
@@ -955,6 +1031,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           stepCount++;
         }
 
+        // FollowCursor を復元してから update → 最終位置でのみスクロール
+        osmdRef.current.FollowCursor = originalFollowCursor;
         cursor.update();
         // ダークモード時はオーバーレイを同期
         if (darkMode) {
@@ -978,6 +1056,18 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       },
       isEndReached: () => {
         return osmdRef.current?.cursor?.Iterator?.EndReached ?? true;
+      },
+      extractAllNotes: () => {
+        return extractAllNotes();
+      },
+      getCurrentTimeSeconds: () => {
+        if (!osmdRef.current?.cursor) return 0;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const sheet = (osmdRef.current as any).sheet;
+        const bpm = sheet?.DefaultTempoInBpm || 120;
+        const secondsPerWholeNote = 240 / bpm;
+        const absTime = osmdRef.current.cursor.Iterator?.currentTimeStamp?.RealValue || 0;
+        return absTime * secondsPerWholeNote;
       },
     }));
 

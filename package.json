@@ -103,6 +103,7 @@
     "socket.io-client": "^4.8.1",
     "styled-components": "^6.1.15",
     "three": "^0.165.0",
+    "tone": "^15.1.22",
     "typeface-noto-sans-sc": "^1.1.13",
     "url-loader": "^4.1.1",
     "use-sound": "^4.0.1"

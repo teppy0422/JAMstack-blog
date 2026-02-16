@@ -12,6 +12,9 @@ import { FaRegFile } from "react-icons/fa6";
 import {
   IoPlayOutline,
   IoPlaySkipBackOutline,
+  IoPlayCircleOutline,
+  IoPauseOutline,
+  IoStopOutline,
   IoSettingsOutline,
   IoExpandOutline,
   IoContractOutline,
@@ -52,6 +55,7 @@ import { useUserContext } from "@/contexts/useUserContext";
 import Auth from "@/components/ui/Auth/Auth";
 import { CustomModal } from "@/components/ui/CustomModal";
 import AccountSwitcher from "./components/AccountSwitcher";
+import { usePlayback, type PlaybackEvent } from "./lib/usePlayback";
 
 const sampleScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
@@ -133,6 +137,7 @@ export default function ScorePage() {
   const [wrongNotes, setWrongNotes] = useState<number[]>([]);
   const [showMidiSettings, setShowMidiSettings] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [playbackEvents, setPlaybackEvents] = useState<PlaybackEvent[]>([]);
   const [appMode, setAppMode] = useState<
     "score" | "sightreading" | "chordpractice" | "rhythmpractice"
   >("score");
@@ -308,6 +313,26 @@ export default function ScorePage() {
     }
   }, [appMode]);
 
+  // 楽譜再生
+  const {
+    status: playbackStatus,
+    tempo: playbackTempo,
+    samplesLoaded,
+    play: handlePlayback,
+    pause: handlePause,
+    stop: handleStopPlayback,
+    setTempo: setPlaybackTempo,
+  } = usePlayback({
+    events: playbackEvents,
+    onCursorMove: (measureIndex, timestampInMeasure) => {
+      sheetMusicRef.current?.jumpToTimestamp(measureIndex, timestampInMeasure);
+    },
+    onPlaybackEnd: () => {
+      sheetMusicRef.current?.reset();
+    },
+    enabled: appMode === "score" && !!selectedScore && !isLoading,
+  });
+
   // MIDI接続（和音練習モードではオクターブ無視+contains判定）
   const effectiveMidiConfig =
     appMode === "chordpractice"
@@ -322,6 +347,7 @@ export default function ScorePage() {
       onNoteOff: handleMidiNoteOff,
       enabled:
         midiEnabled &&
+        playbackStatus === "stopped" &&
         (appMode === "sightreading" ||
           appMode === "chordpractice" ||
           appMode === "rhythmpractice" ||
@@ -472,6 +498,10 @@ export default function ScorePage() {
       );
     }
     setIsLoading(false);
+
+    // 再生用にノートを抽出
+    const events = sheetMusicRef.current?.extractAllNotes() || [];
+    setPlaybackEvents(events);
   }, []);
 
   const handleNext = () => {
@@ -1046,7 +1076,7 @@ export default function ScorePage() {
                   />
                   <button
                     onClick={handleReset}
-                    disabled={isLoading}
+                    disabled={isLoading || playbackStatus === "playing"}
                     style={{
                       height: "40px",
                       width: "24px",
@@ -1058,15 +1088,15 @@ export default function ScorePage() {
                       alignItems: "center",
                       display: "flex",
                       color: frColor,
-                      cursor: isLoading ? "not-allowed" : "pointer",
-                      opacity: isLoading ? 0.5 : 1,
+                      cursor: isLoading || playbackStatus === "playing" ? "not-allowed" : "pointer",
+                      opacity: isLoading || playbackStatus === "playing" ? 0.5 : 1,
                     }}
                   >
                     <IoPlaySkipBackOutline />
                   </button>
                   <button
                     onClick={handlePrevious}
-                    disabled={isLoading}
+                    disabled={isLoading || playbackStatus === "playing"}
                     style={{
                       height: "40px",
                       width: "32px",
@@ -1078,15 +1108,15 @@ export default function ScorePage() {
                       alignItems: "center",
                       display: "flex",
                       color: frColor,
-                      cursor: isLoading ? "not-allowed" : "pointer",
-                      opacity: isLoading ? 0.5 : 1,
+                      cursor: isLoading || playbackStatus === "playing" ? "not-allowed" : "pointer",
+                      opacity: isLoading || playbackStatus === "playing" ? 0.5 : 1,
                     }}
                   >
                     <IoPlayOutline style={{ transform: "rotate(180deg)" }} />
                   </button>
                   <button
                     onClick={handleNext}
-                    disabled={isLoading}
+                    disabled={isLoading || playbackStatus === "playing"}
                     style={{
                       height: "40px",
                       width: "32px",
@@ -1098,12 +1128,136 @@ export default function ScorePage() {
                       alignItems: "center",
                       display: "flex",
                       color: frColor,
-                      cursor: isLoading ? "not-allowed" : "pointer",
-                      opacity: isLoading ? 0.5 : 1,
+                      cursor: isLoading || playbackStatus === "playing" ? "not-allowed" : "pointer",
+                      opacity: isLoading || playbackStatus === "playing" ? 0.5 : 1,
                     }}
                   >
                     <IoPlayOutline />
                   </button>
+                  {/* 再生コントロール */}
+                  <div
+                    style={{
+                      width: ".5px",
+                      height: "24px",
+                      backgroundColor: borderColor,
+                      margin: "0 3px",
+                    }}
+                  />
+                  <button
+                    onClick={playbackStatus === "playing" ? handlePause : () => {
+                      const cursorTime = sheetMusicRef.current?.getCurrentTimeSeconds() || 0;
+                      handlePlayback(cursorTime);
+                    }}
+                    disabled={isLoading || playbackEvents.length === 0}
+                    style={{
+                      height: "40px",
+                      width: "32px",
+                      fontSize: "18px",
+                      borderRadius: "4px",
+                      borderWidth: ".5px",
+                      borderColor: playbackStatus === "playing" ? highlightColor : borderColor,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      display: "flex",
+                      color: playbackStatus === "playing" ? highlightColor : frColor,
+                      cursor: isLoading ? "not-allowed" : "pointer",
+                      opacity: isLoading ? 0.5 : 1,
+                    }}
+                    title={playbackStatus === "playing" ? "一時停止" : samplesLoaded ? "再生" : "再生（初回はピアノ音読み込み）"}
+                  >
+                    {playbackStatus === "playing" ? <IoPauseOutline /> : <IoPlayCircleOutline />}
+                  </button>
+                  {playbackStatus !== "stopped" && (
+                    <button
+                      onClick={handleStopPlayback}
+                      style={{
+                        height: "40px",
+                        width: "32px",
+                        fontSize: "18px",
+                        borderRadius: "4px",
+                        borderWidth: ".5px",
+                        borderColor: borderColor,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        display: "flex",
+                        color: frColor,
+                        cursor: "pointer",
+                      }}
+                      title="停止"
+                    >
+                      <IoStopOutline />
+                    </button>
+                  )}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "2px",
+                    }}
+                    title="テンポ"
+                  >
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        color: frColor,
+                        minWidth: "32px",
+                        textAlign: "center",
+                        userSelect: "none",
+                      }}
+                    >
+                      x{playbackTempo.toFixed(1)}
+                    </span>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
+                      <button
+                        onClick={() => {
+                          const next = Math.round((playbackTempo + 0.1) * 10) / 10;
+                          if (next <= 1.5) setPlaybackTempo(next);
+                        }}
+                        disabled={playbackTempo >= 1.5}
+                        style={{
+                          width: "18px",
+                          height: "14px",
+                          fontSize: "8px",
+                          borderRadius: "2px",
+                          borderWidth: ".5px",
+                          borderColor: borderColor,
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          color: playbackTempo >= 1.5 ? `${frColor}40` : frColor,
+                          cursor: playbackTempo >= 1.5 ? "not-allowed" : "pointer",
+                          backgroundColor: "transparent",
+                          lineHeight: 1,
+                        }}
+                      >
+                        ▲
+                      </button>
+                      <button
+                        onClick={() => {
+                          const next = Math.round((playbackTempo - 0.1) * 10) / 10;
+                          if (next >= 0.5) setPlaybackTempo(next);
+                        }}
+                        disabled={playbackTempo <= 0.5}
+                        style={{
+                          width: "18px",
+                          height: "14px",
+                          fontSize: "8px",
+                          borderRadius: "2px",
+                          borderWidth: ".5px",
+                          borderColor: borderColor,
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          color: playbackTempo <= 0.5 ? `${frColor}40` : frColor,
+                          cursor: playbackTempo <= 0.5 ? "not-allowed" : "pointer",
+                          backgroundColor: "transparent",
+                          lineHeight: 1,
+                        }}
+                      >
+                        ▼
+                      </button>
+                    </div>
+                  </div>
                   <div
                     style={{
                       width: ".5px",
