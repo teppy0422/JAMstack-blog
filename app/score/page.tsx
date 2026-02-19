@@ -1826,13 +1826,38 @@ export default function ScorePage() {
             />
           ) : selectedScore ? (
             <PianoKeyboard
-              notes={
-                midiConfig.staffFilter === "both"
+              notes={(() => {
+                // 再生中: 落下ノートと連動（現在鳴っている音をハイライト）
+                if (playbackStatus === "playing") {
+                  const scoreTime = playbackCurrentTime * playbackTempo;
+                  return playbackEvents
+                    .filter(
+                      (e) =>
+                        scoreTime >= e.timeSeconds &&
+                        scoreTime < e.timeSeconds + e.durationSeconds,
+                    )
+                    .filter(
+                      (e) =>
+                        midiConfig.staffFilter === "both" || e.staff === midiConfig.staffFilter,
+                    )
+                    .map((e) => {
+                      const semitone = e.midiNote % 12;
+                      const octave = Math.floor(e.midiNote / 12) - 1;
+                      const semitoneToNote = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6];
+                      const semitoneToAlter = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
+                      const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
+                      const step = noteNames[semitoneToNote[semitone]];
+                      const alter = semitoneToAlter[semitone];
+                      return { step, octave, alter, staff: e.staff };
+                    });
+                }
+                // 停止中: カーソル位置の音符を表示
+                return midiConfig.staffFilter === "both"
                   ? currentNotes
                   : currentNotes.filter(
                       (n) => n.staff === midiConfig.staffFilter,
-                    )
-              }
+                    );
+              })()}
               minMidi={keyboardRange?.min}
               maxMidi={keyboardRange?.max}
               wrongNotes={wrongNotes}

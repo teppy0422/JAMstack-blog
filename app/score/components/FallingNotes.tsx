@@ -217,12 +217,18 @@ export default function FallingNotes({
       const layout = kl.get(evt.midiNote);
       if (!layout) continue;
 
-      // Y 座標: 下端 = scoreTime, 上端 = scoreTime + VISIBLE_WINDOW
-      const yBottom = ch * (1 - (noteStart - scoreTime) / VISIBLE_WINDOW);
+      // Y 座標: 下端 = noteStart の位置, 上端 = noteEnd の位置
+      const yBottomRaw = ch * (1 - (noteStart - scoreTime) / VISIBLE_WINDOW);
       const yTop = ch * (1 - (noteEnd - scoreTime) / VISIBLE_WINDOW);
 
-      // 画面外のノートはスキップ
-      if (yBottom < 0 || yTop > ch) continue;
+      // ノートの上端が画面下端より下 → まだ来ていない
+      if (yTop > ch) continue;
+      // ノートの上端が画面上端より上 → 完全に通過済み（鍵盤ハイライトと一致させるため、
+      // durationSeconds 分だけヒットラインに張り付かせてから消す）
+      if (yTop < 0 && yBottomRaw < 0) continue;
+
+      // ヒットラインより下にはみ出す分はクランプ（鍵盤に吸い込まれる演出）
+      const yBottom = Math.min(yBottomRaw, ch);
 
       const barHeight = yBottom - yTop;
 

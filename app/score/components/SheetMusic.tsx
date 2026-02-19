@@ -103,6 +103,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         timestamp: number;
       }>
     >([]);
+    // マップが構築済みかどうか（遅延構築のフラグ）
+    const positionMapBuiltRef = useRef(false);
 
     // Store onMusicTermClick in ref for use in setupClickHandlers
     const onMusicTermClickRef = useRef(onMusicTermClick);
@@ -256,6 +258,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
     };
 
     // Function to build position-to-timestamp map for note click functionality
+    // 重い処理なので最初のクリック時にのみ実行する（遅延構築）
     const buildPositionToTimestampMap = () => {
       const map: Array<{
         x: number;
@@ -300,6 +303,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       }
 
       positionToTimestampMapRef.current = map;
+      positionMapBuiltRef.current = true;
       return map;
     };
 
@@ -791,19 +795,34 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
                 // Duration in whole-note units
                 let durationWholeNotes: number;
-                // Try to match with parsed MusicXML data for accurate duration
-                const matchedParsedNote = parsedMusicXmlNotesRef.current.find(pNote =>
-                  pNote.measureIndex === measureIndex &&
-                  Math.abs(pNote.timestampInMeasure - entryTimestampInMeasure) < 0.01 &&
-                  pNote.midi === midi
-                );
 
-                if (matchedParsedNote && divisionsRef.current > 0) {
-                  // parsedNote.duration is in MusicXML divisions; convert to whole notes
-                  durationWholeNotes = matchedParsedNote.duration / divisionsRef.current / 4;
+                // タイで繋がれた音の合計 duration を計算
+                if (noteAny.NoteTie) {
+                  // OSMD の NoteTie.Notes にタイチェーン全体の音符が入っている
+                  const tieNotes = noteAny.NoteTie.Notes;
+                  if (tieNotes && tieNotes.length > 1) {
+                    let totalDuration = 0;
+                    for (const tiedNote of tieNotes) {
+                      const tn = tiedNote as any;
+                      totalDuration += tn.Length?.RealValue ?? tn.NoteDuration?.RealValue ?? 0;
+                    }
+                    durationWholeNotes = totalDuration;
+                  } else {
+                    durationWholeNotes = noteAny.Length?.RealValue ?? noteAny.NoteDuration?.RealValue ?? 0.25;
+                  }
                 } else {
-                  // OSMD's Length.RealValue is already in whole-note units
-                  durationWholeNotes = noteAny.Length?.RealValue ?? noteAny.NoteDuration?.RealValue ?? 0.25;
+                  // タイなし: parsed MusicXML データから正確な duration を取得
+                  const matchedParsedNote = parsedMusicXmlNotesRef.current.find(pNote =>
+                    pNote.measureIndex === measureIndex &&
+                    Math.abs(pNote.timestampInMeasure - entryTimestampInMeasure) < 0.01 &&
+                    pNote.midi === midi
+                  );
+
+                  if (matchedParsedNote && divisionsRef.current > 0) {
+                    durationWholeNotes = matchedParsedNote.duration / divisionsRef.current / 4;
+                  } else {
+                    durationWholeNotes = noteAny.Length?.RealValue ?? noteAny.NoteDuration?.RealValue ?? 0.25;
+                  }
                 }
                 const durationSeconds = durationWholeNotes * secondsPerWholeNote;
 
@@ -899,7 +918,9 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         if (osmdRef.current) {
           osmdRef.current.Zoom = zoom;
           osmdRef.current.render();
-          buildPositionToTimestampMap(); // Rebuild map after zoom
+          // ズーム後はマップが無効になるのでリセット（次回クリック時に再構築）
+          positionToTimestampMapRef.current = [];
+          positionMapBuiltRef.current = false;
         }
       },
       hideCursor: () => {
@@ -1119,9 +1140,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           }
 
           await osmd.render();
-
-          // After rendering, rebuild the position map
-          buildPositionToTimestampMap();
 
           // Set chord visibility
           (osmd as any).setOptions({
