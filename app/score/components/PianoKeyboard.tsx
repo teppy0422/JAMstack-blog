@@ -1,7 +1,7 @@
 "use client";
-import { border, useColorMode } from "@chakra-ui/react";
-import { useTheme } from "@chakra-ui/react";
+import { useColorMode } from "@chakra-ui/react";
 import { noteToMidi, midiToNoteName, isBlackKey } from "../lib/noteUtils";
+import { getHandColor, getWrongColor, getScoreColors } from "../lib/colors";
 
 interface Note {
   step: string;
@@ -40,7 +40,8 @@ export default function PianoKeyboard({
   let startMidi = 24;
   let endMidi = 96;
   const { colorMode } = useColorMode();
-  const theme = useTheme();
+  const darkMode = colorMode === "dark";
+  const sc = getScoreColors(darkMode);
 
   if (minMidi !== undefined && maxMidi !== undefined) {
     // Only use provided range if it seems valid
@@ -51,20 +52,20 @@ export default function PianoKeyboard({
   }
 
   // ハイライトする鍵盤のMIDI番号とstaff情報、表記名をマッピング
-  const midiToStaffMap = new Map<number, number>();
+  const midiToStaffMap = new Map<number, number | undefined>();
   const midiToDisplayNameMap = new Map<number, string>();
+  const highlightedMidiSet = new Set<number>();
   notes
     .filter((note) => note.step && typeof note.octave === "number")
     .forEach((note) => {
       const midi = noteToMidi(note.step, note.octave, note.alter);
-      if (note.staff !== undefined) {
-        midiToStaffMap.set(midi, note.staff);
-      }
+      midiToStaffMap.set(midi, note.staff);
+      highlightedMidiSet.add(midi);
       // 元の音符データから表記名を保存（フラット・シャープを区別）
       midiToDisplayNameMap.set(midi, noteToDisplayName(note));
     });
 
-  const highlightedMidis = Array.from(midiToStaffMap.keys());
+  const highlightedMidis = Array.from(highlightedMidiSet);
 
   // 白鍵の数を数える
   let whiteKeyCount = 0;
@@ -88,15 +89,12 @@ export default function PianoKeyboard({
     const staff = midiToStaffMap.get(midi);
     const displayName = midiToDisplayNameMap.get(midi) || midiToNoteName(midi);
 
-    // 間違い音は赤、正しい音はハイライト色、それ以外は白
-    let highlightKeyColor = "#ffffff";
+    // 間違い音は赤、正しい音はstaff色（右手=青、左手=緑）、それ以外は白
+    let highlightKeyColor = sc.whiteKey;
     if (isWrong) {
-      highlightKeyColor = "#FF4444";
+      highlightKeyColor = getWrongColor(false);
     } else if (isHighlighted) {
-      highlightKeyColor =
-        colorMode === "dark"
-          ? theme.colors.custom.theme.orange[500]
-          : theme.colors.custom.pianoHighlight;
+      highlightKeyColor = getHandColor(staff, false);
     }
     if (!isBlack) {
       whiteKeys.push(
@@ -106,18 +104,15 @@ export default function PianoKeyboard({
             position: "relative",
             width: `${100 / whiteKeyCount}%`,
             height: "100%",
-            backgroundColor:
-              colorMode === "dark"
-                ? `${highlightKeyColor}99`
-                : `${highlightKeyColor}77`,
-            border: "1px solid #333",
+            backgroundColor: `${highlightKeyColor}${sc.whiteKeyHighlightAlpha}`,
+            border: `1px solid ${sc.whiteKeyBorder}`,
             boxSizing: "border-box",
             display: "flex",
             alignItems: "flex-end",
             justifyContent: "center",
             fontSize: "10px",
             paddingBottom: "5px",
-            color: isHighlighted || isWrong ? "#000" : "#999",
+            color: isHighlighted || isWrong ? sc.highlightLabel : sc.whiteKeyLabel,
             fontWeight: isHighlighted || isWrong ? "bold" : "normal",
             transition: "background-color 0.2s",
           }}
@@ -148,15 +143,12 @@ export default function PianoKeyboard({
     const staff = midiToStaffMap.get(midi);
     const displayName = midiToDisplayNameMap.get(midi) || midiToNoteName(midi);
 
-    // 間違い音は赤、正しい音はハイライト色、それ以外は黒
-    let highlightKeyColor = "#000";
+    // 間違い音は赤、正しい音はstaff色（右手=青、左手=緑）、それ以外は黒
+    let highlightKeyColor = sc.blackKey;
     if (isWrong) {
-      highlightKeyColor = "#FF4444";
+      highlightKeyColor = getWrongColor(true);
     } else if (isHighlighted) {
-      highlightKeyColor =
-        colorMode === "dark"
-          ? theme.colors.custom.theme.orange[500]
-          : theme.colors.custom.pianoHighlight;
+      highlightKeyColor = getHandColor(staff, true);
     }
     if (isBlack) {
       const position =
@@ -170,7 +162,7 @@ export default function PianoKeyboard({
             width: `${(100 / whiteKeyCount) * 0.6}%`,
             height: "60%",
             backgroundColor: highlightKeyColor,
-            border: "1px solid #000",
+            border: `1px solid ${sc.blackKeyBorder}`,
             boxSizing: "border-box",
             zIndex: 1,
             display: "flex",
@@ -178,7 +170,7 @@ export default function PianoKeyboard({
             justifyContent: "center",
             fontSize: "6px",
             paddingBottom: "5px",
-            color: "#000",
+            color: sc.highlightLabel,
             fontWeight: isHighlighted || isWrong ? "bold" : "normal",
             transition: "background-color 0.2s",
           }}
@@ -208,7 +200,7 @@ export default function PianoKeyboard({
         height: "100%",
         position: "relative",
         display: "flex",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: sc.pianoBackground,
         borderRadius: "4px",
         overflow: "hidden",
       }}

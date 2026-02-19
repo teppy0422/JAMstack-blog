@@ -30,6 +30,8 @@ interface UsePlaybackOptions {
 interface UsePlaybackReturn {
   status: PlaybackStatus;
   currentTime: number;
+  /** ref版 — rAFごとに更新されるが React 再レンダーを起こさない */
+  currentTimeRef: React.RefObject<number>;
   totalDuration: number;
   tempo: number;
   samplesLoaded: boolean;
@@ -74,6 +76,9 @@ export function usePlayback({
   const statusRef = useRef<PlaybackStatus>("stopped");
   statusRef.current = status;
   const tempoRef = useRef(1.0);
+  /** rAF ごとに更新される高精度タイム（state 更新なし） */
+  const currentTimeRef = useRef(0);
+  const lastStateUpdateRef = useRef(0);
 
   const eventsRef = useRef(events);
   eventsRef.current = events;
@@ -198,7 +203,14 @@ export function usePlayback({
     const Tone = await ensureTone();
     const tick = () => {
       if (statusRef.current === "playing") {
-        setCurrentTime(Tone.getTransport().seconds);
+        const t = Tone.getTransport().seconds;
+        currentTimeRef.current = t;
+        // React state は ~100ms ごとに更新（PianoKeyboard 用）
+        const now = performance.now();
+        if (now - lastStateUpdateRef.current > 100) {
+          lastStateUpdateRef.current = now;
+          setCurrentTime(t);
+        }
         animFrameRef.current = requestAnimationFrame(tick);
       }
     };
@@ -246,6 +258,7 @@ export function usePlayback({
     scheduledIdsRef.current = [];
     setStatus("stopped");
     setCurrentTime(0);
+    currentTimeRef.current = 0;
     cancelAnimationFrame(animFrameRef.current);
     onPlaybackEndRef.current();
   }, [ensureTone]);
@@ -306,6 +319,7 @@ export function usePlayback({
   return {
     status,
     currentTime,
+    currentTimeRef,
     totalDuration,
     tempo,
     samplesLoaded,

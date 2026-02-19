@@ -10,8 +10,10 @@ import {
 import React from "react"; // Import React for React.CSSProperties
 import { isMusicTerm } from "../lib/musicTerms";
 import { useTheme } from "@chakra-ui/react";
-import { border, useColorMode } from "@chakra-ui/react";
+import { useColorMode } from "@chakra-ui/react";
+import { getScoreColors } from "../lib/colors";
 import type { PlaybackEvent } from "../lib/usePlayback";
+import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
 
 interface SheetMusicProps {
   musicXmlPath: string;
@@ -46,7 +48,12 @@ export interface SheetMusicRef {
   setChordVisibility: (visible: boolean) => Promise<void>;
   jumpToTimestamp: (measureIndex: number, timestampInMeasure: number) => void;
   /** 現在のカーソル位置の音符を取得 */
-  getCurrentNotes: () => Array<{ step: string; octave: number; alter: number; staff?: number }>;
+  getCurrentNotes: () => Array<{
+    step: string;
+    octave: number;
+    alter: number;
+    staff?: number;
+  }>;
   /** カーソルが終端に達しているか */
   isEndReached: () => boolean;
   /** 全音符を抽出（再生用） */
@@ -72,7 +79,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
   ) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const parentRef = useRef<HTMLDivElement>(null);
-    const osmdRef = useRef<any>(null);
+    const osmdRef = useRef<OpenSheetMusicDisplay | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const theme = useTheme();
@@ -86,6 +93,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       colorMode === "dark"
         ? theme.colors.custom.theme.dark[900]
         : theme.colors.custom.theme.light[500];
+    const sc = getScoreColors(darkMode);
     // Store position map in a ref so it can be updated after zoom changes
     const positionToTimestampMapRef = useRef<
       Array<{
@@ -104,21 +112,141 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
     const onNotesChangeRef = useRef(onNotesChange);
     onNotesChangeRef.current = onNotesChange;
 
+    // Add new types for parsed MusicXML data
+    interface ParsedMusicXmlNote {
+      measureIndex: number; // 0-indexed
+      timestampInMeasure: number; // RealValue from OSMD, beat-relative
+      midi: number;
+      duration: number; // Raw duration from MusicXML (in divisions)
+      tieStart: boolean;
+      tieStop: boolean;
+    }
+
+    // Store parsed MusicXML note data
+    const parsedMusicXmlNotesRef = useRef<ParsedMusicXmlNote[]>([]);
+    const divisionsRef = useRef<number>(0); // Add this new ref
+
+    // Function to parse MusicXML content
+    const parseMusicXml = async (xmlContent: string) => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlContent, "application/xml");
+
+      const parsedNotes: ParsedMusicXmlNote[] = [];
+      let divisions = 0;
+
+      // Get divisions from <attributes> inside the first measure (NOT from <defaults>)
+      const divisionsElement = xmlDoc.querySelector("part > measure > attributes > divisions");
+      if (divisionsElement && divisionsElement.textContent) {
+        divisions = parseInt(divisionsElement.textContent, 10);
+      }
+      if (divisions === 0) {
+        console.warn("MusicXML: Could not find divisions or it is 0. Defaulting to 1.");
+        divisions = 1; // Fallback
+      }
+      divisionsRef.current = divisions; // Store divisions in ref
+
+      const parts = xmlDoc.querySelectorAll("part");
+      parts.forEach((part) => {
+        const measures = part.querySelectorAll("measure");
+        measures.forEach((measure, measureNumber0Indexed) => {
+          // Check for divisions change within this measure
+          const localDivisionsEl = measure.querySelector("attributes > divisions");
+          if (localDivisionsEl && localDivisionsEl.textContent) {
+            const localDiv = parseInt(localDivisionsEl.textContent, 10);
+            if (localDiv > 0) divisions = localDiv;
+          }
+
+          let currentMeasureTime = 0; // Time in 'divisions' within the measure
+
+          // Use childNodes to iterate in document order (querySelectorAll may not preserve order for siblings)
+          const children = measure.children;
+          for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+
+            // Handle <forward> and <backup> elements for multi-voice
+            if (child.tagName === "forward") {
+              const durEl = child.querySelector("duration");
+              if (durEl && durEl.textContent) {
+                currentMeasureTime += parseInt(durEl.textContent, 10);
+              }
+              continue;
+            }
+            if (child.tagName === "backup") {
+              const durEl = child.querySelector("duration");
+              if (durEl && durEl.textContent) {
+                currentMeasureTime -= parseInt(durEl.textContent, 10);
+              }
+              continue;
+            }
+
+            if (child.tagName !== "note") continue;
+
+            const noteElement = child;
+            const durationElement = noteElement.querySelector("duration");
+            const tieElements = noteElement.querySelectorAll("tie");
+            const pitchElement = noteElement.querySelector("pitch");
+            const restElement = noteElement.querySelector("rest");
+            const chordElement = noteElement.querySelector("chord");
+
+            const noteDuration = durationElement && durationElement.textContent
+              ? parseInt(durationElement.textContent, 10) : 0;
+
+            // Record the start time BEFORE advancing
+            const noteStartTime = currentMeasureTime;
+
+            // Advance time only for non-chord notes (chord notes share the same start time)
+            if (!chordElement) {
+              currentMeasureTime += noteDuration;
+            }
+
+            // Skip rests
+            if (restElement) continue;
+
+            if (pitchElement && noteDuration > 0) {
+              const stepElement = pitchElement.querySelector("step");
+              const octaveElement = pitchElement.querySelector("octave");
+              const alterElement = pitchElement.querySelector("alter");
+
+              if (stepElement && octaveElement) {
+                const step = stepElement.textContent;
+                const octave = parseInt(octaveElement.textContent!, 10);
+                const alter = alterElement ? parseInt(alterElement.textContent!, 10) : 0;
+
+                const stepToSemitone: Record<string, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+                const midi = (octave + 1) * 12 + (stepToSemitone[step as string] ?? 0) + alter;
+
+                const tieStart = Array.from(tieElements).some(tie => tie.getAttribute("type") === "start");
+                const tieStop = Array.from(tieElements).some(tie => tie.getAttribute("type") === "stop");
+
+                parsedNotes.push({
+                  measureIndex: measureNumber0Indexed,
+                  timestampInMeasure: noteStartTime / divisions,
+                  midi,
+                  duration: noteDuration,
+                  tieStart,
+                  tieStop,
+                });
+              }
+            }
+          }
+        });
+      });
+      parsedMusicXmlNotesRef.current = parsedNotes;
+      return parsedNotes;
+    };
+
     // Fix chord symbol text (e.g., "maj7" -> "Maj7") after OSMD renders
-    // OSMD may render "maj7" in lowercase, but the standard notation uses "Maj7"
     const fixChordSymbolText = () => {
       if (!containerRef.current) return;
       const textElements = containerRef.current.querySelectorAll("text");
       textElements.forEach((textEl) => {
         const content = textEl.textContent;
         if (!content) return;
-        // Hide unwanted annotations (e.g., "Time stretch: 5.0", "(Hands shake)")
         if (/Time stretch/i.test(content) || /Hands shake/i.test(content)) {
           (textEl as SVGElement).style.display = "none";
           return;
         }
         if (/maj/i.test(content)) {
-          // Replace "maj" with "Maj" (case-sensitive: only fix lowercase "maj")
           const fixed = content.replace(/maj/g, "Maj");
           if (fixed !== content) {
             textEl.textContent = fixed;
@@ -138,12 +266,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
       if (osmdRef.current?.cursor && containerRef.current) {
         const cursor = osmdRef.current.cursor;
-
-        // Save current scroll position
         const scrollContainer = containerRef.current.closest("main");
         const savedScrollTop = scrollContainer?.scrollTop || 0;
-
-        // Temporarily disable follow cursor to prevent scrolling during map building
         const originalFollowCursor = osmdRef.current.FollowCursor;
         osmdRef.current.FollowCursor = false;
 
@@ -160,25 +284,19 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             map.push({
               x,
               y,
-              measureIndex: cursor.Iterator.currentMeasureIndex,
-              timestamp: cursor.Iterator.currentTimeStamp?.RealValue || 0,
+              measureIndex: (cursor.Iterator as any).currentMeasureIndex,
+              timestamp: (cursor.Iterator as any).currentTimeStamp?.RealValue || 0,
             });
           }
           cursor.next();
         }
 
-        // Reset cursor to beginning
         cursor.reset();
         cursor.update();
-
-        // Restore follow cursor setting
         osmdRef.current.FollowCursor = originalFollowCursor;
-
-        // Restore scroll position
         if (scrollContainer) {
           scrollContainer.scrollTop = savedScrollTop;
         }
-
       }
 
       positionToTimestampMapRef.current = map;
@@ -192,7 +310,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       const staveNoteElements =
         containerRef.current.querySelectorAll(".vf-stavenote");
 
-      // Get cursor height for click area
       const cursorElement = (osmdRef.current.cursor as any).cursorElement;
       const cursorHeight = cursorElement
         ? cursorElement.getBoundingClientRect().height
@@ -200,19 +317,10 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
       staveNoteElements.forEach((element) => {
         const noteElement = element as SVGGraphicsElement;
-
-        // Get all path elements within the note for hover effect
-        const paths = noteElement.querySelectorAll("path");
-
-        // Get bounding box for the note
         const bbox = noteElement.getBBox();
-
-        // Create a transparent rectangle overlay for easier clicking
-        // Width: same as note, Height: same as cursor highlight
         const svgNS = "http://www.w3.org/2000/svg";
         const rectOverlay = document.createElementNS(svgNS, "rect");
 
-        // Calculate the center Y of the note and extend to cursor height
         const noteCenterY = bbox.y + bbox.height / 2;
         const overlayHeight = cursorHeight;
         const overlayY = noteCenterY - overlayHeight / 2;
@@ -224,11 +332,9 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         rectOverlay.setAttribute("fill", "transparent");
         rectOverlay.setAttribute("style", "cursor: pointer;");
 
-        // Add click handler
         rectOverlay.addEventListener("click", (e) => {
           e.stopPropagation();
 
-          // Get the X,Y position of the clicked note using screen coordinates (same as map)
           const noteRect = noteElement.getBoundingClientRect();
           const currentContainerRect =
             containerRef.current?.getBoundingClientRect();
@@ -238,8 +344,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           const noteY =
             noteRect.top - currentContainerRect.top + noteRect.height / 2;
 
-          // Find the closest timestamp in the map using both X and Y coordinates
-          // 遅延構築: 初回クリック時にposMapを構築
           if (positionToTimestampMapRef.current.length === 0) {
             buildPositionToTimestampMap();
           }
@@ -248,7 +352,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           let minDist = Infinity;
 
           for (const entry of positionMap) {
-            // Calculate 2D distance
             const distX = Math.abs(entry.x - noteX);
             const distY = Math.abs(entry.y - noteY);
             const dist = Math.sqrt(distX * distX + distY * distY);
@@ -259,7 +362,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           }
 
           if (closest) {
-            // Jump cursor to the position
             if (osmdRef.current?.cursor) {
               const cursor = osmdRef.current.cursor;
 
@@ -268,9 +370,9 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               const maxSteps = 10000;
 
               while (!cursor.Iterator.EndReached && stepCount < maxSteps) {
-                const currentMeasureIndex = cursor.Iterator.currentMeasureIndex;
+                const currentMeasureIndex = (cursor.Iterator as any).currentMeasureIndex;
                 const currentTimestamp =
-                  cursor.Iterator.currentTimeStamp?.RealValue || 0;
+                  (cursor.Iterator as any).currentTimeStamp?.RealValue || 0;
 
                 if (
                   currentMeasureIndex === closest.measureIndex &&
@@ -289,7 +391,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               }
 
               cursor.update();
-              // ダークモード時はオーバーレイを同期
               if (darkMode) {
                 const cursorElement = (cursor as any).cursorElement;
                 const cursorOverlay =
@@ -309,23 +410,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             }
           }
         });
-        // Append the rectangle overlay to the note group
         noteElement.appendChild(rectOverlay);
       });
-    };
-
-    const applyCursorStyles = () => {
-      const osmd = osmdRef.current;
-      if (!osmd || !osmd.cursor) {
-        return;
-      }
-      const cursorElement = (osmd.cursor as any).cursorElement;
-      if (cursorElement) {
-        // Apply demo-like styling directly to the cursor image element
-        cursorElement.style.backgroundColor = "#FFD700"; // Demo yellow
-        cursorElement.style.opacity = "0.4"; // Semi-transparent
-        cursorElement.style.zIndex = "1000"; // Bring to front
-      }
     };
 
     const getCurrentNotes = () => {
@@ -339,17 +425,19 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           return [];
         }
 
-        const notes: Array<{ step: string; octave: number; alter: number; staff?: number }> =
-          [];
+        const notes: Array<{
+          step: string;
+          octave: number;
+          alter: number;
+          staff?: number;
+        }> = [];
 
-        // Get all voices at current timestep, not just CurrentVoiceEntries
         const currentMeasure = iterator.CurrentMeasure;
         const currentTimestamp =
-          iterator.currentTimeStamp || iterator.CurrentTimeStamp;
+          (iterator as any).currentTimeStamp || (iterator as any).CurrentTimeStamp;
 
         if (currentMeasure && currentTimestamp) {
-          // Iterate through all staffs and voices in the current measure
-          for (const staffEntry of currentMeasure.staffLinkedExpressions ||
+          for (const staffEntry of (currentMeasure as any).staffLinkedExpressions ||
             []) {
             for (const voiceEntry of staffEntry) {
               if (
@@ -399,13 +487,12 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           }
         }
 
-        // Try to get all currently sounding notes from the music sheet
         if (notes.length === 0 && currentTimestamp) {
           try {
-            const musicSheet = iterator.musicSheet;
+            const musicSheet = (iterator as any).musicSheet;
             const currentMeasure = iterator.CurrentMeasure;
             if (musicSheet?.SourceMeasures && currentMeasure) {
-              const measureIndex = iterator.currentMeasureIndex;
+              const measureIndex = (iterator as any).currentMeasureIndex;
               const sourceMeasure = musicSheet.SourceMeasures[measureIndex];
               if (sourceMeasure) {
                 const measureStartTimestamp =
@@ -420,8 +507,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                     const voiceEntries = sourceStaffEntry.VoiceEntries;
                     const staffId = (sourceStaffEntry as any).ParentStaff
                       ?.idInMusicSheet;
-                    // idInMusicSheet is 0-based, convert to 1-based (1=右手, 2=左手)
-                    const staffNumber = typeof staffId === "number" ? staffId + 1 : undefined;
+                    const staffNumber =
+                      typeof staffId === "number" ? staffId + 1 : undefined;
 
                     if (voiceEntries && entryTimestamp) {
                       for (const voiceEntry of voiceEntries) {
@@ -442,11 +529,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                                 pitch = noteAny.sourceNote.Pitch;
                               }
                               if (pitch) {
-                                // Use halfTone to calculate everything
-                                // halfTone in OSMD is the actual MIDI note number
                                 const halfTone = pitch.halfTone;
                                 if (typeof halfTone === "number") {
-                                  // MIDI to note conversion
                                   const noteNames = [
                                     "C",
                                     "D",
@@ -458,10 +542,10 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                                   ];
                                   const semitoneToNote = [
                                     0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6,
-                                  ]; // C, C#, D, D#, E, F, F#, G, G#, A, A#, B
+                                  ];
                                   const semitoneToAlter = [
                                     0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
-                                  ]; // 0=natural, 1=sharp
+                                  ];
 
                                   const octave = Math.floor(halfTone / 12) - 1;
                                   const semitone = halfTone % 12;
@@ -495,14 +579,11 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           }
         }
 
-        // Access the graphic measures which contain all staffs
         const graphicalMeasure = iterator.CurrentMeasure;
 
-        // Try to get all voices under cursor from all staffs
         if (notes.length === 0) {
-          if (graphicalMeasure?.staffEntries) {
-            for (const staffEntry of graphicalMeasure.staffEntries) {
-              // Check if this staff entry is at the current timestamp
+          if ((graphicalMeasure as any)?.staffEntries) {
+            for (const staffEntry of (graphicalMeasure as any).staffEntries) {
               const staffTimestamp = (staffEntry as any)?.timestamp;
 
               if (staffTimestamp?.RealValue === currentTimestamp?.RealValue) {
@@ -530,9 +611,12 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                           const octave =
                             pitch.octave !== undefined ? pitch.octave : 4;
                           const alter = pitch.accidental || 0;
-                          const staffId3 = (staffEntry as any)
-                            ?.parentStaffEntry?.ParentStaff?.idInMusicSheet;
-                          const staffNumber3 = typeof staffId3 === "number" ? staffId3 + 1 : undefined;
+                          const staffId3 = (staffEntry as any)?.parentStaffEntry
+                            ?.ParentStaff?.idInMusicSheet;
+                          const staffNumber3 =
+                            typeof staffId3 === "number"
+                              ? staffId3 + 1
+                              : undefined;
                           const noteData = {
                             step,
                             octave,
@@ -550,14 +634,12 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           }
         }
 
-        // Try checking all staff entries that overlap with current time (not just exact timestamp)
         if (notes.length === 0 && currentMeasure && currentTimestamp) {
-          if (graphicalMeasure?.staffEntries) {
-            for (const staffEntry of graphicalMeasure.staffEntries) {
+          if ((graphicalMeasure as any)?.staffEntries) {
+            for (const staffEntry of (graphicalMeasure as any).staffEntries) {
               const entryTimestamp = (staffEntry as any)?.timestamp;
               const entryEndTimestamp = (staffEntry as any)?.endTimestamp;
 
-              // Check if this entry started at or before current time and hasn't ended yet
               if (entryTimestamp && currentTimestamp) {
                 const starts =
                   entryTimestamp.RealValue <= currentTimestamp.RealValue;
@@ -582,15 +664,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                           }
                           if (pitch) {
                             const fundamentalNote = pitch.fundamentalNote;
-                            const noteNames = [
-                              "C",
-                              "D",
-                              "E",
-                              "F",
-                              "G",
-                              "A",
-                              "B",
-                            ];
+                            const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
                             const step =
                               fundamentalNote !== undefined
                                 ? noteNames[fundamentalNote]
@@ -600,7 +674,10 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                             const alter = pitch.accidental || 0;
                             const staffId4 = (staffEntry as any)
                               ?.parentStaffEntry?.ParentStaff?.idInMusicSheet;
-                            const staffNumber4 = typeof staffId4 === "number" ? staffId4 + 1 : undefined;
+                            const staffNumber4 =
+                              typeof staffId4 === "number"
+                                ? staffId4 + 1
+                                : undefined;
                             const noteData = {
                               step,
                               octave,
@@ -620,8 +697,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         }
 
         // Ultimate fallback to CurrentVoiceEntries
-        if (notes.length === 0 && iterator.CurrentVoiceEntries) {
-          for (const voiceEntry of iterator.CurrentVoiceEntries) {
+        if (notes.length === 0 && (iterator as any).CurrentVoiceEntries) {
+          for (const voiceEntry of (iterator as any).CurrentVoiceEntries) {
             if (voiceEntry?.Notes) {
               for (const note of voiceEntry.Notes) {
                 const noteAny = note as any;
@@ -642,7 +719,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   const alter = pitch.accidental || 0;
                   const staffId5 = (voiceEntry as any)?.ParentStaffEntry
                     ?.ParentStaff?.idInMusicSheet;
-                  const staffNumber5 = typeof staffId5 === "number" ? staffId5 + 1 : undefined;
+                  const staffNumber5 =
+                    typeof staffId5 === "number" ? staffId5 + 1 : undefined;
                   const noteData = { step, octave, alter, staff: staffNumber5 };
                   notes.push(noteData);
                 }
@@ -651,64 +729,91 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           }
         }
         return notes;
-      } catch (err) {
-        console.error("Error getting current notes:", err);
+      } catch (error) {
+        console.error("Error in getCurrentNotes:", error);
         return [];
       }
     };
 
     const extractAllNotes = (): PlaybackEvent[] => {
-      const osmd = osmdRef.current;
-      if (!osmd) return [];
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const sheet = (osmd as any).sheet;
-      if (!sheet?.SourceMeasures) return [];
-
-      const bpm = sheet.DefaultTempoInBpm || 120;
-      // OSMD の RealValue は全音符基準（1.0 = 全音符 = 4拍）なので
-      // 秒変換には 240/bpm を使う（60/bpm × 4）
-      const secondsPerWholeNote = 240 / bpm;
       const events: PlaybackEvent[] = [];
+      if (!(osmdRef.current as any)?.sheet) {
+        return events;
+      }
+      const sheet = (osmdRef.current as any).sheet;
 
-      for (let mi = 0; mi < sheet.SourceMeasures.length; mi++) {
-        const measure = sheet.SourceMeasures[mi];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const measureAbsTime = (measure as any).AbsoluteTimestamp?.RealValue || 0;
+      // Extract tempo for BPM calculation
+      let bpm = (sheet as any).DefaultTempoInBpm || 120;
+      // Try AllInstructions if available
+      if ((sheet as any).AllInstructions) {
+        const tempoInstruction = (sheet as any).AllInstructions.find(
+          (instr: any) => instr.TempoInBpm,
+        );
+        if (tempoInstruction) {
+          bpm = tempoInstruction.TempoInBpm;
+        }
+      }
+      const secondsPerBeat = 60 / bpm;
+      // OSMD's RealValue is in whole notes (1.0 = whole note, 0.25 = quarter note)
+      // To convert to seconds: RealValue * 4 * secondsPerBeat (4 beats per whole note)
+      const secondsPerWholeNote = 4 * secondsPerBeat;
 
-        for (const container of measure.VerticalSourceStaffEntryContainers || []) {
-          for (const staffEntry of container.StaffEntries || []) {
-            if (!staffEntry) continue;
+      for (let measureIndex = 0; measureIndex < sheet.SourceMeasures.length; measureIndex++) {
+        const sourceMeasure = sheet.SourceMeasures[measureIndex];
+        const measureStartAbsTimestamp = (sourceMeasure as any).AbsoluteTimestamp?.RealValue ?? 0;
 
-            const entryTimestamp = staffEntry.Timestamp?.RealValue || 0;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const staffId = (staffEntry as any).ParentStaff?.idInMusicSheet;
-            const staffNumber = typeof staffId === "number" ? staffId + 1 : undefined;
+        for (const verticalContainer of sourceMeasure.VerticalSourceStaffEntryContainers) {
+          for (const sourceStaffEntry of verticalContainer.StaffEntries) {
+            if (!sourceStaffEntry || !sourceStaffEntry.VoiceEntries) continue;
 
-            for (const voiceEntry of staffEntry.VoiceEntries || []) {
-              if (!voiceEntry?.Notes) continue;
+            const staffId = (sourceStaffEntry as any).ParentStaff?.idInMusicSheet;
+            const staff = typeof staffId === "number" ? staffId + 1 : undefined; // 1-based staff number
 
-              const durationBeats = voiceEntry.Duration?.RealValue || 0.25;
+            for (const voiceEntry of sourceStaffEntry.VoiceEntries) {
+              if (!voiceEntry || !voiceEntry.Notes) continue;
+
+              const entryTimestampInMeasure = voiceEntry.Timestamp?.RealValue ?? 0;
 
               for (const note of voiceEntry.Notes) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const noteAny = note as any;
+                const pitch = noteAny.Pitch || noteAny.sourceNote?.Pitch;
+                if (!pitch || noteAny.IsRest) continue;
 
-                // 休符をスキップ
-                if (noteAny.isRest?.() || noteAny.IsRest) continue;
+                // Skip tied continuation notes
+                if (noteAny.NoteTie && noteAny.NoteTie.StartNote !== noteAny) continue;
 
-                let pitch = noteAny.Pitch || noteAny.sourceNote?.Pitch;
-                if (!pitch || pitch.halfTone === undefined) continue;
+                // Compute standard MIDI from pitch.halfTone
+                // OSMD source-level halfTone = standard MIDI - 12, so add 12
+                const halfTone = pitch.halfTone;
+                if (typeof halfTone !== "number") continue;
+                const midi = halfTone + 12;
+                if (midi < 0 || midi > 127) continue;
 
-                const absoluteTimeBeats = measureAbsTime + entryTimestamp;
+                // Duration in whole-note units
+                let durationWholeNotes: number;
+                // Try to match with parsed MusicXML data for accurate duration
+                const matchedParsedNote = parsedMusicXmlNotesRef.current.find(pNote =>
+                  pNote.measureIndex === measureIndex &&
+                  Math.abs(pNote.timestampInMeasure - entryTimestampInMeasure) < 0.01 &&
+                  pNote.midi === midi
+                );
+
+                if (matchedParsedNote && divisionsRef.current > 0) {
+                  // parsedNote.duration is in MusicXML divisions; convert to whole notes
+                  durationWholeNotes = matchedParsedNote.duration / divisionsRef.current / 4;
+                } else {
+                  // OSMD's Length.RealValue is already in whole-note units
+                  durationWholeNotes = noteAny.Length?.RealValue ?? noteAny.NoteDuration?.RealValue ?? 0.25;
+                }
+                const durationSeconds = durationWholeNotes * secondsPerWholeNote;
 
                 events.push({
-                  timeSeconds: absoluteTimeBeats * secondsPerWholeNote,
-                  durationSeconds: durationBeats * secondsPerWholeNote,
-                  midiNote: pitch.halfTone,
-                  staff: staffNumber,
-                  measureIndex: mi,
-                  timestampInMeasure: entryTimestamp,
+                  timeSeconds: (measureStartAbsTimestamp + entryTimestampInMeasure) * secondsPerWholeNote,
+                  durationSeconds,
+                  midiNote: midi,
+                  staff,
+                  measureIndex,
+                  timestampInMeasure: entryTimestampInMeasure,
                 });
               }
             }
@@ -716,7 +821,9 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         }
       }
 
-      events.sort((a, b) => a.timeSeconds - b.timeSeconds || a.midiNote - b.midiNote);
+      events.sort(
+        (a, b) => a.timeSeconds - b.timeSeconds || a.midiNote - b.midiNote,
+      );
       return events;
     };
 
@@ -728,8 +835,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       next: () => {
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.next();
-          osmdRef.current.cursor.update(); // Update visual position after movement
-          // ダークモード時はオーバーレイを同期
+          osmdRef.current.cursor.update();
           if (darkMode) {
             const cursorElement = (osmdRef.current.cursor as any).cursorElement;
             const cursorOverlay = cursorElement?.parentElement?.querySelector(
@@ -750,8 +856,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       previous: () => {
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.previous();
-          osmdRef.current.cursor.update(); // Update visual position after movement
-          // ダークモード時はオーバーレイを同期
+          osmdRef.current.cursor.update();
           if (darkMode) {
             const cursorElement = (osmdRef.current.cursor as any).cursorElement;
             const cursorOverlay = cursorElement?.parentElement?.querySelector(
@@ -772,8 +877,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       reset: () => {
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.reset();
-          osmdRef.current.cursor.update(); // Update visual position after reset
-          // ダークモード時はオーバーレイを同期
+          osmdRef.current.cursor.update();
           if (darkMode) {
             const cursorElement = (osmdRef.current.cursor as any).cursorElement;
             const cursorOverlay = cursorElement?.parentElement?.querySelector(
@@ -791,12 +895,18 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           onNotesChange?.(getCurrentNotes());
         }
       },
+      setZoom: async (zoom: number) => {
+        if (osmdRef.current) {
+          osmdRef.current.Zoom = zoom;
+          osmdRef.current.render();
+          buildPositionToTimestampMap(); // Rebuild map after zoom
+        }
+      },
       hideCursor: () => {
         if (osmdRef.current?.cursor) {
           const cursorElement = (osmdRef.current.cursor as any).cursorElement;
           if (cursorElement) {
             cursorElement.classList.add("cursor-hidden");
-            // ダークモード時はオーバーレイも非表示にする
             if (darkMode) {
               const cursorOverlay = cursorElement.parentElement?.querySelector(
                 ".cursor-overlay-orange",
@@ -820,32 +930,61 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               darkMode ? "cursor-dark" : "cursor-light",
             );
             if (darkMode) {
-              // ダークモード時はオーバーレイを同期（IMGのスタイルをコピー）
               const parentForOverlay =
                 cursorElement.parentElement || containerRef.current;
-              let cursorOverlay = parentForOverlay?.querySelector(
+
+              if (!parentForOverlay) {
+                return;
+              }
+
+              let cursorOverlay = parentForOverlay.querySelector(
                 ".cursor-overlay-orange",
               ) as HTMLDivElement;
-              // オーバーレイが存在しない場合は新規作成
-              if (!cursorOverlay && parentForOverlay) {
+
+              if (!cursorOverlay) {
                 cursorOverlay = document.createElement("div");
                 cursorOverlay.className = "cursor-overlay-orange";
+                cursorOverlay.style.pointerEvents = "none";
                 parentForOverlay.appendChild(cursorOverlay);
               }
-              if (cursorOverlay) {
-                cursorOverlay.style.cssText = cursorElement.style.cssText;
-                cursorOverlay.style.height =
-                  cursorElement.getAttribute("height") + "px";
-                cursorOverlay.style.width =
-                  cursorElement.getAttribute("width") + "px";
-                cursorOverlay.style.backgroundColor = "#F89173";
-                cursorOverlay.style.opacity = "0.5";
-                cursorOverlay.style.pointerEvents = "none";
-                cursorOverlay.style.zIndex = "-1";
-                cursorOverlay.style.display = "block";
-              }
+
+              const syncOverlay = () => {
+                if (cursorOverlay && cursorElement) {
+                  cursorOverlay.style.cssText = cursorElement.style.cssText;
+                  cursorOverlay.style.height =
+                    cursorElement.getAttribute("height") + "px";
+                  cursorOverlay.style.width =
+                    cursorElement.getAttribute("width") + "px";
+                  cursorOverlay.style.backgroundColor = sc.cursorOverlay;
+                  cursorOverlay.style.opacity = sc.cursorOverlayOpacity;
+                  cursorOverlay.style.pointerEvents = "none";
+                  cursorOverlay.style.zIndex = "-1";
+                  if (cursorElement.classList.contains("cursor-hidden")) {
+                    cursorOverlay.style.display = "none";
+                  } else {
+                    cursorOverlay.style.display = "block";
+                  }
+                }
+              };
+
+              const cursorObserver = new MutationObserver(() => {
+                syncOverlay();
+              });
+              cursorObserver.observe(cursorElement, {
+                attributes: true,
+                attributeFilter: ["style", "height", "width"],
+              });
+
+              syncOverlay();
             } else {
-              cursorElement.style.opacity = "0.5";
+              cursorElement.style.opacity = sc.cursorOverlayOpacity;
+              const cursorOverlay =
+                cursorElement.parentElement?.querySelector(
+                  ".cursor-overlay-orange",
+                ) as HTMLDivElement;
+              if (cursorOverlay) {
+                cursorOverlay.style.display = "none";
+              }
             }
             cursorElement.style.width = "10px";
             cursorElement.style.display = "block";
@@ -853,366 +992,207 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           }
         }
       },
-      setZoom: async (zoom: number) => {
-        if (osmdRef.current) {
-          osmdRef.current.Zoom = zoom;
-
-          // Wrap render in Promise to wait for completion
-          await new Promise<void>((resolve) => {
-            osmdRef.current.render();
-            // Use setTimeout to ensure render is complete
-            setTimeout(() => {
-              // Re-apply cursor styles after render
-              if (osmdRef.current.cursor) {
-                const cursorElement = (osmdRef.current.cursor as any)
-                  .cursorElement;
-                if (cursorElement) {
-                  cursorElement.classList.add("osmdCursor");
-                  cursorElement.classList.remove("cursor-dark", "cursor-light");
-                  cursorElement.classList.add(
-                    darkMode ? "cursor-dark" : "cursor-light",
-                  );
-                  if (darkMode) {
-                    // ダークモード時はオーバーレイを同期（IMGのスタイルをコピー）
-                    const parentForOverlay =
-                      cursorElement.parentElement || containerRef.current;
-                    let cursorOverlay = parentForOverlay?.querySelector(
-                      ".cursor-overlay-orange",
-                    ) as HTMLDivElement;
-                    // オーバーレイが存在しない場合は新規作成
-                    if (!cursorOverlay && parentForOverlay) {
-                      cursorOverlay = document.createElement("div");
-                      cursorOverlay.className = "cursor-overlay-orange";
-                      parentForOverlay.appendChild(cursorOverlay);
-                      }
-                    if (cursorOverlay) {
-                      cursorOverlay.style.cssText = cursorElement.style.cssText;
-                      cursorOverlay.style.height =
-                        cursorElement.getAttribute("height") + "px";
-                      cursorOverlay.style.width =
-                        cursorElement.getAttribute("width") + "px";
-                      cursorOverlay.style.backgroundColor = highlightColor;
-                      cursorOverlay.style.opacity = "0.4";
-                      cursorOverlay.style.pointerEvents = "none";
-                      cursorOverlay.style.zIndex = "-1";
-                      cursorOverlay.style.display = "block";
-                    }
-                  } else {
-                    cursorElement.style.opacity = "0.5";
-                  }
-                  cursorElement.style.width = "10px";
-                  cursorElement.style.display = "block";
-                  cursorElement.style.visibility = "visible";
-                }
-              }
-
-              // Fix chord symbols after zoom re-render
-              fixChordSymbolText();
-
-              // Rebuild click handlers after zoom change
-              // posMapはキャッシュクリアして次回クリック時に遅延再構築
-              positionToTimestampMapRef.current = [];
-              setupNoteClickHandlers();
-
-              resolve();
-            }, 100);
-          });
-        }
-      },
-      getNotesAtPosition,
+      getNotesAtPosition: getNotesAtPosition,
       setChordVisibility: async (visible: boolean) => {
         if (osmdRef.current) {
-          // Set the rule before re-rendering
-          if (osmdRef.current.EngravingRules) {
-            osmdRef.current.EngravingRules.RenderChordSymbols = visible;
-          }
-
-          // Need to reload the music XML for chord visibility changes to take effect
-          try {
-            if (musicXmlContent) {
-              await osmdRef.current.load(musicXmlContent);
-            } else if (musicXmlPath) {
-              await osmdRef.current.load(musicXmlPath);
-            }
-            osmdRef.current.render();
-            // Re-apply cursor styles after render
-            setTimeout(() => {
-              fixChordSymbolText();
-              if (osmdRef.current?.cursor) {
-                osmdRef.current.cursor.show();
-                osmdRef.current.cursor.reset();
-                const cursorElement = (osmdRef.current.cursor as any)
-                  .cursorElement;
-                if (cursorElement) {
-                  cursorElement.classList.add("osmdCursor");
-                  cursorElement.classList.remove("cursor-dark", "cursor-light");
-                  cursorElement.classList.add(
-                    darkMode ? "cursor-dark" : "cursor-light",
-                  );
-                  if (darkMode) {
-                    // ダークモード時はオーバーレイを同期（IMGのスタイルをコピー）
-                    const parentForOverlay =
-                      cursorElement.parentElement || containerRef.current;
-                    let cursorOverlay = parentForOverlay?.querySelector(
-                      ".cursor-overlay-orange",
-                    ) as HTMLDivElement;
-                    // オーバーレイが存在しない場合は新規作成
-                    if (!cursorOverlay && parentForOverlay) {
-                      cursorOverlay = document.createElement("div");
-                      cursorOverlay.className = "cursor-overlay-orange";
-                      parentForOverlay.appendChild(cursorOverlay);
-                    }
-                    if (cursorOverlay) {
-                      cursorOverlay.style.cssText = cursorElement.style.cssText;
-                      cursorOverlay.style.height =
-                        cursorElement.getAttribute("height") + "px";
-                      cursorOverlay.style.width =
-                        cursorElement.getAttribute("width") + "px";
-                      cursorOverlay.style.backgroundColor = "#F89173";
-                      cursorOverlay.style.opacity = "0.7";
-                      cursorOverlay.style.pointerEvents = "none";
-                      cursorOverlay.style.zIndex = "-1";
-                      cursorOverlay.style.display = "block";
-                    }
-                  } else {
-                    cursorElement.style.opacity = "0.5";
-                  }
-                  cursorElement.style.width = "10px";
-                  cursorElement.style.display = "block";
-                  cursorElement.style.visibility = "visible";
-                }
-              }
-            }, 100);
-          } catch (error) {
-            console.error("Error reloading for chord visibility:", error);
-          }
+          (osmdRef.current as any).setOptions({
+            renderOptions: {
+              chordSymbolsVisible: visible,
+            },
+          });
+          osmdRef.current.render();
         }
       },
       jumpToTimestamp: (measureIndex: number, timestampInMeasure: number) => {
-        if (!osmdRef.current?.cursor) {
-          return;
-        }
+        if (osmdRef.current?.cursor) {
+          const cursor = osmdRef.current.cursor;
+          cursor.reset();
+          let stepCount = 0;
+          const maxSteps = 10000; // Prevent infinite loop
 
-        // 絶対タイムスタンプを算出（OSMD の currentTimeStamp は曲頭からの絶対値）
-        const sheet = (osmdRef.current as any).sheet;
-        let targetAbsTime = timestampInMeasure; // フォールバック
-        if (sheet?.SourceMeasures?.[measureIndex]) {
-          const measureAbsTime = sheet.SourceMeasures[measureIndex].AbsoluteTimestamp?.RealValue || 0;
-          targetAbsTime = measureAbsTime + timestampInMeasure;
-        }
-
-        const cursor = osmdRef.current.cursor;
-
-        // カーソル移動中のスクロールを抑止（reset→next のたびにスクロールが走るのを防ぐ）
-        const originalFollowCursor = osmdRef.current.FollowCursor;
-        osmdRef.current.FollowCursor = false;
-
-        cursor.reset();
-
-        let stepCount = 0;
-        const maxSteps = 10000; // Safety limit
-
-        while (!cursor.Iterator.EndReached && stepCount < maxSteps) {
-          const currentTimestamp =
-            cursor.Iterator.currentTimeStamp?.RealValue || 0;
-
-          // Check if we've reached the target position
-          if (Math.abs(currentTimestamp - targetAbsTime) < 0.001) {
-            break;
+          while (!cursor.Iterator.EndReached && stepCount < maxSteps) {
+            if (
+              (cursor.Iterator as any).currentMeasureIndex === measureIndex &&
+              Math.abs(
+                (cursor.Iterator as any).currentTimeStamp?.RealValue ||
+                  0 - timestampInMeasure,
+              ) < 0.001
+            ) {
+              break;
+            }
+            cursor.next();
+            stepCount++;
           }
-
-          // If we've passed the target, go back
-          if (currentTimestamp > targetAbsTime + 0.001) {
-            cursor.previous();
-            break;
-          }
-
-          cursor.next();
-          stepCount++;
+          cursor.update();
+          onNotesChange?.(getCurrentNotes());
         }
-
-        // FollowCursor を復元してから update → 最終位置でのみスクロール
-        osmdRef.current.FollowCursor = originalFollowCursor;
-        cursor.update();
-        // ダークモード時はオーバーレイを同期
-        if (darkMode) {
-          const cursorElement = (cursor as any).cursorElement;
-          const cursorOverlay = cursorElement?.parentElement?.querySelector(
-            ".cursor-overlay-orange",
-          ) as HTMLDivElement;
-          if (cursorOverlay && cursorElement) {
-            cursorOverlay.style.top = cursorElement.style.top;
-            cursorOverlay.style.left = cursorElement.style.left;
-            cursorOverlay.style.height =
-              cursorElement.getAttribute("height") + "px";
-            cursorOverlay.style.width =
-              cursorElement.getAttribute("width") + "px";
-          }
-        }
-        onNotesChange?.(getCurrentNotes());
       },
-      getCurrentNotes: () => {
-        return getCurrentNotes();
-      },
-      isEndReached: () => {
-        return osmdRef.current?.cursor?.Iterator?.EndReached ?? true;
-      },
-      extractAllNotes: () => {
-        return extractAllNotes();
-      },
+      getCurrentNotes: getCurrentNotes,
+      isEndReached: () => osmdRef.current?.cursor.Iterator.EndReached || false,
+      extractAllNotes: extractAllNotes,
       getCurrentTimeSeconds: () => {
         if (!osmdRef.current?.cursor) return 0;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const cursor = osmdRef.current.cursor;
+        const iterator = cursor.Iterator;
+        if (!iterator) return 0;
+
         const sheet = (osmdRef.current as any).sheet;
-        const bpm = sheet?.DefaultTempoInBpm || 120;
-        const secondsPerWholeNote = 240 / bpm;
-        const absTime = osmdRef.current.cursor.Iterator?.currentTimeStamp?.RealValue || 0;
-        return absTime * secondsPerWholeNote;
+        let bpm = sheet?.DefaultTempoInBpm || 120;
+        if (sheet?.AllInstructions) {
+          const tempoInstruction = sheet.AllInstructions.find(
+            (instr: any) => instr.TempoInBpm,
+          );
+          if (tempoInstruction) {
+            bpm = tempoInstruction.TempoInBpm;
+          }
+        }
+        // RealValue is in whole notes; convert to seconds: RealValue * 4 * (60/bpm)
+        const secondsPerWholeNote = 4 * (60 / bpm);
+
+        const measureStartAbsTimestamp =
+          (iterator.CurrentMeasure as any).AbsoluteTimestamp?.RealValue || 0;
+        const currentTimestampInMeasure =
+          iterator.currentTimeStamp?.RealValue || 0;
+
+        return (
+          (measureStartAbsTimestamp + currentTimestampInMeasure) *
+          secondsPerWholeNote
+        );
       },
     }));
 
     useEffect(() => {
       let mounted = true;
+
       const loadOSMD = async () => {
+        setIsLoading(true);
+        setError(null);
+
+        if (containerRef.current) {
+          containerRef.current.innerHTML = "";
+        }
+
+        const OSMD = await import("opensheetmusicdisplay").then(
+          (m) => m.OpenSheetMusicDisplay,
+        );
+        const osmd = new OSMD(containerRef.current!, {
+          autoResize: true,
+          drawTitle: true,
+          drawSubtitle: true,
+          drawComposer: true,
+          drawLyricist: true,
+          drawPartNames: true,
+          drawMeasureNumbers: true,
+          drawMetronomeMarks: true,
+          drawPartAbbreviations: true,
+          followCursor: false,
+          disableCursor: false,
+          drawingParameters: "compacttight",
+          defaultColorStem: sc.scoreNotehead || undefined,
+          defaultColorNotehead: sc.scoreNotehead || undefined,
+          defaultColorRest: sc.scoreNotehead || undefined,
+          defaultColorLabel: sc.scoreNotehead || undefined,
+          defaultColorTitle: sc.scoreTitle || undefined,
+          defaultColorBackground: darkMode ? bgColor : undefined,
+        } as any);
+
+        osmdRef.current = osmd;
+
         try {
-          setIsLoading(true);
-          setError(null);
-          const { OpenSheetMusicDisplay } =
-            await import("opensheetmusicdisplay");
-          if (!mounted || !containerRef.current) return;
-          if (osmdRef.current) {
-            containerRef.current.innerHTML = "";
-          }
-          // ダークモード時はオレンジ色、ライトモード時は緑色のカーソル
-          const cursorColor = darkMode ? "#F89173" : "#33e02f";
-          const cursorAlpha = darkMode ? 0.5 : 0.5;
-
-          const osmd = new OpenSheetMusicDisplay(containerRef.current, {
-            autoResize: true,
-            backend: "svg",
-            drawingParameters: "default", // Use default instead of compacttight
-            disableCursor: false, // Explicitly enable cursor
-            followCursor: true, // Auto-scroll when cursor moves to new system
-            cursorsOptions: [
-              { type: 0, color: cursorColor, alpha: cursorAlpha, follow: true },
-            ],
-          });
-
-          // Enable/disable chord symbols and optimize rendering BEFORE loading the MusicXML
-          if (osmd.EngravingRules) {
-            osmd.EngravingRules.RenderChordSymbols = showChords;
-            // ペダル記号の描画を無効化（大きな楽譜の高速化）
-            osmd.EngravingRules.RenderPedals = false;
-            // フィンガリング（指番号）の描画を無効化
-            osmd.EngravingRules.RenderFingerings = false;
-
-            // Apply dark mode colors
-            if (darkMode) {
-              const darkColor = "#d0d0d0";
-              osmd.EngravingRules.DefaultColorNotehead = darkColor;
-              osmd.EngravingRules.DefaultColorStem = darkColor;
-              osmd.EngravingRules.DefaultColorRest = darkColor;
-              osmd.EngravingRules.DefaultColorLabel = darkColor;
-              osmd.EngravingRules.DefaultColorTitle = darkColor;
-              osmd.EngravingRules.DefaultColorMusic = darkColor;
-              osmd.EngravingRules.LedgerLineColorDefault = darkColor; // 加線の色
+          let xmlContentToParse = musicXmlContent;
+          if (!xmlContentToParse && musicXmlPath) {
+            const response = await fetch(musicXmlPath);
+            if (!response.ok) {
+              throw new Error(
+                `Failed to fetch MusicXML from ${musicXmlPath}: ${response.statusText}`,
+              );
             }
+            xmlContentToParse = await response.text();
           }
 
-          osmdRef.current = osmd;
-
-          // Load from either XML content or file path
-          if (musicXmlContent) {
-            // Load from direct XML content
-            await osmd.load(musicXmlContent);
+          if (xmlContentToParse) {
+            // Parse MusicXML for custom duration logic
+            await parseMusicXml(xmlContentToParse);
+            await osmd.load(xmlContentToParse);
           } else {
-            // Load from file path
-            await osmd.load(musicXmlPath);
+            throw new Error("No MusicXML content or path provided.");
           }
 
-          if (!mounted) return;
+          await osmd.render();
 
-          osmd.render();
+          // After rendering, rebuild the position map
+          buildPositionToTimestampMap();
 
-          // Initialize cursor after rendering (like the demo does)
+          // Set chord visibility
+          (osmd as any).setOptions({
+            renderOptions: {
+              chordSymbolsVisible: showChords,
+            },
+          });
+          osmd.render(); // Re-render to apply chord visibility
+
+          // Initialize cursor AFTER the final render (so DOM elements aren't destroyed by re-render)
           if (osmd.cursor) {
             osmd.cursor.show();
             osmd.cursor.reset();
-            osmd.cursor.update(); // Calculate initial cursor position
+            osmd.cursor.update();
 
-            // デフォルトのカーソル要素にスタイルを適用する
             const cursorElement = (osmd.cursor as any).cursorElement;
 
             if (cursorElement) {
-              // CSSクラスを追加（デモと同じスタイル）
               cursorElement.classList.add("osmdCursor");
-              // ダークモード/ライトモード用クラスを切り替え
               cursorElement.classList.remove("cursor-dark", "cursor-light");
               cursorElement.classList.add(
                 darkMode ? "cursor-dark" : "cursor-light",
               );
 
-              // ダークモード時はIMG要素を完全に隠してDIVオーバーレイでオレンジを表示
               if (darkMode) {
-                // parentElementがない場合はcontainerRefを使う
                 const parentForOverlay =
                   cursorElement.parentElement || containerRef.current;
 
-                if (!parentForOverlay) {
-                  return;
-                }
+                if (parentForOverlay) {
+                  let cursorOverlay = parentForOverlay.querySelector(
+                    ".cursor-overlay-orange",
+                  ) as HTMLDivElement;
 
-                // オレンジ色のDIVオーバーレイを作成
-                let cursorOverlay = parentForOverlay.querySelector(
-                  ".cursor-overlay-orange",
-                ) as HTMLDivElement;
-
-                if (!cursorOverlay) {
-                  cursorOverlay = document.createElement("div");
-                  cursorOverlay.className = "cursor-overlay-orange";
-                  cursorOverlay.style.pointerEvents = "none";
-                  parentForOverlay.appendChild(cursorOverlay);
-                }
-
-                // IMGのstyle属性を完全にコピーしてオレンジ背景を追加
-                const syncOverlay = () => {
-                  if (cursorOverlay && cursorElement) {
-                    // IMGのstyle属性をコピー
-                    cursorOverlay.style.cssText = cursorElement.style.cssText;
-                    // height属性もコピー
-                    cursorOverlay.style.height =
-                      cursorElement.getAttribute("height") + "px";
-                    cursorOverlay.style.width =
-                      cursorElement.getAttribute("width") + "px";
-                    // オレンジ背景と透明度を設定
-                    cursorOverlay.style.backgroundColor = "#F89173";
-                    cursorOverlay.style.opacity = "0.7";
+                  if (!cursorOverlay) {
+                    cursorOverlay = document.createElement("div");
+                    cursorOverlay.className = "cursor-overlay-orange";
                     cursorOverlay.style.pointerEvents = "none";
-                    // z-indexを正の値に上書き（IMGのz-index: -1を上書きして前面に表示）
-                    cursorOverlay.style.zIndex = "-1";
-                    // 表示状態を設定（IMGがdisplay:noneでもDIVは表示する、ただしhideCursor時は非表示）
-                    if (cursorElement.classList.contains("cursor-hidden")) {
-                      cursorOverlay.style.display = "none";
-                    } else {
-                      cursorOverlay.style.display = "block";
-                    }
+                    parentForOverlay.appendChild(cursorOverlay);
                   }
-                };
 
-                // MutationObserverでIMG要素のstyle変更を監視してオーバーレイを同期
-                const cursorObserver = new MutationObserver(() => {
+                  const syncOverlay = () => {
+                    if (cursorOverlay && cursorElement) {
+                      cursorOverlay.style.cssText = cursorElement.style.cssText;
+                      cursorOverlay.style.height =
+                        cursorElement.getAttribute("height") + "px";
+                      cursorOverlay.style.width =
+                        cursorElement.getAttribute("width") + "px";
+                      cursorOverlay.style.backgroundColor = sc.cursorOverlay;
+                      cursorOverlay.style.opacity = sc.cursorOverlayOpacity;
+                      cursorOverlay.style.pointerEvents = "none";
+                      cursorOverlay.style.zIndex = "-1";
+                      if (cursorElement.classList.contains("cursor-hidden")) {
+                        cursorOverlay.style.display = "none";
+                      } else {
+                        cursorOverlay.style.display = "block";
+                      }
+                    }
+                  };
+
+                  const cursorObserver = new MutationObserver(() => {
+                    syncOverlay();
+                  });
+                  cursorObserver.observe(cursorElement, {
+                    attributes: true,
+                    attributeFilter: ["style", "height", "width"],
+                  });
+
                   syncOverlay();
-                });
-                cursorObserver.observe(cursorElement, {
-                  attributes: true,
-                  attributeFilter: ["style", "height", "width"],
-                });
-
-                // 初回同期
-                syncOverlay();
+                }
               } else {
-                cursorElement.style.opacity = "0.5";
-                // ライトモード時はオーバーレイを非表示
+                cursorElement.style.opacity = sc.cursorOverlayOpacity;
                 const cursorOverlay =
                   cursorElement.parentElement?.querySelector(
                     ".cursor-overlay-orange",
@@ -1227,66 +1207,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             }
           }
 
-          // Calculate the range of all notes in the score
-          if (onRangeChange) {
-            try {
-              const sheet = (osmd as any).sheet;
-              let minMidi = Infinity;
-              let maxMidi = -Infinity;
-
-              // Iterate through all parts, measures, and voices to find all notes
-              if (sheet?.Instruments) {
-                for (const instrument of sheet.Instruments) {
-                  for (const voice of instrument.Voices) {
-                    for (const voiceEntry of voice.VoiceEntries) {
-                      if (voiceEntry?.Notes) {
-                        for (const note of voiceEntry.Notes) {
-                          const noteAny = note as any;
-                          let pitch: any = null;
-                          if (noteAny.Pitch) {
-                            pitch = noteAny.Pitch;
-                          } else if (noteAny.sourceNote?.Pitch) {
-                            pitch = noteAny.sourceNote.Pitch;
-                          }
-                          if (pitch?.halfTone !== undefined) {
-                            // Convert to MIDI using same logic as getCurrentNotes
-                            const semitone = pitch.halfTone % 12;
-                            const octave = Math.floor(pitch.halfTone / 12);
-                            const midi =
-                              (octave + 1) * 12 + semitone + (pitch.Alter || 0);
-                            minMidi = Math.min(minMidi, midi);
-                            maxMidi = Math.max(maxMidi, midi);
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-
-              if (minMidi !== Infinity && maxMidi !== -Infinity) {
-                // Adjust minMidi to start from C (semitone 0) and extend 1 octave lower
-                const minSemitone = minMidi % 12;
-                if (minSemitone !== 0) {
-                  minMidi = minMidi - minSemitone;
-                }
-                minMidi = minMidi - 12; // Extend 1 octave lower
-
-                // Adjust maxMidi to end at B (semitone 11)
-                // Extend to include the highest note by finding the next B at or after maxMidi
-                const maxSemitone = maxMidi % 12;
-                if (maxSemitone !== 11) {
-                  // Extend to the next B after the highest note
-                  maxMidi = maxMidi + (11 - maxSemitone);
-                }
-
-                onRangeChange(minMidi, maxMidi);
-              }
-            } catch (err) {
-              console.error("Error calculating note range:", err);
-            }
-          }
-
           onNotesChange?.(getCurrentNotes());
 
           // Add click handlers to music term text elements (vf-text) and clef elements (vf-clef)
@@ -1298,20 +1218,15 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               const textElements =
                 containerRef.current.querySelectorAll(".vf-text");
               textElements.forEach((element) => {
-                // Get text from the inner <text> element
                 const textEl = element.querySelector("text");
                 const text =
                   textEl?.textContent?.trim() || element.textContent?.trim();
-                // Only add click handler if the term exists in the dictionary
                 if (text && isMusicTerm(text)) {
-                  // For SVG elements, use setAttribute for styling
                   element.setAttribute("style", "cursor: pointer;");
                   element.classList.add("music-term-clickable");
-                  // ダークモード時はdark-modeクラスを追加（CSSでホバー色をオレンジにする）
                   if (darkMode) {
                     element.classList.add("dark-mode");
                   }
-                  // Also style the inner text element
                   if (textEl) {
                     textEl.setAttribute(
                       "style",
@@ -1333,25 +1248,18 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                 const pathEl = element.querySelector("path");
                 if (pathEl) {
                   const d = pathEl.getAttribute("d") || "";
-                  // Count M commands in the path
                   const mCount = (d.match(/M/g) || []).length;
 
                   let clefType: string;
                   if (d.length > 5000) {
-                    // ト音記号: very long path (complex treble clef shape)
                     clefType = "__treble-clef__";
                   } else if (mCount >= 3) {
-                    // ヘ音記号: 3 M commands (body + 2 dots)
                     clefType = "__bass-clef__";
                   } else {
-                    // ハ音記号: everything else
                     clefType = "__alto-clef__";
                   }
 
-                  // Get bounding box for rectangular click area
                   const bbox = (element as SVGGraphicsElement).getBBox();
-
-                  // Create a transparent rectangle overlay for easier clicking
                   const svgNS = "http://www.w3.org/2000/svg";
                   const rectOverlay = document.createElementNS(svgNS, "rect");
                   rectOverlay.setAttribute("x", String(bbox.x));
@@ -1361,13 +1269,11 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   rectOverlay.setAttribute("fill", "transparent");
                   rectOverlay.setAttribute("style", "cursor: pointer;");
 
-                  // Add click handler to the rectangle overlay
                   rectOverlay.addEventListener("click", (e) => {
                     e.stopPropagation();
                     onMusicTermClick(clefType);
                   });
 
-                  // Add hover effect to change path fill color
                   rectOverlay.addEventListener("mouseenter", () => {
                     pathEl.style.fill = highlightColor;
                   });
@@ -1375,10 +1281,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                     pathEl.style.fill = "";
                   });
 
-                  // Append the rectangle to the clef group
                   element.appendChild(rectOverlay);
-
-                  // Also keep cursor style on original element for visual feedback
                   element.setAttribute("style", "cursor: pointer;");
                 }
               });
@@ -1389,17 +1292,9 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
               timeSignatureElements.forEach((element) => {
                 const pathElements = element.querySelectorAll("path");
                 if (pathElements.length >= 2) {
-                  // 拍子記号は通常2つのpath要素（分子と分母）で構成される
-                  // path要素の数から拍子を推測
-                  // 4/4などの一般的な拍子を識別
                   const bbox = (element as SVGGraphicsElement).getBBox();
+                  let timeSignatureType = "__time-4/4__";
 
-                  // 拍子記号の種類を判定（pathの数とサイズから推測）
-                  // 実際の値はOSMDのデータから取得できないため、一般的な4/4として扱う
-                  // より正確な判定が必要な場合はMusicXMLを解析する必要がある
-                  let timeSignatureType = "__time-4/4__"; // デフォルト
-
-                  // Create a transparent rectangle overlay for easier clicking
                   const svgNS = "http://www.w3.org/2000/svg";
                   const rectOverlay = document.createElementNS(svgNS, "rect");
                   rectOverlay.setAttribute("x", String(bbox.x));
@@ -1409,13 +1304,11 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                   rectOverlay.setAttribute("fill", "transparent");
                   rectOverlay.setAttribute("style", "cursor: pointer;");
 
-                  // Add click handler to the rectangle overlay
                   rectOverlay.addEventListener("click", (e) => {
                     e.stopPropagation();
                     onMusicTermClick(timeSignatureType);
                   });
 
-                  // Add hover effect to change path fill color
                   rectOverlay.addEventListener("mouseenter", () => {
                     pathElements.forEach((pathEl) => {
                       (pathEl as SVGPathElement).style.fill = highlightColor;
@@ -1427,22 +1320,17 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                     });
                   });
 
-                  // Append the rectangle to the time signature group
                   element.appendChild(rectOverlay);
-
-                  // Also keep cursor style on original element for visual feedback
                   element.setAttribute("style", "cursor: pointer;");
                 }
               });
 
-              // Handle note clicks for cursor jump
-              // posMapは初回クリック時に遅延構築される（高速化のため）
               setupNoteClickHandlers();
             }
           }, 200);
 
           setIsLoading(false);
-          onLoad?.(); // Call onLoad when loading and rendering are complete
+          onLoad?.();
         } catch (err) {
           console.error("Error loading music:", err);
           if (mounted) {
@@ -1457,7 +1345,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             }
             setError(errorMessage);
             setIsLoading(false);
-            onLoad?.(); // Also call onLoad on error to ensure parent can react
+            onLoad?.();
           }
         }
       };
@@ -1467,7 +1355,6 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         if (containerRef.current) {
           containerRef.current.innerHTML = "";
         }
-        // Remove the custom red line cursor when the component unmounts or musicXmlPath changes
         const customCursorElement =
           parentRef.current?.querySelector("#custom-cursor");
         if (customCursorElement) {
@@ -1518,7 +1405,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
           width: "100%",
           height: "100%",
           padding: "20px",
-          ...style, // Apply passed style prop
+          ...style,
         }}
       >
         {" "}

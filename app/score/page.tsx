@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import SheetMusic, { SheetMusicRef } from "./components/SheetMusic";
 import PianoKeyboard from "./components/PianoKeyboard";
 import { border, useColorMode } from "@chakra-ui/react";
@@ -56,6 +56,7 @@ import Auth from "@/components/ui/Auth/Auth";
 import { CustomModal } from "@/components/ui/CustomModal";
 import AccountSwitcher from "./components/AccountSwitcher";
 import { usePlayback, type PlaybackEvent } from "./lib/usePlayback";
+import FallingNotes from "./components/FallingNotes";
 
 const sampleScores = [
   { id: "twinkle", name: "きらきら星", path: "/scores/twinkle.musicxml" },
@@ -138,8 +139,9 @@ export default function ScorePage() {
   const [showMidiSettings, setShowMidiSettings] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [playbackEvents, setPlaybackEvents] = useState<PlaybackEvent[]>([]);
+  const [keyboardMidiTimeIndex, setKeyboardMidiTimeIndex] = useState(0);
   const [appMode, setAppMode] = useState<
-    "score" | "sightreading" | "chordpractice" | "rhythmpractice"
+    "score" | "keyboard" | "sightreading" | "chordpractice" | "rhythmpractice"
   >("score");
 
   // マウント後にlocalStorageから復元
@@ -147,6 +149,7 @@ export default function ScorePage() {
     const saved = localStorage.getItem("scoreAppMode");
     if (
       saved === "score" ||
+      saved === "keyboard" ||
       saved === "sightreading" ||
       saved === "chordpractice" ||
       saved === "rhythmpractice"
@@ -250,12 +253,45 @@ export default function ScorePage() {
     )
     .map((n) => noteToMidi(n.step, n.octave, n.alter));
 
-  const expectedMidiNotes =
-    appMode === "sightreading"
-      ? sightReadingExpectedNotes
-      : appMode === "chordpractice"
-        ? chordPracticeExpectedNotes
-        : scoreExpectedMidiNotes;
+  // 鍵盤モード用: playbackEventsをtimeSecondsでグループ化（和音=同時刻の音）
+  // 浮動小数点誤差を考慮して近い時間をまとめ、重複MIDIノートを除去
+  // staff情報も保持（PianoKeyboardの色分けに使用）
+  const keyboardTimePositions = useMemo(() => {
+    if (playbackEvents.length === 0) return [];
+    const filtered = playbackEvents.filter(
+      (e) => midiConfig.staffFilter === "both" || e.staff === midiConfig.staffFilter,
+    );
+    // timeSecondsでソートしてから、近い時間（0.001秒以内）を同一グループにまとめる
+    const sorted = [...filtered].sort((a, b) => a.timeSeconds - b.timeSeconds);
+    const groups: { time: number; notes: Map<number, number | undefined> }[] = [];
+    for (const e of sorted) {
+      const last = groups[groups.length - 1];
+      if (last && Math.abs(e.timeSeconds - last.time) < 0.001) {
+        if (!last.notes.has(e.midiNote)) {
+          last.notes.set(e.midiNote, e.staff);
+        }
+      } else {
+        groups.push({ time: e.timeSeconds, notes: new Map([[e.midiNote, e.staff]]) });
+      }
+    }
+    return groups.map(({ time, notes }) => ({
+      time,
+      midiNotes: Array.from(notes.keys()),
+      midiStaffMap: Object.fromEntries(notes),
+    }));
+  }, [playbackEvents, midiConfig.staffFilter]);
+
+  // playbackEventsが変わったら（楽譜変更）インデックスをリセット
+  useEffect(() => {
+    setKeyboardMidiTimeIndex(0);
+  }, [playbackEvents]);
+
+  const keyboardMidiTime =
+    keyboardTimePositions[Math.min(keyboardMidiTimeIndex, keyboardTimePositions.length - 1)]?.time ?? 0;
+  const keyboardMidiExpectedNotes =
+    keyboardTimePositions[Math.min(keyboardMidiTimeIndex, keyboardTimePositions.length - 1)]?.midiNotes ?? [];
+  const keyboardMidiStaffMap: Record<number, number | undefined> =
+    keyboardTimePositions[Math.min(keyboardMidiTimeIndex, keyboardTimePositions.length - 1)]?.midiStaffMap ?? {};
 
   // MIDI判定成功時: モードに応じて処理を分岐
   const handleMidiMatch = useCallback(() => {
@@ -272,6 +308,13 @@ export default function ScorePage() {
       chordPracticeRef.current?.handleCorrectAnswer();
       return;
     }
+    // 鍵盤モード: インデックスを進める
+    if (appMode === "keyboard") {
+      setKeyboardMidiTimeIndex((prev) =>
+        Math.min(prev + 1, keyboardTimePositions.length - 1),
+      );
+      return;
+    }
     sheetMusicRef.current?.next();
 
     // 次の位置が休符/タイなら自動スキップ（最大100回で安全制限）
@@ -285,7 +328,7 @@ export default function ScorePage() {
       ref.next();
       skipCount++;
     }
-  }, [appMode]);
+  }, [appMode, keyboardTimePositions.length]);
 
   // MIDI判定失敗時: 間違い鍵盤を赤く表示 + 譜読みモードでは不正解処理
   const handleMidiMismatch = useCallback(
@@ -316,6 +359,8 @@ export default function ScorePage() {
   // 楽譜再生
   const {
     status: playbackStatus,
+    currentTime: playbackCurrentTime,
+    currentTimeRef: playbackCurrentTimeRef,
     tempo: playbackTempo,
     samplesLoaded,
     play: handlePlayback,
@@ -325,13 +370,31 @@ export default function ScorePage() {
   } = usePlayback({
     events: playbackEvents,
     onCursorMove: (measureIndex, timestampInMeasure) => {
+      if (appMode === "keyboard") return; // 鍵盤モードではカーソル移動不要
       sheetMusicRef.current?.jumpToTimestamp(measureIndex, timestampInMeasure);
     },
     onPlaybackEnd: () => {
+      if (appMode === "keyboard") {
+        setKeyboardMidiTimeIndex(0);
+        return;
+      }
       sheetMusicRef.current?.reset();
     },
-    enabled: appMode === "score" && !!selectedScore && !isLoading,
+    enabled:
+      (appMode === "score" || appMode === "keyboard") &&
+      !!selectedScore &&
+      !isLoading,
   });
+
+  // expectedMidiNotes（playbackStatusに依存するためusePlaybackの後で定義）
+  const expectedMidiNotes =
+    appMode === "sightreading"
+      ? sightReadingExpectedNotes
+      : appMode === "chordpractice"
+        ? chordPracticeExpectedNotes
+        : appMode === "keyboard" && playbackStatus === "stopped"
+          ? keyboardMidiExpectedNotes
+          : scoreExpectedMidiNotes;
 
   // MIDI接続（和音練習モードではオクターブ無視+contains判定）
   const effectiveMidiConfig =
@@ -472,6 +535,7 @@ export default function ScorePage() {
   }, []);
 
   const handleRangeChange = useCallback((minMidi: number, maxMidi: number) => {
+    console.log("[onRangeChange]", minMidi, "-", maxMidi);
     setKeyboardRange({ min: minMidi, max: maxMidi });
   }, []);
 
@@ -499,9 +563,31 @@ export default function ScorePage() {
     }
     setIsLoading(false);
 
-    // 再生用にノートを抽出
-    const events = sheetMusicRef.current?.extractAllNotes() || [];
+    // 再生用にノートを抽出（重複イベントを除去）
+    const rawEvents = sheetMusicRef.current?.extractAllNotes() || [];
+    const seen = new Set<string>();
+    const events = rawEvents.filter((e) => {
+      // timeSeconds の浮動小数点誤差を丸めてキー化
+      const key = `${Math.round(e.timeSeconds * 1000)}_${e.midiNote}_${e.staff ?? ""}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
     setPlaybackEvents(events);
+
+    // playbackEventsからkeyboardRangeを計算（onRangeChangeのhalfToneはOSMD内部値で不正確なため常にこちらを使う）
+    if (events.length > 0) {
+      let minM = 127;
+      let maxM = 0;
+      for (const e of events) {
+        if (e.midiNote < minM) minM = e.midiNote;
+        if (e.midiNote > maxM) maxM = e.midiNote;
+      }
+      // オクターブ境界（C〜B）に揃える + 上下に1オクターブ余裕
+      const rangeMin = Math.max(0, Math.floor(minM / 12) * 12 - 12);
+      const rangeMax = Math.min(127, Math.ceil((maxM + 1) / 12) * 12 + 11);
+      setKeyboardRange({ min: rangeMin, max: rangeMax });
+    }
   }, []);
 
   const handleNext = () => {
@@ -819,6 +905,7 @@ export default function ScorePage() {
               onChange={(e) => {
                 const mode = e.target.value as
                   | "score"
+                  | "keyboard"
                   | "sightreading"
                   | "chordpractice"
                   | "rhythmpractice";
@@ -837,11 +924,12 @@ export default function ScorePage() {
               }}
             >
               <option value="score">楽譜</option>
+              <option value="keyboard">鍵盤</option>
               <option value="sightreading">譜読み練習</option>
               <option value="chordpractice">和音練習</option>
               <option value="rhythmpractice">リズム練習</option>
             </select>
-            {appMode === "score" && (
+            {(appMode === "score" || appMode === "keyboard") && (
               <>
                 <label
                   htmlFor="score-select"
@@ -957,7 +1045,7 @@ export default function ScorePage() {
               </>
             )}
           </div>
-          {appMode === "score" && (
+          {(appMode === "score" || appMode === "keyboard") && (
             <>
               <div
                 style={{
@@ -976,7 +1064,8 @@ export default function ScorePage() {
                     flex: 1,
                   }}
                 >
-                  {/* Zoom preset buttons - 2 rows x 3 columns */}
+                  {/* Zoom preset buttons - 楽譜モードのみ */}
+                  {appMode === "score" && (
                   <div
                     style={{
                       display: "grid",
@@ -1015,8 +1104,9 @@ export default function ScorePage() {
                       </button>
                     ))}
                   </div>
-                  {/* Chord toggle button - for all scores */}
-                  {selectedScoreId && (
+                  )}
+                  {/* Chord toggle button - 楽譜モードのみ */}
+                  {appMode === "score" && selectedScoreId && (
                     <>
                       <button
                         onClick={handleChordToggle}
@@ -1066,6 +1156,9 @@ export default function ScorePage() {
                       </button>
                     </>
                   )}
+                  {/* カーソル操作 - 楽譜モード・鍵盤モード */}
+                  {(appMode === "score" || appMode === "keyboard") && (
+                  <>
                   <div
                     style={{
                       width: ".5px",
@@ -1075,7 +1168,13 @@ export default function ScorePage() {
                     }}
                   />
                   <button
-                    onClick={handleReset}
+                    onClick={() => {
+                      if (appMode === "keyboard") {
+                        setKeyboardMidiTimeIndex(0);
+                      } else {
+                        handleReset();
+                      }
+                    }}
                     disabled={isLoading || playbackStatus === "playing"}
                     style={{
                       height: "40px",
@@ -1095,7 +1194,13 @@ export default function ScorePage() {
                     <IoPlaySkipBackOutline />
                   </button>
                   <button
-                    onClick={handlePrevious}
+                    onClick={() => {
+                      if (appMode === "keyboard") {
+                        setKeyboardMidiTimeIndex((prev) => Math.max(prev - 1, 0));
+                      } else {
+                        handlePrevious();
+                      }
+                    }}
                     disabled={isLoading || playbackStatus === "playing"}
                     style={{
                       height: "40px",
@@ -1115,7 +1220,15 @@ export default function ScorePage() {
                     <IoPlayOutline style={{ transform: "rotate(180deg)" }} />
                   </button>
                   <button
-                    onClick={handleNext}
+                    onClick={() => {
+                      if (appMode === "keyboard") {
+                        setKeyboardMidiTimeIndex((prev) =>
+                          Math.min(prev + 1, keyboardTimePositions.length - 1),
+                        );
+                      } else {
+                        handleNext();
+                      }
+                    }}
                     disabled={isLoading || playbackStatus === "playing"}
                     style={{
                       height: "40px",
@@ -1134,6 +1247,8 @@ export default function ScorePage() {
                   >
                     <IoPlayOutline />
                   </button>
+                  </>
+                  )}
                   {/* 再生コントロール */}
                   <div
                     style={{
@@ -1145,8 +1260,9 @@ export default function ScorePage() {
                   />
                   <button
                     onClick={playbackStatus === "playing" ? handlePause : () => {
-                      const cursorTime = sheetMusicRef.current?.getCurrentTimeSeconds() || 0;
-                      handlePlayback(cursorTime);
+                      // 鍵盤モードでは常に先頭から再生
+                      const startTime = appMode === "keyboard" ? 0 : (sheetMusicRef.current?.getCurrentTimeSeconds() || 0);
+                      handlePlayback(startTime);
                     }}
                     disabled={isLoading || playbackEvents.length === 0}
                     style={{
@@ -1456,7 +1572,7 @@ export default function ScorePage() {
             position: "relative", // Added for positioning loading overlay
           }}
         >
-          {appMode === "score" &&
+          {(appMode === "score" || appMode === "keyboard") &&
             isLoading && ( // Show loading animation when isLoading is true
               <div
                 style={{
@@ -1470,6 +1586,7 @@ export default function ScorePage() {
                   alignItems: "center",
                   justifyContent: "center",
                   zIndex: 10, // Ensure it's above the sheet music
+                  backgroundColor: "#1a1a2e",
                 }}
               >
                 <div className="loading-hippo-container">
@@ -1478,7 +1595,7 @@ export default function ScorePage() {
                     alt="Loading..."
                     className="loading-hippo hippo-1"
                     style={{
-                      filter: colorMode === "dark" ? "invert(1)" : "none",
+                      filter: "invert(1)",
                     }}
                   />
                   <img
@@ -1486,7 +1603,7 @@ export default function ScorePage() {
                     alt="Loading..."
                     className="loading-hippo hippo-2"
                     style={{
-                      filter: colorMode === "dark" ? "invert(1)" : "none",
+                      filter: "invert(1)",
                     }}
                   />
                   <img
@@ -1494,7 +1611,7 @@ export default function ScorePage() {
                     alt="Loading..."
                     className="loading-hippo hippo-3"
                     style={{
-                      filter: colorMode === "dark" ? "invert(1)" : "none",
+                      filter: "invert(1)",
                     }}
                   />
                 </div>
@@ -1509,7 +1626,7 @@ export default function ScorePage() {
                     <p
                       style={{
                         fontSize: "1.1em",
-                        color: frColor,
+                        color: "#ffffff",
                         margin: 0,
                         whiteSpace: "pre-wrap",
                       }}
@@ -1519,7 +1636,7 @@ export default function ScorePage() {
                     <p
                       style={{
                         fontSize: "0.9em",
-                        color: frColor,
+                        color: "#ffffff",
                         fontStyle: "italic",
                         marginTop: "8px",
                       }}
@@ -1566,6 +1683,39 @@ export default function ScorePage() {
               bgColor={bgColor}
               userId={currentUserId}
             />
+          ) : appMode === "keyboard" && selectedScore ? (
+            <>
+              {/* SheetMusic を非表示で保持（extractAllNotes / onRangeChange が必要） */}
+              <div style={{ position: "absolute", width: "1px", height: "1px", overflow: "hidden", opacity: 0 }}>
+                <SheetMusic
+                  ref={sheetMusicRef}
+                  musicXmlPath={selectedScore}
+                  musicXmlContent={selectedScoreContent || undefined}
+                  onNotesChange={handleNotesChange}
+                  onRangeChange={handleRangeChange}
+                  onLoad={handleSheetMusicLoad}
+                  onMusicTermClick={handleMusicTermClick}
+                  showChords={false}
+                  darkMode={colorMode === "dark"}
+                />
+              </div>
+              <FallingNotes
+                events={midiConfig.staffFilter === "both"
+                  ? playbackEvents
+                  : playbackEvents.filter(e => e.staff === midiConfig.staffFilter)
+                }
+                currentTime={
+                  playbackStatus === "stopped"
+                    ? keyboardMidiTime / playbackTempo
+                    : playbackCurrentTime
+                }
+                currentTimeRef={playbackCurrentTimeRef}
+                tempo={playbackTempo}
+                keyboardRange={keyboardRange}
+                darkMode={colorMode === "dark"}
+                playbackStatus={playbackStatus}
+              />
+            </>
           ) : selectedScore ? (
             <SheetMusic
               ref={sheetMusicRef}
@@ -1622,19 +1772,56 @@ export default function ScorePage() {
               ).map((midi) => {
                 const semitone = midi % 12;
                 const octave = Math.floor(midi / 12) - 1;
-                const stepMap: Record<number, string> = {
-                  0: "C",
-                  2: "D",
-                  4: "E",
-                  5: "F",
-                  7: "G",
-                  9: "A",
-                  11: "B",
-                };
-                const step = stepMap[semitone] || "C";
-                const alter = stepMap[semitone] ? 0 : 1;
+                const semitoneToNote = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6];
+                const semitoneToAlter = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
+                const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
+                const step = noteNames[semitoneToNote[semitone]];
+                const alter = semitoneToAlter[semitone];
                 return { step, octave, alter };
               })}
+              wrongNotes={wrongNotes}
+            />
+          ) : appMode === "keyboard" && selectedScore ? (
+            <PianoKeyboard
+              notes={(() => {
+                if (playbackStatus === "stopped") {
+                  // 停止中: 現在位置の期待ノートだけを表示
+                  return keyboardMidiExpectedNotes.map((midi) => {
+                    const semitone = midi % 12;
+                    const octave = Math.floor(midi / 12) - 1;
+                    const semitoneToNote = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6];
+                    const semitoneToAlter = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
+                    const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
+                    const step = noteNames[semitoneToNote[semitone]];
+                    const alter = semitoneToAlter[semitone];
+                    return { step, octave, alter, staff: keyboardMidiStaffMap[midi] };
+                  });
+                }
+                // 再生中: 現在鳴っている音を表示
+                const scoreTime = playbackCurrentTime * playbackTempo;
+                return playbackEvents
+                  .filter(
+                    (e) =>
+                      scoreTime >= e.timeSeconds &&
+                      scoreTime < e.timeSeconds + e.durationSeconds,
+                  )
+                  .filter(
+                    (e) =>
+                      midiConfig.staffFilter === "both" || e.staff === midiConfig.staffFilter,
+                  )
+                  .map((e) => {
+                    const semitone = e.midiNote % 12;
+                    const octave = Math.floor(e.midiNote / 12) - 1;
+                    const semitoneToNote = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6];
+                    const semitoneToAlter = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
+                    const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
+                    const step = noteNames[semitoneToNote[semitone]];
+                    const alter = semitoneToAlter[semitone];
+                    return { step, octave, alter, staff: e.staff };
+                  });
+              })()}
+              minMidi={keyboardRange?.min}
+              maxMidi={keyboardRange?.max}
               wrongNotes={wrongNotes}
             />
           ) : selectedScore ? (

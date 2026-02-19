@@ -100,7 +100,8 @@ const apps = [
   {
     title: "ピアノ学習",
     href: "/score",
-    description: "MIDI出力が可能な電子ピアノで学習",
+    description:
+      "MIDI出力が可能な電子ピアノで効率よく学習\n中級者を目指す人向け",
     src: "/images/ico/score-logo.svg",
     rate: 5,
     limitTag: "",
