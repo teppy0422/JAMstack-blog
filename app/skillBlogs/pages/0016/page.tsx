@@ -1,19 +1,15 @@
 export const metadata = {
-  title: "切断工程直接作業支援システムの使い方",
-  description: "切断工程直接作業支援システム",
+  title: "省力化補助金申請向けシステム開発見積",
+  description: "PreHarnessPro",
   openGraph: {
     images: [
       {
-        url: "/images/illust/hippo/hippo_019.png",
+        url: "/images/0015/temp.webp",
         width: 1200,
         height: 630,
-        alt: "切断工程直接作業支援システムのサムネイル",
+        alt: "省力化補助金申請向けシステム開発見積",
       },
     ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: ["/images/illust/hippo/hippo_019.png"],
   },
 };
 

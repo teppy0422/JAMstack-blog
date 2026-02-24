@@ -1,14 +1,18 @@
 {
   "planName": "プランA",
-  "note": "・最終的に展開できそうな設備全てを対象としたプラン\n・ノートパソコン購入をタブレットに変更済み(変更前は合計180万)",
-  "notice": "△ジョイント圧着用にアプリ修正(20日)\n△皮剥きモードをアプリに追加(7日)\n△シールド切断モードを追加(30日)\n△出荷チェックモードを追加(10日)",
+  "note": "・最終的に展開できそうな設備全てを対象としたプラン",
+  "notice": "",
   "projects": [
-    { "path": "server.json", "sets": 1 },
-    { "path": "wired.json", "sets": 1 },
-    { "path": "wireless.json", "sets": 1 },
-    { "path": "cm20.json", "sets": 7 },
-    { "path": "strip.json", "sets": 3 },
-    { "path": "shield.json", "sets": 1 },
-    { "path": "shipping.json", "sets": 1 }
+    { "path": "server.json", "sets": 1, "type": "hardware" },
+    { "path": "wired.json", "sets": 1, "type": "hardware" },
+    { "path": "wireless.json", "sets": 1, "type": "hardware" },
+    { "path": "cm20.json", "sets": 7, "type": "hardware" },
+    { "path": "strip.json", "sets": 3, "type": "hardware" },
+    { "path": "shield.json", "sets": 1, "type": "hardware" },
+    { "path": "shipping.json", "sets": 1, "type": "hardware" },
+    { "path": "dev-base.json", "sets": 1, "type": "development" },
+    { "path": "dev-strip.json", "sets": 1, "type": "development" },
+    { "path": "dev-shield.json", "sets": 1, "type": "development" },
+    { "path": "dev-shipment.json", "sets": 1, "type": "development" }
   ]
 }

@@ -16,6 +16,8 @@ interface PianoKeyboardProps {
   maxMidi?: number;
   /** 間違えて押した鍵盤のMIDI番号配列（赤く表示される） */
   wrongNotes?: number[];
+  /** 実際に押されている鍵盤のMIDI番号配列（下部インジケーターで表示） */
+  pressedNotes?: number[];
 }
 
 // 音符データから表記名を取得（フラット・シャープの区別を保持）
@@ -34,6 +36,7 @@ export default function PianoKeyboard({
   minMidi,
   maxMidi,
   wrongNotes = [],
+  pressedNotes = [],
 }: PianoKeyboardProps) {
   // 表示する鍵盤の範囲（デフォルト: C1-C7: MIDI 24-96）
   // If minMidi/maxMidi are provided but seem incorrect, use defaults
@@ -81,6 +84,7 @@ export default function PianoKeyboard({
   let whiteKeyIndex = 0;
 
   const wrongNoteSet = new Set(wrongNotes);
+  const pressedNoteSet = new Set(pressedNotes);
 
   for (let midi = startMidi; midi <= endMidi; midi++) {
     const isHighlighted = highlightedMidis.includes(midi);
@@ -97,6 +101,7 @@ export default function PianoKeyboard({
       highlightKeyColor = getHandColor(staff, false);
     }
     if (!isBlack) {
+      const isPressed = pressedNoteSet.has(midi);
       whiteKeys.push(
         <div
           key={`white-${midi}`}
@@ -128,6 +133,19 @@ export default function PianoKeyboard({
               {displayName}
             </span>
           )}
+          {isPressed && (
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                width: "100%",
+                height: "10%",
+                backgroundColor: "#f59e0b",
+                pointerEvents: "none",
+              }}
+            />
+          )}
         </div>,
       );
       whiteKeyIndex++;
@@ -151,6 +169,7 @@ export default function PianoKeyboard({
       highlightKeyColor = getHandColor(staff, true);
     }
     if (isBlack) {
+      const isPressed = pressedNoteSet.has(midi);
       const position =
         whiteKeyIndex * (100 / whiteKeyCount) - (100 / whiteKeyCount) * 0.3;
       blackKeys.push(
@@ -185,6 +204,19 @@ export default function PianoKeyboard({
             >
               {displayName}
             </span>
+          )}
+          {isPressed && (
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                width: "100%",
+                height: "10%",
+                backgroundColor: "#f59e0b",
+                pointerEvents: "none",
+              }}
+            />
           )}
         </div>,
       );

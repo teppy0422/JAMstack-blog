@@ -1,0 +1,9 @@
+{
+  "projectName": "皮剥き作業に対応(追加)",
+  "discount": -48000,
+  "parts": [
+    { "id": 211, "quantity": 1 },
+    { "id": 212, "quantity": 1 },
+    { "id": 213, "quantity": 1 }
+  ]
+}

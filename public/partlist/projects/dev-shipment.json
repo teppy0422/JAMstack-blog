@@ -1,0 +1,11 @@
+{
+  "projectName": "出荷チェック(追加)",
+  "discount": -220000,
+  "parts": [
+    { "id": 231, "quantity": 1 },
+    { "id": 232, "quantity": 1 },
+    { "id": 233, "quantity": 1 },
+    { "id": 234, "quantity": 1 },
+    { "id": 235, "quantity": 1 }
+  ]
+}

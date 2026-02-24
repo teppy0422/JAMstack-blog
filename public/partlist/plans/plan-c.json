@@ -1,14 +1,18 @@
 {
   "planName": "プランC",
-  "note": "→無線(Wifi)が安定しない場合の有線通信を削除\n→ジョイント圧着1→0台に変更\n→出荷チェック1→0台に変更",
+  "note": "→無線(Wifi)が安定しない場合の有線通信を削除",
   "notice": "",
   "projects": [
-    { "path": "server.json", "sets": 1 },
-    { "path": "wired.json", "sets": 0 },
-    { "path": "wireless.json", "sets": 1 },
-    { "path": "cm20.json", "sets": 5 },
-    { "path": "strip.json", "sets": 0 },
-    { "path": "shield.json", "sets": 0 },
-    { "path": "shipping.json", "sets": 0 }
+    { "path": "server.json", "sets": 1, "type": "hardware" },
+    { "path": "wired.json", "sets": 0, "type": "hardware" },
+    { "path": "wireless.json", "sets": 1, "type": "hardware" },
+    { "path": "cm20.json", "sets": 5, "type": "hardware" },
+    { "path": "strip.json", "sets": 0, "type": "hardware" },
+    { "path": "shield.json", "sets": 0, "type": "hardware" },
+    { "path": "shipping.json", "sets": 0, "type": "hardware" },
+    { "path": "dev-base.json", "sets": 1, "type": "development" },
+    { "path": "dev-strip.json", "sets": 0, "type": "development" },
+    { "path": "dev-shield.json", "sets": 0, "type": "development" },
+    { "path": "dev-shipment.json", "sets": 0, "type": "development" }
   ]
 }

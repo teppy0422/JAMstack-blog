@@ -77,3 +77,9 @@ h4 {
   animation: shake 0.5s ease;
   /* アニメーションの持続時間とイージングを設定 */
 }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

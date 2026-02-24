@@ -1,0 +1,13 @@
+{
+  "projectName": "実績収集システム(基本)",
+  "discount": -80000,
+  "parts": [
+    { "id": 201, "quantity": 1 },
+    { "id": 202, "quantity": 1 },
+    { "id": 203, "quantity": 1 },
+    { "id": 204, "quantity": 1 },
+    { "id": 205, "quantity": 1 },
+    { "id": 299, "quantity": 1 },
+    { "id": 206, "quantity": 1 }
+  ]
+}

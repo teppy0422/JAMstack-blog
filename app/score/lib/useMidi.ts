@@ -49,6 +49,8 @@ export function useMidi({
   const [connectionStatus, setConnectionStatus] =
     useState<MidiConnectionStatus>("disconnected");
   const [deviceName, setDeviceName] = useState<string | null>(null);
+  // 現在押されているMIDIノート（NoteOn〜NoteOffの間）
+  const [pressedNotes, setPressedNotes] = useState<number[]>([]);
 
   // Refs for latest values (to avoid stale closures in MIDI callbacks)
   const configRef = useRef(config);
@@ -136,6 +138,7 @@ export function useMidi({
   const handleNoteOn = useCallback(
     (midiNote: number) => {
       noteBufferRef.current.push(midiNote);
+      setPressedNotes((prev) => prev.includes(midiNote) ? prev : [...prev, midiNote]);
 
       // 時間窓タイマーをリセット
       if (timerRef.current) {
@@ -168,6 +171,7 @@ export function useMidi({
         }
         handleNoteOn(note);
       } else if (isNoteOff) {
+        setPressedNotes((prev) => prev.filter((n) => n !== note));
         onNoteOffRef.current?.();
       }
     },
@@ -261,5 +265,6 @@ export function useMidi({
   return {
     connectionStatus,
     deviceName,
+    pressedNotes,
   };
 }

@@ -32,6 +32,7 @@ interface SheetMusicProps {
   style?: React.CSSProperties;
   showChords?: boolean; // Whether to display chord symbols
   darkMode?: boolean; // Dark mode for score colors
+  engravingRulesOverrides?: Record<string, unknown>; // Per-score EngravingRules overrides
 }
 
 export interface SheetMusicRef {
@@ -74,6 +75,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       style,
       showChords = true,
       darkMode = false,
+      engravingRulesOverrides,
     },
     ref,
   ) => {
@@ -1119,6 +1121,11 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
 
         osmdRef.current = osmd;
 
+        // Apply per-score EngravingRules overrides
+        if (engravingRulesOverrides && (osmd as any).rules) {
+          Object.assign((osmd as any).rules, engravingRulesOverrides);
+        }
+
         try {
           let xmlContentToParse = musicXmlContent;
           if (!xmlContentToParse && musicXmlPath) {
@@ -1139,15 +1146,29 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
             throw new Error("No MusicXML content or path provided.");
           }
 
-          await osmd.render();
+          // Helper: apply per-score EngravingRules overrides to both osmd.rules and sheet.Rules
+          // (calculator.rules is initialized from sheet.Rules inside initialize(), not osmd.rules)
+          const applyEngravingOverrides = () => {
+            if (!engravingRulesOverrides) return;
+            const osmdRules = (osmd as any).rules;
+            const sheetRules = (osmd as any).sheet?.Rules;
+            if (osmdRules) Object.assign(osmdRules, engravingRulesOverrides);
+            if (sheetRules && sheetRules !== osmdRules) Object.assign(sheetRules, engravingRulesOverrides);
+          };
 
-          // Set chord visibility
+          applyEngravingOverrides();
+
+          osmd.render();
+
+          // Set chord visibility (using correct OSMD option name)
           (osmd as any).setOptions({
-            renderOptions: {
-              chordSymbolsVisible: showChords,
-            },
+            drawChordSymbols: showChords,
           });
-          osmd.render(); // Re-render to apply chord visibility
+
+          // Re-apply after setOptions to ensure overrides survive
+          applyEngravingOverrides();
+
+          osmd.render(); // Re-render to apply chord visibility and overrides
 
           // Initialize cursor AFTER the final render (so DOM elements aren't destroyed by re-render)
           if (osmd.cursor) {

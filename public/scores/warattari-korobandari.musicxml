@@ -1,0 +1,871 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN"
+  "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1">
+  <work>
+    <work-title>笑ったり転んだり</work-title>
+  </work>
+  <identification>
+    <creator type="composer">佐藤良成</creator>
+    <creator type="lyricist">mbert humbert</creator>
+    <encoding>
+      <software>Claude Code</software>
+    </encoding>
+  </identification>
+  <defaults>
+    <scaling>
+      <millimeters>7</millimeters>
+      <tenths>40</tenths>
+    </scaling>
+    <lyric-font>
+      <font-size>14</font-size>
+    </lyric-font>
+  </defaults>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Piano</part-name>
+      <part-abbreviation>Pno.</part-abbreviation>
+      <score-instrument id="P1-I1">
+        <instrument-name>Piano</instrument-name>
+      </score-instrument>
+    </score-part>
+  </part-list>
+
+  <part id="P1">
+
+    <!-- イントロ [G][Em][C/E][Am7][D7][G] = 2小節 -->
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>1</fifths><mode>major</mode></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <staves>2</staves>
+        <clef number="1"><sign>G</sign><line>2</line></clef>
+        <clef number="2"><sign>F</sign><line>4</line></clef>
+      </attributes>
+      <direction placement="above">
+        <direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>72</per-minute></metronome></direction-type>
+        <sound tempo="72"/>
+      </direction>
+
+      <!-- 右手 (staff 1) メロディ: B3+G4(四) B3+G4(四) B3+E4(四) E4+G4(四) -->
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+      <note><chord/><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+      <note><chord/><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+      <note><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+      <harmony><root><root-step>C</root-step></root><kind text="C/E">major</kind><bass><bass-step>E</bass-step></bass></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+      <note><chord/><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+
+      <!-- 左手 (staff 2) に移動 -->
+      <backup><duration>16</duration></backup>
+
+      <!-- 左手: G2(八) D3(八) G3(八) D3(八) E2(八) B2(八) C3(四) -->
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>2</duration><type>eighth</type><stem>down</stem><staff>2</staff></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><stem>down</stem><staff>2</staff></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><stem>down</stem><staff>2</staff></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><stem>down</stem><staff>2</staff></note>
+      <note><pitch><step>E</step><octave>2</octave></pitch><duration>2</duration><type>eighth</type><stem>up</stem><staff>2</staff></note>
+      <note><pitch><step>B</step><octave>2</octave></pitch><duration>2</duration><type>eighth</type><stem>up</stem><staff>2</staff></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><stem>down</stem><staff>2</staff></note>
+    </measure>
+
+    <measure number="2">
+      <!-- 右手 メロディ: E4+B4(四) D4+B4(四) B3+G4(八) A3(八) B3(四) -->
+      <harmony><root><root-step>A</root-step></root><kind text="Am7">minor-seventh</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+      <note><chord/><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+      <note><chord/><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><stem>up</stem><staff>1</staff></note>
+      <note><chord/><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><stem>up</stem><staff>1</staff></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><stem>up</stem><staff>1</staff></note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><stem>up</stem><staff>1</staff></note>
+
+      <backup><duration>16</duration></backup>
+
+      <!-- 左手: A2(四) D3+A3(四) G2(四) D3(四) -->
+      <note><pitch><step>A</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type><stem>down</stem><staff>2</staff></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><stem>down</stem><staff>2</staff></note>
+      <note><chord/><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><stem>down</stem><staff>2</staff></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type><stem>down</stem><staff>2</staff></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><stem>down</stem><staff>2</staff></note>
+    </measure>
+
+    <!-- Verse 1 -->
+    <!-- [G]毎日[G7]難儀な[C]こと[G]ばかり -->
+    <measure number="3">
+      <direction placement="above">
+        <direction-type><rehearsal></rehearsal></direction-type>
+      </direction>
+      <!-- 右手 staff 1 -->
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>毎日</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G7">dominant</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>6</duration><type>quarter</type><dot/><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>難儀な</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ことばか</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>り</text></lyric>
+      </note>
+      <!-- 左手 staff 2 -->
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [Bm]泣き疲[Em]れ[A7]眠るだ[D7]け -->
+    <measure number="4">
+      <harmony><root><root-step>B</root-step></root><kind text="Bm">minor</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>6</duration><type>quarter</type><dot/><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>泣き疲</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>れ</text></lyric>
+      </note>
+      <harmony><root><root-step>A</root-step></root><kind text="A7">dominant</kind></harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>眠るだ</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>け</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]そんなじゃ[G7]ダメだと[C]怒った[B7]り -->
+    <measure number="5">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>そんなじゃ</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G7">dominant</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ダメだと</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>怒った</text></lyric>
+      </note>
+      <harmony><root><root-step>B</root-step></root><kind text="B7">dominant</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>り</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [C]これでも[G]いい[Em]かと[Am7]思[D7]った[G]り -->
+    <measure number="6">
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>これでも</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>いい</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>かと</text></lyric>
+      </note>
+      <harmony><root><root-step>A</root-step></root><kind text="Am7">minor-seventh</kind></harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>思</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>った</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>り</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- Pre-Chorus 1 -->
+    <!-- [B7]風が吹け[Em]ば[C]消えそう[G]で -->
+    <measure number="7">
+      <direction placement="above">
+        <direction-type><rehearsal></rehearsal></direction-type>
+      </direction>
+      <harmony><root><root-step>B</root-step></root><kind text="B7">dominant</kind></harmony>
+      <note><rest/><duration>2</duration><type>eighth</type><staff>1</staff></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>風が</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>吹けば</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>消えそう</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>で</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [B7]おちおち[Em]夢も[A7]見られな[D7]い -->
+    <measure number="8">
+      <harmony><root><root-step>B</root-step></root><kind text="B7">dominant</kind></harmony>
+      <note><rest/><duration>2</duration><type>eighth</type><staff>1</staff></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>おちお</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ち夢も</text></lyric>
+      </note>
+      <harmony><root><root-step>A</root-step></root><kind text="A7">dominant</kind></harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>見られな</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>い 何</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- Chorus 1 -->
+    <!-- [G]何があ[D7]るのか[G]どこに[Bm7]行[C]くのか -->
+    <measure number="9">
+      <direction placement="above">
+        <direction-type><rehearsal></rehearsal></direction-type>
+      </direction>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>があるの</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>かどこ</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>に行</text></lyric>
+      </note>
+      <harmony><root><root-step>B</root-step></root><kind text="Bm7">minor-seventh</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>くの</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>か</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]わから[C]ぬまま[C#m7-5]家を[D7]出[G]て -->
+    <measure number="10">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>わから</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ぬまま</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step><root-alter>1</root-alter></root><kind text="C#m7-5">half-diminished</kind></harmony>
+      <note><pitch><step>C</step><alter>1</alter><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>家を出</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>て帰</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]帰る場[B7/F#]所など[Em]とうに[G/D]忘れ[C]た -->
+    <measure number="11">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>る場所な</text></lyric>
+      </note>
+      <harmony><root><root-step>B</root-step></root><kind text="B7/F#">dominant</kind><bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ど とう</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>に</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G/D">major</kind><bass><bass-step>D</bass-step></bass></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>忘れ</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>た</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]君と[Em]ふたり[C/E]歩[Am7]くだ[D7]け[G] -->
+    <measure number="12">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>君と</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ふた</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C/E">major</kind><bass><bass-step>E</bass-step></bass></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>り</text></lyric>
+      </note>
+      <harmony><root><root-step>A</root-step></root><kind text="Am7">minor-seventh</kind></harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>歩</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>くだ</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>け</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- Interlude [G][Em][C/E][Am7][D7][G] -->
+    <measure number="13">
+      <direction placement="above">
+        <direction-type><rehearsal></rehearsal></direction-type>
+      </direction>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <harmony><root><root-step>C</root-step></root><kind text="C/E">major</kind><bass><bass-step>E</bass-step></bass></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <measure number="14">
+      <harmony><root><root-step>A</root-step></root><kind text="Am7">minor-seventh</kind></harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- Verse 2 -->
+    <!-- [G]日に日に[G7]世界が[C]悪くな[G]る -->
+    <measure number="15">
+      <direction placement="above">
+        <direction-type><rehearsal></rehearsal></direction-type>
+      </direction>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>日に日に</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G7">dominant</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>世界が</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>悪くな</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>る</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [Bm]気のせ[Em]いか[A7]そうじゃな[D7]い -->
+    <measure number="16">
+      <harmony><root><root-step>B</root-step></root><kind text="Bm">minor</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>6</duration><type>quarter</type><dot/><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>気のせ</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>いか</text></lyric>
+      </note>
+      <harmony><root><root-step>A</root-step></root><kind text="A7">dominant</kind></harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>そうじゃな</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>い</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]そんなじゃ[G7]ダメだと[C]焦った[B7]り -->
+    <measure number="17">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>そんなじゃ</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G7">dominant</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ダメだと</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>焦った</text></lyric>
+      </note>
+      <harmony><root><root-step>B</root-step></root><kind text="B7">dominant</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>り</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [C]生活[G]しな[Em]きゃと[Am7]坐[D]った[G]り -->
+    <measure number="18">
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>生活</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>しな</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>きゃと</text></lyric>
+      </note>
+      <harmony><root><root-step>A</root-step></root><kind text="Am7">minor-seventh</kind></harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>坐</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>った</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>り</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- Pre-Chorus 2 -->
+    <!-- [B7]夕日がとて[Em]も[C]綺麗だ[G]ね -->
+    <measure number="19">
+      <direction placement="above">
+        <direction-type><rehearsal></rehearsal></direction-type>
+      </direction>
+      <harmony><root><root-step>B</root-step></root><kind text="B7">dominant</kind></harmony>
+      <note><rest/><duration>2</duration><type>eighth</type><staff>1</staff></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>夕日</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>がとても</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>綺麗だ</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ね</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [B7]野垂れ死ぬかも[Em]しれ[A7]ない[D7]ね -->
+    <measure number="20">
+      <harmony><root><root-step>B</root-step></root><kind text="B7">dominant</kind></harmony>
+      <note><rest/><duration>2</duration><type>eighth</type><staff>1</staff></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>6</duration><type>eighth</type><dot/><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>野垂れ</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>死ぬかも</text></lyric>
+      </note>
+      <harmony><root><root-step>A</root-step></root><kind text="A7">dominant</kind></harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>しれない</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ね 何</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- Chorus 2 -->
+    <!-- [G]何があ[D7]るのか[G]どこに[Bm7]行[C]くのか -->
+    <measure number="21">
+      <direction placement="above">
+        <direction-type><rehearsal></rehearsal></direction-type>
+      </direction>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>があるの</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>か どこ</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>に行</text></lyric>
+      </note>
+      <harmony><root><root-step>B</root-step></root><kind text="Bm7">minor-seventh</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>くの</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>か</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]わから[C]ぬまま[C#m7-5]家を[D7]出[G]て -->
+    <measure number="22">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>わから</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ぬまま</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step><root-alter>1</root-alter></root><kind text="C#m7-5">half-diminished</kind></harmony>
+      <note><pitch><step>C</step><alter>1</alter><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>家を出</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>て帰</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]帰る場[B7/F#]所など[Em]とうに[G/D]忘れ[C]た -->
+    <measure number="23">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>る場所な</text></lyric>
+      </note>
+      <harmony><root><root-step>B</root-step></root><kind text="B7/F#">dominant</kind><bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ど とう</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>に</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G/D">major</kind><bass><bass-step>D</bass-step></bass></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>忘れ</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>た</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]君と[Em]ふたり[C/E]歩[Am7]くだ[D7]け[G] -->
+    <measure number="24">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>君と</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ふた</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C/E">major</kind><bass><bass-step>E</bass-step></bass></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>り</text></lyric>
+      </note>
+      <harmony><root><root-step>A</root-step></root><kind text="Am7">minor-seventh</kind></harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>歩</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>くだ</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>け 黄</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- Bridge -->
+    <!-- [G]黄昏の[D7]街[G]西向きの[Bm7]部[C]屋 -->
+    <measure number="25">
+      <direction placement="above">
+        <direction-type><rehearsal></rehearsal></direction-type>
+      </direction>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>昏の</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>街 西</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>向き</text></lyric>
+      </note>
+      <harmony><root><root-step>B</root-step></root><kind text="Bm7">minor-seventh</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>の部</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>屋</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]壊さ[C]ぬよう[C#m7-5]戸を[D7]閉[G]めて -->
+    <measure number="26">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>壊さ</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ぬよう戸</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step><root-alter>1</root-alter></root><kind text="C#m7-5">half-diminished</kind></harmony>
+      <note><pitch><step>C</step><alter>1</alter><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>を閉め</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>て 落ち</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]落ち込ま[B7/F#]ないで[Em]諦め[G/D]ない[C]で -->
+    <measure number="27">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>込まない</text></lyric>
+      </note>
+      <harmony><root><root-step>B</root-step></root><kind text="B7/F#">dominant</kind><bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>で</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>諦め</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G/D">major</kind><bass><bass-step>D</bass-step></bass></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ない</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>で</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]君の[Em]となり[C/E]歩[Am7]くか[D7]ら[G] -->
+    <measure number="28">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>君の</text></lyric>
+      </note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>とな</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C/E">major</kind><bass><bass-step>E</bass-step></bass></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>り</text></lyric>
+      </note>
+      <harmony><root><root-step>A</root-step></root><kind text="Am7">minor-seventh</kind></harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>歩</text></lyric>
+      </note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>くか</text></lyric>
+      </note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>ら</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G]今夜[C]も散歩しましょうか -->
+    <measure number="29">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><type>half</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>今夜も</text></lyric>
+      </note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>8</duration><type>half</type><staff>1</staff>
+        <lyric number="1"><syllabic>single</syllabic><text>散歩しましょうか</text></lyric>
+      </note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- Outro -->
+    <!-- [G][D7] -->
+    <measure number="30">
+      <direction placement="above">
+        <direction-type><rehearsal></rehearsal></direction-type>
+      </direction>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G][Bm7][C] -->
+    <measure number="31">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <harmony><root><root-step>B</root-step></root><kind text="Bm7">minor-seventh</kind></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G][C] -->
+    <measure number="32">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [C#m7-5][D7] -->
+    <measure number="33">
+      <harmony><root><root-step>C</root-step><root-alter>1</root-alter></root><kind text="C#m7-5">half-diminished</kind></harmony>
+      <note><pitch><step>C</step><alter>1</alter><octave>5</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G][B7/F#] -->
+    <measure number="34">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <harmony><root><root-step>B</root-step></root><kind text="B7/F#">dominant</kind><bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass></harmony>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [Em][G/D][C] -->
+    <measure number="35">
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <harmony><root><root-step>G</root-step></root><kind text="G/D">major</kind><bass><bass-step>D</bass-step></bass></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <harmony><root><root-step>C</root-step></root><kind text="C">major</kind></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [G][Em][C/E] -->
+    <measure number="36">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <harmony><root><root-step>E</root-step></root><kind text="Em">minor</kind></harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <harmony><root><root-step>C</root-step></root><kind text="C/E">major</kind><bass><bass-step>E</bass-step></bass></harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <!-- [Am7][D7][G] -->
+    <measure number="37">
+      <harmony><root><root-step>A</root-step></root><kind text="Am7">minor-seventh</kind></harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>8</duration><type>half</type><staff>1</staff></note>
+      <harmony><root><root-step>D</root-step></root><kind text="D7">dominant</kind></harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><staff>1</staff></note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+    </measure>
+
+    <measure number="38">
+      <harmony><root><root-step>G</root-step></root><kind text="G">major</kind></harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>16</duration><type>whole</type><staff>1</staff></note>
+      <backup><duration>16</duration></backup>
+      <note><rest/><duration>16</duration><type>whole</type><staff>2</staff></note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+
+  </part>
+
+</score-partwise>

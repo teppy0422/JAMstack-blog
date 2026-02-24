@@ -57,7 +57,8 @@ const Frame: React.FC<{
   sectionRefs?: React.RefObject<HTMLElement[]> | null;
   isThrough?: boolean;
   isMain?: boolean;
-}> = ({ children, sections, sectionRefs, isThrough, isMain }) => {
+  hideMenu?: boolean;
+}> = ({ children, sections, sectionRefs, isThrough, isMain, hideMenu }) => {
   const { language, setLanguage } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
@@ -378,7 +379,9 @@ const Frame: React.FC<{
               position="sticky"
               top="64px"
               display={
-                isMain
+                hideMenu
+                  ? "none"
+                  : isMain
                   ? ["block", "block", "block", "block"]
                   : ["none", "none", "none", "block"]
               }

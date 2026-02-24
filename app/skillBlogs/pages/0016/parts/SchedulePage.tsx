@@ -26,13 +26,31 @@ import {
 } from "date-fns";
 import { delay } from "lodash";
 
+type StepDetail = {
+  title: string;
+  plannedStart: string;
+  plannedEnd: string;
+  actualStart?: string;
+  actualEnd?: string;
+};
+
+type Step = {
+  title: string;
+  details: StepDetail[];
+};
+
 // プロジェクトの期間設定
-const projectStart = startOfDay(parseISO("2025-07-11"));
-const projectEnd = startOfDay(parseISO("2025-12-31"));
+const projectStart = startOfDay(parseISO("2026-03-02"));
+const projectEnd = startOfDay(parseISO("2026-07-31"));
+
+// カレンダー開始はprojectStartの1週間前の月曜
+const calendarStart = startOfWeek(addDays(projectStart, -7), {
+  weekStartsOn: 1,
+});
 
 // allDates は local の 0時基準にしておく
 const allDates = eachDayOfInterval({
-  start: startOfDay(projectStart),
+  start: calendarStart,
   end: startOfDay(projectEnd),
 });
 
@@ -41,97 +59,84 @@ const DAY_WIDTH = 10; // 1日あたり20px
 const totalWidth = allDates.length * DAY_WIDTH;
 
 // ステップと詳細データ
-const steps = [
+const steps: Step[] = [
   {
     title: "1.アプリ作成",
     details: [
       {
         title: "開発環境の準備",
-        plannedStart: "2025-07-11",
-        plannedEnd: "2025-07-17",
-        actualStart: "2025-07-11",
-        actualEnd: "2025-07-14",
+        plannedStart: "2026-03-02",
+        plannedEnd: "2026-03-08",
       },
       {
         title: "アプリ初期開発",
-        plannedStart: "2025-07-21",
-        plannedEnd: "2025-07-25",
-        actualStart: "2025-07-15",
-        actualEnd: "2025-08-01",
+        plannedStart: "2026-03-09",
+        plannedEnd: "2026-03-15",
       },
       {
         title: "入力機器の動作確認",
-        plannedStart: "2025-07-28",
-        plannedEnd: "2025-08-01",
-        actualStart: "2025-08-04",
-        actualEnd: "2025-08-08",
+        plannedStart: "2026-03-16",
+        plannedEnd: "2026-03-22",
       },
       {
         title: "電子回路開発",
-        plannedStart: "2025-08-04",
-        plannedEnd: "2025-08-08",
-        actualStart: "2025-08-11",
-        actualEnd: "2025-08-15",
+        plannedStart: "2026-03-23",
+        plannedEnd: "2026-03-29",
       },
       {
         title: "作業実績の保存と出力",
-        plannedStart: "2025-08-11",
-        plannedEnd: "2025-08-15",
-        actualStart: "2025-08-18",
-        actualEnd: "2025-08-22",
+        plannedStart: "2026-03-23",
+        plannedEnd: "2026-03-29",
       },
       {
         title: "本番環境の構成に変更",
-        plannedStart: "2025-08-18",
-        plannedEnd: "2025-08-22",
-        actualStart: "2025-08-25",
-        actualEnd: "2025-09-05",
+        plannedStart: "2026-03-30",
+        plannedEnd: "2026-04-05",
       },
       {
         title: "データの整合確認",
-        plannedStart: "2025-08-25",
-        plannedEnd: "2025-09-05",
-        actualStart: "2025-09-08",
+        plannedStart: "2026-04-06",
+        plannedEnd: "2026-04-12",
       },
       {
         title: "圧着カウント機器をプレスに装着テスト",
-        plannedStart: "2025-09-08",
-        plannedEnd: "2025-09-12",
+        plannedStart: "2026-04-13",
+        plannedEnd: "2026-04-19",
       },
       {
         title: "CFMの自動切替",
-        plannedStart: "2025-09-15",
-        plannedEnd: "2025-09-26",
+        plannedStart: "2026-04-20",
+        plannedEnd: "2026-05-03",
       },
       {
         title: "規格表の自動取得テスト",
-        plannedStart: "2025-09-29",
-        plannedEnd: "2025-10-10",
+        plannedStart: "2026-05-04",
+        plannedEnd: "2026-05-10",
       },
       {
-        title: "1台設置",
-        plannedStart: "2025-10-13",
-        plannedEnd: "2025-10-17",
+        title: "1セットを設置(CM20)",
+        plannedStart: "2026-05-11",
+        plannedEnd: "2026-05-17",
       },
       {
         title: "運用テスト(現場意見で修正)",
-        plannedStart: "2025-10-20",
-        plannedEnd: "2025-11-14",
+        plannedStart: "2026-05-18",
+        plannedEnd: "2026-05-31",
       },
       {
         title: "運用開始",
-        plannedStart: "2025-11-17",
-        plannedEnd: "2025-12-31",
+        plannedStart: "2026-06-01",
+        plannedEnd: "2026-06-07",
       },
       {
         title: "不具合時の対応資料の作成",
-        plannedStart: "2025-12-01",
-        plannedEnd: "2025-12-05",
+        plannedStart: "2026-06-08",
+        plannedEnd: "2026-06-21",
       },
       {
         title: "保守資料の作成",
-        plannedStart: "2025-12-08",
-        plannedEnd: "2025-12-12",
+        plannedStart: "2026-06-22",
+        plannedEnd: "2026-06-28",
       },
     ],
   },
@@ -140,15 +145,13 @@ const steps = [
     details: [
       {
         title: "各1台分",
-        plannedStart: "2025-07-21",
-        plannedEnd: "2025-07-27",
-        actualStart: "2025-08-01",
-        actualEnd: "2025-08-01",
+        plannedStart: "2026-03-01",
+        plannedEnd: "2026-03-08",
       },
       {
         title: "残り必要台数分",
-        plannedStart: "2025-11-17",
-        plannedEnd: "2025-11-21",
+        plannedStart: "2026-06-01",
+        plannedEnd: "2026-06-07",
       },
     ],
   },
@@ -157,30 +160,23 @@ const steps = [
     details: [
       {
         title: "機材借用/既存データ入手",
-        plannedStart: "2025-07-21",
-        plannedEnd: "2025-07-25",
-        actualStart: "2025-08-06",
-        actualEnd: "2025-08-06",
+        plannedStart: "2026-03-01",
+        plannedEnd: "2026-03-06",
       },
       {
         title: "データ運用の相談",
-        plannedStart: "2025-10-06",
-        plannedEnd: "2025-10-10",
+        plannedStart: "2026-04-13",
+        plannedEnd: "2026-05-08",
       },
     ],
   },
 ];
-const holidayRanges = [
-  {
-    start: "2025-08-09",
-    end: "2025-08-17",
-    label: "お盆休み",
-  },
-  {
-    start: "2025-12-27",
-    end: "2025-12-31",
-    label: "正月休み",
-  },
+const holidayRanges: { start: string; end: string; label: string }[] = [
+  // {
+  //   start: "2026-08-19",
+  //   end: "2026-08-23",
+  //   label: "お盆休み",
+  // },
 ];
 // 日数差の計算（マイナス防止）
 function getDaysBetween(startStr: string, endStr: string) {
@@ -248,6 +244,7 @@ export default function ScheduleWithGrid() {
 
   return (
     <Box py={0}>
+      <Text>調整中</Text>
       {/* ラベルの説明 */}
       <Box pt={2} pb={2} display="flex" alignItems="center" gap={1}>
         <Box bg={scheduleColor} w="30px" h="6px" />
@@ -259,7 +256,6 @@ export default function ScheduleWithGrid() {
         <Box bg={delayColor} w="30px" h="6px" />
         <Box fontSize="12px">遅延</Box>
       </Box>
-
       {/* グリッド全体 */}
       <Box
         overflowX="auto"
@@ -297,11 +293,20 @@ export default function ScheduleWithGrid() {
                   whiteSpace="nowrap"
                   textAlign="left"
                 >
-                  {idx === 0
-                    ? `${format(date, "M月d日")}`
+                  {idx === 6
+                    ? "N"
                     : isMonthStart
-                    ? `${format(date, "M月")}`
-                    : ""}
+                      ? differenceInCalendarDays(date, projectStart) < 0
+                        ? ""
+                        : `+${
+                            differenceInCalendarDays(date, projectStart) >= 30
+                              ? Math.round(
+                                  differenceInCalendarDays(date, projectStart) /
+                                    30,
+                                )
+                              : 1
+                          }ヶ月`
+                      : ""}
                 </Box>
               );
             })}
@@ -429,7 +434,7 @@ export default function ScheduleWithGrid() {
                 const formattedDate = format(date, "yyyy-MM-dd");
                 const left = getOffsetPixels(format(date, "yyyy-MM-dd"));
                 const holidayStartDates = holidayRanges.map((h) =>
-                  format(new Date(h.start), "yyyy-MM-dd")
+                  format(new Date(h.start), "yyyy-MM-dd"),
                 );
                 if (
                   !holidayStartDates.includes(formattedDate) &&
@@ -445,7 +450,12 @@ export default function ScheduleWithGrid() {
                       color={color}
                       pl="2px"
                     >
-                      {format(date, "M/d")}
+                      {(() => {
+                        const weekNum = Math.round(
+                          differenceInCalendarDays(date, projectStart) / 7,
+                        );
+                        return weekNum > 0 ? `+${weekNum}週` : "";
+                      })()}
                     </Box>
                   );
                 }
@@ -500,8 +510,8 @@ export default function ScheduleWithGrid() {
                       const actualEnd = detail.actualEnd
                         ? parseISO(detail.actualEnd)
                         : actualStart && actualStart <= today
-                        ? today
-                        : actualStart;
+                          ? today
+                          : actualStart;
 
                       const actualEndStr = actualEnd
                         ? format(actualEnd, "yyyy-MM-dd")
@@ -521,7 +531,7 @@ export default function ScheduleWithGrid() {
                       const delayDays = isDelay
                         ? differenceInCalendarDays(
                             today,
-                            parseISO(detail.plannedEnd)
+                            parseISO(detail.plannedEnd),
                           )
                         : 0;
 
@@ -532,8 +542,10 @@ export default function ScheduleWithGrid() {
                       const tempColor = isInProgress
                         ? inProcessColor
                         : isDelay
-                        ? delayColor
-                        : resultantColor;
+                          ? delayColor
+                          : isCompleted
+                            ? resultantColor
+                            : scheduleColor;
 
                       return (
                         <Box
@@ -562,8 +574,8 @@ export default function ScheduleWithGrid() {
                                 isSticky
                                   ? tempColor
                                   : isInProgress
-                                  ? inProcessColor
-                                  : scheduleColor
+                                    ? inProcessColor
+                                    : scheduleColor
                               }
                             />
                             <Text
@@ -617,11 +629,11 @@ export default function ScheduleWithGrid() {
                               <Box
                                 position="absolute"
                                 left={`${getOffsetPixels(
-                                  detail.plannedStart
+                                  detail.plannedStart,
                                 )}px`}
                                 width={`${getWidthPixels(
                                   detail.plannedStart,
-                                  detail.plannedEnd
+                                  detail.plannedEnd,
                                 )}px`}
                                 top="0px"
                                 height="6px"
@@ -640,11 +652,11 @@ export default function ScheduleWithGrid() {
                                 <Box
                                   position="absolute"
                                   left={`${getOffsetPixels(
-                                    String(detail.actualStart)
+                                    String(detail.actualStart),
                                   )}px`}
                                   width={`${getWidthPixels(
                                     String(detail.actualStart),
-                                    actualEndStr
+                                    actualEndStr,
                                   )}px`}
                                   top="6px"
                                   height="6px"
