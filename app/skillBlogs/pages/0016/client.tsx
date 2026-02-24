@@ -301,7 +301,7 @@ function EstimateSection() {
   );
 }
 
-function EstimateSection2() {
+function EstimateSection2({ isAdmin }: { isAdmin: boolean }) {
   const { colorMode } = useColorMode();
   const [planIndex, setPlanIndex] = useState(2);
   const [devProjects, setDevProjects] = useState<
@@ -418,7 +418,7 @@ function EstimateSection2() {
 </style></head>
 <body>
 <h1>見 積 書</h1>
-<div class="meta-grid">
+${isAdmin ? `<div class="meta-grid">
   <div class="meta-left">
     <div class="client-name">有限会社ウエダ　御中</div>
     <div class="grand-box">合計金額： ¥${grandTotal.toLocaleString()} </div>
@@ -433,7 +433,7 @@ function EstimateSection2() {
     <p>連絡先：070-9913-6256</p>
     <p>e-mail：teppy422@au.com</p>
   </div>
-</div>
+</div>` : ``}
 
 <table>
   <thead>
@@ -825,7 +825,7 @@ const BlogPage: React.FC = () => {
           sectionRefs={sectionRefs}
           sections={sections}
         >
-          <EstimateSection2 />
+          <EstimateSection2 isAdmin={currentUserCompany === "開発"} />
         </SectionBox>
         <SectionBox
           id="section6"
