@@ -1,0 +1,1341 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC
+  "-//Recordare//DTD MusicXML 3.1 Partwise//EN"
+  "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1">
+  <work>
+    <work-title>アンパンマンのマーチ (Swing)</work-title>
+  </work>
+
+  <part-list>
+    <score-part id="P1">
+      <part-name></part-name>
+    </score-part>
+    <score-part id="P2">
+      <part-name></part-name>
+    </score-part>
+  </part-list>
+
+  <!-- ==================== RIGHT HAND (Melody) ==================== -->
+  <part id="P1">
+
+    <!-- ===== INTRO (8 measures) ===== -->
+    <!-- M1: Am -->
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>0</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <harmony>
+        <root><root-step>A</root-step></root>
+        <kind>minor</kind>
+      </harmony>
+      <note><pitch><step>E</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>E</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>G</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+    </measure>
+
+    <!-- M2: G/B -->
+    <measure number="2">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>B</bass-step></bass>
+      </harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>3</duration><type>eighth</type><dot/><beam number="1">begin</beam></note>
+      <note><pitch><step>E</step><octave>5</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M3: Am -->
+    <measure number="3">
+      <harmony>
+        <root><root-step>A</root-step></root>
+        <kind>minor</kind>
+      </harmony>
+      <note><pitch><step>E</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><beam number="1">begin</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><beam number="1">end</beam></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>eighth</type><dot/><beam number="1">begin</beam></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+    </measure>
+
+    <!-- M4: E/G# -->
+    <measure number="4">
+      <harmony>
+        <root><root-step>E</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>G</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam></note>
+      <note><pitch><step>E</step><octave>5</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>8</duration><type>half</type></note>
+    </measure>
+
+    <!-- M5: Am→Dm -->
+    <measure number="5">
+      <harmony>
+        <root><root-step>A</root-step></root>
+        <kind>minor</kind>
+      </harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor</kind>
+      </harmony>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+    </measure>
+
+    <!-- M6: G→C -->
+    <measure number="6">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam><beam number="2">end</beam></note>
+    </measure>
+
+    <!-- M7: Dm/F→Em/G -->
+    <measure number="7">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor</kind>
+        <bass><bass-step>F</bass-step></bass>
+      </harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <harmony>
+        <root><root-step>E</root-step></root>
+        <kind>minor</kind>
+        <bass><bass-step>G</bass-step></bass>
+      </harmony>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+    </measure>
+
+    <!-- M8: Dm→Am/C -->
+    <measure number="8">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor</kind>
+      </harmony>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <harmony>
+        <root><root-step>A</root-step></root>
+        <kind>minor</kind>
+        <bass><bass-step>C</bass-step></bass>
+      </harmony>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">begin</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+    </measure>
+
+    <!-- ===== VERSE 1 ===== -->
+    <!-- divisions=2: eighth=1, quarter=2, dotted-quarter=3, half=4, whole=8 -->
+    <!-- M9: Cmaj7 そうだ  E4: rest-8th, E4-dotted-q, D4-8th, E4-q, rest-q -->
+    <measure number="9">
+      <attributes>
+        <divisions>2</divisions>
+        <key><fifths>0</fifths></key>
+      </attributes>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>そうだ</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M10: Fmaj7 うれしいんだ  A4: rest-8th, A4-dotted-q, G4-8th, A4-q, rest-q -->
+    <measure number="10">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>うれしいんだ</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M11: D7/F# 生きる  F#4: rest-8th, F#4-dotted-q, E4-8th, F#4-half -->
+    <measure number="11">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>生きる</text></lyric></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>4</duration><type>half</type></note>
+    </measure>
+
+    <!-- M12: G7 よろこび  B4: rest-8th, B4-dotted-q, A4-8th, B4-q, rest-8th, C5-8th -->
+    <measure number="12">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>よろこび</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M13: Cmaj7 たとえ  E4: rest-8th, E4-dotted-q, D4-8th, E4-q, rest-8th, G4-8th -->
+    <measure number="13">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>たとえ</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M14: Fmaj7 胸の傷が  A4: rest-8th, A4-dotted-q, G4-8th, A4-q, rest-8th, C5-8th -->
+    <measure number="14">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>胸の傷が</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M15: D7/F# いた → G7 んで  F#4-dotted-q, E4-8th, | B4-dotted-q, A4-8th, B4-q -->
+    <measure number="15">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>いた</text></lyric></note>
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><lyric><text>んで</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M16: Cmaj7 も  E4-dotted-half, D4-8th, E4-8th, rest-q -->
+    <measure number="16">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>6</duration><type>half</type><dot/><lyric><text>も</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- ===== VERSE 2 ===== -->
+    <!-- M18: Fmaj7 → C/E  A4-dotted-q, G4-8th, A4-q | E4-half -->
+    <measure number="18">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M19: Dm7 → C  F4-dotted-q, E4-8th, F4-q | E4-half -->
+    <measure number="19">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M20: D7/F#  F#4-dotted-q, E4-8th, F#4-half -->
+    <measure number="20">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>4</duration><type>half</type></note>
+    </measure>
+
+    <!-- M21: G7  B4-dotted-q, A4-8th, B4-q, rest-8th, D5-8th -->
+    <measure number="21">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M22: Fmaj7 → C/E  A4-dotted-q, G4-8th, A4-q | E4-dotted-q, F4-8th -->
+    <measure number="22">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M23: Dm7 → C  F4-dotted-q, E4-8th, E4-q, D4-8th, E4-8th -->
+    <measure number="23">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M24: Fmaj7 → C/E  A4-dotted-q, G4-8th, A4-q | E4-dotted-q, F4-8th -->
+    <measure number="24">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M25: Dm7 → G7  F4-dotted-q, Eb4-8th | B4-dotted-q, A4-8th, B4-q -->
+    <measure number="25">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>E</step><alter>-1</alter><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- ===== CHORUS ===== -->
+    <!-- M26: Cmaj7 なんの → C/E ために  rest-8th, E4-dotted-q, D4-8th, E4-q | E4-q, F#4-8th, G4-8th -->
+    <measure number="26">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>なんの</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><lyric><text>ために</text></lyric></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M27: Fmaj7 生まれ → Cmaj7 て  rest-8th, A4-dotted-q, G4-8th, A4-q | E4-dotted-q, D4-8th -->
+    <measure number="27">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>生まれ</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><lyric><text>て</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M28: Fmaj7 なにを → C/E して  rest-8th, A4-dotted-q, G4-8th, A4-q | E4-dotted-q, F4-8th -->
+    <measure number="28">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>なにを</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><lyric><text>して</text></lyric></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M29: D7 生きるの → G7 か  rest-8th, F#4-dotted-q, E4-8th, F#4-q | B4-dotted-q, A4-8th -->
+    <measure number="29">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>生きるの</text></lyric></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><lyric><text>か</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M30: Cmaj7 こたえら → C/E れな  rest-8th, E4-dotted-q, D4-8th, E4-q | E4-dotted-q, F#4-8th -->
+    <measure number="30">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>こたえら</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><lyric><text>れな</text></lyric></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M31: Fmaj7 い　なん → Cmaj7 て  rest-8th, A4-dotted-q, G4-8th, A4-q | G4-8th, E4-q. -->
+    <measure number="31">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>い　なん</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><lyric><text>て</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M32: Fmaj7 そんな → C/E のは  rest-8th, A4-dotted-q, G4-8th, A4-q | E4-dotted-q, F4-8th -->
+    <measure number="32">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>そんな</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><lyric><text>のは</text></lyric></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M33: G7 いや → Cmaj7 だ！  rest-8th, B4-dotted-q, A4-8th, B4-q | E4-half -->
+    <measure number="33">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>いや</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><lyric><text>だ！</text></lyric></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M34: D7/F# 今を生きる  rest-8th, F#4-dotted-q, E4-8th, F#4-q, G4-8th, A4-8th -->
+    <measure number="34">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>今を生きる</text></lyric></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M35: G ことで  rest-8th, B4-dotted-q, A4-8th, B4-half -->
+    <measure number="35">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>ことで</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><type>half</type></note>
+    </measure>
+
+    <!-- M36: E7/G# 熱いこころ  rest-8th, G#4-dotted-q, F#4-8th, G#4-q, A4-8th, B4-8th -->
+    <measure number="36">
+      <harmony>
+        <root><root-step>E</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>G</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>G</step><alter>1</alter><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>熱いこころ</text></lyric></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>G</step><alter>1</alter><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M37: Am7 燃える  rest-8th, A4-dotted-q, G4-8th, A4-half -->
+    <measure number="37">
+      <harmony>
+        <root><root-step>A</root-step></root>
+        <kind>minor-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>燃える</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>half</type></note>
+    </measure>
+
+    <!-- M38: G7/B だから　君は  rest-8th, B4-dotted-q, A4-8th, B4-q, C5-8th, D5-8th -->
+    <measure number="38">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>B</bass-step></bass>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>だから　君は</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M39: Cmaj7 いく → C/E んだ  rest-8th, E4-dotted-q, D4-8th | E4-dotted-q, F#4-8th -->
+    <measure number="39">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>いく</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>んだ</text></lyric></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M40: D/F# ほほえん  rest-8th, F#4-dotted-q, E4-8th, F#4-q, G4-8th, A4-8th -->
+    <measure number="40">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>ほほえん</text></lyric></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M41: G7 で  rest-8th, B4-dotted-q, A4-8th, B4-half -->
+    <measure number="41">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>で</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><type>half</type></note>
+    </measure>
+
+    <!-- M42: Cmaj7 あ → C/E あ  rest-8th, E4-dotted-q, D4-8th | E4-dotted-q, F4-8th -->
+    <measure number="42">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>あ</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><lyric><text>あ</text></lyric></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M43: Fmaj7 アンパンマン  rest-8th, A4-dotted-q, G4-8th, A4-q, G4-8th, E4-8th -->
+    <measure number="43">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>アンパンマン</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M44: D7/F# やさしい  rest-8th, F#4-dotted-q, E4-8th, F#4-half -->
+    <measure number="44">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>やさしい</text></lyric></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>4</duration><type>half</type></note>
+    </measure>
+
+    <!-- M45: G7 君は  rest-8th, B4-dotted-q, A4-8th, B4-q, C5-8th, D5-8th -->
+    <measure number="45">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>君は</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M46: Cmaj7 い → C/E け！  rest-8th, E4-dotted-q, D4-8th | E4-dotted-q, F#4-8th -->
+    <measure number="46">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>い</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>け！</text></lyric></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M47: Fmaj7 みんなの夢  rest-8th, A4-dotted-q, G4-8th, A4-q, G4-8th, E4-8th -->
+    <measure number="47">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>みんなの夢</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M48: D/F# まも → G7 るた  rest-8th, F#4-dotted-q, E4-8th | B4-dotted-q, A4-8th, B4-q -->
+    <measure number="48">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/><lyric><text>まも</text></lyric></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type><lyric><text>るた</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M49: Cmaj7 め  E4-dotted-half, D4-8th, E4-8th -->
+    <measure number="49">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>6</duration><type>half</type><dot/><lyric><text>め</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- アウトロ -->
+    <!-- M50: Fmaj7 → C/E  rest-8th, A4-dotted-q, G4-8th | E4-dotted-q, F4-8th -->
+    <measure number="50">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M51: Dm7 → C  rest-8th, F4-dotted-q, E4-8th | E4-q, D4-8th, E4-8th -->
+    <measure number="51">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor-seventh</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M52: D7/F#  rest-8th, F#4-dotted-q, E4-8th, F#4-half -->
+    <measure number="52">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>4</duration><type>half</type></note>
+    </measure>
+
+    <!-- M53: G7  rest-8th, B4-dotted-q, A4-8th, B4-q, C5-8th, D5-8th -->
+    <measure number="53">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note><rest/><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>3</duration><type>quarter</type><dot/></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>1</duration><type>eighth</type></note>
+    </measure>
+
+    <!-- M54: Cmaj7 (終止) -->
+    <measure number="54">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major-seventh</kind>
+      </harmony>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>8</duration><type>whole</type></note>
+      <barline location="right"><bar-style>light-heavy</bar-style></barline>
+    </measure>
+
+  </part>
+
+  <!-- ==================== LEFT HAND (Walking Bass) ==================== -->
+  <part id="P2">
+
+    <!-- ===== INTRO (8 measures) ===== -->
+    <!-- M1 LH: C3q E3q F3q F3q -->
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>0</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>F</sign><line>4</line></clef>
+      </attributes>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M2 LH: F#3q F#3q G3q G2q -->
+    <measure number="2">
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M3 LH: C3q E3q F3q F3q -->
+    <measure number="3">
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M4 LH: F#3q F#3q C3h -->
+    <measure number="4">
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>8</duration><type>half</type></note>
+    </measure>
+
+    <!-- M5 LH: F3q E3q D3q C3q -->
+    <measure number="5">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M6 LH: F#3q F#3q G3q G2q -->
+    <measure number="6">
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M7 LH: F3q E3q D3q C3q -->
+    <measure number="7">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M8 LH: F3q E3q D3q G3q -->
+    <measure number="8">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- ===== VERSE 1 ===== -->
+    <!-- アプローチノートの考え方: 次コードのルートへ半音下から入る -->
+    <!-- M9: Cmaj7  C-E-F-E#(approach F) -->
+    <measure number="9">
+      <attributes>
+        <divisions>1</divisions>
+        <key><fifths>0</fifths></key>
+      </attributes>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M10: Fmaj7  F-A-C-F(approach F#) -->
+    <measure number="10">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M11: D7/F#  F#-A-E-E#(approach F) -->
+    <measure number="11">
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M12: G7  G-B-D-B(approach C) -->
+    <measure number="12">
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M13: Cmaj7  C-E-F-E#(approach F) -->
+    <measure number="13">
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M14: Fmaj7  F-A-C-F(approach F#) -->
+    <measure number="14">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M15: D7/F# -> G7  F#-A-F#-B -->
+    <measure number="15">
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M16: Cmaj7  C-E-G-E#(approach F) -->
+    <measure number="16">
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- ===== VERSE 2 ===== -->
+    <!-- M18: Fmaj7 -> C/E  F-A-C-E#(approach E) -->
+    <measure number="18">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M19: Dm7 -> C  D-F-A-C#(approach D) -->
+    <measure number="19">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M20: D7/F#  F#-A-C-E#(approach F) -->
+    <measure number="20">
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M21: G7  G-B-D-F#(approach G) -->
+    <measure number="21">
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M22: Fmaj7 -> C/E  F-A-C-E#(approach E) -->
+    <measure number="22">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M23: Dm7 -> C  D-F-A-C#(approach D) -->
+    <measure number="23">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M24: Fmaj7 -> C/E  F-A-C-E#(approach E) -->
+    <measure number="24">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M25: Dm7 -> G7  D-F-A-F#(approach G) -->
+    <measure number="25">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- ===== CHORUS ===== -->
+    <!-- M26: Cmaj7 -> C/E  C-E-G-E#(approach E) -->
+    <measure number="26">
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M27: Fmaj7 -> C  F-A-C-B(approach C) -->
+    <measure number="27">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M28: Fmaj7 -> C/E  F-A-C-E#(approach E) -->
+    <measure number="28">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M29: D7 -> G7  D-F#-A-F#(approach G) -->
+    <measure number="29">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M30: Cmaj7 -> C/E  C-E-G-E#(approach E) -->
+    <measure number="30">
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M31: Fmaj7 -> C  F-A-C-B(approach C) -->
+    <measure number="31">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M32: Fmaj7 -> C/E  F-A-C-E#(approach E) -->
+    <measure number="32">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M33: G7 -> C  G-B-D-B(approach C) -->
+    <measure number="33">
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M34: D7/F#  F#-A-C-E#(approach F) -->
+    <measure number="34">
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M35: G  G-B-D-F#(approach G) -->
+    <measure number="35">
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M36: E7/G#  G#-B-D-Ab(approach A) -->
+    <measure number="36">
+      <note><pitch><step>G</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><alter>-1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M37: Am7  A-C-E-G#(approach A) -->
+    <measure number="37">
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M38: G7/B  B-D-F-F#(approach G) -->
+    <measure number="38">
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M39: Cmaj7 -> C/E  C-E-G-E#(approach E) -->
+    <measure number="39">
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M40: D/F#  F#-A-C-E#(approach F) -->
+    <measure number="40">
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M41: G7  G-B-D-F#(approach G) -->
+    <measure number="41">
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M42: Cmaj7 -> C/E  C-E-G-E#(approach E) -->
+    <measure number="42">
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M43: Fmaj7  F-A-C-E#(approach F) -->
+    <measure number="43">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M44: D7/F# -> G7  F#-A-F#-B -->
+    <measure number="44">
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M45: G7  G-B-D-B(approach C) -->
+    <measure number="45">
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M46: Cmaj7 -> C/E  C-E-G-E#(approach E) -->
+    <measure number="46">
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M47: Fmaj7  F-A-C-C#(approach D) -->
+    <measure number="47">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M48: D/F# -> G7  F#-A-F#-B -->
+    <measure number="48">
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M49: G7  G-B-D-B(approach C) -->
+    <measure number="49">
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- Outro -->
+    <!-- M50: Fmaj7 -> C/E  F-A-C-E#(approach E) -->
+    <measure number="50">
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M51: Dm7 -> C  D-F-A-C#(approach D) -->
+    <measure number="51">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M52: D7/F#  F#-A-C-E#(approach F) -->
+    <measure number="52">
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><alter>1</alter><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M53: G7  G-B-D-B(approach C) -->
+    <measure number="53">
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M54: Cmaj7 finale  C-E-G-C -->
+    <measure number="54">
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>quarter</type></note>
+      <barline location="right"><bar-style>light-heavy</bar-style></barline>
+    </measure>
+
+    </part>
+
+</score-partwise>

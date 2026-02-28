@@ -107,6 +107,8 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
     >([]);
     // マップが構築済みかどうか（遅延構築のフラグ）
     const positionMapBuiltRef = useRef(false);
+    // 再生中の自動スクロール：前回スクロールしたターゲット位置を記憶（連続スクロール防止）
+    const lastAutoScrollTopRef = useRef<number>(-1);
 
     // Store onMusicTermClick in ref for use in setupClickHandlers
     const onMusicTermClickRef = useRef(onMusicTermClick);
@@ -857,18 +859,24 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.next();
           osmdRef.current.cursor.update();
-          if (darkMode) {
-            const cursorElement = (osmdRef.current.cursor as any).cursorElement;
-            const cursorOverlay = cursorElement?.parentElement?.querySelector(
-              ".cursor-overlay-orange",
-            ) as HTMLDivElement;
-            if (cursorOverlay && cursorElement) {
-              cursorOverlay.style.top = cursorElement.style.top;
-              cursorOverlay.style.left = cursorElement.style.left;
-              cursorOverlay.style.height =
-                cursorElement.getAttribute("height") + "px";
-              cursorOverlay.style.width =
-                cursorElement.getAttribute("width") + "px";
+          const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+          if (cursorElement) {
+            cursorElement.classList.remove("cursor-hidden");
+            cursorElement.style.display = "block";
+            cursorElement.style.visibility = "visible";
+            if (darkMode) {
+              const cursorOverlay = cursorElement?.parentElement?.querySelector(
+                ".cursor-overlay-orange",
+              ) as HTMLDivElement;
+              if (cursorOverlay) {
+                cursorOverlay.style.top = cursorElement.style.top;
+                cursorOverlay.style.left = cursorElement.style.left;
+                cursorOverlay.style.height =
+                  cursorElement.getAttribute("height") + "px";
+                cursorOverlay.style.width =
+                  cursorElement.getAttribute("width") + "px";
+                cursorOverlay.style.display = "block";
+              }
             }
           }
           onNotesChange?.(getCurrentNotes());
@@ -878,39 +886,52 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.previous();
           osmdRef.current.cursor.update();
-          if (darkMode) {
-            const cursorElement = (osmdRef.current.cursor as any).cursorElement;
-            const cursorOverlay = cursorElement?.parentElement?.querySelector(
-              ".cursor-overlay-orange",
-            ) as HTMLDivElement;
-            if (cursorOverlay && cursorElement) {
-              cursorOverlay.style.top = cursorElement.style.top;
-              cursorOverlay.style.left = cursorElement.style.left;
-              cursorOverlay.style.height =
-                cursorElement.getAttribute("height") + "px";
-              cursorOverlay.style.width =
-                cursorElement.getAttribute("width") + "px";
+          const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+          if (cursorElement) {
+            cursorElement.classList.remove("cursor-hidden");
+            cursorElement.style.display = "block";
+            cursorElement.style.visibility = "visible";
+            if (darkMode) {
+              const cursorOverlay = cursorElement?.parentElement?.querySelector(
+                ".cursor-overlay-orange",
+              ) as HTMLDivElement;
+              if (cursorOverlay) {
+                cursorOverlay.style.top = cursorElement.style.top;
+                cursorOverlay.style.left = cursorElement.style.left;
+                cursorOverlay.style.height =
+                  cursorElement.getAttribute("height") + "px";
+                cursorOverlay.style.width =
+                  cursorElement.getAttribute("width") + "px";
+                cursorOverlay.style.display = "block";
+              }
             }
           }
           onNotesChange?.(getCurrentNotes());
         }
       },
       reset: () => {
+        lastAutoScrollTopRef.current = -1; // 自動スクロール履歴をクリア
         if (osmdRef.current?.cursor) {
           osmdRef.current.cursor.reset();
           osmdRef.current.cursor.update();
-          if (darkMode) {
-            const cursorElement = (osmdRef.current.cursor as any).cursorElement;
-            const cursorOverlay = cursorElement?.parentElement?.querySelector(
-              ".cursor-overlay-orange",
-            ) as HTMLDivElement;
-            if (cursorOverlay && cursorElement) {
-              cursorOverlay.style.top = cursorElement.style.top;
-              cursorOverlay.style.left = cursorElement.style.left;
-              cursorOverlay.style.height =
-                cursorElement.getAttribute("height") + "px";
-              cursorOverlay.style.width =
-                cursorElement.getAttribute("width") + "px";
+          const cursorElement = (osmdRef.current.cursor as any).cursorElement;
+          if (cursorElement) {
+            cursorElement.classList.remove("cursor-hidden");
+            cursorElement.style.display = "block";
+            cursorElement.style.visibility = "visible";
+            if (darkMode) {
+              const cursorOverlay = cursorElement?.parentElement?.querySelector(
+                ".cursor-overlay-orange",
+              ) as HTMLDivElement;
+              if (cursorOverlay) {
+                cursorOverlay.style.top = cursorElement.style.top;
+                cursorOverlay.style.left = cursorElement.style.left;
+                cursorOverlay.style.height =
+                  cursorElement.getAttribute("height") + "px";
+                cursorOverlay.style.width =
+                  cursorElement.getAttribute("width") + "px";
+                cursorOverlay.style.display = "block";
+              }
             }
           }
           onNotesChange?.(getCurrentNotes());
@@ -1029,24 +1050,64 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
       jumpToTimestamp: (measureIndex: number, timestampInMeasure: number) => {
         if (osmdRef.current?.cursor) {
           const cursor = osmdRef.current.cursor;
-          cursor.reset();
-          let stepCount = 0;
-          const maxSteps = 10000; // Prevent infinite loop
 
+          // hidden=true にすることで reset()/next() 内部の update() をDOM更新なしにする
+          (cursor as any).hidden = true;
+          cursor.reset();
+
+          // cursor.next() でターゲット位置まで前進（hidden=true なので DOM更新は走らない）
+          // timestampInMeasure は小節内相対時間 → currentRelativeInMeasureTimestamp と比較
+          let stepCount = 0;
+          const maxSteps = 10000;
           while (!cursor.Iterator.EndReached && stepCount < maxSteps) {
-            if (
-              (cursor.Iterator as any).currentMeasureIndex === measureIndex &&
-              Math.abs(
-                (cursor.Iterator as any).currentTimeStamp?.RealValue ||
-                  0 - timestampInMeasure,
-              ) < 0.001
-            ) {
+            const itM = (cursor.Iterator as any).currentMeasureIndex as number;
+            const itTs = ((cursor.Iterator as any).currentRelativeInMeasureTimestamp?.RealValue ?? 0) as number;
+            if (itM === measureIndex && Math.abs(itTs - timestampInMeasure) < 0.001) {
               break;
             }
             cursor.next();
             stepCount++;
           }
+
+          // DOM更新（hidden=false を保証してから）
+          (cursor as any).hidden = false;
           cursor.update();
+
+          const cursorElement = (cursor as any).cursorElement;
+          if (cursorElement) {
+            cursorElement.classList.remove("cursor-hidden");
+            cursorElement.style.display = "block";
+            cursorElement.style.visibility = "visible";
+            if (darkMode) {
+              const cursorOverlay = cursorElement.parentElement?.querySelector(
+                ".cursor-overlay-orange",
+              ) as HTMLDivElement;
+              if (cursorOverlay) {
+                cursorOverlay.style.display = "block";
+              }
+            }
+            // カーソルが画面外なら自動スクロール（前回と同じ位置なら再スクロールしない）
+            const scrollContainer = containerRef.current?.closest("main") as HTMLElement | null;
+            if (scrollContainer) {
+              const containerRect = scrollContainer.getBoundingClientRect();
+              const cursorRect = cursorElement.getBoundingClientRect();
+              const margin = 80;
+              const inView =
+                cursorRect.top >= containerRect.top + margin &&
+                cursorRect.bottom <= containerRect.bottom - margin;
+              if (!inView) {
+                const relativeTop =
+                  cursorRect.top - containerRect.top + scrollContainer.scrollTop;
+                const targetTop =
+                  relativeTop - scrollContainer.clientHeight / 2 + cursorRect.height / 2;
+                // 前回と100px以上違う場合のみスクロール（連続呼び出しで暴れ防止）
+                if (Math.abs(targetTop - lastAutoScrollTopRef.current) > 100) {
+                  lastAutoScrollTopRef.current = targetTop;
+                  scrollContainer.scrollTo({ top: targetTop, behavior: "instant" });
+                }
+              }
+            }
+          }
           onNotesChange?.(getCurrentNotes());
         }
       },

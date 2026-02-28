@@ -100,6 +100,16 @@ const sampleScores = [
     name: "笑ったり転んだり",
     path: "/scores/warattari-korobandari.musicxml",
   },
+  {
+    id: "anpanmanMarch",
+    name: "アンパンマンのマーチ",
+    path: "/scores/anpanman_march.musicxml",
+  },
+  {
+    id: "anpanmanMarch-jazz",
+    name: "アンパンマンのマーチ(jazz)",
+    path: "/scores/anpanman_swing.musicxml",
+  },
 ];
 
 interface Note {
@@ -126,6 +136,33 @@ export default function ScorePage() {
       return {
         FixedMeasureWidth: true,
         FixedMeasureWidthFixedValue: 24,
+        FixedMeasureWidthUseForPickupMeasures: true,
+        LyricsHeight: 1.6,
+        ChordSymbolTextHeight: 1.6,
+      };
+    }
+    if (selectedScore === "/scores/anpanman_march.musicxml") {
+      return {
+        FixedMeasureWidth: true,
+        FixedMeasureWidthFixedValue: 18,
+        FixedMeasureWidthUseForPickupMeasures: true,
+        LyricsHeight: 1.6,
+        ChordSymbolTextHeight: 1.6,
+      };
+    }
+    if (selectedScore === "/scores/anpanman_jazz_keyC.musicxml") {
+      return {
+        FixedMeasureWidth: true,
+        FixedMeasureWidthFixedValue: 18,
+        FixedMeasureWidthUseForPickupMeasures: true,
+        LyricsHeight: 1.6,
+        ChordSymbolTextHeight: 1.6,
+      };
+    }
+    if (selectedScore === "/scores/anpanman_swing.musicxml") {
+      return {
+        FixedMeasureWidth: true,
+        FixedMeasureWidthFixedValue: 18,
         FixedMeasureWidthUseForPickupMeasures: true,
         LyricsHeight: 1.6,
         ChordSymbolTextHeight: 1.6,

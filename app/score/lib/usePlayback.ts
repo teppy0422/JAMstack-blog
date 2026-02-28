@@ -152,6 +152,7 @@ export function usePlayback({
 
         // 音のスケジュール（SamplerはMIDIノート名で再生）
         const id = Tone.getTransport().schedule((time: number) => {
+          if (!synthRef.current?.loaded) return;
           const noteName = Tone.Frequency(evt.midiNote, "midi").toNote();
           synthRef.current?.triggerAttackRelease(
             noteName,

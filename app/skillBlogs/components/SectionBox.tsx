@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, Link, Heading, Divider } from "@chakra-ui/react";
-import { useColorMode } from "@chakra-ui/react";
+import { Box, Link, Heading, HStack } from "@chakra-ui/react";
 
 interface SectionBoxProps {
   id: string;
@@ -10,6 +9,7 @@ interface SectionBoxProps {
   sections: React.MutableRefObject<{ id: string; title: string }[]>;
   size?: string;
   mt?: string;
+  rightElement?: React.ReactNode;
 }
 
 const SectionBox: React.FC<SectionBoxProps> = ({
@@ -20,8 +20,8 @@ const SectionBox: React.FC<SectionBoxProps> = ({
   sections,
   size = "md",
   mt = "5",
+  rightElement,
 }) => {
-  const { colorMode } = useColorMode();
   return (
     <Box
       id={id}
@@ -35,14 +35,17 @@ const SectionBox: React.FC<SectionBoxProps> = ({
       }}
       width="100%"
     >
-      <Link
-        href={`#${id}`}
-        style={{ textDecoration: "none", display: "inline-block" }} // displayをinline-blockに設定
-      >
-        <Heading size={size} fontWeight="600" mt={mt}>
-          {title}
-        </Heading>
-      </Link>
+      <HStack justify="space-between" align="center" mt={mt}>
+        <Link
+          href={`#${id}`}
+          style={{ textDecoration: "none" }}
+        >
+          <Heading size={size} fontWeight="600">
+            {title}
+          </Heading>
+        </Link>
+        {rightElement && <Box>{rightElement}</Box>}
+      </HStack>
       {children}
     </Box>
   );

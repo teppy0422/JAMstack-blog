@@ -106,14 +106,14 @@ const nodes: Node[] = [
     id: "2",
     type: "custom",
     data: { label: "2.圧着PC", color: "orange" },
-    position: { x: 50, y: 500 },
+    position: { x: 250, y: 500 },
   },
-  {
-    id: "3",
-    type: "custom",
-    data: { label: "3.出荷PC", color: "orange" },
-    position: { x: 450, y: 500 },
-  },
+  // {
+  //   id: "3",
+  //   type: "custom",
+  //   data: { label: "3.出荷PC", color: "orange" },
+  //   position: { x: 450, y: 500 },
+  // },
 ];
 
 const edges: Edge[] = [

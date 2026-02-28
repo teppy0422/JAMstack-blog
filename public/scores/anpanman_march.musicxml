@@ -1,0 +1,1995 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC
+  "-//Recordare//DTD MusicXML 3.1 Partwise//EN"
+  "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1">
+  <work>
+    <work-title>アンパンマンのマーチ</work-title>
+  </work>
+
+  <part-list>
+    <score-part id="P1">
+      <part-name></part-name>
+    </score-part>
+    <score-part id="P2">
+      <part-name></part-name>
+    </score-part>
+  </part-list>
+
+  <!-- ==================== RIGHT HAND ==================== -->
+  <part id="P1">
+    <!-- ===== INTRO (melody) ===== -->
+    <!-- M1: Am -->
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>0</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <harmony>
+        <root><root-step>A</root-step></root>
+        <kind>minor</kind>
+      </harmony>
+      <note><pitch><step>E</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>E</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>G</step><alter>1</alter><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+    </measure>
+
+    <!-- M2: G/B -->
+    <measure number="2">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>B</bass-step></bass>
+      </harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>3</duration><type>eighth</type><dot/><beam number="1">begin</beam></note>
+      <note><pitch><step>E</step><octave>5</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- M3: Am -->
+    <measure number="3">
+      <harmony>
+        <root><root-step>A</root-step></root>
+        <kind>minor</kind>
+      </harmony>
+      <note><pitch><step>E</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><beam number="1">begin</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type><beam number="1">end</beam></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>3</duration><type>eighth</type><dot/><beam number="1">begin</beam></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+    </measure>
+
+    <!-- M4: E/G# -->
+    <measure number="4">
+      <harmony>
+        <root><root-step>E</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>G</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam></note>
+      <note><pitch><step>E</step><octave>5</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam></note>
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>8</duration><type>half</type></note>
+    </measure>
+
+    <!-- M5: Am→Dm -->
+    <measure number="5">
+      <harmony>
+        <root><root-step>A</root-step></root>
+        <kind>minor</kind>
+      </harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor</kind>
+      </harmony>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+    </measure>
+
+    <!-- M6: G→C -->
+    <measure number="6">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam><beam number="2">end</beam></note>
+    </measure>
+
+    <!-- M7: Dm/F→Em/G -->
+    <measure number="7">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor</kind>
+        <bass><bass-step>F</bass-step></bass>
+      </harmony>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <harmony>
+        <root><root-step>E</root-step></root>
+        <kind>minor</kind>
+        <bass><bass-step>G</bass-step></bass>
+      </harmony>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+    </measure>
+
+    <!-- M8: Dm/D→Am/C -->
+    <measure number="8">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor</kind>
+      </harmony>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>F</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">begin</beam><beam number="2">begin</beam></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam><beam number="2">continue</beam></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam><beam number="2">end</beam></note>
+      <harmony>
+        <root><root-step>A</root-step></root>
+        <kind>minor</kind>
+        <bass><bass-step>C</bass-step></bass>
+      </harmony>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">begin</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>1</duration><type>16th</type><beam number="1">continue</beam></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>1</duration><type>16th</type><beam number="1">end</beam></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">begin</beam></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><type>eighth</type><beam number="1">end</beam></note>
+    </measure>
+
+    <!-- ===== VERSE 1 ===== -->
+    <!-- M9: C そうだ -->
+    <measure number="9">
+      <attributes>
+        <divisions>1</divisions>
+        <key><fifths>0</fifths></key>
+      </attributes>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>そうだ</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M10: F うれしいんだ -->
+    <measure number="10">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>うれしいんだ</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M11: D7/F# 生きる -->
+    <measure number="11">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>生きる</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M12: G7 よろこび -->
+    <measure number="12">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>よろこび</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M13: C たとえ -->
+    <measure number="13">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>たとえ</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M14: F 胸の傷が -->
+    <measure number="14">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>胸の傷が</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M15: D7/F#(2) + G7(2) いた／んで -->
+    <measure number="15">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>いた</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>んで</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M16: C(whole) も -->
+    <measure number="16">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>も</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- ===== INTERLUDE 1 ===== -->
+    <!-- M18: F(2) C/E(2) -->
+    <measure number="18">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M19: Dm7(2) C(2) -->
+    <measure number="19">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor-seventh</kind>
+      </harmony>
+      <note>
+        <pitch><step>F</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M20: D7/F#(4) -->
+    <measure number="20">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M21: G7(4) -->
+    <measure number="21">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M22: F(2) C/E(2) -->
+    <measure number="22">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M23: Dm7(2) C(2) -->
+    <measure number="23">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor-seventh</kind>
+      </harmony>
+      <note>
+        <pitch><step>F</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M24: F(2) C/E(2) -->
+    <measure number="24">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M25: Dm7(2) G7(2) -->
+    <measure number="25">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor-seventh</kind>
+      </harmony>
+      <note>
+        <pitch><step>F</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- ===== VERSE 2 ===== -->
+    <!-- M22: C(2) C/E(2) なんの／ために -->
+    <measure number="22">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>なんの</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>ために</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M23: F(2) C(2) 生まれて -->
+    <measure number="23">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>生まれ</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>て</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M24: F(2) C/E(2) なにをして -->
+    <measure number="24">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>なにを</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>して</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M25: D7(2) G7(2) 生きるのか -->
+    <measure number="25">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>生きるの</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>か</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M26: C(2) C/E(2) こたえら／れな -->
+    <measure number="26">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>こたえら</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>れな</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M27: F(2) C(2) い　なん／て -->
+    <measure number="27">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>い　なん</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>て</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M28: F(2) C(2) そんな／のは -->
+    <measure number="28">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>そんな</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>のは</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M29: G7(2) C(2) いや／だ！ -->
+    <measure number="29">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>いや</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>だ！</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- ===== BRIDGE ===== -->
+    <!-- M30: D7/F# 今を生きる -->
+    <measure number="30">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>今を生きる</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M31: G ことで -->
+    <measure number="31">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>ことで</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M32: E7/G# 熱いこころ -->
+    <measure number="32">
+      <harmony>
+        <root><root-step>E</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>G</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note>
+        <pitch><step>G</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>熱いこころ</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M33: Am 燃える -->
+    <measure number="33">
+      <harmony>
+        <root><root-step>A</root-step></root>
+        <kind>minor</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>燃える</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>E</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M34: G7/B(4) だから　君は -->
+    <measure number="34">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>B</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>だから　君は</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M35: C(2) C/E(2) いく／んだ -->
+    <measure number="35">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>いく</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>んだ</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M36: D/F#(4) ほほえん -->
+    <measure number="36">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>ほほえん</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M37: G7(4) で -->
+    <measure number="37">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>で</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+
+    <!-- ===== CHORUS: ああアンパンマン ===== -->
+    <!-- M38: C(1) C/E(1) あ／あ -->
+    <measure number="38">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>あ</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>あ</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M39: F(4) アンパンマン -->
+    <measure number="39">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>アンパンマン</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M40: D7/F#(4) やさしい -->
+    <measure number="40">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>やさしい</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M41: G7(4) 君は -->
+    <measure number="41">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>君は</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M42: C(2) C/E(2) い／け！ -->
+    <measure number="42">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>い</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>け！</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M43: F(4) みんなの夢 -->
+    <measure number="43">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>みんなの夢</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M44: D/F#(2) G7(2) まも／るた -->
+    <measure number="44">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>まも</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+        <lyric><text>るた</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M45: C(4) め -->
+    <measure number="45">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+        <lyric><text>め</text></lyric>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- ===== INTERLUDE 2 ===== -->
+    <!-- M46: F(2) C/E(2) -->
+    <measure number="46">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M47: Dm7(2) C(2) -->
+    <measure number="47">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor-seventh</kind>
+      </harmony>
+      <note>
+        <pitch><step>F</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M48: D7/F#(4) -->
+    <measure number="48">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>dominant</kind>
+        <bass><bass-step>F</bass-step><bass-alter>1</bass-alter></bass>
+      </harmony>
+      <note>
+        <pitch><step>F</step><alter>1</alter><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M49: G7(4) -->
+    <measure number="49">
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+    <!-- M50: F(2) C/E(2) -->
+    <measure number="50">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M51: Dm7(2) C(2) -->
+    <measure number="51">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor-seventh</kind>
+      </harmony>
+      <note>
+        <pitch><step>F</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M52: F(2) C/E(2) -->
+    <measure number="52">
+      <harmony>
+        <root><root-step>F</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+        <bass><bass-step>E</bass-step></bass>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M53: Dm7(2) G7(2) -->
+    <measure number="53">
+      <harmony>
+        <root><root-step>D</root-step></root>
+        <kind>minor-seventh</kind>
+      </harmony>
+      <note>
+        <pitch><step>F</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <harmony>
+        <root><root-step>G</root-step></root>
+        <kind>dominant</kind>
+      </harmony>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>D</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+      <note><chord/>
+        <pitch><step>F</step><octave>5</octave></pitch>
+        <duration>2</duration><type>half</type>
+      </note>
+    </measure>
+
+    <!-- M54: C (final) -->
+    <measure number="54">
+      <harmony>
+        <root><root-step>C</root-step></root>
+        <kind>major</kind>
+      </harmony>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+      <note><chord/>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>4</duration><type>whole</type>
+      </note>
+    </measure>
+
+  </part>
+
+  <!-- ==================== LEFT HAND ==================== -->
+  <part id="P2">
+
+    <!-- INTRO -->
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>0</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>F</sign><line>4</line></clef>
+      </attributes>
+      <!-- M1 LH: C3q E3q F3q F3q -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <measure number="2">
+      <!-- M2 LH: F#3q F#3q G3q G3q -->
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <measure number="3">
+      <!-- M3 LH: A2q C3q E3q A3q -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <measure number="4">
+      <!-- M4 LH: G#2q B2q E3q G#3q -->
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>8</duration><type>half</type></note>
+    </measure>
+
+    <measure number="5">
+      <!-- M5 LH: A2q C3q D3q F3q -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <measure number="6">
+      <!-- M6 LH: G2q B2q C3q E3q -->
+      <note><pitch><step>F</step><octave>3</octave><alter>1</alter></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><octave>3</octave><alter>1</alter></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <measure number="7">
+      <!-- M7 LH: F2q A2q E2q G2q -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <measure number="8">
+      <!-- M8 LH: D2q F2q A2q C3q -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+
+    <!-- VERSE 1 -->
+    <measure number="9">
+      <attributes>
+        <divisions>1</divisions>
+        <key><fifths>0</fifths></key>
+      </attributes>
+      <!-- C -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="10">
+      <!-- F -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="11">
+      <!-- F# (D7/F#) -->
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="12">
+      <!-- G -->
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="13">
+      <!-- C -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="14">
+      <!-- F -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="15">
+      <!-- F#(2) G(2) -->
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="16">
+      <!-- C(whole) -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <!-- INTERLUDE 1 -->
+    <measure number="18">
+      <!-- F(2) E(2) -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="19">
+      <!-- D(2) C(2) -->
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="20">
+      <!-- D7/F#(4) -->
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="21">
+      <!-- G7(4) -->
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="22">
+      <!-- F(2) E(2) -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="23">
+      <!-- D(2) C(2) -->
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="24">
+      <!-- F(2) E(2) -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="25">
+      <!-- D(2) G(2) -->
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <!-- VERSE 2 -->
+    <measure number="22">
+      <!-- C(2) E(2) = C / C/E -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="23">
+      <!-- F(2) C(2) -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="24">
+      <!-- F(2) E(2) -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="25">
+      <!-- D(2) G(2) -->
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="26">
+      <!-- C(2) E(2) = C / C/E こたえら/れな -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="27">
+      <!-- F(2) C(2) = F / C い　なん/て -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="28">
+      <!-- F(2) C(2) = F / C そんな/のは -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="29">
+      <!-- G(2) C(2) = G7 / C いや/だ！ -->
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <!-- BRIDGE -->
+    <measure number="30">
+      <!-- F# (D7/F#) -->
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="31">
+      <!-- G -->
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="32">
+      <!-- G# (E7/G#) -->
+      <note><pitch><step>G</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="33">
+      <!-- A -->
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="34">
+      <!-- B(4) = G7/B だから　君は -->
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="35">
+      <!-- C(2) E(2) = C / C/E いく／んだ -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="36">
+      <!-- F#(4) = D/F# ほほえん -->
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="37">
+      <!-- G7 で -->
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+
+    <!-- CHORUS -->
+    <measure number="38">
+      <!-- C(2) E(2) = C / C/E あ／あ -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="39">
+      <!-- F(4) アンパンマン -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="40">
+      <!-- F#(4) = D7/F# やさしい -->
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="41">
+      <!-- G(4) = G7 君は -->
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="42">
+      <!-- C(2) E(2) = C / C/E い／け！ -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="43">
+      <!-- F(4) みんなの夢 -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="44">
+      <!-- F#(2) G(2) = D/F# / G7 まも／るた -->
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="45">
+      <!-- C(4) め -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <!-- INTERLUDE 2 -->
+    <measure number="46">
+      <!-- F(2) + E(2) = F / C/E -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="47">
+      <!-- D(2) + C(2) = Dm7 / C -->
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="48">
+      <!-- D7/F#(4) -->
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="49">
+      <!-- G7(4) -->
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+    <measure number="50">
+      <!-- F(2) + E(2) = F / C/E -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="51">
+      <!-- D(2) + C(2) = Dm7 / C -->
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="52">
+      <!-- F(2) + E(2) = F / C/E -->
+      <note><pitch><step>F</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="53">
+      <!-- D(2) + G(2) = Dm7 / G7 -->
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><type>half</type></note>
+    </measure>
+
+    <measure number="54">
+      <!-- C (final) -->
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>whole</type></note>
+    </measure>
+
+  </part>
+</score-partwise>

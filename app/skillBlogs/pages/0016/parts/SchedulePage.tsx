@@ -65,78 +65,80 @@ const steps: Step[] = [
     details: [
       {
         title: "開発環境の準備",
+        plannedStart: "2026-02-20",
+        plannedEnd: "2026-02-26",
+        actualStart: "2026-02-20",
+        actualEnd: "2026-02-26",
+      },
+      {
+        title: "アプリ初期開発",
         plannedStart: "2026-03-02",
         plannedEnd: "2026-03-08",
       },
       {
-        title: "アプリ初期開発",
+        title: "入力機器の動作確認",
         plannedStart: "2026-03-09",
         plannedEnd: "2026-03-15",
       },
       {
-        title: "入力機器の動作確認",
+        title: "電子回路開発",
         plannedStart: "2026-03-16",
         plannedEnd: "2026-03-22",
       },
       {
-        title: "電子回路開発",
-        plannedStart: "2026-03-23",
-        plannedEnd: "2026-03-29",
-      },
-      {
         title: "作業実績の保存と出力",
-        plannedStart: "2026-03-23",
-        plannedEnd: "2026-03-29",
+        plannedStart: "2026-03-16",
+        plannedEnd: "2026-03-22",
       },
       {
         title: "本番環境の構成に変更",
+        plannedStart: "2026-03-23",
+        plannedEnd: "2026-03-29",
+      },
+      {
+        title: "データの整合確認",
         plannedStart: "2026-03-30",
         plannedEnd: "2026-04-05",
       },
       {
-        title: "データの整合確認",
+        title: "圧着カウント機器をプレスに装着テスト",
         plannedStart: "2026-04-06",
         plannedEnd: "2026-04-12",
       },
       {
-        title: "圧着カウント機器をプレスに装着テスト",
-        plannedStart: "2026-04-13",
-        plannedEnd: "2026-04-19",
-      },
-      {
         title: "CFMの自動切替",
-        plannedStart: "2026-04-20",
-        plannedEnd: "2026-05-03",
+        plannedStart: "2026-04-13",
+        plannedEnd: "2026-04-26",
       },
       {
         title: "規格表の自動取得テスト",
+        plannedStart: "2026-04-27",
+        plannedEnd: "2026-05-03",
+      },
+      {
+        title: "1セットを設置(CM20)",
         plannedStart: "2026-05-04",
         plannedEnd: "2026-05-10",
       },
       {
-        title: "1セットを設置(CM20)",
-        plannedStart: "2026-05-11",
-        plannedEnd: "2026-05-17",
-      },
-      {
         title: "運用テスト(現場意見で修正)",
-        plannedStart: "2026-05-18",
-        plannedEnd: "2026-05-31",
+        plannedStart: "2026-05-11",
+        plannedEnd: "2026-05-24",
       },
       {
         title: "運用開始",
-        plannedStart: "2026-06-01",
-        plannedEnd: "2026-06-07",
+        plannedStart: "2026-05-25",
+        plannedEnd: "2026-05-31",
       },
       {
         title: "不具合時の対応資料の作成",
-        plannedStart: "2026-06-08",
-        plannedEnd: "2026-06-21",
+        plannedStart: "2026-06-01",
+        plannedEnd: "2026-06-14",
       },
       {
         title: "保守資料の作成",
-        plannedStart: "2026-06-22",
-        plannedEnd: "2026-06-28",
+        plannedStart: "2026-06-15",
+        plannedEnd: "2026-06-21",
       },
     ],
   },
@@ -145,8 +147,10 @@ const steps: Step[] = [
     details: [
       {
         title: "各1台分",
-        plannedStart: "2026-03-01",
-        plannedEnd: "2026-03-08",
+        plannedStart: "2026-02-20",
+        plannedEnd: "2026-02-26",
+        actualStart: "2026-02-20",
+        actualEnd: "2026-02-26",
       },
       {
         title: "残り必要台数分",
@@ -244,7 +248,6 @@ export default function ScheduleWithGrid() {
 
   return (
     <Box py={0}>
-      <Text>調整中</Text>
       {/* ラベルの説明 */}
       <Box pt={2} pb={2} display="flex" alignItems="center" gap={1}>
         <Box bg={scheduleColor} w="30px" h="6px" />
