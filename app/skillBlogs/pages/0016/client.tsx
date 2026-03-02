@@ -106,6 +106,9 @@ import QR_Payload from "./parts/QrPayloadTable";
 const FloorPlan = dynamic(() => import("./parts/FloorLayout/ueda"), {
   ssr: false,
 });
+const ConnectionDiagram = dynamic(() => import("./parts/ConnectionDiagram"), {
+  ssr: false,
+});
 
 const BlogPage: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -289,10 +292,145 @@ const BlogPage: React.FC = () => {
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <VStack align="start" spacing={3} mt={3}>
-            <Text fontSize="sm" color="gray.500">
-              ※作成中
-            </Text>
+          <VStack align="start" spacing={4} mt={3} fontSize="sm">
+            {/* 2.1 目的 */}
+            <Box w="100%">
+              <Text fontWeight="bold" mb={1}>
+                2.1 目的
+              </Text>
+              <Text>
+                手圧着工程における作業実績の手書き記録・規格表の手動検索・ハイト調整ダイヤルの目安確認に要する時間を削減し、生産性を向上させる。
+              </Text>
+            </Box>
+
+            {/* 2.2 対象工程 */}
+            <Box w="100%">
+              <Text fontWeight="bold" mb={1}>
+                2.2 対象工程
+              </Text>
+              <Text>手圧着工程（手圧着＋JOINT）</Text>
+            </Box>
+
+            {/* 2.3 解決する課題 */}
+            <Box w="100%">
+              <Text fontWeight="bold" mb={2}>
+                2.3 解決する課題
+              </Text>
+              <Grid templateColumns="auto 1fr" gap={2} pl={2}>
+                <GridItem fontWeight="semibold" color="gray.500">
+                  課題1
+                </GridItem>
+                <GridItem>
+                  作業実績（端子ロットNº・マイクロメーター管理Nº・固着サンプルNº・準完日・背番号・品種・サイズ・端子品番・数量・再圧着履歴）を日報に手書きしており、生産性が低下している
+                </GridItem>
+
+                <GridItem fontWeight="semibold" color="gray.500">
+                  課題2
+                </GridItem>
+                <GridItem>
+                  規格表（基本データ・芯線出寸法等の詳細データ）を紙で探す手間が発生している
+                </GridItem>
+
+                <GridItem fontWeight="semibold" color="gray.500">
+                  課題3
+                </GridItem>
+                <GridItem>
+                  ハイト調整ダイヤルの設定値をメモ書きから探す手間が発生している
+                </GridItem>
+
+                <GridItem fontWeight="semibold" color="gray.500">
+                  課題4
+                </GridItem>
+                <GridItem>
+                  マイクロメーターの計測値を手入力しており、入力ミスや時間ロスが発生している
+                </GridItem>
+              </Grid>
+            </Box>
+
+            {/* 2.4 主要機能 */}
+            <Box w="100%">
+              <Text fontWeight="bold" mb={2}>
+                2.4 主要機能
+              </Text>
+              <VStack align="start" spacing={2} pl={2}>
+                <Box>
+                  <Text fontWeight="semibold">① 作業実績入力機能</Text>
+                  <Text color="gray.600">
+                    タッチパネル・QRリーダーにより、日報への手書き記録を電子化して入力工数を削減する
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="semibold">② 規格表表示機能</Text>
+                  <Text color="gray.600">
+                    基本データ（TCSC連携）および規格表画像データを画面表示し、紙の規格表を探す手間をなくす
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="semibold">
+                    ③ ハイト調整ダイヤル目安表示機能
+                  </Text>
+                  <Text color="gray.600">
+                    品番に対応したダイヤル設定値を自動表示し、メモ書きの参照を不要にする
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="semibold">
+                    ④ マイクロメーター直接入力機能
+                  </Text>
+                  <Text color="gray.600">
+                    専用ケーブルでマイクロメーターと接続し、計測値を自動取り込みすることで手書き時間の短縮
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="semibold">⑤ かんばん印刷機能</Text>
+                  <Text color="gray.600">
+                    手圧着工程に対応した製造指示（かんばん）をQRコード付きで印刷する
+                  </Text>
+                </Box>
+              </VStack>
+            </Box>
+
+            {/* 2.5 操作方法 */}
+            <Box w="100%">
+              <Text fontWeight="bold" mb={1}>
+                2.5 操作インターフェース
+              </Text>
+              <Grid templateColumns="auto 1fr" gap={2} pl={2}>
+                <GridItem fontWeight="semibold" color="gray.500">
+                  入力
+                </GridItem>
+                <GridItem>タッチパネルによる直感的な操作</GridItem>
+                <GridItem fontWeight="semibold" color="gray.500">
+                  QR読取
+                </GridItem>
+                <GridItem>
+                  製造指示書のQRコードを読み取って生産条件を簡単に呼び出し
+                </GridItem>
+              </Grid>
+            </Box>
+
+            {/* 2.6 システム構成 */}
+            <Box w="100%">
+              <Text fontWeight="bold" mb={1}>
+                2.6 システム構成
+              </Text>
+              <Grid templateColumns="auto 1fr" gap={2} pl={2}>
+                <GridItem fontWeight="semibold" color="gray.500">
+                  データ管理
+                </GridItem>
+                <GridItem>NASを経由してデータを一元管理</GridItem>
+                <GridItem fontWeight="semibold" color="gray.500">
+                  セキュリティ
+                </GridItem>
+                <GridItem>
+                  生産設備PCはローカル接続のみ。NASへの外部アクセスは禁止
+                </GridItem>
+                <GridItem fontWeight="semibold" color="gray.500">
+                  信頼性
+                </GridItem>
+                <GridItem>NAS相互監視によりデータ損失を防止</GridItem>
+              </Grid>
+            </Box>
           </VStack>
         </SectionBox>
         <SectionBox
@@ -682,6 +820,20 @@ const BlogPage: React.FC = () => {
           </Text>
           <Box mt={3}>
             <DataFlowDiagram />
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section7-1"
+          title={"7-1." + getMessage({ ja: "設備接続図", language })}
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box mt={3}>
+            <ConnectionDiagram />
           </Box>
         </SectionBox>
         <SectionBox
