@@ -80,11 +80,23 @@ import { downloadLatestFile } from "@/lib/downloadLatestFile";
 import CodeBlock from "@/components/CodeBlock";
 
 import SchedulePage from "./parts/SchedulePage";
+import { QRCodeSVG } from "qrcode.react";
+import OperationFlowDiagram from "./parts/OperationFlowDiagram";
 import EstimateSection from "./parts/pdfPrint/EstimateSection";
 import EstimateSection2 from "./parts/pdfPrint/EstimateSection2";
 import { ANNEX_SECTIONS } from "./parts/pdfPrint/annexContent";
 import ContractSection from "./parts/pdfPrint/ContractSection";
 import MaintenancePdfSection from "./parts/pdfPrint/MaintenancePdfSection";
+import SystemOverviewPdfSection from "./parts/pdfPrint/SystemOverviewPdfSection";
+import FlowDiagramPdfSection from "./parts/pdfPrint/FlowDiagramPdfSection";
+import {
+  SECTION2_PURPOSE,
+  SECTION2_TARGET,
+  SECTION2_ISSUES,
+  SECTION2_FEATURES,
+  SECTION2_INTERFACE,
+  SECTION2_SYSTEM,
+} from "./parts/pdfPrint/section2Content";
 import {
   SECTION4_ITEMS,
   SECTION4_1_LEGEND,
@@ -144,6 +156,7 @@ const BlogPage: React.FC = () => {
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
   const estimate2PrintFnRef = useRef<(() => void) | null>(null);
+  const connectionPrintFnRef = useRef<(() => void) | null>(null);
 
   // 点滅アニメーションを定義
   const blink = keyframes`
@@ -282,157 +295,189 @@ const BlogPage: React.FC = () => {
             </Grid>
           </VStack>
         </SectionBox>
-        <SectionBox
-          id="section2"
-          title={"2." + getMessage({ ja: "システム概要書", language })}
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
+        <Box position="relative" pr="14px" mt={5}>
+          {/* 縦棒 */}
+          <Box
+            position="absolute"
+            right={0}
+            top="13px"
+            bottom={0}
+            w="2px"
+            bg={
+              colorMode === "light"
+                ? "custom.theme.dark.300"
+                : "custom.theme.light.800"
+            }
+            borderRadius="full"
           />
-          <VStack align="start" spacing={4} mt={3} fontSize="sm">
-            {/* 2.1 目的 */}
-            <Box w="100%">
-              <Text fontWeight="bold" mb={1}>
-                2.1 目的
-              </Text>
-              <Text>
-                手圧着工程における作業実績の手書き記録・規格表の手動検索・ハイト調整ダイヤルの目安確認に要する時間を削減し、生産性を向上させる。
-              </Text>
+          <SectionBox
+            id="section2"
+            title={
+              "2." + getMessage({ ja: "システム概要書(プランC)", language })
+            }
+            sectionRefs={sectionRefs}
+            sections={sections}
+            rightElement={
+              <Box position="relative">
+                <SystemOverviewPdfSection />
+                {/* 横線：ボタン右端から縦棒まで */}
+                <Box
+                  position="absolute"
+                  top="50%"
+                  left="100%"
+                  transform="translateY(-50%)"
+                  h="2px"
+                  w="14px"
+                  bg={
+                    colorMode === "light"
+                      ? "custom.theme.dark.300"
+                      : "custom.theme.light.800"
+                  }
+                />
+              </Box>
+            }
+            mt="0"
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <VStack align="start" spacing={4} mt={3} fontSize="sm">
+              {/* 2.1 目的 */}
+              <Box w="100%">
+                <Text fontWeight="bold" mb={1}>
+                  2.1 目的
+                </Text>
+                <Text>{SECTION2_PURPOSE}</Text>
+              </Box>
+
+              {/* 2.2 対象工程 */}
+              <Box w="100%">
+                <Text fontWeight="bold" mb={1}>
+                  2.2 対象工程
+                </Text>
+                <Text>{SECTION2_TARGET}</Text>
+              </Box>
+
+              {/* 2.3 解決する課題 */}
+              <Box w="100%">
+                <Text fontWeight="bold" mb={2}>
+                  2.3 解決する課題
+                </Text>
+                <Grid templateColumns="auto 1fr" gap={2} pl={2}>
+                  {SECTION2_ISSUES.map((item) => (
+                    <React.Fragment key={item.label}>
+                      <GridItem fontWeight="semibold" color="gray.500">
+                        {item.label}
+                      </GridItem>
+                      <GridItem>{item.text}</GridItem>
+                    </React.Fragment>
+                  ))}
+                </Grid>
+              </Box>
+
+              {/* 2.4 主要機能 */}
+              <Box w="100%">
+                <Text fontWeight="bold" mb={2}>
+                  2.4 主要機能
+                </Text>
+                <VStack align="start" spacing={2} pl={2}>
+                  {SECTION2_FEATURES.map((item) => (
+                    <Box key={item.title}>
+                      <Text fontWeight="semibold">{item.title}</Text>
+                      <Text color="gray.600">{item.text}</Text>
+                    </Box>
+                  ))}
+                </VStack>
+              </Box>
+
+              {/* 2.5 操作インターフェース */}
+              <Box w="100%">
+                <Text fontWeight="bold" mb={1}>
+                  2.5 操作インターフェース
+                </Text>
+                <Grid templateColumns="auto 1fr" gap={2} pl={2}>
+                  {SECTION2_INTERFACE.map((item) => (
+                    <React.Fragment key={item.label}>
+                      <GridItem fontWeight="semibold" color="gray.500">
+                        {item.label}
+                      </GridItem>
+                      <GridItem>{item.text}</GridItem>
+                    </React.Fragment>
+                  ))}
+                </Grid>
+              </Box>
+
+              {/* 2.6 システム構成 */}
+              <Box w="100%">
+                <Text fontWeight="bold" mb={1}>
+                  2.6 システム構成
+                </Text>
+                <Grid templateColumns="auto 1fr" gap={2} pl={2}>
+                  {SECTION2_SYSTEM.map((item) => (
+                    <React.Fragment key={item.label}>
+                      <GridItem fontWeight="semibold" color="gray.500">
+                        {item.label}
+                      </GridItem>
+                      <GridItem>{item.text}</GridItem>
+                    </React.Fragment>
+                  ))}
+                </Grid>
+              </Box>
+            </VStack>
+          </SectionBox>
+        </Box>
+        {/* 縦棒 */}
+        <Box position="relative" pr="14px" mt={5} width="100%">
+          <Box
+            position="absolute"
+            right={0}
+            top="32px"
+            bottom={0}
+            w="2px"
+            bg={
+              colorMode === "light"
+                ? "custom.theme.dark.300"
+                : "custom.theme.light.800"
+            }
+            borderRadius="full"
+          />
+          <SectionBox
+            id="section2_1"
+            title={
+              "2-1." + getMessage({ ja: "手圧着アプリ操作フロー図", language })
+            }
+            sectionRefs={sectionRefs}
+            sections={sections}
+            mt="5"
+            rightElement={
+              <Box position="relative">
+                <FlowDiagramPdfSection targetId="operation-flow-diagram" />
+                <Box
+                  position="absolute"
+                  top="50%"
+                  left="100%"
+                  transform="translateY(-50%)"
+                  h="2px"
+                  w="14px"
+                  bg={
+                    colorMode === "light"
+                      ? "custom.theme.dark.300"
+                      : "custom.theme.light.800"
+                  }
+                />
+              </Box>
+            }
+          >
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Box mt={3} id="operation-flow-diagram">
+              <OperationFlowDiagram />
             </Box>
-
-            {/* 2.2 対象工程 */}
-            <Box w="100%">
-              <Text fontWeight="bold" mb={1}>
-                2.2 対象工程
-              </Text>
-              <Text>手圧着工程（手圧着＋JOINT）</Text>
-            </Box>
-
-            {/* 2.3 解決する課題 */}
-            <Box w="100%">
-              <Text fontWeight="bold" mb={2}>
-                2.3 解決する課題
-              </Text>
-              <Grid templateColumns="auto 1fr" gap={2} pl={2}>
-                <GridItem fontWeight="semibold" color="gray.500">
-                  課題1
-                </GridItem>
-                <GridItem>
-                  作業実績（端子ロットNº・マイクロメーター管理Nº・固着サンプルNº・準完日・背番号・品種・サイズ・端子品番・数量・再圧着履歴）を日報に手書きしており、生産性が低下している
-                </GridItem>
-
-                <GridItem fontWeight="semibold" color="gray.500">
-                  課題2
-                </GridItem>
-                <GridItem>
-                  規格表（基本データ・芯線出寸法等の詳細データ）を紙で探す手間が発生している
-                </GridItem>
-
-                <GridItem fontWeight="semibold" color="gray.500">
-                  課題3
-                </GridItem>
-                <GridItem>
-                  ハイト調整ダイヤルの設定値をメモ書きから探す手間が発生している
-                </GridItem>
-
-                <GridItem fontWeight="semibold" color="gray.500">
-                  課題4
-                </GridItem>
-                <GridItem>
-                  マイクロメーターの計測値を手入力しており、入力ミスや時間ロスが発生している
-                </GridItem>
-              </Grid>
-            </Box>
-
-            {/* 2.4 主要機能 */}
-            <Box w="100%">
-              <Text fontWeight="bold" mb={2}>
-                2.4 主要機能
-              </Text>
-              <VStack align="start" spacing={2} pl={2}>
-                <Box>
-                  <Text fontWeight="semibold">① 作業実績入力機能</Text>
-                  <Text color="gray.600">
-                    タッチパネル・QRリーダーにより、日報への手書き記録を電子化して入力工数を削減する
-                  </Text>
-                </Box>
-                <Box>
-                  <Text fontWeight="semibold">② 規格表表示機能</Text>
-                  <Text color="gray.600">
-                    基本データ（TCSC連携）および規格表画像データを画面表示し、紙の規格表を探す手間をなくす
-                  </Text>
-                </Box>
-                <Box>
-                  <Text fontWeight="semibold">
-                    ③ ハイト調整ダイヤル目安表示機能
-                  </Text>
-                  <Text color="gray.600">
-                    品番に対応したダイヤル設定値を自動表示し、メモ書きの参照を不要にする
-                  </Text>
-                </Box>
-                <Box>
-                  <Text fontWeight="semibold">
-                    ④ マイクロメーター直接入力機能
-                  </Text>
-                  <Text color="gray.600">
-                    専用ケーブルでマイクロメーターと接続し、計測値を自動取り込みすることで手書き時間の短縮
-                  </Text>
-                </Box>
-                <Box>
-                  <Text fontWeight="semibold">⑤ かんばん印刷機能</Text>
-                  <Text color="gray.600">
-                    手圧着工程に対応した製造指示（かんばん）をQRコード付きで印刷する
-                  </Text>
-                </Box>
-              </VStack>
-            </Box>
-
-            {/* 2.5 操作方法 */}
-            <Box w="100%">
-              <Text fontWeight="bold" mb={1}>
-                2.5 操作インターフェース
-              </Text>
-              <Grid templateColumns="auto 1fr" gap={2} pl={2}>
-                <GridItem fontWeight="semibold" color="gray.500">
-                  入力
-                </GridItem>
-                <GridItem>タッチパネルによる直感的な操作</GridItem>
-                <GridItem fontWeight="semibold" color="gray.500">
-                  QR読取
-                </GridItem>
-                <GridItem>
-                  製造指示書のQRコードを読み取って生産条件を簡単に呼び出し
-                </GridItem>
-              </Grid>
-            </Box>
-
-            {/* 2.6 システム構成 */}
-            <Box w="100%">
-              <Text fontWeight="bold" mb={1}>
-                2.6 システム構成
-              </Text>
-              <Grid templateColumns="auto 1fr" gap={2} pl={2}>
-                <GridItem fontWeight="semibold" color="gray.500">
-                  データ管理
-                </GridItem>
-                <GridItem>NASを経由してデータを一元管理</GridItem>
-                <GridItem fontWeight="semibold" color="gray.500">
-                  セキュリティ
-                </GridItem>
-                <GridItem>
-                  生産設備PCはローカル接続のみ。NASへの外部アクセスは禁止
-                </GridItem>
-                <GridItem fontWeight="semibold" color="gray.500">
-                  信頼性
-                </GridItem>
-                <GridItem>NAS相互監視によりデータ損失を防止</GridItem>
-              </Grid>
-            </Box>
-          </VStack>
-        </SectionBox>
+          </SectionBox>
+        </Box>
         <SectionBox
           id="section3"
           title={"3." + getMessage({ ja: "省力化効果", language })}
@@ -508,7 +553,7 @@ const BlogPage: React.FC = () => {
             </VStack>
           </SectionBox>
           <SectionBox
-            id="section4-1"
+            id="section4_1"
             title={"4-1." + getMessage({ ja: "保証・サポート範囲", language })}
             sectionRefs={sectionRefs}
             sections={sections}
@@ -660,7 +705,7 @@ const BlogPage: React.FC = () => {
             </Box>
           </SectionBox>
           <SectionBox
-            id="section4-2"
+            id="section4_2"
             title={
               "4-2." +
               getMessage({ ja: "外部要因による影響について", language })
@@ -788,7 +833,7 @@ const BlogPage: React.FC = () => {
           </SectionBox>
         </Box>
         <SectionBox
-          id="section6-1"
+          id="section6_1"
           title={"6-1." + getMessage({ ja: "業務委託契約書", language })}
           sectionRefs={sectionRefs}
           sections={sections}
@@ -807,7 +852,7 @@ const BlogPage: React.FC = () => {
         </SectionBox>
         <SectionBox
           id="section7"
-          title={"7." + getMessage({ ja: "システム構成図", language })}
+          title={"7." + getMessage({ ja: "データフロー図", language })}
           sectionRefs={sectionRefs}
           sections={sections}
         >
@@ -823,17 +868,41 @@ const BlogPage: React.FC = () => {
           </Box>
         </SectionBox>
         <SectionBox
-          id="section7-1"
+          id="section7_1"
           title={"7-1." + getMessage({ ja: "設備接続図", language })}
           sectionRefs={sectionRefs}
           sections={sections}
+          rightElement={
+            <Button
+              size="xs"
+              leftIcon={<FaDownload />}
+              variant="outline"
+              borderColor={
+                colorMode === "light"
+                  ? "custom.theme.dark.300"
+                  : "custom.theme.light.800"
+              }
+              color={
+                colorMode === "light"
+                  ? "custom.theme.dark.300"
+                  : "custom.theme.light.800"
+              }
+              onClick={() => connectionPrintFnRef.current?.()}
+            >
+              PDF
+            </Button>
+          }
         >
           <Divider
             mt={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
           <Box mt={3}>
-            <ConnectionDiagram />
+            <ConnectionDiagram
+              onPrintReady={(fn) => {
+                connectionPrintFnRef.current = fn;
+              }}
+            />
           </Box>
         </SectionBox>
         <SectionBox
@@ -853,6 +922,130 @@ const BlogPage: React.FC = () => {
           </Text>
           <Box mt={3}>
             <SchedulePage />
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section9"
+          title={"9." + getMessage({ ja: "セットアップ", language })}
+          sectionRefs={sectionRefs}
+          sections={sections}
+          mt="0"
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box>
+            各デバイスのセットアップ手順。購入直後を想定しています。
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section9_1"
+          title={"9-1." + getMessage({ ja: "Androidタブレット", language })}
+          sectionRefs={sectionRefs}
+          sections={sections}
+          mt="0"
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box>
+            作成中
+          </Box>
+        </SectionBox>
+        <SectionBox
+          id="section9_2"
+          title={"9-2." + getMessage({ ja: "QRリーダー", language })}
+          sectionRefs={sectionRefs}
+          sections={sections}
+          mt="0"
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box mt={3}>
+            <Link href="https://cdn.shopify.com/s/files/1/0144/3482/8374/files/Model-HW0002_HW0008_8100_HW0010-_Model-EV0031-3.pdf" isExternal fontSize="sm">
+              メーカー設定マニュアル(PDF) <ExternalLinkIcon mx="2px" />
+            </Link>
+            <Text>AndroidタブレットでBluetoothを開く</Text>
+            <Box bg="white" p="5px" mr="16px"display="inline-block">
+              <Text>Bluetooth HID</Text>
+              <QRCodeSVG value="%%SpecCodeAA" size={120} />
+              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCodeAA</Text>
+            </Box>
+            <Box bg="white" p="5px" display="inline-block">
+              <Text>強制ベアリング</Text>
+              <QRCodeSVG value="%%SpecCode99" size={120} />
+              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCode99</Text>
+            </Box>
+            <Text>接続を確立させる(ペアリング)</Text>
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>QRリーダーの設定</Text>
+            <Box bg="white" p="5px" mr="16px"display="inline-block">
+              <Text>設定モードに入る</Text>
+              <QRCodeSVG value="%%EnterSet" size={120} />
+              <Text fontSize="sm" mt={2} color="gray.500">%%EnterSet</Text>
+            </Box>
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>振動設定</Text>
+            <Box bg="white" p="5px" mr="16px"display="inline-block">
+              <Text>振動をオフ</Text>
+              <QRCodeSVG value="%%SpecCode76" size={120} />
+              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCode76</Text>
+            </Box>
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>スリープ時間の設定</Text>
+            <Box bg="white" p="5px" mr="16px"display="inline-block">
+              <Text>30分</Text>
+              <QRCodeSVG value="%%SpecCode35" size={120} />
+              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCode35</Text>
+            </Box>
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>アップロード速度</Text>
+            <Box bg="white" p="5px" mr="16px"display="inline-block">
+              <Text>速度遅い</Text>
+              <QRCodeSVG value="%%SpecCodeB2" size={120} />
+              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCodeB2</Text>
+            </Box>
+            <Box bg="white" p="5px" mr="16px"display="inline-block">
+              <Text>速度中</Text>
+              <QRCodeSVG value="%%SpecCodeB1" size={120} />
+              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCodeB1</Text>
+            </Box>
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>言語</Text>
+            <Box bg="white" p="5px" mr="16px"display="inline-block">
+              <Text>英語</Text>
+              <QRCodeSVG value="%%SpecCode40" size={120} />
+              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCode40</Text>
+            </Box>
+            <Divider
+              mt={2}
+              borderColor={colorMode === "light" ? "black" : "white"}
+            />
+            <Text>セットアップ終了</Text>
+            <Box bg="white" p="5px" mr="16px"display="inline-block">
+              <Text>終了</Text>
+              <QRCodeSVG value="%%ExitSet" size={120} />
+              <Text fontSize="sm" mt={2} color="gray.500">%%ExitSet</Text>
+            </Box>
           </Box>
         </SectionBox>
       </Frame>

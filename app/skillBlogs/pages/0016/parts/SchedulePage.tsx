@@ -40,8 +40,8 @@ type Step = {
 };
 
 // プロジェクトの期間設定
-const projectStart = startOfDay(parseISO("2026-03-02"));
-const projectEnd = startOfDay(parseISO("2026-07-31"));
+const projectStart = startOfDay(parseISO("2026-05-18"));
+const projectEnd = startOfDay(parseISO("2026-10-18"));
 
 // カレンダー開始はprojectStartの1週間前の月曜
 const calendarStart = startOfWeek(addDays(projectStart, -7), {
@@ -72,73 +72,73 @@ const steps: Step[] = [
       },
       {
         title: "アプリ初期開発",
-        plannedStart: "2026-03-02",
-        plannedEnd: "2026-03-08",
-      },
-      {
-        title: "入力機器の動作確認",
-        plannedStart: "2026-03-09",
-        plannedEnd: "2026-03-15",
-      },
-      {
-        title: "電子回路開発",
-        plannedStart: "2026-03-16",
-        plannedEnd: "2026-03-22",
-      },
-      {
-        title: "作業実績の保存と出力",
-        plannedStart: "2026-03-16",
-        plannedEnd: "2026-03-22",
-      },
-      {
-        title: "本番環境の構成に変更",
-        plannedStart: "2026-03-23",
-        plannedEnd: "2026-03-29",
-      },
-      {
-        title: "データの整合確認",
-        plannedStart: "2026-03-30",
-        plannedEnd: "2026-04-05",
-      },
-      {
-        title: "圧着カウント機器をプレスに装着テスト",
-        plannedStart: "2026-04-06",
-        plannedEnd: "2026-04-12",
-      },
-      {
-        title: "CFMの自動切替",
-        plannedStart: "2026-04-13",
-        plannedEnd: "2026-04-26",
-      },
-      {
-        title: "規格表の自動取得テスト",
-        plannedStart: "2026-04-27",
-        plannedEnd: "2026-05-03",
-      },
-      {
-        title: "1セットを設置(CM20)",
-        plannedStart: "2026-05-04",
-        plannedEnd: "2026-05-10",
-      },
-      {
-        title: "運用テスト(現場意見で修正)",
-        plannedStart: "2026-05-11",
+        plannedStart: "2026-05-18",
         plannedEnd: "2026-05-24",
       },
       {
-        title: "運用開始",
+        title: "入力機器の動作確認",
         plannedStart: "2026-05-25",
         plannedEnd: "2026-05-31",
       },
       {
-        title: "不具合時の対応資料の作成",
+        title: "電子回路開発",
         plannedStart: "2026-06-01",
+        plannedEnd: "2026-06-07",
+      },
+      {
+        title: "作業実績の保存と出力",
+        plannedStart: "2026-06-01",
+        plannedEnd: "2026-06-07",
+      },
+      {
+        title: "本番環境の構成に変更",
+        plannedStart: "2026-06-08",
         plannedEnd: "2026-06-14",
       },
       {
-        title: "保守資料の作成",
+        title: "データの整合確認",
         plannedStart: "2026-06-15",
         plannedEnd: "2026-06-21",
+      },
+      {
+        title: "圧着カウント機器をプレスに装着テスト",
+        plannedStart: "2026-06-22",
+        plannedEnd: "2026-06-28",
+      },
+      {
+        title: "CFMの自動切替",
+        plannedStart: "2026-06-29",
+        plannedEnd: "2026-07-12",
+      },
+      {
+        title: "規格表の自動取得テスト",
+        plannedStart: "2026-07-13",
+        plannedEnd: "2026-07-19",
+      },
+      {
+        title: "1セットを設置(CM20)",
+        plannedStart: "2026-07-20",
+        plannedEnd: "2026-07-26",
+      },
+      {
+        title: "運用テスト(現場意見で修正)",
+        plannedStart: "2026-07-27",
+        plannedEnd: "2026-08-09",
+      },
+      {
+        title: "運用開始",
+        plannedStart: "2026-08-10",
+        plannedEnd: "2026-08-16",
+      },
+      {
+        title: "不具合時の対応資料の作成",
+        plannedStart: "2026-08-17",
+        plannedEnd: "2026-08-30",
+      },
+      {
+        title: "保守資料の作成",
+        plannedStart: "2026-08-31",
+        plannedEnd: "2026-09-06",
       },
     ],
   },
@@ -154,8 +154,8 @@ const steps: Step[] = [
       },
       {
         title: "残り必要台数分",
-        plannedStart: "2026-06-01",
-        plannedEnd: "2026-06-07",
+        plannedStart: "2026-08-17",
+        plannedEnd: "2026-08-23",
       },
     ],
   },
@@ -164,13 +164,13 @@ const steps: Step[] = [
     details: [
       {
         title: "機材借用/既存データ入手",
-        plannedStart: "2026-03-01",
-        plannedEnd: "2026-03-06",
+        plannedStart: "2026-05-16",
+        plannedEnd: "2026-05-21",
       },
       {
         title: "データ運用の相談",
-        plannedStart: "2026-04-13",
-        plannedEnd: "2026-05-08",
+        plannedStart: "2026-06-29",
+        plannedEnd: "2026-07-24",
       },
     ],
   },

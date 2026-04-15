@@ -17,7 +17,7 @@ import CustomEdge from "./CustomEdge";
 
 // カスタムノード（非表示Handle付き）
 const CustomNode = ({ data }: NodeProps) => {
-  const padding = data.padding ?? 10;
+  const padding = data.padding ?? 6;
   return (
     <div
       style={{
@@ -26,36 +26,44 @@ const CustomNode = ({ data }: NodeProps) => {
         borderRadius: 6,
         background: data.color || "#f0f0f0",
         textAlign: "center",
-        minWidth: 120,
+        minWidth: data.minWidth ?? 120,
+        minHeight: data.minHeight ?? undefined,
+        maxWidth: data.maxWidth ?? undefined,
+        maxHeight: data.maxHeight ?? undefined,
         position: "relative",
-        cursor: "grab", // ★ 追加
+        whiteSpace: "pre-wrap",
+        cursor: "grab",
       }}
     >
-      {/* 非表示の接続点（必要） */}
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        style={{
-          display: "block",
-          width: 0,
-          height: 0,
-          background: "transparent",
-          border: "none",
-        }}
-        isConnectable={false}
-      />
-      <Handle
-        type="target"
-        position={Position.Top}
-        style={{
-          display: "block",
-          width: 0,
-          height: 0,
-          background: "transparent",
-          border: "none",
-        }}
-        isConnectable={false}
-      />
+      {/* 4方向の非表示ハンドル */}
+      {(["top", "right", "bottom", "left"] as const).map((pos) => (
+        <React.Fragment key={pos}>
+          <Handle
+            type="source"
+            position={
+              Position[
+                (pos.charAt(0).toUpperCase() +
+                  pos.slice(1)) as keyof typeof Position
+              ]
+            }
+            id={pos}
+            style={{ opacity: 0, width: 0, height: 0 }}
+            isConnectable={false}
+          />
+          <Handle
+            type="target"
+            position={
+              Position[
+                (pos.charAt(0).toUpperCase() +
+                  pos.slice(1)) as keyof typeof Position
+              ]
+            }
+            id={pos}
+            style={{ opacity: 0, width: 0, height: 0 }}
+            isConnectable={false}
+          />
+        </React.Fragment>
+      ))}
       {data.label}
     </div>
   );
@@ -65,48 +73,105 @@ const nodeTypes = {
   custom: CustomNode,
 };
 
+// ── エッジヘルパー ────────────────────────────────
+function e(
+  id: string,
+  source: string,
+  target: string,
+  label: string,
+  color: string,
+  dashed = false,
+  sourceHandle = "bottom",
+  targetHandle = "top",
+  labelXOffset = 0,
+  labelYOffset = 0,
+  labelBgFill = "transparent",
+): Edge {
+  return {
+    id,
+    source,
+    target,
+    sourceHandle,
+    targetHandle,
+    label,
+    type: "smoothstep",
+    markerEnd: { type: MarkerType.ArrowClosed, color },
+    style: {
+      stroke: color,
+      strokeWidth: 2,
+      strokeDasharray: dashed ? "6,3" : undefined,
+    },
+    labelStyle: {
+      fontSize: 13,
+      transform: `translate(${labelXOffset}px, ${labelYOffset}px)`,
+    },
+    labelBgStyle: { fill: labelBgFill },
+  };
+}
+
 const nodes: Node[] = [
   {
-    id: "4",
+    id: "shikoku",
     type: "custom",
-    data: { label: "4.四国部品PC", color: "#ddd" },
-    position: { x: 250, y: 0 },
+    data: { label: "四国部品PC", color: "#ddd", minWidth: 200 },
+    position: { x: 250, y: -30 },
   },
   {
-    id: "5",
+    id: "rltf",
     type: "custom",
-    data: { label: "5.ウエダPC", color: "#ddd" },
+    data: {
+      label: "RLTF-AまたはB",
+      color: "#FFF",
+      minWidth: 100,
+      maxHeight: 40,
+    },
+    position: { x: 50, y: 68 },
+  },
+  {
+    id: "tcssc",
+    type: "custom",
+    data: {
+      label: "TCSSC(規格データ)\n規格表画像",
+      color: "#FFF",
+      minWidth: 100,
+      maxHeight: 80,
+    },
+    position: { x: 250, y: 80 },
+  },
+  {
+    id: "shield",
+    type: "custom",
+    data: {
+      label: "シールドかんばん",
+      color: "#FFF",
+      minWidth: 100,
+      maxHeight: 80,
+    },
+    position: { x: 450, y: 68 },
+  },
+  {
+    id: "usb",
+    type: "custom",
+    data: { label: "USBメモリ\n(または通信)", color: "#ddd" },
     position: { x: 250, y: 200 },
   },
   {
-    id: "6",
+    id: "ueda",
     type: "custom",
-    data: { label: "6.かんばん", color: "orange", padding: 0 },
-    position: { x: 500, y: 350 },
+    data: { label: "ウエダPC", color: "#ddd" },
+    position: { x: 250, y: 300 },
   },
   {
-    id: "7",
+    id: "server",
     type: "custom",
-    data: { label: "7.作業者ネーム", color: "orange", padding: 0 },
-    position: { x: 500, y: 380 },
+    data: { label: "サーバー", color: "orange" },
+    position: { x: 250, y: 400 },
   },
   {
-    id: "8",
+    id: "cm20",
     type: "custom",
-    data: { label: "8.作業実績", color: "orange", padding: 0 },
-    position: { x: 10, y: 350 },
-  },
-  {
-    id: "1",
-    type: "custom",
-    data: { label: "1.サーバー", color: "orange" },
-    position: { x: 250, y: 350 },
-  },
-  {
-    id: "2",
-    type: "custom",
-    data: { label: "2.圧着PC", color: "orange" },
-    position: { x: 250, y: 500 },
+    data: { label: "圧着PC", color: "orange" },
+    position: { x: 450, y: 400 },
   },
   // {
   //   id: "3",
@@ -145,87 +210,102 @@ const edges: Edge[] = [
     style: { stroke: "#aaa", strokeWidth: 2 },
     labelBgStyle: { fill: "#fff" },
   },
-  {
-    id: "e5-6",
-    source: "5",
-    target: "8",
-    type: "smoothstep",
-    label: "印刷/検索/出力",
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      color: "orange",
-    },
-    style: { stroke: "orange", strokeWidth: 2 },
-    labelStyle: { fontSize: 13 },
-    labelBgStyle: { fill: "#fff" },
-  },
-  {
-    id: "e5-6",
-    source: "5",
-    target: "6",
-    type: "smoothstep",
-    label: "印刷",
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      color: "orange",
-    },
-    style: { stroke: "orange", strokeWidth: 2 },
-    labelStyle: { fontSize: 13 },
-    labelBgStyle: { fill: "#fff" },
-  },
-  {
-    id: "e5-1",
-    source: "5",
-    target: "1",
-    type: "smoothstep",
-    label: "切断データを移動",
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      color: "orange",
-    },
-    style: { stroke: "orange", strokeWidth: 2 },
-    labelStyle: { fontSize: 13 },
-    labelBgStyle: { fill: "#fff" },
-  },
-  {
-    id: "e1-2",
-    source: "1",
-    target: "2",
-    type: "smoothstep",
-    label: "圧着用データ相互通信",
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      color: "orange",
-    },
-    style: { stroke: "orange", strokeWidth: 2 },
-    labelStyle: { fontSize: 13 },
-    labelBgStyle: { fill: "#fff" },
-  },
-  {
-    id: "e1-3",
-    source: "1",
-    target: "3",
-    type: "smoothstep",
-    label: "出荷用データ相互通信",
-    markerStart: {
-      type: MarkerType.ArrowClosed,
-      color: "orange",
-    },
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      color: "orange",
-    },
-    style: { stroke: "orange", strokeWidth: 2 },
-    labelStyle: { fontSize: 13 },
-    labelBgStyle: { fill: "#fff" },
-  },
+  e("e1-2", "1", "2", "圧着用データ相互通信", "orange"),
+  e(
+    "e-sikoku-rltf",
+    "shikoku",
+    "rltf",
+    "毎日",
+    "orange",
+    false,
+    "left",
+    "top",
+    0,
+    -8,
+  ),
+  e(
+    "e-sikoku-tcssc",
+    "shikoku",
+    "tcssc",
+    "更新都度(月一回?)",
+    "orange",
+    false,
+    "bottom",
+    "top",
+    0,
+    -8,
+  ),
+  e(
+    "e-sikoku-shield",
+    "shikoku",
+    "shield",
+    "変更都度",
+    "orange",
+    false,
+    "right",
+    "top",
+    0,
+    -8,
+  ),
+  e("e-rltf-usb", "rltf", "usb", "", "orange", false, "bottom", "top"),
+  e("e-tcssc-usb", "tcssc", "usb", "", "orange", false, "bottom", "top"),
+  e("e-shield-usb", "shield", "usb", "", "orange", false, "bottom", "top"),
+  e("e-usb-ueda", "usb", "ueda", "", "orange", false, "bottom", "top"),
+  e(
+    "e-ueda-server",
+    "ueda",
+    "server",
+    "PreHarnessでインポート処理",
+    "orange",
+    false,
+    "bottom",
+    "top",
+    94,
+  ),
+  e(
+    "e-server-cm20",
+    "server",
+    "cm20",
+    "データ提供",
+    "orange",
+    false,
+    "right",
+    "left",
+    0,
+    -12,
+  ),
+  e(
+    "e-cm20-server",
+    "cm20",
+    "server",
+    "作業実績保存",
+    "orange",
+    false,
+    "bottom",
+    "bottom",
+    0,
+    16,
+  ),
+  e(
+    "e-server-ueda",
+    "server",
+    "ueda",
+    "データ参照",
+    "orange",
+    false,
+    "left",
+    "left",
+    -36,
+    0,
+  ),
 ];
 
 export default function DataFlowDiagram() {
   return (
-    <div style={{ width: "100%", height: "600px", position: "relative" }}>
+    <div style={{ width: "100%", height: "660px", position: "relative" }}>
       <ReactFlow
         nodes={nodes}
+        nodeOrigin={[0.5, 0.5]}
         nodesDraggable={true}
         edges={edges}
         edgeTypes={{ custom: CustomEdge }}

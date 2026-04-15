@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactFlow, {
   Background,
   Controls,
@@ -9,6 +9,8 @@ import ReactFlow, {
   Position,
   Handle,
   NodeProps,
+  ReactFlowProvider,
+  useReactFlow,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import {
@@ -883,12 +885,134 @@ const Legend = () => (
   </Box>
 );
 
+// ─── 内部コンポーネント（useReactFlow使用） ──────────────────
+function ConnectionDiagramInner({
+  activePlan,
+  nodes,
+  edges,
+  containerRef,
+  onPrintReady,
+}: {
+  activePlan: Plan;
+  nodes: Node[];
+  edges: Edge[];
+  containerRef: React.RefObject<HTMLDivElement>;
+  onPrintReady?: (fn: () => void) => void;
+}) {
+  const { fitView, getViewport, setViewport } = useReactFlow();
+
+  const handlePrint = async () => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    // 現在の状態を保存
+    const prevViewport = getViewport();
+    const prevW = el.style.width;
+    const prevH = el.style.height;
+
+    // プランごとのコンテンツ高さに合わせてキャプチャサイズを決定
+    const PRINT_W = 900;
+    const PRINT_H = (
+      { A: 880, B: 510, C: 370, D: 370, E: 370 } as Record<Plan, number>
+    )[activePlan];
+    el.style.width = `${PRINT_W}px`;
+    el.style.height = `${PRINT_H}px`;
+    await new Promise((r) => setTimeout(r, 80));
+
+    // 全ノードが収まるようfitView（padding=0で余白なし）
+    fitView({ padding: 0, duration: 0 });
+    await new Promise((r) => setTimeout(r, 200));
+
+    // ズームボタンを一時非表示
+    const controls = el.querySelector(
+      ".react-flow__controls",
+    ) as HTMLElement | null;
+    if (controls) controls.style.display = "none";
+
+    const html2canvas = (await import("html2canvas")).default;
+    const canvas = await html2canvas(el, {
+      backgroundColor: "#fff",
+      scale: 2,
+      useCORS: true,
+      width: PRINT_W,
+      height: PRINT_H as number,
+    });
+
+    if (controls) controls.style.display = "";
+    // サイズとビューポートを元に戻す
+    el.style.width = prevW;
+    el.style.height = prevH;
+    setViewport(prevViewport, { duration: 0 });
+
+    const imgData = canvas.toDataURL("image/png");
+    const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>設備接続図_プラン${activePlan}</title>
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 0; font-family: sans-serif; }
+  h2 { font-size: 13px; margin: 0 0 6px; }
+  img { width: 100%; height: auto; display: block; }
+</style></head>
+<body>
+<h2>7-1. 設備接続図（プラン${activePlan}）</h2>
+<img src="${imgData}" />
+</body></html>`;
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const win = window.open(url, "_blank");
+    if (!win) return;
+    setTimeout(() => {
+      win.focus();
+      win.print();
+      URL.revokeObjectURL(url);
+    }, 800);
+  };
+
+  useEffect(() => {
+    onPrintReady?.(() => {
+      void handlePrint();
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePlan]);
+
+  return (
+    <ReactFlow
+      key={activePlan}
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={nodeTypes}
+      nodesDraggable={true}
+      nodeOrigin={[0.5, 0.5]}
+      defaultViewport={{ x: 10, y: 10, zoom: 0.72 }}
+      minZoom={0.3}
+      zoomOnScroll={false}
+      preventScrolling={false}
+      proOptions={{ hideAttribution: true }}
+    >
+      <Legend />
+      <Background gap={16} color="#e8e8e8" />
+      <Controls
+        showZoom={true}
+        showFitView={true}
+        showInteractive={false}
+        position="bottom-left"
+      />
+    </ReactFlow>
+  );
+}
+
 // ─── メインコンポーネント ──────────────────────────────────
-export default function ConnectionDiagram() {
+export default function ConnectionDiagram({
+  onPrintReady,
+}: {
+  onPrintReady?: (fn: () => void) => void;
+} = {}) {
   const [activePlan, setActivePlan] = useState<Plan>("C");
   const { colorMode } = useColorMode();
   const isDark = colorMode === "dark";
   const activeBtnBg = isDark ? "#E3836D" : "#503F35";
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // プランに含まれるノード・エッジのみ抽出
   const nodes: Node[] = BASE_NODES.filter(
@@ -908,7 +1032,7 @@ export default function ConnectionDiagram() {
 
   return (
     <Box>
-      {/* プラン選択ボタン＋凡例 */}
+      {/* プラン選択ボタン */}
       <HStack mb={3} spacing={1} flexWrap="wrap">
         <Text fontSize="xs" color="gray.500" mr={1}>
           プラン：
@@ -934,6 +1058,7 @@ export default function ConnectionDiagram() {
       </HStack>
 
       <div
+        ref={containerRef}
         style={{
           width: "100%",
           height: (
@@ -948,28 +1073,15 @@ export default function ConnectionDiagram() {
           position: "relative",
         }}
       >
-        <ReactFlow
-          key={activePlan}
-          nodes={nodes}
-          edges={edges}
-          nodeTypes={nodeTypes}
-          nodesDraggable={true}
-          nodeOrigin={[0.5, 0.5]}
-          defaultViewport={{ x: 10, y: 10, zoom: 0.72 }}
-          minZoom={0.3}
-          zoomOnScroll={false}
-          preventScrolling={false}
-          proOptions={{ hideAttribution: true }}
-        >
-          <Legend />
-          <Background gap={16} color="#e8e8e8" />
-          <Controls
-            showZoom={true}
-            showFitView={true}
-            showInteractive={false}
-            position="bottom-left"
+        <ReactFlowProvider>
+          <ConnectionDiagramInner
+            activePlan={activePlan}
+            nodes={nodes}
+            edges={edges}
+            containerRef={containerRef}
+            onPrintReady={onPrintReady}
           />
-        </ReactFlow>
+        </ReactFlowProvider>
       </div>
     </Box>
   );
