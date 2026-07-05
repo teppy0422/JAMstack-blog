@@ -381,6 +381,22 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          downloadPath: "/download/sjp/sjp/Sjp3.101.38_.zip",
+                          version: "3.101.38",
+                          date: "2026/07/05",
+                          reason: [
+                            "配策図(紙)の出力時にエラー",
+                            "生準+のコネクタ登録から略図の座標を取得できない"
+                          ],
+                          change: [
+                            "k_が0の時のエラー回避",
+                            "実行速度の改善(10%UP)",
+                            "治具の座標入力が無い場合の警告を追加",
+                            
+                          ],
+                          inCharge: ["徳島", "秋山さん"],
+                        },
+                        {
                           downloadPath: "/download/sjp/sjp/Sjp3.101.28_.zip",
                           version: "3.101.28",
                           date: "2025/11/12",
