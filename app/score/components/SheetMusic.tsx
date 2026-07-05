@@ -1103,7 +1103,7 @@ const SheetMusic = forwardRef<SheetMusicRef, SheetMusicProps>(
                 // 前回と100px以上違う場合のみスクロール（連続呼び出しで暴れ防止）
                 if (Math.abs(targetTop - lastAutoScrollTopRef.current) > 100) {
                   lastAutoScrollTopRef.current = targetTop;
-                  scrollContainer.scrollTo({ top: targetTop, behavior: "instant" });
+                  scrollContainer.scrollTo({ top: targetTop, behavior: "instant" as ScrollBehavior });
                 }
               }
             }

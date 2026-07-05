@@ -1007,7 +1007,7 @@ export default function ConnectionDiagram({
   onPrintReady,
 }: {
   onPrintReady?: (fn: () => void) => void;
-} = {}) {
+}) {
   const [activePlan, setActivePlan] = useState<Plan>("C");
   const { colorMode } = useColorMode();
   const isDark = colorMode === "dark";
