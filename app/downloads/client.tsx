@@ -1530,6 +1530,13 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          version: "2.200.16",
+                          date: "2026/07/09",
+                          reason: ["サーバーが移動したからエラー","エクセルが新しいバージョンになった","DSWのUrlが変わった"],
+                          change: ["サーバーを新見から徳島に修正","エクセルのバージョンに関係なく動作するように修正","あたらしいDSWのUrlに変更"],
+                          inCharge: ["徳島"],
+                        },
+                        {
                           version: "2.200.15",
                           date: "2025/01/23",
                           reason: ["製品品番の点数が146を超える場合にエラー"],
