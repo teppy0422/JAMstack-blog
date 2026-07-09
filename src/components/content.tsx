@@ -139,7 +139,7 @@ export default function Content({
               fontSize="12px"
               color={colorMode === "light" ? "gray.500" : "white"}
             >
-              ©︎ 2022-2025 Teppei Kataoka. All rights Reserved.
+              ©︎ 2022-2026 Teppei Kataoka. All rights Reserved.
             </Center>
             <Box height="60px" />
           </Box>

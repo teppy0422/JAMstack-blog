@@ -2,6 +2,45 @@ import { VideoMeta } from "@/types/video-meta";
 
 export const allVideos: VideoMeta[] = [
   {
+    id: "youtube_0005",
+    title: {
+      ja: "お肉(猫)はプランターが好き",
+      us: "Oniku(cat) likes planters",
+      cn: "Oniku（猫）喜欢花盆",
+    },
+    autoPlay: true,
+    date: "2026/05/31",
+    name: {
+      ja: "",
+      us: "",
+      cn: "",
+    },
+    textContent: {
+      ja: `これはYouTubeの転載です。このサイトで作成した動画ではありません。
+バルコニーに作ったプランター。
+なぜか気に入ったみたいで、
+風の日も、
+雨の日も、
+晴れの日も、最近はここにいます。`,
+      us: `This is a repost from YouTube. It is not a video created on this site.
+A planter I made for the balcony.
+For some reason, he seems to like it,
+and lately he’s been spending time here—
+whether it’s windy,
+rainy,
+or sunny.`,
+      cn: `这是从YouTube转载的视频。并非本网站制作的视频。
+在阳台上摆放的花盆。
+不知为何它似乎很喜欢这里，
+无论是刮风的日子，
+下雨的日子，
+还是晴天，最近它都待在这里。`,
+    },
+    src: "https://www.youtube.com/watch?v=__33zbaGsGE",
+    thumbnail: "https://img.youtube.com/vi/__33zbaGsGE/hqdefault.jpg",
+    time: "0:49",
+  },
+  {
     id: "youtube_0004",
     title: {
       ja: "初心者が最初に覚えるべき関数",
