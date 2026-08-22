@@ -13,7 +13,8 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { IoIosMail } from "react-icons/io";
-import { FaLine } from "react-icons/fa";
+import { FaLine, FaYoutube } from "react-icons/fa";
+import QRCode from "qrcode.react";
 import { PhoneIcon } from "@/components/ui/icons";
 import { AnimationImage } from "@/components/ui/CustomImage";
 import { SunderText, ScrollText } from "@/components/ui/CustomText";
@@ -385,6 +386,33 @@ m 139.02,400.77 c -8.65,-4.42 -13.98,-12.43 -20.52,-30.81 -8.68,-24.42 -10.69,-2
                   </Box>
                 </Link>
               </Box>
+              <Link
+                href="https://www.youtube.com/channel/UC8t-PMayTWV4YxpjhumUKvw"
+                isExternal
+                _hover={{ textDecoration: "none" }}
+                _focus={{ boxShadow: "none" }}
+              >
+                <Box display="flex" alignItems="center" justifyContent="center" gap={2} p={1}>
+                  <Box bg="white" p="3px" display="flex">
+                    <QRCode
+                      value="https://www.youtube.com/channel/UC8t-PMayTWV4YxpjhumUKvw"
+                      size={40}
+                    />
+                  </Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    fontSize="sm"
+                    color={colorMode === "light" ? "#000" : "#FFF"}
+                  >
+                    <FaYoutube
+                      style={{ marginRight: "4px", fontSize: "18px" }}
+                      color="#FF0000"
+                    />
+                    YouTube
+                  </Box>
+                </Box>
+              </Link>
               <Box
                 as="button"
                 onClick={onClose} // モーダルを閉じる関数を呼び出す
