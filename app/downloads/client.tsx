@@ -381,6 +381,15 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          downloadPath: "/download/sjp/sjp/Sjp3.103.07_.zip",
+                          version: "3.103.07",
+                          date: "2026/08/25",
+                          change: [
+                            "先ハメ誘導SSCを更新",
+                          ],
+                          inCharge: ["徳島", "坂東さん"],
+                        },
+                        {
                           downloadPath: "/download/sjp/sjp/Sjp3.103.04_.zip",
                           version: "3.103.04",
                           date: "2026/08/24",

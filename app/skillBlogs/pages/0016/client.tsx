@@ -41,7 +41,6 @@ import {
   ModalContent,
   ModalBody,
   useDisclosure,
-  DarkMode,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 
@@ -80,45 +79,18 @@ import { downloadLatestFile } from "@/lib/downloadLatestFile";
 import CodeBlock from "@/components/CodeBlock";
 
 import SchedulePage from "./parts/SchedulePage";
-import { QRCodeSVG } from "qrcode.react";
-import OperationFlowDiagram from "./parts/OperationFlowDiagram";
-import EstimateSection from "./parts/pdfPrint/EstimateSection";
-import EstimateSection2 from "./parts/pdfPrint/EstimateSection2";
-import { ANNEX_SECTIONS } from "./parts/pdfPrint/annexContent";
-import ContractSection from "./parts/pdfPrint/ContractSection";
-import MaintenancePdfSection from "./parts/pdfPrint/MaintenancePdfSection";
-import SystemOverviewPdfSection from "./parts/pdfPrint/SystemOverviewPdfSection";
-import FlowDiagramPdfSection from "./parts/pdfPrint/FlowDiagramPdfSection";
-import {
-  SECTION2_PURPOSE,
-  SECTION2_TARGET,
-  SECTION2_ISSUES,
-  SECTION2_FEATURES,
-  SECTION2_INTERFACE,
-  SECTION2_SYSTEM,
-} from "./parts/pdfPrint/section2Content";
-import {
-  SECTION4_ITEMS,
-  SECTION4_1_LEGEND,
-  SECTION4_1_NOTES,
-  SECTION4_2_INTRO,
-  SECTION4_2_ITEMS,
-} from "./parts/pdfPrint/section4Content";
 import DataFlowDiagram from "app/skillBlogs/pages/0015/parts/DataFlowDiagram";
 import DataFlowDiagram2 from "app/skillBlogs/pages/0015/parts/DataFlowDiagram2";
 import { UrlModalButton } from "@/components/ui/UrlModalButton";
 import { ImageSelector } from "@/components/ui/ImageSelector";
 import SpecTable_terminal from "./parts/SpecTable_terminal";
 import SpecTable_sarver from "./parts/SpecTable_sarver";
-import PartListTable from "./parts/pdfPrint/PartListTable";
-import PartListPlan from "./parts/pdfPrint/PartListPlan";
+import PartListTable from "../../../components/PartListTable";
+import PartListPlan from "../../../components/PartListPlan";
 
 import dynamic from "next/dynamic";
 import QR_Payload from "./parts/QrPayloadTable";
 const FloorPlan = dynamic(() => import("./parts/FloorLayout/ueda"), {
-  ssr: false,
-});
-const ConnectionDiagram = dynamic(() => import("./parts/ConnectionDiagram"), {
   ssr: false,
 });
 
@@ -155,8 +127,6 @@ const BlogPage: React.FC = () => {
   const toast = useToast();
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
-  const estimate2PrintFnRef = useRef<(() => void) | null>(null);
-  const connectionPrintFnRef = useRef<(() => void) | null>(null);
 
   // 点滅アニメーションを定義
   const blink = keyframes`
@@ -189,7 +159,7 @@ const BlogPage: React.FC = () => {
   }
   return (
     <>
-      <Frame sections={sections} sectionRefs={sectionRefs} isThrough hideMenu>
+      <Frame sections={sections} sectionRefs={sectionRefs} isThrough>
         <Box w="100%">
           <HStack spacing={2} align="center" mb={1} ml={1}>
             <AvatarGroup size="sm" spacing={-1.5}>
@@ -209,7 +179,7 @@ const BlogPage: React.FC = () => {
           </HStack>
           <Heading fontSize="3xl" mb={1}>
             {getMessage({
-              ja: "PreHarnessPro(仮)",
+              ja: "マイコンの使い方",
               us: "",
               cn: "",
               language,
@@ -217,7 +187,7 @@ const BlogPage: React.FC = () => {
           </Heading>
           <CustomBadge
             text={getMessage({
-              ja: "名称未定",
+              ja: "Arduino",
               us: "",
               cn: "",
               language,
@@ -233,818 +203,147 @@ const BlogPage: React.FC = () => {
               ja: "更新日",
               language,
             })}
-            :2026-02-09
+            :2026-08-25
           </Text>
         </Box>
+        {/* <SectionBox
+          id="section1"
+          title={
+            "1." +
+            getMessage({
+              ja: "はじめに",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Divider
+            mt={2}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
+          <Box>
+            <UnorderedList spacing={1}>
+              <ListItem>7/10に交付決定</ListItem>
+              <ListItem>
+                事業終了期限は9/30。間に合わない場合は片岡が社労士に連絡する。
+              </ListItem>
+              <ListItem>
+                運用開始から3ヶ月間を無償サポート期間とさせて頂きます。
+              </ListItem>
+              <ListItem>以下の計画は作成途中で適宜変更していきます。</ListItem>
+            </UnorderedList>
+          </Box>
+        </SectionBox> */}
         <SectionBox
           id="section1"
-          title={"1." + getMessage({ ja: "概要", language })}
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <VStack align="start" spacing={3} mt={3}>
-            <ExternalLink
-              href="https://shoryokuka.smrj.go.jp/ippan/"
-              text="中小企業省力化投資補助金（一般型）公式サイト"
-            />
-            <Text fontSize="sm">
-              人手不足に悩む中小企業等が、IoT・ロボット等のデジタル技術を活用した設備を導入する際の費用を補助する制度です。
-              ハード・ソフトを自由に組み合わせて申請できます。
-            </Text>
-            <Grid templateColumns="auto 1fr" gap={2} fontSize="sm" w="100%">
-              <GridItem fontWeight="semibold" color="gray.500">
-                補助対象者
-              </GridItem>
-              <GridItem>
-                中小企業者、小規模企業者、特定非営利活動法人 など
-              </GridItem>
-
-              <GridItem fontWeight="semibold" color="gray.500">
-                補助率
-              </GridItem>
-              <GridItem>
-                中小企業：1/2（賃上げ実施で2/3）／小規模企業者：2/3
-              </GridItem>
-
-              <GridItem fontWeight="semibold" color="gray.500">
-                補助上限額
-              </GridItem>
-              <GridItem>
-                750万〜8,000万円（従業員数により異なる）
-                <br />
-                賃上げ実施で上限額引き上げ可（最大1億円）
-              </GridItem>
-
-              <GridItem fontWeight="semibold" color="gray.500">
-                対象設備
-              </GridItem>
-              <GridItem>
-                IoT・ロボット・AI等、人手不足解消に効果があるデジタル技術を活用した設備
-              </GridItem>
-
-              <GridItem fontWeight="semibold" color="gray.500">
-                申請状況
-              </GridItem>
-              <GridItem>
-                第5回公募申請受付中（GビズIDプライムアカウント必須）
-              </GridItem>
-            </Grid>
-          </VStack>
-        </SectionBox>
-        <Box position="relative" pr="14px" mt={5}>
-          {/* 縦棒 */}
-          <Box
-            position="absolute"
-            right={0}
-            top="13px"
-            bottom={0}
-            w="2px"
-            bg={
-              colorMode === "light"
-                ? "custom.theme.dark.300"
-                : "custom.theme.light.800"
-            }
-            borderRadius="full"
-          />
-          <SectionBox
-            id="section2"
-            title={
-              "2." + getMessage({ ja: "システム概要書(プランC)", language })
-            }
-            sectionRefs={sectionRefs}
-            sections={sections}
-            rightElement={
-              <Box position="relative">
-                <SystemOverviewPdfSection />
-                {/* 横線：ボタン右端から縦棒まで */}
-                <Box
-                  position="absolute"
-                  top="50%"
-                  left="100%"
-                  transform="translateY(-50%)"
-                  h="2px"
-                  w="14px"
-                  bg={
-                    colorMode === "light"
-                      ? "custom.theme.dark.300"
-                      : "custom.theme.light.800"
-                  }
-                />
-              </Box>
-            }
-            mt="0"
-          >
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <VStack align="start" spacing={4} mt={3} fontSize="sm">
-              {/* 2.1 目的 */}
-              <Box w="100%">
-                <Text fontWeight="bold" mb={1}>
-                  2.1 目的
-                </Text>
-                <Text>{SECTION2_PURPOSE}</Text>
-              </Box>
-
-              {/* 2.2 対象工程 */}
-              <Box w="100%">
-                <Text fontWeight="bold" mb={1}>
-                  2.2 対象工程
-                </Text>
-                <Text>{SECTION2_TARGET}</Text>
-              </Box>
-
-              {/* 2.3 解決する課題 */}
-              <Box w="100%">
-                <Text fontWeight="bold" mb={2}>
-                  2.3 解決する課題
-                </Text>
-                <Grid templateColumns="auto 1fr" gap={2} pl={2}>
-                  {SECTION2_ISSUES.map((item) => (
-                    <React.Fragment key={item.label}>
-                      <GridItem fontWeight="semibold" color="gray.500">
-                        {item.label}
-                      </GridItem>
-                      <GridItem>{item.text}</GridItem>
-                    </React.Fragment>
-                  ))}
-                </Grid>
-              </Box>
-
-              {/* 2.4 主要機能 */}
-              <Box w="100%">
-                <Text fontWeight="bold" mb={2}>
-                  2.4 主要機能
-                </Text>
-                <VStack align="start" spacing={2} pl={2}>
-                  {SECTION2_FEATURES.map((item) => (
-                    <Box key={item.title}>
-                      <Text fontWeight="semibold">{item.title}</Text>
-                      <Text color="gray.600">{item.text}</Text>
-                    </Box>
-                  ))}
-                </VStack>
-              </Box>
-
-              {/* 2.5 操作インターフェース */}
-              <Box w="100%">
-                <Text fontWeight="bold" mb={1}>
-                  2.5 操作インターフェース
-                </Text>
-                <Grid templateColumns="auto 1fr" gap={2} pl={2}>
-                  {SECTION2_INTERFACE.map((item) => (
-                    <React.Fragment key={item.label}>
-                      <GridItem fontWeight="semibold" color="gray.500">
-                        {item.label}
-                      </GridItem>
-                      <GridItem>{item.text}</GridItem>
-                    </React.Fragment>
-                  ))}
-                </Grid>
-              </Box>
-
-              {/* 2.6 システム構成 */}
-              <Box w="100%">
-                <Text fontWeight="bold" mb={1}>
-                  2.6 システム構成
-                </Text>
-                <Grid templateColumns="auto 1fr" gap={2} pl={2}>
-                  {SECTION2_SYSTEM.map((item) => (
-                    <React.Fragment key={item.label}>
-                      <GridItem fontWeight="semibold" color="gray.500">
-                        {item.label}
-                      </GridItem>
-                      <GridItem>{item.text}</GridItem>
-                    </React.Fragment>
-                  ))}
-                </Grid>
-              </Box>
-            </VStack>
-          </SectionBox>
-        </Box>
-        {/* 縦棒 */}
-        <Box position="relative" pr="14px" mt={5} width="100%">
-          <Box
-            position="absolute"
-            right={0}
-            top="32px"
-            bottom={0}
-            w="2px"
-            bg={
-              colorMode === "light"
-                ? "custom.theme.dark.300"
-                : "custom.theme.light.800"
-            }
-            borderRadius="full"
-          />
-          <SectionBox
-            id="section2_1"
-            title={
-              "2-1." + getMessage({ ja: "手圧着アプリ操作フロー図", language })
-            }
-            sectionRefs={sectionRefs}
-            sections={sections}
-            mt="5"
-            rightElement={
-              <Box position="relative">
-                <FlowDiagramPdfSection targetId="operation-flow-diagram" />
-                <Box
-                  position="absolute"
-                  top="50%"
-                  left="100%"
-                  transform="translateY(-50%)"
-                  h="2px"
-                  w="14px"
-                  bg={
-                    colorMode === "light"
-                      ? "custom.theme.dark.300"
-                      : "custom.theme.light.800"
-                  }
-                />
-              </Box>
-            }
-          >
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <Box mt={3} id="operation-flow-diagram">
-              <OperationFlowDiagram />
-            </Box>
-          </SectionBox>
-        </Box>
-        <SectionBox
-          id="section3"
-          title={"3." + getMessage({ ja: "省力化効果", language })}
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <VStack align="start" spacing={3} mt={3}>
-            <Text fontSize="sm" color="gray.500">
-              ※要作成
-            </Text>
-          </VStack>
-        </SectionBox>
-        <Box position="relative" pr="14px" mt={5}>
-          {/* 縦棒 */}
-          <Box
-            position="absolute"
-            right={0}
-            top="13px"
-            bottom={0}
-            w="2px"
-            bg={
-              colorMode === "light"
-                ? "custom.theme.dark.300"
-                : "custom.theme.light.800"
-            }
-            borderRadius="full"
-          />
-          <SectionBox
-            id="section4"
-            title={"4." + getMessage({ ja: "保守点検の考え方", language })}
-            sectionRefs={sectionRefs}
-            sections={sections}
-            rightElement={
-              <Box position="relative">
-                <MaintenancePdfSection />
-                {/* 横線：ボタン右端から縦棒まで */}
-                <Box
-                  position="absolute"
-                  top="50%"
-                  left="100%"
-                  transform="translateY(-50%)"
-                  h="2px"
-                  w="14px"
-                  bg={
-                    colorMode === "light"
-                      ? "custom.theme.dark.300"
-                      : "custom.theme.light.800"
-                  }
-                />
-              </Box>
-            }
-            mt="0"
-          >
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <VStack align="start" spacing={1} mt={3} fontSize="sm">
-              {SECTION4_ITEMS.map((item, i) => (
-                <Box key={i}>
-                  <Text fontWeight="600" mt={i > 0 ? 4 : 0}>
-                    {item.heading}
-                  </Text>
-                  {item.lines.map((line, j) => (
-                    <Text key={j}>{line}</Text>
-                  ))}
-                </Box>
-              ))}
-            </VStack>
-          </SectionBox>
-          <SectionBox
-            id="section4_1"
-            title={"4-1." + getMessage({ ja: "保証・サポート範囲", language })}
-            sectionRefs={sectionRefs}
-            sections={sections}
-          >
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <Box mt={4} fontSize="sm">
-              {/* タイムライン */}
-              <Grid templateColumns="80px 1fr" gap={0} mb={4}>
-                {/* ラベル列 */}
-                <Box />
-                <Box position="relative" pb={1}>
-                  <Grid templateColumns="1fr 3fr" gap={0}>
-                    <Box fontSize="xs" color="gray.500" textAlign="left">
-                      納品
-                    </Box>
-                    <Box fontSize="xs" color="gray.500" textAlign="right">
-                      1年
-                    </Box>
-                  </Grid>
-                  <Box
-                    position="absolute"
-                    left="25%"
-                    top="0"
-                    fontSize="xs"
-                    color="gray.500"
-                    transform="translateX(-50%)"
-                  >
-                    3ヶ月
-                  </Box>
-                </Box>
-
-                {/* 初期調整期間バー */}
-                <Box
-                  fontSize="xs"
-                  color="gray.600"
-                  display="flex"
-                  alignItems="center"
-                  pr={2}
-                  fontWeight="bold"
-                >
-                  初期調整
-                </Box>
-                <Grid templateColumns="1fr 3fr" gap={0}>
-                  <Box
-                    bg="green.400"
-                    borderRadius="sm"
-                    h="28px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    fontSize="xs"
-                    color="white"
-                    fontWeight="bold"
-                  >
-                    無償
-                  </Box>
-                  <Box h="28px" />
-                </Grid>
-
-                {/* 保証期間バー */}
-                <Box
-                  fontSize="xs"
-                  color="gray.600"
-                  display="flex"
-                  alignItems="center"
-                  pr={2}
-                  fontWeight="bold"
-                  mt={1}
-                >
-                  不具合対応
-                </Box>
-                <Grid templateColumns="1fr 2fr 1fr" gap={0} mt={1}>
-                  <Box
-                    bg="blue.300"
-                    h="28px"
-                    borderRadius="sm"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    fontSize="xs"
-                    color="white"
-                    fontWeight="bold"
-                  >
-                    無償
-                  </Box>
-                  <Box
-                    bg="blue.500"
-                    h="28px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    fontSize="xs"
-                    color="white"
-                    fontWeight="bold"
-                  >
-                    仕様内のみ無償
-                  </Box>
-                  <Box
-                    bg="blue.800"
-                    borderRadius="sm"
-                    h="28px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    fontSize="xs"
-                    color="white"
-                    fontWeight="bold"
-                  >
-                    ※延長あり→
-                  </Box>
-                </Grid>
-              </Grid>
-
-              {/* 凡例 */}
-              <VStack
-                align="start"
-                spacing={1}
-                fontSize="xs"
-                color="gray.600"
-                mt={2}
-              >
-                {SECTION4_1_LEGEND.map((item, i) => (
-                  <HStack key={i} alignItems="flex-start">
-                    <Box
-                      w="12px"
-                      h="12px"
-                      bg={item.color}
-                      borderRadius="sm"
-                      flexShrink={0}
-                      mt="3px"
-                    />
-                    <Text>{item.label}</Text>
-                  </HStack>
-                ))}
-              </VStack>
-              {SECTION4_1_NOTES.map((note, i) => (
-                <Text
-                  key={i}
-                  fontSize="xs"
-                  color="gray.800"
-                  mt={i === 0 ? 3 : 1}
-                >
-                  {note}
-                </Text>
-              ))}
-            </Box>
-          </SectionBox>
-          <SectionBox
-            id="section4_2"
-            title={
-              "4-2." +
-              getMessage({ ja: "外部要因による影響について", language })
-            }
-            sectionRefs={sectionRefs}
-            sections={sections}
-          >
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <VStack align="start" spacing={3} mt={3} fontSize="sm">
-              <Text>{SECTION4_2_INTRO}</Text>
-              <Box w="100%">
-                <Text fontWeight="bold" mb={2}>
-                  不具合が発生し得る外部要因
-                </Text>
-                <VStack align="start" spacing={2} pl={2}>
-                  {SECTION4_2_ITEMS.map((item, i) => (
-                    <Box key={i}>
-                      <Text fontWeight="bold" fontSize="xs">
-                        {item.heading}
-                      </Text>
-                      {item.lines.map((line, j) => (
-                        <Text key={j}>{line}</Text>
-                      ))}
-                    </Box>
-                  ))}
-                </VStack>
-              </Box>
-            </VStack>
-          </SectionBox>
-        </Box>
-        <SectionBox
-          id="section5"
-          title={"5." + getMessage({ ja: "見積書", language })}
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <EstimateSection />
-        </SectionBox>
-        <Box position="relative" pr="14px" mt={5}>
-          {/* 縦棒 */}
-          <Box
-            position="absolute"
-            right={0}
-            top="33px"
-            bottom={0}
-            w="2px"
-            bg={
-              colorMode === "light"
-                ? "custom.theme.dark.300"
-                : "custom.theme.light.800"
-            }
-            borderRadius="full"
-          />
-          <SectionBox
-            id="section6"
-            title={
-              "6." + getMessage({ ja: "見積書（開発費のみ請求）", language })
-            }
-            sectionRefs={sectionRefs}
-            sections={sections}
-            rightElement={
-              <Box position="relative">
-                <Button
-                  size="xs"
-                  leftIcon={<FaDownload />}
-                  variant="outline"
-                  borderColor={
-                    colorMode === "light"
-                      ? "custom.theme.dark.300"
-                      : "custom.theme.light.800"
-                  }
-                  color={
-                    colorMode === "light"
-                      ? "custom.theme.dark.300"
-                      : "custom.theme.light.800"
-                  }
-                  onClick={() => estimate2PrintFnRef.current?.()}
-                >
-                  PDF
-                </Button>
-                <Box
-                  position="absolute"
-                  top="50%"
-                  left="100%"
-                  transform="translateY(-50%)"
-                  h="2px"
-                  w="14px"
-                  bg={
-                    colorMode === "light"
-                      ? "custom.theme.dark.300"
-                      : "custom.theme.light.800"
-                  }
-                />
-              </Box>
-            }
-          >
-            <EstimateSection2
-              isAdmin={currentUserCompany === "開発"}
-              onPrintReady={(fn) => {
-                estimate2PrintFnRef.current = fn;
-              }}
-            />
-            <Box mt={7} fontSize="sm">
-              <Text fontWeight="600" mb={2} w="100%" fontSize="sm">
-                ※別紙 見積補足資料
-              </Text>
-              <VStack align="start" spacing={3}>
-                {ANNEX_SECTIONS.map((s) => (
-                  <Box key={s.title}>
-                    <Text fontWeight="bold" mb={1}>
-                      {s.title}
-                    </Text>
-                    {s.lines.map((line, i) => (
-                      <Text key={i} mt={i > 0 ? 1 : 0}>
-                        {line}
-                      </Text>
-                    ))}
-                  </Box>
-                ))}
-              </VStack>
-            </Box>
-          </SectionBox>
-        </Box>
-        <SectionBox
-          id="section6_1"
-          title={"6-1." + getMessage({ ja: "業務委託契約書", language })}
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          {currentUserCompany === "開発" ? (
-            <ContractSection />
-          ) : (
-            <Text fontSize="sm" color="gray.500">
-              ※作成中
-            </Text>
-          )}
-        </SectionBox>
-        <SectionBox
-          id="section7"
-          title={"7." + getMessage({ ja: "データフロー図", language })}
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <Text fontSize="sm" color="gray.500">
-            ※作成中
-          </Text>
-          <Box mt={3}>
-            <DataFlowDiagram />
-          </Box>
-        </SectionBox>
-        <SectionBox
-          id="section7_1"
-          title={"7-1." + getMessage({ ja: "設備接続図", language })}
-          sectionRefs={sectionRefs}
-          sections={sections}
-          rightElement={
-            <Button
-              size="xs"
-              leftIcon={<FaDownload />}
-              variant="outline"
-              borderColor={
-                colorMode === "light"
-                  ? "custom.theme.dark.300"
-                  : "custom.theme.light.800"
-              }
-              color={
-                colorMode === "light"
-                  ? "custom.theme.dark.300"
-                  : "custom.theme.light.800"
-              }
-              onClick={() => connectionPrintFnRef.current?.()}
-            >
-              PDF
-            </Button>
-          }
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <Box mt={3}>
-            <ConnectionDiagram
-              onPrintReady={(fn) => {
-                connectionPrintFnRef.current = fn;
-              }}
-            />
-          </Box>
-        </SectionBox>
-        <SectionBox
-          id="section8"
           title={
-            "8." + getMessage({ ja: "導入スケジュール(プランC)", language })
+            "1." +
+            getMessage({
+              ja: "Arduino IDEのインストール",
+              language,
+            })
+          }
+          sectionRefs={sectionRefs}
+          sections={sections}
+        >
+          <Box mt={4}>
+          </Box>
+          {/* <Box mt={4}>
+            <PartListTable />
+          </Box> */}
+        </SectionBox>
+        
+        <SectionBox
+          id="section14"
+          title={
+            "14." +
+            getMessage({
+              ja: "まとめ",
+              language,
+            })
           }
           sectionRefs={sectionRefs}
           sections={sections}
         >
           <Divider
-            mt={2}
+            my={2}
             borderColor={colorMode === "light" ? "black" : "white"}
           />
-          <Text fontSize="sm" color="gray.500">
-            ※作成中
-          </Text>
-          <Box mt={3}>
-            <SchedulePage />
-          </Box>
-        </SectionBox>
-        <SectionBox
-          id="section9"
-          title={"9." + getMessage({ ja: "セットアップ", language })}
-          sectionRefs={sectionRefs}
-          sections={sections}
-          mt="0"
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <Box>
-            各デバイスのセットアップ手順。購入直後を想定しています。
-          </Box>
-        </SectionBox>
-        <SectionBox
-          id="section9_1"
-          title={"9-1." + getMessage({ ja: "Androidタブレット", language })}
-          sectionRefs={sectionRefs}
-          sections={sections}
-          mt="0"
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <Box>
-            作成中
-          </Box>
-        </SectionBox>
-        <SectionBox
-          id="section9_2"
-          title={"9-2." + getMessage({ ja: "QRリーダー", language })}
-          sectionRefs={sectionRefs}
-          sections={sections}
-          mt="0"
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <Box mt={3}>
-            <Link href="https://cdn.shopify.com/s/files/1/0144/3482/8374/files/Model-HW0002_HW0008_8100_HW0010-_Model-EV0031-3.pdf" isExternal fontSize="sm">
-              メーカー設定マニュアル(PDF) <ExternalLinkIcon mx="2px" />
-            </Link>
-            <Text>AndroidタブレットでBluetoothを開く</Text>
-            <Box bg="white" p="5px" mr="16px"display="inline-block">
-              <Text>Bluetooth HID</Text>
-              <QRCodeSVG value="%%SpecCodeAA" size={120} />
-              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCodeAA</Text>
-            </Box>
-            <Box bg="white" p="5px" display="inline-block">
-              <Text>強制ベアリング</Text>
-              <QRCodeSVG value="%%SpecCode99" size={120} />
-              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCode99</Text>
-            </Box>
-            <Text>接続を確立させる(ペアリング)</Text>
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <Text>QRリーダーの設定</Text>
-            <Box bg="white" p="5px" mr="16px"display="inline-block">
-              <Text>設定モードに入る</Text>
-              <QRCodeSVG value="%%EnterSet" size={120} />
-              <Text fontSize="sm" mt={2} color="gray.500">%%EnterSet</Text>
-            </Box>
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <Text>振動設定</Text>
-            <Box bg="white" p="5px" mr="16px"display="inline-block">
-              <Text>振動をオフ</Text>
-              <QRCodeSVG value="%%SpecCode76" size={120} />
-              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCode76</Text>
-            </Box>
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <Text>スリープ時間の設定</Text>
-            <Box bg="white" p="5px" mr="16px"display="inline-block">
-              <Text>30分</Text>
-              <QRCodeSVG value="%%SpecCode35" size={120} />
-              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCode35</Text>
-            </Box>
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <Text>アップロード速度</Text>
-            <Box bg="white" p="5px" mr="16px"display="inline-block">
-              <Text>速度遅い</Text>
-              <QRCodeSVG value="%%SpecCodeB2" size={120} />
-              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCodeB2</Text>
-            </Box>
-            <Box bg="white" p="5px" mr="16px"display="inline-block">
-              <Text>速度中</Text>
-              <QRCodeSVG value="%%SpecCodeB1" size={120} />
-              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCodeB1</Text>
-            </Box>
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <Text>言語</Text>
-            <Box bg="white" p="5px" mr="16px"display="inline-block">
-              <Text>英語</Text>
-              <QRCodeSVG value="%%SpecCode40" size={120} />
-              <Text fontSize="sm" mt={2} color="gray.500">%%SpecCode40</Text>
-            </Box>
-            <Divider
-              mt={2}
-              borderColor={colorMode === "light" ? "black" : "white"}
-            />
-            <Text>セットアップ終了</Text>
-            <Box bg="white" p="5px" mr="16px"display="inline-block">
-              <Text>終了</Text>
-              <QRCodeSVG value="%%ExitSet" size={120} />
-              <Text fontSize="sm" mt={2} color="gray.500">%%ExitSet</Text>
+          <Box
+            style={{
+              backgroundImage:
+                "url('https://thlpowhlzoeoymvhzlyi.supabase.co/storage/v1/object/public/uploads/public/20241021054156.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              color: "#fff",
+              position: "relative",
+            }}
+            borderRadius="10px"
+          >
+            <Box
+              px="13px"
+              py="20px"
+              style={{
+                textAlign: "left",
+                color: "#fff",
+                textShadow: "none",
+                fontWeight: "400",
+              }}
+              lineHeight={1.6}
+            >
+              <Text>✅ Androidタブレットに関して</Text>
+              <Text fontSize="15px">
+                現在、生産現場で使用するタッチ操作対応のWindows
+                PCは市場の縮小に伴い、以下のような課題が顕在化しております：
+              </Text>
+              <UnorderedList fontSize="14px" my={3}>
+                <ListItem>
+                  専用機の流通量が減少し、一般店頭ではほぼ入手困難
+                </ListItem>
+                <ListItem>
+                  入手可能な機種は価格が高騰し、選択肢も限られている
+                </ListItem>
+                <ListItem>
+                  通販では、**信頼性に不安のある海外製品（主に中華系）**が多く、長期運用には不安が残る
+                </ListItem>
+              </UnorderedList>
+              <Text fontSize="15px">
+                このような背景から、従来のWindowsベースの構成を継続することは、コスト・調達性・将来性の面で持続性が低いと判断いたしました。
+                そこで、今後の運用においては、以下の理由から
+                Androidタブレットをベースとしたシステム構成に移行することを提案・検討しております。
+              </Text>
+              <Text mt={8}>✅ Androidタブレットの利点</Text>
+
+              <UnorderedList fontSize="14px" my={3}>
+                <ListItem>
+                  安価かつ入手性が高い（市場規模が大きく流通が安定）
+                </ListItem>
+                <ListItem>
+                  タッチパネルが標準搭載されており、追加機器が不要
+                </ListItem>
+                <ListItem>
+                  スピーカー内蔵のため、音声ガイダンス等にも対応可能
+                </ListItem>
+                <ListItem>
+                  軽量・省スペース・可搬性が高い（生産現場に適した形状）
+                </ListItem>
+                <ListItem>今後も継続的に新機種が登場する見込み</ListItem>
+              </UnorderedList>
+              <Text fontSize="15px">
+                以降後のアプリケーションはAndroidだけじゃなくWindows/Mac/Linuxでも対応可能であり、現場で必要な機能（QRコード読み取り、USB機器接続、音声案内など）も十分実現可能です。
+              </Text>
+
+              <Text mt={8}>✅ iPadの利点</Text>
+              <UnorderedList fontSize="14px" my={3}>
+                <ListItem>部品性能が高く使用期間が長い(10年以上)</ListItem>
+                <ListItem>動作の安定性が高い</ListItem>
+              </UnorderedList>
+              <Text mt={8}>🟥 iPadのデメリット</Text>
+              <UnorderedList fontSize="14px" my={3}>
+                <ListItem>アプリのバージョンアップにMacが必須</ListItem>
+                <ListItem>シリアル通信が使用不可</ListItem>
+              </UnorderedList>
             </Box>
           </Box>
         </SectionBox>
