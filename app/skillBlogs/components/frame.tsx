@@ -268,11 +268,17 @@ const Frame: React.FC<{
         case window.location.pathname.includes("/skillBlogs/pages/0010"):
           index = [3];
           break;
-        case window.location.pathname.includes("/skillBlogs/pages/0003"):
+        case window.location.pathname.includes("/skillBlogs/pages/0017"):
           index = [4];
           break;
-        case window.location.pathname.includes("/skillBlogs/pages/0012"):
+        case window.location.pathname.includes("/skillBlogs/pages/0018"):
           index = [5];
+          break;
+        case window.location.pathname.includes("/skillBlogs/pages/0003"):
+          index = [6];
+          break;
+        case window.location.pathname.includes("/skillBlogs/pages/0012"):
+          index = [7];
           break;
         default:
           index = [];
@@ -375,7 +381,7 @@ const Frame: React.FC<{
           <HStack align="start" spacing={2} p={2} w="100%" bg="transparent">
             <VStack
               align="start"
-              flex={isMain ? "100" : "3.5"}
+              flex={isMain ? "100" : "4.5"}
               position="sticky"
               top="64px"
               display={
@@ -662,6 +668,80 @@ const Frame: React.FC<{
                         >
                           5.
                           {getMessage({
+                            ja: "先ハメ誘導(SSC有り)の作り方",
+                            us: "How to create pre-fit guidance (with SSC)",
+                            cn: "先装配引导（含SSC）的制作方法",
+                            language,
+                          })}
+                        </Box>
+                      </AccordionButton>
+                      {createLinkPanel(
+                        "/skillBlogs/pages/0017/",
+                        getMessage({
+                          ja: "作成手順",
+                          us: "Creation Procedure",
+                          cn: "创建步骤",
+                          language,
+                        }),
+                        isMain,
+                        true
+                      )}
+                    </>
+                  )}
+                </AccordionItem>
+                <AccordionItem border="0">
+                  {({ isExpanded }) => (
+                    <>
+                      <AccordionButton m={1} p={0}>
+                        <CustomAccordionIcon
+                          isExpanded={isExpanded}
+                          color_={isMain ? "#FFF" : ""}
+                        />
+                        <Box
+                          flex="1"
+                          textAlign="left"
+                          fontSize="13px"
+                          color={isMain ? "#FFF" : ""}
+                        >
+                          6.
+                          {getMessage({
+                            ja: "マイコンの使い方",
+                            us: "How to use the microcomputer",
+                            cn: "微机的使用方法",
+                            language,
+                          })}
+                        </Box>
+                      </AccordionButton>
+                      {createLinkPanel(
+                        "/skillBlogs/pages/0018/",
+                        getMessage({
+                          ja: "使い方",
+                          us: "How to Use",
+                          cn: "使用方法",
+                          language,
+                        }),
+                        isMain,
+                        true
+                      )}
+                    </>
+                  )}
+                </AccordionItem>
+                <AccordionItem border="0">
+                  {({ isExpanded }) => (
+                    <>
+                      <AccordionButton m={1} p={0}>
+                        <CustomAccordionIcon
+                          isExpanded={isExpanded}
+                          color_={isMain ? "#FFF" : ""}
+                        />
+                        <Box
+                          flex="1"
+                          textAlign="left"
+                          fontSize="13px"
+                          color={isMain ? "#FFF" : ""}
+                        >
+                          7.
+                          {getMessage({
                             ja: "改善活動の進め方",
                             us: "How to proceed with improvement activities",
                             cn: "如何开展改进活动",
@@ -697,7 +777,7 @@ const Frame: React.FC<{
                           fontSize="13px"
                           color={isMain ? "#FFF" : ""}
                         >
-                          6.
+                          8.
                           {getMessage({
                             ja: "ツール",
                             us: "tool (esp. software, etc.)",
@@ -778,7 +858,7 @@ const Frame: React.FC<{
                 <VStack
                   align="start"
                   spacing={6}
-                  flex="10"
+                  flex="9"
                   bg={
                     colorMode === "light"
                       ? "rgb(255,255,255,0.15)"

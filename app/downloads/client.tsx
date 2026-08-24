@@ -381,15 +381,14 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
-                          downloadPath: "/download/sjp/sjp/Sjp3.102.91_.zip",
-                          version: "3.102.91",
-                          date: "2026/08/22",
+                          downloadPath: "/download/sjp/sjp/Sjp3.103.04_.zip",
+                          version: "3.103.04",
+                          date: "2026/08/24",
                           reason: [
                             "WH_DataConvert.extでエラーになる"
                           ],
                           change: [
                             "生準+が08_MD2として分解するように修正(CAV一覧のみ)",
-                            
                           ],
                           inCharge: ["徳島", "秋山さん"],
                         },
