@@ -381,7 +381,18 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
-                          downloadPath: "/download/sjp/sjp/Sjp3.103.07_.zip",
+                          downloadPath: "/download/sjp/sjp/Sjp3.103.16_.zip",
+                          version: "3.103.16",
+                          date: "2026/08/28",
+                          reason: [
+                            "改訂履歴を全サブに付けるのが面倒"
+                          ],
+                          change: [
+                            "改訂履歴を各サブ図の末尾に追加",
+                          ],
+                          inCharge: ["徳島", "秋山さん"],
+                        },
+                        {
                           version: "3.103.07",
                           date: "2026/08/25",
                           change: [
@@ -390,7 +401,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           inCharge: ["徳島", "坂東さん"],
                         },
                         {
-                          downloadPath: "/download/sjp/sjp/Sjp3.103.04_.zip",
                           version: "3.103.04",
                           date: "2026/08/24",
                           reason: [
@@ -402,7 +412,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           inCharge: ["徳島", "秋山さん"],
                         },
                         {
-                          downloadPath: "/download/sjp/sjp/Sjp3.101.38_.zip",
                           version: "3.101.38",
                           date: "2026/07/05",
                           reason: [
@@ -418,7 +427,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           inCharge: ["徳島", "秋山さん"],
                         },
                         {
-                          downloadPath: "/download/sjp/sjp/Sjp3.101.28_.zip",
                           version: "3.101.28",
                           date: "2025/11/12",
                           reason: [
@@ -431,7 +439,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           inCharge: ["徳島", "秋山さん"],
                         },
                         {
-                          downloadPath: "/download/sjp/sjp/Sjp3.101.27_.zip",
                           version: "3.101.27",
                           date: "2025/10/30",
                           reason: [
@@ -441,7 +448,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           inCharge: ["徳島", "秋山さん"],
                         },
                         {
-                          downloadPath: "/download/sjp/sjp/Sjp3.101.26_.zip",
                           version: "3.101.26",
                           date: "2025/10/07",
                           reason: [
@@ -457,7 +463,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           inCharge: ["徳島", "山田さん"],
                         },
                         {
-                          downloadPath: "/download/sjp/sjp/Sjp3.101.21_.zip",
                           version: "3.101.21",
                           date: "2025/06/07",
                           reason: [
@@ -471,7 +476,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           inCharge: ["高知", "王さん"],
                         },
                         {
-                          downloadPath: "/download/sjp/sjp/Sjp3.101.18_.zip",
                           version: "3.101.18",
                           date: "2025/04/25",
                           reason: [
