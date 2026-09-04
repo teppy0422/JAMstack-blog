@@ -374,6 +374,9 @@ deploy 0053
 
 0082
 
+- bbsのファイルアップロード上限を60MBに変更
+
+0083
 #### Doing Now
 
 react-icons を利用しない

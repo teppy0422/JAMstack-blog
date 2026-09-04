@@ -1389,7 +1389,7 @@ function ThreadContent(): JSX.Element {
       setSelectedFileSize(formatFileSize(file.size));
     }
     if (file) {
-      if (file.size > 30 * 1024 * 1024) {
+      if (file.size > 60 * 1024 * 1024) {
         toast({
           position: "bottom",
           duration: 4000,
@@ -1398,9 +1398,9 @@ function ThreadContent(): JSX.Element {
             <CustomToast
               onClose={onClose}
               title={getMessage({
-                ja: "ファイルサイズが30MBを超えています。",
-                us: "File size exceeds 30 MB.",
-                cn: "文件大小超过 30 MB。",
+                ja: "ファイルサイズが60MBを超えています。",
+                us: "File size exceeds 60 MB.",
+                cn: "文件大小超过 60 MB。",
                 language,
               })}
               description={
