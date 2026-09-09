@@ -39,8 +39,6 @@
     "**/*.tsx",
     "pages/api/auth/[...nextauth].ts",
     "**/*.d.ts",
-    // ".next/types/**/*.ts",
-    "libs/.blog-post.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [

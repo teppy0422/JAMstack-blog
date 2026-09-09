@@ -269,6 +269,7 @@ const Frame: React.FC<{
           index = [3];
           break;
         case window.location.pathname.includes("/skillBlogs/pages/0016"):
+        case window.location.pathname.includes("/skillBlogs/pages/0017"):
           index = [4];
           break;
         case window.location.pathname.includes("/skillBlogs/pages/0003"):
@@ -678,6 +679,17 @@ const Frame: React.FC<{
                           ja: "使い方",
                           us: "How to Use",
                           cn: "使用方法",
+                          language,
+                        }),
+                        isMain,
+                        true
+                      )}
+                      {createLinkPanel(
+                        "/skillBlogs/pages/0017/",
+                        getMessage({
+                          ja: "USBキーボードインターフェイスの自作",
+                          us: "Building a Custom USB Keyboard Interface",
+                          cn: "自制USB键盘接口",
                           language,
                         }),
                         isMain,

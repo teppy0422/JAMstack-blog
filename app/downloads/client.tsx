@@ -381,6 +381,22 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          downloadPath: "/download/sjp/sjp/Sjp3.103.90_.zip",
+                          version: "3.103.90",
+                          date: "2026/09/09",
+                          reason: [
+                            "MENUの表示が遅い!遅すぎる!!",
+                            "ヘルプページアドレスにアクセスできない"
+                          ],
+                          change: [
+                            "先ハメ誘導SSCの追加",
+                            "MENUの表示を最適化",
+                            "アドレスの修正",
+                            "その他の細かい調整"
+                          ],
+                          inCharge: ["徳島", "秋山さん,橋本さん"],
+                        },
+                        {
                           downloadPath: "/download/sjp/sjp/Sjp3.103.16_.zip",
                           version: "3.103.16",
                           date: "2026/08/28",
