@@ -397,7 +397,6 @@ export default function Ui({ filterId }: { filterId?: string }) {
                           inCharge: ["徳島", "秋山さん,橋本さん"],
                         },
                         {
-                          downloadPath: "/download/sjp/sjp/Sjp3.103.16_.zip",
                           version: "3.103.16",
                           date: "2026/08/28",
                           reason: [
