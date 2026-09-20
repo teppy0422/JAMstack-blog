@@ -24,6 +24,13 @@ import {
   Th,
   Td,
   Badge,
+  Image,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 import Content from "@/components/content";
@@ -53,8 +60,8 @@ bool rightLastReading = HIGH;
 unsigned long rightLastChangeTime = 0;
 
 void setup() {
-  pinMode(LEFT_BUTTON, INPUT_PULLUP);
-  pinMode(RIGHT_BUTTON, INPUT_PULLUP);
+  pinMode(LEFT_BUTTON, INPUT);
+  pinMode(RIGHT_BUTTON, INPUT);
 
   Keyboard.begin();
 }
@@ -111,6 +118,65 @@ void handleButton(
   }
 }`;
 
+const ZoomableImage: React.FC<{
+  src: string;
+  alt: string;
+  invertOnDark?: boolean;
+}> = ({ src, alt, invertOnDark }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { colorMode } = useColorMode();
+  const filter =
+    invertOnDark && colorMode === "dark" ? "invert(1)" : undefined;
+
+  return (
+    <>
+      <Image
+        src={src}
+        alt={alt}
+        borderRadius="md"
+        w="auto"
+        h="100%"
+        maxW="100%"
+        objectFit="contain"
+        cursor="zoom-in"
+        onClick={onOpen}
+        transition="transform 0.15s ease"
+        _hover={{ transform: "scale(1.02)" }}
+        filter={filter}
+      />
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size="4xl">
+        <ModalOverlay />
+        <ModalContent bg="transparent" boxShadow="none">
+          <ModalCloseButton
+            color="white"
+            bg="blackAlpha.600"
+            borderRadius="full"
+            _hover={{ bg: "blackAlpha.800" }}
+          />
+          <ModalBody
+            p={0}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Image
+              src={src}
+              alt={alt}
+              maxH="90vh"
+              maxW="100%"
+              objectFit="contain"
+              borderRadius="md"
+              cursor="zoom-out"
+              onClick={onClose}
+              filter={filter}
+            />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
 const BlogPage: React.FC = () => {
   const {
     currentUserId,
@@ -147,45 +213,51 @@ const BlogPage: React.FC = () => {
       url: "https://www.amazon.co.jp/dp/B07ZV8FWM4",
     },
     {
-      name: "タクトスイッチまたは外部ボタン",
-      qty: "2",
-      note: "左右操作用",
-      url: "",
+      name: "タクトスイッチ",
+      qty: "1",
+      note: "書き込み時のリセット用",
+      url: "https://www.amazon.co.jp/Youmile-GR-YM-096-100%E5%80%8B%E3%82%BF%E3%82%AF%E3%83%88%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%B9%E3%82%A4%E3%83%83%E3%83%812%E3%83%94%E3%83%B3DIP-6x6x5mm-PCB%E3%83%A2%E3%83%BC%E3%83%A1%E3%83%B3%E3%82%BF%E3%83%AA%E3%82%BF%E3%82%AF%E3%82%BF%E3%82%A4%E3%83%AB%E3%82%BF%E3%82%AF%E3%83%88%E3%83%97%E3%83%83%E3%82%B7%E3%83%A5%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81/dp/B084X8LKTJ/ref=sr_1_2?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&crid=3B1CH4MKP977J&dib=eyJ2IjoiMSJ9.xEgKtdD4Cy4TRvl_zmGOEpAX6dmGWItUNpBXCyO9tiPDsmsmKDqcAxwir4vHm6kq7KzX1asQEK0O1Rvs2qWUi0nJMznwnNfpDyeaj1_YQGSVRCChCFvKVq4u7j861-MMKKnLRPiTLY4gKzmt8nFq-Z_EWlsneCO6f91pvSVTfXX3apM0cq3a-SoXRPHOBn-ncdm4HHlbEVWgO668WcZnRgkHztbTA4c8iOvXUcCVv8EsZsvZfGsDtjS1f7epVUmbBwaSsBQxLbW6FSPZpbeJ4UqplA5A8YIZGrdgpLhF-JA.5I6TEAL5Z275ibNysb4xHSgJgYiav8YkdXiZ8ZrxuCk&dib_tag=se&keywords=amazon+%E3%82%BF%E3%82%AF%E3%83%88+%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81+2%E3%83%94%E3%83%B3&qid=1789276253&sprefix=amazon+%E3%82%BF%E3%82%AF%E3%83%88+%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81+2%E3%83%94%E3%83%B3%2Caps%2C215&sr=8-2&ufe=app_do%3Aamzn1.fos.d8e7ee72-073f-4b97-8ec0-59c18d6dfebe",
     },
     {
       name: "0.1μF コンデンサ",
       qty: "2",
       note: "スイッチのノイズ・チャタリング対策",
-      url: "",
+      url: "https://akizukidenshi.com/catalog/g/g110147/",
     },
     {
       name: "10kΩ 抵抗",
       qty: "2",
       note: "入力信号を安定させるため",
-      url: "",
+      url: "https://akizukidenshi.com/catalog/g/g125103/",
     },
     {
-      name: "リセット用タクトスイッチ",
-      qty: "1",
-      note: "書き込み時のリセット操作用",
-      url: "",
-    },
-    {
-      name: "配線材",
-      qty: "適量",
-      note: "配線用",
-      url: "",
-    },
-    {
-      name: "ネジ式端子台（5.08mmピッチ 2Pin）",
-      qty: "適量",
-      note: "ボタンや配線を基板にネジ止めで着脱しやすくする",
+      name: "ターミナルブロック 2Pin",
+      qty: "2",
+      note: "ボタンへの配線の固定用",
       url: "https://www.amazon.co.jp/dp/B08B85SHLL",
     },
     {
-      name: "USBケーブル",
+      name: "分割ロングピンソケット 42P",
       qty: "1",
-      note: "PC接続・書き込み用",
+      note: "マイコン取り付け用",
+      url: "https://akizukidenshi.com/catalog/g/g105779/",
+    },
+    {
+      name: "USBケーブル(AtoC)",
+      qty: "1",
+      note: "書き込み用※CtoCはマイコンが対応してないので注意",
+      url: "https://www.amazon.co.jp/Anker-USB-IF%E8%AA%8D%E8%A8%BC-%E9%AB%98%E8%80%90%E4%B9%85%E3%83%8A%E3%82%A4%E3%83%AD%E3%83%B3%E7%B4%A0%E6%9D%90%E6%8E%A1%E7%94%A8-iPhone-Galaxy/dp/B0F6V25HTL/ref=sr_1_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&crid=DACOB867DX5W&dib=eyJ2IjoiMSJ9.RParLelQx809srnmG2AUfqesiAtVLFMLkwZEVbZJUuawzAzvnstP4DQYf-uYiFd-6xu2rrgeb0_yryfvxmLCjOSRSNf5xj2JttGFM8v5FVa1nq_w6sMaaPXY8BzPNh9XUB8GT9lafGTCo3FpeQOUVn7YGmHjebQEAnO39ilEfZIfuQysmj2TJIlNVOh9HnG8vt9Pg3kAb0nH9zwDrzAGOhDq4kSbAo_gnPR_Uql0JGxWPMqPqP_ojSaTlJ05qOGDmySQ-PkH0IkwifoSwh02Sf1vSsTeKyENqFLy8fY_jpI.Kz39Eys9IZ_P-r9Wcyn31ytiOVyLtTHR0AfJSrAHhCA&dib_tag=se&keywords=usb-c&qid=1789277855&refinements=p_n_g-101014941094111%3A23322626051%2Cp_123%3A3271&rnid=23341432051&sprefix=usb-%2Caps%2C428&sr=8-1&ufe=app_do%3Aamzn1.fos.35785624-70c4-44ae-a5c3-3f044f475d63&th=1",
+    },
+    {
+      name: "スズメッキ線5m",
+      qty: "1",
+      note: "φ0.4mm",
+      url: "https://www.amazon.co.jp/ELPA-HK-SM04H-%E3%82%B9%E3%82%BA%E3%83%A1%E3%83%83%E3%82%AD%E7%B7%9A-%CF%860-4mm/dp/B00BECS36Q/ref=sr_1_1_pp?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&crid=1Q09VST6H69XX&dib=eyJ2IjoiMSJ9.tBwicBkilykhd-c3iH33bmhEB97ukmCmT49J3ria_XJVpZi6lV3hyRIMRJpCLe7weD7eeLd-0PAMtpP1nV_npGKAjy7VxoUvq0k2miep06_vse5k-G-PJkLamiavqs3dMkgKyHqzWTIvKo2zU3GDCWY25_InzjmgBkJj5MdPgq00XYUvjFnvFi1CowBdxRubotfJ_8GJWr1D255DWP5IdCH7TbIFt5gB5vbgf_HZADj9nJPmjFB-GAvSsJ3mGEQBrfJ6pxNUG9tsiSMtnDwuZ5nZ8led4pIWDnJtjNssFWU.Mld6l7TC_mN05wgloZXrtj5mY0cVSjRq9IDBOEBYuOo&dib_tag=se&keywords=%E3%81%99%E3%81%9A%E3%82%81%E3%81%A3%E3%81%8D%E7%B7%9A&qid=1789278926&sprefix=%E3%81%99%E3%81%9A%E3%82%81%E3%81%A3%E3%81%8D%E7%B7%9A%2Caps%2C287&sr=8-1&ufe=app_do%3Aamzn1.fos.d8e7ee72-073f-4b97-8ec0-59c18d6dfebe&th=1",
+    },
+    {
+      name: "配線",
+      qty: "-",
+      note: "0.3spくらい※品種D02とか077",
       url: "",
     },
   ];
@@ -236,12 +308,12 @@ const BlogPage: React.FC = () => {
               ja: "更新日",
               language,
             })}
-            :2026-09-04
+            :2026-09-13
           </Text>
 
           <Text mt={4} lineHeight={1.8}>
             {getMessage({
-              ja: "この記事では、ATmega32U4というチップを搭載した「Pro Micro互換ボード」というマイコン（小さなコンピューター基板）を使って、物理的なボタンを押すとPCに矢印キー（←→）が送信される「USBキーボードインターフェイス」を自作する方法を、電子工作が初めての方にも分かるように説明します。",
+              ja: "ここではATmega32U4というチップを搭載した「Pro Micro互換ボード」というマイコンを使って、物理的なボタンを押すとPCに矢印キー（←→）が送信される「USBキーボードインターフェイス」を自作する方法を解説します。プログラムを書き換えると簡単に別のキーに変更できます。",
               language,
             })}
           </Text>
@@ -266,7 +338,7 @@ const BlogPage: React.FC = () => {
           />
           <Text mt={3}>
             {getMessage({
-              ja: "今回使用するのは、ATmega32U4というチップを搭載した「Pro Micro互換ボード」です。",
+              ja: "ATmega32U4というチップを搭載したマイコンボードなら何でもOKです。",
               language,
             })}
           </Text>
@@ -296,15 +368,6 @@ const BlogPage: React.FC = () => {
               })}
             </ListItem>
           </UnorderedList>
-          <Text mt={3}>
-            {getMessage({ ja: "今回使用したボードはこちらです。", language })}
-          </Text>
-          <Box mt={1}>
-            <ExternalLink
-              href="https://www.amazon.co.jp/dp/B0DMNBJHT7"
-              text="使用したATmega32U4 Pro Micro互換ボード"
-            />
-          </Box>
         </SectionBox>
 
         {/* 2. できること */}
@@ -313,7 +376,7 @@ const BlogPage: React.FC = () => {
           title={
             "2." +
             getMessage({
-              ja: "この装置でできること",
+              ja: "今回作るもの",
               language,
             })
           }
@@ -333,13 +396,13 @@ const BlogPage: React.FC = () => {
           <UnorderedList spacing={1} mt={2}>
             <ListItem>
               {getMessage({
-                ja: "左ボタン → PCに「←（左矢印キー）」を送信",
+                ja: "左ボタンを押して離す → PCに「←（左矢印キー）」を送信",
                 language,
               })}
             </ListItem>
             <ListItem>
               {getMessage({
-                ja: "右ボタン → PCに「→（右矢印キー）」を送信",
+                ja: "右ボタンを押して離す → PCに「→（右矢印キー）」を送信",
                 language,
               })}
             </ListItem>
@@ -352,7 +415,7 @@ const BlogPage: React.FC = () => {
           </Text>
           <Text mt={3}>
             {getMessage({
-              ja: "そのため、Webページのページ送り、プレゼンテーションのスライド操作、動画の早送り・巻き戻しなど、さまざまな用途に使用できます。",
+              ja: "Webページのページ送り、プレゼンテーションのスライド操作、動画の早送り・巻き戻しなど、さまざまな用途に使用できます。",
               language,
             })}
           </Text>
@@ -380,7 +443,7 @@ const BlogPage: React.FC = () => {
               <Thead>
                 <Tr bg={colorMode === "light" ? "gray.100" : "gray.600"}>
                   <Th>{getMessage({ ja: "部品", language })}</Th>
-                  <Th isNumeric>{getMessage({ ja: "数量", language })}</Th>
+                  <Th isNumeric>{getMessage({ ja: "数", language })}</Th>
                   <Th>{getMessage({ ja: "用途", language })}</Th>
                 </Tr>
               </Thead>
@@ -414,18 +477,6 @@ const BlogPage: React.FC = () => {
               </Tbody>
             </Table>
           </Box>
-          <Text mt={3} fontSize="sm" color="gray.500">
-            {getMessage({
-              ja: "※「0.1μF」は「マイクロファラッド」と読みます。コンデンサの容量（電気をためられる量）を表す単位です。",
-              language,
-            })}
-          </Text>
-          <Text mt={1} fontSize="xs" color="gray.500">
-            {getMessage({
-              ja: "※部品名をクリックすると、購入したサイトが別タブで開きます。",
-              language,
-            })}
-          </Text>
         </SectionBox>
 
         {/* 4. 回路について */}
@@ -434,7 +485,7 @@ const BlogPage: React.FC = () => {
           title={
             "4." +
             getMessage({
-              ja: "回路について",
+              ja: "回路設計について",
               language,
             })
           }
@@ -447,31 +498,13 @@ const BlogPage: React.FC = () => {
           />
           <Text mt={3}>
             {getMessage({
-              ja: "今回使用するArduinoのコードでは、pinModeにINPUT_PULLUPを指定しています。これはArduinoの内部にすでに用意されているプルアップ抵抗（ピンの電圧をHIGHに保つための抵抗）を使う設定です。",
+              ja: "Arduinoにはpinの電圧を安定してHIGH（5V側）に保つ「内部プルアップ抵抗」がチップ内に用意されており、pinModeにINPUT_PULLUPを指定するだけでこれを使うこともできます。ただし今回は配線を長くしたい場合にも安定して動作するように、内部プルアップは使わず、外部に10kΩ抵抗を追加する「外部プルアップ」方式で回路を組みます。",
               language,
             })}
           </Text>
-          <Box
-            mt={3}
-            p={3}
-            borderRadius="md"
-            bg={colorMode === "light" ? "yellow.50" : "yellow.900"}
-            border="1px solid"
-            borderColor={colorMode === "light" ? "yellow.300" : "yellow.600"}
-          >
-            <Text fontWeight="bold">
-              {getMessage({ ja: "⚠ 重要な注意点", language })}
-            </Text>
-            <Text mt={2}>
-              {getMessage({
-                ja: "INPUT_PULLUPを使っている状態で、外部に10kΩのプルアップ抵抗を単純に追加すると、内部プルアップと外部プルアップが二重にかかってしまいます。今回のように配線を長くしたい場合や、入力をより安定させたい場合に外部抵抗＋コンデンサ方式へ変更するときは、必ずコードのpinModeもINPUT（内部プルアップを使わない設定）に変更してください。",
-                language,
-              })}
-            </Text>
-          </Box>
           <Text mt={4} fontWeight="bold">
             {getMessage({
-              ja: "各部品の役割（初心者向け）",
+              ja: "各部品の役割",
               language,
             })}
           </Text>
@@ -484,100 +517,11 @@ const BlogPage: React.FC = () => {
             </ListItem>
             <ListItem>
               {getMessage({
-                ja: "0.1μFコンデンサ：ボタンを押した瞬間・離した瞬間に発生する微小なノイズ（チャタリング）を電気的に吸収し、信号を滑らかにする役割があります。",
+                ja: "0.1μFコンデンサ：ボタンを押した瞬間・離した瞬間に発生する微小なノイズや周囲のモーターノイズを電気的に吸収し、誤動作を防ぎます。",
                 language,
               })}
             </ListItem>
           </UnorderedList>
-
-          <Divider
-            my={4}
-            borderColor={colorMode === "light" ? "gray.300" : "gray.600"}
-          />
-
-          <Text fontWeight="bold" fontSize="lg">
-            {getMessage({ ja: "左ボタン（D2ピン）", language })}
-          </Text>
-          <Text mt={2}>
-            {getMessage({
-              ja: "Arduinoの2番ピン（D2）を使用します。今回は外部抵抗＋コンデンサ方式で配線する場合の接続イメージは以下の通りです。",
-              language,
-            })}
-          </Text>
-          <Box mt={2} pl={4}>
-            <UnorderedList spacing={1}>
-              <ListItem>
-                {getMessage({
-                  ja: "D2ピン ─┬─ 10kΩ抵抗 ─ 5V（外部プルアップ）",
-                  language,
-                })}
-              </ListItem>
-              <ListItem>
-                {getMessage({
-                  ja: "D2ピン ─┴─ ボタン ─ GND",
-                  language,
-                })}
-              </ListItem>
-              <ListItem>
-                {getMessage({
-                  ja: "D2ピンとGNDの間に0.1μFコンデンサを接続（ノイズ対策）",
-                  language,
-                })}
-              </ListItem>
-            </UnorderedList>
-          </Box>
-          <Box
-            mt={3}
-            p={3}
-            borderRadius="md"
-            bg={colorMode === "light" ? "blue.50" : "blue.900"}
-            border="1px solid"
-            borderColor={colorMode === "light" ? "blue.200" : "blue.700"}
-          >
-            <Text fontSize="sm">
-              {getMessage({
-                ja: "※このページ後半で紹介するArduinoコードは、シンプルさを優先してINPUT_PULLUP（内部プルアップのみ使用）を前提に書かれています。配線を短く済ませたい初心者の方は、外部の10kΩ抵抗とコンデンサを省略し、ボタンとGNDだけをD2・D4ピンに接続する形でも動作します。配線を長くする、あるいはノイズが気になる環境で外部抵抗＋コンデンサ方式を使う場合は、コード内のpinMode(LEFT_BUTTON, INPUT_PULLUP)をpinMode(LEFT_BUTTON, INPUT)に、pinMode(RIGHT_BUTTON, INPUT_PULLUP)をpinMode(RIGHT_BUTTON, INPUT)に書き換えてください。",
-                language,
-              })}
-            </Text>
-          </Box>
-
-          <Divider
-            my={4}
-            borderColor={colorMode === "light" ? "gray.300" : "gray.600"}
-          />
-
-          <Text fontWeight="bold" fontSize="lg">
-            {getMessage({ ja: "右ボタン（D4ピン）", language })}
-          </Text>
-          <Text mt={2}>
-            {getMessage({
-              ja: "Arduinoの4番ピン（D4）を使用します。考え方は左ボタンと全く同じです。",
-              language,
-            })}
-          </Text>
-          <Box mt={2} pl={4}>
-            <UnorderedList spacing={1}>
-              <ListItem>
-                {getMessage({
-                  ja: "D4ピン ─┬─ 10kΩ抵抗 ─ 5V（外部プルアップ）",
-                  language,
-                })}
-              </ListItem>
-              <ListItem>
-                {getMessage({
-                  ja: "D4ピン ─┴─ ボタン ─ GND",
-                  language,
-                })}
-              </ListItem>
-              <ListItem>
-                {getMessage({
-                  ja: "D4ピンとGNDの間に0.1μFコンデンサを接続（ノイズ対策）",
-                  language,
-                })}
-              </ListItem>
-            </UnorderedList>
-          </Box>
         </SectionBox>
 
         {/* 5. 回路図 */}
@@ -599,262 +543,35 @@ const BlogPage: React.FC = () => {
           />
           <Text mt={3}>
             {getMessage({
-              ja: "左ボタン（D2）・右ボタン（D4）それぞれについて、外部抵抗＋コンデンサ方式で配線する場合の回路図です。電気の流れが分かるように、記号で表しています。",
+              ja: '下図のように接続してください。交線に⚫︎があれば繋がっています。"D2"はデジタル2番という意味でボードには"2"と表記されてる事が多いです。',
               language,
             })}
           </Text>
-          <Box
+          <HStack
             mt={4}
-            p={3}
-            borderRadius="md"
-            border="1px solid"
-            borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
-            bg={colorMode === "light" ? "white" : "gray.800"}
-            overflowX="auto"
+            spacing={4}
+            align="stretch"
+            flexWrap="wrap"
+            justify="center"
+            h={{ base: "auto", md: "480px" }}
           >
-            <figure style={{ margin: 0 }}>
-              <svg
-                viewBox="0 0 660 385"
-                role="img"
-                aria-label="左ボタンD2・右ボタンD4それぞれについて、5Vから10kΩ抵抗を介してArduinoの入力ピンへ接続し、そのピンからネジ式端子台を経由してボタンへ、ボタンから再び端子台を経由してGNDへ接続する。ピンとGNDの間には0.1マイクロファラッドのコンデンサを並列に接続するプルアップ回路の回路図。"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  maxWidth: "700px",
-                  color: colorMode === "light" ? "#1a202c" : "#e2e8f0",
-                  fontFamily: "monospace",
-                }}
-              >
-                <defs>
-                  <marker
-                    id="circuit-arrow"
-                    viewBox="0 0 10 10"
-                    refX="8"
-                    refY="5"
-                    markerWidth="7"
-                    markerHeight="7"
-                    orient="auto-start-reverse"
-                  >
-                    <path d="M0,0 L10,5 L0,10 z" fill="currentColor" />
-                  </marker>
-                </defs>
-
-                {/* ---- 左ボタン回路 (D2) ---- */}
-                <g stroke="currentColor" strokeWidth="1.6" fill="none">
-                  {/* 5V rail */}
-                  <line x1="40" y1="40" x2="220" y2="40" />
-                  {/* 5V to resistor */}
-                  <line x1="120" y1="40" x2="120" y2="80" />
-                  {/* resistor body (zigzag) */}
-                  <polyline points="120,80 108,90 132,100 108,110 132,120 120,130" />
-                  {/* resistor to node */}
-                  <line x1="120" y1="130" x2="120" y2="170" />
-                  {/* node to pin box (right) */}
-                  <line
-                    x1="120"
-                    y1="170"
-                    x2="220"
-                    y2="170"
-                    markerEnd="url(#circuit-arrow)"
-                  />
-                  {/* node down to terminal block */}
-                  <line x1="120" y1="170" x2="120" y2="196" />
-                  {/* terminal block to button */}
-                  <line x1="105" y1="212" x2="105" y2="220" />
-                  <line x1="135" y1="212" x2="135" y2="220" />
-                  {/* button symbol */}
-                  <line x1="85" y1="220" x2="155" y2="220" />
-                  <line x1="85" y1="240" x2="155" y2="240" />
-                  <line x1="105" y1="240" x2="105" y2="250" />
-                  <line x1="135" y1="240" x2="135" y2="250" />
-                  {/* button to terminal block 2 */}
-                  <line x1="105" y1="250" x2="105" y2="258" />
-                  <line x1="135" y1="250" x2="135" y2="258" />
-                  {/* terminal block 2 to node2 */}
-                  <line x1="120" y1="274" x2="120" y2="290" />
-                  {/* node2 to capacitor (right, below pin box) */}
-                  <line x1="120" y1="290" x2="220" y2="290" />
-                  <line x1="220" y1="270" x2="220" y2="310" />
-                  <line x1="200" y1="278" x2="200" y2="302" />
-                  <line x1="220" y1="290" x2="245" y2="290" />
-                  {/* GND rail */}
-                  <line x1="40" y1="330" x2="220" y2="330" />
-                  <line x1="120" y1="290" x2="120" y2="330" />
-                </g>
-                {/* left terminal blocks (screw terminal) */}
-                <g stroke="currentColor" strokeWidth="1.4" fill="none">
-                  <rect x="90" y="196" width="60" height="16" rx="2" />
-                  <circle cx="105" cy="204" r="3.2" />
-                  <circle cx="135" cy="204" r="3.2" />
-                  <rect x="90" y="258" width="60" height="16" rx="2" />
-                  <circle cx="105" cy="266" r="3.2" />
-                  <circle cx="135" cy="266" r="3.2" />
-                </g>
-                {/* ground hatch */}
-                <g stroke="currentColor" strokeWidth="1.6">
-                  <line x1="40" y1="330" x2="40" y2="346" />
-                  <line x1="30" y1="346" x2="50" y2="346" />
-                  <line x1="34" y1="352" x2="46" y2="352" />
-                  <line x1="38" y1="358" x2="42" y2="358" />
-                </g>
-                <text x="15" y="44" fontSize="13">5V</text>
-                <text x="10" y="334" fontSize="13">GND</text>
-                <text x="60" y="95" fontSize="12">10kΩ</text>
-                <text x="165" y="208" fontSize="10">端子台</text>
-                <text x="60" y="235" fontSize="12">SW</text>
-                <text x="165" y="270" fontSize="10">端子台</text>
-                <text x="70" y="145" fontSize="11">左ボタン</text>
-                <rect
-                  x="245"
-                  y="150"
-                  width="90"
-                  height="40"
-                  rx="4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-                <text x="290" y="175" fontSize="13" textAnchor="middle">
-                  D2
-                </text>
-                <rect
-                  x="245"
-                  y="270"
-                  width="90"
-                  height="40"
-                  rx="4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-                <text x="290" y="295" fontSize="12" textAnchor="middle">
-                  0.1μF
-                </text>
-
-                {/* ---- 右ボタン回路 (D4), mirrored layout offset ---- */}
-                <g stroke="currentColor" strokeWidth="1.6" fill="none">
-                  <line x1="440" y1="40" x2="620" y2="40" />
-                  <line x1="540" y1="40" x2="540" y2="80" />
-                  <polyline points="540,80 528,90 552,100 528,110 552,120 540,130" />
-                  <line x1="540" y1="130" x2="540" y2="170" />
-                  <line
-                    x1="540"
-                    y1="170"
-                    x2="440"
-                    y2="170"
-                    markerEnd="url(#circuit-arrow)"
-                  />
-                  <line x1="540" y1="170" x2="540" y2="196" />
-                  <line x1="525" y1="212" x2="525" y2="220" />
-                  <line x1="555" y1="212" x2="555" y2="220" />
-                  <line x1="505" y1="220" x2="575" y2="220" />
-                  <line x1="505" y1="240" x2="575" y2="240" />
-                  <line x1="525" y1="240" x2="525" y2="250" />
-                  <line x1="555" y1="240" x2="555" y2="250" />
-                  <line x1="525" y1="250" x2="525" y2="258" />
-                  <line x1="555" y1="250" x2="555" y2="258" />
-                  <line x1="540" y1="274" x2="540" y2="290" />
-                  <line x1="540" y1="290" x2="440" y2="290" />
-                  <line x1="440" y1="270" x2="440" y2="310" />
-                  <line x1="460" y1="278" x2="460" y2="302" />
-                  <line x1="440" y1="290" x2="415" y2="290" />
-                  <line x1="440" y1="330" x2="620" y2="330" />
-                  <line x1="540" y1="290" x2="540" y2="330" />
-                </g>
-                {/* right terminal blocks (screw terminal) */}
-                <g stroke="currentColor" strokeWidth="1.4" fill="none">
-                  <rect x="510" y="196" width="60" height="16" rx="2" />
-                  <circle cx="525" cy="204" r="3.2" />
-                  <circle cx="555" cy="204" r="3.2" />
-                  <rect x="510" y="258" width="60" height="16" rx="2" />
-                  <circle cx="525" cy="266" r="3.2" />
-                  <circle cx="555" cy="266" r="3.2" />
-                </g>
-                <g stroke="currentColor" strokeWidth="1.6">
-                  <line x1="620" y1="330" x2="620" y2="346" />
-                  <line x1="610" y1="346" x2="630" y2="346" />
-                  <line x1="614" y1="352" x2="626" y2="352" />
-                  <line x1="618" y1="358" x2="622" y2="358" />
-                </g>
-                <text x="595" y="44" fontSize="13">5V</text>
-                <text x="590" y="334" fontSize="13">GND</text>
-                <text x="565" y="95" fontSize="12">10kΩ</text>
-                <text x="425" y="208" fontSize="10">端子台</text>
-                <text x="565" y="235" fontSize="12">SW</text>
-                <text x="425" y="270" fontSize="10">端子台</text>
-                <text x="590" y="145" fontSize="11">右ボタン</text>
-                <rect
-                  x="325"
-                  y="150"
-                  width="90"
-                  height="40"
-                  rx="4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-                <text x="370" y="175" fontSize="13" textAnchor="middle">
-                  D4
-                </text>
-                <rect
-                  x="325"
-                  y="270"
-                  width="90"
-                  height="40"
-                  rx="4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-                <text x="370" y="295" fontSize="12" textAnchor="middle">
-                  0.1μF
-                </text>
-
-                {/* Arduino board outline linking both pin/cap boxes */}
-                <rect
-                  x="235"
-                  y="130"
-                  width="190"
-                  height="200"
-                  rx="6"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeDasharray="4 3"
-                />
-                <text x="330" y="365" fontSize="12" textAnchor="middle">
-                  Pro Micro（ATmega32U4）本体
-                </text>
-              </svg>
-              <figcaption
-                style={{
-                  fontSize: "12px",
-                  color: colorMode === "light" ? "#718096" : "#a0aec0",
-                  marginTop: "8px",
-                }}
-              >
-                {getMessage({
-                  ja: "左右それぞれのボタン回路。5V→10kΩ抵抗→ピン(D2/D4)の経路でプルアップし、ピンからネジ式端子台を経由してボタンへ、ボタンから再び端子台を経由してGNDへ落とす。ピン-GND間には0.1μFコンデンサを並列に入れてノイズを吸収する。",
-                  language,
-                })}
-              </figcaption>
-            </figure>
-          </Box>
-          <Text mt={3} fontSize="sm" color="gray.500">
-            {getMessage({
-              ja: "※内部プルアップ（INPUT_PULLUP）のみを使うシンプルな配線にする場合は、5Vライン・10kΩ抵抗・0.1μFコンデンサを省略し、ピンとボタン、ボタンとGNDだけを接続してください。",
-              language,
-            })}
-          </Text>
+            <Box h="100%">
+              <ZoomableImage
+                src="/images/0017/circuitDiagram.webp"
+                alt="Pro Micro互換ボードを中心に、左のD2ピンとD4ピンからそれぞれ10kΩ抵抗・0.1μFコンデンサを介してスイッチ(SW)へ、右のGND・RST・VCCからもスイッチや配線へつながる回路図。"
+                invertOnDark
+              />
+            </Box>
+          </HStack>
         </SectionBox>
 
-        {/* 6. 配線図 */}
+        {/* 6. 実体配線図 */}
         <SectionBox
           id="section6"
           title={
             "6." +
             getMessage({
-              ja: "配線図",
+              ja: "実体配線図",
               language,
             })
           }
@@ -867,465 +584,39 @@ const BlogPage: React.FC = () => {
           />
           <Text mt={3}>
             {getMessage({
-              ja: "実際に部品を配置したときのイメージです。基板は「3.使用する部品」で紹介したソルダブルブレッドボード（はんだ付けできるプリント基板）を使用します。中央にPro Micro互換ボードを配置し、左右のボタン回路をネジ式端子台で接続します。",
+              ja: "実際に部品を配置したときの写真です。黄色の箇所をハンダ付けしてください。画像はクリックすると拡大表示できます。",
               language,
             })}
           </Text>
-          <Box
+          <HStack
             mt={4}
-            p={3}
-            borderRadius="md"
-            border="1px solid"
-            borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
-            bg={colorMode === "light" ? "white" : "gray.800"}
-            overflowX="auto"
+            spacing={4}
+            align="stretch"
+            flexWrap="wrap"
+            justify="center"
+            h={{ base: "auto", md: "480px" }}
           >
-            <figure style={{ margin: 0 }}>
-              <svg
-                viewBox="-10 -60 780 460"
-                role="img"
-                aria-label="ソルダブルブレッドボード（上下に赤と青の電源ライン、中央に5穴グループの縦ストリップが並ぶ、中央に部品を差す溝がある基板）の中央にPro Micro互換ボードを縦向きに配置し、短辺にあるUSBコネクタが基板の外へ上向きに突き出してケーブルでPCへつながる。左側にD2ピン用のネジ式端子台・10kΩ抵抗・0.1マイクロファラッドコンデンサ・左ボタンを、右側にD4ピン用の同じ部品構成と右ボタンを配置する。Pro Microの下端のRESETピンとGNDピンからリセット用タクトスイッチへ接続する配線図。"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  maxWidth: "700px",
-                  color: colorMode === "light" ? "#1a202c" : "#e2e8f0",
-                  fontFamily: "monospace",
-                }}
-              >
-                {/* ---- ソルダブルブレッドボード（プリント基板）---- */}
-                <rect
-                  x="30"
-                  y="30"
-                  width="700"
-                  height="340"
-                  rx="6"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                />
-                <text x="46" y="20" fontSize="12">
-                  {getMessage({
-                    ja: "ソルダブルブレッドボード（プリント基板）",
-                    language,
-                  })}
-                </text>
-
-                {/* 上側 電源ライン（赤=+ / 青=-）穴の列 */}
-                <g>
-                  {Array.from({ length: 44 }).map((_, i) => (
-                    <React.Fragment key={`top-rail-${i}`}>
-                      <circle
-                        cx={46 + i * 16}
-                        cy={44}
-                        r="2"
-                        fill="currentColor"
-                        opacity={colorMode === "light" ? 0.55 : 0.6}
-                      />
-                      <circle
-                        cx={46 + i * 16}
-                        cy={54}
-                        r="2"
-                        fill="currentColor"
-                        opacity={colorMode === "light" ? 0.35 : 0.4}
-                      />
-                    </React.Fragment>
-                  ))}
-                </g>
-                <text x="46" y="66" fontSize="9" opacity={0.7}>
-                  + / − {getMessage({ ja: "電源ライン", language })}
-                </text>
-
-                {/* 中央の穴グループ（5穴×多数の縦ストリップ）上半分 */}
-                <g opacity={colorMode === "light" ? 0.45 : 0.5}>
-                  {Array.from({ length: 42 }).map((_, col) =>
-                    Array.from({ length: 5 }).map((_, row) => (
-                      <circle
-                        key={`upper-${col}-${row}`}
-                        cx={48 + col * 16}
-                        cy={86 + row * 8}
-                        r="1.6"
-                        fill="currentColor"
-                      />
-                    ))
-                  )}
-                </g>
-
-                {/* 中央の溝（部品を差す境目） */}
-                <line
-                  x1="30"
-                  y1="200"
-                  x2="730"
-                  y2="200"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeDasharray="2 4"
-                  opacity={0.5}
-                />
-
-                {/* 中央の穴グループ 下半分 */}
-                <g opacity={colorMode === "light" ? 0.45 : 0.5}>
-                  {Array.from({ length: 42 }).map((_, col) =>
-                    Array.from({ length: 5 }).map((_, row) => (
-                      <circle
-                        key={`lower-${col}-${row}`}
-                        cx={48 + col * 16}
-                        cy={222 + row * 8}
-                        r="1.6"
-                        fill="currentColor"
-                      />
-                    ))
-                  )}
-                </g>
-
-                {/* 下側 電源ライン 穴の列 */}
-                <g>
-                  {Array.from({ length: 44 }).map((_, i) => (
-                    <React.Fragment key={`bottom-rail-${i}`}>
-                      <circle
-                        cx={46 + i * 16}
-                        cy={344}
-                        r="2"
-                        fill="currentColor"
-                        opacity={colorMode === "light" ? 0.35 : 0.4}
-                      />
-                      <circle
-                        cx={46 + i * 16}
-                        cy={354}
-                        r="2"
-                        fill="currentColor"
-                        opacity={colorMode === "light" ? 0.55 : 0.6}
-                      />
-                    </React.Fragment>
-                  ))}
-                </g>
-                <text x="46" y="368" fontSize="9" opacity={0.7}>
-                  − / + {getMessage({ ja: "電源ライン", language })}
-                </text>
-
-                {/* ---- Pro Micro board (center, opaque so it sits over the holes) ---- */}
-                {/* board silhouette: narrow rectangle, long edge vertical, seated inside the breadboard */}
-                <rect
-                  x="345"
-                  y="70"
-                  width="70"
-                  height="150"
-                  rx="4"
-                  fill={colorMode === "light" ? "white" : "#1a202c"}
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                />
-                <text
-                  x="380"
-                  y="150"
-                  fontSize="11.5"
-                  textAnchor="middle"
-                  transform="rotate(-90 380 150)"
-                >
-                  Pro Micro（ATmega32U4）
-                </text>
-
-                {/* Micro USB connector: tab protruding OUT of the breadboard's top edge */}
-                <rect
-                  x="366"
-                  y="8"
-                  width="28"
-                  height="24"
-                  rx="2"
-                  fill={colorMode === "light" ? "white" : "#1a202c"}
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-                <line
-                  x1="366"
-                  y1="20"
-                  x2="345"
-                  y2="20"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeDasharray="2 2"
-                />
-                <line
-                  x1="394"
-                  y1="20"
-                  x2="415"
-                  y2="20"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeDasharray="2 2"
-                />
-                <text x="430" y="24" fontSize="9.5">
-                  {getMessage({ ja: "USBコネクタ", language })}
-                </text>
-                <text x="430" y="37" fontSize="9" opacity={0.75}>
-                  {getMessage({ ja: "（基板の外へ突き出す）", language })}
-                </text>
-                <line
-                  x1="380"
-                  y1="8"
-                  x2="380"
-                  y2="-16"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-                <text x="380" y="-24" fontSize="11" textAnchor="middle">
-                  {getMessage({ ja: "USBケーブルでPCへ", language })}
-                </text>
-
-                {/* pin header rows on both long edges, protruding into the board's holes */}
-                {[100, 130].map((y, i) => (
-                  <React.Fragment key={`pm-pin-l-${i}`}>
-                    <line
-                      x1="337"
-                      y1={y}
-                      x2="345"
-                      y2={y}
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                    />
-                    <circle cx="337" cy={y} r="2" fill="currentColor" />
-                  </React.Fragment>
-                ))}
-                {[100, 130].map((y, i) => (
-                  <React.Fragment key={`pm-pin-r-${i}`}>
-                    <line
-                      x1="415"
-                      y1={y}
-                      x2="423"
-                      y2={y}
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                    />
-                    <circle cx="423" cy={y} r="2" fill="currentColor" />
-                  </React.Fragment>
-                ))}
-
-                {/* Pin labels on Pro Micro left/right edges (using pin header rows) */}
-                <line x1="337" y1="100" x2="260" y2="100" stroke="currentColor" strokeWidth="1.4" />
-                <text x="255" y="104" fontSize="11" textAnchor="end">D2</text>
-                <line x1="337" y1="130" x2="260" y2="130" stroke="currentColor" strokeWidth="1.4" />
-                <text x="255" y="134" fontSize="11" textAnchor="end">GND</text>
-
-                <line x1="423" y1="100" x2="500" y2="100" stroke="currentColor" strokeWidth="1.4" />
-                <text x="505" y="104" fontSize="11">D4</text>
-                <line x1="423" y1="130" x2="500" y2="130" stroke="currentColor" strokeWidth="1.4" />
-                <text x="505" y="134" fontSize="11">GND</text>
-
-                {/* RESET / GND pin header on the bottom short edge */}
-                <line x1="365" y1="220" x2="365" y2="228" stroke="currentColor" strokeWidth="1.4" />
-                <circle cx="365" cy="228" r="2" fill="currentColor" />
-                <line x1="395" y1="220" x2="395" y2="228" stroke="currentColor" strokeWidth="1.4" />
-                <circle cx="395" cy="228" r="2" fill="currentColor" />
-                <text
-                  x="120"
-                  y="300"
-                  fontSize="9.5"
-                  opacity={0.75}
-                >
-                  {getMessage({
-                    ja: "※ピンヘッダーで基板の穴に差し込んで固定",
-                    language,
-                  })}
-                </text>
-
-                {/* ---- 左回路ブロック ---- */}
-                <g stroke="currentColor" strokeWidth="1.4" fill="none">
-                  <line x1="260" y1="100" x2="215" y2="100" />
-                  <line x1="260" y1="130" x2="215" y2="130" />
-                </g>
-                {/* 左側 ネジ式端子台（4極: D2 / GND 用） */}
-                <rect
-                  x="175"
-                  y="88"
-                  width="40"
-                  height="55"
-                  rx="3"
-                  fill={colorMode === "light" ? "white" : "#1a202c"}
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                />
-                <circle cx="195" cy="100" r="3" fill="none" stroke="currentColor" strokeWidth="1.3" />
-                <circle cx="195" cy="130" r="3" fill="none" stroke="currentColor" strokeWidth="1.3" />
-                <text x="195" y="157" fontSize="9.5" textAnchor="middle">
-                  {getMessage({ ja: "端子台", language })}
-                </text>
-
-                <g stroke="currentColor" strokeWidth="1.4" fill="none">
-                  <line x1="175" y1="100" x2="150" y2="100" />
-                  <line x1="175" y1="130" x2="150" y2="130" />
-                </g>
-                <rect
-                  x="90"
-                  y="80"
-                  width="60"
-                  height="70"
-                  rx="4"
-                  fill={colorMode === "light" ? "white" : "#1a202c"}
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                />
-                <text x="120" y="74" fontSize="9.5" textAnchor="middle">
-                  {getMessage({ ja: "抵抗+コンデンサ", language })}
-                </text>
-                <text x="120" y="105" fontSize="10" textAnchor="middle">10kΩ</text>
-                <text x="120" y="120" fontSize="10" textAnchor="middle">0.1μF</text>
-                <line x1="90" y1="130" x2="60" y2="130" stroke="currentColor" strokeWidth="1.4" />
-                <circle cx="55" cy="130" r="12" fill={colorMode === "light" ? "white" : "#1a202c"} stroke="currentColor" strokeWidth="1.6" />
-                <text x="55" y="134" fontSize="9" textAnchor="middle">SW</text>
-                <text x="55" y="160" fontSize="11" textAnchor="middle">
-                  {getMessage({ ja: "左ボタン", language })}
-                </text>
-
-                {/* ---- 右回路ブロック ---- */}
-                <g stroke="currentColor" strokeWidth="1.4" fill="none">
-                  <line x1="500" y1="100" x2="545" y2="100" />
-                  <line x1="500" y1="130" x2="545" y2="130" />
-                </g>
-                <rect
-                  x="545"
-                  y="88"
-                  width="40"
-                  height="55"
-                  rx="3"
-                  fill={colorMode === "light" ? "white" : "#1a202c"}
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                />
-                <circle cx="565" cy="100" r="3" fill="none" stroke="currentColor" strokeWidth="1.3" />
-                <circle cx="565" cy="130" r="3" fill="none" stroke="currentColor" strokeWidth="1.3" />
-                <text x="565" y="157" fontSize="9.5" textAnchor="middle">
-                  {getMessage({ ja: "端子台", language })}
-                </text>
-
-                <g stroke="currentColor" strokeWidth="1.4" fill="none">
-                  <line x1="585" y1="100" x2="610" y2="100" />
-                  <line x1="585" y1="130" x2="610" y2="130" />
-                </g>
-                <rect
-                  x="610"
-                  y="80"
-                  width="60"
-                  height="70"
-                  rx="4"
-                  fill={colorMode === "light" ? "white" : "#1a202c"}
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                />
-                <text x="640" y="74" fontSize="9.5" textAnchor="middle">
-                  {getMessage({ ja: "抵抗+コンデンサ", language })}
-                </text>
-                <text x="640" y="105" fontSize="10" textAnchor="middle">10kΩ</text>
-                <text x="640" y="120" fontSize="10" textAnchor="middle">0.1μF</text>
-                <line x1="670" y1="130" x2="700" y2="130" stroke="currentColor" strokeWidth="1.4" />
-                <circle cx="705" cy="130" r="12" fill={colorMode === "light" ? "white" : "#1a202c"} stroke="currentColor" strokeWidth="1.6" />
-                <text x="705" y="134" fontSize="9" textAnchor="middle">SW</text>
-                <text x="705" y="160" fontSize="11" textAnchor="middle">
-                  {getMessage({ ja: "右ボタン", language })}
-                </text>
-
-                {/* Reset switch, connected from the board's bottom edge */}
-                <line x1="365" y1="228" x2="365" y2="250" stroke="currentColor" strokeWidth="1.4" />
-                <line x1="395" y1="228" x2="395" y2="250" stroke="currentColor" strokeWidth="1.4" />
-                <circle cx="380" cy="260" r="14" fill={colorMode === "light" ? "white" : "#1a202c"} stroke="currentColor" strokeWidth="1.6" />
-                <line x1="365" y1="250" x2="371" y2="256" stroke="currentColor" strokeWidth="1.4" />
-                <line x1="395" y1="250" x2="389" y2="256" stroke="currentColor" strokeWidth="1.4" />
-                <text x="380" y="286" fontSize="11" textAnchor="middle">
-                  {getMessage({ ja: "リセットスイッチ", language })}
-                </text>
-              </svg>
-              <figcaption
-                style={{
-                  fontSize: "12px",
-                  color: colorMode === "light" ? "#718096" : "#a0aec0",
-                  marginTop: "8px",
-                }}
-              >
-                {getMessage({
-                  ja: "ソルダブルブレッドボード上でのおおまかな部品配置。中央にPro Microを縦向きに置き、上端のUSBコネクタは基板の外へ突き出してPCへつながる。左右対称にネジ式端子台・抵抗＋コンデンサ・ボタンをまとめ、Pro Micro下端のRESET/GNDピンからリセットスイッチへ接続する。",
-                  language,
-                })}
-              </figcaption>
-            </figure>
-          </Box>
-          <Text mt={3} fontSize="sm" color="gray.500">
-            {getMessage({
-              ja: "※ネジ式端子台を使うと、ボタンや配線材を基板にはんだ付けせずネジ止めだけで着脱できるようになり、配線のやり直しがしやすくなります。",
-              language,
-            })}
-          </Text>
+            <Box h="100%">
+              <ZoomableImage
+                src="/images/0017/board-0.webp"
+                alt="ソルダブルブレッドボードの中央にPro Micro（USB-C版）を配置し、その左側にネジ式端子台、抵抗2本とコンデンサ2個、赤いタクトスイッチを配線した実体配線図の写真。端子台からは緑・赤・白・黒の4本の配線が外部へ伸びている。"
+              />
+            </Box>
+            <Box h="100%">
+              <ZoomableImage
+                src="/images/0017/board-1.webp"
+                alt="ソルダブルブレッドボードの裏面（はんだ面）の写真。金色にはんだ付けされたパッドと、黄色いジャンパー線で基板裏側の配線をつないでいる様子が写っている。"
+              />
+            </Box>
+          </HStack>
         </SectionBox>
-
-        {/* 7. リセットスイッチ */}
-        <SectionBox
-          id="section7"
-          title={
-            "7." +
-            getMessage({
-              ja: "リセットスイッチについて",
-              language,
-            })
-          }
-          sectionRefs={sectionRefs}
-          sections={sections}
-        >
-          <Divider
-            mt={2}
-            borderColor={colorMode === "light" ? "black" : "white"}
-          />
-          <Text mt={3}>
-            {getMessage({
-              ja: "このPro Micro互換ボードでは、スケッチ（プログラム）を書き込むときに、ボードをUSBブートローダーモード（書き込み受付状態）にするため、RESETボタンを短時間に2回押す操作が必要になる場合があります。",
-              language,
-            })}
-          </Text>
-          <Text mt={3}>
-            {getMessage({
-              ja: "ボードに付属のRESETボタンが押しにくい場合は、外部から押しやすいように、リセット用のタクトスイッチを配線しておくと便利です。",
-              language,
-            })}
-          </Text>
-          <Text mt={3} fontWeight="bold">
-            {getMessage({ ja: "接続方法", language })}
-          </Text>
-          <Text mt={1}>
-            {getMessage({
-              ja: "RESETピンとGNDピンの2つを、タクトスイッチで一時的に接続するだけです。スイッチを押すとRESETとGNDが接続され、マイコンがリセットされます。",
-              language,
-            })}
-          </Text>
-          <Box
-            mt={3}
-            p={3}
-            borderRadius="md"
-            bg={colorMode === "light" ? "green.50" : "green.900"}
-            border="1px solid"
-            borderColor={colorMode === "light" ? "green.200" : "green.700"}
-          >
-            <Text fontWeight="bold">
-              {getMessage({ ja: "書き込みに失敗する場合", language })}
-            </Text>
-            <Text mt={2}>
-              {getMessage({
-                ja: "Arduino IDEでの書き込みが失敗する場合は、RESETスイッチを素早く2回（ダブルクリックのように）押してから、書き込みを開始してみてください。ボードがブートローダーモードに入り、書き込みができるようになることがあります。",
-                language,
-              })}
-            </Text>
-          </Box>
-          <Text mt={3} fontSize="sm" color="gray.500">
-            {getMessage({
-              ja: "※この「RESET2回押し」の操作は、すべてのPro Micro互換ボードで必ず必要というわけではありません。ボードやブートローダーの種類によって動作が異なるため、まずは通常の書き込みを試し、失敗した場合の対処法として覚えておいてください。",
-              language,
-            })}
-          </Text>
-        </SectionBox>
-
         {/* 8. Arduino IDEの準備 */}
         <SectionBox
           id="section8"
           title={
-            "8." +
+            "7." +
             getMessage({
-              ja: "Arduino IDEの準備",
+              ja: "Arduino IDEの接続テスト",
               language,
             })
           }
@@ -1338,8 +629,13 @@ const BlogPage: React.FC = () => {
           />
           <OrderedList spacing={2} mt={3}>
             <ListItem>
+              Arduino IDE（
+              <ExternalLink
+                href="https://www.arduino.cc/en/software"
+                text={getMessage({ ja: "公式サイト", language })}
+              />
               {getMessage({
-                ja: "Arduino IDE（公式サイトから無料でダウンロードできる開発ソフト）をインストールします。",
+                ja: "から無料でダウンロードできる開発ソフト）をインストールします。",
                 language,
               })}
             </ListItem>
@@ -1357,7 +653,7 @@ const BlogPage: React.FC = () => {
             </ListItem>
             <ListItem>
               {getMessage({
-                ja: "ATmega32U4を搭載したボードとして認識させます（詳しくは次項参照）。",
+                ja: "ATmega32U4を搭載したボードとして認識させます。",
                 language,
               })}
             </ListItem>
@@ -1369,22 +665,77 @@ const BlogPage: React.FC = () => {
             </ListItem>
             <ListItem>
               {getMessage({
-                ja: "「書き込みボタン（→アイコン）」をクリックして、コードをボードに書き込みます。",
+                ja: '「書き込ボタン（→アイコン）」をクリックして、ボードに書き込みます。成功すると"書込み完了"のメッセージが表示されます。',
+                language,
+              })}<br/>
+              {getMessage({
+                ja: " ※ここで書込みエラーが出る場合は以下を試してみてください。",
+                language,
+              })}<br/>
+
+            </ListItem>
+          </OrderedList>
+          <Text mt={4} ml={4} fontWeight="bold">1.
+            {getMessage({
+              ja: '書込みボタンを押して"書込み中"が表示されたらすぐにRESETスイッチを素早く2回押してください',
+              language,
+            })}
+          </Text>
+          <Text mt={4} ml={4} fontWeight="bold">2.
+            {getMessage({
+              ja: "SparkFunのボード定義を追加する",
+              language,
+            })}
+          </Text>
+          <Text mt={2} ml={8}>
+            {getMessage({
+              ja: "「SparkFun Pro Micro」を選択肢に出すには、あらかじめボードマネージャーにSparkFunのボード定義を追加しておく必要があります。手順は以下の通りです。",
+              language,
+            })}
+          </Text>
+          <UnorderedList spacing={2} mt={2} ml={12}>
+            <ListItem>
+              {getMessage({
+                ja: "Arduino IDEの「ファイル」→「環境設定」（Macでは「Arduino IDE」→「Settings」）を開きます。",
                 language,
               })}
             </ListItem>
-          </OrderedList>
-
-          <Text mt={4}>
+            <ListItem>
+              {getMessage({
+                ja: "「追加のボードマネージャーのURL」欄に、次のURLを貼り付けます。",
+                language,
+              })}
+            </ListItem>
+            <Box mt={2}ml={0}>
+              <CodeBlock code="https://raw.githubusercontent.com/sparkfun/Arduino_Boards/main/IDE_Board_Manager/package_sparkfun_index.json" />
+            </Box>
+            <ListItem>
+              {getMessage({
+                ja: "「ツール」→「ボード」→「ボードマネージャー」を開き、検索欄に「sparkfun」と入力します。",
+                language,
+              })}
+            </ListItem>
+            <ListItem>
+              {getMessage({
+                ja: "「SparkFun AVR Boards」を選択してインストールします。インストールが完了すると、「ツール」→「ボード」の一覧に「SparkFun AVR Boards」というグループが追加され、その中に「SparkFun Pro Micro」が表示されます。",
+                language,
+              })}
+            </ListItem>
+          </UnorderedList>
+          <Text mt={3} fontSize="sm" ml={8}>
             {getMessage({
-              ja: "購入した互換ボードによって、Arduino IDE上での認識名や設定項目が「Arduino Micro」「Arduino Leonardo」「Pro Micro」など異なる場合があります。書き込みに失敗した場合は、以下のポイントを確認してください。",
+              ja: "※購入したボードがArduino公式の「Arduino Micro」や「Arduino Leonardo」として認識される場合は、この追加インストールは不要です。まずは購入ページの説明を確認し、対応するボード名が分からない場合や、標準のボード一覧に見当たらない場合にこの手順を試してください。",
               language,
             })}
           </Text>
 
           <Text mt={4} fontWeight="bold">
-            {getMessage({ ja: "書き込みに失敗した場合の確認ポイント", language })}
+            {getMessage({ ja: "書込みに失敗した場合の確認ポイント", language })}
           </Text>
+          <Divider
+            mt={1}
+            borderColor={colorMode === "light" ? "black" : "white"}
+          />
           <UnorderedList spacing={2} mt={2}>
             <ListItem>
               <Text as="span" fontWeight="semibold">
@@ -1438,9 +789,9 @@ const BlogPage: React.FC = () => {
         <SectionBox
           id="section9"
           title={
-            "9." +
+            "8." +
             getMessage({
-              ja: "使用するArduinoコード",
+              ja: "Arduinoコードの書込み",
               language,
             })
           }
@@ -1453,11 +804,11 @@ const BlogPage: React.FC = () => {
           />
           <Text mt={3}>
             {getMessage({
-              ja: "以下のコードをArduino IDEに貼り付けて、ボードに書き込んでください。左ボタン（D2）を離すと左矢印キー、右ボタン（D4）を離すと右矢印キーがPCに送信されます。",
+              ja: "以下のコードをArduino IDEに貼り付けて、ボードに書き込んでください。左ボタン（D2）を離すと左矢印キー、右ボタン（D4）を離すと右矢印キーがPCに送信されます。「4.回路について」で説明した外部10kΩプルアップ抵抗を使う配線に合わせて、pinModeはINPUTにしてあります。",
               language,
             })}
           </Text>
-          <Text mt={2} fontSize="sm" color="gray.500">
+          <Text mt={2} fontSize="sm">
             {getMessage({
               ja: "コード内のDEBOUNCE_TIME（30ミリ秒）は、ボタンのチャタリング（電気的な細かい振動）を無視するための待ち時間です。ボタンの反応が悪いと感じる場合は値を小さく、逆に誤反応が多い場合は値を大きくして調整してください。",
               language,
@@ -1472,7 +823,7 @@ const BlogPage: React.FC = () => {
         <SectionBox
           id="section10"
           title={
-            "10." +
+            "9." +
             getMessage({
               ja: "まとめ",
               language,

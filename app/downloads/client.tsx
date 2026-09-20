@@ -381,7 +381,33 @@ export default function Ui({ filterId }: { filterId?: string }) {
                     <ChangelogAccordion
                       changelog={[
                         {
+                          downloadPath: "/download/sjp/sjp/Sjp3.104.56_.zip",
+                          version: "3.104.56",
+                          date: "2026/09/20",
+                          change: [
+                            "クボタMDの分解に対応",
+                            "サブ図の承認とか社外秘のハンコとか",
+                            "先ハメ誘導SSCの何か",
+                            "配策誘導Ver3.1の更新"
+                          ],
+                          inCharge: ["徳島", "秋山さん","補給の秋山さん","橋本さん"],
+                        },
+                        {
                           downloadPath: "/download/sjp/sjp/Sjp3.103.90_.zip",
+                          version: "3.103.90",
+                          date: "2026/09/09",
+                          reason: [
+                            "コネクタ座標登録の描画が遅い",
+                            "シートをインポートする方式なので修正が手間"
+                          ],
+                          change: [
+                            "Shift + EnterでWEBで確認モードの追加",
+                            "シートイベントをWorkbookに変更",
+                            "Verup.xlsmを更新する処理を追加"
+                          ],
+                          inCharge: ["徳島", "秋山さん"],
+                        },
+                        {
                           version: "3.103.90",
                           date: "2026/09/09",
                           reason: [
