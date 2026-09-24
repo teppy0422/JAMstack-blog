@@ -53,6 +53,8 @@ export default function EntryForm({
   const [saving, setSaving] = useState(false);
   const [newProjectMode, setNewProjectMode] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
+  const [newProjectClientName, setNewProjectClientName] = useState("");
+  const [newProjectDeliveryPlace, setNewProjectDeliveryPlace] = useState("");
   const [newProjectPlannedStart, setNewProjectPlannedStart] = useState("");
   const [newProjectPlannedEnd, setNewProjectPlannedEnd] = useState("");
   const [newProjectHourlyRate, setNewProjectHourlyRate] = useState("2000");
@@ -63,6 +65,8 @@ export default function EntryForm({
   const [planEnd, setPlanEnd] = useState("");
   const [planHourlyRate, setPlanHourlyRate] = useState("");
   const [planBudgetLimit, setPlanBudgetLimit] = useState("");
+  const [planClientName, setPlanClientName] = useState("");
+  const [planDeliveryPlace, setPlanDeliveryPlace] = useState("");
 
   const selectedProject = projects.find((p) => String(p.id) === projectId);
 
@@ -109,6 +113,8 @@ export default function EntryForm({
       .from("schedule_projects")
       .insert({
         name: newProjectName.trim(),
+        client_name: newProjectClientName.trim() || null,
+        delivery_place: newProjectDeliveryPlace.trim() || null,
         created_by: userId,
         planned_start: newProjectPlannedStart || null,
         planned_end: newProjectPlannedEnd || null,
@@ -123,6 +129,8 @@ export default function EntryForm({
     }
     toast({ status: "success", title: "プロジェクトを作成しました" });
     setNewProjectName("");
+    setNewProjectClientName("");
+    setNewProjectDeliveryPlace("");
     setNewProjectPlannedStart("");
     setNewProjectPlannedEnd("");
     setNewProjectHourlyRate("2000");
@@ -140,6 +148,8 @@ export default function EntryForm({
     setPlanEnd(selectedProject.planned_end || "");
     setPlanHourlyRate(String(selectedProject.hourly_rate));
     setPlanBudgetLimit(String(selectedProject.budget_limit));
+    setPlanClientName(selectedProject.client_name || "");
+    setPlanDeliveryPlace(selectedProject.delivery_place || "");
     setEditingPlan(true);
   };
 
@@ -158,6 +168,8 @@ export default function EntryForm({
         planned_end: planEnd || null,
         hourly_rate: hourlyRateNum,
         budget_limit: budgetLimitNum,
+        client_name: planClientName.trim() || null,
+        delivery_place: planDeliveryPlace.trim() || null,
       })
       .eq("id", selectedProject.id);
     if (error) {
@@ -227,6 +239,30 @@ export default function EntryForm({
                 value={newProjectName}
                 onChange={(e) => setNewProjectName(e.target.value)}
               />
+              <HStack>
+                <Box flex={1}>
+                  <FormLabel fontSize="11px" mb={0.5}>
+                    取引先名（請求書の宛先）
+                  </FormLabel>
+                  <Input
+                    size="sm"
+                    placeholder="例: 四国部品(株)徳島工場"
+                    value={newProjectClientName}
+                    onChange={(e) => setNewProjectClientName(e.target.value)}
+                  />
+                </Box>
+                <Box flex={1}>
+                  <FormLabel fontSize="11px" mb={0.5}>
+                    納入場所
+                  </FormLabel>
+                  <Input
+                    size="sm"
+                    placeholder="例: 四国部品(株)徳島工場"
+                    value={newProjectDeliveryPlace}
+                    onChange={(e) => setNewProjectDeliveryPlace(e.target.value)}
+                  />
+                </Box>
+              </HStack>
               <HStack>
                 <Box flex={1}>
                   <FormLabel fontSize="11px" mb={0.5}>
@@ -318,7 +354,9 @@ export default function EntryForm({
               {selectedProject && !editingPlan && (
                 <HStack fontSize="12px" color="gray.500">
                   <Box>
-                    予定：
+                    取引先：{selectedProject.client_name || "未設定"}
+                    ／納入場所：{selectedProject.delivery_place || "未設定"}
+                    ／予定：
                     {selectedProject.planned_start && selectedProject.planned_end
                       ? `${selectedProject.planned_start} 〜 ${selectedProject.planned_end}`
                       : "未設定"}
@@ -332,6 +370,30 @@ export default function EntryForm({
               )}
               {selectedProject && editingPlan && (
                 <VStack align="stretch" spacing={2}>
+                  <HStack>
+                    <Box flex={1}>
+                      <FormLabel fontSize="11px" mb={0.5}>
+                        取引先名（請求書の宛先）
+                      </FormLabel>
+                      <Input
+                        size="sm"
+                        placeholder="例: 四国部品(株)徳島工場"
+                        value={planClientName}
+                        onChange={(e) => setPlanClientName(e.target.value)}
+                      />
+                    </Box>
+                    <Box flex={1}>
+                      <FormLabel fontSize="11px" mb={0.5}>
+                        納入場所
+                      </FormLabel>
+                      <Input
+                        size="sm"
+                        placeholder="例: 四国部品(株)徳島工場"
+                        value={planDeliveryPlace}
+                        onChange={(e) => setPlanDeliveryPlace(e.target.value)}
+                      />
+                    </Box>
+                  </HStack>
                   <HStack>
                     <Box flex={1}>
                       <FormLabel fontSize="11px" mb={0.5}>

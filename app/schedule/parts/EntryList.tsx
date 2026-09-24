@@ -40,9 +40,13 @@ export default function EntryList({
   const projectInvoiceNumber = (id: number) =>
     projects.find((p) => p.id === id)?.invoice_number || "-";
 
-  const sorted = [...entries].sort((a, b) =>
-    b.work_date.localeCompare(a.work_date)
-  );
+  const sorted = [...entries].sort((a, b) => {
+    const invoiceCompare = projectInvoiceNumber(a.project_id).localeCompare(
+      projectInvoiceNumber(b.project_id)
+    );
+    if (invoiceCompare !== 0) return invoiceCompare;
+    return a.work_date.localeCompare(b.work_date);
+  });
 
   const startEdit = (entry: ScheduleEntry) => {
     setEditingId(entry.id);
