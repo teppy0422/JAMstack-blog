@@ -47,6 +47,7 @@ import {
   FaEnvelope,
   FaCloudDownloadAlt,
   FaKeyboard,
+  FaRegCalendarAlt,
 } from "react-icons/fa";
 import { AiOutlineWechat } from "react-icons/ai";
 import { BsCloud, BsCloudRain, BsSun } from "react-icons/bs";
@@ -79,7 +80,6 @@ import LiquidGlass from "@/components/LiquidGlass";
 import { CustomModal } from "@/components/ui/CustomModal";
 
 import "@fontsource/dela-gothic-one";
-import VoiceDailyModal from "@/components/modals/VoiceDailyModal";
 
 import AlertModal from "@/components/modals/Alert";
 import { HippoFootPrintIcon, MenuIcon } from "@/components/ui/icons";
@@ -370,7 +370,26 @@ export default function Header() {
             </Box>
 
             <HStack spacing={2}>
-              <VoiceDailyModal currentUserName={currentUserName} />
+              <IconButton
+                as="a"
+                href="/schedule"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="スケジュール"
+                icon={<FaRegCalendarAlt size="18px" />}
+                variant="ghost"
+                size="sm"
+                borderRadius="50%"
+                minWidth="34px"
+                width="34px"
+                height="34px"
+                color={
+                  colorMode === "light"
+                    ? "custom.theme.light.900"
+                    : "custom.theme.orange.400"
+                }
+                _hover={{ opacity: "0.9", transform: "scale(1.1)" }}
+              />
               <CustomSwitchColorModeButton />
               <Box
                 onClick={() =>
