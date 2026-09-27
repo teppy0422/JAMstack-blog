@@ -23,6 +23,63 @@ import type { ScheduleProject } from "./GanttSummary";
 import { toHalfWidthNumber, makeHalfWidthOnInput } from "./toHalfWidthNumber";
 
 const DEFAULT_CATEGORIES = ["自宅"];
+const CUSTOM_OPTION_VALUE = "__custom__";
+
+function SelectableTextField({
+  label,
+  placeholder,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  options: string[];
+  onChange: (value: string) => void;
+}) {
+  const isKnownValue = value === "" || options.includes(value);
+  const [customMode, setCustomMode] = useState(!isKnownValue);
+  const selectValue = customMode ? CUSTOM_OPTION_VALUE : value;
+
+  return (
+    <Box flex={1}>
+      <FormLabel fontSize="11px" mb={0.5}>
+        {label}
+      </FormLabel>
+      <Select
+        size="sm"
+        value={selectValue}
+        onChange={(e) => {
+          if (e.target.value === CUSTOM_OPTION_VALUE) {
+            setCustomMode(true);
+            onChange("");
+          } else {
+            setCustomMode(false);
+            onChange(e.target.value);
+          }
+        }}
+      >
+        <option value="">未設定</option>
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+        <option value={CUSTOM_OPTION_VALUE}>＋新規を追加</option>
+      </Select>
+      {customMode && (
+        <Input
+          mt={2}
+          size="sm"
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      )}
+    </Box>
+  );
+}
 
 export default function EntryForm({
   userId,
@@ -60,7 +117,39 @@ export default function EntryForm({
   const [newProjectHourlyRate, setNewProjectHourlyRate] = useState("2000");
   const [newProjectBudgetLimit, setNewProjectBudgetLimit] = useState("200000");
 
+  const sortedProjects = useMemo(
+    () =>
+      [...projects].sort((a, b) =>
+        (a.invoice_number || "").localeCompare(b.invoice_number || "")
+      ),
+    [projects]
+  );
+
+  const clientNameOptions = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          projects
+            .map((p) => p.client_name?.trim())
+            .filter((v): v is string => !!v)
+        )
+      ).sort(),
+    [projects]
+  );
+  const deliveryPlaceOptions = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          projects
+            .map((p) => p.delivery_place?.trim())
+            .filter((v): v is string => !!v)
+        )
+      ).sort(),
+    [projects]
+  );
+
   const [editingPlan, setEditingPlan] = useState(false);
+  const [planName, setPlanName] = useState("");
   const [planStart, setPlanStart] = useState("");
   const [planEnd, setPlanEnd] = useState("");
   const [planHourlyRate, setPlanHourlyRate] = useState("");
@@ -144,6 +233,7 @@ export default function EntryForm({
 
   const startEditPlan = () => {
     if (!selectedProject) return;
+    setPlanName(selectedProject.name);
     setPlanStart(selectedProject.planned_start || "");
     setPlanEnd(selectedProject.planned_end || "");
     setPlanHourlyRate(String(selectedProject.hourly_rate));
@@ -155,6 +245,10 @@ export default function EntryForm({
 
   const handleSavePlan = async () => {
     if (!selectedProject) return;
+    if (!planName.trim()) {
+      toast({ status: "warning", title: "プロジェクト名を入力してください" });
+      return;
+    }
     const hourlyRateNum = Number(planHourlyRate);
     const budgetLimitNum = Number(planBudgetLimit);
     if (!(hourlyRateNum > 0) || !(budgetLimitNum > 0)) {
@@ -164,6 +258,7 @@ export default function EntryForm({
     const { error } = await supabase
       .from("schedule_projects")
       .update({
+        name: planName.trim(),
         planned_start: planStart || null,
         planned_end: planEnd || null,
         hourly_rate: hourlyRateNum,
@@ -176,7 +271,7 @@ export default function EntryForm({
       toast({ status: "error", title: "予定の更新に失敗しました", description: error.message });
       return;
     }
-    toast({ status: "success", title: "予定・単価情報を更新しました" });
+    toast({ status: "success", title: "プロジェクト情報を更新しました" });
     setEditingPlan(false);
     onSaved();
   };
@@ -217,6 +312,10 @@ export default function EntryForm({
 
     toast({ status: "success", title: "実績を登録しました" });
     setTransportationFeeTouched(false);
+    setHours("1");
+    setDescription("");
+    setCategory("自宅");
+    setCustomCategory("");
     onSaved();
   };
 
@@ -239,29 +338,21 @@ export default function EntryForm({
                 value={newProjectName}
                 onChange={(e) => setNewProjectName(e.target.value)}
               />
-              <HStack>
-                <Box flex={1}>
-                  <FormLabel fontSize="11px" mb={0.5}>
-                    取引先名（請求書の宛先）
-                  </FormLabel>
-                  <Input
-                    size="sm"
-                    placeholder="例: 四国部品(株)徳島工場"
-                    value={newProjectClientName}
-                    onChange={(e) => setNewProjectClientName(e.target.value)}
-                  />
-                </Box>
-                <Box flex={1}>
-                  <FormLabel fontSize="11px" mb={0.5}>
-                    納入場所
-                  </FormLabel>
-                  <Input
-                    size="sm"
-                    placeholder="例: 四国部品(株)徳島工場"
-                    value={newProjectDeliveryPlace}
-                    onChange={(e) => setNewProjectDeliveryPlace(e.target.value)}
-                  />
-                </Box>
+              <HStack align="flex-start">
+                <SelectableTextField
+                  label="取引先名（請求書の宛先）"
+                  placeholder="例: 四国部品(株)徳島工場"
+                  value={newProjectClientName}
+                  options={clientNameOptions}
+                  onChange={setNewProjectClientName}
+                />
+                <SelectableTextField
+                  label="納入場所"
+                  placeholder="例: 四国部品(株)徳島工場"
+                  value={newProjectDeliveryPlace}
+                  options={deliveryPlaceOptions}
+                  onChange={setNewProjectDeliveryPlace}
+                />
               </HStack>
               <HStack>
                 <Box flex={1}>
@@ -341,12 +432,26 @@ export default function EntryForm({
                     setEditingPlan(false);
                   }}
                 >
-                  {projects.map((p) => (
+                  {sortedProjects.map((p) => (
                     <option key={p.id} value={p.id}>
-                      {p.name}
+                      {p.invoice_number ? `${p.invoice_number} ${p.name}` : p.name}
                     </option>
                   ))}
                 </Select>
+                {selectedProject?.invoice_number && (
+                  <Box
+                    fontSize="11px"
+                    fontWeight="600"
+                    color="white"
+                    bg="custom.theme.light.900"
+                    px="6px"
+                    py="4px"
+                    borderRadius="sm"
+                    whiteSpace="nowrap"
+                  >
+                    {selectedProject.invoice_number}
+                  </Box>
+                )}
                 <Button size="sm" variant="outline" onClick={() => setNewProjectMode(true)}>
                   ＋新規
                 </Button>
@@ -370,29 +475,32 @@ export default function EntryForm({
               )}
               {selectedProject && editingPlan && (
                 <VStack align="stretch" spacing={2}>
-                  <HStack>
-                    <Box flex={1}>
-                      <FormLabel fontSize="11px" mb={0.5}>
-                        取引先名（請求書の宛先）
-                      </FormLabel>
-                      <Input
-                        size="sm"
-                        placeholder="例: 四国部品(株)徳島工場"
-                        value={planClientName}
-                        onChange={(e) => setPlanClientName(e.target.value)}
-                      />
-                    </Box>
-                    <Box flex={1}>
-                      <FormLabel fontSize="11px" mb={0.5}>
-                        納入場所
-                      </FormLabel>
-                      <Input
-                        size="sm"
-                        placeholder="例: 四国部品(株)徳島工場"
-                        value={planDeliveryPlace}
-                        onChange={(e) => setPlanDeliveryPlace(e.target.value)}
-                      />
-                    </Box>
+                  <Box>
+                    <FormLabel fontSize="11px" mb={0.5}>
+                      プロジェクト名
+                    </FormLabel>
+                    <Input
+                      size="sm"
+                      placeholder="プロジェクト名"
+                      value={planName}
+                      onChange={(e) => setPlanName(e.target.value)}
+                    />
+                  </Box>
+                  <HStack align="flex-start">
+                    <SelectableTextField
+                      label="取引先名（請求書の宛先）"
+                      placeholder="例: 四国部品(株)徳島工場"
+                      value={planClientName}
+                      options={clientNameOptions}
+                      onChange={setPlanClientName}
+                    />
+                    <SelectableTextField
+                      label="納入場所"
+                      placeholder="例: 四国部品(株)徳島工場"
+                      value={planDeliveryPlace}
+                      options={deliveryPlaceOptions}
+                      onChange={setPlanDeliveryPlace}
+                    />
                   </HStack>
                   <HStack>
                     <Box flex={1}>
@@ -466,101 +574,105 @@ export default function EntryForm({
           )}
         </FormControl>
 
-        <HStack spacing={3}>
-          <FormControl>
-            <FormLabel fontSize="13px">日付</FormLabel>
-            <Input
-              size="sm"
-              type="date"
-              value={workDate}
-              onChange={(e) => setWorkDate(e.target.value)}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel fontSize="13px">工数（H）</FormLabel>
-            <NumberInput
-              size="sm"
-              value={hours}
-              min={0.5}
-              step={0.5}
-              onChange={(v) => setHours(toHalfWidthNumber(v))}
-            >
-              <NumberInputField
-                onFocus={(e) => e.target.select()}
-                onInput={makeHalfWidthOnInput(setHours)}
-              />
-            </NumberInput>
-          </FormControl>
-        </HStack>
+        {!newProjectMode && (
+          <>
+            <HStack spacing={3}>
+              <FormControl>
+                <FormLabel fontSize="13px">日付</FormLabel>
+                <Input
+                  size="sm"
+                  type="date"
+                  value={workDate}
+                  onChange={(e) => setWorkDate(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel fontSize="13px">工数（H）</FormLabel>
+                <NumberInput
+                  size="sm"
+                  value={hours}
+                  min={0.5}
+                  step={0.5}
+                  onChange={(v) => setHours(toHalfWidthNumber(v))}
+                >
+                  <NumberInputField
+                    onFocus={(e) => e.target.select()}
+                    onInput={makeHalfWidthOnInput(setHours)}
+                  />
+                </NumberInput>
+              </FormControl>
+            </HStack>
 
-        <HStack spacing={3} align="flex-start">
-          <FormControl>
-            <FormLabel fontSize="13px">カテゴリ</FormLabel>
-            <Select
-              size="sm"
-              value={category}
-              onChange={(e) => {
-                setCategory(e.target.value);
-                setTransportationFeeTouched(false);
-              }}
-            >
-              {categoryOptions.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-              <option value="__custom__">＋新しいカテゴリ</option>
-            </Select>
-            {category === "__custom__" && (
-              <Input
-                mt={2}
-                size="sm"
-                placeholder="新しいカテゴリ名"
-                value={customCategory}
-                onChange={(e) => setCustomCategory(e.target.value)}
-              />
-            )}
-          </FormControl>
-          <FormControl>
-            <FormLabel fontSize="13px">交通費（円）</FormLabel>
-            <NumberInput
-              size="sm"
-              value={transportationFee}
-              min={0}
-              onChange={(v) => {
-                setTransportationFee(toHalfWidthNumber(v));
-                setTransportationFeeTouched(true);
-              }}
-            >
-              <NumberInputField
-                onFocus={(e) => e.target.select()}
-                onInput={(e) => {
-                  const converted = toHalfWidthNumber(e.currentTarget.value);
-                  if (converted !== e.currentTarget.value) {
-                    e.currentTarget.value = converted;
-                    setTransportationFee(converted);
+            <HStack spacing={3} align="flex-start">
+              <FormControl>
+                <FormLabel fontSize="13px">カテゴリ</FormLabel>
+                <Select
+                  size="sm"
+                  value={category}
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                    setTransportationFeeTouched(false);
+                  }}
+                >
+                  {categoryOptions.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                  <option value="__custom__">＋新しいカテゴリ</option>
+                </Select>
+                {category === "__custom__" && (
+                  <Input
+                    mt={2}
+                    size="sm"
+                    placeholder="新しいカテゴリ名"
+                    value={customCategory}
+                    onChange={(e) => setCustomCategory(e.target.value)}
+                  />
+                )}
+              </FormControl>
+              <FormControl>
+                <FormLabel fontSize="13px">交通費（円）</FormLabel>
+                <NumberInput
+                  size="sm"
+                  value={transportationFee}
+                  min={0}
+                  onChange={(v) => {
+                    setTransportationFee(toHalfWidthNumber(v));
                     setTransportationFeeTouched(true);
-                  }
-                }}
+                  }}
+                >
+                  <NumberInputField
+                    onFocus={(e) => e.target.select()}
+                    onInput={(e) => {
+                      const converted = toHalfWidthNumber(e.currentTarget.value);
+                      if (converted !== e.currentTarget.value) {
+                        e.currentTarget.value = converted;
+                        setTransportationFee(converted);
+                        setTransportationFeeTouched(true);
+                      }
+                    }}
+                  />
+                </NumberInput>
+              </FormControl>
+            </HStack>
+
+            <FormControl>
+              <FormLabel fontSize="13px">作業内容</FormLabel>
+              <Textarea
+                size="sm"
+                placeholder="例: 先ハメ誘導SSCの設計を考える"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={2}
               />
-            </NumberInput>
-          </FormControl>
-        </HStack>
+            </FormControl>
 
-        <FormControl>
-          <FormLabel fontSize="13px">作業内容</FormLabel>
-          <Textarea
-            size="sm"
-            placeholder="例: 先ハメ誘導SSCの設計を考える"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={2}
-          />
-        </FormControl>
-
-        <Button colorScheme="blue" size="sm" onClick={handleSubmit} isLoading={saving}>
-          登録
-        </Button>
+            <Button colorScheme="blue" size="sm" onClick={handleSubmit} isLoading={saving}>
+              登録
+            </Button>
+          </>
+        )}
       </VStack>
     </Box>
   );

@@ -42,6 +42,7 @@ export default function PaymentTab({
             onChanged={onChanged}
             showRevert={false}
             emptyMessage="入金済みの請求書がありません"
+            totalLabel="入金済み合計"
           />
         )}
       </Box>

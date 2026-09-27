@@ -27,6 +27,7 @@ export default function InvoiceListTab({
   onChanged,
   showRevert = true,
   emptyMessage = "発行済みの請求書がありません",
+  totalLabel = "合計",
 }: {
   invoices: Invoice[];
   lineItemsByInvoice: Record<number, InvoiceLineItem[]>;
@@ -34,6 +35,7 @@ export default function InvoiceListTab({
   onChanged: () => void;
   showRevert?: boolean;
   emptyMessage?: string;
+  totalLabel?: string;
 }) {
   const toast = useToast();
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
@@ -45,8 +47,10 @@ export default function InvoiceListTab({
     projects.find((p) => p.id === projectId)?.name || "";
 
   const sorted = [...invoices].sort((a, b) =>
-    b.issue_date.localeCompare(a.issue_date)
+    projectInvoiceNumber(a.project_id).localeCompare(projectInvoiceNumber(b.project_id))
   );
+
+  const totalAmount = invoices.reduce((sum, invoice) => sum + invoice.total, 0);
 
   const handleUpdatePayment = async (
     invoiceId: number,
@@ -128,6 +132,7 @@ export default function InvoiceListTab({
           <Tr>
             <Th whiteSpace="nowrap">請求番号</Th>
             <Th whiteSpace="nowrap">宛先</Th>
+            <Th whiteSpace="nowrap">対応者様</Th>
             <Th whiteSpace="nowrap">発行日</Th>
             <Th whiteSpace="nowrap" isNumeric>
               金額
@@ -140,11 +145,26 @@ export default function InvoiceListTab({
         <Tbody>
           {sorted.map((invoice) => (
             <Tr key={invoice.id}>
-              <Td whiteSpace="nowrap" fontSize="12px">
-                {projectInvoiceNumber(invoice.project_id)}
+              <Td whiteSpace="nowrap">
+                <Box
+                  fontSize="11px"
+                  fontWeight="600"
+                  color="white"
+                  bg="custom.theme.light.900"
+                  px="6px"
+                  py="4px"
+                  borderRadius="sm"
+                  whiteSpace="nowrap"
+                  display="inline-block"
+                >
+                  {projectInvoiceNumber(invoice.project_id)}
+                </Box>
               </Td>
               <Td whiteSpace="nowrap" fontSize="12px">
                 {invoice.client_name}
+              </Td>
+              <Td whiteSpace="nowrap" fontSize="12px">
+                {invoice.responder_name || "-"}
               </Td>
               <Td whiteSpace="nowrap" fontSize="12px">
                 {invoice.issue_date}
@@ -195,6 +215,16 @@ export default function InvoiceListTab({
               </Td>
             </Tr>
           ))}
+          <Tr fontWeight="700">
+            <Td colSpan={3} fontSize="12px" textAlign="right">
+              {totalLabel}
+            </Td>
+            <Td></Td>
+            <Td isNumeric fontSize="12px">
+              ¥{totalAmount.toLocaleString()}
+            </Td>
+            <Td colSpan={3}></Td>
+          </Tr>
         </Tbody>
       </Table>
     </Box>

@@ -20,6 +20,8 @@ import { supabase } from "@/utils/supabase/client";
 import type { ScheduleEntry, ScheduleProject } from "./GanttSummary";
 import { toHalfWidthNumber, makeHalfWidthOnInput } from "./toHalfWidthNumber";
 
+const TAX_RATE = 0.1;
+
 export default function EntryList({
   entries,
   projects,
@@ -35,10 +37,10 @@ export default function EntryList({
   const [editHours, setEditHours] = useState("");
   const [editTransportationFee, setEditTransportationFee] = useState("");
 
-  const projectName = (id: number) =>
-    projects.find((p) => p.id === id)?.name || "-";
   const projectInvoiceNumber = (id: number) =>
     projects.find((p) => p.id === id)?.invoice_number || "-";
+  const projectHourlyRate = (id: number) =>
+    projects.find((p) => p.id === id)?.hourly_rate || 0;
 
   const sorted = [...entries].sort((a, b) => {
     const invoiceCompare = projectInvoiceNumber(a.project_id).localeCompare(
@@ -47,6 +49,19 @@ export default function EntryList({
     if (invoiceCompare !== 0) return invoiceCompare;
     return a.work_date.localeCompare(b.work_date);
   });
+
+  const totalsByInvoiceNumber = entries.reduce<Record<string, number>>((acc, entry) => {
+    const invoiceNumber = projectInvoiceNumber(entry.project_id);
+    const subtotal =
+      Number(entry.hours) * projectHourlyRate(entry.project_id) +
+      Number(entry.transportation_fee || 0);
+    const amount = Math.round(subtotal * (1 + TAX_RATE));
+    acc[invoiceNumber] = (acc[invoiceNumber] || 0) + amount;
+    return acc;
+  }, {});
+  const sortedInvoiceNumbers = Object.keys(totalsByInvoiceNumber).sort((a, b) =>
+    a.localeCompare(b)
+  );
 
   const startEdit = (entry: ScheduleEntry) => {
     setEditingId(entry.id);
@@ -107,11 +122,11 @@ export default function EntryList({
           <Tr>
             <Th whiteSpace="nowrap">日付</Th>
             <Th whiteSpace="nowrap">請求番号</Th>
-            <Th whiteSpace="nowrap">プロジェクト</Th>
             <Th whiteSpace="nowrap">カテゴリ</Th>
             <Th whiteSpace="nowrap">作業内容</Th>
             <Th whiteSpace="nowrap" isNumeric>工数</Th>
             <Th whiteSpace="nowrap" isNumeric>交通費</Th>
+            <Th whiteSpace="nowrap" isNumeric>税込金額</Th>
             <Th></Th>
           </Tr>
         </Thead>
@@ -124,7 +139,6 @@ export default function EntryList({
               <Td whiteSpace="nowrap" fontSize="12px">
                 {projectInvoiceNumber(entry.project_id)}
               </Td>
-              <Td whiteSpace="nowrap" fontSize="12px">{projectName(entry.project_id)}</Td>
               <Td whiteSpace="nowrap" fontSize="12px">{entry.category}</Td>
               <Td fontSize="12px">
                 {editingId === entry.id ? (
@@ -172,6 +186,19 @@ export default function EntryList({
                   `¥${Number(entry.transportation_fee || 0).toLocaleString()}`
                 )}
               </Td>
+              <Td isNumeric fontSize="12px">
+                {(() => {
+                  const hoursVal =
+                    editingId === entry.id ? Number(editHours) || 0 : Number(entry.hours) || 0;
+                  const feeVal =
+                    editingId === entry.id
+                      ? Number(editTransportationFee) || 0
+                      : Number(entry.transportation_fee) || 0;
+                  const subtotal = hoursVal * projectHourlyRate(entry.project_id) + feeVal;
+                  const amount = Math.round(subtotal * (1 + TAX_RATE));
+                  return `¥${amount.toLocaleString()}`;
+                })()}
+              </Td>
               <Td>
                 {editingId === entry.id ? (
                   <>
@@ -209,6 +236,17 @@ export default function EntryList({
                   </>
                 )}
               </Td>
+            </Tr>
+          ))}
+          {sortedInvoiceNumbers.map((invoiceNumber) => (
+            <Tr key={`total-${invoiceNumber}`} fontWeight="700">
+              <Td colSpan={5} fontSize="12px" textAlign="right">
+                {invoiceNumber} 合計
+              </Td>
+              <Td colSpan={2} isNumeric fontSize="12px">
+                ¥{totalsByInvoiceNumber[invoiceNumber].toLocaleString()}
+              </Td>
+              <Td></Td>
             </Tr>
           ))}
         </Tbody>

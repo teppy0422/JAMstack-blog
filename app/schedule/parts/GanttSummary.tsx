@@ -33,6 +33,10 @@ export type ScheduleProject = {
   planned_end: string | null;
   hourly_rate: number;
   budget_limit: number;
+  draft_subject_title: string | null;
+  draft_subject_detail: string | null;
+  draft_responder_name: string | null;
+  draft_notes: string | null;
 };
 
 const TAX_RATE = 0.1;
@@ -56,6 +60,7 @@ const FIXED_CATEGORY_COLORS: Record<string, string> = {
   工場内: "purple.500",
   自宅: "green.400",
 };
+const CATEGORY_DISPLAY_ORDER = ["自宅", "工場内"];
 const FALLBACK_CATEGORY_COLORS = [
   "blue.400",
   "orange.400",
@@ -97,7 +102,7 @@ function buildCategoryBars(entries: ScheduleEntry[]): CategoryBar[] {
     list.push(e);
     byCategory.set(e.category, list);
   }
-  return Array.from(byCategory.entries()).map(([category, list]) => {
+  const bars = Array.from(byCategory.entries()).map(([category, list]) => {
     const dates = list.map((e) => e.work_date).sort();
     return {
       category,
@@ -106,6 +111,15 @@ function buildCategoryBars(entries: ScheduleEntry[]): CategoryBar[] {
       lastDate: dates[dates.length - 1],
       entries: list,
     };
+  });
+
+  return bars.sort((a, b) => {
+    const orderA = CATEGORY_DISPLAY_ORDER.indexOf(a.category);
+    const orderB = CATEGORY_DISPLAY_ORDER.indexOf(b.category);
+    if (orderA === -1 && orderB === -1) return 0;
+    if (orderA === -1) return 1;
+    if (orderB === -1) return -1;
+    return orderA - orderB;
   });
 }
 
@@ -122,11 +136,13 @@ export default function GanttSummary({
   const color =
     colorMode === "light" ? "custom.theme.light.900" : "custom.theme.dark.100";
 
-  const projectsWithData = projects.filter(
-    (p) =>
-      entries.some((e) => e.project_id === p.id) ||
-      (p.planned_start && p.planned_end)
-  );
+  const projectsWithData = projects
+    .filter(
+      (p) =>
+        entries.some((e) => e.project_id === p.id) ||
+        (p.planned_start && p.planned_end)
+    )
+    .sort((a, b) => (a.invoice_number || "").localeCompare(b.invoice_number || ""));
 
   if (projectsWithData.length === 0) {
     return (
@@ -260,7 +276,7 @@ export default function GanttSummary({
         })()}
 
         {/* グリッド背景（VStackと同じセルに重ねて高さを自動追従させる） */}
-        <Box display="grid" gridTemplateAreas="'stack'" w="100%">
+        <Box display="grid" gridTemplateAreas="'stack'" w={`${totalWidth}px`} minW="100%">
           <HStack
             spacing={0}
             gridArea="stack"
@@ -291,8 +307,8 @@ export default function GanttSummary({
               return (
                 <Box
                   key={idx}
-                  flex="1"
-                  minW={`${DAY_WIDTH}px`}
+                  flexShrink={0}
+                  w={`${DAY_WIDTH}px`}
                   h="100%"
                   borderLeft={isMonthStart ? "1.5px solid" : "1px solid"}
                   borderLeftColor={blc}
@@ -346,15 +362,6 @@ export default function GanttSummary({
                 project.hourly_rate,
                 totalTransportationFee
               );
-              const budgetRatio =
-                project.budget_limit > 0 ? totalAmount / project.budget_limit : 0;
-              const budgetColor =
-                budgetRatio >= 1
-                  ? "red.500"
-                  : budgetRatio >= 0.8
-                  ? "orange.400"
-                  : "green.500";
-
               const projectLabelLeft = hasPlan
                 ? getOffsetPixels(allDates, project.planned_start!)
                 : projectEntries.length > 0
@@ -370,7 +377,8 @@ export default function GanttSummary({
                 <Box key={project.id} mb="10px">
                   <Box position="relative" h="22px" mb="4px">
                     <HStack
-                      spacing={2}
+                      spacing={1}
+                      align="stretch"
                       position="sticky"
                       left="0px"
                       w="fit-content"
@@ -387,7 +395,8 @@ export default function GanttSummary({
                             ? "custom.theme.light.500"
                             : "custom.theme.dark.800"
                         }
-                        display="inline-block"
+                        display="inline-flex"
+                        alignItems="center"
                         border="1px solid"
                         borderColor={
                           colorMode === "light"
@@ -397,32 +406,52 @@ export default function GanttSummary({
                         borderRadius="sm"
                         whiteSpace="nowrap"
                       >
+                        {project.name}
+                      </Text>
+                      <VStack spacing={0} align="flex-start" justify="center">
                         {project.invoice_number && (
-                          <Text as="span" fontWeight="400" opacity={0.7} mr="4px">
+                          <Text
+                            fontSize="9px"
+                            fontWeight="600"
+                            px="4px"
+                            color="white"
+                            bg={
+                              colorMode === "light"
+                                ? "custom.theme.light.900"
+                                : "custom.theme.dark.400"
+                            }
+                            display="inline-block"
+                            borderRadius="sm"
+                            whiteSpace="nowrap"
+                            lineHeight="1.4"
+                          >
                             {project.invoice_number}
                           </Text>
                         )}
-                        {project.name}
-                      </Text>
-                      {showBudget && (
-                        <Tooltip
-                          hasArrow
-                          label={`実績${totalHours}H × ${project.hourly_rate}円/H（税抜）＋交通費${totalTransportationFee.toLocaleString()}円＝税込 ${totalAmount.toLocaleString()}円 ／ 上限 ${project.budget_limit.toLocaleString()}円`}
-                        >
-                          <Text
-                            fontSize="12px"
-                            fontWeight="700"
-                            color="white"
-                            bg={budgetColor}
-                            px="6px"
-                            py="1px"
-                            borderRadius="sm"
-                            whiteSpace="nowrap"
+                        {showBudget && (
+                          <Tooltip
+                            hasArrow
+                            label={`実績${totalHours}H × ${project.hourly_rate}円/H（税抜）＋交通費${totalTransportationFee.toLocaleString()}円＝税込 ${totalAmount.toLocaleString()}円 ／ 上限 ${project.budget_limit.toLocaleString()}円`}
                           >
-                            ¥{totalAmount.toLocaleString()}
-                          </Text>
-                        </Tooltip>
-                      )}
+                            <Text
+                              fontSize="10px"
+                              fontWeight="700"
+                              color={color}
+                              bg={
+                                colorMode === "light"
+                                  ? "custom.theme.light.500"
+                                  : "custom.theme.dark.800"
+                              }
+                              px="4px"
+                              display="inline-block"
+                              whiteSpace="nowrap"
+                              lineHeight="1.4"
+                            >
+                              ¥{totalAmount.toLocaleString()}
+                            </Text>
+                          </Tooltip>
+                        )}
+                      </VStack>
                     </HStack>
                   </Box>
                   {hasPlan && (

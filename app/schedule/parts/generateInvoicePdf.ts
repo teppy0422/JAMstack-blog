@@ -19,21 +19,22 @@ const CONTENT_BOTTOM = PAGE_HEIGHT - 55;
 
 const COL = {
   work: MARGIN_X,
-  workW: 230,
-  hours: MARGIN_X + 230,
-  hoursW: 45,
-  unit: MARGIN_X + 275,
-  unitW: 35,
-  unitPrice: MARGIN_X + 310,
-  unitPriceW: 60,
-  amount: MARGIN_X + 370,
-  amountW: 65,
-  remarks: MARGIN_X + 435,
+  workW: 300,
+  hours: MARGIN_X + 300,
+  hoursW: 32,
+  unit: MARGIN_X + 332,
+  unitW: 24,
+  unitPrice: MARGIN_X + 356,
+  unitPriceW: 48,
+  amount: MARGIN_X + 404,
+  amountW: 55,
+  remarks: MARGIN_X + 459,
 };
 const TABLE_RIGHT = PAGE_WIDTH - MARGIN_X;
 const COL_REMARKS_W = TABLE_RIGHT - COL.remarks;
 const HEADER_ROW_H = 16;
-const ROW_H = 16;
+const ROW_LINE_H = 11;
+const ROW_PADDING = 5;
 const DATE_ROW_H = 14;
 
 // 通常テキストの濃度底上げ用の縁取り幅（フォントサイズに比例）
@@ -231,7 +232,24 @@ export async function generateInvoicePdf(
 
   let rowBottom = y;
   for (const row of rows) {
-    const rowH = row.type === "date" ? DATE_ROW_H : ROW_H;
+    let rowH = DATE_ROW_H;
+    let labelLines: string[] = [];
+    let remarksLines: string[] = [];
+
+    if (row.type === "item") {
+      setSize(8.5);
+      const item = row.item;
+      const label = item.section_label
+        ? `${item.section_label}：${item.description}`
+        : item.description;
+      labelLines = doc.splitTextToSize(label, COL.workW - 12);
+      remarksLines = item.remarks
+        ? doc.splitTextToSize(item.remarks, COL_REMARKS_W - 8)
+        : [];
+      const lineCount = Math.max(labelLines.length, remarksLines.length, 1);
+      rowH = ROW_PADDING + lineCount * ROW_LINE_H;
+    }
+
     if (y + rowH > CONTENT_BOTTOM) {
       finishTableBlock(rowBottom);
       newPage();
@@ -249,10 +267,9 @@ export async function generateInvoicePdf(
       const item = row.item;
 
       setSize(8.5);
-      const label = item.section_label
-        ? `${item.section_label}：${item.description}`
-        : item.description;
-      t(label, COL.work + 8, y + 11, { maxWidth: COL.workW - 12 });
+      labelLines.forEach((line, idx) => {
+        t(line, COL.work + 8, y + 11 + idx * ROW_LINE_H);
+      });
       if (item.hours !== null) {
         t(String(item.hours), COL.hours + COL.hoursW - 4, y + 11, { align: "right" });
       }
@@ -263,9 +280,9 @@ export async function generateInvoicePdf(
       t(item.amount.toLocaleString(), COL.amount + COL.amountW - 4, y + 11, {
         align: "right",
       });
-      if (item.remarks) {
-        t(item.remarks, COL.remarks + 4, y + 11, { maxWidth: COL_REMARKS_W - 8 });
-      }
+      remarksLines.forEach((line, idx) => {
+        t(line, COL.remarks + 4, y + 11 + idx * ROW_LINE_H);
+      });
     }
 
     y += rowH;
@@ -311,7 +328,7 @@ export async function generateInvoicePdf(
   }
   y = summaryTop + summaryRowH * 3 + 16;
 
-  const notesLines = (invoice.notes || "").split("\n").filter((l) => l.length > 0);
+  const notesLines = (invoice.notes || "").trim() === "" ? [] : (invoice.notes || "").split("\n");
   if (notesLines.length > 0) {
     if (y + 14 > CONTENT_BOTTOM) newPlainPage();
     setSize(9);

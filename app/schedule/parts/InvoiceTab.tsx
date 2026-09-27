@@ -61,6 +61,7 @@ export default function InvoiceTab({
             onChanged={onChanged}
             showRevert
             emptyMessage="発行済みの請求書がありません"
+            totalLabel="未入金合計"
           />
         )}
       </Box>

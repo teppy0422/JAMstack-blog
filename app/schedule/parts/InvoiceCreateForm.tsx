@@ -39,14 +39,22 @@ type DraftLine = {
 };
 
 const TRANSPORTATION_FEE_HOURS = 2;
+const CATEGORY_SORT_ORDER = ["工場内", "自宅"];
+
+function categorySortIndex(category: string): number {
+  const idx = CATEGORY_SORT_ORDER.indexOf(category);
+  return idx === -1 ? CATEGORY_SORT_ORDER.length : idx;
+}
 
 function buildDraftLinesFromEntries(
   entries: ScheduleEntry[],
   hourlyRate: number
 ): DraftLine[] {
-  const sorted = [...entries].sort((a, b) =>
-    a.work_date.localeCompare(b.work_date)
-  );
+  const sorted = [...entries].sort((a, b) => {
+    const dateCompare = a.work_date.localeCompare(b.work_date);
+    if (dateCompare !== 0) return dateCompare;
+    return categorySortIndex(a.category) - categorySortIndex(b.category);
+  });
   const lines: DraftLine[] = [];
   for (const e of sorted) {
     lines.push({
@@ -125,6 +133,15 @@ export default function InvoiceCreateForm({
     setLines(buildDraftLinesFromEntries(targetEntries, selectedProject.hourly_rate));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, entries]);
+
+  useEffect(() => {
+    if (!selectedProject) return;
+    setSubjectTitle(selectedProject.draft_subject_title ?? "");
+    setSubjectDetail(selectedProject.draft_subject_detail ?? "");
+    setResponderName(selectedProject.draft_responder_name ?? "");
+    setNotes(selectedProject.draft_notes ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId]);
 
   const lineAmount = (l: DraftLine) => {
     const hours = Number(l.hours) || 0;
@@ -319,6 +336,16 @@ export default function InvoiceCreateForm({
       }
     }
 
+    await supabase
+      .from("schedule_projects")
+      .update({
+        draft_subject_title: subjectTitle.trim() || null,
+        draft_subject_detail: subjectDetail.trim() || null,
+        draft_responder_name: responderName.trim() || null,
+        draft_notes: notes.trim() || null,
+      })
+      .eq("id", selectedProject.id);
+
     setSaving(false);
     toast({ status: "success", title: "請求書を作成しました" });
     setLines([]);
@@ -416,7 +443,7 @@ export default function InvoiceCreateForm({
                       日付
                     </Th>
                     <Th whiteSpace="nowrap" w="90px" px={1}>
-                      見出し
+                      カテゴリ
                     </Th>
                     <Th whiteSpace="nowrap" px={1}>
                       作業内容
