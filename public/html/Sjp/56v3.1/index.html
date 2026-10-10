@@ -1,170 +1,723 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<link rel="stylesheet" href="./assets/composition.css">
-	<title>index</title>
-	<style>
-		.glass-container {
-			font-family: 'WalterTurncoat', cursive;
-			color: white;
-			font-size: 2.4em;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			padding: 4px 20px;
-			border-radius: 6px;
-			backdrop-filter: blur(5px);
-			background-color: rgba(255, 255, 255, 0.22);
-			border: 1px rgba(255, 255, 255) solid;
-			position: absolute;
-			z-index: 100;
-			top: calc(30% - 50px);
-			/* 50% - 半分の高さ */
-			left: 50%;
-			transform: translate(-50%, 0%);
-		}
-
-		.vertical-line {
-			position: absolute;
-			z-index: 100;
-			top: 0;
-			bottom: 0;
-			width: 1px;
-			background-color: white;
-		}
-
-		.line-15vw {
-			left: 15vw;
-		}
-
-		.line-85vw {
-			left: 85vw;
-		}
-
-		.form-container {
-			display: flex;
-			flex-direction: column;
-			/* 縦に配置 */
-			align-items: center;
-		}
-
-		.holder {
-			width: 100%;
-			height: 100vh;
-			z-index: 1;
-		}
-
-		body {
-			background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='100%25' width='100%25'%3E%3Cdefs%3E%3Cpattern id='doodad' width='228' height='228' viewBox='0 0 40 40' patternUnits='userSpaceOnUse' patternTransform='rotate(125)'%3E%3Crect width='100%25' height='100%25' fill='rgba(84, 7, 38,0.7)'/%3E%3Cpath d='M0 12h40v3.67h-40zM0 17.33h40v3.67h-40zM0 22.67h40v3.67h-40zM0 28h40v3.67h-40z' fill='rgba(45, 55, 72,1)' filter='url(%23filter-doodad-1)'/%3E%3Cpath d='M 20 12a 8 8 0 0 0 0 16a 8 8 0 0 0 0-16zM-10-10h 60v 60h-60z' fill='rgba(8, 8, 8,1)' filter='url(%23filter-doodad-2)'/%3E%3C/pattern%3E%3Cfilter id='filter-doodad-1'%3E%3CfeTurbulence baseFrequency='0.01 0.2' numOctaves='2' result='result1'/%3E%3CfeDisplacementMap in2='result1' scale='5' result='result2' xChannelSelector='R' yChannelSelector='G' in='SourceGraphic'/%3E%3CfeComposite in2='result2' in='SourceGraphic' operator='atop' result='compositeGraphic'/%3E%3CfeOffset in='compositeGraphic' result='fbSourceGraphic' dx='-0.5'/%3E%3C/filter%3E%3Cfilter id='filter-doodad-2'%3E%3CfeTurbulence baseFrequency='0.05 0.01' numOctaves='2' result='result1'/%3E%3CfeDisplacementMap in2='result1' scale='9' result='result2' xChannelSelector='R' yChannelSelector='G' in='SourceGraphic'/%3E%3CfeComposite in2='result2' in='SourceGraphic' operator='atop' result='compositeGraphic'/%3E%3CfeOffset in='compositeGraphic' result='fbSourceGraphic' dy='-0.9'/%3E%3C/filter%3E%3C/defs%3E%3Crect fill='url(%23doodad)' height='200%25' width='200%25'/%3E%3C/svg%3E ")
-		}
-
-		form {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-		}
-
-		p {
-			font-size: 1em;
-			padding: 0;
-			margin: 0;
-		}
-	</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配索図誘導 - 製品選択</title>
+<style>
+  html, body {
+      margin: 0;
+      height: 100%;
+      background: #111;
+      font-family: Verdana, Arial, Helvetica, sans-serif;
+  }
+  body {
+      display: flex;
+      flex-direction: column;
+  }
+  #productList {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      box-sizing: border-box;
+  }
+  :root {
+      --table-width: 36em;
+  }
+  table.productTable {
+      width: var(--table-width);
+      max-width: 100%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      table-layout: fixed;
+  }
+  table.productTable col.colSsc { width: 6em; }
+  table.productTable col.colProduct { width: 13em; }
+  table.productTable col.colKaihen { width: 6em; }
+  table.productTable col.colWire { width: 4.5em; }
+  table.productTable col.colPhoto { width: 6.5em; }
+  table.productTable col.colVer { width: 5em; }
+  table.productTable tbody td.verCell {
+      font-size: 0.75em;
+      color: rgba(255,255,255,0.6);
+  }
+  table.productTable thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #F07070;
+      color: #fff;
+      font-size: 1.1em;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 1px 0.4em;
+      border-bottom: 2px solid #c94f4f;
+      box-sizing: border-box;
+  }
+  table.productTable thead th.sortableTh { cursor: pointer; }
+  table.productTable thead th.sortableTh:hover { text-decoration: underline; }
+  table.productTable thead tr th:first-child { border-top-left-radius: 4px; }
+  table.productTable thead tr th:last-child { border-top-right-radius: 4px; }
+  table.productTable tbody tr:last-child td:first-child { border-bottom-left-radius: 4px; }
+  table.productTable tbody tr:last-child td:last-child { border-bottom-right-radius: 4px; }
+  table.productTable tbody td {
+      color: #fff;
+      font-size: 1.2em;
+      font-weight: 600;
+      text-align: center;
+      padding: 2px 0.4em;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      border-right: 1px solid rgba(255,255,255,0.07);
+      box-sizing: border-box;
+      position: relative;
+  }
+  table.productTable tbody td:last-child {
+      border-right: none;
+  }
+  table.productTable tbody tr.rowBtn {
+      cursor: pointer;
+  }
+  table.productTable tbody tr.groupA td { background: #1c1c1c; }
+  table.productTable tbody tr.groupB td { background: #161616; }
+  table.productTable tbody tr.groupEnd td {
+      border-bottom: 1px solid #F07070;
+  }
+  table.productTable tbody tr.groupA td.valueHover,
+  table.productTable tbody tr.groupB td.valueHover {
+      background: #333;
+  }
+  table.productTable tbody tr.rowBtn:active td {
+      background: #2a2a2a;
+  }
+  table.productTable tbody tr.rowBtn.loading td {
+      opacity: 0.5;
+      pointer-events: none;
+  }
+  table.productTable tbody td.sscCell {
+      font-weight: 700;
+  }
+  table.productTable tbody td.wireCountCell,
+  table.productTable tbody td.photoCell {
+      font-size: 1em;
+      white-space: nowrap;
+  }
+  .noImageBadge {
+      display: inline-block;
+      margin-left: 0.35em;
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+      background: #E53935;
+      color: #fff;
+      font-size: 0.8em;
+      font-weight: 700;
+      line-height: 1;
+      vertical-align: middle;
+  }
+  table.productTable tbody td.rawCell {
+      text-align: left;
+      padding-left: 0.8em;
+  }
+  .valueText {
+      position: relative;
+      display: inline-block;
+  }
+  .currentBadge {
+      position: absolute;
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-right: 0.4em;
+      background: #F07070;
+      color: #fff;
+      font-size: 0.4em;
+      font-weight: 700;
+      line-height: 1;
+      padding: 0.22em 0.45em;
+      border-radius: 4px;
+      white-space: nowrap;
+  }
+  #topBar {
+      position: relative;
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: flex-end;
+      padding: 0.5em 0.8em;
+      background: #111;
+      box-sizing: border-box;
+  }
+  .topBarTrack {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: var(--table-width);
+      max-width: 100%;
+      margin: 0 auto;
+      pointer-events: none;
+  }
+  #topCharacter {
+      width: 36px;
+      height: 36px;
+      display: block;
+  }
+  .topBarTitle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-size: 1.1em;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+  }
+  #backBtn {
+      position: relative;
+      z-index: 1;
+      font-size: 1.1em;
+      padding: 0.3em 0.8em;
+      background: transparent;
+      color: #fff;
+      border: 1px solid #F07070;
+      border-radius: 6px;
+      cursor: pointer;
+  }
+  #backBtn:hover {
+      background: rgba(240, 112, 112, 0.15);
+  }
+  #backBtn:active {
+      background: rgba(240, 112, 112, 0.3);
+  }
+  /* 製品品番の検索(テーブルの上)。QRリーダーで読むか、入力して Enter */
+  #searchBar {
+      flex: 0 0 auto;
+      width: var(--table-width);
+      max-width: 100%;
+      margin: 0 auto 0.5em;
+      box-sizing: border-box;
+  }
+  #productSearch {
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 1.3em;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 0.35em 0.6em;
+      color: #fff;
+      background: #1c1c1c;
+      border: 2px solid #F07070;
+      border-radius: 6px;
+      outline: none;
+  }
+  #productSearch:focus {
+      background: #262626;
+      box-shadow: 0 0 0 3px rgba(240, 112, 112, 0.35);
+  }
+  #productSearch::placeholder {
+      color: rgba(255,255,255,0.45);
+      font-weight: 400;
+      letter-spacing: 0;
+  }
+  #searchMsg {
+      min-height: 1.2em;
+      margin-top: 0.2em;
+      color: #F07070;
+      font-size: 0.95em;
+      font-weight: 700;
+      text-align: center;
+  }
+  #footerBar {
+      flex: 0 0 auto;
+      padding: 0.8em 1em;
+      text-align: center;
+      color: #fff;
+      font-size: 1.3em;
+      background: #1a1a1a;
+      border-top: 2px solid #F07070;
+      box-sizing: border-box;
+  }
+</style>
 </head>
-
-<body onload="document.myform.txtb.focus();">
-	<div class="holder">
-		<div class="glass-container">
-			<div class="form-container">
-				<p style="font-size: 1rem;">Ver:3.100.23</p>
-				<p style="font-size: 1.5rem;">82111V4731-C00</p>
-				<form name="myform" onsubmit="return checkText()" style="width:100%">
-					<input type="text" name="txtb" class="myT" autocomplete="off" onfocus="this.select()"
-						style="width:60%;margin-top: 4px;" />
-					<input type="submit" value="Enter" class="myB" id="submitButton"
-						style="color:gray;background-color: white;border-color:gray;box-shadow: 0 0 0 0px gray;font-family: 'Walter Turncoat', cursive;margin-top: 4px;">
-				</form>
-			</div>
-		</div>
-		<div class="glass-container" data-composition="0133">
-			<p>0</p>
-		</div>
-		<div class="glass-container" data-composition="0118">
-			<p>1</p>
-		</div>
-		<div class="glass-container" data-composition="0232">
-			<p>2</p>
-		</div>
-		<div class="glass-container" data-composition="0095">
-			<p>A</p>
-		</div>
-		<div class="glass-container" data-composition="0166">
-			<p>B</p>
-		</div>
-		<div class="glass-container" data-composition="0850">
-			<p>F</p>
-		</div>
-		<div class="glass-container" data-composition="0507">
-			<p>GK1</p>
-		</div>
-		<div class="glass-container" data-composition="0818">
-			<p>GK2</p>
-		</div>
-		<div class="glass-container" data-composition="0423">
-			<p>GK3</p>
-		</div>
-		<div class="glass-container" data-composition="0215">
-			<p>GK4</p>
-		</div>
-		<div class="glass-container" data-composition="0506">
-			<p>GK5</p>
-		</div>
-		<div class="glass-container" data-composition="0105">
-			<p>GK6</p>
-		</div>
-		<div class="glass-container" data-composition="0834">
-			<p>GK7</p>
-		</div>
-		<div class="glass-container" data-composition="0318">
-			<p>GK8</p>
-		</div>
-		<div class="glass-container" data-composition="0214">
-			<p>SP</p>
-		</div>
-	</div>
-	<div class="vertical-line line-15vw"></div>
-	<div class="vertical-line line-85vw"></div>
-	<script src="./assets/main.js"></script>
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-			var containers = document.getElementsByClassName('glass-container');
-			var holder = document.querySelector('.holder');
-			var holderWidth = holder.offsetWidth;
-			var bottom = 20;
-			var left = window.innerWidth / 2;
-			var row = 1;
-			for (var i = 0; i < containers.length; i++) {
-				containers[i].style.position = 'absolute';
-				containers[i].style.top = bottom + 16 + 'px';
-				containers[i].style.left = left + 'px';
-				(function (container) {
-					var composition = container.getAttribute('data-composition');
-					if (composition) {
-						container.style.cursor = 'pointer';
-						container.addEventListener('click', function () {
-							window.location.href = composition + ".html";
-						});
-					}
-				})(containers[i]);
-				var rect = containers[i].getBoundingClientRect();
-				bottom = rect.top + rect.height;
-			}
-		});
-	</script>
+<body>
+  <!-- テーブル行(tr.rowBtn)以外なので下のbody click時のhistory.back()にそのまま乗る。個別のクリック処理は不要 -->
+  <div id="topBar">
+      <div class="topBarTrack">
+          <svg id="topCharacter" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg"><style>.npPin { animation: npBob 1.4s ease-in-out infinite; } @keyframes npBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } } .npRoute { stroke-dasharray: 3 6; animation: npFlow 1s linear infinite; } @keyframes npFlow { to { stroke-dashoffset: -18; } }</style><defs><linearGradient id="npGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8E6E95"/><stop offset="1" stop-color="#4E3753"/></linearGradient></defs><path class="npRoute" d="M6 88 Q30 70 48 86 T90 80" fill="none" stroke="#00FF66" stroke-width="4" stroke-linecap="round"/><g class="npPin"><path d="M48 6 C30 6 18 19 18 35 C18 55 48 78 48 78 C48 78 78 55 78 35 C78 19 66 6 48 6 Z" fill="url(#npGrad)" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><circle cx="48" cy="34" r="17" fill="#fff"/><circle cx="37" cy="38" r="2.8" fill="#E8B8D0"/><circle cx="59" cy="38" r="2.8" fill="#E8B8D0"/><circle cx="42" cy="32" r="3" fill="#3a2a3e"/><circle cx="54" cy="32" r="3" fill="#3a2a3e"/><path d="M42 39 Q48 44 54 39" fill="none" stroke="#3a2a3e" stroke-width="2.5" stroke-linecap="round"/></g></svg>
+          <span class="topBarTitle">配索誘導Ver3.1</span>
+      </div>
+      <button type="button" id="backBtn">戻る</button>
+  </div>
+  <!-- 製品品番の検索。QRリーダー(キーボードとして入力する物)で読むと、その製品品番の index.html へ移動する -->
+  <div id="searchBar">
+      <input type="text" id="productSearch" placeholder="製品品番(QRを読む・入力して Enter)" autocomplete="off" spellcheck="false" inputmode="none">
+      <div id="searchMsg"></div>
+  </div>
+  <div id="productList"></div>
+  <div id="footerBar">
+      <span>製品品番のQRを読むか、生産する製品品番の行をクリックしてください</span>
+  </div>
+  <script>
+  (function () {
+      var LAST_KEY = 'ssc_last_page';
+      // ssc_last_pageとは別に、直近で選んだ品番フォルダだけを覚えておくキー。
+      // ssc_last_pageは品番変更時(composition側のトップ表クリック)にクリアされるが、
+      // こちらは残るので、一覧に戻ってきたときに「現在」バッジの表示に使える
+      var CURRENT_KEY = 'ssc_current_folder';
+      var last = localStorage.getItem(LAST_KEY);
+      if (last) {
+          window.location.href = last;
+          return;
+      }
+      var currentFolder = localStorage.getItem(CURRENT_KEY);
+      // フォルダ配下で1.html,2.html...と順に存在確認し、最初に見つかったページ名を返す
+      async function findFirstCompositionPage(folder) {
+          var maxTry = 30;
+          for (var i = 1; i <= maxTry; i++) {
+              var candidate = i + '.html';
+              try {
+                  var res = await fetch(folder + '/' + candidate, { method: 'HEAD' });
+                  if (res.ok) return candidate;
+              } catch (e) {}
+          }
+          return null;
+      }
+      // 2ndディスプレイが開いている場合、切替先のページに同期する。
+      // window.open()による直接同期は確実だが2ndに一瞬フォーカスが移るため、直後に1st側へ戻す
+      function syncDisplay2Reliably(url) {
+          if (localStorage.getItem('ssc_display2_open') !== '1') return;
+          try {
+              window.open(url, 'display2Window');
+              window.focus();
+          } catch (e) {}
+      }
+      function goTo(folder, page) {
+          localStorage.setItem(LAST_KEY, folder + '/' + page);
+          localStorage.setItem(CURRENT_KEY, folder);
+          syncDisplay2Reliably(folder + '/' + page.replace(/\.html$/, '_2nd.html'));
+          window.location.href = folder + '/' + page;
+      }
+      async function goToFolder(folder, rowEl) {
+          if (rowEl) rowEl.classList.add('loading');
+          // 各製品フォルダ直下のindex.html(サブ番号選択画面)へ遷移する。
+          // 存在しない古い製品フォルダは従来通り先頭の構成ページへ遷移する
+          try {
+              var res = await fetch(folder + '/index.html', { method: 'HEAD' });
+              if (res.ok) {
+                  goTo(folder, 'index.html');
+                  return;
+              }
+          } catch (e) {}
+          var page = await findFirstCompositionPage(folder);
+          if (page) {
+              goTo(folder, page);
+          } else if (rowEl) {
+              rowEl.classList.remove('loading');
+          }
+      }
+      // フォルダ名(品番_設変)を2列に分解する。治具番号はフォルダ名では
+      // なく各ページのjigNumberTagから取得するため、ここでは扱わない。
+      // 3つ目以降の区切りがあっても無視する(古い命名の"_base"等に対応)。
+      // この形式に合わないフォルダ名は区切りなし(1列表示)のまま扱う
+      function parseFolderName(folder) {
+          var parts = folder.split('_');
+          if (parts.length >= 2 && parts[0] && parts[1]) {
+              return { product: parts[0], kaihen: parts[1], matched: true };
+          }
+          return { product: folder, kaihen: '', matched: false };
+      }
+      // 製品品番の表示用ハイフン挿入(10文字なら5-5、8文字なら4-4、それ以外はそのまま)
+      function formatProductNumber(s) {
+          if (s.length === 10) return s.slice(0, 5) + '-' + s.slice(5);
+          if (s.length === 8) return s.slice(0, 4) + '-' + s.slice(4);
+          return s;
+      }
+      function cmp(a, b) {
+          return a < b ? -1 : (a > b ? 1 : 0);
+      }
+      // "3.103.9"と"3.103.10"のように桁数が違っても正しく比較できるよう、
+      // ドット区切りの各セグメントを数値として比較する
+      function compareVersions(a, b) {
+          var pa = String(a).split('.').map(Number);
+          var pb = String(b).split('.').map(Number);
+          var len = Math.max(pa.length, pb.length);
+          for (var i = 0; i < len; i++) {
+              var na = pa[i] || 0, nb = pb[i] || 0;
+              if (na !== nb) return na - nb;
+          }
+          return 0;
+      }
+      // productMetaTag(隠した div)の data-名前="値" を読む。無ければ ''
+      function readMetaAttr(tagText, name) {
+          var m = tagText.match(new RegExp('data-' + name + '=[\'"]([^\'"]*)'));
+          return m ? m[1] : '';
+      }
+      // フォルダの先頭ページを取得し、そのページに埋め込まれている
+      // versionTag(バージョン番号)とjigNumberTag(治具番号)と
+      // productMetaTag(回路数・端末の数・写真のある端末の数・写真も略図も無い端末の数)を
+      // まとめて読み取る。1回のfetchで全部取れるようにしている
+      // (productMetaTag が無い古いページは、回路数・写真が空欄になる)
+      async function fetchFolderMeta(folder) {
+          try {
+              var page = await findFirstCompositionPage(folder);
+              if (!page) return { ver: '', jig: '' };
+              var res = await fetch(folder + '/' + page);
+              if (!res.ok) return { ver: '', jig: '' };
+              var text = await res.text();
+              var mv = text.match(/class=['"]versionTag['"][^>]*>([^<]*)</);
+              var mj = text.match(/class=['"]jigNumberTag['"][^>]*>([^<]*)</);
+              var mp = text.match(/class=['"]productMetaTag['"][^>]*>/);
+              var tag = mp ? mp[0] : '';
+              return {
+                  ver: mv ? mv[1].trim() : '', jig: mj ? mj[1].trim() : '',
+                  wire: readMetaAttr(tag, 'wire-count'), terminals: readMetaAttr(tag, 'terminals'),
+                  photo: readMetaAttr(tag, 'photo'), none: readMetaAttr(tag, 'none')
+              };
+          } catch (e) {
+              return { ver: '', jig: '' };
+          }
+      }
+      // 値をspanで包んでおく(バッジを値の左に並べて表示するため)
+      function makeValueSpan(text) {
+          var span = document.createElement('span');
+          span.className = 'valueText';
+          span.appendChild(document.createTextNode(text));
+          return span;
+      }
+      function addCurrentBadge(valueSpan) {
+          var badge = document.createElement('span');
+          badge.className = 'currentBadge';
+          badge.textContent = '現在';
+          valueSpan.insertBefore(badge, valueSpan.firstChild);
+      }
+      // 品番一覧をテーブルで構築。呼び出し時は品番昇順→設変昇順で表示し、
+      // 治具番号ヘッダーをクリックすると治具番号昇順→品番昇順→設変昇順に
+      // 並び替える。治具番号は各フォルダの先頭ページを非同期取得するため、
+      // 取得が終わっていない行は空欄のまま扱う(グループ結合はしない)
+      fetch('__listdir').then(function (res) {
+          return res.ok ? res.json() : [];
+      }).catch(function () { return []; }).then(function (folders) {
+          folders = folders.filter(function (f) { return String(f).charAt(0) !== '_'; }); var items = folders.map(function (folder) {
+              var parsed = parseFolderName(folder);
+              parsed.folder = folder;
+              parsed.ver = null; // null=未取得、''=取得したが値なし
+              parsed.jig = null;
+              parsed.wire = null;
+              parsed.photoInfo = null;
+              return parsed;
+          });
+          var sortMode = 'product'; // 'product' か 'jig'
+          function sortItems() {
+              if (sortMode === 'jig') {
+                  items.sort(function (a, b) {
+                      return cmp(a.jig || '', b.jig || '') || cmp(a.product, b.product) || cmp(a.kaihen, b.kaihen);
+                  });
+              } else {
+                  items.sort(function (a, b) {
+                      return cmp(a.product, b.product) || cmp(a.kaihen, b.kaihen);
+                  });
+              }
+          }
+          // 現在の並び順に応じたグループキー(交互の背景色・区切り線に使う)
+          function groupKeyOf(item) {
+              return sortMode === 'jig' ? (item.jig || '') : item.product;
+          }
+          sortItems();
+          var table = document.createElement('table');
+          table.className = 'productTable';
+          var colgroup = document.createElement('colgroup');
+          colgroup.innerHTML =
+              '<col class="colSsc"><col class="colProduct"><col class="colKaihen"><col class="colWire"><col class="colPhoto"><col class="colVer">';
+          table.appendChild(colgroup);
+          var thead = document.createElement('thead');
+          thead.innerHTML =
+              '<tr><th id="jigHeaderCell" class="sortableTh" title="クリックで治具番号順に並び替え">治具番号</th><th>製品品番</th><th>設変</th>' +
+              '<th>回路数</th><th title="写真のある端末 / 全端末。赤は写真も略図も無い端末の数">写真</th><th>Ver</th></tr>';
+          table.appendChild(thead);
+          var tbody = document.createElement('tbody');
+          table.appendChild(tbody);
+          document.getElementById('productList').appendChild(table);
+          var rowRefs = {}; // folder -> { tdSsc, tdVer, tdWire, tdPhoto }(再描画されても最新のセルを参照し直すため)
+          // 写真の列: 写真のある端末の数/全端末の数。写真も略図も無い端末があれば、赤で 無N を付ける
+          // (写真があれば略図の有無は関係ない。写真が無い端末は略図で表示している)
+          function fillPhotoCell(td, item) {
+              td.textContent = '';
+              if (item.photoInfo === null) { td.textContent = '…'; return; }
+              var info = item.photoInfo;
+              if (!info.terminals) return;
+              td.appendChild(document.createTextNode(info.photo + '/' + info.terminals));
+              if (info.none && info.none !== '0') {
+                  var badge = document.createElement('span');
+                  badge.className = 'noImageBadge';
+                  badge.textContent = '無' + info.none;
+                  td.appendChild(badge);
+              }
+          }
+          // itemsの現在の並び順・グループキーに従って行を組み立て直す。
+          // 取得済みのver/jigの値はそのまま引き継いで表示する
+          function renderRows() {
+              tbody.innerHTML = '';
+              rowRefs = {};
+              var groupParity = 0;
+              for (var i = 0; i < items.length; i++) {
+                  var item = items[i];
+                  var tr = document.createElement('tr');
+                  tr.className = 'rowBtn';
+                  tr.dataset.folder = item.folder;
+                  tr.addEventListener('click', (function (folder, rowEl) {
+                      return function () { goToFolder(folder, rowEl); };
+                  })(item.folder, tr));
+                  if (!item.matched) {
+                      groupParity = 1 - groupParity;
+                      tr.classList.add(groupParity ? 'groupA' : 'groupB', 'groupEnd');
+                      var tdRaw = document.createElement('td');
+                      tdRaw.className = 'rawCell';
+                      tdRaw.colSpan = 6;
+                      var rawValue = makeValueSpan(item.folder);
+                      if (item.folder === currentFolder) addCurrentBadge(rawValue);
+                      tdRaw.appendChild(rawValue);
+                      tr.appendChild(tdRaw);
+                      tbody.appendChild(tr);
+                      continue;
+                  }
+                  var prevItem = i > 0 ? items[i - 1] : null;
+                  if (!prevItem || !prevItem.matched || groupKeyOf(prevItem) !== groupKeyOf(item)) {
+                      groupParity = 1 - groupParity;
+                  }
+                  tr.classList.add(groupParity ? 'groupA' : 'groupB');
+                  // グループキーが変わる箇所にテーマ色の区切り線を引く
+                  var nextItem = i + 1 < items.length ? items[i + 1] : null;
+                  if (!nextItem || !nextItem.matched || groupKeyOf(nextItem) !== groupKeyOf(item)) {
+                      tr.classList.add('groupEnd');
+                  }
+                  var tdSsc = document.createElement('td');
+                  tdSsc.className = 'sscCell';
+                  tdSsc.textContent = item.jig || '';
+                  tr.appendChild(tdSsc);
+                  var tdProduct = document.createElement('td');
+                  var productValue = makeValueSpan(formatProductNumber(item.product));
+                  if (item.folder === currentFolder) addCurrentBadge(productValue);
+                  tdProduct.appendChild(productValue);
+                  tr.appendChild(tdProduct);
+                  var tdKaihen = document.createElement('td');
+                  tdKaihen.textContent = item.kaihen;
+                  tr.appendChild(tdKaihen);
+                  var tdWire = document.createElement('td');
+                  tdWire.className = 'wireCountCell';
+                  tdWire.textContent = item.wire === null ? '…' : item.wire;
+                  tr.appendChild(tdWire);
+                  var tdPhoto = document.createElement('td');
+                  tdPhoto.className = 'photoCell';
+                  fillPhotoCell(tdPhoto, item);
+                  tr.appendChild(tdPhoto);
+                  var tdVer = document.createElement('td');
+                  tdVer.className = 'verCell';
+                  tdVer.textContent = item.ver === null ? '…' : item.ver;
+                  tr.appendChild(tdVer);
+                  rowRefs[item.folder] = { tdSsc: tdSsc, tdVer: tdVer, tdWire: tdWire, tdPhoto: tdPhoto };
+                  tbody.appendChild(tr);
+              }
+          }
+          renderRows();
+          // 治具番号ヘッダーをクリックしたら治具番号→品番→設変の昇順に並び替える。
+          // 治具番号が未取得の行は空欄のまま先頭側に来る
+          document.getElementById('jigHeaderCell').addEventListener('click', function (e) {
+              e.stopPropagation();
+              sortMode = 'jig';
+              sortItems();
+              renderRows();
+              filterRows(searchInput.value);
+          });
+          // 各フォルダの先頭ページを1回だけ取得し、Ver/治具番号を埋める。
+          // renderRowsで行が再構築されてもrowRefsから最新のセルを引き直すので
+          // 取得中に並び替えが起きても正しいセルを更新できる
+          var metaPromises = items.filter(function (item) { return item.matched; }).map(function (item) {
+              return fetchFolderMeta(item.folder).then(function (meta) {
+                  item.ver = meta.ver;
+                  item.jig = meta.jig;
+                  item.wire = meta.wire || '';
+                  item.photoInfo = { terminals: meta.terminals || '', photo: meta.photo || '', none: meta.none || '' };
+                  var refs = rowRefs[item.folder];
+                  if (refs) {
+                      refs.tdVer.textContent = meta.ver;
+                      refs.tdSsc.textContent = meta.jig;
+                      refs.tdWire.textContent = item.wire;
+                      fillPhotoCell(refs.tdPhoto, item);
+                  }
+                  return { folder: item.folder, ver: meta.ver };
+              });
+          });
+          // 全行の取得が揃ったら、最新版(最大)の行だけ白、それ以外は暗めの色にする
+          Promise.all(metaPromises).then(function (entries) {
+              var maxVer = null;
+              entries.forEach(function (e) {
+                  if (e.ver && (maxVer === null || compareVersions(e.ver, maxVer) > 0)) maxVer = e.ver;
+              });
+              entries.forEach(function (e) {
+                  var isLatest = e.ver && maxVer !== null && compareVersions(e.ver, maxVer) === 0;
+                  var refs = rowRefs[e.folder];
+                  if (refs) refs.tdVer.style.color = isLatest ? '#fff' : '#ffffff99';
+              });
+          });
+          // ---- 製品品番の検索(テーブルの上の入力欄) ----
+          // ・入力するとその文字を含む行だけ表示する(ハイフン・空白・大文字小文字は無視)
+          // ・Enter(QRリーダーは読んだ後に Enter を送る)で移動先を決めて、その製品品番の index.html へ移動
+          //   QR の例: "82111V4032     A07R76092400019103" → 製品品番 82111V4032、設変 A07(後ろの文字は使わない)
+          //     1. フォルダ名(品番_設変)と同じ → そのフォルダ
+          //     2. 読んだ文字が製品品番で始まる(製品品番だけを入力した時も含む)
+          //          製品品番の後ろが設変で始まるフォルダがあれば、それ(最優先)
+          //          無ければ、その製品品番で一番新しい設変のフォルダ
+          //     3. 製品品番の一部を入力した時: 1つの製品品番に決まれば、その一番新しい設変。複数なら一覧から選んでもらう
+          //   設変の新しさ: 1文字目から順に比べ、0 < 9 < A < Z(文字コードの順と同じ)
+          //   同じ品番・設変のフォルダが複数ある時(例: _060 と _060_base)は、品番_設変 だけの名前のフォルダを優先
+          var searchInput = document.getElementById('productSearch');
+          var searchMsg = document.getElementById('searchMsg');
+          function normalizeKey(s) {
+              return String(s || '').toUpperCase().replace(/[^0-9A-Z]/g, '');
+          }
+          function filterRows(q) {
+              var key = normalizeKey(q);
+              tbody.querySelectorAll('tr.rowBtn').forEach(function (tr) {
+                  var hit = !key || normalizeKey(tr.dataset.folder).indexOf(key) >= 0;
+                  tr.style.display = hit ? '' : 'none';
+              });
+          }
+          function isPlainFolder(item) {
+              return item.folder === item.product + '_' + item.kaihen;
+          }
+          // 候補の中から1つ選ぶ。plain(品番_設変 だけの名前)を優先
+          function pickPlain(list) {
+              var plain = list.filter(isPlainFolder);
+              return (plain.length ? plain : list)[0];
+          }
+          // 同じ製品品番の候補から、一番新しい設変のフォルダを選ぶ
+          function pickNewest(list) {
+              var newest = list.reduce(function (a, b) {
+                  return normalizeKey(b.kaihen) > normalizeKey(a.kaihen) ? b : a;
+              });
+              return pickPlain(list.filter(function (item) { return normalizeKey(item.kaihen) === normalizeKey(newest.kaihen); }));
+          }
+          // 移動先を決める。{ target: item } か { list: [item, ...] }(選んでもらう) か {}(見つからない)
+          function findTarget(q) {
+              var key = normalizeKey(q);
+              if (!key) return {};
+              var matchedItems = items.filter(function (item) { return item.matched; });
+              var exact = items.filter(function (item) { return normalizeKey(item.folder) === key; });
+              if (exact.length) return { target: pickPlain(exact) };
+              // 2. 読んだ文字が製品品番で始まる(一番長く一致した製品品番)
+              var starts = matchedItems.filter(function (item) { return key.indexOf(normalizeKey(item.product)) === 0; });
+              if (starts.length) {
+                  var longest = Math.max.apply(null, starts.map(function (item) { return normalizeKey(item.product).length; }));
+                  var same = starts.filter(function (item) { return normalizeKey(item.product).length === longest; });
+                  var rest = key.slice(longest);
+                  var kaihenHit = same.filter(function (item) { return item.kaihen && rest.indexOf(normalizeKey(item.kaihen)) === 0; });
+                  return { target: kaihenHit.length ? pickPlain(kaihenHit) : pickNewest(same) };
+              }
+              // 3. 製品品番の一部
+              var contains = matchedItems.filter(function (item) { return normalizeKey(item.product).indexOf(key) >= 0; });
+              if (!contains.length) return {};
+              var products = {};
+              contains.forEach(function (item) { products[item.product] = true; });
+              if (Object.keys(products).length === 1) return { target: pickNewest(contains) };
+              return { list: contains };
+          }
+          function rowOf(folder) {
+              var rows = tbody.querySelectorAll('tr.rowBtn');
+              for (var r = 0; r < rows.length; r++) if (rows[r].dataset.folder === folder) return rows[r];
+              return null;
+          }
+          // QRリーダーは最後に CR LF を送る。CR(Enter)で移動し、続く LF(Enter または Ctrl+J)は無視する
+          // (Ctrl+J はブラウザのダウンロード画面を開くので止める)
+          var lastSubmitAt = 0;
+          function isLineFeedKey(e) {
+              return e.ctrlKey && (e.key === 'j' || e.key === 'J' || e.key === 'm' || e.key === 'M');
+          }
+          function submitSearch() {
+              if (Date.now() - lastSubmitAt < 500) return;
+              lastSubmitAt = Date.now();
+              var q = searchInput.value;
+              var found = findTarget(q);
+              if (found.target) {
+                  searchMsg.textContent = ''; if (/^[A-Z0-9]{10}\s+\d{3}[A-Z0-9]{2}\d{10}$/i.test(q.trim())) { try { localStorage.setItem('ssc_pending_name', q.trim()); } catch (e) {} }
+                  goToFolder(found.target.folder, rowOf(found.target.folder));
+                  return;
+              }
+              if (found.list) {
+                  var folders = found.list.map(function (item) { return item.folder; });
+                  tbody.querySelectorAll('tr.rowBtn').forEach(function (tr) {
+                      tr.style.display = folders.indexOf(tr.dataset.folder) >= 0 ? '' : 'none';
+                  });
+                  searchMsg.textContent = found.list.length + '件あります。行を選んでください';
+              } else {
+                  filterRows('');
+                  searchMsg.textContent = q.trim() ? '見つかりません: ' + q.trim() : '';
+              }
+              // 次の読み取りでそのまま上書きできる様に全選択しておく
+              searchInput.select();
+          }
+          searchInput.addEventListener('input', function () {
+              searchMsg.textContent = '';
+              filterRows(searchInput.value);
+          });
+          searchInput.addEventListener('keydown', function (e) {
+              if (isLineFeedKey(e)) { e.preventDefault(); return; }
+              if (e.key === 'Enter') { e.preventDefault(); submitSearch(); }
+              else if (e.key === 'Escape') { searchInput.value = ''; searchMsg.textContent = ''; filterRows(''); }
+          });
+          // 画面キーボード: QRリーダーで読む時は出さない(inputmode=none)。入力欄をタップした時だけ出す
+          // (付け直す為に一度 blur するので、その間は blur で none に戻さない)
+          var keyboardSwitching = false;
+          searchInput.addEventListener('pointerdown', function () {
+              if (searchInput.getAttribute('inputmode') !== 'text') {
+                  searchInput.setAttribute('inputmode', 'text');
+                  keyboardSwitching = true;
+                  searchInput.blur();
+                  setTimeout(function () { searchInput.focus(); keyboardSwitching = false; }, 0);
+              }
+          });
+          searchInput.addEventListener('blur', function () {
+              if (!keyboardSwitching) searchInput.setAttribute('inputmode', 'none');
+          });
+          // 入力欄の外にいる時に QRリーダーで読んでも入る様に、文字のキーは入力欄へ送る
+          document.addEventListener('keydown', function (e) {
+              if (isLineFeedKey(e)) { e.preventDefault(); return; }
+              if (e.target === searchInput || e.ctrlKey || e.altKey || e.metaKey) return;
+              if (e.key && e.key.length === 1) {
+                  e.preventDefault();
+                  searchInput.focus();
+                  searchInput.value += e.key;
+                  searchInput.dispatchEvent(new Event('input'));
+              } else if (e.key === 'Enter' && searchInput.value) {
+                  e.preventDefault();
+                  submitSearch();
+              }
+          });
+          searchInput.focus({ preventScroll: true });
+          // ホバーした行のセルをハイライトする
+          tbody.addEventListener('mouseover', function (e) {
+              var tr = e.target.closest('tr.rowBtn');
+              if (!tr) return;
+              tr.querySelectorAll('td').forEach(function (td) { td.classList.add('valueHover'); });
+          });
+          tbody.addEventListener('mouseout', function (e) {
+              var tr = e.target.closest('tr.rowBtn');
+              if (!tr) return;
+              tr.querySelectorAll('td').forEach(function (td) { td.classList.remove('valueHover'); });
+          });
+      });
+      // ブラウザの戻る操作でbfcacheから復元された場合、クリックで無効化した行がそのまま
+      // 残ってしまうため、その場合は全行を再度有効化する
+      window.addEventListener('pageshow', function (e) {
+          if (e.persisted) {
+              document.querySelectorAll('.rowBtn.loading').forEach(function (el) { el.classList.remove('loading'); });
+          }
+      });
+      // 品番行以外をクリックしたら前のページに戻る(ブラウザの戻るボタンは押しづらいため)
+      document.body.addEventListener('click', function (e) {
+          if (e.target.closest('.rowBtn') || e.target.closest('#searchBar')) return;
+          history.back();
+      });
+  })();
+  </script>
 </body>
-
 </html>

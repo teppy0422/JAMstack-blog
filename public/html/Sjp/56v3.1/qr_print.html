@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QRコードの印刷</title>
+<style>
+body { margin: 0; padding: 16px; background: #fff; color: #000; font-family: 'Meiryo', sans-serif; text-align: center; }
+.toolbar { display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; }
+.toolbar button { padding: .6em 2em; font-size: 1.1em; border: none; border-radius: 4px; cursor: pointer; color: #fff; }
+#printBtn { background: #FE4951; }
+#backBtn { background: #888; }
+#character { width: 72px; height: 72px; display: block; margin: 0 auto 4px; }
+h1 { font-size: 1.4em; margin: 0 0 12px; }
+.cards { display: flex; flex-direction: column; align-items: center; gap: 5mm; }
+.card { width: 70mm; border: 1px solid #000; border-radius: 4px; padding: 4mm; break-inside: avoid; }
+.card svg { width: 22.5mm; height: 22.5mm; display: block; margin: 0 auto; }
+.cmd { font-size: 1.4em; font-weight: bold; margin-top: 2mm; letter-spacing: .05em; }
+.desc { font-size: .9em; margin-top: 1mm; }
+.note { font-size: .8em; color: #555; margin-top: 12px; }
+@media print { .toolbar { display: none; } body { padding: 0; } }
+</style>
+</head>
+<body>
+<div class="toolbar"><button type="button" id="printBtn" onclick="window.print()">印刷</button><button type="button" id="backBtn" onclick="history.back()">戻る</button></div>
+<svg id="character" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg"><style>.npPin { animation: npBob 1.4s ease-in-out infinite; } @keyframes npBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } } .npRoute { stroke-dasharray: 3 6; animation: npFlow 1s linear infinite; } @keyframes npFlow { to { stroke-dashoffset: -18; } }</style>
+<defs><linearGradient id="npGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8E6E95"/><stop offset="1" stop-color="#4E3753"/></linearGradient></defs>
+<path class="npRoute" d="M6 88 Q30 70 48 86 T90 80" fill="none" stroke="#00FF66" stroke-width="4" stroke-linecap="round"/>
+<g class="npPin"><path d="M48 6 C30 6 18 19 18 35 C18 55 48 78 48 78 C48 78 78 55 78 35 C78 19 66 6 48 6 Z" fill="url(#npGrad)" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>
+<circle cx="48" cy="34" r="17" fill="#fff"/><circle cx="37" cy="38" r="2.8" fill="#E8B8D0"/><circle cx="59" cy="38" r="2.8" fill="#E8B8D0"/><circle cx="42" cy="32" r="3" fill="#3a2a3e"/><circle cx="54" cy="32" r="3" fill="#3a2a3e"/>
+<path d="M42 39 Q48 44 54 39" fill="none" stroke="#3a2a3e" stroke-width="2.5" stroke-linecap="round"/></g></svg>
+<h1>配索誘導 QRコード</h1>
+<div class="cards">
+<div class="card" data-qr="1fdf7f,104341,17465d,17585d,17455d,104141,1fd57f,000800,05d289,0108a7,047aeb,14a132,0cf82b,001349,1fc657,105f09,175555,1746aa,175ca5,1040fa,1fca27"><div class="cmd">top</div><div class="desc">製品品番の一覧へ移ります</div></div>
+<div class="card" data-qr="1fc37f,104e41,174a5d,174c5d,17595d,104341,1fd57f,001f00,0674d0,1f06a9,1afbff,099b88,13d651,001580,1fd050,104d2e,1745cf,175ada,17562c,104781,1fc6cc"><div class="cmd">index</div><div class="desc">この製品品番のサブ一覧へ移ります</div></div>
+<div class="card" data-qr="1fc07f,104241,17565d,17585d,17475d,104f41,1fd57f,000c00,03670c,1526b6,12d1ab,112d77,0762b9,001684,1fdb0c,104d0d,175ed3,175d9c,1740ff,104f47,1fcdb4"><div class="cmd">wrap</div><div class="desc">結わき中の画面へ移ります(準備中)</div></div>
+<div class="card" data-qr="1fdc7f,105541,175a5d,17455d,174e5d,105b41,1fd57f,001b00,0751e7,132ca9,0c43d2,0ebe3e,09dc92,00150d,1fc526,104387,175e24,175764,175554,104234,1fc616"><div class="cmd">end</div><div class="desc">1 本の作業を終わります</div></div>
+</div>
+<div class="note">ヘッダーの入力欄にカーソルがある時に、バーコードリーダーで読んでください。</div>
+<script>
+// data-qr の 21 行(1 行 = 21 マスを 16 進数にした物)から QR の絵(SVG)を作る。周りに 4 マスの余白
+(function () {
+    var cards = document.querySelectorAll('.card');
+    for (var i = 0; i < cards.length; i++) {
+        var rows = cards[i].getAttribute('data-qr').split(','), n = rows.length, d = '';
+        for (var y = 0; y < n; y++) { var bits = parseInt(rows[y], 16), x = 0; while (x < n) { if ((bits >> (n - 1 - x)) & 1) { var s = x; while (x < n && ((bits >> (n - 1 - x)) & 1)) x++; d += 'M' + s + ' ' + y + 'h' + (x - s) + 'v1h-' + (x - s) + 'z'; } else { x++; } } }
+        var size = n + 8;
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 ' + size + ' ' + size + '" shape-rendering="crispEdges">';
+        svg += '<rect x="-4" y="-4" width="' + size + '" height="' + size + '" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>';
+        cards[i].insertAdjacentHTML('afterbegin', svg);
+    }
+})();
+</script>
+</body>
+</html>
