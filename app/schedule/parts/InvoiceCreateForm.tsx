@@ -136,6 +136,7 @@ export default function InvoiceCreateForm({
 
   useEffect(() => {
     if (!selectedProject) return;
+    setIssueDate(selectedProject.draft_issue_date ?? new Date().toISOString().slice(0, 10));
     setSubjectTitle(selectedProject.draft_subject_title ?? "");
     setSubjectDetail(selectedProject.draft_subject_detail ?? "");
     setResponderName(selectedProject.draft_responder_name ?? "");

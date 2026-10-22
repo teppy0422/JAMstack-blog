@@ -42,6 +42,26 @@ const NORMAL_STROKE_RATIO = 0.035;
 // 強調テキストの縁取り幅（フォントサイズに比例、通常よりわずかに太くする程度に留める）
 const BOLD_STROKE_RATIO = 0.055;
 
+export type PdfDocumentKind = "invoice" | "estimate";
+
+const DOCUMENT_TEXT: Record<
+  PdfDocumentKind,
+  { title: string; lead: string; amountLabel: string; unitLabel: string }
+> = {
+  invoice: {
+    title: "請求書",
+    lead: "下記の通り、ご請求申し上げます。",
+    amountLabel: "ご請求金額(税込)",
+    unitLabel: "H",
+  },
+  estimate: {
+    title: "御見積書",
+    lead: "下記の通り、御見積申し上げます。",
+    amountLabel: "御見積金額(税込)",
+    unitLabel: "式",
+  },
+};
+
 type Row =
   | { type: "date"; date: string }
   | { type: "item"; item: InvoiceLineItem };
@@ -65,9 +85,11 @@ export async function generateInvoicePdf(
   invoice: Invoice,
   lineItems: InvoiceLineItem[],
   invoiceNumber: string,
-  projectName: string
+  projectName: string,
+  kind: PdfDocumentKind = "invoice"
 ): Promise<Blob> {
   const { doc, fontName } = await createJsPdfWithJapaneseFont();
+  const text = DOCUMENT_TEXT[kind];
 
   let currentFontSize = 9;
   const setSize = (size: number) => {
@@ -128,7 +150,7 @@ export async function generateInvoicePdf(
     doc.setFillColor(221, 221, 221);
     doc.rect(MARGIN_X, y, PAGE_WIDTH - MARGIN_X * 2, 22, "F");
     setSize(15);
-    t("請求書", PAGE_WIDTH / 2, y + 15, { align: "center", bold: true });
+    t(text.title, PAGE_WIDTH / 2, y + 15, { align: "center", bold: true });
     y += 34;
 
     setSize(10);
@@ -145,7 +167,7 @@ export async function generateInvoicePdf(
     y += 18;
 
     setSize(9);
-    t("下記の通り、ご請求申し上げます。", MARGIN_X, y);
+    t(text.lead, MARGIN_X, y);
     y += 28;
 
     const issuerLines = [
@@ -172,7 +194,7 @@ export async function generateInvoicePdf(
     y = Math.max(issuerY, subjectY) + 6;
 
     setSize(9);
-    t("ご請求金額(税込)", MARGIN_X, y);
+    t(text.amountLabel, MARGIN_X, y);
     y += 18;
     setSize(18);
     t(`¥${invoice.total.toLocaleString()}`, MARGIN_X, y, { bold: true });
@@ -273,7 +295,7 @@ export async function generateInvoicePdf(
       if (item.hours !== null) {
         t(String(item.hours), COL.hours + COL.hoursW - 4, y + 11, { align: "right" });
       }
-      t("H", COL.unit + 4, y + 11);
+      t(text.unitLabel, COL.unit + 4, y + 11);
       t(item.unit_price.toLocaleString(), COL.unitPrice + COL.unitPriceW - 4, y + 11, {
         align: "right",
       });

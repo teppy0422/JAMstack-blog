@@ -18,6 +18,7 @@ import { supabase } from "@/utils/supabase/client";
 import Content from "@/components/content";
 import GanttSummary, { ScheduleEntry, ScheduleProject } from "./parts/GanttSummary";
 import EntryForm from "./parts/EntryForm";
+import EstimateTab from "./parts/EstimateTab";
 import EntryList from "./parts/EntryList";
 import InvoiceTab from "./parts/InvoiceTab";
 import PaymentTab from "./parts/PaymentTab";
@@ -108,13 +109,22 @@ export default function ScheduleBlogPage() {
             </Box>
 
             {isDev ? (
-              <Tabs size="sm" colorScheme="blue">
+              <Tabs size="sm" colorScheme="blue" defaultIndex={1}>
                 <TabList>
+                  <Tab>見積</Tab>
                   <Tab>実績を登録</Tab>
                   <Tab>請求</Tab>
                   <Tab>入金</Tab>
                 </TabList>
                 <TabPanels>
+                  <TabPanel px={0}>
+                    <EstimateTab
+                      userId={currentUserId}
+                      projects={projects}
+                      loading={loadingData}
+                      onChanged={fetchData}
+                    />
+                  </TabPanel>
                   <TabPanel px={0}>
                     <VStack align="stretch" spacing={4}>
                       <Box>

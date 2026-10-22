@@ -33,6 +33,8 @@ export type ScheduleProject = {
   planned_end: string | null;
   hourly_rate: number;
   budget_limit: number;
+  draft_issue_date: string | null;
+  estimate_amount: number | null;
   draft_subject_title: string | null;
   draft_subject_detail: string | null;
   draft_responder_name: string | null;
