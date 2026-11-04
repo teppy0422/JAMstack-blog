@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang='ja'>
+<head>
+	<meta charset='UTF-8'>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<link rel='stylesheet' href='./assets/1st.css'>
+		<title>15_1st</title>
+	</head>
+	<body>
+		<div class='versionTag'>3.106.10</div>
+	<form name='myform' onsubmit='return checkText()'>
+		<div class='headerWrap'>
+		<table style='--table-bg-color: #F00000; --table-text-color: #FFFFFF;'>
+			<tr class='top'>
+				<td class='clickable'><div class='headerProductCell'><div class='headerProductGroup'><span class='headerBig'>RC691-53315</span><span class='headerSub030'>060</span><span class='headerSubBench'>B</span><span class='headerSubCav'>46-2</span></div></div></td>
+				<td class='clickable'><span class='workFlowNum'>15</span>/<span class='workFlowDenom'>66</span></td>
+				<td style='white-space:nowrap'>
+					<input type='text' name='txtb' class='myT' autocomplete='off' onfocus='this.select()'/>
+				</td>
+				<td style='white-space:nowrap'>
+					<div class='headerIconsRow'>
+					<button type='button' class='myB' id='openHelpBtn'>？</button>
+					<button type='button' class='myB' id='openTestDisplay2Btn'>調整</button>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</form>
+	<div class="workOrderRow">
+		<div class="workOrderTrack">
+			<div class="workOrderFill" style="width:23.0769230769231%;"></div>
+			<div class="workOrderDivider" style="left:1.53846153846154%;" data-sub="20"></div>
+			<div class="workOrderDivider" style="left:23.0769230769231%;" data-sub="46"></div>
+			<div class="workOrderDivider" style="left:24.6153846153846%;" data-sub="20"></div>
+			<div class="workOrderDivider" style="left:32.3076923076923%;" data-sub="46"></div>
+			<div class="workOrderDivider" style="left:33.8461538461538%;" data-sub="20"></div>
+			<div class="workOrderDivider" style="left:36.9230769230769%;" data-sub="15"></div>
+			<div class="workOrderDivider" style="left:38.4615384615385%;" data-sub="46"></div>
+			<div class="workOrderDivider" style="left:40%;" data-sub="20"></div>
+			<div class="workOrderDivider" style="left:63.0769230769231%;" data-sub="32"></div>
+			<div class="workOrderDivider" style="left:64.6153846153846%;" data-sub="20"></div>
+		</div>
+	</div>
+	<div id='tagRow' style='background-color: 00ff00; height: 20px'>
+		<div id = '32tag2' class = 'box tableBox' data-x = '20' data-values = '32' data-color = '#fff' data-line-color = '#000' data-exist = '1'></div>
+		<div id = '20tag2' class = 'box tableBox' data-x = '40' data-values = '20' data-color = '#fff' data-line-color = '#000' data-exist = '1'></div>
+		<div id = '46tag2' class = 'box tableBox' data-x = '60' data-values = '46' data-color = '#fff' data-line-color = '#000' data-exist = '1'></div>
+		<div id = '15tag2' class = 'box tableBox' data-x = '80' data-values = '15' data-color = '#fff' data-line-color = '#000' data-exist = '1'></div>
+		<svg id = 'mainSvg' class='blink' data-connect= '46tag2' data-color='#F00000'></svg>
+	</div>
+  <div class="singleImage" data-src="./img/46.png" data-aspect-ratio="0.915966386554622" data-rotate="0"></div>
+  <script type="application/json" class="blink-coords-data">[
+    {"cav":"1","x":52.1786437966335,"y":27.3849103680109,"w":35.9035712962638,"h":33.4637712595761,"composition":"0005","workNum":"18","wireSize":"3","oppositeTerminal":"20","color":"#","bgColor":"#","fontColor":"#","finalLength":"1067","radius":"50","feltColor":"#","feltColorBorder":"#","plugColor":"#","plugFontColor":"#"},
+    {"cav":"2","x":11.7614995895629,"y":27.3849103680109,"w":35.9035712962638,"h":33.4637712595761,"composition":"0202","workNum":"15","wireSize":"3","oppositeTerminal":"20","color":"#F00000","bgColor":"#FCFCFC","fontColor":"#FFFFFF","finalLength":"1065","radius":"50","feltColor":"#","feltColorBorder":"#","plugColor":"#","plugFontColor":"#","hasWire":true},
+    {"cav":"3","x":31.8068036211984,"y":58.2921675341268,"w":35.9035712962638,"h":33.4637712595761,"composition":"0203","workNum":"22","wireSize":"3","oppositeTerminal":"","color":"#","bgColor":"#FCFCFC","fontColor":"#","finalLength":"603","radius":"50","feltColor":"#","feltColorBorder":"#","plugColor":"#","plugFontColor":"#"}
+]</script>
+		<script src="./assets/main_1st.js"></script>
+		<script src="./assets/display2.js"></script>
+		<script>
+			document.addEventListener('keydown', function (e) {
+				if (document.getElementById('sscCalibrationModalOverlay')) return;
+				if (e.repeat) return; // 押しっぱなしの繰り返しでは送らない(ページが次々に読み直されて画面がちらつく)
+				if (e.key === 'ArrowLeft') {
+					try { updateDisplay2IfOpen('14_2nd.html'); } catch (err) {}
+					window.location.href = '14.html';
+				}
+				if (e.key === 'ArrowRight') {
+					try { updateDisplay2IfOpen('16_2nd.html'); } catch (err) {}
+					window.location.href = '16.html';
+				}
+			});
+		</script>
+	</body>
+</html>

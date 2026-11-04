@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang='ja'>
+<head>
+	<meta charset='UTF-8'>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<link rel='stylesheet' href='./assets/2nd.css'>
+		<title>_2nd</title>
+	</head>
+<body>
+		<script src="./assets/main_2nd.js"></script>
+		<script src="./assets/display2.js"></script>
+		<script>
+	enableAutoFullscreen();
+	document.addEventListener('keydown', function (e) {
+		if (e.key === 'ArrowLeft') {
+			if (window.opener) {
+				window.opener.location.href = '21.html';
+				window.opener.focus();
+			}
+			window.location.href = '21_2nd.html';
+		}
+		if (e.key === 'ArrowRight') {
+			if (window.opener) {
+				window.opener.location.href = '23.html';
+				window.opener.focus();
+			}
+			window.location.href = '23_2nd.html';
+		}
+	});
+		</script>
+	</body>
+</html>

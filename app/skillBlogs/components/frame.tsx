@@ -58,7 +58,23 @@ const Frame: React.FC<{
   isThrough?: boolean;
   isMain?: boolean;
   hideMenu?: boolean;
-}> = ({ children, sections, sectionRefs, isThrough, isMain, hideMenu }) => {
+  hideToc?: boolean;
+  hideReactions?: boolean;
+  hideFooter?: boolean;
+  // 目次クリック時の移動先を差し替える(iframeで表示する記事用)
+  onSectionClick?: (id: string) => void;
+}> = ({
+  children,
+  sections,
+  sectionRefs,
+  isThrough,
+  isMain,
+  hideMenu,
+  hideToc,
+  hideReactions,
+  hideFooter,
+  onSectionClick,
+}) => {
   const { language, setLanguage } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
@@ -254,6 +270,7 @@ const Frame: React.FC<{
           index = [0];
           break;
         case window.location.pathname.includes("/skillBlogs/pages/0006"):
+        case window.location.pathname.includes("/skillBlogs/pages/0018"):
         case window.location.pathname.includes("/skillBlogs/pages/0009"):
         case window.location.pathname.includes("/skillBlogs/pages/0007"):
         case window.location.pathname.includes("/skillBlogs/pages/0008"):
@@ -349,7 +366,7 @@ const Frame: React.FC<{
 
   return (
     <>
-      <Content maxWidth="1280px" isUse={!isMain}>
+      <Content maxWidth="1280px" isUse={!isMain} hideFooter={hideFooter}>
         {isLoading ? (
           <Box
             h="30vh"
@@ -477,9 +494,20 @@ const Frame: React.FC<{
                       {createLinkPanel(
                         "/skillBlogs/pages/0006/",
                         getMessage({
-                          ja: "生産準備+とは",
-                          us: "What is Production Preparation+",
-                          cn: "什么是生产准备+？",
+                          ja: "生産準備+とは(旧)",
+                          us: "What is Production Preparation+ (Old)",
+                          cn: "什么是生产准备+？（旧）",
+                          language,
+                        }),
+                        isMain,
+                        true
+                      )}
+                      {createLinkPanel(
+                        "/skillBlogs/pages/0018/",
+                        getMessage({
+                          ja: "生産準備+とは(新)",
+                          us: "What is Production Preparation+ (New)",
+                          cn: "什么是生产准备+？（新）",
                           language,
                         }),
                         isMain,
@@ -781,7 +809,7 @@ const Frame: React.FC<{
                   flex=".5"
                   position="sticky"
                   top="64px"
-                  display={["none", "none", "none", "block"]}
+                  display={hideReactions ? "none" : ["none", "none", "none", "block"]}
                   alignItems="center"
                   justifyContent="center"
                   bg="transparent"
@@ -848,7 +876,7 @@ const Frame: React.FC<{
                   flex="4"
                   position="sticky"
                   top="63px"
-                  display={["none", "none", "none", "block"]}
+                  display={hideToc ? "none" : ["none", "none", "none", "block"]}
                 >
                   <List spacing={1} fontSize="sm">
                     {(() => {
@@ -915,6 +943,10 @@ const Frame: React.FC<{
                                 title={section.title}
                                 onClick={(e) => {
                                   e.preventDefault(); // デフォルトの#リンクを無効化
+                                  if (onSectionClick) {
+                                    onSectionClick(section.id);
+                                    return;
+                                  }
                                   const target = document.getElementById(
                                     section.id
                                   );

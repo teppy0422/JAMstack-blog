@@ -16,6 +16,7 @@ export default function Content({
   children,
   maxWidth = "900px",
   isUse = true,
+  hideFooter = false,
 }) {
   const { language, setLanguage } = useLanguage();
   const { colorMode, toggleColorMode } = useColorMode();
@@ -84,65 +85,67 @@ export default function Content({
               </Container>
             </Box>
           </Flex>
-          <Box
-            className="no-print-page"
-            zIndex={10}
-            bg={
-              colorMode === "light"
-                ? "custom.theme.light.500"
-                : "custom.theme.dark.500"
-            }
-            minH="10vh"
-          >
-            <Center py="4px">
-              <Box maxW="600px" w="100%" px={0}>
-                <VercelUsage />
-              </Box>
-            </Center>
-            <Center py="4px">
-              <Box maxW="600px" w="100%" px={0}>
-                <SupabaseUsage />
-              </Box>
-            </Center>
-            <Center
-              py="12px"
-              color={colorMode === "light" ? "gray.500" : "white"}
-              fontSize="12px"
-              fontFamily={getMessage({
-                ja: "Noto Sans JP",
-                us: "Noto Sans JP",
-                cn: "Noto Sans SC",
-                language,
-              })}
-              fontWeight="100"
+          {!hideFooter && (
+            <Box
+              className="no-print-page"
+              zIndex={10}
+              bg={
+                colorMode === "light"
+                  ? "custom.theme.light.500"
+                  : "custom.theme.dark.500"
+              }
+              minH="10vh"
             >
-              <NextLink href="/privacy">
-                {getMessage({
-                  ja: "プライバシーポリシー",
-                  us: "Privacy Policy",
-                  cn: "隐私政策",
+              <Center py="4px">
+                <Box maxW="600px" w="100%" px={0}>
+                  <VercelUsage />
+                </Box>
+              </Center>
+              <Center py="4px">
+                <Box maxW="600px" w="100%" px={0}>
+                  <SupabaseUsage />
+                </Box>
+              </Center>
+              <Center
+                py="12px"
+                color={colorMode === "light" ? "gray.500" : "white"}
+                fontSize="12px"
+                fontFamily={getMessage({
+                  ja: "Noto Sans JP",
+                  us: "Noto Sans JP",
+                  cn: "Noto Sans SC",
                   language,
                 })}
-              </NextLink>
-              <Box mr={5} />
-              <NextLink href="/terms">
-                {getMessage({
-                  ja: "利用規約",
-                  us: "Terms of Use",
-                  cn: "条款和条件",
-                  language,
-                })}
-              </NextLink>
-            </Center>
-            <Center
-              mb="2px"
-              fontSize="12px"
-              color={colorMode === "light" ? "gray.500" : "white"}
-            >
-              ©︎ 2022-2026 Teppei Kataoka. All rights Reserved.
-            </Center>
-            <Box height="60px" />
-          </Box>
+                fontWeight="100"
+              >
+                <NextLink href="/privacy">
+                  {getMessage({
+                    ja: "プライバシーポリシー",
+                    us: "Privacy Policy",
+                    cn: "隐私政策",
+                    language,
+                  })}
+                </NextLink>
+                <Box mr={5} />
+                <NextLink href="/terms">
+                  {getMessage({
+                    ja: "利用規約",
+                    us: "Terms of Use",
+                    cn: "条款和条件",
+                    language,
+                  })}
+                </NextLink>
+              </Center>
+              <Center
+                mb="2px"
+                fontSize="12px"
+                color={colorMode === "light" ? "gray.500" : "white"}
+              >
+                ©︎ 2022-2026 Teppei Kataoka. All rights Reserved.
+              </Center>
+              <Box height="60px" />
+            </Box>
+          )}
         </>
       ) : (
         <>{children}</>

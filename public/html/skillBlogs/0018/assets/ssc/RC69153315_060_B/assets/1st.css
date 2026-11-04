@@ -1,0 +1,514 @@
+@font-face {
+ font-family: 'MPLUS1p';
+ src: url("./MPLUS1p-Medium.ttf") format('truetype');
+ font-weight: normal;
+ font-style: normal;
+}
+@font-face {
+ font-family: 'NewAmsterdam';
+ src: url("./NewAmsterdam-Regular.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'WalterTurncoat';
+    src: url("./WalterTurncoat-Regular.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+body{background-color:#000;margin:0;overflow:hidden;}
+td:has(> input.myT) { vertical-align: middle; }
+@media (max-width: 600px) {
+    table, .myB {
+        font-size: 2vw;
+    }
+    .myT {
+        font-size: 1.8vw;
+        max-width: 50%;
+    }
+    .myB{
+        position:relative;
+        padding:1px 3px;
+        top:0px;
+        left:1px;
+    }
+}
+@media (min-width: 601px) and (max-width: 1200px) {
+    table, .myB {
+        font-size: 1.5vw;
+    }
+    .myT {
+        font-size: 1.4vw;
+        max-width: 60%;
+    }
+    .myB{
+        position:relative;
+        top:0px;
+        left:1px;
+        padding:1px 2px;
+    }
+}
+@media (min-width: 1200px) {
+    table, .myB {
+        font-size: 1.5vw;
+    }
+    .myT {
+        font-size: 1.5vw;
+        max-width: 70%;
+    }
+}
+.headerWrap {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 2.8vw;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+table {
+    position: relative;
+    table-layout: fixed;
+    width:100%;
+    text-align:center;
+    font-weight: bold;
+    border-collapse: collapse;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    border-bottom:0px;
+    line-height: 1;
+    background-color: var(--table-bg-color);
+    color: var(--table-text-color);
+}
+tr.top td:nth-child(1) {
+    width: 42.6%;
+}
+tr.top td:nth-child(2) {
+    width: 21.3%;
+    font-size: 1.6em;
+    vertical-align: middle;
+    position: relative;
+}
+.workFlowNum {
+    font-size: 1.1em;
+}
+.workFlowDenom {
+    font-size: 0.667em;
+}
+tr.top td:nth-child(3) {
+    width: 21%;
+}
+tr.top td:nth-child(4) {
+    width: 15%;
+}
+.headerIconsRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.headerProductCell {
+    text-align: left;
+    height: 2.8vw;
+    overflow: visible;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+}
+.headerProductGroup {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    top: -2px;
+}
+.headerProductCell .headerBig {
+    display: inline-block;
+    font-size: 2.5em;
+    line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.headerSub030 {
+    font-size: 1.6667em;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    margin-left: 0.3em;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    top: 2px;
+}
+.headerSubBench {
+    font-size: 0.9333em;
+    line-height: 1;
+    margin: 0;
+    padding-left: 0.3em;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    top: 5px;
+}
+.headerSubCav {
+    font-size: 0.9333em;
+    line-height: 1;
+    margin: 0;
+    padding-left: 0.5em;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    top: 5px;
+}
+.versionTag {
+    position: fixed;
+    left: 50%;
+    bottom: 4px;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.35);
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 1.2vw;
+    z-index: 1000;
+    pointer-events: none;
+}
+table td {cursor:pointer;
+    font-family: 'MPLUS1p', sans-serif;
+    padding: 1px;
+    letter-spacing:0px;
+    border: none;
+    vertical-align: top;
+}
+.myB{
+    color: var(--table-text-color);
+    background-color: transparent;
+    border: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 0.4vw;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+.myB:hover {
+    opacity: 0.75;
+}
+.myB:active {
+    opacity: 0.5;
+}
+.box {
+    font-family: 'MPLUS1p', sans-serif;
+    height: 2vw;
+    max-width: 4em;
+    padding-left: 0.2vw;
+    padding-right: 0.2vw;
+    position: absolute;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+   justify-content: center;
+   color: black;
+   border-radius: .3vw;
+   font-size: 1.4vw;
+   font-weight: bold;
+   border: 1px solid var(--line-color);
+}
+.circle {
+   width: .7vw;
+   height: .7vw;
+   max-width: 6px;
+   max-height: 6px;
+   position: absolute;
+   border-radius: 50%;
+   border: 1px solid black;
+   z-index: 5;
+}
+.wireBox {
+   font-family: 'NewAmsterdam', sans-serif;
+   width: 1.2vw;
+   height: 1.2vw;
+   position: absolute;
+   display: -ms-flexbox;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: .2vw;
+   border: 1px solid white;
+   font-size: .7vw;
+   font-weight: bold;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+.imageBox {
+   z-index: 7;
+   max-width: 5vw;
+   max-height: 5vw;
+   background-color:transparent;
+   position: absolute;
+   background-size: contain;
+   background-position: center;
+   background-repeat: no-repeat;;pointer-events: none;
+}
+.bottomImage {
+   position: absolute;
+   bottom: 0;
+   max-width: 50vw;
+   max-height: 30vh;
+   background-size: contain;
+   background-position: center;
+   background-repeat: no-repeat;
+}
+.singleImage {
+   position: absolute;
+   background-size: contain;
+   background-position: center;
+   background-repeat: no-repeat;
+}
+svg {
+   position: absolute;
+   pointer-events: none;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+}
+@keyframes blink {
+   0% { opacity: 1;visibility: visible; }
+   55% { opacity: 1;visibility: visible; }
+   60%{opacity: 0;visibility: hidden;}
+   100% { opacity: 0;visibility: hidden; }
+}
+.blink {
+   animation: blink .5s infinite;
+}
+@keyframes blinkSmooth {
+   0%, 100% { opacity: 0.15; }
+   50% { opacity: 0.8; }
+}
+.blinkSmooth {
+   animation: blinkSmooth 0.5s ease-in-out infinite;
+}
+@keyframes blinkHole {
+   0% { opacity: 0;transform: scale(1); }
+   30% { opacity: .3;transform: scale(1); }
+   50% { opacity: .8;transform: scale(1); }
+   70% { opacity: .3;transform: scale(1); }
+   100% { opacity: 0;transform: scale(1); }
+}
+@keyframes blinkBackground {
+  0%,
+  100% {
+    background-color: var(--blink-bg-color, transparent);
+  }
+  50% {
+    background-color: transparent;
+  }
+}
+.blinkCell {
+  animation: blinkBackground 1s infinite;
+}
+.workOrderRow {
+  position: relative;
+  width: 100%;
+  margin: 0 0 0.8em;
+  Font-family: 'MPLUS1p', sans-serif;
+}
+.workOrderTrack {
+  position: relative;
+  width: 100%;
+  height: 0.3em;
+  min-height: 3px;
+  max-height: 7px;
+  background: #333;
+  border-radius: 0.3em;
+  overflow: hidden;
+}
+.workOrderFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--work-order-color, #FE4951);
+}
+.workOrderDivider {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: #000;
+  opacity: 0.5;
+}
+.workOrderSubBadge {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 0.5em);
+  transform: translateX(-50%);
+  background: var(--work-order-color, #FE4951);
+  color: #fff;
+  font-size: 0.9em;
+  line-height: 1.4;
+  padding: 0 0.5em;
+  border-radius: 0.4em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.workOrderSubBadge::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 0.4em solid transparent;
+  border-bottom-color: var(--work-order-color, #FE4951);
+}
+@keyframes blinkTwoColors {
+0%, 49% {
+  background-color: var(--blink-color-a, transparent);
+}
+50%, 100% {
+background-color: var(--blink-color-b, transparent);
+}
+}
+@keyframes tagBoxPopIn {
+0% { transform: scale(0); }
+60% { transform: scale(1.3); }
+100% { transform: scale(1); }
+}
+.blinkTwoColors {
+animation: blinkTwoColors 0.5s infinite, tagBoxPopIn 0.4s ease-out;
+}
+.splitRow {
+  display: flex;
+  height: 100%;
+}
+.splitItem {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.splitItem:not(:last-child) {
+  border-right: 1px solid #333;
+}
+.blinkHole {
+   z-index: 15;
+   animation-name: blinkHole;
+   animation-duration: var(--blink-duration, 0.7s);
+   animation-timing-function: linear;
+   animation-iteration-count: infinite;
+   will-change: opacity;
+}
+.blinkPlug {
+   z-index: 15;
+   overflow: hidden;
+}
+/* レーダー: 本体は常時点灯のまま、輪が外に広がって消えるのを繰り返す(2nd校正モーダルのプレビュー用) */
+@keyframes blinkRadarRing {
+   /* レーダー: 本体は常時点灯のまま、輪が外に広がって消えるのを繰り返す(2nd校正モーダルのプレビュー用)。
+      輪の描画はSVGのcircle(vector-effect="non-scaling-stroke")で行っており、
+      transform:scaleで拡大しても線の太さは常に一定に保たれるため、太さの補正は不要。
+      non-scaling-strokeはSVG内部の変形しか打ち消さないため、transform:scaleの
+      アニメーションは<svg>ではなく内側のcircle(このクラス自体)に付けている */
+   0%   { transform: scale(var(--radar-max-scale, 2.4)); opacity: 0; }
+   25%  { transform: scale(var(--radar-max-scale, 2.4)); opacity: 0; }
+   70%  { opacity: 1; }
+   100% { transform: scale(1); opacity: 1; }
+}
+.blinkRadar {
+   transform-origin: 50% 50%;
+   animation-name: blinkRadarRing;
+   animation-duration: var(--radar-duration, 1.7s);
+   animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+   animation-iteration-count: infinite;
+   will-change: transform, opacity, border-width;
+   pointer-events: none;
+}
+.blinkStripeBox {
+   z-index:15;
+   container-type: size;
+   box-sizing: border-box;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   overflow: hidden;
+   white-space: nowrap;
+   text-overflow: ellipsis;
+   Font-family: 'MPLUS1p', sans-serif;
+   font-weight: bold;
+   color: #fff;
+   text-shadow: 0 0 2px #000, 0 0 3px #000;
+   border: 1px solid #fff;
+   background-image: linear-gradient(135deg, transparent 35%, var(--stripe-color, #F00000) 35%, var(--stripe-color, #F00000) 65%, transparent 65%);
+   background-size: 100% 100%;
+   animation: blinkHole .7s linear infinite;
+}
+.blinkStripeBoxText {
+   /* 最大3文字を横幅に収め、かつ高さも超えないよう小さい方を採用 */
+   font-size: min(50cqw, 70cqh);
+}
+.blinkCrosshair {
+   z-index: 20;
+}
+#tagRow .box {
+   z-index: 30;
+}
+@keyframes blinkWire {
+   0% { opacity: 1; }
+   50% { opacity: 0; }
+   100% { opacity: 1; }
+}
+.blinkWire {
+   animation: blinkWire 0.4s infinite;
+}
+@keyframes blink-border {
+   0% {
+       box-shadow: 0 0 0 1px var(--blink-border-color, transparent);
+   }
+   50% {
+       box-shadow: 0 0 0 0 transparent;
+   }
+   100% {
+       box-shadow: 0 0 0 1px var(--blink-border-color, transparent);
+   }
+}
+.blink-border {
+   animation: blink-border .5s infinite;
+   box-shadow: 0 0 0 .5px white;
+}
+.slide {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   position: relative;
+}
+.progress-container {
+   position: absolute;
+   bottom: 1px;
+   left: 50%;
+   width: 90%;
+   height: 1px;
+   background-color: transparent;
+   display: flex;
+   justify-content: space-between;
+   transform: translateX(-50%);
+}
+.progress-bar {
+   height: 100%;
+   background-color: transparent;
+   transition: width 0.8s linear;
+}
+.progress-bar.active {
+   background-color: #FE5151;
+}
+#tagRow {
+  height: 0 !important;
+  background-color: transparent !important;
+  overflow: visible;
+}
+@keyframes blinkRainbow {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+.blinkRainbow {
+  animation: blinkRainbow 1s linear infinite;
+}
