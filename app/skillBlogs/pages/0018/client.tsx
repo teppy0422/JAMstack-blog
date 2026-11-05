@@ -15,6 +15,7 @@ const ARTICLE_THEME_KEY = "sjpBlogTheme";
 // URLで開き方を指定できる。例: /skillBlogs/pages/0018/?toc=hide&theme=dark
 //   toc=hide  … 目次を隠した(最大化した)状態で開く。toc=show で表示した状態
 //   theme=dark … ダークモードで開く。theme=light でライトモード
+//   guest=1    … ログインしていなくても記事を表示する
 const NAV_BUTTON_ID = "navToggle";
 // 左右に目次がある時(開いた本) / 目次を隠した時(閉じた本)
 const ICON_SHOWN =
@@ -37,6 +38,7 @@ export default function BlogPage() {
   // sections は ref なので、読み取り後に再描画して目次へ反映させる
   const [, setTocVersion] = useState(0);
   const [hideNav, setHideNav] = useState(false);
+  const [allowGuest, setAllowGuest] = useState(false);
   const { setColorMode } = useColorMode();
 
   useEffect(() => {
@@ -49,6 +51,7 @@ export default function BlogPage() {
         setHideNav(localStorage.getItem(HIDE_NAV_KEY) === "1");
       } catch (e) {}
     }
+    setAllowGuest(params.get("guest") === "1");
     const theme = params.get("theme");
     if (theme === "dark" || theme === "light") {
       setColorMode(theme);
@@ -145,6 +148,7 @@ export default function BlogPage() {
       sections={sections}
       sectionRefs={sectionRefs}
       onSectionClick={scrollToSection}
+      isThrough={allowGuest}
       hideMenu={hideNav}
       hideToc={hideNav}
       hideReactions={hideNav}
