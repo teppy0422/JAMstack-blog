@@ -49,6 +49,12 @@ aside {
   top: 16px;
   font-size: 14.4px;
 }
+:root.tocnarrow aside {
+  overflow: hidden;
+}
+:root.tochidden aside {
+  display: none;
+}
 /* 本文と目次の境目: ドラッグで目次の幅を変える */
 .tocsplit {
   flex: none;
@@ -876,20 +882,36 @@ body.nopins .notes b {
 .neednum { position: absolute; left: -32px; transform: translateY(-50%); width: 26px; height: 26px; border-radius: 50%; background: var(--pin); color: #fff; font-size: 12.8px; font-weight: 700; line-height: 26px; text-align: center; }
 .needlist { flex: 1; list-style: none; counter-reset: need; margin: 0; padding: 0; }
 .needlist li { counter-increment: need; position: relative; padding-left: 38px; margin: 10px 0; }
+/* 手順の文字にマウスを乗せると、その番号の丸がアクセント色に変わって周りがぼんやり光る(1 秒ごとに明るさが寄せては返す)。行の文字も少し色を付ける */
+@keyframes needGlow { 0%, 100% { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--accent), 0 0 6px 3px var(--accent); } 50% { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--accent), 0 0 18px 7px var(--accent); } }
+.needlist li::before { transition: background 0.25s, box-shadow 0.25s; }
+.needlist li { transition: color 0.25s; }
+.needlist li:hover { color: var(--accent); }
+.needlist li:hover::before { background: var(--accent); animation: needGlow 1s ease-in-out infinite; }
 .needlist li::before { content: counter(need); position: absolute; left: 0; top: 0.2em; width: 26px; height: 26px; border-radius: 50%; background: var(--pin); color: #fff; font-size: 12.8px; font-weight: 700; line-height: 26px; text-align: center; }
 /* ここまでの時間(右下)。flow_clock.js */
-#flowClock { position: fixed; right: 24px; bottom: 20px; z-index: 30; width: 270px; padding: 12px 16px 10px; border-radius: 10px; background: rgba(26, 32, 44, 0.92); color: #fff; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); opacity: 0; transform: translateY(12px); transition: opacity 0.3s, transform 0.3s; pointer-events: none; }
-#flowClock.on { opacity: 1; transform: none; }
-#flowClock .fchd { font-size: 11.2px; color: #cbd5e0; margin-bottom: 2px; }
-#flowClock .fcrow { display: flex; align-items: baseline; justify-content: space-between; }
-#flowClock .fcrow span { font-size: 12px; }
+/* ここまでの時間: 上のヘッダーの中(更新日の右)。手順の節より前・後ろでは薄くする */
+#flowClock { display: flex; flex-direction: column; justify-content: center; gap: 3px; min-width: 0; padding: 4px 0; opacity: 0.45; transition: opacity 0.3s; }
+#flowClock.on { opacity: 1; }
+/* 右端(ボタンのすぐ左)に寄せる。右寄せの起点は時計にして、後ろのボタンは続けて並べる */
+.pghd #flowClock { margin-left: auto; }
+.pghd #flowClock ~ .themebtn { margin-left: -10px; }
+#flowClock .fctop { display: flex; align-items: baseline; gap: 14px; white-space: nowrap; }
+#flowClock .fchd { font-size: 12px; color: var(--soft); }
+#flowClock .fcrow { display: inline-flex; align-items: baseline; gap: 5px; }
+#flowClock .fcrow span { font-size: 12px; color: var(--soft); }
 #flowClock .fcrow b { font-variant-numeric: tabular-nums; }
-#flowClock .work b { font-size: 24px; color: #68d391; }
-#flowClock .wait b { font-size: 16px; color: #a0aec0; }
-#flowClock .fcbar { display: flex; height: 6px; margin: 6px 0 4px; border-radius: 3px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
-#flowClock .fcbar .w { background: #68d391; }
-#flowClock .fcbar .t { background: #718096; }
-#flowClock .fcnow { font-size: 10.4px; color: #cbd5e0; line-height: 1.4; }
+#flowClock .work b { font-size: 21px; color: #2f855a; }
+#flowClock .wait b { font-size: 15px; color: var(--fg); }
+#flowClock .fcbar { display: flex; width: 100%; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
+#flowClock .fcbar .w { background: #38a169; }
+#flowClock .fcbar .t { background: #a0aec0; }
+:root[data-theme="dark"] #flowClock .work b { color: #68d391; }
+:root[data-theme="dark"] #flowClock .fcbar .w { background: #68d391; }
+:root[data-theme="dark"] #flowClock .fcbar .t { background: #718096; }
+/* 狭い時は補足から省く */
+@media (max-width: 1000px) { #flowClock .fchd { display: none; } }
+@media (max-width: 700px) { #flowClock { display: none; } .pghd #flowClock + .themebtn { margin-left: auto; } }   /* 時計を隠した時は すぐ後ろのボタンを右寄せの起点に */
 .flowin { display: none; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin: 12px 0; padding: 8px 12px; border: 1px dashed var(--accent); border-radius: 6px; font-size: 12.8px; }
 body.editing .flowin { display: flex; }
 .flowin input { width: 5em; font: inherit; padding: 2px 6px; }
@@ -1102,6 +1124,10 @@ aside { top: calc(var(--hdh) + 16px); }
 .stlview { position: relative; width: 100%; aspect-ratio: 5 / 3; /* 高さは 4:3 の 8/10 */ border: 1px solid var(--line, #d0d7de); border-radius: 10px; background: radial-gradient(circle at 50% 40%, #4a5568, #1a202c); overflow: hidden; }
 .stlview canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 .stlview canvas:active { cursor: grabbing; }
+/* 右の手順(1～5)は 3D の表示の高さに合わせて、上から下まで等間隔に並べる(高さは main.js の .stlview で合わせる) */
+.stlsteps { align-items: flex-start; }
+.stlsteps .needlist { display: flex; flex-direction: column; justify-content: space-evenly; }
+.stlsteps .needlist li { margin: 0; }
 .stlsteps .stlbuy { color: var(--muted); font-size: 12px; }
 .stlsteps .stlbuy a { font-size: 16px; font-weight: 700; }
 /* 3-3 購入したディスプレイの商品カード(.buymodal) */
@@ -1334,18 +1360,8 @@ table.cmp th { font-size: 18px; }
   box-shadow: 0 3px 0 #a8948e, 0 4px 5px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 90, 90, 0.35), inset 0 2px 3px rgba(255, 255, 255, 0.9), inset 0 0 8px rgba(255, 110, 100, 0.35); }
 .stlnav:hover:active span { box-shadow: 0 0 0 #a8948e, 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 90, 90, 0.35), inset 0 2px 5px rgba(150, 90, 80, 0.45); }
 
-/* 右の欄のボタンは パスワードを入れた時だけ出す(unlock.js。html に unlocked) */
-html:not(.unlocked) .tools { display: none; }
-.lockbtn { margin-left: auto; }
-.lockbtn ~ .themebtn { margin-left: -10px; }
-.lockbox { margin-left: auto; }
-.lockbox[hidden] { display: none; }
-.lockbox:not([hidden]) + .lockbtn { margin-left: -10px; }
-.lockbox input { font: inherit; font-size: 13px; width: 150px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 20px; background: var(--bg); color: var(--fg); }
-.lockbox input:focus { outline: none; border-color: var(--accent); }
-.lockbox input.ng { border-color: #e03131; animation: lockNg .3s; }
-@keyframes lockNg { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-@media print { .lockbtn, .lockbox { display: none; } }
+/* 右の欄のボタン(必要時間を入力 から 説明 まで)は 作る PC だけで使うので、このページでは出さない */
+.tools { display: none; }
 
 /* 依頼メールの見本: 70.ポイント点滅 と同じ窓(.submodal の上の帯と暗い中身)。開く・閉じるは index.html の script(display を flex / none) */
 .mailmodal { position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, .45); display: none; align-items: center; justify-content: center; }

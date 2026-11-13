@@ -1,4 +1,4 @@
-// ここまでの時間(右下): 準備・作成の手順(下の steps)ごとに「実働」(生産準備+ を操作する本当に要る時間)と
+// ここまでの時間(上のヘッダー): 準備・作成の手順(下の steps)ごとに「実働」(生産準備+ を操作する本当に要る時間)と
 // 「待ち」(メールの返事待ち・プログラムの実行中など)を入れておき、スクロールした所までの合計を出す。
 // 時間は「必要時間を入力」の時に各節の見出しの下に出る枠で入れる(分)。このブラウザに保存
 (function () {
@@ -67,27 +67,29 @@
     });
   }
 
-  // 右下の表示
+  // 上のヘッダー(更新日の右)に出す。上の段 = 合計の時間、下の段 = 進み具合のバー(枠の幅いっぱい)
   var box = document.createElement("div");
   box.id = "flowClock";
-  box.innerHTML = '<div class="fchd">ここまでの時間(治具 1 台あたり)</div>' +
-    '<div class="fcrow work"><span>実働</span><b data-k="work">0 分</b></div>' +
-    '<div class="fcrow wait"><span>待ち時間含む</span><b data-k="wait">0 分</b></div>' +
-    '<div class="fcbar"><i class="w"></i><i class="t"></i></div>' +
-    '<div class="fcnow"></div>';
-  document.body.appendChild(box);
+  box.innerHTML = '<div class="fctop"><span class="fchd">ここまでの時間/治具1台</span>' +
+    '<span class="fcrow work"><span>実働</span><b data-k="work">0 分</b></span>' +
+    '<span class="fcrow wait"><span>待ち時間含む</span><b data-k="wait">0 分</b></span></div>' +
+    '<div class="fcbar"><i class="w"></i><i class="t"></i></div>';
+  var hd = document.querySelector(".pghd"), dt = hd && hd.querySelector(".date");
+  if (hd) hd.insertBefore(box, dt ? dt.nextSibling : hd.firstChild.nextSibling);
+  else document.body.appendChild(box);
   var elW = box.querySelector('[data-k="work"]'), elT = box.querySelector('[data-k="wait"]'),
-    barW = box.querySelector(".fcbar .w"), barT = box.querySelector(".fcbar .t"), elNow = box.querySelector(".fcnow");
+    barW = box.querySelector(".fcbar .w"), barT = box.querySelector(".fcbar .t");
 
   function hm(m) {
     m = Math.round(m);
     if (m < 60) return m + " 分";
     return Math.floor(m / 60) + " 時間" + (m % 60 ? " " + (m % 60) + " 分" : "");
   }
-  // 画面の 6 割の高さの線を、節がどこまで過ぎたか(0～1)で足す
+  // 上のヘッダーの下端の線を、節がどこまで過ぎたか(0～1)で足す。節の見出しが画面の上(ヘッダーのすぐ下)まで来たら その節を数え始める
+  var hdEl = document.querySelector(".pghd");
   var target = { work: 0, wait: 0 }, shown = { work: 0, wait: 0 }, total = { work: 0, wait: 0 }, raf = 0;
   function update() {
-    var line = innerHeight * 0.6, cur = null;
+    var line = hdEl ? hdEl.getBoundingClientRect().bottom : 0, cur = null;
     target.work = target.wait = total.work = total.wait = 0;
     steps.forEach(function (s) {
       var r = s.getBoundingClientRect(), k = r.bottom <= line ? 1 : r.top >= line ? 0 : (line - r.top) / Math.max(1, r.height);
@@ -95,7 +97,6 @@
       ["work", "wait"].forEach(function (f) { target[f] += val(s.id, f) * k; total[f] += val(s.id, f); });
     });
     box.classList.toggle("on", !!cur);
-    elNow.textContent = cur ? "いま: " + cur.getAttribute("data-title") + (PER[cur.id] ? "(× " + cnt(cur.id) + " 個)" : "") : "";
     if (!raf) raf = requestAnimationFrame(step);
   }
   // 数字は少しずつ追いかける(スクロールに合わせて増えていく様に見せる)

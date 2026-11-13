@@ -72,22 +72,23 @@ export default function BlogPage() {
     });
   };
 
-  // 記事のヘッダー(iframe内)の「パスワードを入れて編集のボタンを出す」の左にボタンを差し込む
+  // 記事のヘッダー(iframe内)の テーマ切り替えボタンの左にボタンを差し込む
   const insertNavButton = (doc: Document) => {
-    const lockBox = doc.getElementById("lockBox");
-    const lock = doc.getElementById("lock");
-    const header = lock?.parentElement;
-    if (!lock || !header || doc.getElementById(NAV_BUTTON_ID)) return;
+    const theme = doc.getElementById("theme");
+    const header = theme?.parentElement;
+    if (!theme || !header || doc.getElementById(NAV_BUTTON_ID)) return;
     const btn = doc.createElement("button");
     btn.type = "button";
     btn.id = NAV_BUTTON_ID;
     btn.className = "themebtn";
     btn.addEventListener("click", toggleNav);
-    header.insertBefore(btn, lockBox ?? lock);
-    // 右寄せの起点をこのボタンに移し、鍵の枠・鍵ボタンは他のボタンと同じ間隔で並べる
-    btn.style.marginLeft = "auto";
-    if (lockBox) lockBox.style.marginLeft = "-10px";
-    lock.style.marginLeft = "-10px";
+    header.insertBefore(btn, theme);
+    // 並べ方は記事の CSS(右寄せの起点は ここまでの時間 #flowClock)に任せる。
+    // 時計の無い記事だけ、このボタンを起点にしてテーマ切り替えボタンをすぐ右に並べる
+    if (!doc.getElementById("flowClock")) {
+      btn.style.marginLeft = "auto";
+      theme.style.marginLeft = "-10px";
+    }
     updateNavButton(doc);
   };
 

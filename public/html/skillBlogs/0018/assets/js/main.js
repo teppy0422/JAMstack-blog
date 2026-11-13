@@ -373,19 +373,22 @@ if (document.getElementById("modal")) {
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") closeModal();
 });
-// 目次の幅: 境目をドラッグで変える(160～600px)。ダブルクリックで元(240px)。ブラウザに覚える
+// 目次の幅: 境目をドラッグで変える(0～600px。0 で目次を隠す)。ダブルクリックで元(240px)。ブラウザに覚える
 (function () {
   var sp = document.querySelector(".tocsplit"),
     root = document.documentElement,
     KEYW = "sjpBlogTocW";
   var setW = function (w) {
-    w = Math.max(160, Math.min(600, Math.round(w)));
+    w = Math.max(0, Math.min(600, Math.round(w)));
     root.style.setProperty("--tocw", w + "px");
+    // 狭い時は目次の文字を枠からはみ出させない。0 の時は目次を隠す(境目は残すのでドラッグで戻せる)
+    root.classList.toggle("tocnarrow", w < 160);
+    root.classList.toggle("tochidden", w === 0);
     return w;
   };
   try {
-    var w0 = +localStorage.getItem(KEYW);
-    if (w0) setW(w0);
+    var w0 = localStorage.getItem(KEYW);
+    if (w0 !== null && w0 !== "" && !isNaN(+w0)) setW(+w0);
   } catch (e) {}
   sp.addEventListener("mousedown", function (e) {
     e.preventDefault();
@@ -411,6 +414,7 @@ document.addEventListener("keydown", function (e) {
   });
   sp.addEventListener("dblclick", function () {
     root.style.removeProperty("--tocw");
+    root.classList.remove("tocnarrow", "tochidden");
     try {
       localStorage.removeItem(KEYW);
     } catch (e) {}
@@ -838,6 +842,7 @@ document.querySelectorAll(".stlview").forEach(function (w) {
   //   モデルは 30° 傾いているので、板の向き s = (0,-0.866,0.5)、縦 t = (0,0.5,0.866)。外形 165 × 102mm(コネクタ受けに合わせて 100 → 102mm)、画面 162.3 × 85.9mm(左右の縁は 5.4 → 1.35mm に細くした)
   var D = { x0: 58, x1: 223, s0: 36, s1: 44, t0: -17.25, t1: 84.75, aw: 162.3, ah: 85.9 };
   var showDisp = false, dispK = 0, disp = null;
+  var showModel = false;   // コネクタ受けの 3D モデル(STL)。右の手順(②)のボタンで 出す/消す
   // ---- コネクタ(#111 のプラスチック)。形はコネクタ受けの溝(s=60 の切り口を 0.4mm 内側へ)、厚みは s 50～78mm ----
   //   穴は端末 20 の 109 個(2ndディスプレイと同じ位置)。穴から下のディスプレイの点滅が見える
   //   形は assets/model/conn_20.json(scratchpad の conn_geom.py で作る)
@@ -849,7 +854,7 @@ document.querySelectorAll(".stlview").forEach(function (w) {
     var cc = document.createElement("canvas"), kx = 1000 / (TB.x1 - TB.x0);
     cc.width = 1000; cc.height = Math.round((TB.t1 - TB.t0) * kx);
     var g = cc.getContext("2d");
-    g.fillStyle = "#0b0b0b"; g.fillRect(0, 0, cc.width, cc.height);
+    g.fillStyle = "#4a4f57"; g.fillRect(0, 0, cc.width, cc.height);   // 上の面: 濃いグレー(黒だと形が見えにくいので明るめ)
     CN.holes.forEach(function (h) { g.clearRect((h[0] - TB.x0) * kx, (TB.t1 - h[3]) * kx, (h[2] - h[0]) * kx, (h[3] - h[1]) * kx); });
     gl.bindTexture(gl.TEXTURE_2D, ctex);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cc);
@@ -1040,7 +1045,21 @@ document.querySelectorAll(".stlview").forEach(function (w) {
   }
   // 右の手順(③)のボタンで 置く/外す。置く時は上から差し込む様に滑らせる
   var bwrap = w.closest(".stlsteps") || w.parentNode;
-  var dbtn = bwrap.querySelector(".stl2nd:not(.stlconn)");
+  // 右の手順の欄の高さを 3D の表示の高さに合わせる(手順は CSS で等間隔に並ぶ)。文字が収まらない時は欄が伸びる
+  var steps = w.closest(".stlsteps") && bwrap.querySelector(".needlist");
+  if (steps) {
+    var fitSteps = function () { steps.style.minHeight = w.offsetHeight + "px"; };
+    fitSteps();
+    if (window.ResizeObserver) new ResizeObserver(fitSteps).observe(w); else addEventListener("resize", fitSteps);
+  }
+  // 右の手順(②)のボタンで コネクタ受けの 3D モデルを 出す/消す
+  var mbtn = bwrap.querySelector(".stlmodel");
+  if (mbtn) mbtn.addEventListener("click", function () {
+    showModel = !showModel;
+    mbtn.textContent = showModel ? "外す" : "セット";
+    mbtn.setAttribute("aria-pressed", showModel ? "true" : "false");
+  });
+  var dbtn = bwrap.querySelector(".stl2nd:not(.stlconn):not(.stlmodel)");
   if (dbtn) dbtn.addEventListener("click", function () {
     showDisp = !showDisp;
     dbtn.textContent = showDisp ? "外す" : "セット";
@@ -1068,12 +1087,14 @@ document.querySelectorAll(".stlview").forEach(function (w) {
     var m = mul(tX, mul(sY, mul(mX, mY))); m[12] = panX; m[13] = panY; m[14] = -dist * PK;
     var asp = cv.width / (cv.height || 1), f = PK / Math.tan(FOV), nr = dist * PK / 50, fr = dist * PK + 10;
     var pr = [f / asp, 0, 0, 0, 0, f, 0, 0, 0, 0, (fr + nr) / (nr - fr), -1, 0, 0, 2 * fr * nr / (nr - fr), 0];
-    gl.useProgram(pg);
-    var lp = bindAttr(pg, "p", mdl.p, 3), ln = bindAttr(pg, "n", mdl.n, 3);
-    gl.uniformMatrix4fv(gl.getUniformLocation(pg, "m"), false, new Float32Array(m));
-    gl.uniformMatrix4fv(gl.getUniformLocation(pg, "pr"), false, new Float32Array(pr));
-    gl.drawArrays(gl.TRIANGLES, 0, cnt);
-    gl.disableVertexAttribArray(lp); gl.disableVertexAttribArray(ln);
+    if (showModel) {
+      gl.useProgram(pg);
+      var lp = bindAttr(pg, "p", mdl.p, 3), ln = bindAttr(pg, "n", mdl.n, 3);
+      gl.uniformMatrix4fv(gl.getUniformLocation(pg, "m"), false, new Float32Array(m));
+      gl.uniformMatrix4fv(gl.getUniformLocation(pg, "pr"), false, new Float32Array(pr));
+      gl.drawArrays(gl.TRIANGLES, 0, cnt);
+      gl.disableVertexAttribArray(lp); gl.disableVertexAttribArray(ln);
+    }
     dispK += ((showDisp ? 1 : 0) - dispK) * 0.12;
     connK += ((showConn ? 1 : 0) - connK) * 0.12;
     // 箱を 1 つ描く: off = 滑らせる量(向き × mm)、col = 無地の面の色、t = 絵を貼る面のテクスチャ
@@ -1103,7 +1124,7 @@ document.querySelectorAll(".stlview").forEach(function (w) {
     }
     showDist(m);
     if (conn && connK > 0.01) {
-      box([[conn.cap, 2], [conn.capB, 2], [conn.wall, 3]], [0, -0.866, 0.5], (1 - connK) * 90, [0.045, 0.045, 0.045], ctex); // 手前から差し込む(#111 のプラスチック)
+      box([[conn.cap, 2], [conn.capB, 2], [conn.wall, 3]], [0, -0.866, 0.5], (1 - connK) * 90, [0.29, 0.31, 0.34], ctex); // 手前から差し込む(#4a4f57 のプラスチック。黒だと形が見えにくいので明るめ)
     }
     requestAnimationFrame(draw);
   }
