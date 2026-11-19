@@ -454,7 +454,7 @@ export default function Header() {
             </DrawerHeader>
             <Divider borderColor={colorMode === "light" ? "#a69689" : "#fff"} />
             <DrawerBody>
-              <Sidebar isDrawer={true} />
+              <Sidebar isDrawer={true} onNavigate={onMenuClose} />
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>

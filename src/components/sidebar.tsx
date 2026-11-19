@@ -33,7 +33,14 @@ import { useLanguage } from "../contexts/LanguageContext";
 import getMessage from "@/utils/getMessage";
 import { AnimationImage } from "./ui/CustomImage";
 
-function Sidebar({ isDrawer }: { isDrawer: boolean }) {
+function Sidebar({
+  isDrawer,
+  onNavigate,
+}: {
+  isDrawer: boolean;
+  // メニュー(Drawer)の中で項目を押した時に、メニューを閉じる
+  onNavigate?: () => void;
+}) {
   const [currentPath, setCurrentPath] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
@@ -46,87 +53,101 @@ function Sidebar({ isDrawer }: { isDrawer: boolean }) {
   const buttonStyle = (path) => ({
     p: "2",
     w: "full",
-    _hover: { bg: "gray.900" },
     cursor: "pointer",
     colorScheme: currentPath === path ? "red" : "gray", // 現在のパスと一致する場合は赤色テーマ、そうでなければ灰色テーマ
     color: colorMode === "light" ? "white" : "white",
   });
 
+  // 項目は本物のリンク(<a>)にする。div にクリックだけ付けると iPhone の Safari でタップが効かないことがある
   const menuItem = (path_, label, useColorMode, icons_) => {
     return (
-      <NextLink href={path_} passHref legacyBehavior>
-        <Box
-          {...buttonStyle(path_)}
-          onClick={onClose}
-          position="relative"
-          _hover={{
-            "& span::after": {
+      <Box
+        as={NextLink}
+        href={path_}
+        display="block"
+        {...buttonStyle(path_)}
+        onClick={() => {
+          onClose();
+          onNavigate?.();
+        }}
+        position="relative"
+        // ホバーの演出はマウスのある端末だけ。タッチの端末(特に画面の広い iPhone Duo)では
+        // 1 回目のタップがホバー扱いになり、押しても移動しない事があるため
+        sx={{
+          "@media (hover: hover) and (pointer: fine)": {
+            "&:hover": { bg: "gray.900" },
+            "&:hover span::after": {
               width: "100%",
               transition: "width 0.5s",
             },
+            "&:hover span span": {
+              opacity: "0.8",
+              borderRadius: "5px",
+            },
+          },
+        }}
+        color={colorMode === "light" ? "black" : "white"}
+      >
+        {currentPath === `${path_}/` && (
+          <ChevronRightIcon
+            position="absolute"
+            left="-10px"
+            top="50%"
+            transform="translateY(-50%)"
+            color={colorMode === "light" ? "#000" : "#FFF"}
+          />
+        )}
+        <Box
+          as="span"
+          position="relative"
+          color={colorMode === "light" ? "#000" : "white"}
+          _after={{
+            content: '""',
+            position: "absolute",
+            width: "0",
+            height: "1px",
+            bottom: "-2px",
+            left: "0",
+            bg: "transparent",
+            transition: "width 0.1s",
+            color: colorMode === "light" ? "white" : "white",
           }}
-          color={colorMode === "light" ? "black" : "white"}
         >
-          {currentPath === `${path_}/` && (
-            <ChevronRightIcon
-              position="absolute"
-              left="-10px"
-              top="50%"
-              transform="translateY(-50%)"
-              color={colorMode === "light" ? "#000" : "#FFF"}
-            />
-          )}
-          <Box
-            as="span"
-            position="relative"
-            color={colorMode === "light" ? "#000" : "white"}
-            _after={{
-              content: '""',
-              position: "absolute",
-              width: "0",
-              height: "1px",
-              bottom: "-2px",
-              left: "0",
-              bg: "transparent",
-              transition: "width 0.1s",
-              color: colorMode === "light" ? "white" : "white",
-            }}
-          >
-            <Flex alignItems="center" gap="4px">
-              <Box
-                as="span"
-                px="3px"
-                _hover={{
-                  opacity: "0.8",
-                  borderRadius: "5px",
-                }}
-              >
-                {label}
-              </Box>
-              {icons_}
-            </Flex>
-          </Box>
+          <Flex alignItems="center" gap="4px">
+            <Box
+              as="span"
+              px="3px"
+            >
+              {label}
+            </Box>
+            {icons_}
+          </Flex>
         </Box>
-      </NextLink>
+      </Box>
     );
   };
 
   return (
     <>
+      {/* メニュー(Drawer)の中では fixed にしない。スライドして出る枠の中の fixed は、iPhone の Safari で見た目とタップの位置がずれることがある */}
       <Box
         display={{ base: isDrawer ? "block" : "none", xl: "block" }}
-        position="fixed"
-        w={["100px", "100px", "150px", "200px"]}
-        h="100vh"
+        {...(isDrawer
+          ? { position: "static", w: "100%" }
+          : {
+              position: "fixed",
+              w: ["100px", "100px", "150px", "200px"],
+              h: "100vh",
+              top: "60px",
+              left: "0",
+              zIndex: "1100",
+              p: "5",
+            })}
         bg="white.200"
-        p="5"
-        top="60px"
-        left="0"
         textAlign="left"
-        zIndex="1100"
         fontWeight={400}
       >
-        <VStack spacing="1" fontSize={14} w="200px">
+        <VStack spacing="1" fontSize={14} w={isDrawer ? "100%" : "200px"}>
           {menuItem(
             "/roadMap",
             getMessage({
