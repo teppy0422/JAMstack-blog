@@ -75,12 +75,16 @@ function Sidebar({
         // 1 回目のタップがホバー扱いになり、押しても移動しない事があるため
         sx={{
           "@media (hover: hover) and (pointer: fine)": {
-            "&:hover": { bg: "gray.900" },
-            "&:hover span::after": {
-              width: "100%",
+            // 背景は文字が読める薄い色(前は gray.900 でほぼ黒になり、文字が読めなかった)
+            "&:hover": {
+              bg: colorMode === "light" ? "blackAlpha.100" : "whiteAlpha.200",
+            },
+            // 下線は文字の左端から右端まで(左右の余白 3px ずつは除く)
+            "&:hover .menuLabel::after": {
+              width: "calc(100% - 6px)",
               transition: "width 0.5s",
             },
-            "&:hover span span": {
+            "&:hover .menuLabel": {
               opacity: "0.8",
               borderRadius: "5px",
             },
@@ -101,22 +105,24 @@ function Sidebar({
           as="span"
           position="relative"
           color={colorMode === "light" ? "#000" : "white"}
-          _after={{
-            content: '""',
-            position: "absolute",
-            width: "0",
-            height: "1px",
-            bottom: "-2px",
-            left: "0",
-            bg: "transparent",
-            transition: "width 0.1s",
-            color: colorMode === "light" ? "white" : "white",
-          }}
         >
           <Flex alignItems="center" gap="4px">
+            {/* 下線は文字の部分だけに付ける(アイコンの右まで伸ばさない) */}
             <Box
               as="span"
+              className="menuLabel"
+              position="relative"
               px="3px"
+              _after={{
+                content: '""',
+                position: "absolute",
+                width: "0",
+                height: "1px",
+                bottom: "-2px",
+                left: "3px",
+                bg: "currentColor", // 下線は文字と同じ色(ライトは黒、ダークは白)
+                transition: "width 0.1s",
+              }}
             >
               {label}
             </Box>
