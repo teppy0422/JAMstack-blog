@@ -128,6 +128,13 @@ import { last } from "lodash";
 
 let cachedUsers: any[] | null = null;
 const now = new Date();
+// 管理者が添付ファイルだけを削除した投稿に付ける印(original_file_nameに保存)
+// 形式: "__attachment_deleted__:元のファイル名"
+const ATTACHMENT_DELETED_MARKER = "__attachment_deleted__";
+const isAttachmentDeleted = (name?: string | null) =>
+  !!name && name.startsWith(ATTACHMENT_DELETED_MARKER);
+const getDeletedFileName = (name: string) =>
+  name.slice(ATTACHMENT_DELETED_MARKER.length + 1); // ":"の分+1
 
 export default function Thread() {
   return (
@@ -317,7 +324,7 @@ function ThreadContent(): JSX.Element {
   //長押し
   const [isLongPress, setIsLongPress] = useState(false);
   const [longPressPostId, setLongPressPostId] = useState<string | null>(null);
-  const [hoveredButton, setHoveredButton] = useState<"delete" | "reply" | null>(
+  const [hoveredButton, setHoveredButton] = useState<"delete" | "reply" | "deleteAttachment" | null>(
     null
   );
   const blinkIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -566,7 +573,7 @@ function ThreadContent(): JSX.Element {
     setStartX(null);
     setIsLongPressDisabled(false);
   };
-  const handleMouseEnter = (buttonType: "delete" | "reply") => {
+  const handleMouseEnter = (buttonType: "delete" | "reply" | "deleteAttachment") => {
     setHoveredButton(buttonType);
   };
   const handleMouseUp = () => {
@@ -621,6 +628,81 @@ function ThreadContent(): JSX.Element {
         setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
       }, 1000);
     }
+  };
+  //添付ファイルのみ削除(管理者専用) メッセージは残す
+  const handleDeleteAttachment = async (postId: string) => {
+    if (currentUserId !== masterUserId) return;
+    const target = posts.find((post) => post.id === postId);
+    const fileUrl = target?.file_url;
+    if (!fileUrl) return;
+    const deletedNameValue = `${ATTACHMENT_DELETED_MARKER}:${
+      target?.original_file_name || fileUrl.split("/").pop() || ""
+    }`;
+    if (
+      !window.confirm(
+        getMessage({
+          ja: "添付ファイルを削除しますか？（メッセージは残ります）",
+          us: "Delete the attachment? (The message will remain)",
+          cn: "要删除附件吗？（消息将保留）",
+          language,
+        })
+      )
+    )
+      return;
+
+    // 先にDBを更新(Storage削除が失敗してもリンク切れにならないように)
+    const { error } = await supabase
+      .from("posts")
+      .update({ file_url: "", original_file_name: deletedNameValue })
+      .eq("id", postId);
+    if (error) {
+      console.error("Error deleting attachment:", error.message);
+      alert(error.message);
+      return;
+    }
+
+    // このファイルを引用しているリプライのプレビューも消す
+    const { error: replyError } = await supabase
+      .from("posts")
+      .update({ reply_file_url: null })
+      .eq("reply_file_url", fileUrl);
+    if (replyError) {
+      console.error("Error clearing reply_file_url:", replyError.message);
+    }
+
+    // ストレージからファイルを削除
+    const filePath = fileUrl
+      .split("/storage/v1/object/public/uploads/")
+      .pop();
+    if (filePath) {
+      const { error: deleteFileError } = await supabase.storage
+        .from("uploads")
+        .remove([filePath]);
+      if (deleteFileError) {
+        console.error(
+          "Error deleting file from storage:",
+          deleteFileError.message
+        );
+      }
+    }
+
+    setPosts((prevPosts) =>
+      prevPosts.map((post) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            file_url: "",
+            original_file_name: deletedNameValue,
+            file_size: undefined,
+          };
+        }
+        if (post.reply_file_url === fileUrl) {
+          return { ...post, reply_file_url: null };
+        }
+        return post;
+      })
+    );
+    handleLongPressEnd();
   };
   //postのリプライ
   const [replyToPostId, setReplyToPostId] = useState<string | null>(null); // リプライ対象の投稿ID
@@ -3176,6 +3258,65 @@ function ThreadContent(): JSX.Element {
                                         </Text>
                                       </Stack>
                                     </Button>
+                                    {currentUserId === masterUserId &&
+                                      post.file_url && (
+                                        <Button //添付を削除ボタン(管理者のみ)
+                                          onClick={() =>
+                                            handleDeleteAttachment(
+                                              longPressPostId!
+                                            )
+                                          }
+                                          onMouseEnter={() =>
+                                            handleMouseEnter("deleteAttachment")
+                                          }
+                                          onMouseLeave={handleMouseLeave}
+                                          borderRadius="0"
+                                          bg="transparent"
+                                          _hover={{
+                                            backgroundColor: "transparent",
+                                          }}
+                                          width="3rem"
+                                        >
+                                          <Stack
+                                            alignItems="center"
+                                            spacing="1"
+                                            maxWidth={1.5}
+                                            color="gray.900"
+                                          >
+                                            <Box position="relative">
+                                              <FaPaperclipIcon
+                                                size="18px"
+                                                fill="custom.theme.light.900"
+                                              />
+                                              <Box
+                                                position="absolute"
+                                                bottom="-4px"
+                                                right="-6px"
+                                              >
+                                                <FaTimesIcon
+                                                  size="10px"
+                                                  fill="red"
+                                                  stroke="currentColor"
+                                                />
+                                              </Box>
+                                            </Box>
+                                            <Text
+                                              fontSize="0.5rem"
+                                              lineHeight="1"
+                                              p={0}
+                                              m={0}
+                                              whiteSpace="nowrap"
+                                            >
+                                              {getMessage({
+                                                ja: "添付を削除",
+                                                us: "Del file",
+                                                cn: "删除附件",
+                                                language,
+                                              })}
+                                            </Text>
+                                          </Stack>
+                                        </Button>
+                                      )}
                                   </Box>
                                 </>
                               )}
@@ -3862,6 +4003,30 @@ function ThreadContent(): JSX.Element {
                                       )}
                                     </>
                                   )}
+                                  {!post.file_url &&
+                                    isAttachmentDeleted(
+                                      post.original_file_name
+                                    ) && (
+                                      <Text
+                                        mt={post.content ? "6px" : "0px"}
+                                        fontSize="12px"
+                                        color="gray.500"
+                                        fontStyle="italic"
+                                      >
+                                        {getMessage({
+                                          ja: "添付は削除されました",
+                                          us: "Attachment has been deleted",
+                                          cn: "附件已被删除",
+                                          language,
+                                        })}
+                                        {getDeletedFileName(
+                                          post.original_file_name
+                                        ) &&
+                                          `: ${getDeletedFileName(
+                                            post.original_file_name
+                                          )}`}
+                                      </Text>
+                                    )}
                                 </CardBody>
                                 <Box // 吹き出しの三角
                                   style={{
