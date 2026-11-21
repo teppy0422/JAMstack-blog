@@ -244,7 +244,7 @@ export function bbsNotifEmailHtml({
                                       <img class="max-width" border="0"
                                         style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px; max-width:100% !important; width:100%; height:auto !important;"
                                         width="600" alt="" data-proportionally-constrained="true" data-responsive="true"
-                                        src="http://cdn.mcauto-images-production.sendgrid.net/954c252fedab403f/a05d7244-edf4-4820-9a42-c376545daa93/600x291.png">
+                                        src="https://teppy.link/images/mail/bbs-notify-header.png">
                                     </td>
                                   </tr>
                                 </tbody>

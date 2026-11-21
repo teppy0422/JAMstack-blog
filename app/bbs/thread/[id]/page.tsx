@@ -88,7 +88,6 @@ import SafeHtml from "../../parts/SafeHtml";
 import ExternalLinkText from "../../parts/ExternalLinkText";
 import UrlPreviewBox from "../../parts/UrlPreviewBox";
 import ChatFeatureMoal from "@/components/modals/ChatFeatures";
-import { bbsNotifEmailHtml } from "@/lib/templates/bbsNotifEmailHtml";
 
 import "@/styles/home.module.scss";
 // import { AppContext } from "../../../pages/_app";
@@ -122,8 +121,6 @@ import { CustomModalCloseButton } from "../../../../src/components/ui/CustomModa
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
-import { sendMail } from "@/lib/sendMail";
-import { getUserEmail } from "@/lib/getUserEmail";
 import { last } from "lodash";
 
 let cachedUsers: any[] | null = null;
@@ -147,7 +144,6 @@ export default function Thread() {
 function ThreadContent(): JSX.Element {
   const { language } = useLanguage();
   const { colorMode } = useColorMode();
-  const [isSentNotify, setIsSentNotify] = useState<boolean>(false);
 
   const { updateUnreadCount } = useUnread();
   const showToast = useToast();
@@ -762,9 +758,49 @@ function ThreadContent(): JSX.Element {
     fetchThreadTitle();
   }, []);
 
-  const handleFetchEmail = async (uid: string): Promise<string | null> => {
-    const email = await getUserEmail(uid);
-    return String(email);
+  // 新着投稿のメール通知(送信結果を待たずに投稿処理を続ける)
+  const notifyNewPost = async (postId: string) => {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) return;
+      const res = await fetch("/api/notify-new-post/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ postId }),
+      });
+      if (!res.ok) {
+        const detail = await res.text();
+        console.error("メール通知に失敗:", detail);
+        showNotifyFailedToast(detail);
+      }
+    } catch (err: any) {
+      console.error("メール通知に失敗:", err);
+      showNotifyFailedToast(err?.message ?? "");
+    }
+  };
+  const showNotifyFailedToast = (detail: string) => {
+    toast({
+      position: "bottom",
+      duration: 4000,
+      isClosable: true,
+      render: ({ onClose }) => (
+        <CustomToast
+          onClose={onClose}
+          title={getMessage({
+            ja: "通知送信が失敗",
+            us: "Failed to send notification",
+            cn: "通知传送失败。",
+            language,
+          })}
+          description={<Box>{detail.slice(0, 200)}</Box>}
+        />
+      ),
+    });
   };
 
   useEffect(() => {
@@ -1046,7 +1082,9 @@ function ThreadContent(): JSX.Element {
       }
     }
 
-    const { error } = await supabase.from("posts").insert([
+    const { data: insertedPost, error } = await supabase
+      .from("posts")
+      .insert([
       {
         thread_id: id,
         content: inputValue,
@@ -1059,121 +1097,15 @@ function ThreadContent(): JSX.Element {
         reply_user_id: replyPostUserId,
         reply_file_url: replyPostFileUrl,
       },
-    ]);
+    ])
+      .select("id")
+      .single();
     if (error) {
       console.error("Error creating post:", error.message);
     } else {
-      // メール送信
-      const is_email_notify = getUserById(threadUserId)?.is_email_notify;
-      console.log("📧 メール通知チェック開始");
-      console.log("  - threadUserId:", threadUserId);
-      console.log("  - currentUserId:", currentUserId);
-      console.log("  - is_email_notify:", is_email_notify);
-      console.log("  - isSentNotify:", isSentNotify);
-
-      if (!is_email_notify) {
-        console.log("❌ is_email_notifyがfalseのため通知をスキップ");
-      } else if (isSentNotify) {
-        console.log("❌ 既に通知送信済みのためスキップ");
-      } else if (threadUserId === currentUserId) {
-        console.log("❌ 自分の投稿のため通知をスキップ");
-      }
-
-      if (is_email_notify) {
-        if (!isSentNotify) {
-          if (threadUserId !== currentUserId) {
-            const threadUrl = `https://teppy.link/bbs/thread/${id}`; // このページのパスを設定
-
-            let lastNotifiedAt = getUserById(threadUserId)?.last_notified_at;
-            let hoursDiff = 25;
-            const now = new Date();
-            if (lastNotifiedAt) {
-              const lastNotifiedDate = new Date(lastNotifiedAt);
-              const timeDiff = now.getTime() - lastNotifiedDate.getTime();
-              hoursDiff = timeDiff / (1000 * 60 * 60);
-            }
-            console.log("  - lastNotifiedAt:", lastNotifiedAt);
-            console.log("  - hoursDiff:", hoursDiff);
-
-            if (hoursDiff <= 24) {
-              console.log("❌ 24時間以内に通知送信済みのためスキップ（残り時間:", (24 - hoursDiff).toFixed(1), "時間）");
-            }
-
-            if (hoursDiff > 24 && threadUserId) {
-              // メール送信
-              const email = await handleFetchEmail(threadUserId);
-              console.log("  - 取得したメールアドレス:", email);
-
-              if (!email) {
-                console.error("❌ メールアドレスの取得に失敗");
-                return;
-              }
-
-              const senderAvatarUrl = getUserById(currentUserId)?.picture_url;
-              console.log("✅ メール送信を実行します");
-              handleSendMail({
-                to: String(email),
-                subject: "📨 BBSの" + threadTitle + "に新着メッセージ",
-                text: threadTitle + " に新着メッセージ " + inputValue,
-                html: bbsNotifEmailHtml({
-                  threadTitle,
-                  inputValue,
-                  threadUrl,
-                  senderAvatarUrl: senderAvatarUrl ?? "",
-                }),
-              });
-              // 送信日時を保存
-              const { error: updateError } = await supabase
-                .from("table_users")
-                .update({ last_notified_at: now.toISOString() })
-                .eq("id", threadUserId);
-              if (updateError) {
-                console.error("❌ last_notified_at update error:", updateError);
-              }
-              setIsSentNotify(true);
-              console.log("send Email to ", String(email));
-            }
-          }
-        }
-      }
-      // 管理者にメール送信
-      const adminId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0";
-      const adminEmail = "teppy@aol.jp";
-      if (String(email) !== adminEmail) {
-        const threadUrl = `https://teppy.link/bbs/thread/${id}`; // このページのパスを設定
-        let lastNotifiedAt = getUserById(adminId)?.last_notified_at;
-        let hoursDiff = 25;
-        const now = new Date();
-        if (lastNotifiedAt) {
-          const lastNotifiedDate = new Date(lastNotifiedAt);
-          const timeDiff = now.getTime() - lastNotifiedDate.getTime();
-          hoursDiff = timeDiff / (1000 * 60 * 60);
-        }
-        if (hoursDiff > 24) {
-          // メール送信
-          const senderAvatarUrl = getUserById(currentUserId)?.picture_url;
-          handleSendMail({
-            to: String(adminEmail),
-            subject: "📨 BBSの" + threadTitle + "に新着メッセージ",
-            text: threadTitle + " に新着メッセージ " + inputValue,
-            html: bbsNotifEmailHtml({
-              threadTitle,
-              inputValue,
-              threadUrl,
-              senderAvatarUrl: senderAvatarUrl ?? "",
-            }),
-          });
-          // 送信日時を保存
-          const { error: updateError } = await supabase
-            .from("table_users")
-            .update({ last_notified_at: now.toISOString() })
-            .eq("id", adminId);
-          if (updateError) {
-            console.error("❌ last_notified_at update error:", updateError);
-          }
-          setIsSentNotify(true);
-          console.log("send Email to ", String(email));
-        }
+      // メール通知(スレッド作成者[通知ON]・管理者) 宛先判定と送信はサーバー側
+      if (insertedPost?.id) {
+        notifyNewPost(insertedPost.id);
       }
 
       setNewPostContent("");
@@ -1192,57 +1124,6 @@ function ThreadContent(): JSX.Element {
       }
     }
   };
-  // メールを送信
-  const handleSendMail = async ({
-    to,
-    subject,
-    text,
-    html,
-  }: {
-    to: string;
-    subject: string;
-    text: string;
-    html: string;
-  }) => {
-    const { success, errorMessage } = await sendMail({
-      to,
-      subject,
-      text,
-      html,
-    });
-
-    toast({
-      position: "bottom",
-      duration: 4000,
-      isClosable: true,
-      render: ({ onClose }) => (
-        <CustomToast
-          onClose={onClose}
-          title={
-            success
-              ? getMessage({
-                  ja: "通知送信が成功",
-                  us: "Successful notification transmission",
-                  cn: "通知传送成功。",
-                  language,
-                })
-              : getMessage({
-                  ja: "通知送信が失敗",
-                  us: "Failed to send notification",
-                  cn: "通知传送失败。",
-                  language,
-                })
-          }
-          description={
-            <>
-              <Box>{success ? undefined : errorMessage}</Box>
-            </>
-          }
-        />
-      ),
-    });
-  };
-
   // ファイルをアップロード
   const uploadFile = async (file: File) => {
     let processedFile = file;
