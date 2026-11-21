@@ -12,7 +12,7 @@ const supabaseAdmin = createClient(
 
 const ADMIN_USER_ID = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0";
 const MAIL_FROM = process.env.MAIL_FROM || "BBS <noreply@teppy.link>";
-const SITE_URL = "https://teppy.link";
+const SITE_URL = "https://www.teppy.link";
 
 const escapeHtml = (s: string) =>
   s

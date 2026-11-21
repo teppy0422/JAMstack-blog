@@ -244,7 +244,7 @@ export function bbsNotifEmailHtml({
                                       <img class="max-width" border="0"
                                         style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px; max-width:100% !important; width:100%; height:auto !important;"
                                         width="600" alt="" data-proportionally-constrained="true" data-responsive="true"
-                                        src="https://teppy.link/images/mail/bbs-notify-header.png">
+                                        src="https://www.teppy.link/images/mail/bbs-notify-header.png">
                                     </td>
                                   </tr>
                                 </tbody>
@@ -287,7 +287,6 @@ export function bbsNotifEmailHtml({
                                 <ul style="display: inline-block; text-align: left; padding-left: 1em; font-size: 14px; line-height: 1.8; margin: 0 auto;">
                                   <li>スレッドの所有者に送信されます</li>
                                   <li>通知設定がオンの場合のみ送信されます</li>
-                                  <li>通知は24時間に1回だけ実行されます</li>
                                 </ul>
                               </div>
 
