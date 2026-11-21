@@ -195,7 +195,7 @@ export function bbsNotifEmailHtml({
                                 </tr>
                               </table>
                               <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%"
-                                role="module" data-type="columns" style="padding:40px 30px 40px 30px;" bgcolor="#D23E3E"
+                                role="module" data-type="columns" style="padding:13px 30px 13px 30px;" bgcolor="#D23E3E"
                                 data-distribution="1,1">
                                 <tbody>
                                   <tr role="module-content">
@@ -296,9 +296,9 @@ export function bbsNotifEmailHtml({
                                 <tbody>
                                   <tr role="module-content">
                                     <td height="100%" valign="top">
-                                      <table width="300"
-                                        style="width:300px; border-spacing:0; border-collapse:collapse; margin:0px 0px 0px 0px;"
-                                        cellpadding="0" cellspacing="0" align="left" border="0" bgcolor=""
+                                      <table width="100%"
+                                        style="width:100%; border-spacing:0; border-collapse:collapse; margin:0px 0px 0px 0px;"
+                                        cellpadding="0" cellspacing="0" align="center" border="0" bgcolor=""
                                         class="column column-0">
                                         <tbody>
                                           <tr>
@@ -321,42 +321,6 @@ export function bbsNotifEmailHtml({
                                                                 style="background-color:#ffffff; border:1px solid #ffffff; border-color:#ffffff; border-radius:0px; border-width:1px; color:#000000; display:inline-block; font-size:14px; font-weight:300; letter-spacing:0px; line-height:normal; padding:12px 18px 12px 18px; text-align:center; text-decoration:none; border-style:solid; width:240px; font-family:lucida sans unicode,lucida grande,sans-serif;"
                                                                 target="_blank">
                                                                   スレッドを見る
-                                                              </a>
-                                                            </td>
-                                                          </tr>
-                                                        </tbody>
-                                                      </table>
-                                                    </td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                      <table width="300"
-                                        style="width:300px; border-spacing:0; border-collapse:collapse; margin:0px 0px 0px 0px;"
-                                        cellpadding="0" cellspacing="0" align="left" border="0" bgcolor=""
-                                        class="column column-1">
-                                        <tbody>
-                                          <tr>
-                                            <td style="padding:0px;margin:0px;border-spacing:0;">
-                                              <table border="0" cellpadding="0" cellspacing="0" class="module"
-                                                data-role="module-button" data-type="button" role="module"
-                                                style="table-layout:fixed;" width="100%"
-                                                data-muid="08619d14-45ee-4dde-827c-7eb48956ed4e.1">
-                                                <tbody>
-                                                  <tr>
-                                                    <td align="center" bgcolor="D23E3E" class="outer-td"
-                                                      style="padding:20px 0px 20px 0px; background-color:D23E3E;">
-                                                      <table border="0" cellpadding="0" cellspacing="0"
-                                                        class="wrapper-mobile" style="text-align:center;">
-                                                        <tbody>
-                                                          <tr>
-                                                            <td align="center" bgcolor="#ffffff" class="inner-td"
-                                                              style="border-radius:6px; font-size:16px; text-align:center; background-color:inherit;">
-                                                              <a href="#" style="background-color:#ffffff; border:1px solid #ffffff; border-color:#ffffff; border-radius:0px; border-width:1px; color:#000000; display:inline-block; font-size:14px; font-weight:300; letter-spacing:0px; line-height:normal; padding:12px 18px 12px 18px; text-align:center; text-decoration:none; border-style:solid; width:240px; font-family:lucida sans unicode,lucida grande,sans-serif;" target="_self">
-                                                                -
                                                               </a>
                                                             </td>
                                                           </tr>
