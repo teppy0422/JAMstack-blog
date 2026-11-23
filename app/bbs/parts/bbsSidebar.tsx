@@ -75,78 +75,87 @@ const SidebarBBS: React.FC<{ isMain?: boolean; reload?: boolean }> = ({
     setShowCompleted((prev) => !prev);
   };
 
-  const { currentUserId, currentUserCompany, currentUserMainCompany } =
-    useUserContext();
+  const {
+    currentUserId,
+    currentUserCompany,
+    currentUserMainCompany,
+    currentUserCreatedAt,
+  } = useUserContext();
   const showToast = useToast();
 
   const [visibleCompanies, setVisibleCompanies] = useState<number[]>([]);
-  //新しい投稿の監視
+  //新しい投稿・既読の監視
   useEffect(() => {
-    const fetchUnreadCount = async () => {
-      if (!currentUserId) {
-        console.log("userId is null, waiting for it to be set...");
-        return;
-      }
-      console.log("Fetching unread count...");
-      console.log("Current userId:", currentUserId);
+    // アカウント作成日が読み込まれるまで待つ(先に数えると大きな数が一瞬表示されるため)
+    if (!currentUserId || !currentUserCreatedAt) return;
+    let cancelled = false;
 
-      const { data, error } = await supabase
-        .from("posts")
-        .select("id, read_by, thread_id, user_uid, created_at")
-        .gt(
-          "created_at",
-          new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
-        );
-      if (error) {
-        console.error("Error fetching unread count:", error);
-        return;
-      }
-      // スレッドごとの未読数を計算
+    // 自分以外が投稿し、まだ既読にしていない投稿をスレッドごとに数える
+    // 対象はアカウントを作った日より後の投稿(それ以前の投稿は数えない)
+    // Supabaseは1回に最大1000件しか返さないため、1000件ずつ取得する
+    const fetchUnreadCount = async () => {
+      const PAGE = 1000;
       const counts: Record<string, number> = {};
-      data.forEach((post) => {
-        if (
-          !post.read_by?.includes(currentUserId) &&
-          post.user_uid !== currentUserId
-        ) {
-          counts[post.thread_id] = (counts[post.thread_id] || 0) + 1;
+      for (let from = 0; ; from += PAGE) {
+        const { data, error } = await supabase
+          .from("posts")
+          .select("thread_id")
+          .or(`user_uid.is.null,user_uid.neq.${currentUserId}`)
+          .or(`read_by.is.null,read_by.not.cs.{${currentUserId}}`)
+          .gt("created_at", currentUserCreatedAt)
+          .order("id")
+          .range(from, from + PAGE - 1);
+        if (error) {
+          console.error("Error fetching unread count:", error);
+          return;
         }
-      });
+        data.forEach((post) => {
+          counts[post.thread_id] = (counts[post.thread_id] || 0) + 1;
+        });
+        if (data.length < PAGE) break;
+      }
+      if (cancelled) return;
       setUnreadCountsByThread(counts);
-      const totalUnreadCount = Object.values(counts).reduce(
-        (sum: number, count: number) => sum + count,
-        0
+      setUnreadCount(
+        Object.values(counts).reduce((sum: number, c: number) => sum + c, 0)
       );
-      setUnreadCount(totalUnreadCount as number);
-      console.log("Unread counts by thread:", counts);
     };
     fetchUnreadCount();
 
+    // 投稿や既読が続けて来ても、まとめて1回だけ数え直す
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const scheduleFetch = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(fetchUnreadCount, 800);
+    };
+
     const subscription = supabase
-      .channel("public:posts")
+      .channel("public:posts:unread")
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "posts" },
         (payload) => {
-          if (!currentUserId) {
-            console.log("userId is null, waiting for it to be set...");
-            return;
-          }
-          console.log("Real-time notification received:", payload);
-          if (
-            (!payload.new.read_by ||
-              !payload.new.read_by.includes(currentUserId)) &&
-            payload.new.user_uid !== currentUserId
-          ) {
-            fetchUnreadCount();
-          }
+          if (payload.new.user_uid !== currentUserId) scheduleFetch();
         }
+      )
+      // 別のタブ・端末で既読にした場合も反映する
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "posts" },
+        () => scheduleFetch()
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "posts" },
+        () => scheduleFetch()
       )
       .subscribe();
     return () => {
-      console.log("Unsubscribing from channel...");
-      subscription.unsubscribe();
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+      supabase.removeChannel(subscription);
     };
-  }, [currentUserId, reload]);
+  }, [currentUserId, currentUserCreatedAt, reload]);
   // reloadが変更されたときに再読み込みの処理を行う
   useEffect(() => {
     console.log("SidebarBBS reloaded");

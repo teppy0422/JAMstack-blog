@@ -400,17 +400,36 @@ function ThreadContent(): JSX.Element {
 
   //既読チェック
   const masterUserId = "6cc1f82e-30a5-449b-a2fe-bc6ddf93a7c0";
+  // 一番下(またはスクロール不要な短いスレッド)かどうか
+  const computeIsAtBottom = () =>
+    window.scrollY + window.innerHeight >=
+    Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) -
+      50;
   useEffect(() => {
-    const handleScroll = () => {
-      setIsAtBottom(
-        window.scrollY + window.innerHeight >= document.body.scrollHeight - 50
-      );
-    };
-    window.addEventListener("scroll", handleScroll);
+    const update = () => setIsAtBottom(computeIsAtBottom());
+    update();
+    window.addEventListener("scroll", update);
+    window.addEventListener("resize", update);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
     };
   }, []);
+  // タブが表示されているか(裏のタブでは既読にしない)
+  const [isPageVisible, setIsPageVisible] = useState(true);
+  useEffect(() => {
+    const update = () =>
+      setIsPageVisible(document.visibilityState === "visible");
+    update();
+    document.addEventListener("visibilitychange", update);
+    return () => document.removeEventListener("visibilitychange", update);
+  }, []);
+  // 最新の値をリアルタイム受信のハンドラから参照するためのref
+  const currentUserIdRef = useRef<string | null>(null);
+  const isAtBottomRef = useRef(false);
+  useEffect(() => {
+    isAtBottomRef.current = isAtBottom;
+  }, [isAtBottom]);
   const [isSomeiyoshinoActive, setIsSomeiyoshinoActive] = useState(false);
   const [isHachisukaActive, setIsHachisukaActive] = useState(false);
   const [isYaeActive, setIsYaeActive] = useState(false);
@@ -448,40 +467,45 @@ function ThreadContent(): JSX.Element {
     setIsFirework(today >= FireworkDate && today <= FireworkEndDate);
   }, []);
 
-  // isAtBottomがtrueになった時に未読の投稿を全て既読にする
+  // 一番下を表示中(かつタブが表示中)なら、未読の投稿を既読にする
+  // 新しい投稿が届いたとき・短いスレッド(スクロール不要)でも動く
+  const markingReadRef = useRef(false);
   useEffect(() => {
-    if (!isAtBottom) {
+    if (
+      !isAtBottom ||
+      !computeIsAtBottom() || // 投稿の読み込み直後など、表示が変わった直後の誤判定を防ぐ
+      !isPageVisible ||
+      !currentUserId ||
+      unreadPostIds.length === 0 ||
+      markingReadRef.current
+    ) {
       return;
     }
-    console.log("isAtBottom is true");
-    if (isAtBottom && unreadPostIds.length > 0 && currentUserId) {
-      const markUnreadPostsAsRead = async () => {
-        try {
-          // 一括で未読投稿のread_byを取得
+    const ids = [...unreadPostIds];
+    markingReadRef.current = true;
+    const markUnreadPostsAsRead = async () => {
+      try {
+        // DB側で read_by に自分を追加(同時に既読を付けても消えない)
+        const { error: rpcError } = await supabase.rpc("mark_posts_read", {
+          post_ids: ids,
+        });
+        if (rpcError) {
+          // 関数が未作成の場合は従来の方法で更新
+          console.warn("mark_posts_read unavailable:", rpcError.message);
           const { data: posts, error: fetchError } = await supabase
             .from("posts")
             .select("id, read_by, content, thread_id, user_uid, created_at")
-            .in("id", unreadPostIds);
-
+            .in("id", ids);
           if (fetchError) {
-            console.error(
-              "Error fetching posts markUnreadPostsAsRead:",
-              fetchError.message
-            );
+            console.error("Error fetching posts for read:", fetchError.message);
             return;
           }
-
-          // 更新が必要な投稿をフィルタリング
-          // 1. 自分の投稿以外
-          // 2. まだread_byに自分のIDが含まれていない投稿
           const postsToUpdate = posts.filter(
             (post) =>
               post.user_uid !== currentUserId &&
               !post.read_by?.includes(currentUserId)
           );
-
           if (postsToUpdate.length > 0) {
-            // 一括で更新を実行
             const { error: updateError } = await supabase.from("posts").upsert(
               postsToUpdate.map((post) => ({
                 id: post.id,
@@ -492,39 +516,62 @@ function ThreadContent(): JSX.Element {
                 created_at: post.created_at,
               }))
             );
-
             if (updateError) {
-              console.error(
-                "Error marking posts as read:",
-                updateError.message
-              );
+              console.error("Error marking posts as read:", updateError.message);
+              return;
             }
           }
-          // 未読リストをクリア
-          setUnreadPostIds([]);
-          // 未読数を0に更新
-          updateUnreadCount(id, 0);
-          // ファビコンをデフォルトにする
-          const favicon = document.querySelector(
-            "link[rel='icon']"
-          ) as HTMLLinkElement;
-          const shortcutIcon = document.querySelector(
-            "link[rel='shortcut icon']"
-          ) as HTMLLinkElement;
-
-          if (favicon) {
-            favicon.href = "/images/ico/hippo_000_foot.ico";
-          }
-          if (shortcutIcon) {
-            shortcutIcon.href = "/images/ico/hippo_000_foot.ico";
-          }
-        } catch (error) {
-          console.error("Error in markUnreadPostsAsRead:", error);
         }
-      };
-      markUnreadPostsAsRead();
+        // 処理中に届いた新着は残す
+        setUnreadPostIds((prev) => prev.filter((pid) => !ids.includes(pid)));
+      } catch (error) {
+        console.error("Error in markUnreadPostsAsRead:", error);
+      } finally {
+        markingReadRef.current = false;
+      }
+    };
+    markUnreadPostsAsRead();
+  }, [isAtBottom, isPageVisible, currentUserId, unreadPostIds]);
+
+  // 投稿が増減して高さが変わったら、一番下かどうかを判定し直す
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAtBottom(computeIsAtBottom()), 50);
+    return () => clearTimeout(timer);
+  }, [posts]);
+
+  // 未読の有無に合わせてタブのアイコンとサイドバーの未読数を更新
+  useEffect(() => {
+    const href =
+      unreadPostIds.length > 0
+        ? "/images/ico/hippo_000_foot_no.ico"
+        : "/images/ico/hippo_000_foot.ico";
+    const links = document.querySelectorAll<HTMLLinkElement>(
+      "link[rel='icon'], link[rel='shortcut icon']"
+    );
+    if (links.length === 0) {
+      const link = document.createElement("link");
+      link.rel = "icon";
+      link.href = href;
+      document.head.appendChild(link);
+    } else {
+      links.forEach((link) => {
+        link.href = href;
+      });
     }
-  }, [isAtBottom]);
+    if (id) updateUnreadCount(String(id), unreadPostIds.length);
+  }, [unreadPostIds.length]);
+  // ページを離れたらアイコンを元に戻す
+  useEffect(() => {
+    return () => {
+      document
+        .querySelectorAll<HTMLLinkElement>(
+          "link[rel='icon'], link[rel='shortcut icon']"
+        )
+        .forEach((link) => {
+          link.href = "/images/ico/hippo_000_foot.ico";
+        });
+    };
+  }, []);
 
   // 長押しイベント
   const [longPressTimeout, setLongPressTimeout] =
@@ -759,83 +806,69 @@ function ThreadContent(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (isClient && id && !isLoadingContext) {
-      // 初回データ取得
-      fetchAllPosts();
+    currentUserIdRef.current = currentUserId ?? null;
+  }, [currentUserId]);
+  // アカウント作成日(これより前の投稿は未読として扱わない。サイドバーの未読数と同じ基準)
+  const currentUserCreatedAtRef = useRef<string | null>(null);
+  useEffect(() => {
+    currentUserCreatedAtRef.current = currentUserCreatedAt ?? null;
+  }, [currentUserCreatedAt]);
 
-      // リアルタイム購読の設定
-      const channel = supabase
-        .channel(`public:posts:thread_id=eq.${id}`)
-        .on(
-          "postgres_changes",
-          {
-            event: "INSERT",
-            schema: "public",
-            table: "posts",
-            filter: `thread_id=eq.${id}`,
-          },
-          (payload) => {
-            setPosts((prevPosts) => [...prevPosts, payload.new]);
-            // 新しい投稿が追加された場合、未読リストに追加
-            if (
-              currentUserId &&
-              !payload.new.read_by?.includes(currentUserId)
-            ) {
-              setUnreadPostIds((prev) => [...prev, payload.new.id]);
-            }
-            // 投稿者が自分でない場合のみ受信音を鳴らす
-            if (
-              payload.new.user_uid !== currentUserId &&
-              audioRef_recieving.current
-            ) {
-              audioRef_recieving.current.play();
-            }
+  // 投稿の取得と新着のリアルタイム受信(ユーザー情報の読み込み後に1回だけ設定)
+  useEffect(() => {
+    if (!isClient || !id || isLoadingContext) return;
+    fetchAllPosts();
 
-            // faviconを変更して通知を表示
-            const originalFavicon = document.querySelector(
-              "link[rel='icon']"
-            ) as HTMLLinkElement;
-            const originalShortcutIcon = document.querySelector(
-              "link[rel='shortcut icon']"
-            ) as HTMLLinkElement;
+    const channel = supabase
+      .channel(`public:posts:thread_id=eq.${id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "posts",
+          filter: `thread_id=eq.${id}`,
+        },
+        (payload) => {
+          const me = currentUserIdRef.current;
+          const isFromOthers = payload.new.user_uid !== me;
+          const wasAtBottom = isAtBottomRef.current;
 
-            // 通知用のfaviconを設定
-            const notificationFavicon = document.createElement("link");
-            notificationFavicon.rel = "icon";
-            notificationFavicon.type = "image/x-icon";
-            notificationFavicon.href = "/images/ico/hippo_000_foot_no.ico";
+          setPosts((prevPosts) =>
+            prevPosts.some((p) => p.id === payload.new.id)
+              ? prevPosts
+              : [...prevPosts, payload.new]
+          );
+          if (!isFromOthers) return; // 自分の投稿では通知しない
 
-            // 既存のfaviconを削除
-            if (originalFavicon) {
-              originalFavicon.remove();
-            }
-            if (originalShortcutIcon) {
-              originalShortcutIcon.remove();
-            }
-            // 新しいfaviconを追加
-            document.head.appendChild(notificationFavicon);
-
-            // デスクトップ通知を表示（iOSのSafari以外の場合のみ）
-            if (typeof Notification !== "undefined") {
-              if (Notification.permission === "granted") {
-                new Notification("新しい投稿があります！");
-              } else if (Notification.permission !== "denied") {
-                Notification.requestPermission().then((permission) => {
-                  if (permission === "granted") {
-                    new Notification("新しい投稿があります！");
-                  }
-                });
-              }
-            }
+          // 未読に追加(タブのアイコンは未読数に合わせて自動で切り替わる)
+          if (me && !payload.new.read_by?.includes(me)) {
+            setUnreadPostIds((prev) =>
+              prev.includes(payload.new.id) ? prev : [...prev, payload.new.id]
+            );
           }
-        )
-        .subscribe();
-      // クリーンアップ
-      return () => {
-        supabase.removeChannel(channel);
-      };
-    }
-  }, [isClient, id, isLoadingContext]); // threadCategoryは依存配列から除外
+          // 一番下を見ていたら、新着が見えるようにスクロール
+          if (wasAtBottom) {
+            setTimeout(scrollToBottom, 100);
+          }
+          if (audioRef_recieving.current) {
+            audioRef_recieving.current.play().catch(() => {});
+          }
+          // デスクトップ通知(許可済みで、タブを見ていないときだけ)
+          if (
+            typeof Notification !== "undefined" &&
+            Notification.permission === "granted" &&
+            document.visibilityState !== "visible"
+          ) {
+            new Notification("新しい投稿があります！");
+          }
+        }
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [isClient, id, isLoadingContext]);
 
   useEffect(() => {
     if (isAtBottom && blinkIntervalRef.current) {
@@ -844,81 +877,6 @@ function ThreadContent(): JSX.Element {
       console.log("Interval cleared because isAtBottom is true");
     }
   }, [isAtBottom]);
-  //リアルタイムにコンテンツを表示
-  useEffect(() => {
-    if (isClient && id) {
-      fetchAllPosts();
-      const channel = supabase
-        .channel(`public:posts:thread_id=eq.${id}`)
-        .on(
-          "postgres_changes",
-          {
-            event: "INSERT",
-            schema: "public",
-            table: "posts",
-            filter: `thread_id=eq.${id}`,
-          },
-          (payload) => {
-            setPosts((prevPosts) => [...prevPosts, payload.new]);
-            // 新しい投稿が追加された場合、未読リストに追加
-            if (
-              currentUserId &&
-              !payload.new.read_by?.includes(currentUserId)
-            ) {
-              setUnreadPostIds((prev) => [...prev, payload.new.id]);
-            }
-            // 投稿者が自分でない場合のみ受信音を鳴らす
-            if (
-              payload.new.user_uid !== currentUserId &&
-              audioRef_recieving.current
-            ) {
-              audioRef_recieving.current.play();
-            }
-
-            // faviconを変更して通知を表示
-            const originalFavicon = document.querySelector(
-              "link[rel='icon']"
-            ) as HTMLLinkElement;
-            const originalShortcutIcon = document.querySelector(
-              "link[rel='shortcut icon']"
-            ) as HTMLLinkElement;
-
-            // 通知用のfaviconを設定
-            const notificationFavicon = document.createElement("link");
-            notificationFavicon.rel = "icon";
-            notificationFavicon.type = "image/x-icon";
-            notificationFavicon.href = "/images/ico/hippo_000_foot_no.ico";
-
-            // 既存のfaviconを削除
-            if (originalFavicon) {
-              originalFavicon.remove();
-            }
-            if (originalShortcutIcon) {
-              originalShortcutIcon.remove();
-            }
-            // 新しいfaviconを追加
-            document.head.appendChild(notificationFavicon);
-
-            // デスクトップ通知を表示（iOSのSafari以外の場合のみ）
-            if (typeof Notification !== "undefined") {
-              if (Notification.permission === "granted") {
-                new Notification("新しい投稿があります！");
-              } else if (Notification.permission !== "denied") {
-                Notification.requestPermission().then((permission) => {
-                  if (permission === "granted") {
-                    new Notification("新しい投稿があります！");
-                  }
-                });
-              }
-            }
-          }
-        )
-        .subscribe();
-      return () => {
-        supabase.removeChannel(channel);
-      };
-    }
-  }, [isClient, id]);
   //全投稿を取得
   const fetchAllPosts = async (): Promise<void> => {
     setLoading(true);
@@ -952,13 +910,17 @@ function ThreadContent(): JSX.Element {
 
       setPosts(postsWithFileSize.reverse());
 
-      // 未読の投稿IDを収集
-      if (currentUserId) {
+      // 未読の投稿IDを収集(アカウント作成日より後の、自分以外の未読投稿)
+      const me = currentUserIdRef.current ?? currentUserId;
+      if (me) {
+        const createdAt = currentUserCreatedAtRef.current;
+        const since = createdAt ? new Date(createdAt).getTime() : 0;
         const unreadIds = postsWithFileSize
           .filter(
             (post) =>
-              !post.read_by?.includes(currentUserId) &&
-              post.user_uid !== currentUserId
+              !post.read_by?.includes(me) &&
+              post.user_uid !== me &&
+              new Date(post.created_at).getTime() > since
           )
           .map((post) => post.id);
         setUnreadPostIds(unreadIds);
@@ -1022,6 +984,13 @@ function ThreadContent(): JSX.Element {
   };
   // 投稿する
   const createPost = async (inputValue: string) => {
+    // デスクトップ通知の許可は、ユーザー操作(送信)のタイミングで1回だけ求める
+    if (
+      typeof Notification !== "undefined" &&
+      Notification.permission === "default"
+    ) {
+      Notification.requestPermission().catch(() => {});
+    }
     let fileUrl: string = "";
     let originalFileName: string = "";
 
