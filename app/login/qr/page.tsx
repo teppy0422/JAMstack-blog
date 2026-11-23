@@ -112,7 +112,9 @@ export default function QrLoginPage() {
                 return setStatus("error");
               }
               setStatus("success");
-              setTimeout(() => router.replace("/"), 1200);
+              // ユーザー情報(UserContext)は読み込み時にしか取得されないため、
+              // ページを再読み込みして新しいアカウントを反映させる
+              setTimeout(() => window.location.replace("/"), 1200);
               return;
             }
             if (data.status === "denied") {

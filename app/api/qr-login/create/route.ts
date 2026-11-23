@@ -4,7 +4,7 @@
 import { NextRequest } from "next/server";
 import {
   QR_LOGIN_TTL_SECONDS,
-  randomToken,
+  createNonce,
   sealQrPayload,
 } from "@/lib/qrLoginCrypto";
 import { TABLE, getCaller, json, supabaseAdmin } from "@/lib/qrLoginServer";
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       .delete()
       .lt("expires_at", new Date(Date.now() - 24 * 3600 * 1000).toISOString());
 
-    const nonce = randomToken();
+    const nonce = createNonce();
     const exp = Math.floor(Date.now() / 1000) + QR_LOGIN_TTL_SECONDS;
     const code = sealQrPayload({ n: nonce, u: user.id, exp });
     return json({ code, nonce, expiresAt: exp * 1000 });

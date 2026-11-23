@@ -259,12 +259,13 @@ export default function QrLogin({ language }: { language: string }) {
         <Flex mt={3} direction="column" alignItems="center" gap={2}>
           <Box
             bg="white"
-            p={2}
             borderRadius="md"
+            lineHeight={0}
             opacity={isExpired ? 0.15 : 1}
             transition="opacity 0.3s"
           >
-            <QRCodeSVG value={qrUrl} size={160} />
+            {/* includeMargin: 読み取りに必要な白い余白(4マス分)を付ける */}
+            <QRCodeSVG value={qrUrl} size={220} level="L" includeMargin />
           </Box>
           <Text fontSize="12px" textAlign="center">
             {isExpired
