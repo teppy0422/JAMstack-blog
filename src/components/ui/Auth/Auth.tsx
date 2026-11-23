@@ -30,6 +30,7 @@ import { QuestionIcon } from "@chakra-ui/icons";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CustomAvatar } from "../CustomAvatar";
 import EmailNotifySwitch from "./emailNotifySwitch";
+import QrLogin from "./QrLogin";
 import { CustomTooltip } from "../CustomTooltip";
 
 import getMessage from "@/utils/getMessage";
@@ -989,7 +990,16 @@ export default function Auth({ userData }: AuthProps) {
                 </HStack>
               </Flex>
             </Box>
-            <Spacer h="10px" />
+            <Box
+              bg="#2c2b29"
+              p={4}
+              borderRadius="md"
+              border="1px solid #4c4b49"
+              color="#ccc"
+              mb={4}
+            >
+              <QrLogin language={language} />
+            </Box>
             <Box
               bg="#2c2b29"
               p={4}

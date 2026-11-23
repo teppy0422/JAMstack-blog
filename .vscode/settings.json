@@ -3,5 +3,6 @@
   "editor.autoClosingQuotes": "languageDefined",
   "typescript.tsdk": "node_modules/typescript/lib",
   "liveServer.settings.port": 5501,
-  "python.terminal.useEnvFile": true
+  "python.terminal.useEnvFile": true,
+  "js/ts.tsdk.path": "node_modules/typescript/lib"
 }
