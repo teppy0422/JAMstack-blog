@@ -758,51 +758,6 @@ function ThreadContent(): JSX.Element {
     fetchThreadTitle();
   }, []);
 
-  // 新着投稿のメール通知(送信結果を待たずに投稿処理を続ける)
-  const notifyNewPost = async (postId: string) => {
-    try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!session) return;
-      const res = await fetch("/api/notify-new-post/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({ postId }),
-      });
-      if (!res.ok) {
-        const detail = await res.text();
-        console.error("メール通知に失敗:", detail);
-        showNotifyFailedToast(detail);
-      }
-    } catch (err: any) {
-      console.error("メール通知に失敗:", err);
-      showNotifyFailedToast(err?.message ?? "");
-    }
-  };
-  const showNotifyFailedToast = (detail: string) => {
-    toast({
-      position: "bottom",
-      duration: 4000,
-      isClosable: true,
-      render: ({ onClose }) => (
-        <CustomToast
-          onClose={onClose}
-          title={getMessage({
-            ja: "通知送信が失敗",
-            us: "Failed to send notification",
-            cn: "通知传送失败。",
-            language,
-          })}
-          description={<Box>{detail.slice(0, 200)}</Box>}
-        />
-      ),
-    });
-  };
-
   useEffect(() => {
     if (isClient && id && !isLoadingContext) {
       // 初回データ取得
@@ -1082,7 +1037,7 @@ function ThreadContent(): JSX.Element {
       }
     }
 
-    const { data: insertedPost, error } = await supabase
+    const { error } = await supabase
       .from("posts")
       .insert([
       {
@@ -1097,16 +1052,11 @@ function ThreadContent(): JSX.Element {
         reply_user_id: replyPostUserId,
         reply_file_url: replyPostFileUrl,
       },
-    ])
-      .select("id")
-      .single();
+    ]);
     if (error) {
       console.error("Error creating post:", error.message);
     } else {
-      // メール通知(スレッド作成者[通知ON]・管理者) 宛先判定と送信はサーバー側
-      if (insertedPost?.id) {
-        notifyNewPost(insertedPost.id);
-      }
+      // メール通知は Supabase の Database Webhook(posts INSERT) → /api/notify-new-post で送信
 
       setNewPostContent("");
       setSelectedFile(null);

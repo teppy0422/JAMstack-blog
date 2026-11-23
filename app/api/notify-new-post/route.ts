@@ -1,8 +1,11 @@
 // app/api/notify-new-post/route.ts
 // BBSに新着投稿があったとき、スレッド作成者(通知ON)と管理者にメール通知する。
-// 宛先・本文はすべてサーバー側で決定する(クライアントからは postId のみ受け取る)。
+// Supabase の Database Webhook(posts の INSERT)から呼ばれる。
+// ブラウザ側に依存しないので、古い画面のまま投稿されても必ず通知される。
+// 認証: ヘッダー x-webhook-secret が環境変数 BBS_WEBHOOK_SECRET と一致すること。
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import crypto from "crypto";
 import { bbsNotifEmailHtml } from "@/lib/templates/bbsNotifEmailHtml";
 
 const supabaseAdmin = createClient(
@@ -49,23 +52,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "RESEND_API_KEY is not set" }, { status: 500 });
     }
 
-    // 呼び出し元ユーザーの確認
-    const token = req.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-    if (!token) {
+    // Webhookの合言葉を確認
+    const expected = process.env.BBS_WEBHOOK_SECRET;
+    const given = req.headers.get("x-webhook-secret") || "";
+    if (!expected) {
+      return NextResponse.json({ error: "BBS_WEBHOOK_SECRET is not set" }, { status: 500 });
+    }
+    const a = Buffer.from(given);
+    const b = Buffer.from(expected);
+    if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const { data: authData, error: authError } = await supabaseAdmin.auth.getUser(token);
-    if (authError || !authData.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    const callerId = authData.user.id;
 
-    const { postId } = await req.json();
-    if (!postId) {
-      return NextResponse.json({ error: "Missing postId" }, { status: 400 });
+    // Supabase Webhook の形式: { type: "INSERT", table: "posts", record: {...} }
+    const body = await req.json();
+    if (body?.type !== "INSERT" || body?.table !== "posts" || !body?.record?.id) {
+      return NextResponse.json({ skipped: "not a posts INSERT" });
     }
+    const postId = body.record.id;
 
-    // 投稿(本人の投稿のみ通知を発火できる)
     const { data: post, error: postError } = await supabaseAdmin
       .from("posts")
       .select("id, thread_id, content, user_uid, file_url")
@@ -74,9 +79,7 @@ export async function POST(req: NextRequest) {
     if (postError || !post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
-    if (post.user_uid !== callerId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const callerId = post.user_uid; // 投稿者
 
     const { data: thread } = await supabaseAdmin
       .from("threads")
@@ -137,6 +140,11 @@ export async function POST(req: NextRequest) {
     }
 
     const failed = results.filter((r) => !r.ok);
+    // 後から調べられるように結果を記録(メールアドレスは出さない)
+    console.log(
+      "notify-new-post:",
+      JSON.stringify({ postId, threadId: thread.id, poster: callerId, results })
+    );
     return NextResponse.json(
       { success: failed.length === 0, sent: results.length - failed.length, failed },
       { status: failed.length ? 502 : 200 }
